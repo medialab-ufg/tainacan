@@ -1,5 +1,6 @@
 <script type="text/javascript">
     var src = $('#src').val();
+    localStorage.setItem("is_init",false);
     $('.dropdown-toggle').dropdown();
     var current_meta_type = $("#property_metadata_type").val();
     var $current_meta_form = "#submit_form_property_data_" + current_meta_type;
@@ -970,25 +971,32 @@
     }
 
     function list_reverses(selected) {
-        $.ajax({
-            url: $('#src').val() + '/controllers/property/property_controller.php',
-            type: 'POST',
-            data: {collection_id: $("#collection_id").val(), category_id: $("#property_object_category_id").val(), operation: 'show_reverses', property_id: $('#property_category_id').val()}
-        }).done(function (result) {
-            elem = jQuery.parseJSON(result);
-            $('#property_object_reverse').html('');
-            $('#property_object_reverse').append('<option value="false"><?php _e('None', 'tainacan'); ?></option>');
-            if (elem.no_properties === false) {
-                $.each(elem.property_object, function (idx, property) {
-                    if (property.id == selected) {
-                        $('#property_object_is_reverse').val('true');
-                        $('#property_object_reverse').append('<option selected="selected" value="' + property.id + '">' + property.name + ' - (' + property.type + ')</option>');
-                    } else {
-                        $('#property_object_reverse').append('<option value="' + property.id + '">' + property.name + ' - (' + property.type + ')</option>');
-                    }
-                });
-            }
-        });
+        if($("#property_object_category_id").val().trim()!='') {
+            $.ajax({
+                url: $('#src').val() + '/controllers/property/property_controller.php',
+                type: 'POST',
+                data: {
+                    collection_id: $("#collection_id").val(),
+                    category_id: $("#property_object_category_id").val(),
+                    operation: 'show_reverses',
+                    property_id: $('#property_category_id').val()
+                }
+            }).done(function (result) {
+                elem = jQuery.parseJSON(result);
+                $('#property_object_reverse').html('');
+                $('#property_object_reverse').append('<option value="false"><?php _e('None', 'tainacan'); ?></option>');
+                if (elem.no_properties === false) {
+                    $.each(elem.property_object, function (idx, property) {
+                        if (property.id == selected) {
+                            $('#property_object_is_reverse').val('true');
+                            $('#property_object_reverse').append('<option selected="selected" value="' + property.id + '">' + property.name + ' - (' + property.type + ')</option>');
+                        } else {
+                            $('#property_object_reverse').append('<option value="' + property.id + '">' + property.name + ' - (' + property.type + ')</option>');
+                        }
+                    });
+                }
+            });
+        }
     }
 
     /**
@@ -1192,6 +1200,10 @@
             var avoid_items = (elem.metas.socialdb_property_avoid_items) ? elem.metas.socialdb_property_avoid_items : false;
             var habilitate_new_item = (elem.metas.socialdb_property_habilitate_new_item) ? elem.metas.socialdb_property_habilitate_new_item : false;
             var default_value = (elem.metas.socialdb_property_default_value) ? elem.metas.socialdb_property_default_value : false;
+            localStorage.setItem("is_init", true);
+            localStorage.setItem("reverse", elem.metas.socialdb_property_object_reverse);
+            localStorage.setItem("is_reverse", elem.metas.socialdb_property_object_reverse);
+
             if (is_metadata_filter(elem.id)) {
                 var use_filter = "use_filter";
                 $("#meta-relationship .property_data_use_filter").prop("checked", true);
@@ -1229,6 +1241,8 @@
 //            if ( related_collection != null ) {
 //                $("#property_object_category_id").val(related_collection);
 //            }
+            var value = elem.metas.socialdb_property_object_category_id;
+            elem.metas.socialdb_property_object_category_id = (value && value.constructor !== Array) ? [value] : value;
             if (elem.metas.socialdb_property_object_category_id && elem.metas.socialdb_property_object_category_id.constructor === Array) {
                 if ($("#property_category_dynatree")) {
                     $('#property_object_category_id').val('');
@@ -1236,82 +1250,65 @@
                         node.select(false);
                     });
                     //console.log(contador);
-                    //if (contador === 0) {
-                    $('#selected_categories_relationship').html('');
-                    $.each(elem.metas.socialdb_property_object_category_id, function (index, value) {
-                        $.ajax({
-                            type: "POST",
-                            url: $('#src').val() + "/controllers/category/category_controller.php",
-                            data: {category_id: value, operation: 'get_metas'}
-                        }).done(function (result) {
-                            elem = jQuery.parseJSON(result);
-                            var contador = 0;
-                            $("#property_category_dynatree").dynatree("getRoot").visit(function (node) {
-                                if (value == node.data.key) {
-                                    contador++;
-                                    node.select(true);
-                                    ids = $('#property_object_category_id').val().split(',');
-                                    index = ids.indexOf(node.data.key);
-                                    if (index < 0) {
-                                        ids.push(node.data.key);
-                                        $('#property_object_category_id').val(ids.join(','));
-                                    }
-                                }
-                            });
-                            if(contador === 0){
-                                add_label_box(elem.term.term_id, elem.term.name, '#selected_categories_relationship');
-                                ids = $('#property_object_category_id').val().split(',');
-                                index = ids.indexOf(elem.term.term_id);
-                                if (index < 0) {
-                                    ids.push(elem.term.term_id);
-                                    $('#property_object_category_id').val(ids.join(','));
-                                }
-                            }
-                        });
-                    });
-                    //}
-                }
-            } 
-            else if (elem.metas.socialdb_property_object_category_id) {
-                if ($("#property_category_dynatree")) {
-                    $("#property_category_dynatree").dynatree("getRoot").visit(function (node) {
-                        node.select(false);
-                    });
-                    var value = elem.metas.socialdb_property_object_category_id;
-                    $('#selected_categories_relationship').html('');
-                    //if (contador === 0) {
+
+                    $('#selected_categories_relationship').html('Verificando relacionamentos...');
+                    setTimeout(function(){
                         $('#selected_categories_relationship').html('');
-                        $.ajax({
-                            type: "POST",
-                            url: $('#src').val() + "/controllers/category/category_controller.php",
-                            data: {category_id: elem.metas.socialdb_property_object_category_id, operation: 'get_metas'}
-                        }).done(function (result) {
-                            elem = jQuery.parseJSON(result);
-                            var contador = 0;
-                            $("#property_category_dynatree").dynatree("getRoot").visit(function (node) {
-                                if (value == node.data.key) {
-                                    contador++;
-                                    node.select(true);
+                        $.each(elem.metas.socialdb_property_object_category_id, function (index, value) {
+                            $.ajax({
+                                type: "POST",
+                                url: $('#src').val() + "/controllers/category/category_controller.php",
+                                data: {category_id: value, operation: 'get_metas'}
+                            }).done(function (result) {
+                                elem = jQuery.parseJSON(result);
+                                var contador = 0;
+                                $("#property_category_dynatree").dynatree("getRoot").visit(function (node) {
+                                    //console.log(value , node);
+                                    if (value == node.data.key) {
+                                        contador++;
+                                        node.select(true);
+                                        ids = $('#property_object_category_id').val().split(',');
+                                        index = ids.indexOf(node.data.key);
+                                        if (index < 0) {
+                                            add_label_box(node.data.key, node.data.title, '#selected_categories_relationship');
+                                            ids.push(node.data.key);
+                                            $('#property_object_category_id').val(ids.join(','));
+                                        }
+                                    }
+                                });
+                                //console.log(contador);
+                                if(contador === 0){
+                                    add_label_box(elem.term.term_id, elem.term.name, '#selected_categories_relationship');
                                     ids = $('#property_object_category_id').val().split(',');
-                                    index = ids.indexOf(node.data.key);
+                                    index = ids.indexOf(elem.term.term_id);
                                     if (index < 0) {
-                                        ids.push(node.data.key);
+                                        ids.push(elem.term.term_id);
                                         $('#property_object_category_id').val(ids.join(','));
                                     }
                                 }
+
                             });
-                            if(contador === 0){
-                                add_label_box(elem.term.term_id, elem.term.name, '#selected_categories_relationship');
-                                ids = $('#property_object_category_id').val().split(',');
-                                index = ids.indexOf(elem.term.term_id);
-                                if (index < 0) {
-                                    ids.push(elem.term.term_id);
-                                    $('#property_object_category_id').val(ids.join(','));
-                                }
-                            }
                         });
-                    //}
+                        setTimeout(function(){
+                            var reverse =  localStorage.getItem("reverse");
+                            var is_reverse =  localStorage.getItem("is_reverse");
+                            console.log(reverse,'reverso');
+                            if (is_reverse === 'false') {
+                                $("#property_object_is_reverse").val('false');
+                                $("#property_object_reverse option[value='false']").attr('selected', 'selected');
+                            } else {
+                                $("#property_object_is_reverse").val('true');
+                                list_reverses(reverse);
+                            }
+                            setTargetProperties('#property_object_category_id');
+                            //liberando o dynatree
+                            localStorage.setItem("is_init", false);
+
+                        }, 1200);
+                    }, 600);
                 }
+            }else{
+                localStorage.setItem("is_init", false); 
             }
 
 
@@ -1324,13 +1321,21 @@
             } else {
                 $("#property_object_facet_true").prop('checked', true);
             }
-            if (elem.metas.socialdb_property_object_is_reverse === 'false') {
-                $("#property_object_is_reverse").val('false');
-                $("#property_object_reverse option[value='false']").attr('selected', 'selected');
-            } else {
-                $("#property_object_is_reverse").val('true');
-                list_reverses(elem.metas.socialdb_property_object_reverse);
-            }
+
+
+            setTimeout(function(){
+                var reverse =  localStorage.getItem("reverse");
+                var is_reverse =  localStorage.getItem("is_reverse");
+                console.log(reverse);
+                if (is_reverse === 'false') {
+                    $("#property_object_is_reverse").val('false');
+                    $("#property_object_reverse option[value='false']").attr('selected', 'selected');
+                } else {
+                    $("#property_object_is_reverse").val('true');
+                    list_reverses(reverse);
+                }
+            }, 1000);
+
             if (elem.metas.socialdb_property_required === 'false') {
                 $("#property_object_required_false").prop('checked', true);
             } else {
@@ -1387,7 +1392,6 @@
                 $("#socialdb_property_object_visualization_restrict").removeAttr('checked');
             }
             $("#operation_property_object").val('update_property_object');
-
             //getRequestFeedback(elem.type, elem.msg);
         });
     }
@@ -1533,8 +1537,11 @@
             var obj = $.parseJSON(result);
             $(obj).each(function (idx, el) {
                 var m = $("option#menu_style_" + el.id);
-                var item_classes = (el.terms).join(' ');
-                $(m).addClass(item_classes);
+                if(el.terms){
+                    var item_classes = (el.terms).join(' ');
+                    $(m).addClass(item_classes);
+                }
+
             });
         });
     }
@@ -2481,19 +2488,22 @@
 
             },
             onSelect: function (flag, node) {
-                if (concatenate_in_array(node.data.key, '#property_object_category_id')) {
-                    add_label_box(node.data.key, node.data.title, '#selected_categories_relationship');
-                } else {
-                    remove_label_box(node.data.key);
-                }
-                $('#default_value_text').val('');
-                $('#socialdb_property_object_default_value').val('');
-                setTargetProperties('#property_object_category_id');
-                //view helper
-                <?php if (has_action('javascript_onselect_relationship_dynatree_property_object')): ?>
+                var is_init = localStorage.getItem("is_init");
+                if(is_init === 'false') {
+                    if (concatenate_in_array(node.data.key, '#property_object_category_id')) {
+                        add_label_box(node.data.key, node.data.title, '#selected_categories_relationship');
+                    } else {
+                        remove_label_box(node.data.key);
+                    }
+                    $('#default_value_text').val('');
+                    $('#socialdb_property_object_default_value').val('');
+                    setTargetProperties('#property_object_category_id');
+                    //view helper
+                    <?php if (has_action('javascript_onselect_relationship_dynatree_property_object')): ?>
                     <?php do_action('javascript_onselect_relationship_dynatree_property_object') ?>
-                <?php endif; ?>
-                list_reverses();
+                    <?php endif; ?>
+                    list_reverses();
+                }
             }
         });
     }

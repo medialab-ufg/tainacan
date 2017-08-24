@@ -39,6 +39,21 @@
   }
 }
 
+#tainacan-stats{
+  margin-bottom: 0;
+  padding-top: 0;
+
+  .padd-r{
+    padding-right: 0;
+  }
+}
+
+#configuration{
+  .padd-r{
+    padding-right: 0;
+    padding-bottom: 48px;
+  }
+}
 
 .bgc-widget{
     background-color: white;
@@ -49,9 +64,26 @@
 
 #dashb{
   margin-bottom: 0px;
+
+  // div row
+  .margin-rl{
+    margin-left: 80px !important;
+  }
+
+  // widgets
+  .margin-r10px{
+    margin-right: 10px;
+  }
+  .margin-t10px{
+    margin-top: 10px;
+  }
 }
 
 .statistics-container {
+  #dynatree-estatisticas{
+    background-color: white;
+    margin-top: -10px;
+  }
 
   #collection-steps {
     margin-bottom: 10px;
@@ -78,10 +110,10 @@
 
   } // dashboard & stats link
 
-  #charts-display {
-    background-color: $collections-bg-color;
-    padding-top: 20px;
-  }
+  //#charts-display {
+  //   background-color: $collections-bg-color;
+  //   padding-top: 20px;
+  //}
 
   /* Left side */
   .statistics-config {
@@ -89,7 +121,7 @@
     border: none;
     font-size: 12px;
     //border-top: 1px solid $item-border;
-    border-right: 3px solid $item-border;
+    //border-right: 3px solid $item-border;
     padding-top: 20px;
 
     .period-config {
@@ -114,9 +146,10 @@
 
   /* Right side */
   .chart-header {
-    @include single_item_container_style();
+    //@include single_item_container_style();
     background-color: white;
-    border: 3px solid $item-border;
+    margin: 0 40px 0 40px;
+    //border: 3px solid $item-border;
     padding: 10px 15px;
 
     h3.topo {
@@ -132,14 +165,14 @@
     }
 
     .user-config-control {
-      .inputPeriod{
-        font-size: 14x;
-        background-color: #fff;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        box-shadow: inset 0 1px 1px rgba(0,0,0, .075);
-        transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
-      }
+      // .inputPeriod{
+      //   font-size: 14x;
+      //   background-color: #fff;
+      //   border: 1px solid #ccc;
+      //   border-radius: 4px;
+      //   box-shadow: inset 0 1px 1px rgba(0,0,0, .075);
+      //   transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+      // }
 
       label.label-from{
         font-weight: normal !important;
@@ -180,14 +213,29 @@
   } // .chart-header
 
   #charts-container {
-    @include single_item_container_style();
+    //@include single_item_container_style();
+    margin: 0 40px 0 40px;
+    background-color: white;
     margin-top: 20px;
     padding: 20px;
   }
 } // statistics-container
 
+#values-details{
+  table {
+    tr {
+      border-top: 1px solid $brand-medium-blue;}
+      th{
+        font-weight: bolder;
+        color: $brand-medium-blue;
+      }
+  }
+}
+
 #charts-resume {
-  @include single_item_container_style();
+  //@include single_item_container_style();
+  margin: 0 40px 0 40px;
+  background-color: white;
   padding: 20px;
   margin-top: 20px;
 
@@ -200,20 +248,35 @@
       th, td {
         padding: 5px 10px;
       }
-      &:first-child {
+      th{
         font-weight: bolder;
         color: $brand-medium-blue;
+      }
+      .more-detail-message{
+        font-size: 7pt;
+        color: rgba(12, 105, 139, 0.5);
       }
       &:nth-child(2) {
         td {
           padding: 5px 10px;
-          &:first-child {
-            font-weight: bolder;
-          }
+          // &:first-child {
+          //   font-weight: bolder;
+          // }
         } // td
       }
     }
   } // table
+  .a-color{
+    color: rgba(0, 0, 0, 0.8) !important;
+    text-decoration: none;
+    span{
+      color: rgba(12, 105, 139, 0.5);
+      font-size: 8pt;
+    }
+  }
+  .mg0{
+    margin: 0 !important;
+  }
 } // #charts-resume
 
 .right-caret {

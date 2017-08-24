@@ -1564,10 +1564,10 @@ class ObjectModel extends Model {
         $categories = (is_array($all_data['metas']['socialdb_property_object_category_id'])) ? implode(',', array_filter($all_data['metas']['socialdb_property_object_category_id'])) : $all_data['metas']['socialdb_property_object_category_id'];
         //$category_root_id = get_term_by('id', $all_data['metas']['socialdb_property_object_category_id'], 'socialdb_category_type');
         $query = "
-                        SELECT p.* FROM $wp_posts p
+                        SELECT DISTINCT p.ID, p.* FROM $wp_posts p
                         INNER JOIN $term_relationships t ON p.ID = t.object_id    
                         WHERE t.term_taxonomy_id IN ({$categories})
-                        AND p.post_type like 'socialdb_object' and p.post_status like 'publish' and p.post_title LIKE '%{$data['term']}%'
+                        AND p.post_type like 'socialdb_object' and p.post_status in ('publish') and p.post_title LIKE '%{$data['term']}%'
                 ";
         $result = $wpdb->get_results($query);
         //$result = $this->get_category_root_posts($all_data['metas']['socialdb_property_object_category_id']);
@@ -1575,9 +1575,13 @@ class ObjectModel extends Model {
             foreach ($result as $object) {
                 if (strpos(strtolower($object->post_title), strtolower($data['term'])) !== false) {
                     $array =  array('value' => $object->ID, 'label' => $object->post_title);
-                    if(isset($data['verify_selected']))
-                        $array['is_selected'] = $this->is_selected_property ($data['property_id'], $object->ID);
-                    $json[] = $array;
+                    $avoid_selected_items = $all_data['metas']['socialdb_property_avoid_items'];
+                    if(($avoid_selected_items === '1'|| $avoid_selected_items == 'true') && $this->is_selected_property($data['property_id'],  $object->ID)){
+                        continue;
+                    }else if(has_filter('avoid-items-list-items-property-object') && apply_filters('avoid-items-list-items-property-object', $data['property_id'],0, $object->ID)){
+                        continue;
+                    }
+                   $json[] = $array;
                 }
             }
         }
@@ -1588,6 +1592,7 @@ class ObjectModel extends Model {
      * 
      * @param type $property_id
      * @param type $item_id
+     * @return boolean
      */
     public function is_selected_property($property_id,$item_id) {
         global $wpdb;

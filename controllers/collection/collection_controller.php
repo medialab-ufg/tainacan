@@ -363,6 +363,7 @@ class CollectionController extends Controller {
                 $default_tab = get_post_meta($data['collection_id'], 'socialdb_collection_default_tab', true);
                 $tabs['default'] = (!$default_tab) ? __('Default', 'tainacan') : $default_tab;
                 $tabs['array'] = $collection_model->sdb_get_post_meta_by_value($data['collection_id'], 'socialdb_collection_tab');
+
                 if ($tabs && is_array($tabs)) {
                     return json_encode($tabs);
                 } else {

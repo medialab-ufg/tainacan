@@ -50,9 +50,10 @@ class ObjectController extends Controller {
                 //se nao existir algum ID eu crio
                 if(isset($data['item_id'])) { 
                     $data['ID'] = $data['item_id']; 
-                }else{  
+                }else{
                     $data['ID'] = $object_model->create();
-                    update_user_meta(get_current_user_id(), 'socialdb_collection_' . $data['collection_id'] . '_betatext', $data['ID']); 
+                    update_user_meta(get_current_user_id(), 'socialdb_collection_' . $data['collection_id'] . '_betatext', $data['ID']);
+                    update_post_meta( $data['ID'], 'socialdb_object_dc_type', 'text');
                 }
                 //jogo a class no array que sera utlizado no formulario
                 $data['formItem'] = $formClass;

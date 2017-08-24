@@ -180,7 +180,7 @@ require_once(dirname(__FILE__).'../../general/general_controller.php');
                 $array_final = [];
                 if(strpos($data['category_id'], ',')!==false):
                     $return['property_object'] = [];
-                    $categories = explode(',', $data['category_id']);
+                    $categories = array_filter(explode(',', $data['category_id']));
                     foreach ($categories as $category) {
                         $data['category_id'] = $category;
                         $object = json_decode($property_model->list_property_object($data,true));
@@ -190,11 +190,11 @@ require_once(dirname(__FILE__).'../../general/general_controller.php');
                     }
                     if(empty($return['property_object'])){
                         $return['no_properties'] = true;
+                        $return = json_encode($return);
                     }else{
                         $return['no_properties'] = false;
+                        return json_encode($return);
                     }
-
-                    $return = json_encode($return);
                 else:
                     $return =  $property_model->list_property_object($data,true);
                 endif;

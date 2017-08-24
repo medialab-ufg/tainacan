@@ -42,6 +42,7 @@
 
         $('#formUserChangePassword').submit(function (e) {
             e.preventDefault();
+            var src = $("#src").val();
             $.ajax({
                 url: $("#src").val() + '/controllers/user/user_controller.php',
                 type: 'POST',
@@ -54,9 +55,7 @@
 
                 if (elem.type == 'success') {
                     $('#myModalChangePassword').modal('hide');
-                    setTimeout(function () {
-                        showLoginScreen($("#src").val());
-                    }, 2000);
+                    showLoginScreen(src);
                 }
 
             });
@@ -77,7 +76,7 @@
                 return true;
             }
             else {
-                showAlertGeneral("Error", "Passwords do not match!", "error");
+                showAlertGeneral("Error", "Senhas não correspondem", "error");
                 return false;
             }
         }

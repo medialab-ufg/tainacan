@@ -86,6 +86,7 @@ $_header_enabled = get_post_meta($collection_id, 'socialdb_collection_show_heade
                     <div class="col-md-8 left repository no-padding">
                       <h5> <?php echo bloginfo('name'); ?> </h5>
                     </div>
+
                 <?php } ?>
 
             </div> <!-- /.navbar header -->
