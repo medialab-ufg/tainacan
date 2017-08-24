@@ -710,6 +710,14 @@
             }
         }).on("change", function () {
             $("#to_period").datepicker("option", "minDate", getDate(this));
+
+            var thisDatepickerDate = getDate(this);
+            var otherDatepickerDate = $("#from_period").datepicker('getDate');
+
+            var diffe = +Math.ceil( (thisDatepickerDate - otherDatepickerDate) / (1000 * 60 * 60 * 24) ) + 1;
+                
+            verifyDiff(diffe)
+            loadChart();
         });
 
         $("#to_period").datepicker({
@@ -725,6 +733,14 @@
             }
         }).on("change", function () {
             $("#from_period").datepicker("option", "maxDate", getDate(this));
+            
+            var thisDatepickerDate = getDate(this);
+            var otherDatepickerDate = $("#to_period").datepicker('getDate');
+
+            var diffe = +Math.ceil( (otherDatepickerDate - thisDatepickerDate) / (1000 * 60 * 60 * 24) ) + 1;
+                
+            verifyDiff(diffe);
+            loadChart();
         });
 
         function getDate(element) {
@@ -761,28 +777,6 @@
         }
     }
 
-    //  On change period
-    $("#from_period").on('change', function () {
-        var thisDatepickerDate = $(this).datepicker('getDate');
-        var otherDatepickerDate = $("#to_period").datepicker('getDate');
-
-        var diffe = +Math.ceil( (otherDatepickerDate - thisDatepickerDate) / (1000 * 60 * 60 * 24) ) + 1;
-            
-        verifyDiff(diffe);
-        loadChart();
-    });
-
-    $("#to_period").on('change', function () {
-        var thisDatepickerDate = $(this).datepicker('getDate');
-        var otherDatepickerDate = $("#from_period").datepicker('getDate');
-
-        var diffe = +Math.ceil( (thisDatepickerDate - otherDatepickerDate) / (1000 * 60 * 60 * 24) ) + 1;
-            
-        verifyDiff(diffe)
-        loadChart(); 
-    });
-    // // -------
-
     // On change filter type week, day, month
     $("input[type=radio][name=optradio]").on('change', function () {
         loadChart();
@@ -791,7 +785,7 @@
 
     //On change chart type
     $('a.change-mode').on('click', function() {
-        var selected_chart = $(this).attr('data-chart');
+        var selected_chart = $(this).data('chart');
         var curr_img = $(this).html();
         var chart_type = selected_chart.replace('chart_div', '');
 
@@ -807,7 +801,7 @@
 
         $("#charts-container div").addClass('hide');
         $("div#" + selected_chart).removeClass('hide');
-
+        
         $("#statChartType").html(curr_img);
         // Click again at current selected node to trigger chart drawing
         loadChart();
@@ -1050,7 +1044,7 @@
                     toggleElements(["#no_chart_data", "#values-details"], true);
                     
                     setTimeout( function() {
-                        drawChart(chart, action, resJSON, filter)
+                        drawChart(chart, action, resJSON, filter);
                     }, 300);
                 }
             }
@@ -1254,29 +1248,47 @@
         var legendOpt = {position: 'top', alignment: 'center', textStyle: {fontSize: 11}, maxLines: 3};
         
         if(filter == "nofilter"){
+            var legendPie = legendOpt;
             legendOpt = {position: 'none'};
+            $('li.piechart_div .change-mode').removeClass('hide');
+
+            if(type == 'pie') {
+                $('#change-chart-msg').addClass('hide');
+
+                var piechart = new google.visualization.PieChart(document.getElementById('piechart_div'));
+                var pieOptions = {
+                    is3D: true,
+                    colors: ['#F09B35','#8DA9BF','#F2C38D','#E6AC03', '#D94308', '#013453'],
+                    legend: legendPie,
+                    fontSize: 10,
+                    selectionMode: 'multiple',
+                    tooltip: {trigger: 'selection'},
+                    aggregationTarget: 'category'
+                };
+
+                google.visualization.events.addListener(piechart, 'ready', function() {
+                    var chart_png = piechart.getImageURI();
+                    $('.dynamic-chart-img').removeClass('hide').attr('src', chart_png );
+                });
+
+                piechart.draw(stat_data, pieOptions);
+            }
+        }
+        else{
+            $('li.piechart_div .change-mode').addClass('hide');
+            $('#piechart_div').addClass('hide');
+
+            if($('.selected_chart_type').val() == 'pie'){
+                $('#charts-container div, #charts-resume').addClass('hide');
+                $('#change-chart-msg').removeClass('hide');
+            }
+            else{
+                $('#charts-container, #charts-resume').removeClass('hide');
+                $('#change-chart-msg').addClass('hide');
+            }
         }
 
-        if(type == 'pie') {
-            var piechart = new google.visualization.PieChart(document.getElementById('piechart_div'));
-            var pieOptions = {
-                is3D: true,
-                colors: ['#F09B35','#8DA9BF','#F2C38D','#E6AC03', '#D94308', '#013453'],
-                legend: legendOpt,
-                fontSize: 10,
-                selectionMode: 'multiple',
-                tooltip: {trigger: 'selection'},
-                aggregationTarget: 'category'
-            };
-
-            google.visualization.events.addListener(piechart, 'ready', function() {
-                var chart_png = piechart.getImageURI();
-                $('.dynamic-chart-img').removeClass('hide').attr('src', chart_png );
-            });
-
-            piechart.draw(stat_data, pieOptions);
-        }
-        else if(type == 'bar') {
+        if(type == 'bar') {
             var barchart = new google.visualization.BarChart(document.getElementById('barchart_div'));
             var barOptions = {
                 bars: 'horizontal',

@@ -106,61 +106,61 @@ class Log extends Model {
         }
         else if(($collection_id == 'null' || is_null($collection_id)) and $filter == 'weeks'){
             if($event == 'publish' || $event == 'draft' || $event == 'trash'){
-                $SQL_query = sprintf(
+                $SQL_query = $wpdb->prepare(
                     "SELECT * FROM (
                         (
                             SELECT * 
                             FROM (
-                                SELECT post_status AS event, INSERT((yearweek(substring(post_date, 1, 10))), 5, 0, '/ week-') AS week_number, count(id) AS total 
-                                FROM %s 
-                                    WHERE post_status = '$event' AND post_type = '$event_type' AND substring(post_date, 1, 10) between '$from' AND '$to' 
-                                    GROUP BY INSERT((yearweek(substring(post_date, 1, 10))), 5, 0, '/ week-')
+                                SELECT post_status AS event, INSERT((yearweek(substring(post_date, 1, 10))), 5, 0, %s) AS week_number, count(id) AS total 
+                                FROM ". self::_posts_table() ." 
+                                    WHERE post_status = %s AND post_type = %s AND substring(post_date, 1, 10) between %s AND '%s 
+                                    GROUP BY INSERT((yearweek(substring(post_date, 1, 10))), 5, 0, %s)
                             ) res1
                         ) res2 
                         NATURAL JOIN (
                             SELECT count(id) AS event_total 
-                            FROM %s 
-                                WHERE post_status = '$event' AND post_type = '$event_type' AND substring(post_date, 1, 10) between '$from' AND '$to'
+                            FROM ". self::_posts_table() ." 
+                                WHERE post_status = %s AND post_type = %s AND substring(post_date, 1, 10) between %s AND %s
                         ) res3
-                    )", self::_posts_table(), self::_posts_table());
+                    )",  '/ '. __('week', 'tainacan') . '-', $event, $event_type, $from, $to,  '/ '. __('week', 'tainacan') . '-', $event, $event_type, $from, $to);
             }
             else if($event == 'delete' and $event_type == 'general_status_items'){
-                $SQL_query = sprintf(
+                $SQL_query = $wpdb->prepare(
                     "SELECT * FROM (
                         (
                             SELECT * 
                             FROM (
-                                SELECT event, INSERT((yearweek(substring(event_date, 1, 10))), 5, 0, '/ week-') AS week_number, count(id) AS total 
-                                FROM %s 
-                                    WHERE event = '$event' AND event_type = 'user_items' AND substring(event_date, 1, 10) between '$from' AND '$to' 
-                                    GROUP BY INSERT((yearweek(substring(event_date, 1, 10))), 5, 0, '/ week-')
+                                SELECT event, INSERT((yearweek(substring(event_date, 1, 10))), 5, 0, %s) AS week_number, count(id) AS total 
+                                FROM ". self::_table() ." 
+                                    WHERE event = %s AND event_type = 'user_items' AND substring(event_date, 1, 10) between %s AND %s 
+                                    GROUP BY INSERT((yearweek(substring(event_date, 1, 10))), 5, 0, %s)
                             ) res1
                         ) res2 
                         NATURAL JOIN (
                             SELECT count(id) AS event_total 
-                            FROM %s 
-                                WHERE event = '$event' AND event_type = 'user_items' AND substring(event_date, 1, 10) between '$from' AND '$to'
+                            FROM ". self::_table() ." 
+                                WHERE event = %s AND event_type = 'user_items' AND substring(event_date, 1, 10) between %s AND %s
                         ) res3
-                    )", self::_table(), self::_table());
+                    )",  '/ '. __('week', 'tainacan') . '-', $event, $from, $to,  '/ '. __('week', 'tainacan') . '-', $event, $from, $to);
             }
             else{
-                $SQL_query = sprintf(
+                $SQL_query = $wpdb->prepare(
                     "SELECT * FROM (
                         (
                             SELECT * 
                             FROM (
-                                SELECT event, INSERT((yearweek(substring(event_date, 1, 10))), 5, 0, '/ week-') AS week_number, count(id) AS total 
-                                FROM %s 
-                                    WHERE event = '$event' AND event_type = '$event_type' AND substring(event_date, 1, 10) between '$from' AND '$to' 
-                                    GROUP BY INSERT((yearweek(substring(event_date, 1, 10))), 5, 0, '/ week-')
+                                SELECT event, INSERT((yearweek(substring(event_date, 1, 10))), 5, 0, %s) AS week_number, count(id) AS total 
+                                FROM ".  self::_table() ." 
+                                    WHERE event = %s AND event_type = %s AND substring(event_date, 1, 10) between %s AND %s 
+                                    GROUP BY INSERT((yearweek(substring(event_date, 1, 10))), 5, 0, %s)
                             ) res1
                         ) res2 
                         NATURAL JOIN (
                             SELECT count(id) AS event_total 
-                            FROM %s 
-                                WHERE event = '$event' AND event_type = '$event_type' AND substring(event_date, 1, 10) between '$from' AND '$to'
+                            FROM ".  self::_table() ." 
+                                WHERE event = %s AND event_type = %s AND substring(event_date, 1, 10) between %s AND %s
                         ) res3
-                    )", self::_table(), self::_table());
+                    )",  '/ '. __('week', 'tainacan') . '-', $event, $event_type, $from, $to, '/ '. __('week', 'tainacan') . '-', $event, $event_type, $from, $to);
             }
         }
         else if(($collection_id == 'null' || is_null($collection_id)) and $filter == 'days'){
@@ -302,53 +302,53 @@ class Log extends Model {
             }
             else if($filter == 'weeks'){
                 if($event == 'publish' || $event == 'draft' || $event == 'trash'){
-                    $SQL_query = sprintf(
+                    $SQL_query = $wpdb->prepare(
                         "SELECT * FROM (
                             (
                                 SELECT * 
                                 FROM (
-                                    SELECT post_status AS event, INSERT((yearweek(substring(post_date, 1, 10))), 5, 0, '/ week-') AS week_number, count(id) AS total 
-                                    FROM %s 
+                                    SELECT post_status AS event, INSERT((yearweek(substring(post_date, 1, 10))), 5, 0, %s) AS week_number, count(id) AS total 
+                                    FROM ". self::_posts_table() ." 
                                         WHERE post_status = '$event' AND post_type = '$event_type' AND collection_id = '$collection_id' AND substring(post_date, 1, 10) between '$from' AND '$to' 
-                                        GROUP BY INSERT((yearweek(substring(post_date, 1, 10))), 5, 0, '/ week-')
+                                        GROUP BY INSERT((yearweek(substring(post_date, 1, 10))), 5, 0, %s)
                                 ) res1
                             ) res2 
                             NATURAL JOIN (
                                 SELECT count(id) AS event_total 
-                                FROM %s 
+                                FROM ". self::_posts_table() ." 
                                     WHERE post_status = '$event' AND post_type = '$event_type' AND collection_id = '$collection_id' AND substring(post_date, 1, 10) between '$from' AND '$to'
                             ) res3
-                        )", self::_posts_table(), self::_posts_table());
+                        )",  '/ '. __('week', 'tainacan') . '-',  '/ '. __('week', 'tainacan') . '-');
                 }
                 else if($event == 'delete' and $event_type == 'general_status_items'){
-                    $SQL_query = sprintf(
+                    $SQL_query = $wpdb->prepare(
                         "SELECT * FROM (
                             (
                                 SELECT * 
                                 FROM (
-                                    SELECT event, INSERT((yearweek(substring(event_date, 1, 10))), 5, 0, '/ week-') AS week_number, count(id) AS total 
-                                    FROM %s 
+                                    SELECT event, INSERT((yearweek(substring(event_date, 1, 10))), 5, 0, %s) AS week_number, count(id) AS total 
+                                    FROM ".  self::_table() ." 
                                         WHERE event = '$event' AND event_type = 'user_items' AND collection_id = '$collection_id' AND substring(event_date, 1, 10) between '$from' AND '$to' 
-                                        GROUP BY INSERT((yearweek(substring(event_date, 1, 10))), 5, 0, '/ week-')
+                                        GROUP BY INSERT((yearweek(substring(event_date, 1, 10))), 5, 0, %s)
                                 ) res1
                             ) res2 
                             NATURAL JOIN (
                                 SELECT count(id) AS event_total 
-                                FROM %s 
+                                FROM ".  self::_table() ." 
                                     WHERE event = '$event' AND event_type = 'user_items' AND collection_id = '$collection_id' AND substring(event_date, 1, 10) between '$from' AND '$to'
                             ) res3
-                        )", self::_table(), self::_table());
+                        )",  '/ '. __('week', 'tainacan') . '-',  '/ '. __('week', 'tainacan') . '-');
                 }
                 else{
-                    $SQL_query = sprintf(
+                    $SQL_query = $wpdb->prepare(
                         "SELECT * FROM (
                             (
                                 SELECT * 
                                 FROM (
-                                    SELECT event, INSERT((yearweek(substring(event_date, 1, 10))), 5, 0, '/ week-') AS week_number, count(id) AS total 
+                                    SELECT event, INSERT((yearweek(substring(event_date, 1, 10))), 5, 0, %s) AS week_number, count(id) AS total 
                                     FROM %s 
                                         WHERE event = '$event' AND event_type = '$event_type' AND collection_id = '$collection_id' AND substring(event_date, 1, 10) between '$from' AND '$to' 
-                                        GROUP BY INSERT((yearweek(substring(event_date, 1, 10))), 5, 0, '/ week-')
+                                        GROUP BY INSERT((yearweek(substring(event_date, 1, 10))), 5, 0, %s)
                                 ) res1
                             ) res2 
                             NATURAL JOIN (
@@ -622,26 +622,26 @@ class Log extends Model {
                     )", self::_posts_table(), self::_posts_table());
         }
         else if($filter == 'weeks'){
-            $SQL_query = sprintf(
+            $SQL_query = $wpdb->prepare(
                 "SELECT event, week_number, total, event_total 
                     FROM (
                         (
                             SELECT event, week_number, count(event) AS total 
                             FROM (
-                                SELECT post_parent AS event, INSERT((yearweek(substring(post_date, 1, 10))), 5, 0, '/ week-') AS week_number 
-                                FROM %s 
-                                    WHERE post_parent > 0 AND post_type = 'socialdb_object' AND substring(post_date, 1, 10) between '$from' AND '$to'
+                                SELECT post_parent AS event, INSERT((yearweek(substring(post_date, 1, 10))), 5, 0, %s) AS week_number 
+                                FROM ".  self::_posts_table() ." 
+                                    WHERE post_parent > 0 AND post_type = 'socialdb_object' AND substring(post_date, 1, 10) between %s AND %s
                             ) res1 
                             GROUP BY event, week_number
                         ) res2 
                         JOIN (
                             SELECT post_parent, count(id) AS event_total 
-                            FROM %s 
-                                WHERE post_parent > 0 AND post_type = 'socialdb_object' AND substring(post_date, 1, 10) between '$from' AND '$to' 
+                            FROM ".  self::_posts_table() ." 
+                                WHERE post_parent > 0 AND post_type = 'socialdb_object' AND substring(post_date, 1, 10) between %s AND %s 
                                 GROUP BY post_parent
                         ) res3 
                         ON res2.event = res3.post_parent
-                    )", self::_posts_table(), self::_posts_table());
+                    )",  '/ '. __('week', 'tainacan') . '-', $from, $to, $from, $to);
         }
         else if($filter == 'days'){
             $SQL_query = sprintf(
@@ -707,23 +707,23 @@ class Log extends Model {
             } 
             else if($filter == 'weeks'){
 
-                $SQL_query = sprintf(
+                $SQL_query = $wpdb->prepare(
                     "SELECT event, week_number, total, event_total
                     FROM (
                         (
-                            SELECT event, INSERT((yearweek(substring(event_date, 1, 10))), 5, 0, '/ week-') AS week_number, count(event) AS total
-                            FROM %s
-                                WHERE event_type like '". $event_type ."'  AND (substring(event_date, 1, 10)) between '$from' AND '$to'
-                                GROUP BY event, INSERT((yearweek(substring(event_date, 1, 10))), 5, 0, '/ week-')
+                            SELECT event, INSERT((yearweek(substring(event_date, 1, 10))), 5, 0, %s) AS week_number, count(event) AS total
+                            FROM ". self::_table() . "
+                                WHERE event_type like %s  AND (substring(event_date, 1, 10)) between %s AND %s
+                                GROUP BY event, INSERT((yearweek(substring(event_date, 1, 10))), 5, 0, %s)
                         ) res1
                         JOIN (
                             SELECT event AS event2, count(event) AS event_total
-                            FROM %s
-                                WHERE event_type like '". $event_type ."'  AND (substring(event_date, 1, 10)) between '$from' AND '$to'
+                            FROM ". self::_table() . "
+                                WHERE event_type like %s  AND (substring(event_date, 1, 10)) between %s AND %s
                                 GROUP BY event
                         ) res2
                         ON res1.event = res2.event2
-                    ) ORDER BY event_total DESC ", self::_table(), self::_table());
+                    ) ORDER BY event_total DESC ", '/ '. __('week', 'tainacan') . '-', $event_type, $from, $to,  '/ '. __('week', 'tainacan') . '-', $event_type, $from, $to);
             }
             else if($filter == 'months' ){
                 $fr = substr($from, 0, 7);
@@ -790,23 +790,23 @@ class Log extends Model {
             } 
             else if($filter == 'weeks' ){
 
-                $SQL_query = sprintf(
+                $SQL_query =$wpdb->prepare(
                     "SELECT event, week_number, total, event_total
                     FROM (
                         (
-                            SELECT event, INSERT((yearweek(substring(event_date, 1, 10))), 5, 0, '/ week-') AS week_number, count(event) AS total
-                            FROM %s
+                            SELECT event, INSERT((yearweek(substring(event_date, 1, 10))), 5, 0, %s) AS week_number, count(event) AS total
+                            FROM ". self::_table() ."
                                 WHERE event_type = '$event_type' AND collection_id = '$collection_id' AND (substring(event_date, 1, 10)) between '$from' AND '$to'
-                                GROUP BY event,INSERT((yearweek(substring(event_date, 1, 10))), 5, 0, '/ week-')
+                                GROUP BY event,INSERT((yearweek(substring(event_date, 1, 10))), 5, 0, %s)
                         ) res1
                         JOIN (
                             SELECT event AS event2, count(event) AS event_total
-                            FROM %s
+                            FROM ". self::_table() ."
                                 WHERE event_type = '$event_type' AND collection_id = '$collection_id' AND (substring(event_date, 1, 10)) between '$from' AND '$to'
                                 GROUP BY event
                         ) res2
                         ON res1.event = res2.event2
-                    )", self::_table(), self::_table());
+                    )",  '/ '. __('week', 'tainacan') . '-',  '/ '. __('week', 'tainacan') . '-');
             }
             else if($filter == 'months' ){
                 $fr = substr($from, 0, 7);

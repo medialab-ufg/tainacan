@@ -96,7 +96,7 @@ include_once('js/list_js.php');
 
             <!-- Chart container -->
             <div id="charts-container" class="">
-                <div id="defaultchart_div" style="width: 100%; height: 500px;"></div> <!--Div that will hold the pie chart-->
+                <div id="defaultchart_div" style="width: 100%; height: 500px;"></div>
                 <div class="hide" id="piechart_div" style="width: 100%; height: 500px;"></div>
                 <div class="hide" id="barchart_div" style="width: 100%; height: 500px;"></div>
                 <div class="hide" id="curvelinechart_div" style="width: 100%; height: 500px;"></div>
@@ -106,6 +106,10 @@ include_once('js/list_js.php');
                     <h4> <?php _t('There is no data for this report or report filter!', 1); ?> </h4>
                 </div>
 
+                <!-- Mensagem 'Altere o tipo de gráfico ' -->
+                <div id="change-chart-msg" class="hide text-center">
+                    <h4> <?php _e('Change the chart type!', 'tainacan'); ?> </h4>
+                </div>
                 <!-- Tabela de exibição dos detalhes dos valores -->
                 <div id="values-details" class="hide table-responsive">
                     <button onclick="javascript:closeDetail()" type="button" class="close" title="Close"> <span aria-hidden="true">&times;</span> </button>    

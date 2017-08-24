@@ -466,7 +466,7 @@ class ViewHelper {
         ?>
         <div class="row" id="collection-steps">
             <ul class="row">
-                <li id="dashboard" class="col-md-2 <?php $this->is_current($current_step,'config'); ?>">
+                <li id="dashboard" class="hidden col-md-2 <?php $this->is_current($current_step,'config'); ?>">
                     <a onclick="showDashboard(<?php get_template_directory_uri() ?>)">
                         <h4> <?php _e('Dashboard', 'tainacan')?> </h4>
                     </a>
