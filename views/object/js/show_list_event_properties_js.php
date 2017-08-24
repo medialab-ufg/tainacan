@@ -14,7 +14,7 @@
         });
     }
     function cancel_data_property(property_id, object_id) {
-         swal({
+        swal({
                 title: '<?php _e('Attention!'); ?>',
                 text: '<?php _e('You going to lose all changes unsaved!'); ?>',
                 type: "info",

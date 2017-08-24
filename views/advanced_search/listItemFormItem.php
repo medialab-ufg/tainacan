@@ -8,10 +8,16 @@
     include_once(dirname(__FILE__) . '/../../helpers/object/object_properties_widgets_helper.php');
     $object = new ObjectWidgetsHelper;
     $hasItem = 0;
+    $result = false;
+    if(has_filter('alter_list_metadata_relations')):
+        $id = ($property_id === '0') ? $compound_id : $property_id;
+        $result = apply_filters('alter_list_metadata_relations',$id,$item_id);
+    endif;
 ?>
+
 <div class="col-md-12">
     <?php
-     if (isset($loop_objects) && $loop_objects->have_posts()) :  ?>
+    if (!$result && isset($loop_objects) && $loop_objects->have_posts()) :  ?>
         <table class="table table-bordered"  style="margin-top: 15px;" id="found_items_property_object_<?php echo $compound_id ?>_<?php echo $property_id ?>_<?php echo $contador ?>">
             <?php
             while ($loop_objects->have_posts()) : $loop_objects->the_post();
@@ -42,7 +48,10 @@
          <?php   
     endif;
     ?>
-    <?php if($hasItem === 0): ?>
+    <?php
+    if($result):
+        echo $result;
+    elseif($hasItem === 0): ?>
      <div class="alert alert-info" role="alert"><?php _e('No items found','tainacan') ?>!</div>
     <?php endif ?>
 </div>

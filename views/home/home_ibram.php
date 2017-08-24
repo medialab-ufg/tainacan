@@ -1,6 +1,7 @@
 <?php
 $_curr_user_ = ['is_logged' => is_user_logged_in(), 'is_subscriber' =>  current_user_can('subscriber'), 'is_admin' => current_user_can('manage_options') ];
-if( $_curr_user_['is_logged'] && $_curr_user_['is_admin'] ) {
+//if( $_curr_user_['is_logged'] && $_curr_user_['is_admin'] ) {
+if( $_curr_user_['is_logged'] ) {
     $_current_menu = "menu-ibram";
 } else if ( !$_curr_user_['is_logged'] || $_curr_user_['is_subscriber']) {
     $_current_menu = "menu-ibram-visitor";

@@ -31,8 +31,10 @@ $_showH = ("disabled" === $_en_header) ? false : true ;
                 <textarea class="form-control" rows="4" id="collection_content" name="collection_content" placeholder='<?php _t("Describe your collection in few words", 1); ?>'><?php echo $collection_post->post_content; ?></textarea>
             </div>
 
-            <hr class='tainacanRow' />
 
+
+            <?php if(!has_action('disable_header_collection')): ?>
+                <hr class='tainacanRow' />
             <div class="form-group" style="margin-bottom: 40px">
                 <label for="enable_header"> <?php _t('Collection header',1); ?> </label>
                 <div class="col-md-12">
@@ -83,8 +85,9 @@ $_showH = ("disabled" === $_en_header) ? false : true ;
 
                 </div>
             </div>
+                <hr class='tainacanRow' />
+            <?php endif; ?>
 
-            <hr class='tainacanRow' />
 
             <div class="form-group">
                 <a id="show_adv_config_link" onclick="showAdvancedConfig();" style="cursor:pointer;">
@@ -176,7 +179,7 @@ $_showH = ("disabled" === $_en_header) ? false : true ;
                 <!------------------- Hierarquia-------------------------->
                 <div class="form-group">
                     <label for="socialdb_collection_allow_hierarchy"><?php _e('Collection Hierarchy', 'tainacan'); ?></label>
-                    <a href="#" data-toggle="tooltip" title="<?php _e('Changing the collection parent allows this collection to extend all metadata and rankings from another collection', 'tainacan'); ?>">
+                    <a href="javascript:void(0)" data-toggle="tooltip" title="<?php _e('Changing the collection parent allows this collection to extend all metadata and rankings from another collection', 'tainacan'); ?>">
                         <span class="glyphicon glyphicon-question-sign"></span>
                     </a>
                     <select name="socialdb_collection_allow_hierarchy" class="form-control">
@@ -1468,7 +1471,7 @@ $_showH = ("disabled" === $_en_header) ? false : true ;
             <input type="hidden" id="operation" name="operation" value="update">
             <input type="hidden" id="save_and_next" name="save_and_next" value="false">
             
-            <button type="button" class="btn btn-default pull-left btn-lg" onclick="backToMainPage()"><?php _e('Cancel', 'tainacan'); ?></button>
+            <button type="button" class="btn btn-default pull-left btn-lg" onclick="backToMainPage()"><?php _e('Back to collection', 'tainacan'); ?></button>
             
             <button type="submit" id="button_save_and_next" class="btn btn-success pull-right btn-lg"> <?php _e('Continue', 'tainacan'); ?> </button>
         </form>

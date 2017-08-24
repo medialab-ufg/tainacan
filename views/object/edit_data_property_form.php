@@ -36,9 +36,9 @@ include_once ('js/edit_data_property_form_js.php'); ?>
     <input type="hidden" id="event_edit_property_data_object_id" name="property_data_object_id" value="<?php echo $object_id; ?>">
     <input type="hidden" id="event_edit_property_data_create_time" name="socialdb_event_create_date" value="<?php echo mktime(); ?>">
     <input type="hidden" id="event_edit_property_data_user_id" name="socialdb_event_user_id" value="<?php echo get_current_user_id(); ?>">
-    
     <input type="hidden" id="event_edit_property_data_id" name="socialdb_event_property_data_edit_id" value="<?php echo $value->id ?>">
     <input type="hidden" id="operation_property_data" name="operation" value="add_event_property_data_edit">
+
     <button type="submit" id="submit_property_data" class="btn btn-default"><?php _e('Submit','tainacan'); ?></button>
     <button type="button" onclick="back_button('<?php echo $object_id; ?>')" class="btn btn-default" id="clear_categories"><?php _e('Clear','tainacan'); ?></button>
 </form>

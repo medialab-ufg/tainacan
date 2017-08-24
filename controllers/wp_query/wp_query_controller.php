@@ -414,7 +414,6 @@ class WPQueryController extends Controller {
 /*
  * Controller execution
  */
-
 if ($_POST['operation']) {
     $operation = $_POST['operation'];
     $data = $_POST;

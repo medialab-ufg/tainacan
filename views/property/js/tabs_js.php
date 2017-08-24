@@ -11,17 +11,21 @@
             type: 'POST',
             data: {
                 collection_id: $("#collection_id").val(), 
-                operation: 'get_tabs'}
+                operation: 'get_tabs'
+            }
         });
+
         // quando o ajax for finalizado        
         xhr.done(function (result) {
             hide_modal_main();
             var json = jQuery.parseJSON(result);
-            if(json.array.length>0){
+            if(json.array.length > 0)
+            {
                 var li = $('#plus_tab_button');
                 var content = $('#tab-content-metadata');
                 $.each(json.array,function(index,value){
-                   if($('#metadata-container-'+value.meta_id).length==0){
+                   if($('#metadata-container-'+value.meta_id).length == 0)
+                   {
                        li.before(get_li_model(value.meta_id,value.meta_value));
                       content.append(get_tab_content(value.meta_id));
                    } 
@@ -37,7 +41,7 @@
         if(!name){
             name = '<?php _e('New tab', 'tainacan') ?>';
         }
-        return '<li role="presentation" onmouseover="show_close_tab('+id+')" onmouseout="hide_close_tab('+id+')">'+
+        return '<li role="presentation" onmouseover="show_close_tab('+id+')" onmouseout="hide_close_tab('+id+')" data-id="'+ id +'" class="my_tab">'+
                 '<a id="click-tab-'+id+'" href="#tab-'+id+'" aria-controls="tab-'+id+'" role="tab" data-toggle="tab">'+
                     '<span class="tab-title"  ondblclick="alter_tab_title('+id+')" id="'+id+'-tab-title">'+name+'</span>'+
                     '<input id="'+id+'-tab-title-input"'+
@@ -50,6 +54,39 @@
                            '<span id="remove-button-tab-'+id+'" style="display:none;cursor:pointer;position: absolute;top: 0px;right: 0px;height: 15px;padding-left:2px;padding-right:2px;background:#0c698b;color:white" onclick="remove_tab(this,'+id+')"><span style="position: relative;top: -3px">x</span></span>'
                 '</a>'+
             '</li>';
+    }
+
+    //funcao responsavel em listar as abas nos selects
+    function list_tabs()
+    {
+        var id = $(".active.my_tab").attr('data-id'), selected = 'selected = "selected"';
+        $.ajax({
+            url: $('#src').val() + '/controllers/collection/collection_controller.php',
+            type: 'POST',
+            data: {
+                collection_id: $("#collection_id").val(),
+                operation: 'get_tabs'
+            }
+        }).done(function (result) {
+            hide_modal_main();
+            var json = jQuery.parseJSON(result);
+            $('.socialdb_event_property_tab').html('');
+
+
+            $('.socialdb_event_property_tab').append('<option value="default">'+json.default+'</option>');
+
+            if(json.array.length > 0){
+                $.each(json.array,function(index,value){
+                    if(value.meta_id == id)
+                    {
+                        $('.socialdb_event_property_tab').append('<option value="'+value.meta_id+'" selected="selected">'+value.meta_value+'</option>');
+                    }else
+                    {
+                        $('.socialdb_event_property_tab').append('<option value="'+value.meta_id+'">'+value.meta_value+'</option>');
+                    }
+                });
+            }
+        });
     }
     
     function show_close_tab(id){
@@ -166,26 +203,7 @@
             return 'ul#metadata-container-'+id;
         }
     }
-    //funcao responsavel em listar as abas nos selects
-    function list_tabs(){
-        $.ajax({
-            url: $('#src').val() + '/controllers/collection/collection_controller.php',
-            type: 'POST',
-            data: {
-                collection_id: $("#collection_id").val(), 
-                operation: 'get_tabs'}
-        }).done(function (result) {
-            hide_modal_main();
-            var json = jQuery.parseJSON(result);
-            $('.socialdb_event_property_tab').html('');
-            $('.socialdb_event_property_tab').append('<option value="default">'+json.default+'</option>');
-            if(json.array.length>0){
-                $.each(json.array,function(index,value){
-                     $('.socialdb_event_property_tab').append('<option value="'+value.meta_id+'">'+value.meta_value+'</option>');
-                });
-            }
-        });
-    }
+
     //inicia o accordeon de cada aba criada
     function initiate_accordeon(id){
         $("#metadata-container-"+id ).sortable({

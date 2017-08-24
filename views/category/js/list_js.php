@@ -36,9 +36,10 @@
 // SUBMISSAO DO FORMULARIO
 ?>
         $('#submit_form_category').submit(function (e) {
+
             e.preventDefault();
             var formData = new FormData(this);
-            verify_category_privacity(formData);// esta funcao chama a que insere o formularioo de fato
+            verify_category_privacity(formData);// esta funcao chama a que insere o formulario de fato
             $('#category_property').html('');
         });// end submit
 <?php // Submissao do form de exclusao da categoria   ?>
@@ -281,7 +282,7 @@
     // FUNCAO QUE MOSTRA MENSAGEM CASO O USUARIO ESTEJA INSERINDO UMA CATEGORIA PRIVADA
     //  EMBAIXO DE UMA PUBLICA
     function verify_category_privacity(formData){
-        if($('#category_parent_name').val()=='<?php _e('Public Categories', 'tainacan') ?>'&&$('#category_permission').val()=='private'){
+        if($('#category_parent_name').val()=='<?php _e('Public Categories', 'tainacan') ?>' && $('#category_permission').val()=='private'){
              showAlertGeneral('<?php _e('Attention!', 'tainacan') ?>', '<?php _e('Please, select the category as public!', 'tainacan') ?>', "warning");   
         }else{
             submit_form(formData);
@@ -427,62 +428,27 @@
                     clean_archive_mode();
                     break;
                 case "edit":
-                    $("#category_name").val(node.data.title);
-                    $("#category_id").val(node.data.key);
-                    $("#operation_category_form").val('update');
-                     $('#category_property').html('');
-                    $.ajax({
-                        type: "POST",
-                        url: $('#src').val() + "/controllers/category/category_controller.php",
-                        data: {category_id: node.data.key, operation: 'get_parent'}
-                    }).done(function (result) {
-                        elem = jQuery.parseJSON(result);
-                        if (elem.name && elem.name!=='socialdb_taxonomy' && elem.name!=='socialdb_category') {
-                            $("#category_parent_name").val(elem.name);
-                            $("#category_parent_id").val(elem.term_id);
-                        } else {
-                            $("#category_parent_name").val('<?php _e('Category root', 'tainacan'); ?>');
-                            if(elem.term_id){
-                                $("#category_parent_id").val(elem.term_id);
-                            }else{
-                                $("#category_parent_id").val('0');
-                            }
-                            
-                        }
-                        $("#show_category_property").show();
-                        $('.dropdown-toggle').dropdown();
-                    });
-                    // metas
-                    $.ajax({
-                        type: "POST",
-                        url: $('#src').val() + "/controllers/category/category_controller.php",
-                        data: {category_id: node.data.key, operation: 'get_metas'}
-                    }).done(function (result) {
-                        elem = jQuery.parseJSON(result);
-                        if(elem.term.description) {
-                            $("#category_description").val(elem.term.description);
-                        }
-                        if (elem.socialdb_category_permission) {
-                            $("#category_permission").val(elem.socialdb_category_permission);
-                        }
-
-                        if(elem.socialdb_category_owner) {
-                            $('.change-category-own').show();
-                            var owner = elem.socialdb_category_owner;
-                            $("#submit_form_category #category_owner").val(owner);
-                        }
-
-                        if (elem.socialdb_category_moderators) {
-                            $("#chosen-selected2-user").html('');
-                            $.each(elem.socialdb_category_moderators, function (idx, user) {
-                                if (user && user !== false) {
-                                    $("#chosen-selected2-user").append("<option class='selected' value='" + user.id + "' selected='selected' >" + user.name + "</option>");
-                                }
+                    var get_editing = sessionStorage.getItem('editing_category');
+                    if(get_editing)
+                    {
+                        swal({
+                                title: '<?php _e('There are not saved items', 'tainacan'); ?>',
+                                text: '<?php _e('Modifications can be lost', 'tainacan'); ?>',
+                                type: "warning",
+                                showCancelButton: true,
+                                confirmButtonColor: "#DD6B55",
+                                confirmButtonText: '<?php _e('Continue', 'tainacan'); ?>',
+                                cancelButtonText: '<?php _e('Cancel', 'tainacan'); ?>',
+                                closeOnConfirm: false
+                            },
+                            function(){
+                                swal('<?php _e('Deleted', 'tainacan'); ?>', '<?php _e('Modifications were discarted', 'tainacan'); ?>', "success");
+                                sessionStorage.removeItem('editing_category');
+                                get_category_info('<?php _e('Category root', 'tainacan'); ?>', node);
                             });
-                        }
-                        set_fields_archive_mode(elem);
-                        $('.dropdown-toggle').dropdown();
-                    });
+                    }
+                    get_category_info('<?php _e('Category root', 'tainacan'); ?>', node);
+
                     break;
                 case "delete":
                      $('#category_property').html('');

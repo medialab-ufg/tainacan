@@ -32,6 +32,7 @@ require_once(dirname(__FILE__).'../../../models/event/event_tag/event_tag_edit_m
 require_once(dirname(__FILE__).'../../../models/event/event_tag/event_tag_delete_model.php');
 require_once(dirname(__FILE__).'../../../models/ranking/ranking_model.php');
 require_once(dirname(__FILE__).'../../../models/object/object_model.php');
+require_once(dirname(__FILE__) . '../../../models/object/object_save_values.php');
 
  class EventController extends Controller{
 	 public function operation($operation,$data) {
@@ -88,6 +89,8 @@ require_once(dirname(__FILE__).'../../../models/object/object_model.php');
         return $event_object_create_model->verify_event($data);
       //object_delete
       case 'save_reason_to_exclude':
+          $class = new ObjectSaveValuesModel();
+
           $root_category = get_post_meta($data['collection_id'], 'socialdb_collection_object_type', true);
           $properties = get_term_meta($root_category,'socialdb_category_property_id');
           $properties = array_unique($properties);
@@ -97,16 +100,25 @@ require_once(dirname(__FILE__).'../../../models/object/object_model.php');
               if($property_name == 'Cancelamento') {
                   $sub_property = intval(get_term_meta($property, 'socialdb_property_compounds_properties_id', true));
 
-                  $object_model = new ObjectModel();
-                  $res['ids'] = $inserted_ids[] = $object_model->add_value_compound($data['collection_id'], $property, $sub_property, 0, 0, $data['reason']);
-                  $res['props'] = update_post_meta($data['elem_id'], 'socialdb_property_' . $property . '_0', implode(',', $inserted_ids));
+//                  $object_model = new ObjectModel();
+//                  $res['ids'] = $inserted_ids[] = $object_model->add_value_compound($data['collection_id'], $property, $sub_property, 0, 0, $data['reason']);
+//                  $res['props'] = update_post_meta($data['elem_id'], 'socialdb_property_' . $property . '_0', implode(',', $inserted_ids));
                   $res['nome'] = $data['item'];
+                  $class->saveValue($data['elem_id'],
+                      $property,
+                      $sub_property,
+                      'data',
+                      0,
+                       $data['reason'],
+                      false
+                  );
 
-                  if(!empty($res) && ctype_digit($res['ids']) && ($res['ids'] != false)) {
+
+                  //if(!empty($res) && ctype_digit($res['ids']) && ($res['ids'] != false)) {
                       $res['success'] = true;
                       $res['title'] = __('Success', 'tainacan');
                       $res['msg'] = sprintf(  __('The item "%s" has been successfully canceled!', 'tainacan'), $data['item'] );
-                  }
+                  //}
 
                   return json_encode($res);
                   break;
@@ -134,9 +146,11 @@ require_once(dirname(__FILE__).'../../../models/object/object_model.php');
       //property_data_edit_value
       case 'add_event_property_data_edit_value':
         $event_property_data_edit_value_model = new EventPropertyDataEditValue();
+
         if(!isset($data['socialdb_event_property_data_edit_value_suggested_value'])||empty($data['socialdb_event_property_data_edit_value_suggested_value'])){
           $data['socialdb_event_property_data_edit_value_suggested_value'] = '';
         }
+
         return $event_property_data_edit_value_model->create_event($data);
       case 'socialdb_event_property_data_edit_value';
         $event_property_data_edit_value_model = new EventPropertyDataEditValue();

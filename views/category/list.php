@@ -114,7 +114,7 @@ global $config;
                     <textarea id="observation" class="form-control" name="observation"></textarea>
                 </div>
             <?php } ?>
-            <button type="button" onclick="list_category_property()" id="show_category_property" style="display: none;" class="btn btn-primary"><?php _e('Category Properties', 'tainacan'); ?></button>
+            <button type="button" onclick="list_category_property()" id="show_category_property" style="display: none;" class="btn btn-primary"><?php _e('See category properties', 'tainacan'); ?></button>
             <div class="form-group">
                 <div id="category_property" style="margin-left: -15px;margin-top: 15px;"></div>
             </div>    
@@ -122,8 +122,9 @@ global $config;
             <input type="hidden" id="category_collection_id" name="collection_id" value="">
             <input type="hidden" id="category_id" name="category_id" value="">
             <input type="hidden" id="operation_category_form" name="operation" value="add">
-            <button type="submit" id="submit" class="btn btn-default"><?php _e('Submit', 'tainacan'); ?></button>
-            <button type="button" onclick="clear_buttons()" class="btn btn-default" id="clear_categories"><?php _e('New', 'tainacan'); ?></button>
+
+            <button type="button" onclick="clear_buttons(); sessionStorage.removeItem('editing_category');" class="btn btn-default" id="clear_categories"><?php _e('Clear', 'tainacan'); ?></button>
+            <button type="submit" id="submit" onclick="sessionStorage.removeItem('editing_category');" class="btn btn-default"><?php _e('Save', 'tainacan'); ?></button>
         </form>
     </div>    
 </div> 
