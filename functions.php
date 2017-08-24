@@ -582,20 +582,44 @@ function tainacan_comments($comment, $args, $depth) {
                         <a onclick="showModalReply('<?php comment_ID(); ?>');"><b><?php _e("Reply", 'tainacan'); ?></b></a>&nbsp;&nbsp;
                     </div>
 
-                    <?php if (!CollectionModel::is_moderator($global_collection_id, get_current_user_id()) && get_userdata(get_current_user_id())->display_name !== get_comment_author()): ?>
-                        <?php if (verify_allowed_action($global_collection_id, 'socialdb_collection_permission_delete_comment')): ?>
+                    <?php
+                        /*Não é o dono da coleção e nem é o autor do comentario*/
+                        $collection_moderator = verify_allowed_action($global_collection_id, 'socialdb_collection_permission_delete_comment');
+                        $comment_autor = (get_userdata(get_current_user_id())->display_name === get_comment_author())? true : false;
+
+                        $can_delete = verify_allowed_action($global_collection_id, 'socialdb_collection_permission_delete_comment');
+                        $can_edit = verify_allowed_action($global_collection_id, 'socialdb_collection_permission_edit_comment');
+                        if (!$collection_moderator && !$comment_autor)
+                        {
+                            ?>
                             <div class="col-md-1 no-padding comment-item">
                                 <a onclick="showModalReportAbuseComment('<?php comment_ID(); ?>');"><span class="glyphicon glyphicon-bullhorn"></span>&nbsp;<?php _e("Report Abuse", 'tainacan'); ?></a>
                             </div>
-                        <?php endif; ?>
-                    <?php else: ?>
-                        <div class="col-md-1 no-padding comment-item">
-                            <a onclick="showEditComment('<?php comment_ID(); ?>');"><span class="glyphicon glyphicon-pencil"></span>&nbsp;<?php _e("Edit", 'tainacan'); ?></a>&nbsp;
-                        </div>
-                        <div class="col-md-1 no-padding comment-item">
-                            <a onclick="showAlertDeleteComment('<?php comment_ID(); ?>', '<?php _e('Attention!') ?>', '<?php _e('Delete this comment?', 'tainacan') ?>', '<?php echo mktime(); ?>');"><span class="glyphicon glyphicon-remove"></span>&nbsp;<?php _e("Delete", 'tainacan'); ?></a>
-                        </div>
-                    <?php endif; ?>
+                            <?php
+                        }else
+                        {
+                            if($can_edit || $collection_moderator)
+                            {
+                                ?>
+                                <div class="col-md-1 no-padding comment-item">
+                                    <a onclick="showEditComment('<?php comment_ID(); ?>');"><span class="glyphicon glyphicon-pencil"></span>&nbsp;<?php _e("Edit", 'tainacan'); ?></a>&nbsp;
+                                </div>
+                                <?php
+                            }
+
+                            if($can_delete || $collection_moderator)
+                            {
+                                ?>
+                                <div class="col-md-1 no-padding comment-item">
+                                    <a onclick="showAlertDeleteComment('<?php comment_ID(); ?>', '<?php _e('Attention!') ?>', '<?php _e('Delete this comment?', 'tainacan') ?>', '<?php echo mktime(); ?>');">
+                                        <span class="glyphicon glyphicon-remove"></span>&nbsp;<?php _e("Delete", 'tainacan'); ?>
+                                    </a>
+                                </div>
+                                <?php
+                            }
+                        }
+
+                    ?>
 
                     <div class="col-md-2 no-padding">
                         <a href="javascript:void(0)" id="resources_collection_button" class="dropdown-toggle"  data-toggle="dropdown" role="button" aria-expanded="false" style="display:inline-block;">
