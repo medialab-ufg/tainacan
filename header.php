@@ -107,7 +107,7 @@ $_src_ = get_template_directory_uri();
                             <!-- dropdown-show -->
                             <ul class="dropdown-menu" role="menu" id="tainacan-menu">
                               <li>
-                                <a href="#" onclick="showProfileScreen('<?php echo $_src_ ?>');"> <?php _e('Profile', 'tainacan'); ?></a>
+                                <a href="javascript:void(0)" onclick="showProfileScreen('<?php echo $_src_ ?>');"> <?php _e('Profile', 'tainacan'); ?></a>
                               </li>
                               <!--li>
                                 <a href="<?= get_the_permalink($col_root_id) . '?mycollections=true' ?>"><?php _e('My collections', 'tainacan'); ?></a>

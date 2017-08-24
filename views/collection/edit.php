@@ -31,8 +31,10 @@ $_showH = ("disabled" === $_en_header) ? false : true ;
                 <textarea class="form-control" rows="4" id="collection_content" name="collection_content" placeholder='<?php _t("Describe your collection in few words", 1); ?>'><?php echo $collection_post->post_content; ?></textarea>
             </div>
 
-            <hr class='tainacanRow' />
 
+
+            <?php if(!has_action('disable_header_collection')): ?>
+                <hr class='tainacanRow' />
             <div class="form-group" style="margin-bottom: 40px">
                 <label for="enable_header"> <?php _t('Collection header',1); ?> </label>
                 <div class="col-md-12">
@@ -83,8 +85,9 @@ $_showH = ("disabled" === $_en_header) ? false : true ;
 
                 </div>
             </div>
+                <hr class='tainacanRow' />
+            <?php endif; ?>
 
-            <hr class='tainacanRow' />
 
             <div class="form-group">
                 <a id="show_adv_config_link" onclick="showAdvancedConfig();" style="cursor:pointer;">
