@@ -25,7 +25,7 @@ $checkout = [ "out" => "do_checkout('". $curr_id ."')",
     "discard" => "discard_checkout('". $curr_id ."')" ];
 
 $itemDelete = [
-    'id' => $curr_id, 
+    'id' => $curr_id,
     'title' =>  _t('Delete Object'),
     'time' => time(),
     'text' => _t('Are you sure to remove the object: ') . get_the_title() ];
@@ -106,7 +106,7 @@ $is_current_user_the_author = get_post($curr_id)->post_author == get_current_use
                         <a onclick="edit_object('<?php echo $curr_id; ?>')"> <?php _t('Edit item',1); ?> </a>
                     <?php } else { ?>
                         <?php if(hasHelper($curr_id)): ?>
-                        <a href="<?php echo get_the_permalink($collection_id).get_post($curr_id)->post_name.'/editar'; ?>">   
+                        <a href="<?php echo get_the_permalink($collection_id).get_post($curr_id)->post_name.'/editar'; ?>">
                             <?php _t('Edit item',1); ?>
                         </a>
                         <?php else: ?>
@@ -148,7 +148,7 @@ $is_current_user_the_author = get_post($curr_id)->post_author == get_current_use
 
             <?php if($is_single_page): ?>
                 <li class="tainacan-museum-clear"> <a class="ac-item-graph" onclick="showGraph('<?php echo $rdfURL; ?>')"> <?php _t('See graph',1); ?> </a> </li>
-            <?php endif; 
+            <?php endif;
 
             if(!$is_single_page): ?>
                 <li class="collec-only tainacan-museum-clear">
@@ -157,7 +157,7 @@ $is_current_user_the_author = get_post($curr_id)->post_author == get_current_use
             <?php
             endif;
 
-            if( has_filter('tainacan_show_reason_modal') && ! apply_filters("tainacan_show_restore_options", $collection_id) 
+            if( has_filter('tainacan_show_reason_modal') && ! apply_filters("tainacan_show_restore_options", $collection_id)
                 && ($is_repo_admin || $is_current_user_the_author) ) {
             ?>
                 <li>

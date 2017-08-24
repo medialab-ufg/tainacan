@@ -1857,11 +1857,11 @@ if (!function_exists("theme_js")) {
         /* ColorPicker Bootstrap JS */
         wp_register_script('ColorPicker', get_template_directory_uri() . '/libraries/js/colorpicker/js/bootstrap-colorpicker.js');
         /* SweetAlert Bootstrap JS */
-        wp_register_script('SweetAlert', get_template_directory_uri() . '/libraries/js/SweetAlert/sweet-alert.js', false, true);
-        wp_register_script('SweetAlertJS', get_template_directory_uri() . '/libraries/js/SweetAlert/functionsAlert.js', false, true);
+        wp_register_script('SweetAlert', get_template_directory_uri() . '/libraries/js/SweetAlert/sweet-alert.js', false, false,true);
+        wp_register_script('SweetAlertJS', get_template_directory_uri() . '/libraries/js/SweetAlert/functionsAlert.js', false, false,true);
 
         /* js-xls */
-        wp_register_script('js-xls', get_template_directory_uri() . '/libraries/js/js-xlsx/xls.core.min.js', false, true);
+        wp_register_script('js-xls', get_template_directory_uri() . '/libraries/js/js-xlsx/xls.core.min.js', false, false, true);
 
         /* FileSaver */
         wp_register_script('FileSaver', get_template_directory_uri() . '/libraries/js/FileSaver/FileSaver.min.js', array('jquery', 'bootstrap.min'), false, true);
@@ -1901,11 +1901,11 @@ if (!function_exists("theme_js")) {
         /* Toastr - notificacoes na tela */
         wp_register_script('toastrjs', get_template_directory_uri() . '/libraries/js/toastr/toastr.min.js');
         /* PrettyPhoto */
-        wp_register_script('montage', get_template_directory_uri() . '/libraries/js/montage/jquery.montage.min.js');
+        wp_register_script('montage', get_template_directory_uri() . '/libraries/js/montage/jquery.montage.min.js', false, false, true);
         /* Select2 */
         wp_register_script("select2", get_template_directory_uri() . '/libraries/js/select2/select2.js', array('jquery'));
         /* Slick - Caroulsel Gallery */
-        wp_register_script("slick", get_template_directory_uri() . '/libraries/js/slick/slick.min.js', array('jquery'));
+        wp_register_script("slick", get_template_directory_uri() . '/libraries/js/slick/slick.min.js', array('jquery'), false, true);
         /* Time Picker */
         wp_register_script("timepicker", get_template_directory_uri() .'/libraries/js/timepicker/timepicker.js', array('jquery'));
         /* Croppic */
@@ -1916,9 +1916,9 @@ if (!function_exists("theme_js")) {
 
         wp_register_script("routes", get_template_directory_uri() . '/libraries/js/router/jquery.routes.js');
 
-        wp_register_script("html5shiv", '//cdn.jsdelivr.net/html5shiv/3.7.2/html5shiv.js');
-        wp_register_script("html5shiv-printshiv", '//cdn.jsdelivr.net/html5shiv/3.7.2/html5shiv-printshiv.js');
-        wp_register_script("respond", '//cdn.jsdelivr.net/respond/1.4.2/respond.min.js');
+        wp_register_script("html5shiv", '//cdn.jsdelivr.net/html5shiv/3.7.2/html5shiv.js', false, false, true);
+        wp_register_script("html5shiv-printshiv", '//cdn.jsdelivr.net/html5shiv/3.7.2/html5shiv-printshiv.js', false, false, true);
+        wp_register_script("respond", '//cdn.jsdelivr.net/respond/1.4.2/respond.min.js', false, false, true);
 
         /* PDF Thumbnail */
         wp_register_script("pdf_thumbnail", get_template_directory_uri() . '/libraries/js/pdfThumb/pdfJS/build/pdf.js');

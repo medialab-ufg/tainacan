@@ -5,9 +5,7 @@ include_once ('js/list_js.php');
 include_once ('js/geolocation_js.php');
 include_once ('helper/loader.php');
 
-$viewHelper = new ViewHelper();
 $objHelper->renderCollectionPagination($loop->found_posts, $loop->post_count, $pagid, $show_string, 'top_pag');
-
 if ( $loop->have_posts() ) { ?>
 
     <div id="collection-view-mode">
@@ -15,7 +13,6 @@ if ( $loop->have_posts() ) { ?>
             <?php
             while ( $loop->have_posts() ) : $loop->the_post(); $countLine++;
                 $curr_id = get_the_ID();
-                
                 include "list_modes/modals.php";
                 include "list_modes/cards.php";
                 include "list_modes/list.php";
@@ -27,7 +24,7 @@ if ( $loop->have_posts() ) { ?>
             include_once "list_modes/geolocation.php";
             ?>
         </div>
-        
+
     </div> <br />
 
 <?php } else { ?> <!-- TAINACAN: se a pesquisa nao encontrou nenhum item -->

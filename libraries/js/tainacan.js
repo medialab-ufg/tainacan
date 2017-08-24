@@ -942,8 +942,6 @@ function populateList(src) {
                     + '</td></tr>');
         });
     });
-    ;
-
 }
 
 // Mostra a listagem inicial
@@ -952,27 +950,34 @@ function showList(src) {
         $('.selectors a').removeClass('highlight');
         $('#list').hide();
         $('#loader_objects').show();
+        var collec_data = { operation: 'list',
+            mycollections: $("#mycollections").val(),
+            sharedcollections: $("#sharedcollections").val(),
+            keyword: $("#search_collection_field").val(),
+            collection_id: $("#collection_id").val(),
+            ordenation_id: $('#collection_single_ordenation').val()
+        };
         $.ajax({
-            url: src + '/controllers/object/object_controller.php',
-            type: 'POST',
-            data: {operation: 'list', mycollections: $("#mycollections").val(), sharedcollections: $("#sharedcollections").val(), keyword: $("#search_collection_field").val(), collection_id: $("#collection_id").val(), ordenation_id: $('#collection_single_ordenation').val()}
+            url: src + '/controllers/object/object_controller.php', type: 'POST', data: collec_data
         }).done(function (result) {
             $('#hideTrash').hide();
-            elem = jQuery.parseJSON(result);
+            var elem = jQuery.parseJSON(result);
+            if (elem) {
+                var set_order = elem.preset_order;
+                if(set_order) {
+                    var order_btn = $(".header-colecao button#" + set_order.toLowerCase());
+                    $(".sort_list").css('background', 'white');
+                    $(order_btn).css('background', 'buttonface');
+                }
+                $('#loader_objects').hide();
+                $('#wp_query_args').val(elem.args);
+                $('#list').html(elem.page).show();
+                if (elem.empty_collection) {
+                    $('#collection_empty').show();
+                    $('#items_not_found').hide();
+                }
+            }
 
-            var set_order = elem.preset_order;
-            if(set_order) {
-                var order_btn = $(".header-colecao button#" + set_order.toLowerCase());
-                $(".sort_list").css('background', 'white');
-                $(order_btn).css('background', 'buttonface');
-            }
-            $('#loader_objects').hide();
-            $('#wp_query_args').val(elem.args);
-            $('#list').html(elem.page).show();
-            if (elem.empty_collection) {
-                $('#collection_empty').show();
-                $('#items_not_found').hide();
-            }
         });
     }
 }

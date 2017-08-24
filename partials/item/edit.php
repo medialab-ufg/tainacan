@@ -1,7 +1,10 @@
 <?php
 include_once dirname(__FILE__ ) . '/../../controllers/object/object_controller.php';
 $obj = new ObjectController();
-$data = ['collection_id' => get_the_ID()];
+
+$item = get_post();
+$data = ['collection_id' => $item->post_parent,'item_id'=>$item->ID];
+
 $op = $obj->operation("edit-item", $data);
 
 get_header();

@@ -202,20 +202,22 @@ class FormItemController extends Controller {
 
                 $category_root_id = $object_model->get_category_root_of($data['collection_id']);
                 
-                if(strcmp($item->post_title, 'Temporary_post') == 0)
-                {
+                if(strcmp($item->post_title, 'Temporary_post') == 0) {
                     $post = array(
                         'post_title' => time(),
                         'ID' => $data['item_id'],
                         'post_parent' => $data['collection_id']
                     );
-                }else
-                {
+                } else {
                     $post = array(
                         'ID' => $data['item_id'],
                         'post_parent' => $data['collection_id']
                     );
                 }
+
+                if($post['post_parent'] === 0)
+                    unset($post['post_parent']);
+
 
                 $data['ID'] = wp_update_post($post);
                 //Tainacan IBRAM

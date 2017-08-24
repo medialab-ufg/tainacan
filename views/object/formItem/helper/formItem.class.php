@@ -944,15 +944,16 @@ class FormItem extends Model {
                     data: {
                         operation: 'updateItem',
                         item_id:'<?php echo $this->itemId ?>',
-                        collection_id:$('#collection_id').val()}
+                        collection_id: $('#collection_id').val()}
                 }).done(function (result) {
                     hide_modal_main();
                     var json = JSON.parse(result);
                     if(json.ok)
                     {
                         showAlertGeneral(json.title,json.msg,json.type);
-                        routerGo($('#slug_collection').val());
-                        showList($('#src').val());
+                       //  window.location = '<?php echo get_the_permalink($this->itemId) ?>';
+                        // routerGo($('#slug_collection').val());
+                        // showList($('#src').val());
                     }else showAlertGeneral(json.title,json.msg,json.type);
                 });
             }

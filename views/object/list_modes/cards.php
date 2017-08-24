@@ -1,14 +1,4 @@
 <?php
-/*
-$_current_collection = $_SERVER['HTTP_REFERER'];
-$_last_char = $_current_collection[strlen($_current_collection) - 1];
-
-if ($_last_char != "/") {
-    $_current_collection .= '/';
-}
-
- $itemURL = $_current_collection . basename(get_permalink());
-*/
 $itemURL = get_the_permalink($curr_id);
 $latitude = get_post_meta($curr_id, "socialdb_property_" . $geo_coordinates["lat"]);
 $longitude = get_post_meta($curr_id, "socialdb_property_" . $geo_coordinates["long"]);
