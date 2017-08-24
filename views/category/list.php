@@ -13,10 +13,18 @@ global $config;
         </h3>
         
         <hr>
+
+        <input type="hidden" id="error_title" value="<?php _e("Error", 'tainacan')?>">
+        <input type="hidden" id="error_msg" value="<?php _e("Seems that you can't delete this category", 'tainacan')?>">
+
+        <input type="hidden" id="success_title" value="<?php _e("Success", 'tainacan')?>">
+        <input type="hidden" id="success_msg" value="<?php _e("Deleted category", 'tainacan')?>">
+
         <div id="alert_success_categories" class="alert alert-success" style="display: none;">
             <button type="button" class="close" onclick="hide_alert();"><span aria-hidden="true">&times;</span></button>
             <?php _e('Operation was successful.', 'tainacan') ?>
-        </div>    
+        </div>
+
         <div id="alert_error_categories" class="alert alert-danger" style="display: none;">
             <button type="button" class="close" onclick="hide_alert();"><span aria-hidden="true">&times;</span></button>
             <span id="default_message_error">
@@ -153,11 +161,12 @@ global $config;
                     <h4 class="modal-title" id="myModalLabel"><span class="glyphicon glyphicon-trash"></span>&nbsp;<?php echo __('Remove Category', 'tainacan'); ?></h4>
                 </div>
                 <div class="modal-body">
-                    <?php echo __('Confirm the exclusion of ', 'tainacan'); ?><span id="delete_category_name"></span>?
+                    <?php echo __('Confirm the exclusion of ', 'tainacan'); ?>: <strong><span id="delete_category_name"></span></strong>?<br>
+                    <p><?php _e('Case this is a father category so your children will becomes father','tainacan');?></p>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo __('Close', 'tainacan'); ?></button>
-                    <button type="submit" class="btn btn-primary"><?php echo __('Save', 'tainacan'); ?></button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo __('No', 'tainacan'); ?></button>
+                    <button type="submit" class="btn btn-primary"><?php echo __('Yes', 'tainacan'); ?></button>
                 </div>
             </form>  
         </div>
