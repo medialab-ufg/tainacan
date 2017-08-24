@@ -57,6 +57,24 @@ $current_user_metas = get_user_meta($current_user->ID);
                                         <td><a href="mailto:<?php echo $current_user->user_email; ?>"><?php echo $current_user->user_email; ?></a></td>
                                     </tr>
 
+                                    <?php if(isset($current_user_metas['about_you'][0]) && !empty($current_user_metas['about_you'][0])): ?>
+                                    <tr>
+                                        <td><?php _e('About you','tainacan'); ?>:</td>
+                                        <td><?php echo $current_user_metas['about_you'][0]  ?></td>
+                                    </tr>
+                                    <?php endif; ?>
+                                    <?php if(isset($current_user_metas['current_work'][0]) && !empty($current_user_metas['current_work'][0])): ?>
+                                    <tr>
+                                        <td><?php _e('Current work','tainacan'); ?>:</td>
+                                        <td><?php echo $current_user_metas['current_work'][0]  ?></td>
+                                    </tr>
+                                    <?php endif; ?>
+                                    <?php if(isset($current_user_metas['prof_resume'][0]) && !empty($current_user_metas['prof_resume'][0])): ?>
+                                    <tr>
+                                        <td><?php _e('Professional resume','tainacan'); ?>:</td>
+                                        <td><?php echo $current_user_metas['prof_resume'][0]  ?></td>
+                                    </tr>
+                                    <?php endif; ?>
                                 </tbody>
                             </table>
 
