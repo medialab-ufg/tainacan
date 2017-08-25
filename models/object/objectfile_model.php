@@ -1,7 +1,7 @@
 <?php
-include_once ('../../../../../wp-config.php');
-include_once ('../../../../../wp-load.php');
-include_once ('../../../../../wp-includes/wp-db.php');
+include_once (dirname(__FILE__) . '/../../../../../wp-config.php');
+include_once (dirname(__FILE__) . '/../../../../../wp-load.php');
+include_once (dirname(__FILE__) . '/../../../../../wp-includes/wp-db.php');
 include_once (dirname(__FILE__) . '../../../models/collection/collection_model.php');
 include_once (dirname(__FILE__) . '../../../models/category/category_model.php');
 include_once (dirname(__FILE__) . '../../../models/event/event_object/event_object_create_model.php');
@@ -290,6 +290,7 @@ class ObjectFileModel extends Model {
                         $metas = wp_get_attachment_metadata($attachment->ID);
                         $obj['ID'] = $attachment->ID;
                         $obj['name'] = $attachment->post_title;
+                        $obj['url'] = $attachment->guid;
                         $obj['size'] = filesize($_file_path_);
                         $extension = $attachment->guid;
                         $ext = pathinfo($extension, PATHINFO_EXTENSION);
