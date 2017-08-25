@@ -560,7 +560,7 @@ $(window).load(function () {
         }
     });
 
-    $(document).on('mouseover', ".config-temp-box", function () {
+    /*$(document).on('mouseover', ".config-temp-box", function () {
         $(document).off('click', 'body');
     });
 
@@ -581,16 +581,14 @@ $(window).load(function () {
                 $("#conclude_config").click();
                 }
             );
-
             event.preventDefault();
-            console.log(this);
         });
-    });
+    });*/
 
     document.addEventListener('scroll', function (event) {
-        if($("#myMenu").is(":visible"))
+        if($("#myMenu,#myMenuSingle").is(":visible"))
         {
-            $("#myMenu").hide();
+            $("#myMenu,#myMenuSingle").hide();
         }
     }, true);
 }); // On load Tainacan' main page

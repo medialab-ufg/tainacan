@@ -302,7 +302,9 @@ while (have_posts()) : the_post();
                         <div class="col-md-12 header-colecao">
                             <div class="row">
                                 <?php $_add_opts = unserialize(get_post_meta($_currentID_, 'socialdb_collection_add_item', true)); ?>
-                                <?php if (get_option('collection_root_id') != get_the_ID() && (is_user_logged_in() && verify_allowed_action(get_the_ID(), 'socialdb_collection_permission_create_object'))): ?>
+                                <?php if ((get_option('collection_root_id') != get_the_ID() && (is_user_logged_in() && verify_allowed_action(get_the_ID(), 'socialdb_collection_permission_create_object')))
+                                            || verify_anonimous_approval_allowed(get_the_ID(), 'socialdb_collection_permission_create_object')
+                                        ): ?>
                                     <div class="tainacan-add-item col-md-1 no-padding"
                                          <?php if (has_filter('show_custom_add_item_button')): ?> style="margin-right:50px;" <?php endif; ?>
                                          <?php if (is_null($_add_opts) && count($_add_opts) == 0): ?> style="display: none" <?php endif; ?> >
@@ -576,30 +578,65 @@ while (have_posts()) : the_post();
     <?php do_action('insert_new_contextmenu_dynatree') ?>
 
     <ul id="myMenuSingle" class="contextMenu" style="display:none; position: fixed">
-        <?php if (!$visualization_page_category || $visualization_page_category === 'right_button'): ?>   
+        <?php if (!$visualization_page_category || $visualization_page_category === 'right_button'):?>
             <li class="see">
                 <a href="#see" style="background-position: 6px 40%;padding:1px 5px 1px 28px;background-repeat:no-repeat;background-image:url('<?php echo get_template_directory_uri() ?>/libraries/css/images/see.png')">
                     <?php _e('View', 'tainacan'); ?>
                 </a>
             </li>
         <?php endif; ?>    
-        <?php if (verify_allowed_action(get_the_ID(), 'socialdb_collection_permission_create_category')): ?>
-            <li class="add">
-                <a href="#add" style="background-position: 6px 50%;padding:1px 5px 1px 28px;background-repeat:no-repeat;background-image:url('<?php echo get_template_directory_uri() ?>/libraries/css/images/1462491942_page_white_add.png')">
-                    <?php _e('Add', 'tainacan'); ?>
-                </a>
-            </li>
-        <?php endif; ?>
-        <?php if (verify_allowed_action(get_the_ID(), 'socialdb_collection_permission_edit_category')): ?>
-            <li class="edit">
-                <a href="#edit"><?php _e('Edit', 'tainacan'); ?></a>
-            </li>
-        <?php endif; ?>
-        <?php if (verify_allowed_action(get_the_ID(), 'socialdb_collection_permission_delete_category')): ?>
-            <li class="delete">
-                <a href="#delete"><?php _e('Remove', 'tainacan'); ?></a>
-            </li>
-        <?php endif; ?>
+        <?php
+            $collection_id = get_the_ID();
+
+            //Add
+            if((get_current_user_id() == 0 && verify_anonimous_approval_allowed($collection_id, 'socialdb_collection_permission_create_category'))
+                || get_current_user_id() != 0)
+            {
+                if (verify_allowed_action($collection_id, 'socialdb_collection_permission_create_category'))
+                {
+                    ?>
+                    <li class="add">
+                        <a href="#add" style="background-position: 6px 50%;padding:1px 5px 1px 28px;background-repeat:no-repeat;background-image:url('<?php echo get_template_directory_uri() ?>/libraries/css/images/1462491942_page_white_add.png')">
+                            <?php _e('Add', 'tainacan'); ?>
+                        </a>
+                    </li>
+                    <?php
+                }
+            }
+
+        ?>
+
+        <?php
+            //Edit
+            if((get_current_user_id() == 0 && verify_anonimous_approval_allowed($collection_id, 'socialdb_collection_permission_edit_category'))
+                || get_current_user_id() != 0)
+            {
+
+                if (verify_allowed_action($collection_id, 'socialdb_collection_permission_edit_category'))
+                {
+                    ?>
+                    <li class="edit">
+                        <a href="#edit"><?php _e('Edit', 'tainacan'); ?></a>
+                    </li>
+                    <?php
+                }
+            }
+
+            //Delete
+            if((get_current_user_id() == 0 && verify_anonimous_approval_allowed($collection_id, 'socialdb_collection_permission_delete_category'))
+                || get_current_user_id() != 0)
+            {
+                if (verify_allowed_action($collection_id, 'socialdb_collection_permission_delete_category'))
+                {
+                    ?>
+                    <li class="delete">
+                        <a href="#delete"><?php _e('Remove', 'tainacan'); ?></a>
+                    </li>
+                    <?php
+                }
+            }
+        ?>
+
         <?php //if (verify_collection_moderators(get_the_ID(), get_current_user_id())):      ?>
         <li class="list" id="list_meta_single">
             <a href="#metadata" style="background-position: 6px 50%;padding:1px 5px 1px 28px;background-repeat:no-repeat;background-image:url('<?php echo get_template_directory_uri() ?>/libraries/css/images/properties.png')">

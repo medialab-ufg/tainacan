@@ -8,7 +8,8 @@
 
     });
 
-    function showDynatreeLeft(src) {
+    function showDynatreeLeft(src)
+    {
         var select = 0;
         $("#dynatree").dynatree({
             selectionVisible: true, // Make sure, selected nodes are visible (expanded).  
@@ -146,7 +147,6 @@
                                     button: 2
                                 });
                         return false;
-
                         // Handle Ctrl-C, -X and -V
                     case 67:
                         if (event.ctrlKey) { // Ctrl-C
@@ -169,8 +169,10 @@
                 }
             },
             onCreate: function (node, span) {
-                if(!$('body').hasClass('logged-in'))
+                /*if(!$('body').hasClass('logged-in'))
+                {
                     return false;
+                } */
                 var key = node.data.key;
                 $(span).attr('id',"ui-dynatree-id-" + node.data.key)
                 var n = key.toString().indexOf("_");

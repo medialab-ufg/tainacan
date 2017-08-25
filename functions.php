@@ -1082,6 +1082,16 @@ function verify_allowed_action($collection_id, $name_permission, $object_id = 0)
     }
 }
 
+function verify_anonimous_approval_allowed($collection_id, $name_permission) {
+    $permission = get_post_meta($collection_id, $name_permission, true);
+    if($permission == 'anonymous' || $permission == 'approval')
+    {
+        return true;
+    }
+    else return false;
+
+}
+
 /**
  * function create_register($name_register,$taxonomy)
  * @param string $name_register

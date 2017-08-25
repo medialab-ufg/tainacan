@@ -404,10 +404,22 @@ $view_helper = new ObjectHelper($collection_id);
                                 </button>
                                 <ul aria-labelledby="btnGroupVerticalDrop1" role="menu" class="dropdown-menu add-metadata">
                                     <?php if ($create_perm_data): ?>
-                                        <li>&nbsp;<span class="glyphicon glyphicon-th-list graydrop"></span>&nbsp;<span><a class="add_property_data" onclick="show_form_data_property_single('<?php echo $object->ID ?>')" href="#property_form_<?php echo $object->ID ?>"><?php _e('Add new data property', 'tainacan'); ?></a></span></li>
+                                        <li>&nbsp;<span class="glyphicon glyphicon-th-list graydrop"></span>
+                                            &nbsp;<span>
+                                                <a class="add_property_data" onclick="show_form_data_property_single('<?php echo $object->ID ?>')" href="javascript:void(0)">
+                                                    <?php _e('Add new data property', 'tainacan'); ?>
+                                                </a>
+                                            </span>
+                                        </li>
                                     <?php endif; ?>
                                     <?php if ($create_perm_object): ?>
-                                        <li>&nbsp;<span class="glyphicon glyphicon-th-list graydrop"></span>&nbsp;<span><a class="add_property_object" onclick="show_form_object_property_single('<?php echo $object->ID ?>')" href="#property_form_<?php echo $object->ID ?>"><?php _e('Add new object property', 'tainacan'); ?></a></span></li>
+                                        <li>&nbsp;<span class="glyphicon glyphicon-th-list graydrop"></span>&nbsp;
+                                            <span>
+                                                <a class="add_property_object" onclick="show_form_object_property_single('<?php echo $object->ID ?>')" href="javascript:void(0)">
+                                                    <?php _e('Add new object property', 'tainacan'); ?>
+                                                </a>
+                                            </span>
+                                        </li>
                                     <?php endif; ?>
                                 </ul>
                             <?php endif; ?>
