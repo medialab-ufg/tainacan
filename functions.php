@@ -1842,10 +1842,6 @@ if (!function_exists("theme_js")) {
         /* jquery UI */
         wp_register_script('jqueryUi', get_template_directory_uri() . '/libraries/js/jquery_ui/jquery-ui.min.js', array('jquery'), '1.2');
         wp_register_script('bootstrap.min', get_template_directory_uri() . '/libraries/js/bootstrap.min.js', array('jquery'), '1.11');
-        /* JIT JS */
-        wp_register_script('JitJs', get_template_directory_uri() . '/libraries/js/jit/jit.js');
-        /* JIT Excanvas JS */
-        wp_register_script('JitExcanvasJs', get_template_directory_uri() . '/libraries/js/jit/extras/excanvas.js');
 
         wp_register_script('tainacan', get_template_directory_uri() . '/libraries/js/tainacan.js', array('jquery'), '1.11');
         /* Dynatree JS */
@@ -1900,8 +1896,7 @@ if (!function_exists("theme_js")) {
         wp_register_script('jqcloud', get_template_directory_uri() . '/libraries/js/jqcloud/jqcloud.js');
         /* Toastr - notificacoes na tela */
         wp_register_script('toastrjs', get_template_directory_uri() . '/libraries/js/toastr/toastr.min.js');
-        /* PrettyPhoto */
-        wp_register_script('montage', get_template_directory_uri() . '/libraries/js/montage/jquery.montage.min.js', false, false, true);
+
         /* Select2 */
         wp_register_script("select2", get_template_directory_uri() . '/libraries/js/select2/select2.js', array('jquery'));
         /* Slick - Caroulsel Gallery */
@@ -1924,10 +1919,10 @@ if (!function_exists("theme_js")) {
         wp_register_script("pdf_thumbnail", get_template_directory_uri() . '/libraries/js/pdfThumb/pdfJS/build/pdf.js');
         wp_register_script("pdf_thumbnail_worker", get_template_directory_uri() . '/libraries/js/pdfThumb/pdfJS/build/pdf.worker.js');
 
-        $js_files = ['jquery_min', 'jqueryUi', 'bootstrap.min', 'JitJs', 'JitExcanvasJs', 'tainacan', 'DynatreeJs', 'ckeditorjs',
-            'contextMenu', 'ColorPicker', 'SweetAlert', 'SweetAlertJS','js-xls', 'FileSaver', 'jsPDF', 'jsPDF_auto_table',
-            'tableExport', 'jquerydataTablesmin', 'data_table', 'raty', 'jqpagination', 'dropzone', 'croppic', 'bootstrap-combobox',
-            'FacebookJS', 'row-sorter', 'maskedInput', 'montage', 'prettyphoto', 'select2', 'slick','timepicker', 'jqcloud',
+        $js_files = ['jquery_min', 'jqueryUi', 'bootstrap.min', 'tainacan', 'DynatreeJs', 'ckeditorjs', 'contextMenu',
+            'ColorPicker', 'SweetAlert', 'SweetAlertJS','js-xls', 'FileSaver', 'jsPDF', 'jsPDF_auto_table', 'tableExport',
+            'jquerydataTablesmin', 'data_table', 'raty', 'jqpagination', 'dropzone', 'croppic', 'bootstrap-combobox',
+            'FacebookJS', 'row-sorter', 'maskedInput', 'prettyphoto', 'select2', 'slick','timepicker', 'jqcloud',
             'toastrjs', 'gloader','routes', 'html5shiv', 'html5shiv-printshiv', 'respond', 'pdf_thumbnail', 'pdf_thumbnail_worker'];
 
         foreach ($js_files as $js_file):
