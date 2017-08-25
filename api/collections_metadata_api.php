@@ -279,7 +279,8 @@ abstract class CollectionsMetadataApi {
         $return['search_in_properties'] =  empty($property['metas']['socialdb_property_to_search_in']) ? false : $property['metas']['socialdb_property_to_search_in'] ;
         $return['avoid_items'] = ( isset($property['metas']['socialdb_property_avoid_items'])) ? true : false;
         $return['habilitate_new_item'] = ( isset($property['metas']['socialdb_property_habilitate_new_item']) && $property['metas']['socialdb_property_habilitate_new_item'] === 'true' ) ? true : false;
-        $return['object_category_id'] = empty($property['metas']['socialdb_property_to_search_in']) ? false : $property['metas']['socialdb_property_to_search_in'] ;
+        $return['object_category_id'] = empty($property['metas']['socialdb_property_object_category_id']) ? false : $property['metas']['socialdb_property_object_category_id'] ;
+        $return['to_search_in'] = empty($property['metas']['socialdb_property_to_search_in']) ? false : $property['metas']['socialdb_property_to_search_in'] ;
         $return['is_filter'] = empty($property['metas']['socialdb_property_object_is_facet']) ? false : $property['metas']['socialdb_property_object_is_facet'] ;
         $return['reverse'] = empty($property['metas']['socialdb_property_object_reverse']) ? false : $property['metas']['socialdb_property_object_is_facet'] ;
         //used always
