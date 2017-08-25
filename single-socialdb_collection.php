@@ -130,7 +130,8 @@ while (have_posts()) : the_post();
                                 <input type="hidden" id="advanced_search_collection_id" name="collection_id" value="<?php echo $_currentID_; ?>">
                                 <div style="margin-top: 10px;display:none;" class="" id="propertiesRootAdvancedSearch">
                                     <center>
-                                        <img src="<?php echo get_template_directory_uri() . '/libraries/images/catalogo_loader_725.gif' ?>">
+                                        <img src="<?php echo get_template_directory_uri() . '/libraries/images/catalogo_loader_725.gif' ?>"
+                                             alt="<?php _t('Loading',1);?>" title="<?php _t('Loading',1);?>" />
                                         <h3><?php _e('Please wait...', 'tainacan') ?></h3>
                                     </center>
                                 </div>

@@ -70,7 +70,6 @@ $(window).load(function () {
 
     // Do NOT load this actions at statistics page
     if( ! $('body').hasClass('page-template-page-statistics') ) {
-        $("area[rel^='prettyPhoto']").prettyPhoto();
         if(src) {
             get_collections_template(src);
             check_privacity(src);

@@ -41,7 +41,8 @@
 else: ?>
     <div id="display_view_main_page" class="container-fluid"></div>
     <div id="loader_collections">
-        <img src="<?php echo get_template_directory_uri() . '/libraries/images/new_loader.gif' ?>" width="64px" height="64px" />
+        <img src="<?php echo get_template_directory_uri().'/libraries/images/new_loader.gif' ?>" width="64px" height="64px"
+             alt="<?php _t('Loading',1);?>" title="<?php _t('Loading',1);?>" />
         <h3> <?php _e('Loading Collections...', 'tainacan') ?> </h3>
     </div>
 <?php endif; ?>

@@ -1841,17 +1841,17 @@ if (!function_exists("theme_js")) {
         wp_register_script('jquery_min', get_template_directory_uri() . '/libraries/js/jquery.min.js', array('jquery'), '1.7.88');
         /* jquery UI */
         wp_register_script('jqueryUi', get_template_directory_uri() . '/libraries/js/jquery_ui/jquery-ui.min.js', array('jquery'), '1.2');
-        wp_register_script('bootstrap.min', get_template_directory_uri() . '/libraries/js/bootstrap.min.js', array('jquery'), '1.11');
+        wp_register_script('bootstrap.min', get_template_directory_uri() . '/libraries/js/bootstrap.min.js', array('jquery'), '1.11', true);
 
-        wp_register_script('tainacan', get_template_directory_uri() . '/libraries/js/tainacan.js', array('jquery'), '1.11');
+        wp_register_script('tainacan', get_template_directory_uri() . '/libraries/js/tainacan.js', array('jquery'), '1.11',true);
         /* Dynatree JS */
-        wp_register_script('DynatreeJs', get_template_directory_uri() . '/libraries/js/dynatree/jquery.dynatree.full.js');
+        wp_register_script('DynatreeJs', get_template_directory_uri() . '/libraries/js/dynatree/jquery.dynatree.full.js', false, false, true);
         /* Ckeditor JS */
-        wp_register_script('ckeditorjs', get_template_directory_uri() . '/libraries/js/ckeditor/ckeditor.js');
+        wp_register_script('ckeditorjs', get_template_directory_uri() . '/libraries/js/ckeditor/ckeditor.js', false, false, true);
         /* Context Menu (Dynatree) JS */
-        wp_register_script('contextMenu', get_template_directory_uri() . '/libraries/js/contextMenu/jquery.contextMenu-custom.js');
+        wp_register_script('contextMenu', get_template_directory_uri() . '/libraries/js/contextMenu/jquery.contextMenu-custom.js', false, false, true);
         /* ColorPicker Bootstrap JS */
-        wp_register_script('ColorPicker', get_template_directory_uri() . '/libraries/js/colorpicker/js/bootstrap-colorpicker.js');
+        wp_register_script('ColorPicker', get_template_directory_uri() . '/libraries/js/colorpicker/js/bootstrap-colorpicker.js', false, false, true);
         /* SweetAlert Bootstrap JS */
         wp_register_script('SweetAlert', get_template_directory_uri() . '/libraries/js/SweetAlert/sweet-alert.js', false, false,true);
         wp_register_script('SweetAlertJS', get_template_directory_uri() . '/libraries/js/SweetAlert/functionsAlert.js', false, false,true);
@@ -1871,58 +1871,54 @@ if (!function_exists("theme_js")) {
         wp_register_script('tableExport', get_template_directory_uri() . '/libraries/js/tableExport/tableExport.min.js', array('FileSaver', 'js-xls'), false, true);
 
         /* Data Table */
-        wp_register_script('jquerydataTablesmin', get_template_directory_uri() . '/libraries/js/bootstrap_data_table/jquery.dataTables.min.js', false, true);
-        wp_register_script('data_table', get_template_directory_uri() . '/libraries/js/bootstrap_data_table/data_table.js', false, true);
+        wp_register_script('jquerydataTablesmin', get_template_directory_uri() . '/libraries/js/bootstrap_data_table/jquery.dataTables.min.js', false, false, true);
+        wp_register_script('data_table', get_template_directory_uri() . '/libraries/js/bootstrap_data_table/data_table.js', false, false,true);
         /* Raty */
-        wp_register_script('raty', get_template_directory_uri() . '/libraries/js/raty/jquery.raty.js');
+        wp_register_script('raty', get_template_directory_uri() . '/libraries/js/raty/jquery.raty.js', false, false, true);
         /* Pagination */
-        wp_register_script('jqpagination', get_template_directory_uri() . '/libraries/js/pagination/jquery.jqpagination.js');
-        /* locdropzone */
-        wp_register_script('dropzone', get_template_directory_uri() . '/libraries/js/dropzone/dropzone.js');
+        wp_register_script('jqpagination', get_template_directory_uri() . '/libraries/js/pagination/jquery.jqpagination.js', false, false, true);
         /* dropzone */
-        wp_register_script('bootstrap-combobox', get_template_directory_uri() . '/libraries/js/combobox/bootstrap-combobox.js');
+        wp_register_script('dropzone', get_template_directory_uri() . '/libraries/js/dropzone/dropzone.js', false, false, true);
+        /* dropzone */
+        wp_register_script('bootstrap-combobox', get_template_directory_uri() . '/libraries/js/combobox/bootstrap-combobox.js', false, false, true);
         /* Facebook */
-        wp_register_script('FacebookJS', 'https://connect.facebook.net/en_US/all.js');
+        wp_register_script('FacebookJS', 'https://connect.facebook.net/en_US/all.js', false, false, true);
         /* Row Sorter */
-        wp_register_script('row-sorter', get_template_directory_uri() . '/libraries/js/row_sorter/jquery.rowsorter.js');
+        wp_register_script('row-sorter', get_template_directory_uri() . '/libraries/js/row_sorter/jquery.rowsorter.js', false, false, true);
         /* Masked Input */
-        wp_register_script('maskedInput', get_template_directory_uri() . '/libraries/js/maskedinput/jquery.mask.min.js');
-        /* Lightbox */
-        //wp_register_script('lightbox', get_template_directory_uri() . '/libraries/js/lightbox/js/lightbox.min.js');
-        /* PrettyPhoto */
-        wp_register_script('prettyphoto', get_template_directory_uri() . '/libraries/js/prettyphoto/js/jquery.prettyPhoto.js');
-        /* Toastr - notificacoes na tela */
+        wp_register_script('maskedInput', get_template_directory_uri() . '/libraries/js/maskedinput/jquery.mask.min.js', false, false, true);
+
         /* jqcloud */
-        wp_register_script('jqcloud', get_template_directory_uri() . '/libraries/js/jqcloud/jqcloud.js');
+        wp_register_script('jqcloud', get_template_directory_uri() . '/libraries/js/jqcloud/jqcloud.js', false, false, true);
         /* Toastr - notificacoes na tela */
-        wp_register_script('toastrjs', get_template_directory_uri() . '/libraries/js/toastr/toastr.min.js');
+        wp_register_script('toastrjs', get_template_directory_uri() . '/libraries/js/toastr/toastr.min.js', false, false, true);
 
         /* Select2 */
-        wp_register_script("select2", get_template_directory_uri() . '/libraries/js/select2/select2.js', array('jquery'));
+        wp_register_script("select2", get_template_directory_uri() . '/libraries/js/select2/select2.js', array('jquery'), false, true);
         /* Slick - Caroulsel Gallery */
         wp_register_script("slick", get_template_directory_uri() . '/libraries/js/slick/slick.min.js', array('jquery'), false, true);
         /* Time Picker */
-        wp_register_script("timepicker", get_template_directory_uri() .'/libraries/js/timepicker/timepicker.js', array('jquery'));
+        wp_register_script("timepicker", get_template_directory_uri() .'/libraries/js/timepicker/timepicker.js', array('jquery'), false, true);
         /* Croppic */
         wp_register_script("croppic", get_template_directory_uri() . '/libraries/js/croppic/croppic.js', array('jquery'), false, true);
 
         /* Google Charts Loader */
-        wp_register_script("gloader", get_template_directory_uri() . '/libraries/js/gchart/gloader.js');
+        wp_register_script("gloader", get_template_directory_uri() . '/libraries/js/gchart/gloader.js', false, false, true);
 
-        wp_register_script("routes", get_template_directory_uri() . '/libraries/js/router/jquery.routes.js');
+        wp_register_script("routes", get_template_directory_uri() . '/libraries/js/router/jquery.routes.js', false, false, true);
 
         wp_register_script("html5shiv", '//cdn.jsdelivr.net/html5shiv/3.7.2/html5shiv.js', false, false, true);
         wp_register_script("html5shiv-printshiv", '//cdn.jsdelivr.net/html5shiv/3.7.2/html5shiv-printshiv.js', false, false, true);
         wp_register_script("respond", '//cdn.jsdelivr.net/respond/1.4.2/respond.min.js', false, false, true);
 
         /* PDF Thumbnail */
-        wp_register_script("pdf_thumbnail", get_template_directory_uri() . '/libraries/js/pdfThumb/pdfJS/build/pdf.js');
-        wp_register_script("pdf_thumbnail_worker", get_template_directory_uri() . '/libraries/js/pdfThumb/pdfJS/build/pdf.worker.js');
+        wp_register_script("pdf_thumbnail", get_template_directory_uri() . '/libraries/js/pdfThumb/pdfJS/build/pdf.js', false, false, true);
+        wp_register_script("pdf_thumbnail_worker", get_template_directory_uri() . '/libraries/js/pdfThumb/pdfJS/build/pdf.worker.js', false, false, true);
 
         $js_files = ['jquery_min', 'jqueryUi', 'bootstrap.min', 'tainacan', 'DynatreeJs', 'ckeditorjs', 'contextMenu',
             'ColorPicker', 'SweetAlert', 'SweetAlertJS','js-xls', 'FileSaver', 'jsPDF', 'jsPDF_auto_table', 'tableExport',
             'jquerydataTablesmin', 'data_table', 'raty', 'jqpagination', 'dropzone', 'croppic', 'bootstrap-combobox',
-            'FacebookJS', 'row-sorter', 'maskedInput', 'prettyphoto', 'select2', 'slick','timepicker', 'jqcloud',
+            'FacebookJS', 'row-sorter', 'maskedInput', 'select2', 'slick','timepicker', 'jqcloud',
             'toastrjs', 'gloader','routes', 'html5shiv', 'html5shiv-printshiv', 'respond', 'pdf_thumbnail', 'pdf_thumbnail_worker'];
 
         foreach ($js_files as $js_file):
