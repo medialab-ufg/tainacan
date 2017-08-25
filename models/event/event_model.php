@@ -488,7 +488,8 @@ abstract class EventModel extends Model {
      * 
      * @author Eduardo Humberto 
      */
-    public function is_automatically_verify_event($collection_id, $action, $user_id, $event_id = 0) {
+    public function is_automatically_verify_event($collection_id, $action, $user_id, $event_id = 0)
+    {
         if (has_filter('tainacan_alter_permission_actions')) {
             return apply_filters('tainacan_alter_permission_actions',$action, $collection_id, $event_id);
         }
@@ -519,7 +520,8 @@ abstract class EventModel extends Model {
                 return true;
             }
         }
-//demais acoes para colecoes
+
+        //demais acoes para colecoes
         if ($permission == 'approval') {
             if (CollectionModel::is_moderator($collection_id, $user_id) || current_user_can('manage_options')) {
                 return true;
@@ -535,7 +537,9 @@ abstract class EventModel extends Model {
                     'socialdb_collection_permission_edit_property_term',
                     'socialdb_collection_permission_delete_property_term'
                 ];
-                if (in_array($action, ['socialdb_collection_permission_edit_category', 'socialdb_collection_permission_delete_category'])) {
+
+                if (in_array($action, ['socialdb_collection_permission_edit_category', 'socialdb_collection_permission_delete_category']))
+                {
                     $category_id = get_post_meta($event_id, 'socialdb_event_term_id', true);
                     if (strpos($category_id, '_facet_category') !== false) {
                         $category_id = str_replace('_facet_category', '', $category_id);
@@ -556,10 +560,10 @@ abstract class EventModel extends Model {
                         return false;
                     }
                 } else {
-                    $is_item = get_post_meta($event_id,'socialdb_event_object_item_id',true);
+                    /*$is_item = get_post_meta($event_id,'socialdb_event_object_item_id',true);
                     if( get_post($is_item) && get_post($is_item)->post_author == get_current_user_id()){
                         return true;
-                    }
+                    }*/
                     return false;
                 }
             }

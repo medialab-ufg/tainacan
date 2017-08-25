@@ -592,7 +592,8 @@
             $('#edit_tag').show();
             $('#event_tag_field').val('');
             elem = jQuery.parseJSON(result);
-            if (elem.term_id.length> 0) {
+
+            if (elem.term_id && elem.term_id.length > 0) {
                 add_tag_item(object_id, elem.term_id);
             } else {
                 $('#modalImportMain').modal('hide');//mostro o modal de carregamento
