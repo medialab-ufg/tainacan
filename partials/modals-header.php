@@ -45,7 +45,7 @@ $col_controller = $_src_ . "/controllers/collection/collection_controller.php";
                 <input type="hidden" name="operation" value="importCollection">
                 <div class="modal-header">
                     <button type='button' class='close' data-dismiss='modal' aria-label='Close'> <span aria-hidden='true' class='glyphicon glyphicon-remove-sign'></span> </button>
-                    <h4 class="modal-title" id="modal-create"> <?php _t('Import Collection',1); ?></h4>
+                    <h4 class="modal-title"> <?php _t('Import Collection',1); ?></h4>
                 </div>
 
                 <div class="modal-body">
@@ -98,7 +98,8 @@ $col_controller = $_src_ . "/controllers/collection/collection_controller.php";
 <div class="modal fade" id="modalImportMain" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <img src="<?php echo get_template_directory_uri() . '/libraries/images/catalogo_loader_725.gif' ?>" />
+            <img src="<?php echo get_template_directory_uri() . '/libraries/images/catalogo_loader_725.gif' ?>"
+            alt="<?php _t('Please wait...', 1) ?>" title="<?php _t('Please wait...', 1) ?>" />
             <h3><?php _e('Please wait...', 'tainacan') ?></h3>
         </div>
     </div>

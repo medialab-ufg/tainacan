@@ -1113,68 +1113,6 @@ function create_metas($term_id, $meta_key, $meta_value, $previous_value) {
 }
 
 /**
- * function init_nav()
- * Funcao para iniciar a navegação do JIT
- * Autor: Eduardo Humberto
- */
-function init_nav($data) {
-    switch ($data) {
-        case "regular":
-            wp_register_script('ExecuteDefault', get_template_directory_uri() . '/libraries/js/jit/executeDefault.js');
-            wp_enqueue_script('ExecuteDefault');
-            break;
-        case "hypertree":
-            wp_register_script('HypertreeJs', get_template_directory_uri() . '/libraries/js/jit/Hypertree.js');
-            wp_enqueue_script('HypertreeJs');
-
-            wp_register_style('HypertreeCss', get_template_directory_uri() . '/libraries/css/jit/Hypertree.css');
-            wp_enqueue_style('HypertreeCss');
-
-
-            wp_register_script('ExecuteHypertree', get_template_directory_uri() . '/libraries/js/jit/executeHypertree.js');
-            wp_enqueue_script('ExecuteHypertree');
-            break;
-        case "spacetree":
-            wp_register_script('SpacetreeJs', get_template_directory_uri() . '/libraries/js/jit/Spacetree.js');
-            wp_enqueue_script('SpacetreeJs');
-
-            wp_register_style('SpacetreeCss', get_template_directory_uri() . '/libraries/css/jit/Spacetree.css');
-            wp_enqueue_style('SpacetreeCss');
-
-
-            wp_register_script('ExecuteSpacetree', get_template_directory_uri() . '/libraries/js/jit/executeSpacetree.js');
-            wp_enqueue_script('ExecuteSpacetree');
-            break;
-        case "treemap":
-            wp_register_script('TreemapJs', get_template_directory_uri() . '/libraries/js/jit/Treemap.js');
-            wp_enqueue_script('TreemapJs');
-
-            wp_register_style('TreemapCss', get_template_directory_uri() . '/libraries/css/jit/Treemap.css');
-            wp_enqueue_style('TreemapCss');
-
-
-            wp_register_script('ExecuteTreemap', get_template_directory_uri() . '/libraries/js/jit/executeTreemap.js');
-            wp_enqueue_script('ExecuteTreemap');
-            break;
-        case "rgraph":
-            wp_register_script('RgraphJs', get_template_directory_uri() . '/libraries/js/jit/Rgraph.js');
-            wp_enqueue_script('RgraphJs');
-
-            wp_register_style('RgraphCss', get_template_directory_uri() . '/libraries/css/jit/Rgraph.css');
-            wp_enqueue_style('RgraphCss');
-
-
-            wp_register_script('ExecuteRgraph', get_template_directory_uri() . '/libraries/js/jit/executeRgraph.js');
-            wp_enqueue_script('ExecuteRgraph');
-            break;
-        default:
-            wp_register_script('ExecuteDefault', get_template_directory_uri() . '/libraries/js/jit/executeDefault.js');
-            wp_enqueue_script('ExecuteDefault');
-            break;
-    }
-}
-
-/**
  * function create_register()
  * Funcao para criar os registros da colecao
  * Autor: Eduardo Humberto
@@ -1790,7 +1728,6 @@ if (!function_exists("theme_styles")) {
                 'slick' => '/libraries/css/slick/slick.css',
                 'slick-theme' => '/libraries/css/slick/slick-theme.css',
                 'socialdbcss' => '/libraries/css/socialdb.css',
-                'prettyphotocss' => '/libraries/js/prettyphoto/css/prettyPhoto.css',
                 'jqcloudcss' => '/libraries/css/jqcloud/jqcloud.css',
                 'toastr' => '/libraries/js/toastr/toastr.css',
                 'croppic' => '/libraries/css/croppic/croppic.css',
@@ -1871,7 +1808,7 @@ if (!function_exists("theme_js")) {
         wp_register_script('tableExport', get_template_directory_uri() . '/libraries/js/tableExport/tableExport.min.js', array('FileSaver', 'js-xls'), false, true);
 
         /* Data Table */
-        wp_register_script('jquerydataTablesmin', get_template_directory_uri() . '/libraries/js/bootstrap_data_table/jquery.dataTables.min.js', false, false, true);
+        wp_register_script('jquerydataTables', get_template_directory_uri() . '/libraries/js/bootstrap_data_table/jquery.dataTables.min.js', false, false, true);
         wp_register_script('data_table', get_template_directory_uri() . '/libraries/js/bootstrap_data_table/data_table.js', false, false,true);
         /* Raty */
         wp_register_script('raty', get_template_directory_uri() . '/libraries/js/raty/jquery.raty.js', false, false, true);
@@ -1917,17 +1854,13 @@ if (!function_exists("theme_js")) {
 
         $js_files = ['jquery_min', 'jqueryUi', 'bootstrap.min', 'tainacan', 'DynatreeJs', 'ckeditorjs', 'contextMenu',
             'ColorPicker', 'SweetAlert', 'SweetAlertJS','js-xls', 'FileSaver', 'jsPDF', 'jsPDF_auto_table', 'tableExport',
-            'jquerydataTablesmin', 'data_table', 'raty', 'jqpagination', 'dropzone', 'croppic', 'bootstrap-combobox',
-            'FacebookJS', 'row-sorter', 'maskedInput', 'select2', 'slick','timepicker', 'jqcloud',
-            'toastrjs', 'gloader','routes', 'html5shiv', 'html5shiv-printshiv', 'respond', 'pdf_thumbnail', 'pdf_thumbnail_worker'];
+            'jquerydataTables', 'data_table', 'raty', 'jqpagination', 'dropzone', 'croppic', 'bootstrap-combobox',
+            'FacebookJS', 'row-sorter', 'maskedInput', 'select2', 'slick','timepicker', 'jqcloud', 'toastrjs',
+            'gloader','routes', 'html5shiv', 'html5shiv-printshiv', 'respond', 'pdf_thumbnail', 'pdf_thumbnail_worker'];
 
         foreach ($js_files as $js_file):
             wp_enqueue_script($js_file);
         endforeach;
-
-        if (isset($_GET["nav"])) {
-            init_nav($_GET["nav"]);
-        }
     }
 
     add_action('wp_enqueue_scripts', 'theme_js');

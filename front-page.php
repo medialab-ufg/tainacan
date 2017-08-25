@@ -16,7 +16,7 @@
                     <div id="searchBoxIndex" class="col-md-3 col-sm-12 center">
                         <form id="formSearchCollections" role="search">
                             <div class="input-group search-collection search-home">
-                                <input style="color:white;" type="text" class="form-control" name="search_collections" id="search_collections" onfocus="changeBoxWidth(this)" placeholder="<?php _e('Find', 'tainacan') ?>"/>
+                                <input style="color:white;" type="text" class="form-control" name="search_collections" id="search_collections" onfocus="changeBoxWidth()" placeholder="<?php _e('Find', 'tainacan') ?>"/>
                                 <span class="input-group-btn">
                             <button class="btn btn-default" type="button"  onclick="redirectAdvancedSearch('#search_collections');"><span class="glyphicon glyphicon-search"></span></button>
                         </span>

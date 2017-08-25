@@ -49,7 +49,6 @@ if(is_single()) {
         $collection_params = [
             "recovery_password" => getPageParam('recovery_password'),
             "is_filter" => getPageParam('is_filter'),
-            "info_messages" => getPageParam('info_messages'),
             "info_title" => getPageParam('info_title'),
             "mycollections" => getPageParam('mycollections', true),
             "sharedcollections" => getPageParam('sharedcollections', true),
@@ -61,7 +60,6 @@ if(is_single()) {
         <!-- TAINACAN - BEGIN: ITENS NECESSARIOS PARA EXECUCAO DE VARIAS PARTES DO SOCIALDB -->
         <input type="hidden" id="visualization_page_category" name="visualization_page_category"
                value="<?php echo (!$visualization_page_category || $visualization_page_category === 'right_button') ? 'right_button' : 'click'; ?>">
-        <input type="hidden" id="socialdb_embed_api_id" name="socialdb_embed_api_id" value="<?php echo $options['socialdb_embed_api_id']; ?>" />
         <input type="hidden" id="current_user_id" name="current_user_id" value="<?php echo get_current_user_id(); ?>" />
         <input type="hidden" id="collection_id" name="collection_id" value="<?php echo $post->ID ?>" />
         <input type="hidden" id="collection_root_id" value="<?php echo $root_id; ?>" />

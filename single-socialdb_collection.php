@@ -261,7 +261,7 @@ while (have_posts()) : the_post();
                                     if (is_user_logged_in() && get_the_ID() != get_option('collection_root_id') &&
                                         verify_collection_moderators(get_the_ID(), get_current_user_id())):
                                         ?>
-                                        <label for="collection_single_ordenation"><?php _t('Select: ', 1); ?></label>
+                                        <label><?php _t('Select: ', 1); ?></label>
                                         <div class="selectors">
                                             <a onclick="select_some()" class="select_some">
                                                 <?php echo ViewHelper::render_icon("selection", "png", __("Select some items", "tainacan")); ?>
@@ -287,7 +287,7 @@ while (have_posts()) : the_post();
                                     if (is_user_logged_in() && get_the_ID() != get_option('collection_root_id') &&
                                         verify_collection_moderators(get_the_ID(), get_current_user_id())):
                                         ?>
-                                        <label for="collection_single_ordenation"><?php _t('Select: ', 1); ?></label>
+                                        <label><?php _t('Select: ', 1); ?></label>
                                         <div class="selectors selectors-trash">
                                             <a onclick="select_some_trash()" class="select_some_trash">
                                                 <?php echo ViewHelper::render_icon("selection", "png", __("Select some items", "tainacan")); ?>
@@ -397,10 +397,13 @@ while (have_posts()) : the_post();
                         </ul>
                     </div>
                     <!-- TAINACAN: div que esta o gif que eh mostrada ao filtrar itens e outras acoes que necessitam e carregamento -->
-                    <div id="loader_objects" style="display:none"><center><img src="<?php echo get_template_directory_uri() . '/libraries/images/catalogo_loader_725.gif' ?>"><h3><?php _e('Loading objects...', 'tainacan') ?></h3></center></div>
-                    <br>
-                    <!--a id="home_button" href="#" class="btn btn-default"><span class="glyphicon glyphicon-th-list"></span></a-->
-
+                    <div id="loader_objects" style="display:none">
+                        <center>
+                            <img src="<?php echo get_template_directory_uri() . '/libraries/images/catalogo_loader_725.gif' ?>"
+                                 title="<?php _t('Loading objects...', 1) ?>" alt="<?php _t('Loading objects...', 1) ?>" />
+                            <h3><?php _t('Loading objects...', 1) ?></h3>
+                        </center>
+                    </div>
                 </div>
 
             </div>

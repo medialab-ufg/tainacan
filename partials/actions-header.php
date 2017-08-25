@@ -161,7 +161,7 @@ $stat_page = get_page_by_title(__('Statistics', 'tainacan'))->ID;
                     </div>
                 </a>
 
-                <ul class="dropdown-menu" id="tainacan-menu" >
+                <ul class="dropdown-menu">
                     <li>
                         <a href="<?php echo get_permalink($col_root_id); ?>"><?php _t('Show collections', 1); ?></a>
                     </li>

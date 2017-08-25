@@ -2015,21 +2015,6 @@ function showGraph(url) {
 
 /***************************** Fim: funcoes para mostrar paginas especificas  *******/
 $(function () {
-    var nav = $('#hypertree');
-    var tamanhoTelaW = $(window).width();
-
-    var w = (tamanhoTelaW / 2) - 100, h = (tamanhoTelaW / 2) - 100;
-    $(window).scroll(function () {
-        if ($(this).scrollTop() > 300) {
-
-            nav.css("width", w);
-            nav.css("height", h);
-            nav.addClass("menuFixo");
-        } else {
-            nav.removeClass("menuFixo");
-        }
-    });
-
     $(document).on("click", ".added", function (e) {
         e.preventDefault();
         var evt = $(this).attr('data-tplt');
@@ -2128,8 +2113,7 @@ function showProfileScreen(src) {
     });
 }
 
-function check_passwords()
-{
+function check_passwords() {
     if ($('#new_password_reset').val().trim() == '' || $('#new_check_password_reset').val().trim() == '' || $('#old_password_reset').val().trim() == '') {
         showAlertGeneral("Erro", "Preencha os campos corretamente.", "error");
         return false;
@@ -2146,8 +2130,7 @@ function check_passwords()
     }
 }
 
-function check_register_fields()
-{
+function check_register_fields() {
     if ($('#user_login').val().trim() == '' || $('#first_name').val().trim() == '' || $('#user_conf_pass').val().trim() == '' || $('#user_pass').val().trim() == '') {
         showAlertGeneral("Erro", "Preencha os campos corretamente.", "error");
         return false;
@@ -2164,13 +2147,9 @@ function check_register_fields()
 }
 
 function changeBoxWidth(formInput) {
-    //formInput.style.background = "yellow";
-    //$('#searchBoxIndex').addClass("col-md-5").removeClass("col-md-3", 1000);
     $('#searchBoxIndex').animate({
         width: '42%'
-    }, 1000, function () {
-        // Animation complete.
-    });
+    }, 1000, function() {});
 }
 
 function showFullDescription() {
@@ -3267,17 +3246,15 @@ $(document).on("submit", "#reindexation_form", function (event) {
 
 function verify_empty_box(elements_id, email_id, button_id)
 {
-    let ids = elements_id.split(",");
-    let button = $("#"+button_id);
+    var ids = elements_id.split(",");
+    var button = $("#"+button_id);
 
-    if(email_id.length === 0)
-    {
+    if(email_id.length === 0) {
         var valide_email = true;
-    }else var valide_email = validate_email(email_id);
+    } else var valide_email = validate_email(email_id);
 
-    for(let element_id of ids)
-    {
-        let text_box = $("#"+element_id);
+    for(var element_id in ids) {
+        var text_box = $("#"+element_id);
         if($(text_box).val().trim().length === 0 || valide_email === false)
         {
             $(button).attr("disabled", true);
@@ -3290,14 +3267,14 @@ function verify_empty_box(elements_id, email_id, button_id)
 
 function validate_email(email_id)
 {
-    let email_box_value = $("#"+email_id).val().trim();
+    var email_box_value = $("#"+email_id).val().trim();
 
     if(email_box_value.length > 0)
     {
-        let email_parts = email_box_value.split("@");
+        var email_parts = email_box_value.split("@");
         if(email_parts.length === 2 && email_parts[0].length > 0 && email_parts[1].length > 0)
         {
-            let where = email_parts[1].split(".");
+            var where = email_parts[1].split(".");
             if(where.length === 2 && where[0].length > 0 && where[1].length > 0)
             {
                 return true;
