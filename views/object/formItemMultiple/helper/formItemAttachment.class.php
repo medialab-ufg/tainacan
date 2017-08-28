@@ -42,7 +42,7 @@ class FormItemAttachment extends FormItemMultiple {
     public function initScriptsAttachmentContainer($property, $item_id) {
         ?>
         <script>
-        myDropzone = new Dropzone("div#dropzone_new", {
+            myDropzone = new Dropzone("#dropzone_new", {
                     accept: function(file, done) {
                         if (file.type === ".exe") {
                             done("Error! Files of this type are not accepted");

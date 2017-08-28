@@ -105,8 +105,11 @@ $is_current_user_the_author = get_post($curr_id)->post_author == get_current_use
                     <?php if( has_filter('show_edit_default') && apply_filters('show_edit_default', $collection_id) ) { ?>
                         <a onclick="edit_object('<?php echo $curr_id; ?>')"> <?php _t('Edit item',1); ?> </a>
                     <?php } else { ?>
-                        <?php if(hasHelper($curr_id)): ?>
-                        <a href="<?php echo get_the_permalink($collection_id).get_post($curr_id)->post_name.'/editar'; ?>">
+                        <?php if(hasHelper($curr_id)):
+                            // $edit_link =  get_the_permalink($collection_id).get_post($curr_id)->post_name.'/editar';
+                            $edit_link =  site_url() . '/item/' . get_post($curr_id)->post_name.'/editar';
+                            ?>
+                        <a href="<?php echo $edit_link; ?>">
                             <?php _t('Edit item',1); ?>
                         </a>
                         <?php else: ?>

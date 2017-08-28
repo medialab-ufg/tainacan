@@ -1780,7 +1780,7 @@ if (!function_exists("theme_js")) {
         wp_register_script('jqueryUi', get_template_directory_uri() . '/libraries/js/jquery_ui/jquery-ui.min.js', array('jquery'), '1.2');
         wp_register_script('bootstrap.min', get_template_directory_uri() . '/libraries/js/bootstrap.min.js', array('jquery'), '1.11', true);
 
-        wp_register_script('tainacan', get_template_directory_uri() . '/libraries/js/tainacan.js', array('jquery'), '1.11',true);
+        wp_register_script('tainacan', get_template_directory_uri() . '/libraries/js/tainacan.js', array('jquery'), '1.11');
         /* Dynatree JS */
         wp_register_script('DynatreeJs', get_template_directory_uri() . '/libraries/js/dynatree/jquery.dynatree.full.js', false, false, true);
         /* Ckeditor JS */
@@ -1815,7 +1815,7 @@ if (!function_exists("theme_js")) {
         /* Pagination */
         wp_register_script('jqpagination', get_template_directory_uri() . '/libraries/js/pagination/jquery.jqpagination.js', false, false, true);
         /* dropzone */
-        wp_register_script('dropzone', get_template_directory_uri() . '/libraries/js/dropzone/dropzone.js', false, false, true);
+        wp_register_script('dropzone', get_template_directory_uri() . '/libraries/js/dropzone/dropzone.js');
         /* dropzone */
         wp_register_script('bootstrap-combobox', get_template_directory_uri() . '/libraries/js/combobox/bootstrap-combobox.js', false, false, true);
         /* Facebook */

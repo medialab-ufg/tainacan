@@ -83,7 +83,7 @@ class FormItem extends Model {
             <div class="col-md-12 no-padding">
                 
                 <div id="tab-content-metadata" class="col-md-3 tab-content no-padding" style="background: white;">
-                   <div id="tab-default"  class="tab-pane fade in active" style="background: white;margin-bottom: 15px;">
+                   <div id="tab-default"  class="tab-pane fade in active" style="background: white;margin-bottom: 15px; margin-top: 10px;">
                        <!-- data-operation 1 Means expand -->
                        <div class="expand-all-div"  onclick="openAccordeon('default')" data-operation="1">
                            <a class="expand-all-link" href="javascript:void(0)">
@@ -696,9 +696,9 @@ class FormItem extends Model {
                    <?php echo ($view_helper->terms_fixed['attachments']) ? $view_helper->terms_fixed['attachments']->name :  _e('Attachments','tainacan') ?>
                </h4>
                 <hr>
-                 <div >
+                 <div>
                      <center>
-                     <div id="dropzone_new"
+                     <div id="dropzone_form"
                          class="dropzone"
                          style="margin-bottom: 15px;min-height: 150px;padding-top: 0px;">
                                 <div class="dz-message" data-dz-message>
@@ -742,7 +742,10 @@ class FormItem extends Model {
                 showChangesUpdate();
             });
 
-            $('.tabs').tab();
+            $(function() {
+                $('.tabs').tab();
+            });
+
             $(".multiple-items-accordion").accordion({
                 active: false,
                 collapsible: true,
@@ -799,7 +802,6 @@ class FormItem extends Model {
                     $('#tab-'+id).find(".expand-all-link").html('Retrair todos <span class="caret"></span>');
                 }
             }
-
 
             /* Verificando se o item pode ser publicado ou atualizado */
             $('#submit-form-item').click(function(){
@@ -987,7 +989,7 @@ class FormItem extends Model {
             }
 
             Hook.register('appendCategoryMetadata',function(args){
-              var categories = args[0]
+              var categories = args[0];
               var item_id = args[1];
               var seletor = args[2];
               $(seletor)
