@@ -89,33 +89,73 @@ class MultipleTreeClass extends FormItem {
                 },
                 onSelect: function (flag, node) {
                     if (node.bSelected) {
-                        $.ajax({
-                            url: $('#src').val() + '/controllers/object/form_item_controller.php',
-                            type: 'POST',
-                            data: {
+                        if($('#AllFieldsShouldBeFilled'+<?php echo $compound_id ?>).length === 0) {
+                            $.ajax({
+                                url: $('#src').val() + '/controllers/object/form_item_controller.php',
+                                type: 'POST',
+                                data: {
+                                    operation: 'saveValue',
+                                    type: 'term',
+                                    value: node.data.key,
+                                    item_id: '<?php echo $item_id ?>',
+                                    compound_id: '<?php echo $compound_id ?>',
+                                    property_children_id: '<?php echo $property_id ?>',
+                                    index: <?php echo $index_id ?>
+                                }
+                            });
+                        }else{
+                            Hook['<?php echo $compound_id.'_'.$index_id ?>'] = ( Hook['<?php echo $compound_id.'_'.$index_id ?>']) ?  Hook['<?php echo $compound_id.'_'.$index_id ?>'] : {};
+                            Hook['<?php echo $compound_id.'_'.$index_id ?>']['<?php echo $property_id ?>'] = {
                                 operation: 'saveValue',
                                 type: 'term',
                                 value: node.data.key,
                                 item_id: '<?php echo $item_id ?>',
                                 compound_id: '<?php echo $compound_id ?>',
                                 property_children_id: '<?php echo $property_id ?>',
-                                index: <?php echo $index_id ?>
-                            }
-                        });
+                                index: <?php echo $index_id ?>,
+                                indexCoumpound: 0
+                            };
+                        }
+
+                        if($('#AllFieldsShouldBeFilled'+<?php echo $compound_id ?>).length > 0 && '<?php echo $property_id ?>' !== '0'){
+                            Hook.call('blockCompounds',['<?php echo $compound_id ?>','<?php echo $property_id ?>','<?php echo $index_id ?>']);
+                        }else{
+                            Hook.result = false;
+                        }
                     } else {
-                        $.ajax({
-                            url: $('#src').val() + '/controllers/object/form_item_controller.php',
-                            type: 'POST',
-                            data: {
-                                operation: 'removeValue',
+                        if($('#AllFieldsShouldBeFilled'+<?php echo $compound_id ?>).length === 0) {
+                            $.ajax({
+                                url: $('#src').val() + '/controllers/object/form_item_controller.php',
+                                type: 'POST',
+                                data: {
+                                    operation: 'removeValue',
+                                    type: 'term',
+                                    value: node.data.key,
+                                    item_id: '<?php echo $item_id ?>',
+                                    compound_id: '<?php echo $compound_id ?>',
+                                    property_children_id: '<?php echo $property_id ?>',
+                                    index: <?php echo $index_id ?>
+                                }
+                            });
+                        }else{
+                            Hook['<?php echo $compound_id.'_'.$index_id ?>'] = ( Hook['<?php echo $compound_id.'_'.$index_id ?>']) ?  Hook['<?php echo $compound_id.'_'.$index_id ?>'] : {};
+                            Hook['<?php echo $compound_id.'_'.$index_id ?>']['<?php echo $property_id ?>'] = {
+                                operation: 'saveValue',
                                 type: 'term',
                                 value: node.data.key,
                                 item_id: '<?php echo $item_id ?>',
                                 compound_id: '<?php echo $compound_id ?>',
                                 property_children_id: '<?php echo $property_id ?>',
-                                index: <?php echo $index_id ?>
-                            }
-                        });
+                                index: <?php echo $index_id ?>,
+                                indexCoumpound: 0
+                            };
+                        }
+
+                        if($('#AllFieldsShouldBeFilled'+<?php echo $compound_id ?>).length > 0 && '<?php echo $property_id ?>' !== '0'){
+                            Hook.call('blockCompounds',['<?php echo $compound_id ?>','<?php echo $property_id ?>','<?php echo $index_id ?>']);
+                        }else{
+                            Hook.result = false;
+                        }
                     }
                     var selKeys = $.map(node.tree.getSelectedNodes(), function (node) {
                         return node;

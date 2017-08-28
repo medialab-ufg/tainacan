@@ -281,44 +281,85 @@ class ObjectClass extends FormItem {
             //remove no formulario de fato
             function original_remove_in_item_value_compound_<?php echo $compound_id ?>_<?php echo $propert_id; ?>_<?php echo $index_id; ?>(id,seletor){
                 $(seletor).remove();
-                $.ajax({
-                    url: $('#src').val() + '/controllers/object/form_item_controller.php',
-                    type: 'POST',
-                    data: {
+                if($('#AllFieldsShouldBeFilled'+<?php echo $compound_id ?>).length === 0 || '<?php echo $propert_id ?>' === '0') {
+                    $.ajax({
+                        url: $('#src').val() + '/controllers/object/form_item_controller.php',
+                        type: 'POST',
+                        data: {
+                            operation: 'removeValue',
+                            type: 'object',
+                            <?php if ($property_id !== 0 && !$isMultiple) echo 'indexCoumpound:0,' ?>
+                            value: id,
+                            item_id: '<?php echo $item_id ?>',
+                            compound_id: '<?php echo $compound_id ?>',
+                            property_children_id: '<?php echo $propert_id ?>',
+                            index: <?php echo $index_id ?>,
+                            reverse: $('#reverse_<?php echo $compound_id ?>_<?php echo $propert_id; ?>_<?php echo $index_id; ?>').val()
+                        }
+                    });
+                }else{
+                    Hook['<?php echo $compound_id.'_'.$index_id ?>'] = ( Hook['<?php echo $compound_id.'_'.$index_id ?>']) ?  Hook['<?php echo $compound_id.'_'.$index_id ?>'] : {};
+                    Hook['<?php echo $compound_id.'_'.$index_id ?>']['<?php echo $propert_id ?>'] = {
                         operation: 'removeValue',
-                        type:'object',
-                        <?php if($property_id!==0 && !$isMultiple) echo 'indexCoumpound:0,' ?>
+                        type: 'object',
+                        <?php if ($propert_id !== 0 && !$isMultiple) echo 'indexCoumpound:0,' ?>
                         value: id,
-                        item_id:'<?php echo $item_id ?>',
-                        compound_id:'<?php echo $compound_id ?>',
+                        item_id: '<?php echo $item_id ?>',
+                        compound_id: '<?php echo $compound_id ?>',
                         property_children_id: '<?php echo $propert_id ?>',
                         index: <?php echo $index_id ?>,
                         reverse: $('#reverse_<?php echo $compound_id ?>_<?php echo $propert_id; ?>_<?php echo $index_id; ?>').val()
-                    }
-                });
+                    };
+                }
                 if($('#results_property_<?php echo $compound_id; ?>_<?php echo $propert_id?>_<?php echo $index_id; ?> ul li').length===0){
                      validateFieldsMetadataText('','<?php echo $compound_id ?>','<?php echo $propert_id ?>','<?php echo $index_id ?>');
                     $('#no_results_property_<?php echo $compound_id; ?>_<?php echo $propert_id; ?>_<?php echo $index_id; ?>').show();
                 }
+
+                if($('#AllFieldsShouldBeFilled'+<?php echo $compound_id ?>).length > 0 && '<?php echo $propert_id ?>' !== '0'){
+                    Hook.call('blockCompounds',['<?php echo $compound_id ?>','<?php echo $propert_id ?>','<?php echo $index_id ?>']);
+                }else{
+                    Hook.result = false;
+                }
             }
             //adiciona no formulario de fato
             function original_add_in_item_value_compound_<?php echo $compound_id ?>_<?php echo $propert_id; ?>_<?php echo $index_id; ?>(id){
-                $.ajax({
-                    url: $('#src').val() + '/controllers/object/form_item_controller.php',
-                    type: 'POST',
-                    data: {
+                if( $('#AllFieldsShouldBeFilled'+<?php echo $compound_id ?>).length === 0 || '<?php echo $propert_id ?>' === '0') {
+                    $.ajax({
+                        url: $('#src').val() + '/controllers/object/form_item_controller.php',
+                        type: 'POST',
+                        data: {
+                            operation: 'saveValue',
+                            type: 'object',
+                            <?php if ($propert_id !== 0 && !$isMultiple) echo 'indexCoumpound:0,' ?>
+                            value: id,
+                            item_id: '<?php echo $item_id ?>',
+                            compound_id: '<?php echo $compound_id ?>',
+                            property_children_id: '<?php echo $propert_id ?>',
+                            index: <?php echo $index_id ?>,
+                            reverse: $('#reverse_<?php echo $compound_id ?>_<?php echo $propert_id; ?>_<?php echo $index_id; ?>').val()
+                        }
+                    });
+                }else{
+                    Hook['<?php echo $compound_id.'_'.$index_id ?>'] = ( Hook['<?php echo $compound_id.'_'.$index_id ?>']) ?  Hook['<?php echo $compound_id.'_'.$index_id ?>'] : {};
+                    Hook['<?php echo $compound_id.'_'.$index_id ?>']['<?php echo $propert_id ?>'] = {
                         operation: 'saveValue',
-                        type:'object',
-                        <?php if($propert_id!==0 && !$isMultiple) echo 'indexCoumpound:0,' ?>
+                        type: 'object',
+                        <?php if ($propert_id !== 0 && !$isMultiple) echo 'indexCoumpound:0,' ?>
                         value: id,
-                        item_id:'<?php echo $item_id ?>',
-                        compound_id:'<?php echo $compound_id ?>',
+                        item_id: '<?php echo $item_id ?>',
+                        compound_id: '<?php echo $compound_id ?>',
                         property_children_id: '<?php echo $propert_id ?>',
                         index: <?php echo $index_id ?>,
                         reverse: $('#reverse_<?php echo $compound_id ?>_<?php echo $propert_id; ?>_<?php echo $index_id; ?>').val()
-                    }
-                });
-                validateFieldsMetadataText(id,'<?php echo $compound_id ?>','<?php echo $propert_id ?>','<?php echo $index_id ?>')
+                    };
+                }
+                validateFieldsMetadataText(id,'<?php echo $compound_id ?>','<?php echo $propert_id ?>','<?php echo $index_id ?>');
+                if($('#AllFieldsShouldBeFilled'+<?php echo $compound_id ?>).length > 0 && '<?php echo $propert_id ?>' !== '0'){
+                    Hook.call('blockCompounds',['<?php echo $compound_id ?>','<?php echo $propert_id ?>','<?php echo $index_id ?>']);
+                }else{
+                    Hook.result = false;
+                }
             }
 
             //************************* properties terms ******************************************//

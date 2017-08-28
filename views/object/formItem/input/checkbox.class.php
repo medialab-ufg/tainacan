@@ -74,34 +74,71 @@ class CheckboxClass extends FormItem{
         <script>
             $('input[name="checkbox-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>[]"]').change(function(){
                  if($(this).is(':checked')){
-                   $.ajax({
-                       url: $('#src').val() + '/controllers/object/form_item_controller.php',
-                       type: 'POST',
-                       data: {
-                           operation: 'saveValue',
-                           type:'term',
-                           value: $(this).val(),
-                           item_id:'<?php echo $item_id ?>',
-                           compound_id:'<?php echo $compound_id ?>',
-                           property_children_id: '<?php echo $property_id ?>',
-                           index: <?php echo $index_id ?>
-                       }
-                   });
-                   Hook.call('appendCategoryMetadata',[$(this).val(), <?php echo $item_id ?>, '#appendCategoryMetadata_<?php echo $compound_id; ?>_0_0']);
+                     if($('#AllFieldsShouldBeFilled'+<?php echo $compound_id ?>).length === 0) {
+                         $.ajax({
+                             url: $('#src').val() + '/controllers/object/form_item_controller.php',
+                             type: 'POST',
+                             data: {
+                                 operation: 'saveValue',
+                                 type: 'term',
+                                 value: $(this).val(),
+                                 item_id: '<?php echo $item_id ?>',
+                                 compound_id: '<?php echo $compound_id ?>',
+                                 property_children_id: '<?php echo $property_id ?>',
+                                 index: <?php echo $index_id ?>
+                             }
+                         });
+                     }else{
+                         Hook['<?php echo $compound_id.'_'.$index_id ?>'] = ( Hook['<?php echo $compound_id.'_'.$index_id ?>']) ?  Hook['<?php echo $compound_id.'_'.$index_id ?>'] : {};
+                         Hook['<?php echo $compound_id.'_'.$index_id ?>']['<?php echo $property_id ?>'] = {
+                             operation: 'saveValue',
+                             type:'term',
+                             value: $(this).val(),
+                             item_id:'<?php echo $item_id ?>',
+                             compound_id:'<?php echo $compound_id ?>',
+                             property_children_id: '<?php echo $property_id ?>',
+                             index: <?php echo $index_id ?>
+                         };
+                     }
+
+                     if($('#AllFieldsShouldBeFilled'+<?php echo $compound_id ?>).length > 0 && '<?php echo $property_id ?>' !== '0'){
+                         Hook.call('blockCompounds',['<?php echo $compound_id ?>','<?php echo $property_id ?>','<?php echo $index_id ?>']);
+                     }else{
+                         Hook.result = false;
+                     }
+                     Hook.call('appendCategoryMetadata',[$(this).val(), <?php echo $item_id ?>, '#appendCategoryMetadata_<?php echo $compound_id; ?>_0_0']);
                  }else{
-                    $.ajax({
-                       url: $('#src').val() + '/controllers/object/form_item_controller.php',
-                       type: 'POST',
-                       data: {
-                           operation: 'removeValue',
-                           type:'term',
-                           value: $(this).val(),
-                           item_id:'<?php echo $item_id ?>',
-                           compound_id:'<?php echo $compound_id ?>',
-                           property_children_id: '<?php echo $property_id ?>',
-                           index: <?php echo $index_id ?>
-                       }
-                   });
+                     if($('#AllFieldsShouldBeFilled'+<?php echo $compound_id ?>).length === 0) {
+                        $.ajax({
+                             url: $('#src').val() + '/controllers/object/form_item_controller.php',
+                             type: 'POST',
+                             data: {
+                                 operation: 'removeValue',
+                                 type: 'term',
+                                 value: $(this).val(),
+                                 item_id: '<?php echo $item_id ?>',
+                                 compound_id: '<?php echo $compound_id ?>',
+                                 property_children_id: '<?php echo $property_id ?>',
+                                 index: <?php echo $index_id ?>
+                             }
+                         });
+                     }else{
+                         Hook['<?php echo $compound_id.'_'.$index_id ?>'] = ( Hook['<?php echo $compound_id.'_'.$index_id ?>']) ?  Hook['<?php echo $compound_id.'_'.$index_id ?>'] : {};
+                         Hook['<?php echo $compound_id.'_'.$index_id ?>']['<?php echo $property_id ?>'] = {
+                             operation: 'saveValue',
+                             type:'term',
+                             value: $(this).val(),
+                             item_id:'<?php echo $item_id ?>',
+                             compound_id:'<?php echo $compound_id ?>',
+                             property_children_id: '<?php echo $property_id ?>',
+                             index: <?php echo $index_id ?>
+                         };
+                     }
+                     if($('#AllFieldsShouldBeFilled'+<?php echo $compound_id ?>).length > 0 && '<?php echo $property_id ?>' !== '0'){
+                         Hook.call('blockCompounds',['<?php echo $compound_id ?>','<?php echo $property_id ?>','<?php echo $index_id ?>']);
+                     }else{
+                         Hook.result = false;
+                     }
                  }
 
                  <?php if($this->isRequired):  ?>

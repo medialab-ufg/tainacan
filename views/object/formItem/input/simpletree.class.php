@@ -94,10 +94,24 @@ class SimpleTreeClass extends FormItem {
                     },
                     onSelect: function (flag, node) {
                         if (node.bSelected) {
-                            $.ajax({
-                                url: $('#src').val() + '/controllers/object/form_item_controller.php',
-                                type: 'POST',
-                                data: {
+                            if($('#AllFieldsShouldBeFilled'+<?php echo $compound_id ?>).length === 0) {
+                                $.ajax({
+                                    url: $('#src').val() + '/controllers/object/form_item_controller.php',
+                                    type: 'POST',
+                                    data: {
+                                        operation: 'saveValue',
+                                        type: 'term',
+                                        value: node.data.key,
+                                        item_id: '<?php echo $item_id ?>',
+                                        compound_id: '<?php echo $compound_id ?>',
+                                        property_children_id: '<?php echo $property_id ?>',
+                                        index: <?php echo $index_id ?>,
+                                        indexCoumpound: 0
+                                    }
+                                });
+                            }else{
+                                Hook['<?php echo $compound_id.'_'.$index_id ?>'] = ( Hook['<?php echo $compound_id.'_'.$index_id ?>']) ?  Hook['<?php echo $compound_id.'_'.$index_id ?>'] : {};
+                                Hook['<?php echo $compound_id.'_'.$index_id ?>']['<?php echo $property_id ?>'] = {
                                     operation: 'saveValue',
                                     type: 'term',
                                     value: node.data.key,
@@ -106,8 +120,14 @@ class SimpleTreeClass extends FormItem {
                                     property_children_id: '<?php echo $property_id ?>',
                                     index: <?php echo $index_id ?>,
                                     indexCoumpound: 0
-                                }
-                            });
+                                };
+                            }
+
+                            if($('#AllFieldsShouldBeFilled'+<?php echo $compound_id ?>).length > 0 && '<?php echo $property_id ?>' !== '0'){
+                                Hook.call('blockCompounds',['<?php echo $compound_id ?>','<?php echo $property_id ?>','<?php echo $index_id ?>']);
+                            }else{
+                                Hook.result = false;
+                            }
                             appendCategoryMetadata(node.data.key, <?php echo $item_id ?>, '#appendCategoryMetadata_<?php echo $compound_id; ?>_0_0');
                             <?php if ($this->isRequired): ?>
                                 validateFieldsMetadataText(
@@ -115,20 +135,40 @@ class SimpleTreeClass extends FormItem {
                             <?php endif; ?>
                         } else {
                              $('#appendCategoryMetadata_<?php echo $compound_id; ?>_0_0').html('');
-                             $.ajax({
-                                 url: $('#src').val() + '/controllers/object/form_item_controller.php',
-                                 type: 'POST',
-                                 data: {
-                                     operation: 'saveValue',
-                                     type: 'term',
-                                     value: '',
-                                     item_id: '<?php echo $item_id ?>',
-                                     compound_id: '<?php echo $compound_id ?>',
-                                     property_children_id: '<?php echo $property_id ?>',
-                                     index: <?php echo $index_id ?>,
-                                     indexCoumpound: 0
-                                 }
-                             });
+                             if($('#AllFieldsShouldBeFilled'+<?php echo $compound_id ?>).length === 0) {
+                                 $.ajax({
+                                     url: $('#src').val() + '/controllers/object/form_item_controller.php',
+                                     type: 'POST',
+                                     data: {
+                                         operation: 'saveValue',
+                                         type: 'term',
+                                         value: '',
+                                         item_id: '<?php echo $item_id ?>',
+                                         compound_id: '<?php echo $compound_id ?>',
+                                         property_children_id: '<?php echo $property_id ?>',
+                                         index: <?php echo $index_id ?>,
+                                         indexCoumpound: 0
+                                     }
+                                 });
+                             }else{
+                                Hook['<?php echo $compound_id.'_'.$index_id ?>'] = ( Hook['<?php echo $compound_id.'_'.$index_id ?>']) ?  Hook['<?php echo $compound_id.'_'.$index_id ?>'] : {};
+                                Hook['<?php echo $compound_id.'_'.$index_id ?>']['<?php echo $property_id ?>'] = {
+                                    operation: 'saveValue',
+                                    type: 'term',
+                                    value: '',
+                                    item_id: '<?php echo $item_id ?>',
+                                    compound_id: '<?php echo $compound_id ?>',
+                                    property_children_id: '<?php echo $property_id ?>',
+                                    index: <?php echo $index_id ?>,
+                                    indexCoumpound: 0
+                                };
+                            }
+
+                            if($('#AllFieldsShouldBeFilled'+<?php echo $compound_id ?>).length > 0 && '<?php echo $property_id ?>' !== '0'){
+                                Hook.call('blockCompounds',['<?php echo $compound_id ?>','<?php echo $property_id ?>','<?php echo $index_id ?>']);
+                            }else{
+                                Hook.result = false;
+                            }
                             <?php if ($this->isRequired): ?>
                                 validateFieldsMetadataText('', '<?php echo $compound_id ?>', '<?php echo $property_id ?>', '<?php echo $index_id ?>')
                             <?php endif; ?>

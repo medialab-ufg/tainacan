@@ -1084,6 +1084,44 @@ class FormItem extends Model {
               }
             });
 
+
+            Hook.register('blockCompounds',function(args){
+                var compound_id = args[0]
+                var property_id = args[1];
+                var index_id = args[2];
+                var block = false;
+                $.each($('#container-field-'+compound_id+'-'+index_id+' .validate-compound-'+compound_id),function(index,value){
+                    if($(value).val()==='false'){
+                        block = true;
+                    }
+                });
+                if(!block){
+                    sendCompoundData(compound_id,index_id);
+                }
+            });
+
+            function sendCompoundData(compound_id,index_id){
+                for (var key in Hook) {
+                    if(key === compound_id+'_'+index_id){
+                        for (var property in Hook[key]) {
+                            $.ajax({
+                                url: $('#src').val() + '/controllers/object/form_item_controller.php',
+                                type: 'POST',
+                                data: Hook[key][property]
+                            }).done(function (result) {
+                                var object_data =  Hook[key][property];
+                                if(object_data.isKey && object_data.isKey!==''){
+                                    var json =JSON.parse(result);
+                                    if(json.value){
+                                        toastr.error(json.value+' <?php _e(' is already inserted!', 'tainacan') ?>', '<?php _e('Attention!', 'tainacan') ?>', {positionClass: 'toast-bottom-right'});
+                                    }
+                                }
+                            });
+                        }
+                    }
+                }
+            }
+
         </script>
         <?php
     }

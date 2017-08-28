@@ -1,6 +1,7 @@
 //utilizado para hooks em javascript
 var Hook = {
     hooks: [],
+    arrayResult:[],
     result: '',
     register: function (name, callback) {
         if ('undefined' == typeof (Hook.hooks[name]))

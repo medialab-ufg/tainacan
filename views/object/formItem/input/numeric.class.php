@@ -90,29 +90,50 @@ class NumericClass extends FormItem{
                 <?php if($this->isRequired):  ?>
                     validateFieldsMetadataText($(this).val().trim(),'<?php echo $compound_id ?>','<?php echo $property_id ?>','<?php echo $index_id ?>')
                 <?php endif; ?>
-                $.ajax({
-                    url: $('#src').val() + '/controllers/object/form_item_controller.php',
-                    type: 'POST',
-                    data: {
+                if($('#AllFieldsShouldBeFilled'+<?php echo $compound_id ?>).length === 0) {
+                    $.ajax({
+                        url: $('#src').val() + '/controllers/object/form_item_controller.php',
+                        type: 'POST',
+                        data: {
+                            operation: 'saveValue',
+                            type:'data',
+                            value: $(this).val().trim(),
+                            item_id:'<?php echo $item_id ?>',
+                            compound_id:'<?php echo $compound_id ?>',
+                            property_children_id: '<?php echo $property_id ?>',
+                            index: <?php echo $index_id ?>,
+                            indexCoumpound: 0,
+                            isKey: <?php echo ($this->isKey) ? 'true':'false' ?>
+                        }
+                    }).done(function (result) {
+                        <?php if($this->isKey): ?>
+                         var json =JSON.parse(result);
+                         if(json.value){
+                            //$('#numeric-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>').val('');
+                                toastr.error(json.value+' <?php _e(' is already inserted!', 'tainacan') ?>', '<?php _e('Attention!', 'tainacan') ?>', {positionClass: 'toast-bottom-right'});
+                         }
+                        <?php endif; ?>
+                    });
+                }else{
+                    Hook['<?php echo $compound_id.'_'.$index_id ?>'] = ( Hook['<?php echo $compound_id.'_'.$index_id ?>']) ?  Hook['<?php echo $compound_id.'_'.$index_id ?>'] : {};
+                    Hook['<?php echo $compound_id.'_'.$index_id ?>']['<?php echo $property_id ?>'] = {
                         operation: 'saveValue',
-                        type:'data',
+                        type: 'data',
                         value: $(this).val().trim(),
-                        item_id:'<?php echo $item_id ?>',
-                        compound_id:'<?php echo $compound_id ?>',
+                        item_id: '<?php echo $item_id ?>',
+                        compound_id: '<?php echo $compound_id ?>',
                         property_children_id: '<?php echo $property_id ?>',
                         index: <?php echo $index_id ?>,
                         indexCoumpound: 0,
-                        isKey: <?php echo ($this->isKey) ? 'true':'false' ?>
-                    }
-                }).done(function (result) {
-                    <?php if($this->isKey): ?>
-                     var json =JSON.parse(result);
-                     if(json.value){
-                        //$('#numeric-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>').val('');
-                            toastr.error(json.value+' <?php _e(' is already inserted!', 'tainacan') ?>', '<?php _e('Attention!', 'tainacan') ?>', {positionClass: 'toast-bottom-right'});
-                     }
-                    <?php endif; ?>
-                });
+                        isKey: <?php echo ($this->isKey) ? 'true' : 'false' ?>
+                    };
+                }
+
+                if($('#AllFieldsShouldBeFilled'+<?php echo $compound_id ?>).length > 0 && '<?php echo $property_id ?>' !== '0'){
+                    Hook.call('blockCompounds',['<?php echo $compound_id ?>','<?php echo $property_id ?>','<?php echo $index_id ?>']);
+                }else{
+                    Hook.result = false;
+                }
             });
         </script> 
         <?php
