@@ -395,11 +395,8 @@ function socialdb_catch_uri() {
     } else if (strpos($actual_link, '.rdf') !== false) {
         require_once 'controllers/export/rdf_controller.php';
         exit();
-    } else if (get_query_var('add')) {
+    } else if ( get_query_var('add') || get_query_var('edit') ) {
         require_once dirname(__FILE__) . '/partials/item/add.php';
-        exit();
-    } else if ( get_query_var('edit') ) {
-        require_once dirname(__FILE__) . '/partials/item/edit.php';
         exit();
     }
 }

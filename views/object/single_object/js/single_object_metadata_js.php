@@ -6,8 +6,6 @@
             $("#configuration").css('margin-top', 50);
         }
 
-        change_breadcrumbs_title('<?php _e('Import', 'tainacan') ?>');
-
         $('img').bind('contextmenu', function (e) {
             return false;
         });

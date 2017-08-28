@@ -152,6 +152,7 @@ while (have_posts()) : the_post();
                                         elseif (has_action('addLibraryMenu')):
                                             do_action('addLibraryMenu', $_currentID_);
                                         else:
+                                            $new_add_url = get_the_permalink($_currentID_). 'add';
                                             $_add_modes = [
                                                 'write_text' => ['label' => _t('Write text'), 'action' => "showAddItemText()"],
                                                 'send_file' => ['label' => _t('Send file(s)'), 'action' => "showViewMultipleItems()"],
@@ -165,9 +166,7 @@ while (have_posts()) : the_post();
                                             if (is_array($_add_opts) && (count($_add_opts) === 1)) {
                                                 $hideStr = "style='display:none'";
                                                 $temp = _t('Add');
-                                                //$add_item_str = '<a href="javascript:void(0)" style="color: white; width: 100%;" class="btn"';
-                                                //$add_item_str .= 'onclick="' . $_add_modes[$_add_opts[0]]['action'] . '">' . $temp . '</a>';
-                                                $add_item_str = '<a href="'. get_the_permalink($_currentID_).'criar-item" style="color: white; width: 100%;" class="btn"';
+                                                $add_item_str = '<a href="'. $new_add_url .'" style="color: white; width: 100%;" class="btn"';
                                                 $add_item_str .= '>' . $temp . '</a>';
                                             }
                                             ?>
@@ -180,7 +179,7 @@ while (have_posts()) : the_post();
                                                     <ul class="dropdown-menu" <?php echo $hideStr; ?> >
                                                         <?php if (false === is_array($_add_opts)) { ?>
                                                             <!--li><a onclick="showAddItemText()"> <?php _e('Write text', 'tainacan') ?> </a> </li-->
-                                                            <li><a href="<?php echo get_the_permalink($_currentID_).'criar-item'; ?>"> <?php _e('Write text', 'tainacan') ?> </a> </li>
+                                                            <li><a href="<?php echo $new_add_url; ?>"> <?php _e('Write text', 'tainacan') ?> </a> </li>
                                                             <li><a onclick="showViewMultipleItems()"> <?php _e('Send file(s)', 'tainacan') ?>  </a> </li>
                                                             <li><a onclick="showSendFilesZip()"> <?php _e('Send file(s) via zip', 'tainacan') ?>  </a> </li>
                                                             <li><a onclick="showAddItemURL();"> <?php _e('Insert URL', 'tainacan') ?> </a> </li>
@@ -196,14 +195,13 @@ while (have_posts()) : the_post();
                                                                                    class="add_<?php echo $_mode ?>"> <?php echo $_item['label'] ?> </a>
                                                                             </li>
                                                                             <?php
-                                                                        }else{
-                                                                            echo '<li><a class="add_'.$_mode .'"  href="'.get_the_permalink($_currentID_).'criar-item">' . __('Write text', 'tainacan') . '</a></li>';
+                                                                        } else {
+                                                                            echo '<li><a class="add_'.$_mode .'" href="'.$new_add_url.'">' . __('Write text', 'tainacan') . '</a></li>';
                                                                         }
                                                                     }
                                                                 }
                                                             } else {
-                                                                //echo '<li><a onclick="showAddItemText()">' . _e('Write text', 'tainacan') . '</a></li>';
-                                                                echo '<li><a href="'.get_the_permalink($_currentID_).'criar-item">' . __('Write text', 'tainacan') . '</a></li>';
+                                                                echo '<li><a href="'.$new_add_url.'">' . __('Write text', 'tainacan') . '</a></li>';
                                                             }
                                                         }
                                                         ?>

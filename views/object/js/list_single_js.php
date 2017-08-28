@@ -1,47 +1,12 @@
 <script>
     $(function () {
-        /*
-         *    R >
-         *
-        $("#main_part_collection").hide();
-        var is_item_home = $("#configuration .item-breadcrumbs").siblings().first().is("#single_object_id");
-        if( is_item_home )
-            $("#configuration").css('margin-top', 50);
-
-        change_breadcrumbs_title( '< ? php _e('Import', 'tainacan') ?>');
-        var is_col_header_visible = $(".collection_header").is(":visible");
-        if (!is_col_header_visible) {
-            //$('.header-navbar').css("margin-bottom", 0);
-            $('body').css('background-color', '#f2f2f2');
-        }
-
-        //botao voltar do browser
-        if (window.history && window.history.pushState) {
-            previousRoute = window.location.pathname;
-            window.history.pushState('forward', null, $('#route_blog').val()+$('#slug_collection').val()+'/'+$('#single_name').val());
-        }
-
-         var myPopoverObject = $('#iframebuttonObject').data('popover');
-         $('#iframebuttonObject').popover('hide');
-         myPopoverObject.options.html = true;
-         //<iframe width="560" height="315" src="https://www.youtube.com/embed/CGyEd0aKWZE" frameborder="0" allowfullscreen></iframe>
-         myPopoverObject.options.content = $('#socialdb_permalink_object').val();
-
-        *
-        *    < R
-        */
-
         $('img').bind('contextmenu', function (e) {
             return false;
         });
         var item_id = $('#single_object_id').val();
         $('body').css('background-color', '#f1f2f2');
 
-        // var stateObj = {foo: "bar"};
         $('#form').html('');
-//        $('#object_page').val($('#single_name').val());
-//        history.replaceState(stateObj, "page 2", $('#socialdb_permalink_object').val());
-
 
         if(!$('body').hasClass('page-template-page-statistics')) {
             list_files_single(item_id);

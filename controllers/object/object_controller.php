@@ -1203,6 +1203,16 @@ class ObjectController extends Controller {
         }
     }
 
+    public function get_collection_by_object($object_id) {
+        $categories = wp_get_object_terms($object_id, 'socialdb_category_type');
+        foreach ($categories as $category) {
+            $result = $this->get_collection_by_category_root($category->term_id);
+            if (!empty($result)) {
+                return $result;
+            }
+        }
+    }
+
 }
 
 /*
