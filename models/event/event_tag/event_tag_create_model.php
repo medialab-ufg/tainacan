@@ -91,6 +91,8 @@ class EventTagCreate extends EventModel {
                 $data['msg'] = __('The event was successful','tainacan');
                 $data['type'] = 'success';
                 $data['title'] = __('Success','tainacan');
+                $data['collection_id'] = $data['socialdb_event_collection_id'];
+                $data['user_id'] = $data['socialdb_event_user_id'];
                 $data['term_id'][] = $result['term_id'];
             }elseif(trim($tag_name)==''){
                 $this->update_event_state('invalid', $data['event_id']); // seto a o evento como invalido

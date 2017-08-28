@@ -115,7 +115,7 @@ $ids = [];
                     <?php if (!empty($property['metas']['objects'])) { ?>
                         <?php foreach ($property['metas']['objects'] as $object) { // percoro todos os objetos  ?>
                             <?php if (isset($property['metas']['value']) && !empty($property['metas']['value']) && in_array($object->ID, $property['metas']['value'])): // verifico se ele esta na lista de objetos da colecao  ?>
-                                <option selected='selected' value="<?php echo $object->ID ?>"><?php echo $object->post_title ?></span>
+                                <option selected='selected' value="<?php echo $object->ID ?>"><?php echo $object->post_title ?></option>
                                 <?php endif; ?>
                             <?php } ?>
                         <?php }else { ?>

@@ -368,7 +368,10 @@ $view_helper = new ObjectHelper($collection_id);
                     <div class="edit-field-btn">
                         <?php
                         // verifico se o metadado pode ser alterado
-                        if (verify_allowed_action($collection_id, 'socialdb_collection_permission_edit_tag', $object->ID)):
+                        $can_edit = verify_allowed_action($global_collection_id, 'socialdb_collection_permission_edit_tag');
+                        $collection_moderator = verify_collection_moderators($collection_id, get_the_ID());
+
+                        if (($can_edit && $collection_moderator) || current_user_can('manage_option')):
                             ?>
                             <button type="button" onclick="cancel_tag()" id="cancel_tag" class="btn btn-default btn-xs" style="display: none;" ><span class="glyphicon glyphicon-arrow-left" ></span></button>
                             <button type="button" onclick="edit_tag()" id="edit_tag" class="btn btn-default btn-xs" ><span class="glyphicon glyphicon-edit"></span></button>

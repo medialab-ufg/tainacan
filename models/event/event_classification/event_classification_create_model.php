@@ -51,7 +51,8 @@ class EventClassificationCreateModel extends EventModel {
      * 
      * Autor: Eduardo Humberto 
      */
-    public function verify_event($data,$automatically_verified = false) {
+    public function verify_event($data,$automatically_verified = false)
+    {
        $collection_id = get_post_meta($data['event_id'],'socialdb_event_collection_id',true); 
        $actual_state = get_post_meta($data['event_id'], 'socialdb_event_confirmed',true);
 
@@ -146,7 +147,7 @@ class EventClassificationCreateModel extends EventModel {
         $tags = explode(',', get_post_meta($data['event_id'], 'socialdb_event_classification_term_id',true));
         foreach ($tags as $tag) {
             $tag = get_term_by('id', $tag,'socialdb_tag_type');
-            if($tag&&$object_id){// se a categoria ou objeto forem validos
+            if($tag && $object_id){// se a categoria ou objeto forem validos
                 wp_set_object_terms( $object_id, $tag->term_id,'socialdb_tag_type',true);
                 $this->concatenate_commom_field_value( $object_id, "socialdb_propertyterm_tag", $tag->term_id);
                 $this->set_approval_metas($data['event_id'], $data['socialdb_event_observation'], $automatically_verified);
