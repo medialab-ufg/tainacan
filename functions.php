@@ -641,21 +641,38 @@ function tainacan_comments($comment, $args, $depth) {
 
                         $can_delete = verify_allowed_action($global_collection_id, 'socialdb_collection_permission_delete_comment');
                         $can_edit = verify_allowed_action($global_collection_id, 'socialdb_collection_permission_edit_comment');
-                        if (!$collection_moderator && !$comment_autor): ?>
+
+                        if (!$collection_moderator && !$comment_autor )
+                        {
+                            ?>
                             <div class="col-md-1 no-padding comment-item">
                                 <a onclick="showModalReportAbuseComment('<?php comment_ID(); ?>');"><span class="glyphicon glyphicon-bullhorn"></span>&nbsp;<?php _e("Report Abuse", 'tainacan'); ?></a>
                             </div>
+                            <?php
+                        }else
+                        {
+                            if($can_edit || $collection_moderator)
+                            {
+                                ?>
+                                <div class="col-md-1 no-padding comment-item">
+                                    <a onclick="showEditComment('<?php comment_ID(); ?>');"><span class="glyphicon glyphicon-pencil"></span>&nbsp;<?php _e("Edit", 'tainacan'); ?></a>&nbsp;
+                                </div>
+                                <?php
+                            }
 
-                        <?php //endif; ?>
-                    <?php else: ?>
-                        <div class="col-md-1 no-padding comment-item">
-                            <a onclick="showEditComment('<?php comment_ID(); ?>');"><span class="glyphicon glyphicon-pencil"></span>&nbsp;<?php _e("Edit", 'tainacan'); ?></a>&nbsp;
-                        </div>
-                        <div class="col-md-1 no-padding comment-item">
-                            <a onclick="showAlertDeleteComment('<?php comment_ID(); ?>', '<?php _e('Attention!') ?>', '<?php _e('Delete this comment?', 'tainacan') ?>', '<?php echo mktime(); ?>');"><span class="glyphicon glyphicon-remove"></span>&nbsp;<?php _e("Delete", 'tainacan'); ?></a>
-                            
-                        </div>
-                    <?php endif; ?>
+                            if($can_delete || $collection_moderator)
+                            {
+                                ?>
+                                <div class="col-md-1 no-padding comment-item">
+                                    <a onclick="showAlertDeleteComment('<?php comment_ID(); ?>', '<?php _e('Attention!') ?>', '<?php _e('Delete this comment?', 'tainacan') ?>', '<?php echo mktime(); ?>');">
+                                        <span class="glyphicon glyphicon-remove"></span>&nbsp;<?php _e("Delete", 'tainacan'); ?>
+                                    </a>
+                                </div>
+                                <?php
+                            }
+                        }
+
+                    ?>
 
                     </div>
                 </div>
