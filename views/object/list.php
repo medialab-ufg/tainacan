@@ -32,10 +32,11 @@ if ( $loop->have_posts() ) { ?>
 
 <?php } else { ?> <!-- TAINACAN: se a pesquisa nao encontrou nenhum item -->
 
+    <?php if(get_option('collection_root_id') != $collection_id): ?>
     <div id="items_not_found" class="alert alert-danger" display="none">
         <span class="glyphicon glyphicon-warning-sign"></span> <?php _t('No objects found!', 1); ?>
     </div>
-
+    <?php else: ?>
     <div id="collection_empty" style="display:none">
         <?php
         if (get_option('collection_root_id') != $collection_id):
@@ -46,7 +47,9 @@ if ( $loop->have_posts() ) { ?>
             endif;
         endif; ?>
     </div>
-    <?php
+<?php
+    endif;
+
 }
 
 $objHelper->renderCollectionPagination($loop->found_posts, $loop->post_count, $pagid, $show_string, 'bottom_pag');

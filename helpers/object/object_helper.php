@@ -158,6 +158,11 @@ class ObjectHelper extends ViewHelper {
                                 if (count($date_temp) > 1):
                                     $_out_ = $date_temp[2] . '/' . $date_temp[1] . '/' . $date_temp[0];
                                 endif;
+
+                                $data = get_post_meta($item_id, "socialdb_property_{$_meta_obj->id}_0_date", true);
+                                if (is_plugin_active('data_aacr2/data_aacr2.php') && $data){
+                                    $_out_ = $data;
+                                }
                             }
 
                             if($meta_type == 'user') {
