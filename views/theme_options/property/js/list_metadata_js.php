@@ -1,10 +1,19 @@
 <script type="text/javascript">
     var src = $('#src').val();
-    $('.dropdown-toggle').dropdown();
     var current_meta_type = $("#property_metadata_type").val();
     var $current_meta_form = "#submit_form_property_data_" + current_meta_type;
     var $form_ranking = $("#meta-voting #submit_form_ranking");
     var ranking_types = ["binary", "stars", "like"];
+
+    $(function()  {
+        $('.dropdown-toggle').dropdown();
+        // Formats select menu options to show up it's thumbnail
+        $('.select2-menu').select2({
+            formatResult: addMenuThumb,
+            formatSelection: addMenuThumb,
+            escapeMarkup: function(m) { return m; }
+        });
+    });
 
      //inicia o dynatree de propriedades
      var types_compounds = []; // array que mostra o tipo das propriedades compostas
@@ -1872,13 +1881,6 @@
         var thumb = '<?php echo get_stylesheet_directory_uri() ?>/extras/cssmenumaker/menus/' + f + '/thumbnail/css_menu_thumb.png';
         return "<span><img src='" + thumb + "' class='img-flag' />" + item.text + "</span>";
     }
-
-    // Formats select menu options to show up it's thumbnail
-    $('.select2-menu').select2({
-        formatResult: addMenuThumb,
-        formatSelection: addMenuThumb,
-        escapeMarkup: function(m) { return m; }
-    });
 
     function resetAllForms() {
         var forms = ['submit_form_property_data_text', 'submit_form_property_data_textarea', 'submit_form_property_data_date',
