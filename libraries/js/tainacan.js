@@ -566,6 +566,7 @@ $(window).load(function () {
 
     $(document).on('mouseleave', ".config-temp-box", function () {
         $(document).on('click', 'body', function (event) {
+            event.preventDefault();
             swal({
                 title: "Finalizar configuração?",
                 text: "Você ainda não finalizou a configuração da coleção",
@@ -581,7 +582,6 @@ $(window).load(function () {
                 $("#conclude_config").click();
                 }
             );
-            event.preventDefault();
         });
     });*/
 
@@ -1366,11 +1366,13 @@ function showCategoriesConfiguration(src, is_front) {
         $("#form").html('');
 
         if (is_front) {
-            $('#searchBoxIndex').hide();
+            /*Problemas ao usar div configuration*/
+            /*$('#searchBoxIndex').hide();
             $('#users_div').addClass('col-md-12').css({background: 'white', padding: "20px"}).html(result).show();
             $('.ibram-home-container').html('');
             $("#display_view_main_page").remove();
-            $("body.home .tainacan-topo-categoria button").remove();
+            $("body.home .tainacan-topo-categoria button").remove();*/
+            window.location = window.location.href;
         } else {
             $('#main_part').hide();
             $('#collection_post').hide();

@@ -26,7 +26,8 @@
                                </div>
                                 <br>
                                 <p><?php _e('Selected relationship','tainacan') ?></p>
-                                <div id="selected_categories_relationship"></div>
+                                <div id="selected_categories_relationship">
+                                </div>
                                <input required="required" type="hidden"  id="property_object_category_id"  name="property_object_category_id" value="<?php //echo $category->term_id; ?>" >
                             <?php // endif; ?>
                         </div>
