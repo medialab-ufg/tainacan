@@ -280,7 +280,7 @@ class ObjectClass extends FormItem {
 
             //remove no formulario de fato
             function original_remove_in_item_value_compound_<?php echo $compound_id ?>_<?php echo $propert_id; ?>_<?php echo $index_id; ?>(id,seletor){
-                $(seletor).remove();
+                $(seletor).parent().remove();
                 if($('#AllFieldsShouldBeFilled'+<?php echo $compound_id ?>).length === 0 || '<?php echo $propert_id ?>' === '0') {
                     $.ajax({
                         url: $('#src').val() + '/controllers/object/form_item_controller.php',
@@ -288,7 +288,7 @@ class ObjectClass extends FormItem {
                         data: {
                             operation: 'removeValue',
                             type: 'object',
-                            <?php if ($property_id !== 0 && !$isMultiple) echo 'indexCoumpound:0,' ?>
+                            <?php if ($propert_id !== 0 && !$isMultiple) echo 'indexCoumpound:0,' ?>
                             value: id,
                             item_id: '<?php echo $item_id ?>',
                             compound_id: '<?php echo $compound_id ?>',
