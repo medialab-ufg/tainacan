@@ -2291,7 +2291,8 @@
         //$('#submit_form_property_term').parents('form').find('input[type=text],textarea,select').filter(':visible').val('');
     }
 
-   function showPropertyCategoryDynatree(src) {
+   function showPropertyCategoryDynatree(src)
+   {
         $("#property_category_dynatree").dynatree({
             selectionVisible: true, // Make sure, selected nodes are visible (expanded).  
             checkbox: true,
