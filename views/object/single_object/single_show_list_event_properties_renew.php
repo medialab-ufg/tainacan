@@ -54,9 +54,19 @@ $ids = [];
                         </button>
                         <?php
                         // verifico se o metadado pode ser alterado
-                        if (verify_allowed_action($collection_id, 'socialdb_collection_permission_edit_property_object_value',$object_id)): ?>
-                            <button type="button" onclick="edit_object_property('<?php echo $property['id']; ?>', '<?php echo $object_id; ?>')" id="single_edit_<?php echo $property['id']; ?>_<?php echo $object_id; ?>" class="btn btn-default btn-xs" ><span class="glyphicon glyphicon-edit"></span></button>
-                        <?php endif; ?>
+                        if((get_current_user_id() == 0 && verify_anonimous_approval_allowed($collection_id, 'socialdb_collection_permission_edit_property_object_value'))
+                            || get_current_user_id() != 0)
+                        {
+                            if (verify_allowed_action($collection_id, 'socialdb_collection_permission_edit_property_object_value', $object_id))
+                            {
+                                ?>
+                                <button type="button" onclick="edit_object_property('<?php echo $property['id']; ?>', '<?php echo $object_id; ?>')" id="single_edit_<?php echo $property['id']; ?>_<?php echo $object_id; ?>" class="btn btn-default btn-xs" >
+                                    <span class="glyphicon glyphicon-edit"></span>
+                                </button>
+                                <?php
+                            }
+                        }
+                        ?>
 
                         <button type="button" onclick="save_object_property('<?php echo $property['id']; ?>', '<?php echo $object_id; ?>')" id="single_save_<?php echo $property['id']; ?>_<?php echo $object_id; ?>"class="btn btn-default btn-xs" style="display: none;"><span class="glyphicon glyphicon-floppy-disk"></span></button>
 
@@ -105,7 +115,7 @@ $ids = [];
                     <?php if (!empty($property['metas']['objects'])) { ?>
                         <?php foreach ($property['metas']['objects'] as $object) { // percoro todos os objetos  ?>
                             <?php if (isset($property['metas']['value']) && !empty($property['metas']['value']) && in_array($object->ID, $property['metas']['value'])): // verifico se ele esta na lista de objetos da colecao  ?>
-                                <option selected='selected' value="<?php echo $object->ID ?>"><?php echo $object->post_title ?></span>
+                                <option selected='selected' value="<?php echo $object->ID ?>"><?php echo $object->post_title ?></option>
                                 <?php endif; ?>
                             <?php } ?>
                         <?php }else { ?>

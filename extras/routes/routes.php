@@ -16,7 +16,11 @@ $collection_route = get_post(get_option('collection_root_id'));
     ?>">
 <input type="hidden" id="goToEditObject" name="goToEditObject" value="<?php
     if (get_query_var('edit-item') && get_query_var('collection') && get_query_var('item')) {
-        echo get_post_by_name(trim(get_query_var('item')),OBJECT,'socialdb_object')->ID;
+        $owner = get_post()->post_author;
+        $moderators = get_post_meta(get_post()->ID, 'socialdb_collection_moderator');
+        $user_id = get_current_user_id();
+        if ($user_id != 0 && ($user_id == $owner || (is_array($moderators) && in_array($user_id, $moderators)) || user_can($user_id, 'manage_options')))
+            echo get_post_by_name(trim(get_query_var('item')),OBJECT,'socialdb_object')->ID;
     }
     ?>">
 <input type="hidden" id="goToAdvancedSearch" name="goToAdvancedSearch" value="<?php

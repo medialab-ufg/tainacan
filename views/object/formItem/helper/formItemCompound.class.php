@@ -237,6 +237,8 @@ class FormItemCompound extends FormItem {
         ?>
         <script>
             var index_<?php echo $property['id'] ?> = <?php echo $index; ?> + 1;
+            Hook.arrayResult = [];
+            Hook.result = true;
 
             $('.js-append-property-<?php echo $property['id'] ?>').click(function(){
                 $.ajax({

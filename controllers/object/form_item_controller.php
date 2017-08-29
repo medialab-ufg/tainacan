@@ -75,7 +75,7 @@ class FormItemController extends Controller {
                         $data['type'],
                         $data['index'],
                         $data['item_id'],
-                        (isset($data['indexCoumpound']) ? $data['indexCoumpound'] : false )
+                        ( false )
                         );
                 }
                 //INSERE O VALOR DE FATO
@@ -302,6 +302,7 @@ class FormItemController extends Controller {
                     foreach ($data['items'] as $item) {
                         $post = array(
                         'ID' => $item,
+                        'post_parent' => $data['collection_id'],
                         'post_status' => 'publish');
                         $data['ID'][] = wp_update_post($post);
                         $category_root_id = $class->get_category_root_of($data['collection_id']);

@@ -59,11 +59,9 @@
                 $("#categories_dynatree").dynatree("getTree").reload();
                 elem = jQuery.parseJSON(result);
                 if (elem.type === 'success') {
-                    $("#alert_error_categories").hide();
-                    $("#alert_success_categories").show();
+                    sweetAlert($("#success_title").val(), $("#success_msg").val(), "success");
                 } else {
-                    $("#alert_error_categories").show();
-                    $("#alert_success_categories").hide();
+                    sweetAlert($("#error_title").val(), $("#error_msg").val(), "error");
                     if (elem.message) {
                         $("#message_category").text(elem.message);
                     }
@@ -345,10 +343,11 @@
                 $('.dropdown-toggle').dropdown();
             },
             onClick: function (node, event) {
+                edit_dynatree(node);
+
                 // Close menu on click
                 if ($(".contextMenu:visible").length > 0) {
                     $(".contextMenu").hide();
-                    //          return false;
                 }
             }, onRender: function (isReloading, isError) {
                 // var selNodes = node.tree.getSelectedNodes();
@@ -362,7 +361,10 @@
                    //     $(span).attr('onmouseover',"showContextMenu('#context_menu_"+node.data.key+"')");
                     //    $(span).append('<a id="context_menu_'+node.data.key+'" onclick="triggerContextMenuCategories('+"'#ui-dynatree-id-"+node.data.key+"'"+
                      //          ',event,'+"'myMenu'"+')" style="display:none;cursor:pointer;"><span class="glyphicon glyphicon-chevron-down"></span></a>');
-                bindContextMenu(span);
+                if(node.data.key != 'shared_categories')
+                {
+                    bindContextMenu(span);
+                }
             },
             onPostInit: function (isReloading, isError) {
                 //$('#parentCat').val("Nenhum");
@@ -429,27 +431,7 @@
                     clean_archive_mode();
                     break;
                 case "edit":
-                    var get_editing = sessionStorage.getItem('editing_category');
-                    if(get_editing)
-                    {
-                        swal({
-                                title: '<?php _e('There are not saved items', 'tainacan'); ?>',
-                                text: '<?php _e('Modifications can be lost', 'tainacan'); ?>',
-                                type: "warning",
-                                showCancelButton: true,
-                                confirmButtonColor: "#DD6B55",
-                                confirmButtonText: '<?php _e('Continue', 'tainacan'); ?>',
-                                cancelButtonText: '<?php _e('Cancel', 'tainacan'); ?>',
-                                closeOnConfirm: false
-                            },
-                            function(){
-                                swal('<?php _e('Deleted', 'tainacan'); ?>', '<?php _e('Modifications were discarted', 'tainacan'); ?>', "success");
-                                sessionStorage.removeItem('editing_category');
-                                get_category_info('<?php _e('Category root', 'tainacan'); ?>', node);
-                            });
-                    }
-                    get_category_info('<?php _e('Category root', 'tainacan'); ?>', node);
-
+                    edit_dynatree(node)
                     break;
                 case "delete":
                      $('#category_property').html('');
@@ -590,7 +572,6 @@
             input.value = '';
     }
 
-
     /**
      * funcao que concatena um array em um input, separado por virgulas
      * @param {int} o ID do item que sera inserido no array
@@ -646,4 +627,28 @@
         $('#label-box-' + id).remove();
     }
 
+    function edit_dynatree(node)
+    {
+        var get_editing = sessionStorage.getItem('editing_category');
+        if(get_editing)
+        {
+            swal({
+                    title: '<?php _e('There are not saved items', 'tainacan'); ?>',
+                    text: '<?php _e('Modifications can be lost', 'tainacan'); ?>',
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: '<?php _e('Continue', 'tainacan'); ?>',
+                    cancelButtonText: '<?php _e('Cancel', 'tainacan'); ?>',
+                    closeOnConfirm: false
+                },
+                function(){
+                    swal('<?php _e('Deleted', 'tainacan'); ?>', '<?php _e('Modifications were discarted', 'tainacan'); ?>', "success");
+                    sessionStorage.removeItem('editing_category');
+                    get_category_info('<?php _e('Category root', 'tainacan'); ?>', node);
+                });
+        }
+        else get_category_info('<?php _e('Category root', 'tainacan'); ?>', node);
+
+    }
 </script>

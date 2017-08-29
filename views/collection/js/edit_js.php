@@ -77,6 +77,7 @@
                 return false;
             }
         });
+
         list_ordenation();
         list_collections_parent();
 

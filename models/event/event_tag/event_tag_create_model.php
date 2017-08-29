@@ -36,22 +36,29 @@ class EventTagCreate extends EventModel {
      * 
      * Autor: Eduardo Humberto 
      */
-    public function verify_event($data,$automatically_verified = false) {
+    public function verify_event($data,$automatically_verified = false)
+    {
        $actual_state = get_post_meta($data['event_id'], 'socialdb_event_confirmed',true);
-       if($actual_state!='confirmed'&&$automatically_verified||(isset($data['socialdb_event_confirmed'])&&$data['socialdb_event_confirmed']=='true')){// se o evento foi confirmado automaticamente ou pelos moderadores
+       if($actual_state != 'confirmed' && $automatically_verified || (isset($data['socialdb_event_confirmed']) && $data['socialdb_event_confirmed']=='true'))// se o evento foi confirmado automaticamente ou pelos moderadores
+       {
            $data = $this->add_tag($data['event_id'],$data,$automatically_verified);    
-       } elseif($actual_state!='confirmed') {
+       }
+       elseif($actual_state!='confirmed')
+       {
            $this->set_approval_metas($data['event_id'], $data['socialdb_event_observation'], $automatically_verified);
            $this->update_event_state('not_confirmed', $data['event_id']);
            $data['msg'] = __('The event was successful NOT confirmed','tainacan');
            $data['type'] = 'success';
            $data['title'] = __('Success','tainacan');
-       } else {
+       }
+       else
+       {
            $data['msg'] = __('This event is already confirmed','tainacan');
            $data['type'] = 'info';
            $data['title'] = __('Atention','tainacan');
        }
-        $this->notificate_user_email(get_post_meta($data['event_id'], 'socialdb_event_collection_id',true),  get_post_meta($data['event_id'], 'socialdb_event_user_id',true), $data['event_id']);
+
+       $this->notificate_user_email(get_post_meta($data['event_id'], 'socialdb_event_collection_id',true),  get_post_meta($data['event_id'], 'socialdb_event_user_id',true), $data['event_id']);
        return json_encode($data);
     }
       /**
@@ -63,18 +70,20 @@ class EventTagCreate extends EventModel {
      * 
      * Autor: Eduardo Humberto 
      */
-    public function add_tag($event_id,$data,$automatically_verified) {
+    public function add_tag($event_id,$data,$automatically_verified)
+    {
         $tagModel = new TagModel();
         $tag_name = get_post_meta($event_id,'socialdb_event_tag_suggested_name', true);
         $tag_description = get_post_meta($event_id, 'socialdb_event_tag_description',true) ;
         $collection_id = get_post_meta($event_id,'socialdb_event_collection_id',true);
         $tags = explode(',', $tag_name);
-        foreach ($tags as $tag_name) {
+        foreach ($tags as $tag_name)
+        {
             $result = $tagModel->add($tag_name, $collection_id,$tag_description);
-            if (isset($result['term_id'])) {
+            if (isset($result['term_id']))
+            {
                 $this->set_approval_metas($data['event_id'], $data['socialdb_event_observation'], $automatically_verified);
                 $this->update_event_state('confirmed', $data['event_id']);
-
                 $logData = ['collection_id' => $data['socialdb_event_collection_id'], 'resource_id' => $result['term_id'],
                     'user_id' => $data['socialdb_event_user_id'], 'event_type' => 'tags', 'event' => 'add' ];
                 Log::addLog($logData);
@@ -82,6 +91,8 @@ class EventTagCreate extends EventModel {
                 $data['msg'] = __('The event was successful','tainacan');
                 $data['type'] = 'success';
                 $data['title'] = __('Success','tainacan');
+                $data['collection_id'] = $data['socialdb_event_collection_id'];
+                $data['user_id'] = $data['socialdb_event_user_id'];
                 $data['term_id'][] = $result['term_id'];
             }elseif(trim($tag_name)==''){
                 $this->update_event_state('invalid', $data['event_id']); // seto a o evento como invalido

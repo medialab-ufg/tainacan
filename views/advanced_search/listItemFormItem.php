@@ -137,43 +137,82 @@
     //adiciona no formulario de fato
     function add_in_item_value_compound_<?php echo $compound_id ?>_<?php echo $property_id; ?>_<?php echo $contador; ?>(id){
         //$('select[name="socialdb_property_<?php echo $compound_id; ?>_<?php echo $property_id; ?>_<?php echo $contador; ?>[]"]').append('<option value="'+id+'" selected="selected">'+id+'</option>');
-        $.ajax({
-            url: $('#src').val() + '/controllers/object/form_item_controller.php',
-            type: 'POST',
-            data: {
+        if($('#AllFieldsShouldBeFilled'+<?php echo $compound_id ?>).length === 0 || '<?php echo $property_id ?>' === '0') {
+            $.ajax({
+                url: $('#src').val() + '/controllers/object/form_item_controller.php',
+                type: 'POST',
+                data: {
+                    operation: 'saveValue',
+                    type: 'object',
+                    <?php if ($property_id !== 0 && $cardinality == 'false') echo 'indexCoumpound:0,' ?>
+                    value: id,
+                    item_id: '<?php echo $item_id ?>',
+                    compound_id: '<?php echo $compound_id ?>',
+                    property_children_id: '<?php echo $property_id ?>',
+                    index: <?php echo $contador ?>,
+                    reverse: $('#reverse_<?php echo $compound_id ?>_<?php echo $property_id; ?>_<?php echo $contador; ?>').val()
+                }
+            });
+        }else{
+            Hook['<?php echo $compound_id.'_'.$contador ?>'] = ( Hook['<?php echo $compound_id.'_'.$contador ?>']) ?  Hook['<?php echo $compound_id.'_'.$contador ?>'] : {};
+            Hook['<?php echo $compound_id.'_'.$contador ?>']['<?php echo $property_id ?>'] = {
                 operation: 'saveValue',
-                type:'object',
-                <?php if($property_id!==0 && $cardinality == 'false') echo 'indexCoumpound:0,' ?>
+                type: 'object',
+                <?php if ($property_id !== 0 && $cardinality == 'false') echo 'indexCoumpound:0,' ?>
                 value: id,
-                item_id:'<?php echo $item_id ?>',
-                compound_id:'<?php echo $compound_id ?>',
+                item_id: '<?php echo $item_id ?>',
+                compound_id: '<?php echo $compound_id ?>',
                 property_children_id: '<?php echo $property_id ?>',
                 index: <?php echo $contador ?>,
                 reverse: $('#reverse_<?php echo $compound_id ?>_<?php echo $property_id; ?>_<?php echo $contador; ?>').val()
-            }
-        });
-        validateFieldsMetadataText('true','<?php echo $compound_id ?>','<?php echo $property_id ?>','<?php echo $contador ?>')
+            };
+        }
+        validateFieldsMetadataText('true','<?php echo $compound_id ?>','<?php echo $property_id ?>','<?php echo $contador ?>');
+        if($('#AllFieldsShouldBeFilled'+<?php echo $compound_id ?>).length > 0 && '<?php echo $property_id ?>' !== '0'){
+            Hook.call('blockCompounds',['<?php echo $compound_id ?>','<?php echo $property_id ?>','<?php echo $contador ?>']);
+        }else{
+            Hook.result = false;
+        }
     }
     //remove no formulario de fato
     function remove_in_item_value_compound_<?php echo $compound_id ?>_<?php echo $property_id; ?>_<?php echo $contador; ?>(id){
         $('select[name="socialdb_property_<?php echo $compound_id; ?>_<?php echo $property_id; ?>_<?php echo $contador; ?>[]"]  option[value="'+id+'"]').remove();
-        $.ajax({
-            url: $('#src').val() + '/controllers/object/form_item_controller.php',
-            type: 'POST',
-            data: {
+        if($('#AllFieldsShouldBeFilled'+<?php echo $compound_id ?>).length === 0  || '<?php echo $property_id ?>' === '0') {
+            $.ajax({
+                url: $('#src').val() + '/controllers/object/form_item_controller.php',
+                type: 'POST',
+                data: {
+                    operation: 'removeValue',
+                    type: 'object',
+                    <?php if ($property_id !== 0 && $cardinality == 'false') echo 'indexCoumpound:0,' ?>
+                    value: id,
+                    item_id: '<?php echo $item_id ?>',
+                    compound_id: '<?php echo $compound_id ?>',
+                    property_children_id: '<?php echo $property_id ?>',
+                    index: <?php echo $contador ?>,
+                    reverse: $('#reverse_<?php echo $compound_id ?>_<?php echo $property_id; ?>_<?php echo $contador; ?>').val()
+                }
+            });
+        }else{
+            Hook['<?php echo $compound_id.'_'.$contador ?>'] = {'<?php echo $property_id ?>' : {
                 operation: 'removeValue',
-                type:'object',
-                <?php if($property_id!==0  && $cardinality == 'false') echo 'indexCoumpound:0,' ?>
+                type: 'object',
+                <?php if ($property_id !== 0 && $cardinality == 'false') echo 'indexCoumpound:0,' ?>
                 value: id,
-                item_id:'<?php echo $item_id ?>',
-                compound_id:'<?php echo $compound_id ?>',
+                item_id: '<?php echo $item_id ?>',
+                compound_id: '<?php echo $compound_id ?>',
                 property_children_id: '<?php echo $property_id ?>',
                 index: <?php echo $contador ?>,
                 reverse: $('#reverse_<?php echo $compound_id ?>_<?php echo $property_id; ?>_<?php echo $contador; ?>').val()
-            }
-        });
+            }};
+        }
         if($('#results_property_<?php echo $compound_id; ?>_<?php echo $property_id?>_<?php echo $contador; ?> ul li').length==0){
              validateFieldsMetadataText('','<?php echo $compound_id ?>','<?php echo $property_id ?>','<?php echo $contador ?>')
+        }
+        if($('#AllFieldsShouldBeFilled'+<?php echo $compound_id ?>).length > 0 && '<?php echo $property_id ?>' !== '0'){
+            Hook.call('blockCompounds',['<?php echo $compound_id ?>','<?php echo $property_id ?>','<?php echo $contador ?>']);
+        }else{
+            Hook.result = false;
         }
     }
     

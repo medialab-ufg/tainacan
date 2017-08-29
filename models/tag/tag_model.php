@@ -22,7 +22,8 @@ class TagModel extends Model{
         * 
         * Autor: Eduardo Humberto 
         */
-	public function add($tag_name,$collection_id,$description = ''){
+	public function add($tag_name, $collection_id, $description = '')
+    {
             $is_new = $this->verify_tag($tag_name,$collection_id);
             if (!$is_new) {
                 $new_tag = wp_insert_term( trim($tag_name), 'socialdb_tag_type',
@@ -31,8 +32,10 @@ class TagModel extends Model{
             }else {
                $new_tag = socialdb_term_exists_by_slug(sanitize_title(remove_accent($tag_name)).'_'.$collection_id, 'socialdb_tag_type');
             }
+
             //apos a insercao
-           if(!is_wp_error($new_tag)&&$new_tag['term_id']){// se a tag foi inserida com sucesso
+           if(!is_wp_error($new_tag)&&$new_tag['term_id'])// se a tag foi inserida com sucesso
+           {
                 wp_set_object_terms($collection_id, array((int)$new_tag['term_id']), 'socialdb_tag_type',true);
                 $data['success'] = 'true';
                 $data['term_id'] = $new_tag['term_id'];

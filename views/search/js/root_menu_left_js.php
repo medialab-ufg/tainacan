@@ -43,6 +43,7 @@
     }*/
 
     function showDynatreeLeft(src) {
+
         var select = 0;
         $("#dynatree").dynatree({
             selectionVisible: true, // Make sure, selected nodes are visible (expanded).  

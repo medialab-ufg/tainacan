@@ -84,25 +84,46 @@ class SelectboxClass extends FormItem{
             $('#selectbox-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>').change(function(){
                 Hook.call('appendCategoryMetadata',[$(this).val(), <?php echo $item_id ?>, '#appendCategoryMetadata_<?php echo $compound_id; ?>_0_0']);
                 //appendCategoryMetadata($(this).val(), <?php echo $compound_id ?>, '#appendCategoryMetadata_<?php echo $compound_id; ?>_0_0');
-                $.ajax({
-                    url: $('#src').val() + '/controllers/object/form_item_controller.php',
-                    type: 'POST',
-                    data: {
+                if($('#AllFieldsShouldBeFilled'+<?php echo $compound_id ?>).length === 0 || '<?php echo $property_id ?>' === '0') {
+                    $.ajax({
+                        url: $('#src').val() + '/controllers/object/form_item_controller.php',
+                        type: 'POST',
+                        data: {
+                            operation: 'saveValue',
+                            type: 'term',
+                            value: $(this).val(),
+                            item_id: '<?php echo $item_id ?>',
+                            compound_id: '<?php echo $compound_id ?>',
+                            property_children_id: '<?php echo $property_id ?>',
+                            index: <?php echo $index_id ?>,
+                            indexCoumpound: 0
+                        }
+                    });
+                }else{
+                    Hook['<?php echo $compound_id.'_'.$index_id ?>'] = ( Hook['<?php echo $compound_id.'_'.$index_id ?>']) ?  Hook['<?php echo $compound_id.'_'.$index_id ?>'] : {};
+                    Hook['<?php echo $compound_id.'_'.$index_id ?>']['<?php echo $property_id ?>'] = {
                         operation: 'saveValue',
-                        type:'term',
+                        type: 'term',
                         value: $(this).val(),
-                        item_id:'<?php echo $item_id ?>',
-                        compound_id:'<?php echo $compound_id ?>',
+                        item_id: '<?php echo $item_id ?>',
+                        compound_id: '<?php echo $compound_id ?>',
                         property_children_id: '<?php echo $property_id ?>',
                         index: <?php echo $index_id ?>,
                         indexCoumpound: 0
-                    }
-                });
+                    };
+                }
                 <?php if($this->isRequired): ?>
                     Hook.call('validateFieldsMetadataText',[$(this).val(),'<?php echo $compound_id ?>','<?php echo $property_id ?>','<?php echo $index_id ?>']);
                     //validateFieldsMetadataText($(this).val(),'<?php echo $compound_id ?>','<?php echo $property_id ?>','<?php echo $index_id ?>');
                 <?php endif; ?>
+                if($('#AllFieldsShouldBeFilled'+<?php echo $compound_id ?>).length > 0 && '<?php echo $property_id ?>' !== '0'){
+                    Hook.call('blockCompounds',['<?php echo $compound_id ?>','<?php echo $property_id ?>','<?php echo $index_id ?>']);
+                }else{
+                    Hook.result = false;
+                }
             });
+
+
         </script>
         <?php
     }
