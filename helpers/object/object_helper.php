@@ -210,4 +210,5 @@ class ObjectHelper extends ViewHelper {
             endforeach;
         }
     }
+
 }

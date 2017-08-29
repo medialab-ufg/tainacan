@@ -759,7 +759,6 @@ class Model {
             ";
         $result = $wpdb->get_results($query);
 
-
         if ($result && is_array($result) && count($result) > 0) {
             return $result;
         } else {

@@ -17,11 +17,12 @@
         }
 
         //botao voltar do browser
+        /*
         if (window.history && window.history.pushState) {
             previousRoute = window.location.pathname;
             window.history.pushState('forward', null, $('#route_blog').val()+$('#slug_collection').val()+'/'+$('#single_name').val());
-            //
         }
+        */
         $('#form').html('');
     });
 

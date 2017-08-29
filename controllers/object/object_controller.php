@@ -1203,13 +1203,28 @@ class ObjectController extends Controller {
         }
     }
 
-    public function get_collection_by_object($object_id) {
+    public function get_collection_by_item($object_id) {
         $categories = wp_get_object_terms($object_id, 'socialdb_category_type');
         foreach ($categories as $category) {
             $result = $this->get_collection_by_category_root($category->term_id);
             if (!empty($result)) {
                 return $result;
             }
+        }
+    }
+
+    public function get_collection_by_category_root($category_root_id) {
+        global $wpdb;
+        $wp_posts = $wpdb->prefix . "posts";
+        $wp_postmeta = $wpdb->prefix . "postmeta";
+        $query = "SELECT p.* FROM $wp_posts p INNER JOIN $wp_postmeta pm ON p.ID = pm.post_id    
+                  WHERE pm.meta_key LIKE 'socialdb_collection_object_type' and pm.meta_value like '$category_root_id'";
+        $result = $wpdb->get_results($query);
+
+        if ($result && is_array($result) && count($result) > 0) {
+            return $result;
+        } else {
+            return array();
         }
     }
 

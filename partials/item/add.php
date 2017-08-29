@@ -13,13 +13,10 @@ if( is_user_logged_in() && current_user_can("manage_option")) {
         $col_id = $item->post_parent;
         if(0 === $col_id || is_null($col_id)) {
             $col_id = get_post_meta($item->ID, "socialdb_object_collection_init", true);
-            if(is_null($col_id)) {
-                include_once dirname(__FILE__ ) . '/../../models/general/general_model.php';
-                $gen = new Model();
-                $col_id = $gen->get_collection_by_object($item->ID)[0]->ID;
+            if(is_null($col_id) || empty($col_id)) {
+                $col_id = $obj->get_collection_by_item($item->ID)[0]->ID;
             }
         }
-
         $set_op = "edit-item";
         $data = ['collection_id' => $col_id, 'item_id' => $item->ID];
     }

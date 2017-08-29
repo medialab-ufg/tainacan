@@ -1,10 +1,21 @@
 <?php
-$single_mode = get_post_meta($post->post_parent, 'socialdb_collection_item_visualization', true);
+if($post->post_parent === 0) {
+    $colModel = new CollectionModel();
+    $parent_obj = $colModel->get_collection_by_object($post->ID)[0];
+    if( is_object($parent_obj) ) {
+        $parent = get_post( $parent_obj->ID );
+    }
+} else if($post->post_parent > 0) {
+    $parent = get_post($post->post_parent);
+}
+
+$collection_id = $parent->ID;
+$single_mode = get_post_meta($collection_id, 'socialdb_collection_item_visualization', true);
 
 if("one" === $single_mode) {
     include_once(dirname(__FILE__) .  '/controllers/object/object_controller.php');
     $obj = new ObjectController();
-    $item_data = ['collection_id' => $post->post_parent, 'object_id' => $post->ID];
+    $item_data = ['collection_id' => $collection_id, 'object_id' => $post->ID];
     $op = $obj->operation('list_single_object', $item_data);
     get_header();
     get_template_part("partials/setup","header");
@@ -21,11 +32,8 @@ if("one" === $single_mode) {
     include_once(dirname(__FILE__) . '/views/object/js/list_single_js.php');
     include_once(dirname(__FILE__) . '/models/collection/collection_model.php');
 
-    $parent = get_post($post->post_parent);
     $metas = get_post_meta($post->ID);
-    $collection_id = $parent->ID;
     $object_id = $post->ID;
-
     $create_perm_object = verify_allowed_action($collection_id, 'socialdb_collection_permission_create_property_object');
     $edit_perm_object = verify_allowed_action($collection_id, 'socialdb_collection_permission_edit_property_object');
     $delete_perm_object = verify_allowed_action($collection_id, 'socialbd_collection_permission_delete_property_object');
@@ -45,7 +53,7 @@ if("one" === $single_mode) {
 
     <ol class="breadcrumb item-breadcrumbs">
         <li><a href="<?php echo site_url(); ?>"> Home </a></li>
-        <li><a href="<?php echo $parent->guid; ?>"> <?php echo $parent->post_title; ?> </a></li>
+        <li><a href="<?php echo get_the_permalink($collection_id); ?>"> <?php echo $parent->post_title; ?> </a></li>
         <li class="active"> <?php echo $post->post_title; ?> </li>
 
         <button data-title="<?php printf(__("URL of %s", "tainacan"), $post->post_title); ?>" id="iframebuttonObject"

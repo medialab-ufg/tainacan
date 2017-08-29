@@ -950,21 +950,17 @@ class FormItem extends Model {
                 }).done(function (result) {
                     hide_modal_main();
                     var json = JSON.parse(result);
-                    if(json.ok)
-                    {
+                    if(json.ok) {
                         showAlertGeneral(json.title,json.msg,json.type);
-                       //  window.location = '<?php echo get_the_permalink($this->itemId) ?>';
-                        // routerGo($('#slug_collection').val());
-                        // showList($('#src').val());
-                    }else showAlertGeneral(json.title,json.msg,json.type);
+                        window.location = '<?php echo get_the_permalink($this->itemId) ?>';
+                    } else {
+                        showAlertGeneral(json.title,json.msg,json.type);
+                    }
                 });
             }
 
-            /**
-             */
             function appendCategoryMetadata(categories, item_id, seletor) {
-                $(seletor)
-                     .html('<center><img width="100" heigth="100" src="<?php echo get_template_directory_uri() . '/libraries/images/catalogo_loader_725.gif' ?>"><?php _e('Loading metadata for this field','tainacan') ?></center>');
+                $(seletor).html('<center><img width="100" heigth="100" src="<?php echo get_template_directory_uri() . '/libraries/images/catalogo_loader_725.gif' ?>"><?php _e('Loading metadata for this field','tainacan') ?></center>');
                 $.ajax({
                     url: $('#src').val() + '/controllers/object/object_controller.php',
                     type: 'POST',
@@ -973,16 +969,10 @@ class FormItem extends Model {
                         operationForm:'<?php echo ($_SESSION && $_SESSION['operation-form']) ? $_SESSION['operation-form'] : 'add' ?>',
                         properties_to_avoid: '<?php echo implode(',', $this->allPropertiesIds) ?>', categories: categories,object_id:item_id ,item_id:item_id,collection_id:$('#collection_id').val()}
                 }).done(function (result) {
-                    if(result !== ''){
-                        $(seletor).css('border','1px solid #ccc');
-                        $(seletor).css('padding','5px;');
-                        $(seletor).css('margin-top','10px');
-                        $(seletor).css('height','auto');
-                        $(seletor).css('float','left');
-                        $(seletor).css('width','100%');
-                        $(seletor).css('padding-bottom','15px');
-                        $(seletor).html(result);
-                    }else{
+                    if(result !== '') {
+                        $(seletor).css({ border: '1px solid #ccc', padding: '5px', height: 'auto', float: 'left',
+                            width: '100%', margin: '10px 0 0 0', paddingBottom: '15px' }).html(result);
+                    } else {
                         $(seletor).html('');
                     }
                 });
@@ -1003,14 +993,8 @@ class FormItem extends Model {
                       properties_to_avoid: '<?php echo implode(',', $this->allPropertiesIds) ?>', categories: categories,object_id:item_id ,item_id:item_id,collection_id:$('#collection_id').val()}
               }).done(function (result) {
                   if(result !== ''){
-                      $(seletor).css('border','1px solid #ccc');
-                      $(seletor).css('padding','5px;');
-                      $(seletor).css('margin-top','10px');
-                      $(seletor).css('height','auto');
-                      $(seletor).css('float','left');
-                      $(seletor).css('width','100%');
-                      $(seletor).css('padding-bottom','15px');
-                      $(seletor).html(result);
+                      $(seletor).css({ border: '1px solid #ccc', padding: '5px', height: 'auto', float: 'left',
+                          width: '100%', margin: '10px 0 0 0', paddingBottom: '15px' }).html(result);
                   }else{
                       $(seletor).css('border','none');
                       $(seletor).html('');
@@ -1020,27 +1004,28 @@ class FormItem extends Model {
 
             /**
             *
-
              * @param {type} val
              * @param {type} compound_id
              * @param {type} property_id
              * @param {type} index_id
              * @returns {undefined}             */
             function validateFieldsMetadataText(val,compound_id,property_id,index_id){
-                if(val == ''){
-                    $('#validation-'+compound_id+'-'+property_id+'-'+index_id).removeClass('has-success has-feedback');
-                    $('#validation-'+compound_id+'-'+property_id+'-'+index_id).addClass('has-error has-feedback');
+                if(val == '') {
+                    $('#validation-'+compound_id+'-'+property_id+'-'+index_id)
+                        .removeClass('has-success has-feedback')
+                        .addClass('has-error has-feedback')
+                        .val('false');
                     $('#validation-'+compound_id+'-'+property_id+'-'+index_id+' .glyphicon-remove').show();
                     $('#validation-'+compound_id+'-'+property_id+'-'+index_id+' .glyphicon-ok').hide();
                     $('#validation-'+compound_id+'-'+property_id+'-'+index_id+' .validate-class').val('false');
-                    $('#validation-'+compound_id+'-'+property_id+'-'+index_id).val('false');
-                }else{
-                    $('#validation-'+compound_id+'-'+property_id+'-'+index_id).removeClass('has-error has-feedback');
-                    $('#validation-'+compound_id+'-'+property_id+'-'+index_id).addClass('has-success has-feedback');
+                } else {
+                    $('#validation-'+compound_id+'-'+property_id+'-'+index_id)
+                        .removeClass('has-error has-feedback')
+                        .addClass('has-success has-feedback')
+                        .val('true');
                     $('#validation-'+compound_id+'-'+property_id+'-'+index_id+' .glyphicon-remove').hide();
                     $('#validation-'+compound_id+'-'+property_id+'-'+index_id+' .glyphicon-ok').show();
                     $('#validation-'+compound_id+'-'+property_id+'-'+index_id+' .validate-class').val('true');
-                    $('#validation-'+compound_id+'-'+property_id+'-'+index_id).val('true');
                     setTimeout(function(){
                         if( $('#validation-'+compound_id+'-'+property_id+'-'+index_id+' .form-control').val()!=''){
                             $('#validation-'+compound_id+'-'+property_id+'-'+index_id).removeClass('has-success has-feedback');
@@ -1060,19 +1045,15 @@ class FormItem extends Model {
               var property_id = args[2];
               var index_id = args[3];
               if(val == ''){
-                  $('#validation-'+compound_id+'-'+property_id+'-'+index_id).removeClass('has-success has-feedback');
-                  $('#validation-'+compound_id+'-'+property_id+'-'+index_id).addClass('has-error has-feedback');
+                  $('#validation-'+compound_id+'-'+property_id+'-'+index_id).removeClass('has-success has-feedback').addClass('has-error has-feedback').val('false');
                   $('#validation-'+compound_id+'-'+property_id+'-'+index_id+' .glyphicon-remove').show();
                   $('#validation-'+compound_id+'-'+property_id+'-'+index_id+' .glyphicon-ok').hide();
                   $('#validation-'+compound_id+'-'+property_id+'-'+index_id+' .validate-class').val('false');
-                  $('#validation-'+compound_id+'-'+property_id+'-'+index_id).val('false');
               }else{
-                  $('#validation-'+compound_id+'-'+property_id+'-'+index_id).removeClass('has-error has-feedback');
-                  $('#validation-'+compound_id+'-'+property_id+'-'+index_id).addClass('has-success has-feedback');
+                  $('#validation-'+compound_id+'-'+property_id+'-'+index_id).removeClass('has-error has-feedback').addClass('has-success has-feedback').val('true');
                   $('#validation-'+compound_id+'-'+property_id+'-'+index_id+' .glyphicon-remove').hide();
                   $('#validation-'+compound_id+'-'+property_id+'-'+index_id+' .glyphicon-ok').show();
                   $('#validation-'+compound_id+'-'+property_id+'-'+index_id+' .validate-class').val('true');
-                  $('#validation-'+compound_id+'-'+property_id+'-'+index_id).val('true');
                   setTimeout(function(){
                       if( $('#validation-'+compound_id+'-'+property_id+'-'+index_id+' .form-control').val()!=''){
                           $('#validation-'+compound_id+'-'+property_id+'-'+index_id).removeClass('has-success has-feedback');
