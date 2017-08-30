@@ -598,6 +598,21 @@ $(window).load(function () {
 }); // On load Tainacan' main page
 
 $(document).ready(function () {
+    // Header btn-toggle                    
+    $('#btn-toggle').on('click', function(e){
+        if( $('#to-collapse').hasClass('in') ){
+            $('#to-collapse').removeClass('in');
+            $('#to-collapse').css('height', 'auto');
+        }
+        else{
+            $('#to-collapse').addClass('in');
+            $('#to-collapse').css('height', 'auto');
+        }
+    });
+
+    $('#btn-toggle').click();
+    // End Header btn-toggle
+
     $('.input_date').mask('00/00/0000');
 
     //Handles menu drop down

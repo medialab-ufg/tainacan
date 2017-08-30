@@ -68,7 +68,7 @@ class HomeModel extends Model {
      * @author: Rodrigo de Oliveira
      */
     private function get_item_thumbnail($item_id, $title) {
-        $no_thumb = '<div class="tainacan-thumbless">'.ucwords($title[0]{0}) . ucwords($title[1]{0}).'</div>';
+        $no_thumb = '<div class="tainacan-thumbless">'.ucwords(htmlentities($title[0]{0})) . ucwords(htmlentities($title[1]{0})).'</div>';
         $return = has_post_thumbnail($item_id) ? get_the_post_thumbnail($item_id, 'thumbnail') : $no_thumb;
 
         $html_image = wp_get_attachment_image(get_post_thumbnail_id($item_id), 'thumbnail', false, array('class' => 'img-responsive'));

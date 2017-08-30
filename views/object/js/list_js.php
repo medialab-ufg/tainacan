@@ -186,7 +186,7 @@
               }
            });
         });
-        
+
         $(".col-items-per-page").val(10).trigger('change');
 
         var default_viewMode = $("#default-viewMode").val();
@@ -362,6 +362,11 @@
 
         var $setViewMode = $('.selected-viewMode').attr('class');
         if($setViewMode) {
+            if($setViewMode.split(" ")[0] == 'gallery')
+            {
+                $(".col-items-per-page").val(8).trigger('change');
+            }
+
             $setViewMode = $setViewMode.split(" ")[0];
             if("table" === $setViewMode) {
 
