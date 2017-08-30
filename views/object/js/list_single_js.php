@@ -659,6 +659,9 @@
             if(elem.type === 'success')
                 $("#text_title").text(value);
 
+            if(type === 'type')
+                cancel_type();
+
             cancel_title();
             showAlertGeneral(elem.title, elem.msg, elem.type);
             //showSingleObjectByName($('#object_page').val(), $('#src').val());

@@ -6,7 +6,7 @@
             "language": {
                 sInfo: "<?php _e('Showing from', 'tainacan'); ?>" + " _START_ " + "<?php _e('until', 'tainacan'); ?>"
                 + " _END_ " + "<?php _e('until', 'tainacan'); ?>" + " _TOTAL_ " + "<?php _e('items', 'tainacan'); ?>",
-                sLengthMenu: "<?php _t('Show', 1); ?>" + " _MENU_ " + "<?php _e('items per page', 'tainacan'); ?>",
+                sLengthMenu: "<?php _t('Show'); ?>" + " _MENU_ " + "<?php __('items per page', 'tainacan'); ?>",
                 sInfoFiltered: "(filtrados de _MAX_ eventos)",
                 zeroRecords: "<?php _e('No matching records found', 'tainacan'); ?>",
                 search: "<?php _e('Search: ', 'tainacan'); ?>",
@@ -131,7 +131,7 @@
         
         $('.pagination_items').jqPagination({
             link_string: '/?page={page_number}',
-            page_string: '<?php _t("Page ",1); ?>' + '{current_page}' + '<?php _t(" of ",1); ?>' + ' {max_page}',
+            page_string: '<?php _t("Page "); ?>' + '{current_page}' + '<?php _t(" of "); ?>' + ' {max_page}',
             max_page: $('#number_pages').val(),
             paged: function (page) {
                 var trash_page = false;

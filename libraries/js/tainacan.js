@@ -3256,10 +3256,11 @@ function verify_empty_box(elements_id, email_id, button_id)
 
     for(var element_id in ids) {
         var text_box = $("#"+element_id);
-        if($(text_box).val().trim().length === 0 || valide_email === false)
-        {
-            $(button).attr("disabled", true);
-            return;
+        if( $(text_box).val() ) {
+            if($(text_box).val().trim().length === 0 || valide_email === false) {
+                $(button).attr("disabled", true);
+                return;
+            }
         }
     }
 

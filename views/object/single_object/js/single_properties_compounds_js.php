@@ -760,19 +760,22 @@
                     socialdb_event_property_compounds_edit_value_row:row,
                     socialdb_event_property_compounds_edit_value_property_id: property_id,
                     socialdb_event_property_compounds_edit_value_attribute_value: value}
-            }).done(function (result) {
-                hide_modal_main();
-                verifyPublishedItem(object_id);
-                elem = jQuery.parseJSON(result);
-                if(!elem){
-                    return false;
-                }
+        }).done(function (result) {
+            hide_modal_main();
+            verifyPublishedItem(object_id);
+            elem = jQuery.parseJSON(result);
+            if(!elem)
+                return false;
+
+            var dynatrees = $("#dynatree").length;
+            if(dynatrees > 0)
                 $("#dynatree").dynatree("getTree").reload();
-                list_properties_single(object_id);
-                showAlertGeneral(elem.title, elem.msg, elem.type);
-                //limpando caches
-                delete_all_cache_collection();
-            });
+
+            list_properties_single(object_id);
+            showAlertGeneral(elem.title, elem.msg, elem.type);
+            //limpando caches
+            delete_all_cache_collection();
+        });
     }
 
 </script>
