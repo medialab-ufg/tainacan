@@ -55,7 +55,7 @@ $_trim_desc = $_object_description;
                         </h4>
 
                         <div class="item-description"> <?php echo $_trim_desc; ?> </div>
-                        <div class='item-desc-hidden-full' style="display: none"><?php echo $_object_description; ?></div>       
+                        <div class='item-desc-hidden-full' style="display: none"><?php echo $_object_description; ?></div>
 
                         <div class="row author-created">
                             <div class="col-md-6 author">
@@ -117,7 +117,8 @@ $_trim_desc = $_object_description;
                             <!-- CATEGORIES AND TAGS -->
                             <button id="show_classificiations_<?php echo $curr_id ?>" style="width:100%" class="btn btn-default cards-voting"
                                     onclick="show_classifications('<?php echo $curr_id ?>')">
-                                <?php _e('Metadata', 'tainacan'); ?>
+                                <?php // _e('Metadata', 'tainacan'); ?>
+                                <?php _e('Categories', 'tainacan'); ?>
                             </button>
                         </div>
                     <?php endif; ?>

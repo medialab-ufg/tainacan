@@ -1,4 +1,26 @@
 <script>
+      var n = 0;
+       var key = '';
+      var decodeEntities = (function() {
+      // this prevents any overhead from creating the object each time
+      var element = document.createElement('div');
+
+      function decodeHTMLEntities (str) {
+        if(str && typeof str === 'string') {
+          // strip script/html tags
+          str = str.replace(/<script[^>]*>([\S\s]*?)<\/script>/gmi, '');
+          str = str.replace(/<\/?\w(?:[^"'>]|"[^"]*"|'[^']*')*>/gmi, '');
+          element.innerHTML = str;
+          str = element.textContent;
+          element.textContent = '';
+        }
+
+        return str;
+      }
+
+      return decodeHTMLEntities;
+      })();
+
     $(function () {
         showDynatreeLeft($('#src').val());
         //se existir filtro para eventos
@@ -12,7 +34,7 @@
     {
         var select = 0;
         $("#dynatree").dynatree({
-            selectionVisible: true, // Make sure, selected nodes are visible (expanded).  
+            selectionVisible: true, // Make sure, selected nodes are visible (expanded).
             checkbox: true,
             initAjax: {
                 url: src + '/controllers/collection/collection_controller.php',
@@ -51,7 +73,7 @@
                                     $(node.span).append('<a id="context_menu_'+node.data.key+'" onclick="triggerContextMenu('+"'#ui-dynatree-id-"+node.data.key+"'"+
                                           ',event,'+"'myMenuSingle'"+')" style="display:none;cursor:pointer;"><span class="glyphicon glyphicon-chevron-down"></span></a>');
                                 }
-                            }   
+                            }
                         }, function(){
                             var node = $.ui.dynatree.getNode(this);
                             if($('#context_menu_'+node.data.key).length==0){
@@ -82,14 +104,14 @@
                     $(".contextMenu").hide();
                 }
                 //verifico aonde esta clicando
-                if($('#visualization_page_category').val()==='click' && 
+                if($('#visualization_page_category').val()==='click' &&
                         ((event.srcElement && event.srcElement.className==='dynatree-title') || (event.target && event.target.className==='dynatree-title'))){
                     // Close menu on click
                     $('#modalImportMain').modal('show');
                     // Close menu on click
                     var promisse = get_url_category(node.data.key);
                     promisse.done(function (result) {
-                        elem = jQuery.parseJSON(result);                    
+                        elem = jQuery.parseJSON(result);
                         $('#modalImportMain').modal('hide');
                         var n = node.data.key.toString().indexOf("_");
                         if(node.data.key.indexOf('_tag')>=0){
@@ -100,7 +122,7 @@
                             node.deactivate();
                         }
                     });
-                }else if($('#visualization_page_category').val()!=='click' && 
+                }else if($('#visualization_page_category').val()!=='click' &&
                         ((event.srcElement && event.srcElement.className==='dynatree-title') || (event.target && event.target.className==='dynatree-title'))){
                     if(node.data.key.indexOf("_facet_")>=0){
                         return false;
@@ -169,13 +191,15 @@
                 }
             },
             onCreate: function (node, span) {
+               //console.log(decodeEntities(node.data.title));
+               $(node.span).find('.dynatree-title').html(decodeEntities(node.data.title));
                 /*if(!$('body').hasClass('logged-in'))
                 {
                     return false;
                 } */
                 var key = node.data.key;
                 $(span).attr('id',"ui-dynatree-id-" + node.data.key)
-                var n = key.toString().indexOf("_");
+                n = key.toString().indexOf("_");
                 if (n > 0) {// se for propriedade de objeto
                     values = key.split("_");
                     if (values[1] === 'tag' || (values[1] === 'facet' && values[2] === 'tag')) {
@@ -225,7 +249,7 @@
                         $(node.span).append('<a id="context_menu_'+node.data.key+'" onclick="triggerContextMenu('+"'#ui-dynatree-id-"+node.data.key+"'"+
                               ',event,'+"'myMenuSingle'"+')" style="display:none;cursor:pointer;"><span class="glyphicon glyphicon-chevron-down"></span></a>');
                     }
-                }    
+                }
             },
             onSelect: function (flag, node) {
 //                    if($('#visualization_page_category').val()!=='click'){
@@ -260,7 +284,7 @@
                 //list_all_objects(selKeys.join(", "), $("#collection_id").val(), $('#collection_single_ordenation').val(), '', $("#value_search").val())
             },
             dnd: {
-                preventVoidMoves: true, // Prevent dropping nodes 'before self', etc.     
+                preventVoidMoves: true, // Prevent dropping nodes 'before self', etc.
                 revert: false, // true: slide helper back to source if drop is rejected
                 onDragStart: function (node) {
                     /** This function MUST be defined to enable dragging for the tree.*/
@@ -286,21 +310,21 @@
             }
         });
     }
-    
+
     /**
-     * 
+     *
      * @returns {undefined}     */
     function showContextMenu(object){
          $(object).show();
     }
     /**
-     * 
+     *
      * @returns {undefined}     */
     function hideContextMenu(object){
          $(object).hide();
     }
     /**
-    * 
+    *
      * @param {type} span
      * @param {type} event
      * @returns {undefined}     */
@@ -455,14 +479,14 @@
         var root = $("#dynatree").dynatree("getRoot");
         root.visit(function (node, unused) {
             $("#ui-dynatree-id-" + node.data.key).hover(function () {
-                
+
                 $(this).data('hover-dynatree', window.setTimeout(function (){
                      $("#ui-dynatree-id-" + node.data.key).trigger("mousedown", {
                                     pageX: 50,
                                     pageY: 50,
                                     button: 3
-                                });        
-                    
+                                });
+
                 }, 2000));
             },
             function ()
@@ -471,7 +495,7 @@
             });
         }, 0, false);
      }
- 
+
     function autocomplete_menu_left(property_id) {
         $("#autocomplete_multipleselect_" + property_id).autocomplete({
             source: $('#src').val() + '/controllers/collection/collection_controller.php?operation=list_items_search_autocomplete&is_search=true&property_id=' + property_id + '&collection_id='+$('#collection_id').val(),
@@ -487,7 +511,7 @@
                 var temp = $("#multipleselect_value_" + property_id + " [value='" + ui.item.value + "']").val();
                 if (typeof temp == "undefined") {
                     $("#multipleselect_value_" + property_id ).append("<option onclick='clear_autocomplete_menu_left(this,"+property_id+")' value='" + ui.item.value + "' id='option_"+property_id+"_"+ui.item.value.replace(/\s+/, "") +"' selected='selected' >" + ui.item.label + "</option>");
-                     wpquery_multipleselect(property_id, "multipleselect_value_" + property_id);  
+                     wpquery_multipleselect(property_id, "multipleselect_value_" + property_id);
                 }
                 setTimeout(function () {
                     $("#autocomplete_multipleselect_" + property_id).val('');
@@ -495,7 +519,7 @@
             }
         });
     }
-    
+
     function clear_autocomplete_menu_left(e,facet_id) {
          $(e).remove();
          wpquery_multipleselect(facet_id, "multipleselect_value_" + facet_id);
@@ -510,7 +534,7 @@
             $('#notifications_filter').html(result);
         });
     }
-    
+
     /*********************************************************************/
     function findCSSTags( css_source ) {
         var tagPattern = /\[\[.+?\]\]/gi;
