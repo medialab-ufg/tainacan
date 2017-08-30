@@ -936,7 +936,7 @@ class ObjectModel extends Model {
 
     /**
      * function get_args($data)
-     * @param array Array com os dados da colecao
+     * @param array $data com os dados da colecao
      * @return void
      * Metodo reponsavel em determinar se deve listar as colecoes ou objetos
      * Autor: Eduardo Humberto
@@ -1234,7 +1234,7 @@ class ObjectModel extends Model {
      * Autor: Eduardo Humberto
      */
     public function list_collection($data = null, $post_status = 'publish') {
-        global $wp_query;
+        // global $wp_query;
         $page = $this->set_page($data);
         $args = array(
             'posts_per_page' => 50,

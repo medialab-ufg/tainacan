@@ -252,7 +252,6 @@ class ObjectController extends Controller {
                 $data['loop'] = new WP_Query($args);
                 $data['collection_data'] = $collection_model->get_collection_data($collection_id);
                 $data["show_string"] = is_root_category($collection_id) ? __('Showing collections:', 'tainacan') : __('Showing Items:', 'tainacan');
-
                 // View mode's vars
                 $data["geo_coordinates"]["lat"] = get_post_meta($collection_id, "socialdb_collection_latitude_meta", true);
                 $data["geo_coordinates"]["long"] = get_post_meta($collection_id, "socialdb_collection_longitude_meta", true);
@@ -271,7 +270,7 @@ class ObjectController extends Controller {
                 }
                 $data['listed_by'] = $object_model->get_ordered_name($data['collection_id'], $data['ordenation_id'], $data['order_by']);
                 $data['is_moderator'] = CollectionModel::is_moderator($data['collection_id'], get_current_user_id());
-                $return['page'] = $this->render(dirname(__FILE__) . '../../../views/object/list.php', $data);
+                $return['page'] = $this->render(dirname(__FILE__) . '../../../views/object/list.php', $data ) ;
                 $return['args'] = serialize($recover_wpquery);
                 $return['preset_order'] = $recover_wpquery['order'];
 
