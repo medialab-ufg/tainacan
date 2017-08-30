@@ -1090,33 +1090,54 @@ class FormItem extends Model {
                 var property_id = args[1];
                 var index_id = args[2];
                 var block = false;
+                var cont = 0;
+                console.log($('#container-field-'+compound_id+'-'+index_id+' .validate-compound-'+compound_id));
                 $.each($('#container-field-'+compound_id+'-'+index_id+' .validate-compound-'+compound_id),function(index,value){
+                    console.log($(value).val());
                     if($(value).val()==='false'){
                         block = true;
                     }
+                    cont++;
                 });
+                if(cont==0){
+                    if($('#container-field-'+compound_id+'-'+index_id+' .validate-compound-'+compound_id).val()==='false'){
+                        block = true;
+                    }
+                }
+
                 if(!block){
                     sendCompoundData(compound_id,index_id);
                 }
             });
 
+            function demo(compound_id,index_id,property,key,i) {
+                setTimeout(function () {
+                    //console.log('Taking a break...');
+                $.ajax({
+                    url: $('#src').val() + '/controllers/object/form_item_controller.php',
+                    type: 'POST',
+                    data: Hook[key][property]
+                }).done(function (result) {
+                    var object_data =  Hook[key][property];
+                    if(object_data.isKey && object_data.isKey!==''){
+                        var json =JSON.parse(result);
+                        if(json.value){
+                            toastr.error(json.value+' <?php _e(' is already inserted!', 'tainacan') ?>', '<?php _e('Attention!', 'tainacan') ?>', {positionClass: 'toast-bottom-right'});
+                        }
+                    }
+                });
+               // console.log('later');
+                }, 250 * i);
+            }
+
             function sendCompoundData(compound_id,index_id){
+                var i = 0;
                 for (var key in Hook) {
                     if(key === compound_id+'_'+index_id){
                         for (var property in Hook[key]) {
-                            $.ajax({
-                                url: $('#src').val() + '/controllers/object/form_item_controller.php',
-                                type: 'POST',
-                                data: Hook[key][property]
-                            }).done(function (result) {
-                                var object_data =  Hook[key][property];
-                                if(object_data.isKey && object_data.isKey!==''){
-                                    var json =JSON.parse(result);
-                                    if(json.value){
-                                        toastr.error(json.value+' <?php _e(' is already inserted!', 'tainacan') ?>', '<?php _e('Attention!', 'tainacan') ?>', {positionClass: 'toast-bottom-right'});
-                                    }
-                                }
-                            });
+
+                            demo(compound_id,index_id,property,key,i);
+                            i++;
                         }
                     }
                 }
