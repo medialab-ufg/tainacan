@@ -3359,3 +3359,16 @@ function showStats(){
     $("#stats").css("border-top","3px solid rgb(210, 169, 109)");
 }
 //#######
+
+// Header btn-toggle                    
+$('#btn-toggle').click(function(e){
+    if( $('#to-collapse').hasClass('in') ){
+        $('#to-collapse').removeClass('in');
+        $('#to-collapse').css('height', 'auto');
+    }
+    else{
+        $('#to-collapse').addClass('in');
+        $('#to-collapse').css('height', 'auto');
+    }
+});
+// End Header btn-toggle
