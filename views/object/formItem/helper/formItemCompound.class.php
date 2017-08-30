@@ -161,6 +161,7 @@ class FormItemCompound extends FormItem {
     public function appendContainerCompounds($property,$item_id,$index) {
         $values = $this->getValuePropertyHelper($item_id, $property_id);
         $childrenProperties = $property['metas']['socialdb_property_compounds_properties_id'];
+        $isRequired = get_term_meta($property['id'],'socialdb_property_required',true);
         ?>
         <div id="container-field-<?php echo $property['id'] ?>-<?php echo $index ?>" 
              class="row" style="padding-bottom: 10px;margin-bottom: 10px;">
@@ -168,6 +169,7 @@ class FormItemCompound extends FormItem {
                 <?php if (is_array($childrenProperties)): ?>
                     <?php
                     foreach ($childrenProperties as $child):
+                        $child['metas']['socialdb_property_required'] = ($isRequired === 'true') ? 'true' : $child['metas']['socialdb_property_required'];
                         $isRequiredChildren = ($child['metas'] && $child['metas']['socialdb_property_required']&&$child['metas']['socialdb_property_required'] != 'false') ? true : false;
                         $object = (isset($child['metas']['socialdb_property_object_category_id']) && !empty($child['metas']['socialdb_property_object_category_id'])) ? true : false;
                         ?>

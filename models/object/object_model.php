@@ -52,13 +52,13 @@ class ObjectModel extends Model {
        if (has_action('tainacan_delete_related_item')) {
             do_action('tainacan_delete_related_item', $data, $col_id);
         }
-        
+
         //Tainacan Biblioteca
         $mapping = get_option('socialdb_general_mapping_collection');
         if(has_filter("add_book_loan") && $mapping['Emprestimo'] == $col_id)
         {
             $result = apply_filters("add_book_loan", $data);
-            
+
             if(!$result['ok'])
             {
                 $result['unavailable_item'] = true;
@@ -172,7 +172,7 @@ class ObjectModel extends Model {
      * @param array $data Os dados vindos do formulario
      * @return void
      * @description - Insere o objeto do item
-     * @author: Eduardo 
+     * @author: Eduardo
      */
     public function insert_item_resource($data) {
         update_post_meta($data['ID'], 'socialdb_object_from', $data['object_from']);
@@ -228,7 +228,7 @@ class ObjectModel extends Model {
      * @param array $data Os dados vindos do formulario
      * @return json com os dados do resultado do evento criado
      * @description - Verificacao de campios do formulario
-     * @author: Eduardo 
+     * @author: Eduardo
      */
     public function validate_form($data) {
         if ($data['properties_id'] !== '') {
@@ -312,7 +312,7 @@ class ObjectModel extends Model {
      * @param array $data Os dados vindos do formulario
      * @return json com os dados do resultado do evento criado
      * @description - Insere um objeto vindo da importacao url
-     * @author: Eduardo 
+     * @author: Eduardo
      */
     public function fast_insert_url($data) {
         $user_id = get_current_user_id();
@@ -358,7 +358,7 @@ class ObjectModel extends Model {
      * @param array $data Os dados vindos do formulario
      * @return json com os dados do resultado do evento criado
      * @description - Insere um objeto apenas com o titulo
-     * @author: Eduardo 
+     * @author: Eduardo
      */
     public function fast_insert($data) {
         $category_root_id = $this->collection_model->get_category_root_of($data['collection_id']);
@@ -424,7 +424,7 @@ class ObjectModel extends Model {
      * @param int $object_id O id do Objeto
      * @return void
      * @description - Insere os valores selecionados no dynatree no objeto criado
-     * @author: Eduardo 
+     * @author: Eduardo
      */
     public function insert_classifications($classification_string, $object_id) {
         $classification_array = explode(',', $classification_string);
@@ -453,7 +453,7 @@ class ObjectModel extends Model {
      * @param int $object_id O id do Objeto
      * @return void
      * @description - Atualiza os valores selecionados no dynatree no objeto criado
-     * @author: Eduardo 
+     * @author: Eduardo
      */
     public function update_classifications($classification_string, $object_id, $collection_id = null) {
         $properties = array();
@@ -508,7 +508,7 @@ class ObjectModel extends Model {
      * @param int $object_id O id do Objeto
      * @return void
      * @description - Insere os valores das tags colocadas pelo usuario
-     * @author: Eduardo 
+     * @author: Eduardo
      */
     public function insert_tags($string_tags, $collection_id, $object_id) {
         $tagModel = new TagModel();
@@ -529,8 +529,8 @@ class ObjectModel extends Model {
      * @signature - function insert_properties_values($data)
      * @param array $data Com os dados vindo do formulario
      * @return void
-     * @description - Insere os valores das propriedades 
-     * @author: Eduardo 
+     * @description - Insere os valores das propriedades
+     * @author: Eduardo
      */
     public function insert_properties_values($data, $object_id) {
         $property_model = new PropertyModel;
@@ -552,7 +552,7 @@ class ObjectModel extends Model {
                     if(apply_filters('alter_update_item_property_value', $dados,$data))
                             continue;
                 }
-                
+
                 $data["socialdb_property_$property_id"] = $this->updateDateValues($dados,$data["socialdb_property_$property_id"]);
                 if ($dados->type && in_array($dados->type, ['stars', 'like', 'binary'])) {
                     add_post_meta($object_id, 'socialdb_property_' . $dados->id, 0);
@@ -565,7 +565,7 @@ class ObjectModel extends Model {
                     update_post_meta($object_id, "socialdb_property_$property_id", $data["socialdb_property_$property_id"]);
                     //inserir o valor no metadado de valor comum
                     $this->set_common_field_values($object_id, "socialdb_property_$property_id", $data["socialdb_property_$property_id"]);
-                }// se estiver inserindo propriedade de objeto e tiver valores relacionado 
+                }// se estiver inserindo propriedade de objeto e tiver valores relacionado
                 elseif (is_array($data["socialdb_property_$property_id"]) && !empty(is_array($data["socialdb_property_$property_id"])))
                 {
                     delete_post_meta($object_id, "socialdb_property_$property_id");
@@ -602,7 +602,7 @@ class ObjectModel extends Model {
             }
         }
     }
-    
+
     public function updateDateValues($property,$value) {
         if($property->type=='date'){
             if(!is_array($value) &&$value !== ''){
@@ -618,7 +618,7 @@ class ObjectModel extends Model {
         }
         return $value;
     }
-    
+
     /**
      * metodod que retorna todos os metadados possivies para insercao de valores
      * @param type $data
@@ -646,7 +646,7 @@ class ObjectModel extends Model {
      * @param array $data Com os dados vindo do formulario
      * @return void
      * @description - deleta os valores simetricos
-     * @author: Eduardo 
+     * @author: Eduardo
      */
     public function clean_simetric_property($object_id, $property_id) {
         $itens = get_post_meta($object_id, "socialdb_property_$property_id");
@@ -661,8 +661,8 @@ class ObjectModel extends Model {
      * @signature - function insert_properties_terms($data)
      * @param array $data Com os dados vindo do formulario
      * @return void
-     * @description - Insere os valores das propriedades 
-     * @author: Eduardo 
+     * @description - Insere os valores das propriedades
+     * @author: Eduardo
      */
     public function insert_properties_terms($data, $object_id) {
         $properties_id = $this->get_all_properties_form_values($data);
@@ -677,7 +677,7 @@ class ObjectModel extends Model {
                         wp_remove_object_terms($object_id, $categories, 'socialdb_category_type');
                     }
                 }
-                
+
                 if (isset($data["socialdb_propertyterm_$property_id"]) && !is_array($data["socialdb_propertyterm_$property_id"]) && $data["socialdb_propertyterm_$property_id"] !== '') {
                     add_post_meta($object_id, 'socialdb_property_'. $property_id.'_cat',$data["socialdb_propertyterm_$property_id"]);
                     wp_set_object_terms($object_id, array((int) $data["socialdb_propertyterm_$property_id"]), 'socialdb_category_type', true);
@@ -698,8 +698,8 @@ class ObjectModel extends Model {
      * @param int $object_id O id do Objeto
      * @param array $data Os dados vindos do formulario
      * @return array os dados para o evento
-     * @description - 
-     * @author: Eduardo 
+     * @description -
+     * @author: Eduardo
      */
     public function insert_object_event($object_id, $data) {
         $eventAddObject = new EventObjectCreateModel();
@@ -715,7 +715,7 @@ class ObjectModel extends Model {
      * @paramters - ($collection_id, $name, $content)
      * @return - boolean confirmação da inserção do post
      * @description - métdo responsável pela inserção de vídeos em uma coleção
-     * @author: Eduardo 
+     * @author: Eduardo
      */
     public function add_video($collection_id, $name, $content) {
         $category_root_id = $this->collection_model->get_category_root_of($collection_id);
@@ -746,7 +746,7 @@ class ObjectModel extends Model {
      * @paramters - ($collection_id, $name, $content)
      * @return - boolean confirmação da inserção do post
      * @description - métdo responsável pela inserção de vídeos em uma coleção
-     * @author: saymon 
+     * @author: saymon
      */
     public function add_photo($collection_id, $name, $content, $type = 'image', $source = '') {
         $category_root_id = $this->collection_model->get_category_root_of($collection_id);
@@ -782,7 +782,7 @@ class ObjectModel extends Model {
      * @param int $collection_id O id da colecao do objeto
      * @return array  Os dados a serem usados na view
      * @description - metodo responsavel em buscar os dados de um objeto
-     * @author: Eduardo 
+     * @author: Eduardo
      */
     public function edit($object_id, $collection_id) {
         $data = [];
@@ -811,7 +811,7 @@ class ObjectModel extends Model {
      * @paramters - ($collection_id, $name, $content)
      * @return - boolean confirmação da inserção do post
      * @description - métdo responsável pela inserção de vídeos em uma coleção
-     * @author: Eduardo 
+     * @author: Eduardo
      */
     public function update($data) {
         $post = array(
@@ -875,9 +875,9 @@ class ObjectModel extends Model {
     /**
      * function delete($data)
      * @param array Array com os dados do post a ser excluido
-     * @return void 
+     * @return void
      * Metodo reponsavel em excluir o objeto
-     * Autor: Eduardo Humberto 
+     * Autor: Eduardo Humberto
      */
     public function delete($data) {
         wp_delete_post($data['ID']);
@@ -885,7 +885,7 @@ class ObjectModel extends Model {
     }
 
     /**
-     * 
+     *
      * @param array $data Os dados vindo do modal de upload de imagem
      */
     public function insert_attachment_event($data) {
@@ -907,9 +907,9 @@ class ObjectModel extends Model {
     /**
      * function list_all()
      * @param array Array com os dados da colecao
-     * @return void 
+     * @return void
      * Metodo reponsavel em determinar se deve listar as colecoes ou objetos
-     * Autor: Eduardo Humberto 
+     * Autor: Eduardo Humberto
      */
     public function list_all($args = null, $post_status = 'publish') {
         if ($args['collection_id'] == get_option('collection_root_id')) {
@@ -922,9 +922,9 @@ class ObjectModel extends Model {
     /**
      * function list_all()
      * @param array Array com os dados da colecao
-     * @return void 
+     * @return void
      * Metodo reponsavel em determinar se deve listar as colecoes ou objetos
-     * Autor: Eduardo Humberto 
+     * Autor: Eduardo Humberto
      */
     public function filter($args = null) {
         if ($args['collection_id'] == get_option('collection_root_id')) {
@@ -937,9 +937,9 @@ class ObjectModel extends Model {
     /**
      * function get_args($data)
      * @param array Array com os dados da colecao
-     * @return void 
+     * @return void
      * Metodo reponsavel em determinar se deve listar as colecoes ou objetos
-     * Autor: Eduardo Humberto 
+     * Autor: Eduardo Humberto
      */
     public function get_args($data) {
         $args['category_root_id'] = $this->collection_model->get_category_root_of($data['collection_id']);
@@ -971,9 +971,9 @@ class ObjectModel extends Model {
     /**
      * function list_object()
      * @param array Array com os dados da colecao
-     * @return void 
+     * @return void
      * Metodo reponsavel em  listar apenas objetos
-     * Autor: Eduardo Humberto 
+     * Autor: Eduardo Humberto
      */
     public function list_object($args = null, $post_status = 'publish') {
         $tax_query = array('relation' => 'AND');
@@ -1022,9 +1022,9 @@ class ObjectModel extends Model {
     /**
      * function filter()
      * @param array Array com os dados a serem utilizados para realizar os filtros
-     * @return void 
+     * @return void
      * Metodo reponsavel em  realizar a filtragem dos items que estao listados
-     * @author Eduardo Humberto 
+     * @author Eduardo Humberto
      */
     public function filter_objects($data) {
         // pego as classificacoes
@@ -1047,7 +1047,7 @@ class ObjectModel extends Model {
         }
         //a forma de ordenacao
         $order = $this->set_type_order($data);
-        //a pagina 
+        //a pagina
         $page = $this->set_page($data);
         //all_data_inside
         $args = array(
@@ -1078,7 +1078,7 @@ class ObjectModel extends Model {
      * @param array $data O array de dados vindo do formulario
      * @return int com a pagina a ser visualizada
      * Metodo reponsavel em  retornar o fromato que sera ordenado (crescente ou decrescente)
-     * @author Eduardo Humberto 
+     * @author Eduardo Humberto
      */
     public function set_page($data) {
         if ($data['pagid'] && $data['pagid'] != '' && is_numeric($data['pagid'])) {
@@ -1093,7 +1093,7 @@ class ObjectModel extends Model {
      * @param array $data O array de dados vindo do formulario
      * @return string com o tipo de pesquisa que sera realizada
      * Metodo reponsavel em  retornar o fromato que sera ordenado (crescente ou decrescente)
-     * @author Eduardo Humberto 
+     * @author Eduardo Humberto
      */
     public function set_type_order($data) {
         if (!isset($data['order_by']) || $data['order_by'] == '') {
@@ -1115,7 +1115,7 @@ class ObjectModel extends Model {
      * @param array $data O array de dados vindo do formulario
      * @return string com o tipo de pesquisa que sera realizada
      * Metodo reponsavel em  retornar o tipo de ordem que sera utilizado no wp_query
-     * @author Eduardo Humberto 
+     * @author Eduardo Humberto
      */
     public function set_order_by($data) {
         $defaults = false;
@@ -1148,9 +1148,9 @@ class ObjectModel extends Model {
      * @param array $categories as categorias selecionadas no dynatree a serem utilizadas na filtragem das colecoes
      * @param int $collection_id O id da colecao
      * @param array $tags as tags selecionadas no dynatree
-     * @return array com os dados a serem utilizados no wp_query 
+     * @return array com os dados a serem utilizados no wp_query
      * Metodo reponsavel em  montar o array que sera utilizado no Wp_query
-     * @author Eduardo Humberto 
+     * @author Eduardo Humberto
      */
     public function get_tax_query($categories, $collection_id, $tags) {
         // coloco categorias no array tax query
@@ -1187,8 +1187,8 @@ class ObjectModel extends Model {
      * @signature categories_by_facet($categories, $collection_id)
      * @param array $categories as categorias selecionadas no dynatree a serem utilizadas na filtragem das colecoes
      * @param int $collection_id O id da colecao
-     * @return array com os categorias separadas pela faceta (faceta como chave no array) 
-     * @author Eduardo Humberto 
+     * @return array com os categorias separadas pela faceta (faceta como chave no array)
+     * @author Eduardo Humberto
      */
     public function categories_by_facet($categories, $collection_id) {
         $categories_by_facet = array();
@@ -1207,9 +1207,9 @@ class ObjectModel extends Model {
      * @param array $categories as categorias selecionadas no dynatree a serem utilizadas na filtragem das colecoes
      * @param int $collection_id O id da colecao
      * @param array $tags as tags selecionadas no dynatree
-     * @return array com os dados a serem utilizados no wp_query 
+     * @return array com os dados a serem utilizados no wp_query
      * Metodo reponsavel em  montar o array que sera utilizado no Wp_query
-     * @author Eduardo Humberto 
+     * @author Eduardo Humberto
      */
     public function get_meta_query($properties) {
         $meta_query = array();
@@ -1229,9 +1229,9 @@ class ObjectModel extends Model {
     /**
      * function list_collection()
      * @param void
-     * @return void 
+     * @return void
      * Metodo reponsavel em listar as colecoes
-     * Autor: Eduardo Humberto 
+     * Autor: Eduardo Humberto
      */
     public function list_collection($data = null, $post_status = 'publish') {
         global $wp_query;
@@ -1275,9 +1275,9 @@ class ObjectModel extends Model {
      * function get_object_author()
      * @param int $user_id O id do usuario que deseja visualizar
      * @param string field O campo que deseja visualizar
-     * @return mix o campo desejado 
+     * @return mix o campo desejado
      * Metodo reponsavel em listar as colecoes
-     * Autor: Eduardo Humberto 
+     * Autor: Eduardo Humberto
      */
     public function get_object_author($user_id, $field = 'id') {
         $array = $this->user_model->get_user($user_id);
@@ -1395,9 +1395,9 @@ class ObjectModel extends Model {
     }
 
     /**
-     * Metodo responsavel em retornar as configuracoes de cada metadado para a montagem 
+     * Metodo responsavel em retornar as configuracoes de cada metadado para a montagem
      * de sua view <i> show_object_properties</i>
-     * 
+     *
      * function show_object_properties()
      * @param array Array com os dados da colecao
      * @return As propriedades da colecao mais das categorias selecionadas
@@ -1413,7 +1413,7 @@ class ObjectModel extends Model {
         } else {
             $all_categories = array();
         }
-        // busco todos os ids de propriedades que este item possui, incluindo 
+        // busco todos os ids de propriedades que este item possui, incluindo
         // as propriedades das categorias, por isso eh necessario o id das categorias
         // o qual foi classificado
         $all_properties = $category_model->get_properties($data['collection_id'], $all_categories);
@@ -1426,8 +1426,8 @@ class ObjectModel extends Model {
 
     /**
      * function set_data_object_properties()
-     * 
-     * 
+     *
+     *
      * @uses element Description
      * @param array Array com as popriedades
      * @return Os dados que serao utilizados para construcao da view
@@ -1452,7 +1452,7 @@ class ObjectModel extends Model {
                 if (in_array($type, ['socialdb_property_object', 'socialdb_property_data', 'socialdb_property_term'])) {
                     $this->get_data_generic_types($type, $all_data, $property_id, $data);
                 } elseif ($type == 'socialdb_property_compounds') {
-                    // as propriedades 
+                    // as propriedades
                     $properties = explode(',', $all_data['metas']['socialdb_property_compounds_properties_id']);
                     if (is_array($properties)) {
                         $all_data['metas']['socialdb_property_compounds_properties_id'] = [];
@@ -1474,14 +1474,14 @@ class ObjectModel extends Model {
     }
 
     /**
-     * 
-     * 
+     *
+     *
      * @param string $type
      * @param array $all_data
      * @param int  $property_id
      * @param array (reference) $data
-     * 
-     * metodo que busca as informacoes necessarias para os tipos primitivos 
+     *
+     * metodo que busca as informacoes necessarias para os tipos primitivos
      * (data,object,term) de metadados
      */
     public function get_data_generic_types($type, $all_data, $property_id, &$data) {
@@ -1519,9 +1519,9 @@ class ObjectModel extends Model {
 
     /**
      * function list_properties()
-     * 
+     *
      * Metdoo que retorna todas propriedades de um objeto ja buscando as propriedades de suas categorias
-     * 
+     *
      * @param array Array com os dados do formulario
      * @return Os dados que serao utilizados para construcao da view
      * @author Eduardo Humberto
@@ -1565,7 +1565,7 @@ class ObjectModel extends Model {
         //$category_root_id = get_term_by('id', $all_data['metas']['socialdb_property_object_category_id'], 'socialdb_category_type');
         $query = "
                         SELECT DISTINCT p.ID, p.* FROM $wp_posts p
-                        INNER JOIN $term_relationships t ON p.ID = t.object_id    
+                        INNER JOIN $term_relationships t ON p.ID = t.object_id
                         WHERE t.term_taxonomy_id IN ({$categories})
                         AND p.post_type like 'socialdb_object' and p.post_status in ('publish') and p.post_title LIKE '%{$data['term']}%'
                 ";
@@ -1587,9 +1587,9 @@ class ObjectModel extends Model {
         }
         return json_encode($json);
     }
-    
+
     /**
-     * 
+     *
      * @param type $property_id
      * @param type $item_id
      * @return boolean
@@ -1603,7 +1603,7 @@ class ObjectModel extends Model {
         }
         $query = "
                         SELECT pm.* FROM $wp_posts p
-                        INNER JOIN $wp_postmeta pm ON p.ID = pm.post_id    
+                        INNER JOIN $wp_postmeta pm ON p.ID = pm.post_id
                         WHERE p.post_status LIKE 'publish' and pm.meta_key like '$meta_key' and pm.meta_value LIKE '%{$item_id}%'
                 ";
         $result = $wpdb->get_results($query);
@@ -1613,7 +1613,7 @@ class ObjectModel extends Model {
             return false;
         }
     }
-    
+
     /**
      * function get_objects_by_selected_categories()
      * @param string $categories Os dados vindo do formulario
@@ -1629,7 +1629,7 @@ class ObjectModel extends Model {
             $property_model = new PropertyModel;
             $query = "
                             SELECT * FROM $wp_terms t
-                            INNER JOIN $wp_term_taxonomy tt ON t.term_id = tt.term_id    
+                            INNER JOIN $wp_term_taxonomy tt ON t.term_id = tt.term_id
                             WHERE tt.parent = {$parent}
                             AND t.name LIKE '%{$term}%'
                     ";
@@ -1682,10 +1682,10 @@ class ObjectModel extends Model {
                 $data['categories'][] = $category_data;
             }
         }
-        $properties = $this->get_all_object_properties($data['object_id'], $data['collection_id']);
-        if (is_array($properties) && !empty($properties)) {
-            $data['properties'] = $properties;
-        }
+         //$properties = $this->get_all_object_properties($data['object_id'], $data['collection_id']);
+        //if (is_array($properties) && !empty($properties)) {
+            //$data['properties'] = $properties;
+        //}
 
         $tags = wp_get_object_terms($data['object_id'], 'socialdb_tag_type');
         $data['tags'] = $tags;
@@ -1705,7 +1705,7 @@ class ObjectModel extends Model {
         $wp_postmeta = $wpdb->prefix . "postmeta";
         $query = "
                       SELECT pm.* FROM $wp_posts p
-                      INNER JOIN $wp_postmeta pm ON p.ID = pm.post_id    
+                      INNER JOIN $wp_postmeta pm ON p.ID = pm.post_id
                       WHERE p.ID = $object_id AND pm.meta_key LIKE 'socialdb_property_%'
              ";
         $array_results = $wpdb->get_results($query);
@@ -2007,7 +2007,7 @@ class ObjectModel extends Model {
     }
 
     /**
-     * 
+     *
      * @param array $data Os dados vindo do formulario
      * @param int $object_id O id do item a ser adicionado
      */
@@ -2056,7 +2056,7 @@ class ObjectModel extends Model {
     }
 
     /**
-     * 
+     *
      * @param type $object_id
      * @param type $compound_id
      * @param type $property_id
@@ -2102,7 +2102,7 @@ class ObjectModel extends Model {
             }
         }
     }
-    
+
     public function copyItem($item, $collection_id, $update = false) {
         $id = ($update ? $item->ID : 0);
         $arrItem = [
@@ -2300,7 +2300,7 @@ class ObjectModel extends Model {
         $wp_postmeta = $wpdb->prefix . "postmeta";
         $query = "
                     SELECT p.* FROM $wp_posts p
-                    INNER JOIN $wp_postmeta pm ON p.ID = pm.post_id    
+                    INNER JOIN $wp_postmeta pm ON p.ID = pm.post_id
                     WHERE pm.meta_key LIKE 'socialdb_version_postid' and pm.meta_value like '$original' AND p.post_status LIKE 'publish'
             ";
         $result = $wpdb->get_results($query);
@@ -2326,7 +2326,7 @@ class ObjectModel extends Model {
         $wp_postmeta = $wpdb->prefix . "postmeta";
 
         $query = "
-                    SELECT * FROM $wp_postmeta    
+                    SELECT * FROM $wp_postmeta
                     WHERE meta_key LIKE 'socialdb_version_postid' AND meta_value = {$original}
             ";
         $result = $wpdb->get_results($query);
@@ -2352,7 +2352,7 @@ class ObjectModel extends Model {
         $wp_postmeta = $wpdb->prefix . "postmeta";
         $query = "
                     SELECT p.* FROM $wp_posts p
-                    INNER JOIN $wp_postmeta pm ON p.ID = pm.post_id    
+                    INNER JOIN $wp_postmeta pm ON p.ID = pm.post_id
                     WHERE pm.meta_key LIKE 'socialdb_version_postid' and pm.meta_value like '$original' AND (p.post_status LIKE 'publish' OR p.post_status LIKE 'inherit')
             ";
         $result = $wpdb->get_results($query);
@@ -2393,9 +2393,9 @@ class ObjectModel extends Model {
         }
         return $result;
     }
-    
+
     /**
-     * 
+     *
      * @param type $item_id
      * @param type $collection_id
      * @param type $property_id

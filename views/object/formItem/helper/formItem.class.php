@@ -81,7 +81,7 @@ class FormItem extends Model {
         if($this->isMediaFocus){
             ?>
             <div class="col-md-12 no-padding">
-                
+
                 <div id="tab-content-metadata" class="col-md-3 tab-content no-padding" style="background: white;">
                    <div id="tab-default"  class="tab-pane fade in active" style="background: white;margin-bottom: 15px; margin-top: 10px;">
                        <!-- data-operation 1 Means expand -->
@@ -105,7 +105,7 @@ class FormItem extends Model {
                 </div>
                 <div class="col-md-9">
                     <?php
-                    foreach ($this->metadatas['default'] as $property) {
+                     foreach ($this->metadatas['default'] as $property) {
                         if (in_array($property['slug'], $this->fixed_slugs)) {
                             if ($property['slug'] == 'socialdb_property_fixed_title') {
                                 $class = new FormItemTitle($this->collection_id);
@@ -121,7 +121,7 @@ class FormItem extends Model {
                     }
                     ?>
                 </div>
-            </div>    
+            </div>
             <?php
         }else if ((!$tabs || empty($tabs)) && !$default_tab && !$allTabs):
             ?>
@@ -139,7 +139,7 @@ class FormItem extends Model {
                         </div>
                     </div>
                 </div>
-            </div>    
+            </div>
             <?php
         else:
             ?>
@@ -226,8 +226,8 @@ class FormItem extends Model {
                     style="margin-bottom: 20px;"
                     class="btn btn-success btn-lg pull-right send-button">
                         <?php _e('Save','tainacan'); ?></button>
-        </div>    
-        <?php    
+        </div>
+        <?php
         $this->initScripts();
     }
 
@@ -248,7 +248,7 @@ class FormItem extends Model {
         //olhando na ordenacao
         if ($propertiesOrdenation && is_array($propertiesOrdenation)) {
             foreach ($propertiesOrdenation as $tab => $ordenation) {
-                $arrayIds[$tab] = explode(',', $ordenation);
+                $arrayIds[$tab] = array_unique(explode(',', $ordenation));
             }
         }
         //olhando no mapeamento
@@ -404,9 +404,9 @@ class FormItem extends Model {
             }
         }
     }
-    
+
     /**
-     * 
+     *
      */
     public function setAllIds() {
          if (is_array($this->metadatas)){
@@ -578,7 +578,7 @@ class FormItem extends Model {
         if(!session_id()) {
                 session_start();
         }
-        if(( ($_SESSION && $_SESSION['operation-form'] == 'edit') || !isset( $_SESSION['operation-form'])) 
+        if(( ($_SESSION && $_SESSION['operation-form'] == 'edit') || !isset( $_SESSION['operation-form']))
                 && (isset($property['metas']['socialdb_property_locked']) && $property['metas']['socialdb_property_locked'] == 'true') && is_array($values) && !empty($values)){
             foreach ($values as $value) {
                 if($type == 'data'){
@@ -600,7 +600,7 @@ class FormItem extends Model {
                                <a style="cursor:pointer;" onclick="wpquery_term_filter('<?php echo $ob->term_id ?>','<?php echo $property['id'] ?>')">
                                    <?php echo $ob->name  ?>
                                </a>
-                            </i>   
+                            </i>
                         </p><br>
                         <?php
                     }
@@ -615,8 +615,8 @@ class FormItem extends Model {
     public function hasTextHelper($property){
         if($property['metas'] &&$property['metas']['socialdb_property_help']&&!empty(trim($property['metas']['socialdb_property_help']))){
             ?>
-             <span     title="<?php echo $property['metas']['socialdb_property_help'] ?>" 
-                       data-toggle="tooltip" 
+             <span     title="<?php echo $property['metas']['socialdb_property_help'] ?>"
+                       data-toggle="tooltip"
                        data-placement="top"  class="glyphicon glyphicon-info-sign"></span>
             <script type="text/javascript">
             $(function () {
@@ -654,9 +654,9 @@ class FormItem extends Model {
             &nbsp;<span id="<?php echo $id ?>" class="<?php echo $id ?> pull-right validateIcon" style="color:red;font-size: 11px;display: none;"><?php echo $text ?>&nbsp;<span style="color:red;font-size: 13px;" class="glyphicon glyphicon-exclamation-sign pull-right"></span></span>
         <?php
     }
-    
+
     /**
-     * 
+     *
      */
     public function mediaHabilitate() {
         $thumbnailClass = new FormItemThumbnail();
@@ -719,9 +719,9 @@ class FormItem extends Model {
                     ?>
                  </div>
             </div>
-        <?php    
+        <?php
     }
-    
+
     public function sortArrayChildren($children) {
         if(count($children) > 0){
             var_dump(usort($children, function($a, $b)
@@ -926,7 +926,7 @@ class FormItem extends Model {
                             }).done(function (result) {
                                 // $('html, body').animate({
                                 //   scrollTop: parseInt($("#wpadminbar").offset().top)
-                                // }, 900);  
+                                // }, 900);
                             });
                         }
                         window.location = '<?php echo get_the_permalink($this->collection_id) ?>'
@@ -1074,33 +1074,54 @@ class FormItem extends Model {
                 var property_id = args[1];
                 var index_id = args[2];
                 var block = false;
+                var cont = 0;
+                console.log($('#container-field-'+compound_id+'-'+index_id+' .validate-compound-'+compound_id));
                 $.each($('#container-field-'+compound_id+'-'+index_id+' .validate-compound-'+compound_id),function(index,value){
+                    console.log($(value).val());
                     if($(value).val()==='false'){
                         block = true;
                     }
+                    cont++;
                 });
+                if(cont==0){
+                    if($('#container-field-'+compound_id+'-'+index_id+' .validate-compound-'+compound_id).val()==='false'){
+                        block = true;
+                    }
+                }
+
                 if(!block){
                     sendCompoundData(compound_id,index_id);
                 }
             });
 
+            function demo(compound_id,index_id,property,key,i) {
+                setTimeout(function () {
+                    //console.log('Taking a break...');
+                $.ajax({
+                    url: $('#src').val() + '/controllers/object/form_item_controller.php',
+                    type: 'POST',
+                    data: Hook[key][property]
+                }).done(function (result) {
+                    var object_data =  Hook[key][property];
+                    if(object_data.isKey && object_data.isKey!==''){
+                        var json =JSON.parse(result);
+                        if(json.value){
+                            toastr.error(json.value+' <?php _e(' is already inserted!', 'tainacan') ?>', '<?php _e('Attention!', 'tainacan') ?>', {positionClass: 'toast-bottom-right'});
+                        }
+                    }
+                });
+               // console.log('later');
+                }, 250 * i);
+            }
+
             function sendCompoundData(compound_id,index_id){
+                var i = 0;
                 for (var key in Hook) {
                     if(key === compound_id+'_'+index_id){
                         for (var property in Hook[key]) {
-                            $.ajax({
-                                url: $('#src').val() + '/controllers/object/form_item_controller.php',
-                                type: 'POST',
-                                data: Hook[key][property]
-                            }).done(function (result) {
-                                var object_data =  Hook[key][property];
-                                if(object_data.isKey && object_data.isKey!==''){
-                                    var json =JSON.parse(result);
-                                    if(json.value){
-                                        toastr.error(json.value+' <?php _e(' is already inserted!', 'tainacan') ?>', '<?php _e('Attention!', 'tainacan') ?>', {positionClass: 'toast-bottom-right'});
-                                    }
-                                }
-                            });
+
+                            demo(compound_id,index_id,property,key,i);
+                            i++;
                         }
                     }
                 }
