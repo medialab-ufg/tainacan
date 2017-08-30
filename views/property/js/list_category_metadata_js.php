@@ -2328,7 +2328,7 @@
                                 ids.push(item.data.key);
                             }
                         });
-                        $('#property_object_category_id').val(ids.join(','));
+                        $('#property_object_category_id').val(ids.filter( onlyUnique ).join(','));
                     }
                 });
             },

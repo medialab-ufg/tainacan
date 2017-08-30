@@ -2550,6 +2550,9 @@
     }
 
     //*****************************************  END IMPORT ALL  *********************************************//
+    function onlyUnique(value, index, self) {
+        return self.indexOf(value) === index;
+    }
     /**
      * funcao que concatena um array em um input, separado por virgulas
      * @param {int} o ID do item que sera inserido no array

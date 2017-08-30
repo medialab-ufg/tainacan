@@ -34,6 +34,12 @@ class ObjectSaveValuesModel extends Model {
                     }else if($meta && $meta->meta_value == $value){
                         // removo o valor do postmeta pelo meta_id
                         $this->sdb_delete_post_meta($meta->meta_id);
+                        if(strpos($meta->meta_key,'_cat')!==false){
+                            wp_remove_object_terms( $item_id, absint($meta->meta_value),'socialdb_category_type');
+                            //retirando dos metadados comuns
+                            $commom_key = ($is_compound) ? "socialdb_propertyterm_$property_children_id" : "socialdb_propertyterm_$compound_id";
+                            $this->delete_commom_field_value($item_id, $commom_key, $meta->meta_value);
+                        }
                         if($is_compound){
                             //removo o composto
                             $this->updateCompoundMeta($item_id, $compound_id, $property_children_id, $index, '');
