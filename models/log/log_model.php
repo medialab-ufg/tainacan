@@ -36,6 +36,8 @@ class Log extends Model {
         return ['ip' => $_SERVER['REMOTE_ADDR'], 'event_date' => date('Y-m-d H:i:s')];
     }
 
+    //#TODO: Refatorar SQL Queries, aumentanto a coesão, juntanto consultas semelhantes, diminuindo quantidade de código.
+
     public static function getUserEvents($event_type, $event, $encoded = true, $from = '', $to = '', $collection_id = NULL, $filter) {
         global $wpdb;
 

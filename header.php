@@ -76,6 +76,24 @@ $_src_ = get_template_directory_uri();
                       <span class="icon-bar"></span>
                       <span class="icon-bar"></span>
                     </button>
+                    <script>
+                      // Header btn-toggle
+                      
+                      $('#btn-toggle').click(function(e){
+                          if( $('#to-collapse').hasClass('in') ){
+                              $('#to-collapse').removeClass('in');
+                              //$('#btn-toggle').addClass('collapsed');
+                              $('#to-collapse').css('height', 'auto');
+                          }
+                          else{
+                              $('#to-collapse').addClass('in');
+                              //$('#btn-toggle').removeClass('collapsed'); 
+                              $('#to-collapse').css('height', 'auto');
+                          }
+                      });
+
+                      // End Header btn-toggle
+                    </script>
 
                     <?php
                     // Render Logo
@@ -365,23 +383,3 @@ $_src_ = get_template_directory_uri();
                   </div>
                 </div>
               </div>
-
-<script type="text/javascript">
-  // Header btn-toggle
- // Solução rápida
- 
-$('#btn-toggle').click(function(e){
-    if( $('#to-collapse').hasClass('in') ){
-        $('#to-collapse').removeClass('in');
-        //$('#btn-toggle').addClass('collapsed');
-        $('#to-collapse').css('height', 'auto');
-    }
-    else{
-        $('#to-collapse').addClass('in');
-        //$('#btn-toggle').removeClass('collapsed'); 
-        $('#to-collapse').css('height', 'auto');
-    }
-});
-
-// End Header btn-toggle
-</script>
