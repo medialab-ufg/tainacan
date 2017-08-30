@@ -32,8 +32,8 @@ if( $_SERVER["REQUEST_METHOD"] === "POST" ) {
     $current_rand = rand();
     $output_filename = dirname($imgUrl). "/" . $final_name . "_" . $current_rand;
 
+    $imgUrl = $imagePath.$_file_["name"];
     $what = getimagesize($imgUrl);
-
     switch(strtolower($what['mime'])) {
         case 'image/png':
             $img_r = imagecreatefrompng($imgUrl);
