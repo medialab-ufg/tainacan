@@ -78,10 +78,11 @@ class ObjectClass extends FormItem {
                         foreach ($values as $id): 
                         ?>
                         <li id="inserted_property_object_<?php echo $compound_id ?>_<?php echo $property_id ?>_<?php echo $index_id ?>_<?php echo $id; ?>" 
-                            onclick="original_remove_in_item_value_compound_<?php echo $compound_id ?>_<?php echo $property_id; ?>_<?php echo $index_id; ?>('<?php echo $id; ?>',this)"
                             item="<?php echo $id; ?>" class="selected-items-property-object property-<?php echo $property['id']; ?>">
                                 <?php echo get_post($id)->post_title; ?>
-                            <span style="cursor:pointer;" class="pull-right glyphicon glyphicon-trash"></span>
+                            <span style="cursor:pointer;"
+                                  onclick="original_remove_in_item_value_compound_<?php echo $compound_id ?>_<?php echo $property_id; ?>_<?php echo $index_id; ?>('<?php echo $id; ?>',this)"
+                                  class="pull-right glyphicon glyphicon-trash"></span>
                         </li>       
                         <?php endforeach;  ?>    
                     <?php endif; ?>
@@ -1067,7 +1068,7 @@ class ObjectClass extends FormItem {
         if(empty(array_filter($title_labels))){
             return __('Keyword','tainacan');
         }
-        return implode('/', $title_labels);
+        return implode('/', array_unique($title_labels));
     }
     
     /**

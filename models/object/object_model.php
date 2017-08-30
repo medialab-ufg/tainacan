@@ -1578,7 +1578,9 @@ class ObjectModel extends Model {
                     $avoid_selected_items = $all_data['metas']['socialdb_property_avoid_items'];
                     if(($avoid_selected_items === '1'|| $avoid_selected_items == 'true') && $this->is_selected_property($data['property_id'],  $object->ID)){
                         continue;
-                    }else if(has_filter('avoid-items-list-items-property-object') && apply_filters('avoid-items-list-items-property-object', $data['property_id'],0, $object->ID)){
+                    }
+
+                    if(has_filter('avoid-items-list-items-property-object') && apply_filters('avoid-items-list-items-property-object', $data['property_id'],0, $object->ID)){
                         continue;
                     }
                    $json[] = $array;
