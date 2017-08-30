@@ -321,6 +321,9 @@ require_once(dirname(__FILE__).'../../general/general_controller.php');
                 $all_properties_id = [];
                 $properties = [];
                 $title_labels = [];
+                if(has_filter('alter_categories_to_find_properties')){
+                    $categories = apply_filters('alter_categories_to_find_properties',$categories);
+                }
                 foreach ($categories as $value) {
                     $properties_raw = get_term_meta($value, 'socialdb_category_property_id');
                     if(is_array($properties_raw)){

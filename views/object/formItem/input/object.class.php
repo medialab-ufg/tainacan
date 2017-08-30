@@ -1053,6 +1053,9 @@ class ObjectClass extends FormItem {
     public function get_labels_search_obejcts($categories) {
         $title_labels = [];
         $categories = (is_array($categories)) ? $categories : explode(',', $categories);
+        if(has_filter('alter_categories_to_find_properties')){
+            $categories = apply_filters('alter_categories_to_find_properties',$categories);
+        }
         foreach ($categories as $value) {
             $collection = $this->get_collection_by_category_root($value);
             if ($collection && isset($collection[0])) {
