@@ -72,12 +72,16 @@ $(window).load(function () {
     // Do NOT load this actions at statistics page
     if( ! $('body').hasClass('page-template-page-statistics') ) {
         if(src) {
+
+            if(!$('body').hasClass('home')) {
+                check_privacity(src);
+                list_main_ordenation();
+                show_most_participatory_authors(src);
+                showDynatreeSingleEdit(src);
+            }
+
             get_collections_template(src);
-            check_privacity(src);
-            list_main_ordenation();
-            showDynatreeSingleEdit(src);
             showHeaderCollection(src);
-            show_most_participatory_authors(src);
             //get_categories_properties_ordenation();
             notification_events_repository();
             list_templates("#collections-menu ul.templates");
