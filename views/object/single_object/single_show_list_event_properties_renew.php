@@ -156,10 +156,7 @@ if (isset($property_data)):
                     </a>
                 </span>
             </h4>
-            <?php
-                if($property['type'] != 'user')
-                {
-                    ?>
+            <?php if($property['type'] != 'user') { ?>
                     <div class="edit-field-btn">
                         <button type="button" onclick="cancel_data_property('<?php echo $property['id']; ?>', '<?php echo $object_id; ?>')" id="single_cancel_<?php echo $property['id']; ?>_<?php echo $object_id; ?>" class="btn btn-default btn-xs" style="display: none;" ><span class="glyphicon glyphicon-arrow-left" ></span></button>
                         <?php // verifico se o metadado pode ser alterado
@@ -185,25 +182,19 @@ if (isset($property_data)):
                     <p>
                         <?php
                         $is_url = filter_var($value, FILTER_VALIDATE_URL);
-                        /*if(!$is_url)
-                        {
-                            $is_url = filter_var("http://".$value, FILTER_VALIDATE_URL);
-                            if(!$is_url)
-                            {
-                                $is_url = filter_var("http://www.".$value, FILTER_VALIDATE_URL);
-                                if($is_url)
-                                {
-                                     $value_href = "http://www.".$value;
-                                }
-                            }else $value_href = "http://".$value;
-                        }else $value_href = $value;*/
+                        /*if(!$is_url) { $is_url = filter_var("http://".$value, FILTER_VALIDATE_URL);
+                            if(!$is_url) { $is_url = filter_var("http://www.".$value, FILTER_VALIDATE_URL);
+                                if($is_url) { $value_href = "http://www.".$value; }
+                            } else $value_href = "http://".$value;
+                        } else $value_href = $value;*/
 
                         if ($is_url):
                             echo '<b><a class="can_short" target="_blank" href="' . $value . '" >' . $value . '</a></b>';
                         elseif (filter_var(trim($value), FILTER_VALIDATE_EMAIL)):
                             echo '<b><a class="can_short" target="_blank" href="mailto:' . $value . '">' . $value . '</a></b>';
                         elseif ($value):
-                            echo '<b><a style="cursor:pointer; white-space: pre-wrap;" onclick="wpquery_link_filter(' . "'" . preg_replace('/\s+/', ' ', $value) . "'" . ',' . $property['id'] . ')">' . $value . '</a></b>';
+                            // echo '<b><a style="cursor:pointer; white-space: pre-wrap;" onclick="wpquery_link_filter(' . "'" . preg_replace('/\s+/', ' ', $value) . "'" . ',' . $property['id'] . ')">' . $value . '</a></b>';
+                            echo '<b><a style="cursor:pointer; white-space: pre-wrap;">' . $value . '</a></b>';
                         endif;
                         ?>
                     </p>

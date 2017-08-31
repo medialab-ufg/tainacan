@@ -49,9 +49,9 @@ session_start();
                     <input type="button" onclick="edit_mapping('youtube')" id="btn_mapping_youtube" name="btn_mapping_youtube" class="btn btn-primary social-networks-btn" value="<?php _e('Edit Youtube Mapping', 'tainacan'); ?>" />
 
                     <!--label for="channel_identifier"><?php _e('Entry channel youtube identifeir', 'tainacan'); ?></label>
-                    <input type="text"  name="channel_identifier" id="youtube_identifier_input" style="width: 33.333%" placeholder="<?php _e('Type here', 'tainacan'); ?>" class="form-control" required /></br>
+                    <input type="text"  name="channel_identifier" id="youtube_identifier_input" style="width: 33.333%" placeholder="<?php _e('Type here', 'tainacan'); ?>" class="form-control" required /><br/>
                     <label for="youtube_playlist_identifier_input"><?php _e('Entry playlist youtube identifeir', 'tainacan'); ?></label>
-                    <input type="text"  name="youtube_playlist_identifier_input" id="youtube_playlist_identifier_input" style="width: 33.333%" placeholder="<?php _e('Type here to get a specific playlist or leave blank to get all', 'tainacan'); ?>" class="form-control"/></br>
+                    <input type="text"  name="youtube_playlist_identifier_input" id="youtube_playlist_identifier_input" style="width: 33.333%" placeholder="<?php _e('Type here to get a specific playlist or leave blank to get all', 'tainacan'); ?>" class="form-control"/><br/>
                     <input type="button" id="btn_identifiers_youtube" name="addChannel" class="btn btn-default pull-left" value="Adicionar"  />
                     <input type="button" id="btn_identifiers_youtube_update" name="updateChannel" class="btn btn-default pull-left" value="Salvar Edição" />
                     <input type="button" id="btn_identifiers_youtube_cancel" name="calcelChannel" class="btn btn-default pull-left" value="Cancelar Edição" /-->
@@ -77,7 +77,7 @@ session_start();
 
                     <input type="button" onclick="edit_mapping('flickr')" id="btn_mapping_flickr" name="btn_mapping_flickr" class="btn btn-primary social-networks-btn" value="<?php _e('Edit Flickr Mapping', 'tainacan'); ?>" /><br><br>
                     <!--label for="flickr_identifiers"><?php _e('Entry an user name from a flickr profile', 'tainacan'); ?></label>
-                    <input type="text"  name="flickr_identifiers" id="flickr_identifier_input" style="width: 33.333%" placeholder="Digite aqui" class="form-control"/></br>
+                    <input type="text"  name="flickr_identifiers" id="flickr_identifier_input" style="width: 33.333%" placeholder="Digite aqui" class="form-control"/><br/>
                     <input type="button" id="btn_identifiers_flickr" name="addChannel" class="btn btn-default pull-left" value="Adicionar"  />
                     <input type="button" id="btn_identifiers_flickr_update" name="updateFlickrProfileIdentifier" class="btn btn-default pull-left" value="Salvar Edição" />
                     <input type="button" id="btn_identifiers_flickr_cancel" name="calcelFlickrProfileIdentifier" class="btn btn-default pull-left" value="Cancelar Edição" /-->
@@ -130,7 +130,7 @@ session_start();
 
                     <input type="button" onclick="edit_mapping('instagram')" id="btn_mapping_instagram" name="btn_mapping_instagram" class="btn btn-primary social-networks-btn" value="<?php _e('Edit Instagram Mapping', 'tainacan'); ?>" /><br><br>
                     <!--label for="instagram_identifiers"><?php _e('Entry an user name from a instagram profile', 'tainacan'); ?></label>
-                    <input type="text"  name="instagram_identifiers" id="instagram_identifier_input" style="width: 33.333%" placeholder="Digite aqui" class="form-control"/></br>
+                    <input type="text"  name="instagram_identifiers" id="instagram_identifier_input" style="width: 33.333%" placeholder="Digite aqui" class="form-control"/><br/>
                     <input type="button" id="btn_identifiers_instagram" name="addChannel" class="btn btn-default pull-left" value="Adicionar"  />
                     <input type="button" id="btn_identifiers_instagram_update" name="updateInstagramProfileIdentifier" class="btn btn-default pull-left" value="Salvar Edição" />
                     <input type="button" id="btn_identifiers_instagram_cancel" name="calcelInstagramProfileIdentifier" class="btn btn-default pull-left" value="Cancelar Edição" /-->
@@ -155,7 +155,7 @@ session_start();
 
                     <input type="button" onclick="edit_mapping('vimeo')" id="btn_mapping_vimeo" name="btn_mapping_vimeo" class="btn btn-primary social-networks-btn" value="<?php _e('Edit Vimeo Mapping', 'tainacan'); ?>" /><br><br>
                     <!--label for="instagram_identifiers"><?php _e('Entry an user name from a instagram profile', 'tainacan'); ?></label>
-                    <input type="text"  name="instagram_identifiers" id="instagram_identifier_input" style="width: 33.333%" placeholder="Digite aqui" class="form-control"/></br>
+                    <input type="text"  name="instagram_identifiers" id="instagram_identifier_input" style="width: 33.333%" placeholder="Digite aqui" class="form-control"/><br/>
                     <input type="button" id="btn_identifiers_instagram" name="addChannel" class="btn btn-default pull-left" value="Adicionar"  />
                     <input type="button" id="btn_identifiers_instagram_update" name="updateInstagramProfileIdentifier" class="btn btn-default pull-left" value="Salvar Edição" />
                     <input type="button" id="btn_identifiers_instagram_cancel" name="calcelInstagramProfileIdentifier" class="btn btn-default pull-left" value="Cancelar Edição" /-->

@@ -65,6 +65,9 @@ if("one" === $single_mode) {
     </ol>
 
     <div id="single_item_tainacan" class="col-md-12">
+
+        <div id="graph_container"></div>
+
         <div class="col-md-9 item-main-data row">
 
             <div class="col-md-12 content-title single-item-title tainacan-header-info no-padding">

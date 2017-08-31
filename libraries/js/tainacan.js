@@ -2017,20 +2017,25 @@ function showPageTags(slug_tag, src) {
 function showGraph(url) {
     $("#category_page").val('');
     $("#property_page").val('');
-    $('#main_part').show();
-    $('#collection_post').show();
-    $('#configuration').hide();
-    var width = $('#div_central').width() - 200;
-    $("#menu_object").hide();
-    $("#container_socialdb").hide('slow');
-    $("#form").hide('slow');
-    $("#list").hide('slow');
-    $("#form").html('<iframe class="col-md-12" scrolling-x="no" height="700"  style="border:3px solid #E8E8E8;background:white;overflow-x:hidden;overflow-y:scroll;" src="' + $('#src').val() + '/extras/visualRDF/index_tainacan.php?url=' + url + '&width=' + width + '"></iframe>');
-    $("#form").show('slow');
-    $("#form").css('border', 'none');
-    $("html, body").delay(1000).animate({
-        scrollTop: $('#form').offset().top
-    }, 2000);
+
+    if( $("#graph_container").length > 0 ) {
+        $("#graph_container").hide('slow')
+            .html('<iframe class="col-md-12 graph-iframe" scrolling-x="no" height="500" src="' + $('#src').val() + '/extras/visualRDF/index_tainacan.php?url=' + url + '&width=200"></iframe>')
+            .show('slow')
+            .css('border', 'none');
+    } else if ( $('#configuration').length > 0 ) {
+        var width = $('#div_central').width() - 200;
+        $("#menu_object").hide();
+        $("#container_socialdb").hide('slow');
+        $("#list").hide('slow');
+        $('#main_part').show();
+        $('#collection_post').show();
+        $('#configuration').hide();
+        $("#form").hide('slow')
+            .html('<iframe class="col-md-12 graph-iframe" scrolling-x="no" height="700" src="' + $('#src').val() + '/extras/visualRDF/index_tainacan.php?url=' + url + '&width=' + width + '"></iframe>')
+            .show('slow')
+            .css('border', 'none');
+    }
 }
 
 /***************************** Fim: funcoes para mostrar paginas especificas  *******/

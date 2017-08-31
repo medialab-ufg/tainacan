@@ -680,9 +680,9 @@ abstract class EventModel extends Model {
             if ($meta_event['socialdb_event_confirmed'][0] == 'confirmed')
                 $body.='<b>' . __("The event ", 'tainacan') . ': (' . $title . ')	' . __(" was confirmed ", 'tainacan') . '';
             else {
-                $body.='<b>' . __("The event ", 'tainacan') . ' (' . $title . ') ' . __("was not confirmed ", 'tainacan') . '</br>';
+                $body.='<b>' . __("The event ", 'tainacan') . ' (' . $title . ') ' . __("was not confirmed ", 'tainacan') . '<br/>';
                 if (isset($meta_event['socialdb_event_observation'][0]))
-                    $body.='<br><b>' . __("Obervations by collection's moderators ", 'tainacan') . ': ' . $meta_event['socialdb_event_observation'][0] . '</br>';
+                    $body.='<br><b>' . __("Obervations by collection's moderators ", 'tainacan') . ': ' . $meta_event['socialdb_event_observation'][0] . '<br/>';
             }
 
             $body.=

@@ -33,10 +33,10 @@ class social_media extends WP_Widget {
         echo '<div>';
 
         // This is where you run the code and display the output
-        if (!empty($facebook_url)) echo '<a target="_blank" rel="noopener" class="smedialink" href="'. $facebook_url .'"><img class="backicon" src="'. get_template_directory_uri() .'/libraries/images/icon_smedia_widget/face.png" alt="Facebook" /> Facebook</br></a>';
-        if (!empty($youtube_url)) echo '<a target="_blank" rel="noopener" class="smedialink" href="'. $youtube_url .'"><img class="backicon" src="'. get_template_directory_uri() .'/libraries/images/icon_smedia_widget/yt.png" alt="Youtube" /> Youtube</br></a>';
-        if (!empty($twitter_url)) echo '<a target="_blank" rel="noopener" class="smedialink" href="'. $twitter_url .'"><img class="backicon" src="'. get_template_directory_uri() .'/libraries/images/icon_smedia_widget/twit.png" alt="Twitter" /> Twitter</br></a>';
-        if (!empty($googleplus_url)) echo '<a target="_blank" rel="noopener" class="smedialink" href="'. $googleplus_url .'"><img class="backicon" src="'. get_template_directory_uri() .'/libraries/images/icon_smedia_widget/gplus.png" alt="Google Plus" /> Google Plus</br></a>';
+        if (!empty($facebook_url)) echo '<a target="_blank" rel="noopener" class="smedialink" href="'. $facebook_url .'"><img class="backicon" src="'. get_template_directory_uri() .'/libraries/images/icon_smedia_widget/face.png" alt="Facebook" /> Facebook<br/></a>';
+        if (!empty($youtube_url)) echo '<a target="_blank" rel="noopener" class="smedialink" href="'. $youtube_url .'"><img class="backicon" src="'. get_template_directory_uri() .'/libraries/images/icon_smedia_widget/yt.png" alt="Youtube" /> Youtube<br/></a>';
+        if (!empty($twitter_url)) echo '<a target="_blank" rel="noopener" class="smedialink" href="'. $twitter_url .'"><img class="backicon" src="'. get_template_directory_uri() .'/libraries/images/icon_smedia_widget/twit.png" alt="Twitter" /> Twitter<br/></a>';
+        if (!empty($googleplus_url)) echo '<a target="_blank" rel="noopener" class="smedialink" href="'. $googleplus_url .'"><img class="backicon" src="'. get_template_directory_uri() .'/libraries/images/icon_smedia_widget/gplus.png" alt="Google Plus" /> Google Plus<br/></a>';
         if (!empty($github_url)) echo '<a target="_blank" rel="noopener" class="smedialink" href="'. $github_url .'"><img class="backicon" src="'. get_template_directory_uri() .'/libraries/images/icon_smedia_widget/ghub.png" alt="Github"/> Github</a>';
 
         echo '</div>';

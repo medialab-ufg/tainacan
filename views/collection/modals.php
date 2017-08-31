@@ -588,7 +588,7 @@
                                     </table>
                                 </div-->
                             <label for="flickr_identifiers"><?php _e('Entry an user name from a flickr profile', 'tainacan'); ?></label>
-                            <input type="text"  name="flickr_identifiers" id="flickr_identifier_input" placeholder="Digite aqui" class="form-control"/></br>
+                            <input type="text"  name="flickr_identifiers" id="flickr_identifier_input" placeholder="Digite aqui" class="form-control"/><br/>
                             <input type="button" id="btn_identifiers_flickr" onclick="import_flickr()" name="addChannel" class="btn btn-success pull-left" value="<?php _e('Import', 'tainacan'); ?>"  />
                             <br><br>
                         </div>
@@ -635,7 +635,7 @@
                                     </table>
                                 </div-->
                             <label for="instagram_identifiers"><?php _e('Entry an user name from a instagram profile', 'tainacan'); ?></label>
-                            <input type="text"  name="instagram_identifiers" id="instagram_identifier_input" placeholder="<?php _e('Type here', 'tainacan'); ?>" class="form-control"/></br>
+                            <input type="text"  name="instagram_identifiers" id="instagram_identifier_input" placeholder="<?php _e('Type here', 'tainacan'); ?>" class="form-control"/> <br/>
                             <input type="button" id="btn_identifiers_instagram" onclick="import_instagram()" name="addChannel" class="btn btn-success pull-left" value="<?php _e('Import', 'tainacan'); ?>"  />
                             <br><br>
                         </div>

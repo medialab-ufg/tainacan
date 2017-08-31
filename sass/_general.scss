@@ -768,3 +768,10 @@ section.admin-configs {
   line-height: normal;
   font-family: Arial;
 }
+
+.graph-iframe {
+  border:3px solid #E8E8E8;
+  background:white;
+  overflow-x:hidden;
+  overflow-y:scroll;
+}
