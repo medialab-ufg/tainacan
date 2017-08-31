@@ -394,7 +394,7 @@ class FormItemMultiple extends Model {
                     has_selected.push($(this).val());
                 });
                  <?php endif;  ?>
-                if(has_selected.length>0){
+                if(has_selected.length > 0){
                     swal({
                         title: '<?php _e('Attention', 'tainacan') ?>',
                         text: '<?php _e('Save only ', 'tainacan') ?>' + has_selected.length + ' <?php _e(' selected items ?', 'tainacan') ?>',

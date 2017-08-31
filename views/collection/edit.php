@@ -933,7 +933,8 @@ $_showH = ("disabled" === $_en_header) ? false : true ;
                         </div>
                     </div>
                     <!-- Property Terms -->
-                    <div class="col-md-12">
+                    <!--Temporariamente desativada -->
+                    <!--<div class="col-md-12">
                         <div class="form-group row">
                             <div class="col-md-6"><?php _e('Property Term', 'tainacan'); ?></div>
                             <div class="col-md-2">
@@ -1009,7 +1010,7 @@ $_showH = ("disabled" === $_en_header) ? false : true ;
                                 </select>
                             </div>
                         </div>
-                    </div>
+                    </div>-->
                     <div class="col-md-12">
                         <div class="form-group row">
                             <div class="col-md-6" id="entity"><strong><?php _e('Entity', 'tainacan'); ?></strong></div>
