@@ -2479,6 +2479,17 @@
                         }
                     })
                 ).then(function(){
+                    if(node.bExpanded === true)
+                    {
+                        let ids = $('#property_object_category_id').val().split(',');
+                        node.childList.forEach(function (item, indice){
+                            if(item.bSelected === true)
+                            {
+                                ids.push(item.data.key);
+                            }
+                        });
+                        $('#property_object_category_id').val(ids.filter( onlyUnique ).join(','));
+                    }
                 });
             },
             onClick: function (node, event) {
