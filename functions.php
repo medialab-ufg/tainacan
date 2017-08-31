@@ -494,6 +494,7 @@ add_action('init', 'custom_rewrite_tag', 10, 0);
 
 function custom_rewrite_basic() {
     $collection = get_post(get_option('collection_root_id'));
+    $collection_base = ( get_option('collection_base_url_id') ) ? get_option('collection_base_url_id') : 'colecao';
 
     add_rewrite_rule('^feed_collection/([^/]*)', 'index.php?collection_name=$matches[1]', 'top');
     add_rewrite_rule('^oai', 'index.php?oaipmh=true', 'top');
@@ -532,7 +533,7 @@ function custom_rewrite_basic() {
     /* add_rewrite_rule('^([^/]*)/([^/]*)/editar', 'index.php?collection=$matches[1]&item=$matches[2]&edit-item=true', 'top');
     add_rewrite_rule('^colecao/([^/]*)/criar-item', 'index.php?collection=$matches[1]&add-item=true', 'top'); flush_rewrite_rules(); */
 
-    add_rewrite_rule('^colecao/([^/]*)/add', 'index.php?collection=$matches[1]&add=true', 'top');
+    add_rewrite_rule("^$collection_base/([^/]*)/add", 'index.php?collection=$matches[1]&add=true', 'top');
     add_rewrite_rule('^item/([^/]*)/edit', 'index.php?object=$matches[1]&edit=true', 'top');
 }
 add_action('init', 'custom_rewrite_basic', 10, 0);
@@ -898,11 +899,15 @@ add_action('init', 'create_folder_tainacan_upload');
 
 function register_post_types() {
     /* Detalhes do post type collection */
+    $set_base_uri = 'colecao';
+    if( get_option('collection_base_url_id') )
+        $set_base_uri = get_option('collection_base_url_id');
+
     $collection_args = array(
         'public' => true,
         'query_var' => 'collection',
         'rewrite' => array(
-            'slug' => 'colecao',
+            'slug' => $set_base_uri,
             'with_front' => false),
         'supports' => array(
             'title',
@@ -3703,3 +3708,29 @@ function load_repository_configs() {
 add_action('wp', 'load_repository_configs');
 include_once 'api/tainacan_api.php';
 $Api = new TainacanApi();
+
+function tainacan_collection_uri() {
+    $_section_title = _t('Register the Collection\'s base name');
+    add_settings_section('collection_uri_section', $_section_title, 'tainacan_collection_base_uri', 'permalink' );
+    add_settings_field('collection_base_url_id', 'Base: ', 'collection_base_cb', 'permalink', 'collection_uri_section', [_t('Enter Collection base URL')]);
+}
+add_action('admin_init', 'tainacan_collection_uri');
+
+function collection_base_cb($args) {
+    $html = '<input type="text" id="collection_base_url_id" name="collection_base_url_id" value="'.get_option('collection_base_url_id') .'"/>';
+    $html .= '<label for="collection_base_url_id"> '  . $args[0] . '</label>';
+
+    echo $html;
+}
+
+function tainacan_collection_base_uri() {
+    echo 'Set above tainacan\'s collection base name';
+}
+
+function save_base_permalink_settings(){
+    if( isset($_POST['permalink_structure']) && isset( $_POST['collection_base_url_id'] ) ){
+        $base_uri = wp_unslash( $_POST['collection_base_url_id'] );
+        update_option( 'collection_base_url_id',  $base_uri );
+    }
+}
+add_action( 'admin_init', 'save_base_permalink_settings' );

@@ -27,6 +27,9 @@ if("one" === $single_mode) {
     get_header();
     get_template_part("partials/setup","header");
 
+    var_dump( get_option('collection_base_uri') );
+    var_dump( get_option('tainacan_collection_base') );
+
     include_once(dirname(__FILE__) . '/helpers/view_helper.php');
     include_once(dirname(__FILE__) . '/helpers/object/object_helper.php');
     include_once(dirname(__FILE__) . '/views/object/js/list_single_js.php');
@@ -327,6 +330,7 @@ if("one" === $single_mode) {
                         </div>
                         <div class="item-share box-item-paddings box-item-right">
                             <h4 class="title-pipe single-title"> <?php _e('Sharing', 'tainacan'); ?></h4>
+
                             <div class="content-redesocial-NO" style="width: 100%">
                                 <a class="fb" target="_blank"
                                    href="http://www.facebook.com/sharer/sharer.php?s=100&amp;p[url]=<?php echo get_the_permalink($collection_id) . '?item=' . $post->post_name; ?>&amp;p[images][0]=<?php echo wp_get_attachment_url(get_post_thumbnail_id($post->ID)); ?>&amp;p[title]=<?php echo htmlentities($post->post_title); ?>&amp;p[summary]=<?php echo strip_tags($post->post_content); ?>">
