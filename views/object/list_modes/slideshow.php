@@ -21,8 +21,7 @@
                                 <div class="wrapper">
                                     <h3>
                                         <?php if(empty($trash_list)): ?>
-                                            <a href="<?php echo get_collection_item_href($collection_id); ?>"
-                                               onclick="<?php get_item_click_event($collection_id, $curr_id) ?>">
+                                            <a href="<?php echo $itemURL; ?>">
                                                 <?php the_title(); ?>
                                             </a>
                                         <?php elseif ($trash_list): the_title(); endif; ?>

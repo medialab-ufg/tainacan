@@ -13,6 +13,7 @@ if ( $loop->have_posts() ) { ?>
             <?php
             while ( $loop->have_posts() ) : $loop->the_post(); $countLine++;
                 $curr_id = get_the_ID();
+                $itemURL = get_the_permalink($curr_id);
                 include "list_modes/modals.php";
                 include "list_modes/cards.php";
                 include "list_modes/list.php";

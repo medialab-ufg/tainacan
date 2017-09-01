@@ -107,7 +107,8 @@
                 });
             } else {
                 var title = $.trim($("#object_" + c_id + " .item-display-title a").text());
-                _table_html += "<td> <a class='tview-title' data-id='"+c_id+"' href='javascript:void(0)'>"+title+" </a></td>";
+                var hrf = $.trim($("#object_" + c_id + " .item-display-title a").attr('href'));
+                _table_html += "<td> <a class='tview-title' data-id='"+c_id+"' href='"+hrf+"'>"+title+" </a></td>";
             }
 
             _table_html += "<td style='width: 7%'> " + actions + " </td> </tr>";
