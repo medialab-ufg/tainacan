@@ -346,11 +346,28 @@ if (isset($property_term)): ?>
                     {
                         ?>
                         <div class="edit-field-btn">
-                            <button type="button" onclick="cancel_term_property('<?php echo $property['id']; ?>', '<?php echo $object_id; ?>')" id="single_cancel_<?php echo $property['id']; ?>_<?php echo $object_id; ?>" class="btn btn-default btn-xs" style="display: none;" ><span class="glyphicon glyphicon-arrow-left" ></span></button>
+                            <?php
+                                if(empty($property['socialdb_property_required']))
+                                {
+                                    ?>
+                                    <!--<button type="button"
+                                            onclick="remove_classication('<?php _e('Remove classification', 'tainacan') ?>', '<?php _e('Are you sure to remove this classification', 'tainacan') ?>', <?= $property['id'] ?>, <?= $object_id ?>, '<?php echo mktime(); ?>');"
+                                            id="single_remove_<?php echo $property['id']; ?>_<?php echo $object_id; ?>"
+                                            class="btn btn-default btn-xs" >
+                                        <span class="glyphicon glyphicon glyphicon-remove" ></span>
+                                    </button>-->
+                                    <?php
+                                }
+                            ?>
+                            <button type="button" onclick="cancel_term_property('<?php echo $property['id']; ?>', '<?php echo $object_id; ?>')" id="single_cancel_<?php echo $property['id']; ?>_<?php echo $object_id; ?>" class="btn btn-default btn-xs" style="display: none;" >
+                                <span class="glyphicon glyphicon-arrow-left" ></span>
+                            </button>
                             <?php
                             // verifico se o metadado pode ser alterado
                             if (verify_allowed_action($collection_id, 'socialdb_collection_permission_add_classification',$object_id)): ?>
-                                <button type="button" onclick="edit_term_property('<?php echo $property['id']; ?>', '<?php echo $object_id; ?>')" id="single_edit_<?php echo $property['id']; ?>_<?php echo $object_id; ?>" class="btn btn-default btn-xs" ><span class="glyphicon glyphicon-edit"></span></button>
+                                <button type="button" onclick="edit_term_property('<?php echo $property['id']; ?>', '<?php echo $object_id; ?>')" id="single_edit_<?php echo $property['id']; ?>_<?php echo $object_id; ?>" class="btn btn-default btn-xs" >
+                                    <span class="glyphicon glyphicon-edit"></span>
+                                </button>
                             <?php endif; ?>
                         </div>
                         <?php

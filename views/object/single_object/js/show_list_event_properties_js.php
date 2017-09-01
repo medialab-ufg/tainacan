@@ -631,9 +631,9 @@
                     //limpando caches
                     delete_all_cache_collection();
                 });
-            } else {
+            } /*else {
                 list_properties_single(object_id);
-            }
+            }*/
         });
     }
 

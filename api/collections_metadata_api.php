@@ -319,8 +319,9 @@ abstract class CollectionsMetadataApi {
         
         //verifico se não tem filhos
         if(!isset($property['has_children']) && $return['taxonomy'])
-            $property['has_children'] = $ObjectModel->getChildren($return['taxonomy']);
-        
+            $property['has_children'] = $this->getHierarchy($return['taxonomy'],$ObjectModel);
+            //$property['has_children'] = $ObjectModel->getChildren($return['taxonomy']);
+
         //se caso for compostos
         if(!$is_compound && is_array($property['has_children'])){
             $return['categories'] = [];
@@ -358,6 +359,17 @@ abstract class CollectionsMetadataApi {
         }
         
         return $return;
+    }
+
+    public function getHierarchy($parent,$ObjectModel,$result = []){
+        $children = $ObjectModel->getChildren($parent);
+        if(is_array($children) && !empty($children)){
+            foreach ($children as $child) {
+                $child->children = $this->getHierarchy($child->term_id,$ObjectModel);
+                $result[] =  $child;
+            }
+        }
+        return $result;
     }
     
     /**
