@@ -1782,7 +1782,9 @@ if (!function_exists("theme_styles")) {
                 'footer' => '/libraries/css/footer.css'
             ];
             $column = get_post_meta(get_the_ID(), 'socialdb_collection_submission_visualization', true);
-            if ($column && $column == 'one') {
+            $_is_edit_page = (get_query_var('edit') &&  get_query_var('edit') === 'true');
+
+            if ($column && $column == 'one' || $_is_edit_page ) {
                 $registered_css['item-page'] = '/libraries/css/item-page.css';
             } else {
                 if (wp_style_is('item-page')) {

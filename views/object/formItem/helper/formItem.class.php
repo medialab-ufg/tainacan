@@ -698,9 +698,7 @@ class FormItem extends Model {
                 <hr>
                  <div>
                      <center>
-                     <div id="dropzone_form"
-                         class="dropzone"
-                         style="margin-bottom: 15px;min-height: 150px;padding-top: 0px;">
+                     <div id="dropzone_form" class="dropzone" style="margin-bottom: 15px;min-height: 150px;padding-top: 0px;">
                                 <div class="dz-message" data-dz-message>
                                     <span style="text-align: center;vertical-align: middle;">
                                         <h3>
@@ -712,7 +710,7 @@ class FormItem extends Model {
                                     </span>
                                 </div>
                      </div>
-                         <button style="margin-bottom: 30px;" type="button" onclick="$('#dropzone_new').trigger('click')" class="btn btn-primary"><?php _e('Upload more files','tainacan') ?></button>
+                         <button style="margin-bottom: 30px;" type="button" onclick="$('#dropzone_form').trigger('click')" class="btn btn-primary"><?php _e('Upload more files','tainacan') ?></button>
                      </center>
                      <?php
                         $attachamentClass->initScriptsAttachmentContainer($view_helper->terms_fixed['attachments']->term_id, $this->itemId);
@@ -952,7 +950,7 @@ class FormItem extends Model {
                     var json = JSON.parse(result);
                     if(json.ok) {
                         showAlertGeneral(json.title,json.msg,json.type);
-                        window.location = '<?php echo get_the_permalink($this->itemId) ?>';
+                        window.location = '<?php echo get_the_permalink($this->collection_id) ?>';
                     } else {
                         showAlertGeneral(json.title,json.msg,json.type);
                     }

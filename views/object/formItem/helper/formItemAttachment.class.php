@@ -12,7 +12,7 @@ class FormItemAttachment extends FormItem {
                     <?php $this->validateIcon('alert-compound-'.$property['id'],__('Required field','tainacan')) ?>
                 <?php echo ($isFocusMedia) ? '</h5>' : '</h2>' ?>
                 <div >
-                    <div id="dropzone_new"
+                    <div id="dropzone_form"
                          class="dropzone"
                          style="margin-bottom: 15px;min-height: 150px;padding-top: 0px;">
                         <div class="dz-message" data-dz-message>

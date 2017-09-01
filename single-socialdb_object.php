@@ -302,18 +302,17 @@ if("one" === $single_mode) {
                                     if (verify_allowed_action($collection_id, 'socialdb_collection_permission_edit_property_data_value', $object_id)): ?>
                                         <div style="margin-top: 5px;">
                                             <button type="button" onclick="edit_thumbnail()" id="edit_thumbnail"
-                                                    class="btn btn-default btn-xs"><span
-                                                        class="glyphicon glyphicon-edit"></span></button>
+                                                    class="btn btn-default btn-xs"><span class="glyphicon glyphicon-edit"></span>
+                                            </button>
                                         </div>
                                     <?php endif; ?>
                                 </div>
-                                <div>
+                                <div id="thumb-wrapper">
                                     <?php if (get_the_post_thumbnail($post->ID, 'thumbnail')) {
                                         $url_image = wp_get_attachment_url(get_post_thumbnail_id($post->ID));
                                         echo get_the_post_thumbnail($post->ID, 'thumbnail');
                                     } else { ?>
-                                        <img class="img-responsive"
-                                             src="<?php echo get_item_thumbnail_default($post->ID); ?>" width="45%"/>
+                                        <img class="img-responsive" src="<?php echo get_item_thumbnail_default($post->ID); ?>" width="45%"/>
                                     <?php } ?>
                                 </div>
                             </div>
@@ -578,16 +577,15 @@ if("one" === $single_mode) {
     </div>
 
     <!-- Modal para upload de thumbnail -->
-    <div class="modal fade" id="single_modal_thumbnail" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-         aria-hidden="true">
+    <div class="modal fade" id="single_modal_thumbnail" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <form id="formThumbnail">
                     <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                                    aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title" id="myModalLabel"><span
-                                    class="glyphicon glyphicon-trash"></span>&nbsp;<?php _e('Select a image', 'tainacan'); ?>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">
+                            <span class="glyphicon glyphicon-trash"></span>&nbsp;<?php _e('Select a image', 'tainacan'); ?>
                         </h4>
                     </div>
                     <div class="modal-body">
@@ -595,10 +593,8 @@ if("one" === $single_mode) {
                         <input type="hidden" name="operation" value="insert_attachment">
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-default"
-                                data-dismiss="modal"><?php echo __('Close', 'tainacan'); ?></button>
-                        <button type="submit"
-                                class="btn btn-primary"><?php echo __('Alter Image', 'tainacan'); ?></button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo __('Close', 'tainacan'); ?></button>
+                        <button type="submit" class="btn btn-primary"><?php echo __('Alter Image', 'tainacan'); ?></button>
                     </div>
                 </form>
             </div>
@@ -619,7 +615,7 @@ if("one" === $single_mode) {
                         <div class="row">
                             <div class="col-md-6">
                                 <?php _t('Post it on: ', 1); ?><br>
-                                <a target="_blank"
+                                <a target="_blank" rel="noopener"
                                    href="https://twitter.com/intent/tweet?url=<?php echo get_the_permalink($collection_id) . '?item=' . $post->post_name; ?>&amp;text=<?php echo htmlentities(get_the_title()); ?>&amp;via=socialdb">
                                     <?php echo ViewHelper::render_icon('twitter-square', 'png', 'Twitter'); ?>
                                 </a>
@@ -628,7 +624,7 @@ if("one" === $single_mode) {
                                     <?php echo ViewHelper::render_icon('facebook-square', 'png', 'Facebook'); ?>
                                 </a>
 
-                                <a target="_blank"
+                                <a target="_blank" rel="noopener"
                                    href="https://plus.google.com/share?url=<?php echo get_the_permalink($collection_id) . '?item=' . $post->post_name; ?>">
                                     <?php echo ViewHelper::render_icon('googleplus-square', 'png', 'Google Plus'); ?>
                                 </a>

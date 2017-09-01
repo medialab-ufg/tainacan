@@ -32,7 +32,8 @@
             }).success(function (result) {
                 elem = jQuery.parseJSON(result);
                 if (elem.attachment_id) {
-                    insert_fixed_metadata($('#single_object_id').val(), 'thumbnail', elem.attachment_id);
+                    var item_id = $('#single_object_id').val();
+                    insert_fixed_metadata(item_id, 'thumbnail', elem.attachment_id, true);
                 } else {
                     $('#modalImportMain').modal('hide');//mostro o modal de carregamento
                 }
@@ -41,7 +42,6 @@
 
         //carrego as licensas ativas
         $.ajax({
-            // url: $('#src').val() + '/controllers/object/object_controller.php',
             url: $('#src').val() + '/controllers/object/object_controller.php',
             type: 'POST',
             data: {operation: 'show_collection_licenses', object_id: item_id, collection_id: $("#collection_id").val()}
@@ -49,6 +49,17 @@
             $('#event_license').html(result);
         });
     });
+
+    function reload_item_thumb(col_id) {
+        if(col_id) {
+            $.ajax({
+                url: $('#src').val() + '/controllers/object/object_controller.php',
+                type: 'POST', data: { operation: 'default_img', curr_id: col_id }
+            }).done(function(r) {
+                $("#thumb-wrapper").html(r);
+            });
+        }
+    }
 
     /*
      * Increments item's collection view count
@@ -640,7 +651,7 @@
     }
 
     //altera a classificacao do metadado e carrega novamente a tela do item
-    function insert_fixed_metadata(object_id, type, value) {
+    function insert_fixed_metadata(object_id, type, value, is_thumb) {
         $('#modalImportMain').modal('show');//mostro o modal de carregamento
         $.ajax({
             type: "POST",
@@ -662,9 +673,13 @@
             if(type === 'type')
                 cancel_type();
 
-            cancel_title();
             showAlertGeneral(elem.title, elem.msg, elem.type);
+            // cancel_title();
             //showSingleObjectByName($('#object_page').val(), $('#src').val());
+            
+            if(is_thumb) {
+                reload_item_thumb(object_id);
+            }
         });
     }
 
