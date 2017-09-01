@@ -134,6 +134,12 @@
         $('#list_all_properties_' + object_id).show();
     }
 
+    function close_graph_item_page() {
+        $("#graph_container").hide();
+        $('.item-main-data').show();
+        $('.item-attachments').show();
+    }
+
 // mostra o formulario para criacao de propriedade de dados
     function show_form_data_property_single(object_id) {
         $.ajax({

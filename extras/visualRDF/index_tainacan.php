@@ -3,15 +3,15 @@ include_once (dirname(__FILE__) . '/../../../../../wp-config.php');
 include_once (dirname(__FILE__) . '/../../../../../wp-load.php');
 include_once (dirname(__FILE__) . '/../../../../../wp-includes/wp-db.php');
 
-$url = get_current_url();//"about.ttl";
+$url = get_current_url();
 if(isset($_GET['url'])){
   $url = $_GET['url'];
-}else{
+} else {
   $indexless = str_replace("index.php", "", $url);
   header("Location: $indexless?url=$indexless");
-  
 }
 
+$_is_single_ = (isset($_GET['is_single']) && ('true' === $_GET['is_single']));
 
 function get_current_url() {
     $protocol = 'http';
@@ -61,9 +61,17 @@ var url = '<?php echo $url?>',
     <div>
         <div class="row" style="margin-right: 15px;margin-left: 15px;margin-top:5px;">
             <h3>
-                <?php _e('Graph','tainacan') ?>
-               <button onclick="parent.back_and_clean_url()" id="btn_back_collection" class="btn btn-default pull-right">
-                <?php _e('Back to collection','tainacan') ?>
+                <?php
+                _t('Graph',1);
+
+                if($_is_single_):
+                    echo '<button onclick="parent.close_graph_item_page()" id="btn_back_collection" class="btn btn-default pull-right">';
+                else:
+                    echo '<button onclick="parent.back_and_clean_url()" id="btn_back_collection" class="btn btn-default pull-right">';
+                endif;
+
+                _t('Back to collection',1);
+                ?>
                </button> 
             </h3>
             <hr>

@@ -2019,8 +2019,11 @@ function showGraph(url) {
     $("#property_page").val('');
 
     if( $("#graph_container").length > 0 ) {
+        $('.item-main-data').hide();
+        $('.item-attachments').hide();
+        var rdf_src = $('#src').val() + '/extras/visualRDF/index_tainacan.php?url=' + url + '&width=200&is_single=true';
         $("#graph_container").hide('slow')
-            .html('<iframe class="col-md-12 graph-iframe" scrolling-x="no" height="500" src="' + $('#src').val() + '/extras/visualRDF/index_tainacan.php?url=' + url + '&width=200"></iframe>')
+            .html('<iframe class="col-md-12 graph-iframe" scrolling-x="no" height="700" src="' + rdf_src + '"></iframe>')
             .show('slow')
             .css('border', 'none');
     } else if ( $('#configuration').length > 0 ) {
