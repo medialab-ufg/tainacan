@@ -59,7 +59,7 @@
                 $("#categories_dynatree").dynatree("getTree").reload();
                 elem = jQuery.parseJSON(result);
                 if (elem.type === 'success') {
-                    sweetAlert($("#success_title").val(), $("#success_msg").val(), "success");
+                    sweetAlert(elem.title, elem.msg, "success");
                 } else {
                     sweetAlert($("#error_title").val(), $("#error_msg").val(), "error");
                     if (elem.message) {

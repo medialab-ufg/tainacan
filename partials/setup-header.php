@@ -33,6 +33,12 @@ $root_id = get_option('collection_root_id');
 <?php
 if(is_single()) {
     $parent = get_post($post->post_parent);
+    ?>
+    <input type="hidden" id="alert_attention" value="<?php _t('Attention', 1); ?>" />
+    <input type="hidden" id="alert_removed_item" value="<?php _t('This item has been removed, redirecting to collection home page! ', 1); ?>" />
+    <input type="hidden" id="alert_empty_comment" value="<?php _t('Fill your comment', 1); ?>" />
+    <input type="hidden" id="alert_error" value="<?php _t('Error', 1); ?>" />
+    <?php
 
     if(is_singular('socialdb_object')) { ?>
         <!-- PAGINA DO ITEM -->

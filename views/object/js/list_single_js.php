@@ -431,29 +431,7 @@
 
 //################  FUNCOES PARA OS COMENTARIOS ################################# 
 //listando os comentarios
-    function list_comments(object_id) {
-        $.ajax({
-            type: "POST", url: $('#src').val() + "/controllers/object/object_controller.php",
-            data: { collection_id: $('#collection_id').val(), operation: 'list_comments', object_id: object_id }
-        }).done(function (result) {
-            verifyPublishedItem(object_id);
-            $("#comments_object").html(result);
-        });
-    }
 
-    function verifyPublishedItem(item_id) {
-        $.ajax({
-            url: $('#src').val() + '/controllers/object/objectsingle_controller.php',
-            type: 'POST',
-            data: { operation: 'verifyPublishedItem', collection_id: $("#collection_id").val(), item_id: item_id}
-        }).done(function (result) {
-            json = JSON.parse(result);
-            if (json.is_removed) {
-                showAlertGeneral('<?php _e('Attention', 'tainacan') ?>', '<?php _e('This item has been removed, redirecting to collection home page! ', 'tainacan') ?>', 'error');
-                window.location = json.url;
-            }
-        });
-    }
 
     function submit_comment(object_id) {
         if ($('#comment').val().trim() === '') {

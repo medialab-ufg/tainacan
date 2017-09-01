@@ -233,51 +233,6 @@
 
     }
 
-    /**************************** Comentarios **************************************************/
-    function list_comments_general() {
-        if ($('#socialdb_event_comment_term_id').val() == 'collection') {
-            list_comments_term('comments_term', 'collection');
-        } else if ($('#socialdb_event_comment_term_id').val() == '') {
-            list_comments($('#single_object_id').val());
-        } else {
-            list_comments_term('comments_term', $('#socialdb_event_comment_term_id').val());
-        }
-    }
-
-
-    function submit_comment(object_id) {
-        let comment_content = $('#comment').val().trim();
-        comment_content = remove_script_tags(comment_content);
-
-        if (comment_content === '') {
-            showAlertGeneral('<?php _e('Attention!', 'tainacan') ?>', '<?php _e('Fill your comment', 'tainacan') ?>', 'info');
-        } else {
-            show_modal_main();
-            $.ajax({
-                type: "POST",
-                url: $('#src').val() + "/controllers/event/event_controller.php",
-                data: {
-                    operation: 'add_event_comment_create',
-                    socialdb_event_create_date: '<?php echo time() ?>',
-                    socialdb_event_user_id: $('#current_user_id').val(),
-                    socialdb_event_comment_create_object_id: object_id,
-                    socialdb_event_comment_create_content: comment_content,
-                    socialdb_event_comment_author_name: $('#author').val(),
-                    socialdb_event_comment_author_email: $('#email').val(),
-                    socialdb_event_comment_author_website: $('#url').val(),
-                    socialdb_event_comment_term_id: $('#socialdb_event_comment_term_id').val(),
-                    socialdb_event_comment_parent: 0,
-                    socialdb_event_collection_id: $('#collection_id').val()}
-            }).done(function (result) {
-                hide_modal_main();
-                elem_first = jQuery.parseJSON(result);
-                showAlertGeneral(elem_first.title, elem_first.msg, elem_first.type);
-                list_comments_general();
-                $("#comment_item"+object_id).modal('hide');
-            });
-        }
-    }
-
     function remove_script_tags(text)
     {
         //Opening tags
@@ -291,46 +246,6 @@
         return div.innerHTML;
     }
 
-    // submissao da resposta a um comentario
-    function submit_comment_reply(object_id) {
-        if ($('#comment_msg_reply').val().trim() === '') {
-            showAlertGeneral('<?php _e('Attention!', 'tainacan') ?>', '<?php _e('Fill your comment', 'tainacan') ?>', 'info');
-        } else {
-            $.ajax({
-                type: "POST",
-                url: $('#src').val() + "/controllers/event/event_controller.php",
-                data: {
-                    operation: 'add_event_comment_create',
-                    socialdb_event_create_date: '<?php echo time() ?>',
-                    socialdb_event_user_id: $('#current_user_id').val(),
-                    socialdb_event_comment_create_object_id: object_id,
-                    socialdb_event_comment_create_content: $('#comment_msg_reply').val(),
-                    socialdb_event_comment_author_name: $('#author_reply').val(),
-                    socialdb_event_comment_author_email: $('#email_reply').val(),
-                    socialdb_event_comment_author_website: $('#url_reply').val(),
-                    socialdb_event_comment_term_id: $('#edit_socialdb_event_comment_term_id').val(),
-                    socialdb_event_comment_parent: $('#comment_id').val(),
-                    socialdb_event_collection_id: $('#collection_id').val()
-                }
-            }).done(function (result) {
-
-                list_comments_general();
-                $('.dropdown-toggle').dropdown();
-                $('.nav-tabs').tab();
-                $('#modalReplyComment').modal("hide");
-                elem_first = jQuery.parseJSON(result);
-                showAlertGeneral(elem_first.title, elem_first.msg, elem_first.type);
-                $('html, body').animate({
-                    scrollTop: $("#comments").offset().top
-                }, 2000);
-            });
-        }
-    }
-    // mostra modal de resposta
-    function showModalReply(comment_parent_id) {
-        $('#comment_id').val(comment_parent_id);
-        $('#modalReplyComment').modal("show");
-    }
     // mostrar modal de reportar abuso
     function showModalReportAbuseComment(comment_parent_id) {
         $.ajax({
@@ -347,59 +262,7 @@
             $('#showModalReportAbuseComment').modal("show");
         });
     }
-    // mostrar edicao
-    function showEditComment(comment_id) {
-        show_modal_main();
-        $.ajax({
-            type: "POST",
-            url: $('#src').val() + "/controllers/comment/comment_controller.php",
-            data: {
-                operation: 'get_comment_json',
-                comment_id: comment_id
-            }
-        }).done(function (result) {
-            hide_modal_main();
-            var comment = jQuery.parseJSON(result);
-            $('#comment_text_' + comment_id).hide("slow");
-            $('#edit_field_value_' + comment_id).val(comment.comment.comment_content);
-            $('#comment_edit_field_' + comment_id).show("slow");
-        });
-    }
-    // cancelar edicao
-    function cancelEditComment(comment_id) {
-        $('#comment_edit_field_' + comment_id).hide("slow");
-        $('#comment_text_' + comment_id).show("slow");
-    }
-    // disparado quando eh dono ou admin   
-    function showAlertDeleteComment(comment_id, title, text, time) {
-        swal({
-            title: title,
-            text: text,
-            type: "warning",
-            showCancelButton: true,
-            confirmButtonClass: 'btn-danger',
-            closeOnConfirm: true,
-            closeOnCancel: true
-        },
-        function (isConfirm) {
-            if (isConfirm) {
-                show_modal_main();
-                $.ajax({
-                    type: "POST",
-                    url: $('#src').val() + "/controllers/event/event_controller.php",
-                    data: {operation: 'add_event_comment_delete', socialdb_event_create_date: time,
-                        socialdb_event_user_id: $('#current_user_id').val(), socialdb_event_comment_delete_id: comment_id,
-                        socialdb_event_comment_delete_object_id: $("#single_object_id").val(),
-                        socialdb_event_collection_id: $('#collection_id').val()}
-                }).done(function (result) {
-                    hide_modal_main();
-                    list_comments_general();
-                    elem_first = jQuery.parseJSON(result);
-                    showAlertGeneral(elem_first.title, elem_first.msg, elem_first.type);
-                });
-            }
-        });
-    }
+
     // formulario de reportar abuso para demais usuarios
     function submit_report_abuse() {
         show_modal_main();
@@ -422,33 +285,6 @@
                 list_comments_general();
                 elem_first = jQuery.parseJSON(result);
                 showAlertGeneral(elem_first.title, elem_first.msg, elem_first.type);
-            });
-        }
-    }
-    // submissao do formulario de edicao
-    function submitEditComment(comment_id) {
-        if ($('#edit_field_value_' + comment_id).val().trim() === '') {
-            showAlertGeneral('<?php _e('Attention!', 'tainacan') ?>', '<?php _e('Fill your comment', 'tainacan') ?>', 'info');
-        } else {
-            show_modal_main();
-            $.ajax({
-                type: "POST",
-                url: $('#src').val() + "/controllers/event/event_controller.php",
-                data: {operation: 'add_event_comment_edit', socialdb_event_create_date: '<?php echo time() ?>',
-                    socialdb_event_user_id: $('#current_user_id').val(), socialdb_event_comment_edit_id: comment_id,
-                    socialdb_event_comment_edit_object_id: $("#single_object_id").val(),
-                    socialdb_event_comment_edit_content: $('#edit_field_value_' + comment_id).val(),
-                    socialdb_event_collection_id: $('#collection_id').val()}
-            }).done(function (result) {
-                list_comments_general();
-                hide_modal_main();
-                $('.dropdown-toggle').dropdown();
-                $('.nav-tabs').tab();
-                elem_first = jQuery.parseJSON(result);
-                showAlertGeneral(elem_first.title, elem_first.msg, elem_first.type);
-                $('html, body').animate({
-                    scrollTop: $("#comments").offset().top
-                }, 2000);
             });
         }
     }
