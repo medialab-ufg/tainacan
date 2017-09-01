@@ -1,5 +1,6 @@
 <?php
-if( is_user_logged_in() && current_user_can("manage_option")) {
+$is_moderator = CollectionModel::is_moderator($collection_id, get_current_user_id());
+if( is_user_logged_in() && (current_user_can("manage_option") || $is_moderator) ) {
     include_once dirname(__FILE__ ) . '/../../controllers/object/object_controller.php';
     $obj = new ObjectController();
 
