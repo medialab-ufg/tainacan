@@ -36,7 +36,6 @@
                 show_filters($('#collection_id').val(), elem.args);
                 if (elem.empty_collection) {
                     $('#collection_empty').show();
-                    $('#items_not_found').hide();
                 }
             });
         }else{
@@ -63,8 +62,6 @@
                     {
                         search_items_query = elem.args_item;
                     }
-
-                    $("#items_not_found").hide();
 
                     if(elem.has_collection && elem.has_item)
                     {
@@ -881,7 +878,7 @@
             $('#list').show();
             if (elem.empty_collection) {
                 $('#collection_empty').show();
-                $('#items_not_found').hide();
+
             }
             setMenuContainerHeight();
         });
@@ -913,7 +910,6 @@
             $('#list').show();
             if (elem.empty_collection) {
                 $('#collection_empty').show();
-                $('#items_not_found').hide();
             }
             var curr_viewMode = $("#collection_single_ordenation").attr('data-viewMode');
             if (curr_viewMode) {

@@ -126,6 +126,14 @@
         });
     }
 
+    function back_button(object_id) {
+        $('#data_property_form_' + object_id).hide();
+        $('#object_property_form_' + object_id).hide();
+        $('#edit_data_property_form_' + object_id).hide();
+        $('#edit_object_property_form_' + object_id).hide();
+        $('#list_all_properties_' + object_id).show();
+    }
+
 // mostra o formulario para criacao de propriedade de dados
     function show_form_data_property_single(object_id) {
         $.ajax({
@@ -676,7 +684,7 @@
             showAlertGeneral(elem.title, elem.msg, elem.type);
             // cancel_title();
             //showSingleObjectByName($('#object_page').val(), $('#src').val());
-            
+
             if(is_thumb) {
                 reload_item_thumb(object_id);
             }

@@ -132,7 +132,7 @@
         
         $('.pagination_items').jqPagination({
             link_string: '/?page={page_number}',
-            page_string: '<?php _t("Page "); ?>' + '{current_page}' + '<?php _t(" of "); ?>' + ' {max_page}',
+            page_string: '<?php _t("Page ",1); ?>' + '{current_page}' + '<?php _t(" of ",1); ?>' + ' {max_page}',
             max_page: $('#number_pages').val(),
             paged: function (page) {
                 var trash_page = false;
@@ -557,13 +557,7 @@
         });
     }
 // funcao acionando no bolta voltar que mostra a listagem principal
-    function back_button(object_id) {
-        $('#data_property_form_' + object_id).hide();
-        $('#object_property_form_' + object_id).hide();
-        $('#edit_data_property_form_' + object_id).hide();
-        $('#edit_object_property_form_' + object_id).hide();
-        $('#list_all_properties_' + object_id).show();
-    }
+
 // END:fim das funcoes que mostram as propriedades
 //funcao que mostra as classificacoes apos clique no botao show_classification
     function show_classifications(object_id) {

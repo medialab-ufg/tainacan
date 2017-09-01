@@ -28,10 +28,9 @@ if ( $loop->have_posts() ) { ?>
 
     </div> <br />
 
-<?php } else { ?> <!-- TAINACAN: se a pesquisa nao encontrou nenhum item -->
-
-    <?php if(get_option('collection_root_id') != $collection_id): ?>
-    <div id="items_not_found" class="alert alert-danger" display="none">
+<?php } else {
+    if(get_option('collection_root_id') != $collection_id): ?>
+    <div id="items_not_found_" class="alert alert-danger" style="margin-top: 20px;text-align: center;">
         <span class="glyphicon glyphicon-warning-sign"></span> <?php _t('No objects found!', 1); ?>
     </div>
     <?php else: ?>

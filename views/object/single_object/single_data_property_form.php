@@ -4,7 +4,7 @@ include_once ('../../../../../wp-load.php');
 include_once ('../../../../../wp-includes/wp-db.php');
 include_once ('js/data_property_form_js.php'); ?>
 
-<form  id="single_submit_form_property_data">
+<form id="single_submit_form_property_data">
     <input type="hidden" name="object_id"  value="<?php echo $category->term_id; ?>">
     <input type="hidden" name="property_category_id"  value="<?php echo $category->term_id; ?>">
     <div class="create_form-group">
@@ -35,7 +35,7 @@ include_once ('js/data_property_form_js.php'); ?>
     <?php  do_action('form_modify_property_data') ?>
     <input type="hidden" id="single_event_add_property_data_collection_id" name="socialdb_event_collection_id" value="<?php echo $collection_id; ?>">
     <input type="hidden" id="single_event_add_property_data_object_id" name="property_data_object_id" value="<?php echo $object_id; ?>">
-    <input type="hidden" id="single_event_add_property_data_create_time" name="socialdb_event_create_date" value="<?php echo mktime(); ?>">
+    <input type="hidden" id="single_event_add_property_data_create_time" name="socialdb_event_create_date" value="<?php echo time(); ?>">
     <input type="hidden" id="single_event_add_property_data_user_id" name="socialdb_event_user_id" value="<?php echo get_current_user_id(); ?>">
     <input type="hidden" id="operation_property_data" name="operation" value="add_event_property_data_create">
     <button type="submit" id="submit_property_data" class="btn btn-default"><?php _e('Submit','tainacan'); ?></button>

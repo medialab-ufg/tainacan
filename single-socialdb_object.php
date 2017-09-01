@@ -511,19 +511,17 @@ if("one" === $single_mode) {
                                     <ul aria-labelledby="btnGroupVerticalDrop1" role="menu"
                                         class="dropdown-menu add-metadata">
                                         <?php if ($create_perm_data): ?>
-                                            <li>&nbsp;<span
-                                                        class="glyphicon glyphicon-th-list graydrop"></span>&nbsp;<span><a
-                                                            class="add_property_data"
-                                                            onclick="show_form_data_property_single('<?php echo $post->ID ?>')"
-                                                            href="#property_form_<?php echo $post->ID ?>"><?php _e('Add new data property', 'tainacan'); ?></a></span>
+                                            <li>&nbsp;<span class="glyphicon glyphicon-th-list graydrop"></span>&nbsp;<span>
+                                                    <a class="add_property_data"
+                                                       onclick="show_form_data_property_single('<?php echo $post->ID ?>')"
+                                                       href="#property_form_<?php echo $post->ID ?>"><?php _e('Add new data property', 'tainacan'); ?></a></span>
                                             </li>
                                         <?php endif; ?>
                                         <?php if ($create_perm_object): ?>
-                                            <li>&nbsp;<span
-                                                        class="glyphicon glyphicon-th-list graydrop"></span>&nbsp;<span><a
-                                                            class="add_property_object"
-                                                            onclick="show_form_object_property_single('<?php echo $post->ID ?>')"
-                                                            href="#property_form_<?php echo $post->ID ?>"><?php _e('Add new object property', 'tainacan'); ?></a></span>
+                                            <li>&nbsp;<span class="glyphicon glyphicon-th-list graydrop"></span>&nbsp;<span>
+                                                    <a class="add_property_object"
+                                                       onclick="show_form_object_property_single('<?php echo $post->ID ?>')"
+                                                       href="#property_form_<?php echo $post->ID ?>"><?php _e('Add new object property', 'tainacan'); ?></a></span>
                                             </li>
                                         <?php endif; ?>
                                     </ul>
@@ -620,7 +618,7 @@ if("one" === $single_mode) {
                                     <?php echo ViewHelper::render_icon('twitter-square', 'png', 'Twitter'); ?>
                                 </a>
 
-                                <a onclick="redirect_facebook('<?php echo get_the_ID() ?>');" href="javascript:void(0)">
+                                <a target="_blank" rel="noopener" href="http://www.facebook.com/sharer/sharer.php?s=100&amp;p[url]=<?php echo get_the_permalink($collection_id) . '?item=' . $post->post_name; ?>&amp;p[images][0]=<?php echo wp_get_attachment_url(get_post_thumbnail_id($post->ID)); ?>&amp;p[title]=<?php echo htmlentities($post->post_title); ?>&amp;p[summary]=<?php echo strip_tags($post->post_content); ?>">
                                     <?php echo ViewHelper::render_icon('facebook-square', 'png', 'Facebook'); ?>
                                 </a>
 
