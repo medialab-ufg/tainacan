@@ -27,9 +27,6 @@ if("one" === $single_mode) {
     get_header();
     get_template_part("partials/setup","header");
 
-    var_dump( get_option('collection_base_uri') );
-    var_dump( get_option('tainacan_collection_base') );
-
     include_once(dirname(__FILE__) . '/helpers/view_helper.php');
     include_once(dirname(__FILE__) . '/helpers/object/object_helper.php');
     include_once(dirname(__FILE__) . '/views/object/js/list_single_js.php');
