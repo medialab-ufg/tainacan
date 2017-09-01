@@ -20,7 +20,7 @@ abstract class CollectionsFiltersApi {
         $response['metadata']['allow_hierarchy'] = $meta['socialdb_collection_allow_hierarchy'];
         $response['metadata']['collection_parent'] = $meta['socialdb_collection_parent'];
         $response['metadata']['license_pattern'] = $meta['socialdb_collection_license_pattern'];
-        $response['metadata']['license_enabled'] = $meta['socialdb_collection_vinculated_object'];
+        $response['metadata']['license_enabled'] = $meta['socialdb_collection_license_enabled'];
         $response['metadata']['collection_view'] = $meta['collection_view_count'];
         $response['metadata']['list_mode'] = $meta['socialdb_collection_list_mode'];
         $response['metadata']['add_watermark'] = $meta['socialdb_collection_add_watermark'];
@@ -30,7 +30,7 @@ abstract class CollectionsFiltersApi {
         $response['metadata']['submission_visualization'] = $meta['socialdb_collection_submission_visualization'];
         $response['metadata']['visualization_page_category'] = $meta['socialdb_collection_visualization_page_category'];
         $response['metadata']['habilitate_media'] = $meta['socialdb_collection_habilitate_media'];
-        $response['metadata']['item_habilitate_media'] = $meta['socialdb_collection_vinculated_object'];
+        $response['metadata']['item_habilitate_media'] = $meta['socialdb_collection_habilitate_media'];
         $response['metadata']['item_visualization'] = $meta['socialdb_collection_item_visualization'];
         $response['metadata']['default_color_scheme'] = $meta['socialdb_default_color_scheme'];
         $response['metadata']['show_header'] = $meta['socialdb_collection_show_header'];
