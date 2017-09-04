@@ -87,6 +87,7 @@ class EventClassificationDeleteModel extends EventModel {
         $category = get_term_by('id',  get_post_meta($data['event_id'], 'socialdb_event_classification_term_id',true),'socialdb_category_type');
         $collection_id = get_post_meta($data['event_id'], 'socialdb_event_collection_id',true);
         $category_root_id = $this->get_category_root_of($collection_id);
+
         if($category&&$object_id&&($category->term_id!=$category_root_id)){// se a categoria ou objeto forem validos
             $result = wp_remove_object_terms( $object_id, $category->term_id,'socialdb_category_type');
             /************commom values*******************/

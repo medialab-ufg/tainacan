@@ -347,15 +347,17 @@ if (isset($property_term)): ?>
                         ?>
                         <div class="edit-field-btn">
                             <?php
-                                if(empty($property['socialdb_property_required']))
+                                if(!$property['metas']['socialdb_property_required'] && $property['metas']['socialdb_property_term_cardinality'] == 1
+                                    && (verify_allowed_action($collection_id, 'socialdb_collection_permission_delete_classification',$object_id) || current_user_can( "manage_options", $object_id )))
                                 {
+                                    $category_id = end(get_post_meta($property['metas']['object_id'], 'socialdb_property_'.$property['id'].'_cat'));
                                     ?>
-                                    <!--<button type="button"
-                                            onclick="remove_classication('<?php _e('Remove classification', 'tainacan') ?>', '<?php _e('Are you sure to remove this classification', 'tainacan') ?>', <?= $property['id'] ?>, <?= $object_id ?>, '<?php echo mktime(); ?>');"
+                                    <button type="button"
+                                                onclick="remove_classication('<?php _e('Remove classification', 'tainacan') ?>', '<?php _e('Are you sure to remove this classification', 'tainacan') ?>', <?= $category_id ?>, <?= $object_id ?>, '<?php echo mktime(); ?>');"
                                             id="single_remove_<?php echo $property['id']; ?>_<?php echo $object_id; ?>"
                                             class="btn btn-default btn-xs" >
                                         <span class="glyphicon glyphicon glyphicon-remove" ></span>
-                                    </button>-->
+                                    </button>
                                     <?php
                                 }
                             ?>
