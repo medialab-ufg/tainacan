@@ -220,7 +220,7 @@ if (isset($property_data)):
                 $object_properties_widgets_helper = new ObjectWidgetsHelper();
                 $meta = unserialize(get_post_meta($object_id, 'socialdb_property_helper_' . $property['id'], true));
                 $indexed_properties = [];
-                if($meta && !empty($meta))
+                if($meta && !empty($meta) && is_array($meta))
                 {
                     foreach ($meta as $property_index => $property_helper) {
                         foreach ($property_helper as $atom) {

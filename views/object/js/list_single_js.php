@@ -720,7 +720,7 @@
                 type: 'POST',
                 data: {operation: 'check-in', collection_id: $('#collection_id').val(), object_id: id,motive:inputValue}
             }).done(function (result) {
-                 wpquery_filter();
+                 // wpquery_filter();
                  hide_modal_main();
                 showAlertGeneral('<?php _e('Success!','tainacan') ?>','<?php _e('Checkin done!') ?>','success');
                 $("#form").html('');

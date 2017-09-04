@@ -44,8 +44,6 @@ class CommentModel extends Model {
         return $data;
     }
 
-   
-
     /**
      * function update($data)
      * @param mix $data  Os dados que serao utilizados para atualizar a colecao

@@ -478,7 +478,7 @@
                                         node.select();
                                     }
 //                                    });
-                                    bindContextMenuSingle(span,'field_property_term_' + tree + '_');
+                                    // bindContextMenuSingle(span,'field_property_term_' + tree + '_');
                                 },
                                 onSelect: function (flag, node) {
                                     var i =  this.$tree[0].id.split('_')[5];

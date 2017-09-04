@@ -48,6 +48,7 @@ if(is_single()) {
         <input type="hidden" id="socialdb_permalink_object" name="socialdb_permalink_object" value="<?php echo get_the_permalink($parent->ID) . '?item=' . $post->post_name; ?>" />
         <input type="hidden" class="object_id"     value="<?php echo $post->ID ?>"  />
         <input type="hidden" class="post_id"       name="post_id" value="<?= $post->ID ?>">
+        <input type="hidden" id="collection_id" name="collection_id" value="<?php echo $parent->ID ?>" />
 
     <?php } else if(is_singular('socialdb_collection')) {
         $visualization_page_category = get_post_meta($post->ID, 'socialdb_collection_visualization_page_category', true);
