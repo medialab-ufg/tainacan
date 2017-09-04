@@ -38,6 +38,7 @@ if(is_single()) {
     <input type="hidden" id="alert_removed_item" value="<?php _t('This item has been removed, redirecting to collection home page! ', 1); ?>" />
     <input type="hidden" id="alert_empty_comment" value="<?php _t('Fill your comment', 1); ?>" />
     <input type="hidden" id="alert_error" value="<?php _t('Error', 1); ?>" />
+    <input type="hidden" id="current_user_id" name="current_user_id" value="<?php echo get_current_user_id(); ?>" />
     <?php
 
     if(is_singular('socialdb_object')) { ?>
@@ -67,7 +68,6 @@ if(is_single()) {
         <!-- TAINACAN - BEGIN: ITENS NECESSARIOS PARA EXECUCAO DE VARIAS PARTES DO SOCIALDB -->
         <input type="hidden" id="visualization_page_category" name="visualization_page_category"
                value="<?php echo (!$visualization_page_category || $visualization_page_category === 'right_button') ? 'right_button' : 'click'; ?>">
-        <input type="hidden" id="current_user_id" name="current_user_id" value="<?php echo get_current_user_id(); ?>" />
         <input type="hidden" id="collection_id" name="collection_id" value="<?php echo $post->ID ?>" />
         <input type="hidden" id="collection_root_id" value="<?php echo $root_id; ?>" />
         <input type="hidden" id="socialdb_permalink_collection" name="socialdb_permalink_collection" value="<?php echo get_the_permalink($post->ID); ?>" />

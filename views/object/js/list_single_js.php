@@ -456,7 +456,7 @@
                 hide_modal_main();
                 elem_first = jQuery.parseJSON(result);
                 showAlertGeneral(elem_first.title, elem_first.msg, elem_first.type);
-                // list_comments_general();
+                list_comments_general();
                 $("#comment_item"+object_id).modal('hide');
             });
         }
