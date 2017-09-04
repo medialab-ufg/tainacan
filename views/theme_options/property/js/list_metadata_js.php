@@ -13,6 +13,31 @@
             formatSelection: addMenuThumb,
             escapeMarkup: function(m) { return m; }
         });
+
+        $('#submit_delete_property').submit(function (e) {
+            e.preventDefault();
+            $("#modal_remove_property").modal('hide');
+            $('#modalImportMain').modal('show');
+            var form_data = $(this).serialize();
+
+            $.ajax({
+                url: src + '/controllers/property/property_controller.php',
+                type: 'POST',
+                data: form_data
+            }).done(function (result) {
+                $('#modalImportMain').modal('hide');
+                elem = jQuery.parseJSON(result);
+
+                if ( elem != null ) {
+                    list_collection_metadata();
+                    getRequestFeedback(elem.type, elem.msg);
+                }
+                //limpando caches
+                delete_all_cache_collection();
+            });
+        });
+
+
     });
 
      //inicia o dynatree de propriedades
@@ -1906,29 +1931,6 @@
         $(".modal-title").text('<?php _e('Add new property', 'tainacan') ?>');
         $("#meta-category .term-widget").hide();
     }
-
-    $('#submit_delete_property').submit(function (e) {
-        e.preventDefault();
-        $("#modal_remove_property").modal('hide');
-        $('#modalImportMain').modal('show');
-        var form_data = $(this).serialize();
-
-        $.ajax({
-            url: src + '/controllers/property/property_controller.php',
-            type: 'POST',
-            data: form_data
-        }).done(function (result) {
-            $('#modalImportMain').modal('hide');
-            elem = jQuery.parseJSON(result);
-
-            if ( elem != null ) {
-                list_collection_metadata();
-                getRequestFeedback(elem.type, elem.msg);
-            } 
-            //limpando caches
-            delete_all_cache_collection();
-        });
-    });
 
     //Exibe lista de metadados
     function list_collection_metadata()
