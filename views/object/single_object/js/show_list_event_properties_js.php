@@ -288,10 +288,27 @@
                         //     $('#property_object_reverse').append('<option selected="selected" value="' + property.id + '">' + property.name + ' - (' + property.type + ')</option>');
                         //  } else {
                         if (categories.indexOf(children.term_id) > -1) {
+                            var title = '<?php _e('Remove classification', 'tainacan') ?>';
+                            var text = '<?php _e('Are you sure to remove this classification', 'tainacan') ?>';
+                            var object_id = <?php echo $object_id; ?>;
+                            var time = '<?php echo mktime(); ?>';
+
+                            /*var remove_button = '';
+                            if(!elem.metas.socialdb_property_required)
+                            {
+                                remove_button =
+                                    ' <a type="button" onclick="remove_classication(\'' + title + '\', \'' + text + '\',' + children.term_id + ',' + object_id + ',\'' + time + '\')" style="cursor: pointer;">'
+                                    + "<span class='glyphicon glyphicon-remove-circle'></span>"
+                                    +"</a>";
+                            }*/
+
                             checked = 'checked="checked"';
                             $('#value_single_radio_' + radio + '_<?php echo $object_id; ?>').val(children.term_id);
                             $("#labels_" + radio + "_<?php echo $object_id; ?>").html('');
-                            $("#labels_" + radio + "_<?php echo $object_id; ?>").append('<b><a style="cursor:pointer;" onclick="wpquery_term_filter(' + children.term_id + ',' + radio + ')">' + children.name + '</a></b><br>');//inserindo os termos escolhidos
+                            $("#labels_" + radio + "_<?php echo $object_id; ?>").append('<b><a style="cursor:pointer;" onclick="wpquery_term_filter(' + children.term_id + ',' + radio + ')">'
+                                + children.name
+                                + '</a>' /*+ remove_button*/
+                                + '</b><br>');//inserindo os termos escolhidos
                         }
                         //delete_value(children.term_id);
                         $('#field_event_single_property_term_' + radio + '_<?php echo $object_id; ?>').append('<input ' + checked + ' onchange="get_event_single_radio(this,' + radio + ',<?php echo $object_id; ?>)" type="radio" name="socialdb_propertyterm_' + radio + '" value="' + children.term_id + '">&nbsp;' + children.name + '<br>');
@@ -487,7 +504,9 @@
                             $("#socialdb_propertyterm_" + tree + "_<?php echo $object_id; ?>").html('');
                             $("#labels_" + tree + "_<?php echo $object_id; ?>").html('');//zero o html do container que recebera os
                             // insiro o html do link do valor atribuido
-                            $("#labels_" + tree + "_<?php echo $object_id; ?>").html('<b><a style="cursor:pointer;" onclick="wpquery_term_filter(' + elem.term.term_id + ',' + tree + ')">' + elem.term.name + '</a></b>');//zero o html do container que recebera os
+
+                            $("#labels_" + tree + "_<?php echo $object_id; ?>").html('<b><a style="cursor:pointer;" onclick="wpquery_term_filter(' + elem.term.term_id + ',' + tree + ')">'
+                                + elem.term.name + '</a></b>');//zero o html do container que recebera os
                             // coloco no selectbox o valor selecionado
                             $("#socialdb_propertyterm_" + tree + "_<?php echo $object_id; ?>").append('<option selected="selected" value="' + elem.term.term_id + '" >' + elem.term.name + '</option>');
                             //coloco o valor atual no hidden para poder remove-lo caso necessario 
@@ -672,6 +691,7 @@
         verifyPublishedItem(object_id);
         var before_category = $('#value_single_radio_' + property_id + '_' + object_id).val();
         $('#value_single_radio_' + property_id + '_' + object_id).val($(e).val());
+
         swal({
             title: '<?php _e('Add classification', 'tainacan') ?>',
             text: '<?php _e('Are you sure to include this classification? This action removes the previous selected category', 'tainacan') ?>',
@@ -692,17 +712,21 @@
                         socialdb_event_create_date: '<?php echo mktime(); ?>',
                         socialdb_event_user_id: $('#current_user_id').val(),
                         socialdb_event_classification_object_id: object_id,
+                        socialdb_event_classification_property_id: property_id,
                         socialdb_event_classification_term_id: $(e).val(),
                         socialdb_event_classification_type: 'category',
-                        socialdb_event_collection_id: $('#collection_id').val()}
+                        socialdb_event_collection_id: $('#collection_id').val()
+                    }
                 }).done(function (result) {
                     elem_first = jQuery.parseJSON(result);
                     show_classifications(object_id);
                     list_properties_single(object_id);
-                    showAlertGeneral(elem_first.title, elem_first.msg, elem_first.type);
                     //limpando caches
                     delete_all_cache_collection();
+
+                    showAlertGeneral(elem_first.title, elem_first.msg, elem_first.type);
                 });
+
                 //retira a anterior
                 $.ajax({
                     type: "POST",
@@ -712,12 +736,11 @@
                         socialdb_event_create_date: '<?php echo mktime(); ?>',
                         socialdb_event_user_id: $('#current_user_id').val(),
                         socialdb_event_classification_object_id: object_id,
+                        socialdb_event_classification_property_id: property_id,
                         socialdb_event_classification_term_id: before_category,
                         socialdb_event_classification_type: 'category',
                         socialdb_event_collection_id: $('#collection_id').val()}
-                }).done(function (result) {
-                    elem_first = jQuery.parseJSON(result);
-                });
+                })
 
             } else {
                 list_properties_single(object_id);
