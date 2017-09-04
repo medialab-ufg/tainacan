@@ -3292,17 +3292,16 @@ function verify_empty_box(elements_id, email_id, button_id)
         var valide_email = true;
     } else var valide_email = validate_email(email_id);
 
-    for(var element_id in ids) {
-        var text_box = $("#"+ids[element_id]);
-        if( $(text_box).val() ) {
-            if($(text_box).val().trim().length === 0 || valide_email === false) {
-                $(button).attr("disabled", true);
-                return;
-            } else {
-                $("#"+button_id).attr("disabled", false);
-            }
+    for(var element_id of ids) {
+        var text_box = $("#"+element_id);
+
+        if($(text_box).val().trim().length === 0 || valide_email === false) {
+            $(button).attr("disabled", true);
+            return;
         }
     }
+
+    $("#"+button_id).attr("disabled", false);
 }
 
 function validate_email(email_id)
