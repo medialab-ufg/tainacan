@@ -1011,14 +1011,15 @@ $_showH = ("disabled" === $_en_header) ? false : true ;
                             </div>
                         </div>
                     </div>-->
-                    <div class="col-md-12">
+
+                    <!--<div class="col-md-12">
                         <div class="form-group row">
                             <div class="col-md-6" id="entity"><strong><?php _e('Entity', 'tainacan'); ?></strong></div>
                             <div class="col-md-2"><strong><?php _e('Create', 'tainacan'); ?></strong></div>
                             <div class="col-md-2"><strong><?php _e('Edit', 'tainacan'); ?></strong></div>
                             <div class="col-md-2"><strong><?php _e('Delete', 'tainacan'); ?></strong></div>
                         </div>
-                    </div>
+                    </div>-->
                 </div>
 
                 <!--div class="form-group">
@@ -1466,14 +1467,18 @@ $_showH = ("disabled" === $_en_header) ? false : true ;
             </fieldset>
         </div-->
             </div>
+
+            <hr class="tainacanRow">
+
             <input type="hidden" id="verify_collection_name" name="verify_collection_name" value="allow">
             <input type="hidden" id="redirect_to_caegories" name="redirect_to_caegories" value="false">
             <input type="hidden" id="collection_id" name="collection_id" value="<?php echo $collection_post->ID; ?>">
             <input type="hidden" id="operation" name="operation" value="update">
             <input type="hidden" id="save_and_next" name="save_and_next" value="false">
-            
+
+
             <button type="button" class="btn btn-default pull-left btn-lg" onclick="backToMainPage()"><?php _e('Back to collection', 'tainacan'); ?></button>
-            
+
             <button type="submit" id="button_save_and_next" class="btn btn-success pull-right btn-lg"> <?php _e('Continue', 'tainacan'); ?> </button>
         </form>
     </div>
