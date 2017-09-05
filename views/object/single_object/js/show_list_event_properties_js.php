@@ -836,7 +836,7 @@
                         socialdb_event_collection_id: $('#collection_id').val()}
                 }).done(function (result) {
                     elem_first = jQuery.parseJSON(result);
-                    show_classifications(object_id);
+                    // show_classifications(object_id);
                     list_properties_single(object_id);
                     showAlertGeneral(elem_first.title, elem_first.msg, elem_first.type);
 
