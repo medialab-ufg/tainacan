@@ -3481,9 +3481,14 @@ function save_canvas_pdf_thumbnails($canvas_images) {
     $upload_dir = wp_upload_dir();
     $upload_path = str_replace('/', DIRECTORY_SEPARATOR, $upload_dir['path']) . DIRECTORY_SEPARATOR;
 
-    foreach ($canvas_images as $post_id => $canvas_image) {
+    foreach($canvas_images as $item)
+    {
+
+        $post_id = get_post_ancestors($item->file_id)[0];
+        $canvas_image = $item->base64IMAGE;
         $image = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $canvas_image));
-        $filename = 'pdf_thumb_' . $post_id . '.png';
+
+        $filename = 'pdf_thumb_'.$post_id.'.png';
 
         $hashed_filename = md5($filename . microtime()) . '_' . $filename;
 
@@ -3585,7 +3590,7 @@ function get_documents_text($ids)
         'application/vnd.openxmlformats-officedocument.presentationml.presentation'
     );
 
-    $postID_pdfURL = [];
+    $there_are_pdfFiles = false;
     foreach($posts as $post)
     {
         $post_meta = get_post_meta($post->ID);
@@ -3597,7 +3602,7 @@ function get_documents_text($ids)
             if(strcmp($post_mime, 'application/pdf') == 0)
             {
                 $PDFidPostAttachmentURL[$post->ID] = array("post_meta" => $post_meta, 'url' => $url_file, 'attachment_id' => $attachment_id);
-                $postID_pdfURL[$post->ID] = $url_file;
+                $there_are_pdfFiles = true;
             }elseif(in_array($post_mime, $office_mimes))
             {
                 $OFFICEidPostAttachmentURL[$post->ID] = array("post_meta" => $post_meta, 'url' => $url_file, 'attachment_id' => $attachment_id);
@@ -3621,14 +3626,8 @@ function get_documents_text($ids)
         }
     }
 
-    if(!empty($postID_pdfURL))
-    {
-        return $postID_pdfURL;
-    }
-    else
-    {
-        return false;
-    }
+    //Retorna se há arquivos pdf
+    return $there_are_pdfFiles;
 }
 
 function getPageParam($param, $returnTrue = false) {

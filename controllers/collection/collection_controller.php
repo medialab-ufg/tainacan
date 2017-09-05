@@ -425,7 +425,8 @@ class CollectionController extends Controller {
                 return json_encode(get_pdf_no_thumb_ids($_POST['count']));
                 break;
             case 'pdf_thumbnail':
-                return json_encode(save_canvas_pdf_thumbnails($_POST));
+                $data = json_decode(stripslashes($_POST['data']));
+                return json_encode(save_canvas_pdf_thumbnails($data));
                 break;
         }
     }

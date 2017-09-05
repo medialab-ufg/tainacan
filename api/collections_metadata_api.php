@@ -319,7 +319,7 @@ abstract class CollectionsMetadataApi {
         
         //verifico se não tem filhos
         if(!isset($property['has_children']) && $return['taxonomy'])
-            $property['has_children'] = $this->getHierarchy($return['taxonomy'],$ObjectModel);
+            $property['has_children'] = CollectionsMetadataApi::getHierarchy($return['taxonomy'],$ObjectModel);
             //$property['has_children'] = $ObjectModel->getChildren($return['taxonomy']);
 
         //se caso for compostos
@@ -333,6 +333,9 @@ abstract class CollectionsMetadataApi {
                     $properties_children = array_filter($properties_children);
                     foreach ($properties_children as $property_id_children) {
                         $property_children = $ObjectModel->get_all_property($property_id_children,true);
+                        //retiro possiveis entidades vazias
+                        if(!isset($property_children['id']))
+                            continue;
                         //verifico se eh composto
                         if(isset($property_children['metas']['socialdb_property_is_compounds']) && $property_children['metas']['socialdb_property_is_compounds'] != ''){
                             continue;
@@ -365,7 +368,7 @@ abstract class CollectionsMetadataApi {
         $children = $ObjectModel->getChildren($parent);
         if(is_array($children) && !empty($children)){
             foreach ($children as $child) {
-                $child->children = $this->getHierarchy($child->term_id,$ObjectModel);
+                $child->children = CollectionsMetadataApi::getHierarchy($child->term_id,$ObjectModel);
                 $result[] =  $child;
             }
         }
@@ -396,7 +399,8 @@ abstract class CollectionsMetadataApi {
         // itero sobre os filhos para buscar os seus dados
         foreach ($childrens as $children) {
             $children = (is_array($children)) ?  $children : $ObjectModel->get_all_property($children, true);
-            $children_array[$children['id']] = $children;
+            if(isset($children['name']))
+                $children_array[$children['id']] = $children;
         }
         
         //iterando sobre as propriedades
