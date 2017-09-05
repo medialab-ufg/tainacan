@@ -308,7 +308,7 @@ class FormItemController extends Controller {
                         wp_set_object_terms($item, array((int) $category_root_id), 'socialdb_category_type',true);
                     }
 
-                    $data['postID_pdfURL'] = get_documents_text($data['items']);
+                    $data['there_are_pdfFiles'] = get_documents_text($data['items']);
                 }
 
                 return json_encode($data);  

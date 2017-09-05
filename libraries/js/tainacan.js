@@ -3076,55 +3076,86 @@ function makeThumb(page) {
     para cada .pdf e então os envia para o servidor para que sejam convertidas em .png e então adicionadas como thumbnail dos
     novos itens.
  */
-function generate_pdfThumb(postID_pdfURL)
+
+function generate_pdfThumb()
 {
-    result = jQuery.parseJSON(postID_pdfURL);
-    result = result.postID_pdfURL;
+    var idImage = [];
+    var ids = sessionStorage.getItem('pdf_ids');
 
-    itens_id = Object.keys(result).map(function(post_id) {return [post_id, result[post_id]]; });
+    //IndexedDB
+    window.indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
+    window.IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction || window.msIDBTransaction;
+    window.IDBKeyRange = window.IDBKeyRange || window.webkitIDBKeyRange || window.msIDBKeyRange;
 
-    let formData = new FormData();
-    let promises = [];
-    promises.push(new Promise(function (right, wrong) {
-        let itemsFetcher = itens_id.map(function(info, index) {
-            let post_id = info[0];
-            let pdf_url = info[1];
+    if (window.indexedDB && ids)
+    {
+        const dbname = "pdf_thumbnails", dbversion = 1, tbname = "pdf_thumbnails";
+        var db, request = indexedDB.open(dbname, dbversion);
+        ids = ids.split(",");
 
-            return new Promise(function(resolve, reject) {
-                PDFJS.getDocument(pdf_url).promise.then(function(doc) {
-                    let page = [];
-                    page.push(1); //Get first page
+        //Banco aberto com sucesso
+        request.onsuccess = function(event)
+        {
+            db = event.target.result;
+            var transaction = db.transaction([tbname], "readwrite"), promises;
+            var objectStore = transaction.objectStore(tbname);
 
-                    return Promise.all(page.map(function(num) {
-                        return doc.getPage(num).then(makeThumb)
-                            .then(function(canvas) {
-                                let img = canvas.toDataURL("image/png");
+            var addObject = [], i = 0;
 
-                                formData.append(post_id, img);
-                                resolve("It's done!");
-                            });
-                    }));
+            for(let pdf_id of ids)
+            {
+                addObject[i] = objectStore.get(pdf_id);
+                i++;
+            }
+
+            promises = addObject.map(function (item, index) {
+                return new Promise(function (resolve, reject) {
+                    item.onsuccess = function () {
+                        idImage.push({file_id: item.result.file_id, base64IMAGE: item.result.base64IMAGE});
+                        resolve("It's done");
+                    };
+
                 });
             });
-        });
 
-        Promise.all(itemsFetcher).then(function(){
-            $.ajax({
-                url: $("#src").val() + '/controllers/collection/collection_controller.php?operation=pdf_thumbnail',
-                type: 'POST',
-                data: formData,
-                processData: false,
-                contentType: false
-            }).done(function (result) {
-                elem = jQuery.parseJSON(result);
-                right(elem.msg);
+            Promise.all(promises).then(function () {
+                var jsonString = JSON.stringify(idImage);
+                $.ajax({
+                    url: $("#src").val() + '/controllers/collection/collection_controller.php?operation=pdf_thumbnail',
+                    type: 'POST',
+                    data: {data : jsonString},
+                    cache: false,
+                }).done(function (result) {
+                    delete_pdf_db(ids, db, tbname);
+                    finish_process();
+                });
             });
-        });
-    }));
+        };
+    }
+}
 
-    Promise.all(promises).then(function(values){
-        return true;
-    });
+function delete_pdf_db(ids, db, tbname) {
+    sessionStorage.removeItem('pdf_ids');
+
+    ids.forEach(function (item) {
+        db.transaction([tbname], "readwrite")
+            .objectStore(tbname)
+            .delete(item);
+    })
+}
+
+function convertDataURIToBinary(dataURI) {
+    var BASE64_MARKER = ';base64,';
+    var base64Index = dataURI.indexOf(BASE64_MARKER) + BASE64_MARKER.length;
+    var base64 = dataURI.substring(base64Index);
+    var raw = window.atob(base64);
+    var rawLength = raw.length;
+    var array = new Uint8Array(new ArrayBuffer(rawLength));
+
+    for(var i = 0; i < rawLength; i++) {
+        array[i] = raw.charCodeAt(i);
+    }
+    return array;
 }
 
 $(document).on("submit", "#reindexation_form", function (event) {
