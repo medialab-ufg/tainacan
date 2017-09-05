@@ -3440,7 +3440,7 @@ function reindex($options) {
     return $result;
 }
 
-function get_pdf_no_thumb_ids() {
+function get_pdf_no_thumb_ids($count) {
     $args = array(
         "numberposts" => -1,
         "post_type" => 'socialdb_object'
@@ -3450,16 +3450,27 @@ function get_pdf_no_thumb_ids() {
 
     $PDFidAttachment = [];
     foreach ($posts as $post) {
-        if (!has_post_thumbnail($post->ID)) {
+        if (!has_post_thumbnail($post->ID))
+        {
             $post_meta = get_post_meta($post->ID);
             $attachment_id = $post_meta['socialdb_object_content'][0];
             $url_file = wp_get_attachment_url($attachment_id);
-            if ($url_file) {
+
+            if ($url_file)
+            {
                 $post_mime = get_post_mime_type($attachment_id);
-                if (strcmp($post_mime, 'application/pdf') == 0) {
+
+                if (strcmp($post_mime, 'application/pdf') == 0)
+                {
                     $PDFidAttachment[$post->ID] = $url_file;
+                    $count--;
                 }
             }
+        }
+
+        if($count == 0)
+        {
+            return $PDFidAttachment;
         }
     }
 

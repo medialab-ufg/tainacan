@@ -3212,57 +3212,7 @@ $(document).on("submit", "#reindexation_form", function (event) {
         );
 
         //PDF Thumbnail
-        promises.push(new Promise(function (right, wrong) {
-            if(formData.get('pdf_thumbnail'))
-            {
-                $.ajax({
-                    url: $("#src").val() + '/controllers/collection/collection_controller.php',
-                    type: 'POST',
-                    data: {operation: 'pdf_no_thumb_ids'}
-                }).done(function (result) {
-                    result = jQuery.parseJSON(result);
-                    itens_id = Object.keys(result).map(function(post_id) {return [post_id, result[post_id]]; });
-
-                    formData = new FormData();
-                    var itemsFetcher = itens_id.map(function(info, index) {
-                        var post_id = info[0];
-                        var pdf_url = info[1];
-
-                        return new Promise(function(resolve, reject) {
-                            PDFJS.getDocument(pdf_url).promise.then(function(doc) {
-                                var page = [];
-                                page.push(1); //Get first page
-
-                                return Promise.all(page.map(function(num) {
-                                    return doc.getPage(num).then(makeThumb)
-                                        .then(function(canvas) {
-                                            var img = canvas.toDataURL("image/png");
-
-                                            formData.append(post_id, img);
-                                            resolve("It's done!");
-                                        });
-                                }));
-                            });
-                        });
-                    });
-                    
-                    Promise.all(itemsFetcher).then(function(){
-                        $.ajax({
-                            url: $("#src").val() + '/controllers/collection/collection_controller.php?operation=pdf_thumbnail',
-                            type: 'POST',
-                            data: formData,
-                            processData: false,
-                            contentType: false
-                        }).done(function (result) {
-                            elem = jQuery.parseJSON(result);
-                            right(elem.msg);
-                        });
-                    });
-
-                });
-            }
-            else right("");
-        }));
+        get_pdf_and_gen_thumb(formData, promises, 10);
 
         Promise.all(promises).then(function(values){
             $("#modalImportMain").modal("hide");
@@ -3282,6 +3232,69 @@ $(document).on("submit", "#reindexation_form", function (event) {
         });
     }
 });
+
+function get_pdf_and_gen_thumb(formData, promises, count, resolveBefore = null, msg = null)
+{
+    promises.push(new Promise(function (right, wrong) {
+        if(formData.get('pdf_thumbnail'))
+        {
+            $.ajax({
+                url: $("#src").val() + '/controllers/collection/collection_controller.php',
+                type: 'POST',
+                data: {operation: 'pdf_no_thumb_ids', count: count}
+            }).done(function (result) {
+                result = jQuery.parseJSON(result);
+                itens_id = Object.keys(result).map(function(post_id) {return [post_id, result[post_id]]; });
+                if(itens_id.length === 0)
+                {
+                    if(resolveBefore != null)
+                    {
+                        resolveBefore(msg);
+                        return;
+                    }
+                }
+
+                formDataIDImg = new FormData();
+                let itemsFetcher = itens_id.map(function(info, index) {
+                    let post_id = info[0];
+                    let pdf_url = info[1];
+
+                    return new Promise(function(resolve, reject) {
+                        PDFJS.getDocument(pdf_url).promise.then(function(doc) {
+                            let page = [];
+                            page.push(1); //Get first page
+
+                            return Promise.all(page.map(function(num) {
+                                return doc.getPage(num).then(makeThumb)
+                                    .then(function(canvas) {
+                                        let img = canvas.toDataURL("image/png");
+
+                                        formDataIDImg.append(post_id, img);
+                                        resolve("It's done!");
+                                    });
+                            }));
+                        });
+                    });
+                });
+
+                Promise.all(itemsFetcher).then(function(){
+                    $.ajax({
+                        url: $("#src").val() + '/controllers/collection/collection_controller.php?operation=pdf_thumbnail',
+                        type: 'POST',
+                        data: formDataIDImg,
+                        processData: false,
+                        contentType: false
+                    }).done(function (result) {
+                        elem = jQuery.parseJSON(result);
+                        get_pdf_and_gen_thumb(formData, promises, count, right, elem.msg);
+                    });
+                });
+            });
+        }
+        else right("");
+    }));
+}
+
 
 function verify_empty_box(elements_id, email_id, button_id)
 {
