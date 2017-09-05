@@ -214,6 +214,7 @@
                         $(span).append('<a id="context_menu_'+node.data.key+'" onclick="triggerContextMenu('+"'#ui-dynatree-id-"+node.data.key+"'"+
                                ',event,'+"'myMenuSingle'"+')" style="display:none;cursor:pointer;"><span class="glyphicon glyphicon-chevron-down"></span></a>');
                         bindContextMenuSingle(span);
+
                     }
                 } else {
                     bindContextMenuSingle(span);
