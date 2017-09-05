@@ -423,7 +423,7 @@ class CollectionController extends Controller {
                 return json_encode(reindex($data));
                 break;
             case 'pdf_no_thumb_ids':
-                return json_encode(get_pdf_no_thumb_ids());
+                return json_encode(get_pdf_no_thumb_ids($_POST['count']));
                 break;
             case 'pdf_thumbnail':
                 return json_encode(save_canvas_pdf_thumbnails($_POST));
