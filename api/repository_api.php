@@ -71,7 +71,8 @@ abstract class RepositoryApi {
                 ];
                 if ($params['includeMetadata'] === '1' && $details['type'] != 'property-default') {
                     $details['metadata'] = CollectionsMetadataApi::includeMetadata($property);
-                    $details['visibility'] = ( in_array($property['id'], $params['visibility'])) ? 'off' : 'on';
+                    $visibility = (get_term_meta($property['id'], 'socialdb_property_visibility', true));
+                    $details['visibility'] = ($visibility === 'hide' ||(is_array($params['visibility']) && in_array($property['id'], $params['visibility']))) ? 'off' : 'on';
                 } elseif ($details['type'] === 'property-default') {
                     $visibility = (get_term_meta($property['id'], 'socialdb_property_visibility', true));
                     $details['real-name'] = $details['name'];
