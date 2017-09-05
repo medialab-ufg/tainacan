@@ -82,8 +82,8 @@
                                 $("#list_licenses_content").append("<tr><td>" + object.nome + "</td>" +
                                         "<td><input type='radio' name='standartLicense' id='radio" + object.id + "' value=" + object.id + " onclick='changeStandartLicense(this," + object.id + ");'/></td>" +
                                         "<td><input type='checkbox' name='enabledLicense[]' id='checkbox" + object.id + "' value=" + object.id + " onclick='changeEnabledLicense(this," + object.id + ");'/></td>" +
-                                        "<td><a onclick='deleteCustomLicense(" + object.id + ")' href='#formAddLicense'><span class='glyphicon glyphicon-trash'></span></a>" +
-                                        " <a onclick='editCustomLicense(" + object.id + ")' href='#formAddLicense'><span class='glyphicon glyphicon-edit'></span></a></td>" +
+                                        "<td><a onclick='deleteCustomLicense(" + object.id + ")' href='javascript:void(0);'><span class='glyphicon glyphicon-trash'></span></a>" +
+                                        " <a onclick='editCustomLicense(" + object.id + ")' href='javascript:void(0);'><span class='glyphicon glyphicon-edit'></span></a></td>" +
                                         "</tr>");
                             });
                         }
