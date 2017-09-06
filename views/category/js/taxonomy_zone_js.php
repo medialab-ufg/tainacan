@@ -35,7 +35,17 @@
                 hide_modal_main();//esconde o modal de carregamento
                 $('.dropdown-toggle').dropdown();
                 elem = jQuery.parseJSON(result);
-                showAlertGeneral('<?php _e('Success', 'tainacan') ?>', '<?php _e('Categories saved successfully!', 'tainacan') ?>', 'success');
+
+                swal({
+                    title: '<?php _e('Success', 'tainacan') ?>',
+                    text: '<?php _e('Categories saved successfully!', 'tainacan') ?>',
+                    type: 'success',
+                    timer: 1500,
+                    showCancelButton: false,
+                    showConfirmButton: false
+                });
+
+
                 if (elem.save_and_next && elem.save_and_next == 'true') {
                     showPropertiesAndFilters('<?php echo get_template_directory_uri() ?>');
                 } else {
@@ -48,6 +58,7 @@
             });
             e.preventDefault();
         });
+
         // Submissao do form de importacao   
         $('#import_taxonomy_submit').submit(function (e) {
             e.preventDefault();

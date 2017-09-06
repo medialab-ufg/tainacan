@@ -28,7 +28,7 @@ $col_controller = $_src_ . "/controllers/collection/collection_controller.php";
 
                     <div class="modal-footer" style="border-top: 0">
                         <button type="button" data-dismiss="modal" class="btn btn-default pull-left"> <?php _t('Cancel', 1); ?> </button>
-                        <button type="submit" class="btn btn-success"><?php _t('Continue', 1); ?></button>
+                        <button type="submit" class="btn btn-success"><?php _t('Create and setup', 1); ?></button>
                     </div>
                 </div>
             </form>

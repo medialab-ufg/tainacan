@@ -1448,7 +1448,7 @@ function showPropertiesAndFilters(src) {
     });
 }
 
-function showLayout(src) {
+function showLayout(src, conclusion_modal = false, title = '', text = '') {
     show_modal_main();
     $.ajax({
         url: src + '/controllers/search/search_controller.php',
@@ -1456,6 +1456,19 @@ function showLayout(src) {
         data: {operation: 'edit_layout', collection_id: $("#collection_id").val()}
     }).done(function (result) {
         hide_modal_main();
+
+        if(conclusion_modal == true)
+        {
+            swal({
+                title: title,
+                text: text,
+                type: 'success',
+                timer: 2000,
+                showCancelButton: false,
+                showConfirmButton: false
+            });
+        }
+
         $('#main_part').hide();
         $('#configuration').html(result).show();
     });

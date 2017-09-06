@@ -125,7 +125,7 @@ $view_helper = new ViewHelper();
                                 <?php _e('DESC','tainacan'); ?>
                             </option>
                             <option value="asc" <?php if ($collection_ordenation == 'asc') { echo 'selected = "selected"'; } ?> >
-                                <?php _e('ASC','tainacan'); ?>
+                                <?php _e('ASC','tainacan'); ?> <!-- Rename portuguese version to Crescente -->
                             </option>
                         </select>
                     </div>

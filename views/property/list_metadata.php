@@ -147,7 +147,9 @@ unset($_SESSION['tainacan-categories']);
                 </div>
             </div>
         </div>
-        <button id="next_property_wizard" onclick="showLayout($('#src').val());" class="btn btn-success pull-right btn-lg" style="display:none;margin-top: 15px;margin-right: 15px;">
+        <button id="next_property_wizard"
+                onclick="showLayout($('#src').val(), true, '<?php _e('Success', 'tainacan') ?>', '<?php _e('Filters and metadata were saved successfully!', 'tainacan') ?>',);"
+                class="btn btn-success pull-right btn-lg" style="display:none;margin-top: 15px;margin-right: 15px;">
             <?php _e('Save & Next', 'tainacan'); ?>
         </button>
         <?php include_once "metadata_forms.php"; ?>

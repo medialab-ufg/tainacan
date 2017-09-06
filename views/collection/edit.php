@@ -77,6 +77,9 @@ $_showH = ("disabled" === $_en_header) ? false : true ;
                         (<?php _t('Minimum width recommended: 1920px',1) ?>)">
                                 <span class="glyphicon glyphicon-question-sign"></span>
                             </a>
+
+                            <p><?php _e("Image aspect ratio", "tainacan"); ?>  <strong>8:1.2</strong></p>
+
                             <div id="collection_cover_image"></div>
                             <input type="hidden" id="collection_cover_img_id" name="collection_cover_img_id" value=""/>
                         </div>

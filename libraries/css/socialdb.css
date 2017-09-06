@@ -715,3 +715,7 @@ table.sorting-table tbody tr:not(.sorting-row) td {opacity: 0.2;}
 {
     cursor: pointer;
 }
+
+button#delete_collection {
+    margin: 13px 8px 0 0;
+}

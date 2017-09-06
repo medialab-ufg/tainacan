@@ -361,6 +361,11 @@ class ViewHelper {
             <button type="submit" id="conclude_config" class="btn btn-default btn-lg pull-right">
                 <?php _e('Conclude', 'tainacan'); ?>
             </button>
+
+            <button type="button" id="delete_collection" class="btn btn-danger pull-right"
+                    onclick="$('#delete_current_collection').click()">
+                <?php _e('Delete', 'tainacan'); ?>
+            </button>
         </div>
 
     <?php }

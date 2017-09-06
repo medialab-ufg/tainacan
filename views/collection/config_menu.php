@@ -21,7 +21,11 @@ if(!isset($collection_post)){
         </a>
 
         <ul class="dropdown-menu pull-right dropdown-show" role="menu">
-            <li><a style="cursor: pointer;" onclick="showCollectionConfiguration('<?php echo get_template_directory_uri() ?>');updateStateCollection('configuration');" ><span class="glyphicon glyphicon-wrench"></span>&nbsp;<?php _t('Configuration', 1); ?></a></li>
+            <li>
+                <a id="collection_config" style="cursor: pointer;" onclick="showCollectionConfiguration('<?php echo get_template_directory_uri() ?>');updateStateCollection('configuration');" >
+                    <span class="glyphicon glyphicon-wrench"></span>&nbsp;<?php _t('Configuration', 1); ?>
+                </a>
+            </li>
             <li <?php do_action('menu_collection_property_and_filters_configuration') ?>>
                 <a style="cursor: pointer;" onclick="showPropertiesAndFilters('<?php echo get_template_directory_uri() ?>');updateStateCollection('metadata');" >
                     <span class="glyphicon glyphicon-list-alt"></span> &nbsp; <?php _e('Metadata and Filters', 'tainacan'); ?>
@@ -74,7 +78,8 @@ if(!isset($collection_post)){
                 <li class="divider tainacan-museum-clear"></li>
 
                 <li class="tainacan-museum-clear" style="cursor: pointer;">
-                    <a onclick="delete_collection_redirect('<?php _e('Delete Collection', 'tainacan') ?>', '<?php echo __('Are you sure to remove the collection: ', 'tainacan') . $collection_post->post_title ?>', '<?php echo $collection_post->ID ?>', '<?= time() ?>', '<?php echo get_option('collection_root_id') ?>')" href="javascript:void(0)"><span class="glyphicon glyphicon-trash"></span>&nbsp;<?php _e('Delete', 'tainacan'); ?></a>
+                    <a id="delete_current_collection"
+                       onclick="delete_collection_redirect('<?php _e('Delete Collection', 'tainacan') ?>', '<?php echo __('Are you sure to remove the collection: ', 'tainacan') . $collection_post->post_title ?>', '<?php echo $collection_post->ID ?>', '<?= time() ?>', '<?php echo get_option('collection_root_id') ?>')" href="javascript:void(0)"><span class="glyphicon glyphicon-trash"></span>&nbsp;<?php _e('Delete', 'tainacan'); ?></a>
                 </li>
                 <li class="tainacan-museum-clear" style="cursor: pointer;">
                     <a onclick="clean_collection('<?php _e('Clean Collection', 'tainacan') ?>', '<?php echo __('Are you sure to remove all items', 'tainacan') ?>', '<?php echo $collection_post->ID ?>')" style="cursor: pointer;"><span class="glyphicon glyphicon-unchecked"></span>&nbsp;<?php _e('Clean Collection', 'tainacan'); ?></a>
