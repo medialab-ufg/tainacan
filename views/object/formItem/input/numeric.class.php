@@ -110,9 +110,9 @@ class NumericClass extends FormItem{
                          var json =JSON.parse(result);
                          if(json.value){
                             //$('#numeric-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>').val('');
-                                toastr.error(json.value+' <?php _e(' is already inserted!', 'tainacan') ?>', '<?php _e('Attention!', 'tainacan') ?>', {positionClass: 'toast-bottom-right'});
+                                toastr.error(json.value+' <?php _e(' is already inserted! The value will not be persisted!', 'tainacan') ?>', '<?php _e('Attention!', 'tainacan') ?>', {positionClass: 'toast-bottom-right'});
                          }
-                        <?php endif; ?>
+                        <?php endif ?>
                     });
                 }else{
                     Hook['<?php echo $compound_id.'_'.$index_id ?>'] = ( Hook['<?php echo $compound_id.'_'.$index_id ?>']) ?  Hook['<?php echo $compound_id.'_'.$index_id ?>'] : {};

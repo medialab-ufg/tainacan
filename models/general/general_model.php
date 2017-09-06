@@ -1518,13 +1518,13 @@ class Model {
                         INNER JOIN $wp_postmeta pm ON p.ID = pm.post_id    
                         INNER JOIN $term_relationships t ON p.ID = t.object_id    
                         WHERE t.term_taxonomy_id = {$category_root_id->term_taxonomy_id}
-                        AND p.post_status LIKE 'publish' and pm.meta_key like '$meta_key' and pm.meta_value LIKE '%{$data['term']}%'
+                        AND p.post_status IN ('publish','draft') and pm.meta_key like '$meta_key' and pm.meta_value LIKE '%{$data['term']}%'
                 ";
         }else if($has_mask){
             $query = "
                         SELECT pm.* FROM $wp_posts p
                         INNER JOIN $wp_postmeta pm ON p.ID = pm.post_id    
-                        WHERE p.post_status LIKE 'publish' and pm.meta_key like '$meta_key' and pm.meta_value LIKE '%{$data['term']}%'
+                        WHERE p.post_status IN ('publish','draft') and pm.meta_key like '$meta_key' and pm.meta_value LIKE '%{$data['term']}%'
                 ";
         }else{
             return json_encode([]);

@@ -107,7 +107,7 @@ class TextClass extends FormItem{
                     Hook.call('validate_unique_fields',['<?php echo $compound_id; ?>',$(this).val(),'text-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>','<?php echo $property_id ?>']);
                     if(Hook.result){
                         $('#text-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>').val('');
-                        toastr.error('<?php _e('this value is already inserted!', 'tainacan') ?>', '<?php _e('Attention!', 'tainacan') ?>', {positionClass: 'toast-bottom-right'});
+                        toastr.error('<?php _e('this value is already inserted! The value will not be persisted!', 'tainacan') ?>', '<?php _e('Attention!', 'tainacan') ?>', {positionClass: 'toast-bottom-right'});
                     }
                 }
 
@@ -134,7 +134,7 @@ class TextClass extends FormItem{
                             var json = JSON.parse(result);
                             if (json.value) {
                                 //$('#text-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>').val('');
-                                toastr.error(json.value + ' <?php _e(' is already inserted!', 'tainacan') ?>', '<?php _e('Attention!', 'tainacan') ?>', {positionClass: 'toast-bottom-right'});
+                                toastr.error(json.value + ' <?php _e(' is already inserted! The value will not be persisted!', 'tainacan') ?>', '<?php _e('Attention!', 'tainacan') ?>', {positionClass: 'toast-bottom-right'});
                             }
                             <?php endif; ?>
                         });

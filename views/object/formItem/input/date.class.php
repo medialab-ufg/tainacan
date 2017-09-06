@@ -175,7 +175,7 @@ class DateClass extends FormItem {
         });
         //enviando valores
 
-      /*  $('#date-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>').blur(function () {
+      /*  $('#date-field- <?php echo $compound_id ?> -<?php echo $property_id ?>-<?php echo $index_id; ?>').blur(function () {
             let field_value = $(this).val().split("/");
             let day = field_value[0], month = field_value[1], year = field_value[2];
             if(day_exist(day, month, year))
@@ -213,7 +213,7 @@ class DateClass extends FormItem {
                 $('#date-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>').val('');
                 toastr.error(' <?php _e('Invalid date!', 'tainacan') ?>', '<?php _e('Attention!', 'tainacan') ?>', {positionClass: 'toast-bottom-right'});
             }
-        });*/
+        }); */
 
         $('#date-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>').change(function ()
         {
@@ -244,9 +244,9 @@ class DateClass extends FormItem {
                         let json = JSON.parse(result);
                         if(json.value){
                             //$('#date-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>').val('');
-                            toastr.error(json.value+' <?php _e(' is already inserted!', 'tainacan') ?>', '<?php _e('Attention!', 'tainacan') ?>', {positionClass: 'toast-bottom-right'});
+                            toastr.error(json.value+' <?php _e(' is already inserted! The value will not be persisted!', 'tainacan') ?>', '<?php _e('Attention!', 'tainacan') ?>', {positionClass: 'toast-bottom-right'});
                         }
-                        <?php endif; ?>
+                        <?php endif ?>
                     });
                 }else{
                     Hook['<?php echo $compound_id.'_'.$index_id ?>'] = ( Hook['<?php echo $compound_id.'_'.$index_id ?>']) ?  Hook['<?php echo $compound_id.'_'.$index_id ?>'] : {};
