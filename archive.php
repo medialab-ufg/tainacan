@@ -36,8 +36,6 @@ $_menu_args = [ 'container_class' => 'container', 'container' => false, 'walker'
             </div>
         </div>
 
-
-
     </div><!-- .wrap -->
 
 <?php get_footer(); ?>

@@ -1,19 +1,44 @@
-<?php get_header(); ?>
-    <div class="container-fluid">
-        <div class="col-md-12">
-            <?php while (have_posts()): the_post(); ?>
-                <h1 class="entry-title"><?php the_title(); ?></h1> <hr />
+<?php get_header();
 
-                <div class="single-post-wrapper"> <?php echo the_content(); ?> </div>
+if(is_singular('post')):
+    $_menu_args = [ 'container_class' => 'container', 'container' => false, 'walker' => new wp_bootstrap_navwalker(),
+        'menu_class' => 'navbar navbar-inverse menu-ibram' ];
+?>
+    <header class="custom-header" style="<?php echo home_header_bg($socialdb_logo)?>">
+        <div class="menu-transp-cover"></div>
+        <?php get_template_part("partials/header/main"); ?>
+    </header>
 
-                <?php if (comments_open() || get_comments_number()): ?>
-                    <div class="comments-wrapper"> <?php comments_template(); ?> </div>
-                <?php
-                endif;
+<?php wp_nav_menu($_menu_args); endif; ?>
 
-                edit_post_link();
+    <div class="col-md-12 tainacan-page-area">
 
-            endwhile; ?>
+        <div class="col-md-8 no-padding center">
+            <header class="page-header col-md-12 no-padding">
+                <h1 class="page-title"> <?php the_title();  ?> </h1>
+            </header>
+
+            <div id="primary" class="tainacan-content-area">
+                <main id="main" class="col-md-12" role="main">
+                    <?php if (have_posts()):
+                        while ( have_posts() ) : the_post(); ?>
+
+                            <div class="single-post-wrapper"> <?php echo the_content(); ?> </div>
+
+                            <?php /* if (comments_open() || get_comments_number()): ?>
+                                <div class="comments-wrapper"> <?php comments_template(); ?> </div>
+                                <?php
+                            endif; */
+
+                            edit_post_link();
+                        endwhile;
+                        the_posts_pagination( );
+                    else:
+                        get_template_part( 'partials/content/content', 'none' );
+                    endif;
+                    ?>
+                </main>
+            </div>
         </div>
     </div>
 

@@ -1,4 +1,4 @@
-body.archive {
+body.archive, body.single-post {
   .tainacan-page-area {
     background: $collections-bg-color;
 
@@ -32,8 +32,6 @@ body.archive {
       }
 
       .tainacan-new-wrapper {
-
-
         .tainacan-article-wrapper {
           height: 150px;
           border-bottom: 1px solid $collections-bg-color;

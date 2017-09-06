@@ -1,4 +1,5 @@
     <div>
+        <?php //if( ! is_archive() ): ?>
         <footer id="footer" role="contentinfo">
             <div class="row">
                 <div class="col-md-5">
@@ -34,6 +35,7 @@
                 </div>
             </div><!-- .widget-area -->
         </footer>
+        <?php //endif; ?>
 
         <section class="logo-footer flogo-bar">
             <img class="logofooter" src="<?php echo get_template_directory_uri().'/libraries/images/Tainacan_pb.svg' ?>"
