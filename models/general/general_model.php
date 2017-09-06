@@ -2068,7 +2068,7 @@ class Model {
         }else{
             $where =  '' ;
         }
-        $query = "SELECT * FROM $wpdb->postmeta WHERE post_id = $post_id AND meta_key LIKE '$key'$where ";
+        $query = "SELECT * FROM $wpdb->postmeta WHERE post_id = $post_id AND meta_key LIKE '$key'$where  ORDER BY meta_id";
         $result = $wpdb->get_results($query);
         if ($result && is_array($result)) {
             return (!$value) ? $result : $result[0];
