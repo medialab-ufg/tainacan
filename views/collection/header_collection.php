@@ -119,7 +119,7 @@ $thumb_url = $collection_thumb ? wp_get_attachment_url($collection_thumb) : get_
                             </div>
                         </button-->
                         <script>
-                            set_popover_content($("#socialdb_permalink_collection").val() + '?' + elem.url + '&is_filter=1');
+                            set_popover_content($("#socialdb_permalink_collection").val());
                         </script>
 
                         <!--button style="float:right;margin-left:5px;" id="iframebutton" type="button" class="btn btn-default btn-sm" data-container="body" data-toggle="popover" data-placement="left" data-title="URL Iframe" data-content="">

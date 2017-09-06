@@ -100,7 +100,12 @@ $(window).load(function () {
         // verifico se esta mandando alguma mensagem
         var info = { title:  $('#info_title').val(), messages:  $('#info_messages').val() };
         if (info.title && info.messages)
+        {
             showAlertGeneral(info.title, $('#info_messages').val(), 'info');
+
+            var url = $("#socialdb_permalink_collection").val();
+            window.history.replaceState('', '', url);
+        }
     }
 
     //verifico se esta mandando alguma mensagem
@@ -1352,16 +1357,9 @@ function showCollectionConfiguration(src) {
 }
 
 function showCollectionConfiguration_editImages(src, field) {
-    $('#change_collection_images').val(field);
-    $.ajax({
-        url: src + '/controllers/collection/collection_controller.php',
-        type: 'POST',
-        data: {operation: 'edit_configuration', collection_id: $("#collection_id").val()}
-    }).done(function (result) {
-        $('#main_part').hide();
-        $('#configuration').html(result);
-        $('#configuration').show();
-    });
+    showCollectionConfiguration(src);
+    updateStateCollection('configuration');
+    //$('#change_collection_images').val(field);
 }
 
 function showSocialConfiguration(src) {

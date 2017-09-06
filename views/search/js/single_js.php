@@ -295,8 +295,9 @@
         //$('[data-toggle="popover"]').popover();
         //var myPopover = $('#iframebutton').data('popover');
         //$('#iframebutton').popover('hide');
-        if ($('#iframebutton_dropdown').length>0) {
-            $('#iframebutton_dropdown').html('<form style="margin:5px;">Search URL:&nbsp<input type="text" style="width:165px;" value="' + content + '" /><br><br>Iframe:&nbsp<input type="text" style="width:200px;" value="<iframe style=\'width:100%\' height=\'1000\' src=\'' + content + '\' frameborder=\'0\'></iframe>" /></form>'); 
+        if ($('#iframebutton_dropdown').length>0)
+        {
+            $('#iframebutton_dropdown').html('<form style="margin:5px;">Search URL:&nbsp<input type="text" style="width:165px;" value="' + content + '" /><br><br>Iframe:&nbsp<input type="text" style="width:200px;" value="<iframe style=\'width:100%\' height=\'1000\' src=\'' + content + '\' frameborder=\'0\'></iframe>" /></form>');
         }
     }
 
