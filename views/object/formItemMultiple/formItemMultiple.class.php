@@ -407,9 +407,9 @@ class FormItemMultiple extends Model {
                     function (isConfirm) {
                         if(isConfirm){
                             publishItems(has_selected);
-                        }else{
-                            //publishItems(allIds);
-                        }
+                        }/*else{
+                            publishItems(allIds);
+                        }*/
                     });
                 }else{
                     publishItems(allIds);

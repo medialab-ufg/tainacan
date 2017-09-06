@@ -1870,24 +1870,12 @@
     }
 
     function verify_import_type() {
-        var url = $('#item_url_import_all').val().trim();
-        if (url != undefined && url != '') {
-            var youtube_url = validateYouTubeUrl();
-            if (youtube_url) {
-                // É uma URL de um vídeo do youtube.
-                $("#btn_import_fb").css('display', 'none');
-                $("#btn_import_allrest").css('display', 'block');
-                $("#facebook_import_icon").addClass("grayscale");
-                $("#flickr_import_icon").addClass("grayscale");
-                $("#youtube_import_icon").removeClass("grayscale");
-                $("#vimeo_import_icon").addClass("grayscale");
-                $("#instagram_import_icon").addClass("grayscale");
-                $("#files_import_icon").addClass("grayscale");
-                $("#sites_import_icon").addClass("grayscale");
-            } else {
-                var youtube_channel_url = validateYouTubeChannelUrl();
-                if (youtube_channel_url) {
-                    // É uma URL de um canal do youtube.
+        setTimeout(function(){
+            var url = $('#item_url_import_all').val().trim();
+            if (url != undefined && url != '') {
+                var youtube_url = validateYouTubeUrl();
+                if (youtube_url) {
+                    // É uma URL de um vídeo do youtube.
                     $("#btn_import_fb").css('display', 'none');
                     $("#btn_import_allrest").css('display', 'block');
                     $("#facebook_import_icon").addClass("grayscale");
@@ -1897,11 +1885,10 @@
                     $("#instagram_import_icon").addClass("grayscale");
                     $("#files_import_icon").addClass("grayscale");
                     $("#sites_import_icon").addClass("grayscale");
-                }
-                else {
-                    var youtube_playlist_url = validateYouTubePlaylistUrl();
-                    if (youtube_playlist_url) {
-                        // É uma URL de uma playlist do youtube.
+                } else {
+                    var youtube_channel_url = validateYouTubeChannelUrl();
+                    if (youtube_channel_url) {
+                        // É uma URL de um canal do youtube.
                         $("#btn_import_fb").css('display', 'none');
                         $("#btn_import_allrest").css('display', 'block');
                         $("#facebook_import_icon").addClass("grayscale");
@@ -1913,73 +1900,75 @@
                         $("#sites_import_icon").addClass("grayscale");
                     }
                     else {
-                        var instagram_url = validateInstagramUrl();
-                        if (instagram_url) {
-                            // É uma URL do instagram.
+                        var youtube_playlist_url = validateYouTubePlaylistUrl();
+                        if (youtube_playlist_url) {
+                            // É uma URL de uma playlist do youtube.
                             $("#btn_import_fb").css('display', 'none');
                             $("#btn_import_allrest").css('display', 'block');
                             $("#facebook_import_icon").addClass("grayscale");
                             $("#flickr_import_icon").addClass("grayscale");
-                            $("#youtube_import_icon").addClass("grayscale");
+                            $("#youtube_import_icon").removeClass("grayscale");
                             $("#vimeo_import_icon").addClass("grayscale");
-                            $("#instagram_import_icon").removeClass("grayscale");
+                            $("#instagram_import_icon").addClass("grayscale");
                             $("#files_import_icon").addClass("grayscale");
                             $("#sites_import_icon").addClass("grayscale");
-                        } else {
-                            var vimeo_url = validateVimeoUrl();
-                            if (vimeo_url) {
-                                // É uma URL do vimeo.
+                        }
+                        else {
+                            var instagram_url = validateInstagramUrl();
+                            if (instagram_url) {
+                                // É uma URL do instagram.
                                 $("#btn_import_fb").css('display', 'none');
                                 $("#btn_import_allrest").css('display', 'block');
                                 $("#facebook_import_icon").addClass("grayscale");
                                 $("#flickr_import_icon").addClass("grayscale");
                                 $("#youtube_import_icon").addClass("grayscale");
-                                $("#vimeo_import_icon").removeClass("grayscale");
-                                $("#instagram_import_icon").addClass("grayscale");
+                                $("#vimeo_import_icon").addClass("grayscale");
+                                $("#instagram_import_icon").removeClass("grayscale");
                                 $("#files_import_icon").addClass("grayscale");
                                 $("#sites_import_icon").addClass("grayscale");
-                            }
-                            else {
-                                var flickr_url = validateFlickrUrl();
-                                if (flickr_url) {
-                                    // É uma URL do Flickr.
+                            } else {
+                                var vimeo_url = validateVimeoUrl();
+                                if (vimeo_url) {
+                                    // É uma URL do vimeo.
                                     $("#btn_import_fb").css('display', 'none');
                                     $("#btn_import_allrest").css('display', 'block');
                                     $("#facebook_import_icon").addClass("grayscale");
-                                    $("#flickr_import_icon").removeClass("grayscale");
+                                    $("#flickr_import_icon").addClass("grayscale");
                                     $("#youtube_import_icon").addClass("grayscale");
-                                    $("#vimeo_import_icon").addClass("grayscale");
+                                    $("#vimeo_import_icon").removeClass("grayscale");
                                     $("#instagram_import_icon").addClass("grayscale");
                                     $("#files_import_icon").addClass("grayscale");
                                     $("#sites_import_icon").addClass("grayscale");
                                 }
                                 else {
-                                    var facebook_url = validateFacebookUrl();
-                                    if (facebook_url) {
-                                        $("#btn_import_fb").css('display', 'block');
-                                        $("#btn_import_allrest").css('display', 'none');
-                                        $("#facebook_import_icon").removeClass("grayscale");
-                                        $("#flickr_import_icon").addClass("grayscale");
+                                    var flickr_url = validateFlickrUrl();
+                                    if (flickr_url) {
+                                        // É uma URL do Flickr.
+                                        $("#btn_import_fb").css('display', 'none');
+                                        $("#btn_import_allrest").css('display', 'block');
+                                        $("#facebook_import_icon").addClass("grayscale");
+                                        $("#flickr_import_icon").removeClass("grayscale");
                                         $("#youtube_import_icon").addClass("grayscale");
                                         $("#vimeo_import_icon").addClass("grayscale");
                                         $("#instagram_import_icon").addClass("grayscale");
                                         $("#files_import_icon").addClass("grayscale");
                                         $("#sites_import_icon").addClass("grayscale");
-                                    } else {
-                                        var any_file_url = validateAnyFile();
-                                        if (any_file_url) {
-                                            $("#btn_import_fb").css('display', 'none');
-                                            $("#btn_import_allrest").css('display', 'block');
-                                            $("#facebook_import_icon").addClass("grayscale");
+                                    }
+                                    else {
+                                        var facebook_url = validateFacebookUrl();
+                                        if (facebook_url) {
+                                            $("#btn_import_fb").css('display', 'block');
+                                            $("#btn_import_allrest").css('display', 'none');
+                                            $("#facebook_import_icon").removeClass("grayscale");
                                             $("#flickr_import_icon").addClass("grayscale");
                                             $("#youtube_import_icon").addClass("grayscale");
                                             $("#vimeo_import_icon").addClass("grayscale");
                                             $("#instagram_import_icon").addClass("grayscale");
-                                            $("#files_import_icon").removeClass("grayscale");
+                                            $("#files_import_icon").addClass("grayscale");
                                             $("#sites_import_icon").addClass("grayscale");
                                         } else {
-                                            var any_url = validateAnyUrl();
-                                            if (any_url) {
+                                            var any_file_url = validateAnyFile();
+                                            if (any_file_url) {
                                                 $("#btn_import_fb").css('display', 'none');
                                                 $("#btn_import_allrest").css('display', 'block');
                                                 $("#facebook_import_icon").addClass("grayscale");
@@ -1987,18 +1976,31 @@
                                                 $("#youtube_import_icon").addClass("grayscale");
                                                 $("#vimeo_import_icon").addClass("grayscale");
                                                 $("#instagram_import_icon").addClass("grayscale");
-                                                $("#files_import_icon").addClass("grayscale");
-                                                $("#sites_import_icon").removeClass("grayscale");
-                                            } else {
-                                                $("#btn_import_fb").css('display', 'none');
-                                                $("#btn_import_allrest").css('display', 'block');
-                                                $("#facebook_import_icon").addClass("grayscale");
-                                                $("#flickr_import_icon").addClass("grayscale");
-                                                $("#youtube_import_icon").addClass("grayscale");
-                                                $("#vimeo_import_icon").addClass("grayscale");
-                                                $("#instagram_import_icon").addClass("grayscale");
-                                                $("#files_import_icon").addClass("grayscale");
+                                                $("#files_import_icon").removeClass("grayscale");
                                                 $("#sites_import_icon").addClass("grayscale");
+                                            } else {
+                                                var any_url = validateAnyUrl();
+                                                if (any_url) {
+                                                    $("#btn_import_fb").css('display', 'none');
+                                                    $("#btn_import_allrest").css('display', 'block');
+                                                    $("#facebook_import_icon").addClass("grayscale");
+                                                    $("#flickr_import_icon").addClass("grayscale");
+                                                    $("#youtube_import_icon").addClass("grayscale");
+                                                    $("#vimeo_import_icon").addClass("grayscale");
+                                                    $("#instagram_import_icon").addClass("grayscale");
+                                                    $("#files_import_icon").addClass("grayscale");
+                                                    $("#sites_import_icon").removeClass("grayscale");
+                                                } else {
+                                                    $("#btn_import_fb").css('display', 'none');
+                                                    $("#btn_import_allrest").css('display', 'block');
+                                                    $("#facebook_import_icon").addClass("grayscale");
+                                                    $("#flickr_import_icon").addClass("grayscale");
+                                                    $("#youtube_import_icon").addClass("grayscale");
+                                                    $("#vimeo_import_icon").addClass("grayscale");
+                                                    $("#instagram_import_icon").addClass("grayscale");
+                                                    $("#files_import_icon").addClass("grayscale");
+                                                    $("#sites_import_icon").addClass("grayscale");
+                                                }
                                             }
                                         }
                                     }
@@ -2007,18 +2009,18 @@
                         }
                     }
                 }
+            } else {
+                $("#btn_import_fb").css('display', 'none');
+                $("#btn_import_allrest").css('display', 'block');
+                $("#facebook_import_icon").addClass("grayscale");
+                $("#flickr_import_icon").addClass("grayscale");
+                $("#youtube_import_icon").addClass("grayscale");
+                $("#vimeo_import_icon").addClass("grayscale");
+                $("#instagram_import_icon").addClass("grayscale");
+                $("#files_import_icon").addClass("grayscale");
+                $("#sites_import_icon").addClass("grayscale");
             }
-        } else {
-            $("#btn_import_fb").css('display', 'none');
-            $("#btn_import_allrest").css('display', 'block');
-            $("#facebook_import_icon").addClass("grayscale");
-            $("#flickr_import_icon").addClass("grayscale");
-            $("#youtube_import_icon").addClass("grayscale");
-            $("#vimeo_import_icon").addClass("grayscale");
-            $("#instagram_import_icon").addClass("grayscale");
-            $("#files_import_icon").addClass("grayscale");
-            $("#sites_import_icon").addClass("grayscale");
-        }
+        }, 1);
     }
 
     function import_youtube_video_url() {

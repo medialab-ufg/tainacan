@@ -33,7 +33,7 @@ include_once ('js/extract_metadata_js.php');
         <div id='container-input' class="col-md-12" style="padding-left: 0px;">
             <div class="form-group">
                 <label class="col-sm-1" for="item_url_import_all"><?php _e('URL', 'tainacan'); ?>:</label>
-                <div class="col-sm-9">
+                <div class="col-sm-9" onpaste="verify_import_type();">
                     <input type="text" onkeyup="verify_import_type()"
                        name="item_url_import_all" id="item_url_import_all" class="form-control"
                        placeholder="<?php _e('Type here', 'tainacan'); ?>" />
