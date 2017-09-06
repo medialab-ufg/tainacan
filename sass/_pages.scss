@@ -1,0 +1,66 @@
+body.archive {
+  .tainacan-page-area {
+    background: $collections-bg-color;
+
+    h1,h2,h3,h4,h6 {
+      font-weight: bolder;
+    }
+
+    h2 {
+      font-size: 20px;
+    }
+
+    .page-header {
+      border-bottom: 2px solid $brand-medium-blue;
+      .page-title {
+        color: $brand-medium-blue;
+      }
+    }
+
+    #primary {
+      main {
+        background: white;
+        padding: 40px;
+        border: 3px solid $item-border;
+        margin-bottom: 20px;
+
+        h2 {
+          a {
+            color: $brand-medium-blue;
+          }
+        }
+      }
+
+      .tainacan-new-wrapper {
+
+
+        .tainacan-article-wrapper {
+          height: 150px;
+          border-bottom: 1px solid $collections-bg-color;
+        }
+
+        .entry-header {
+          max-height: 65px;
+          overflow: hidden;
+        }
+
+        .post-resume {
+          max-height: 60px;
+          overflow: hidden;
+        }
+        .read-more {
+          text-align: right;
+          position: absolute;
+          right: 10px;
+          bottom: 10px;
+          
+          a {
+            color: $brand-medium-blue;
+          }
+        }
+      } // wrapper
+
+    } // #primary
+
+  } // tainacan-page-area
+} // archive
