@@ -612,7 +612,6 @@ class WPQueryModel extends Model {
             if(isset($recover_data['author']) && $recover_data['author'] != ''){
                 $args['author'] = $recover_data['author'];
             }
-
             return $args;
         }
     }
@@ -1317,7 +1316,7 @@ class WPQueryModel extends Model {
             $recover_data['pagid'] = $ordenation;
         }
         //verificando a pesquisa no titulo e descricao
-        if($data['advanced_search_title']){
+        if(isset($data['advanced_search_title'])){
             $recover_data['keyword'] = $data['advanced_search_title'];
             $recover_data['keyword_operation'] = $this->get_operation_advanced_search($data['advanced_search_title_operation']);
         }
