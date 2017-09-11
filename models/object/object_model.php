@@ -1562,6 +1562,9 @@ class ObjectModel extends Model {
         $data['term'] = trim($data['term']);
         $all_data = $property_model->get_all_property($data['property_id'], true); // pego todos os dados possiveis da propriedad
         $categories = (is_array($all_data['metas']['socialdb_property_object_category_id'])) ? implode(',', array_filter($all_data['metas']['socialdb_property_object_category_id'])) : $all_data['metas']['socialdb_property_object_category_id'];
+//        if(has_filter('alter_categories_to_find_properties')){
+//            $categories = implode(',',apply_filters('alter_categories_to_find_properties',array_filter(explode(',',$categories))));
+//        }
         //$category_root_id = get_term_by('id', $all_data['metas']['socialdb_property_object_category_id'], 'socialdb_category_type');
         $query = "
                         SELECT DISTINCT p.ID, p.* FROM $wp_posts p

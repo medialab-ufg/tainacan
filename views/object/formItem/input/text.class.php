@@ -90,16 +90,16 @@ class TextClass extends FormItem{
 //                 $(this).trigger('blur');
 //             });
              
-            if('<?php echo $index_id; ?>' !=='0' && '<?php echo $property_id; ?>' ==='0'  && $('#text-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>').val()==''){
-                $('.js-append-property-<?php echo $compound_id ?>').hide();
-            }
-            $('#text-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>').keyup(function(){
-                if($(this).val()=='' && '<?php echo $property_id; ?>' === '0'){
-                    $('.js-append-property-<?php echo $compound_id ?>').hide();
-                }else if('<?php echo $property_id; ?>' === '0'){
-                    $('.js-append-property-<?php echo $compound_id ?>').show();
-                }
-            });
+//            if('<?php //echo $index_id; ?>//' !=='0' && '<?php //echo $property_id; ?>//' ==='0'  && $('#text-field-<?php //echo $compound_id ?>//-<?php //echo $property_id ?>//-<?php //echo $index_id; ?>//').val()==''){
+//                $('.js-append-property-<?php //echo $compound_id ?>//').hide();
+//            }
+//            $('#text-field-<?php //echo $compound_id ?>//-<?php //echo $property_id ?>//-<?php //echo $index_id; ?>//').keyup(function(){
+//                if($(this).val()=='' && '<?php //echo $property_id; ?>//' === '0'){
+//                    $('.js-append-property-<?php //echo $compound_id ?>//').hide();
+//                }else if('<?php //echo $property_id; ?>//' === '0'){
+//                    $('.js-append-property-<?php //echo $compound_id ?>//').show();
+//                }
+//            });
             //enviando valores
             $('#text-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>').blur(function(){
                 //validando campos dentro do mesmo metadado
@@ -107,7 +107,7 @@ class TextClass extends FormItem{
                     Hook.call('validate_unique_fields',['<?php echo $compound_id; ?>',$(this).val(),'text-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>','<?php echo $property_id ?>']);
                     if(Hook.result){
                         $('#text-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>').val('');
-                        toastr.error('<?php _e('this value is already inserted!', 'tainacan') ?>', '<?php _e('Attention!', 'tainacan') ?>', {positionClass: 'toast-bottom-right'});
+                        toastr.error('<?php _e('this value is already inserted! The value will not be persisted!', 'tainacan') ?>', '<?php _e('Attention!', 'tainacan') ?>', {positionClass: 'toast-bottom-right'});
                     }
                 }
 
@@ -134,7 +134,7 @@ class TextClass extends FormItem{
                             var json = JSON.parse(result);
                             if (json.value) {
                                 //$('#text-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>').val('');
-                                toastr.error(json.value + ' <?php _e(' is already inserted!', 'tainacan') ?>', '<?php _e('Attention!', 'tainacan') ?>', {positionClass: 'toast-bottom-right'});
+                                toastr.error(json.value + ' <?php _e(' is already inserted! The value will not be persisted!', 'tainacan') ?>', '<?php _e('Attention!', 'tainacan') ?>', {positionClass: 'toast-bottom-right'});
                             }
                             <?php endif; ?>
                         });

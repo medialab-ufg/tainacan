@@ -771,7 +771,7 @@ class ObjectClass extends FormItem {
                                name="advanced_search_title" 
                                class="form-control <?php if (isset($this->compound_id)): ?> advanced_search_title_<?php echo $this->compound_id ?>_<?php echo ($this->property_id != '0') ? $property['id'] : '0' ?>_<?php echo $this->index_id ?><?php endif; ?>"
                                id="advanced_search_title_<?php echo $property['id'] ?>"
-                               placeholder="<?php _e('Type the 3 first letters to activate autocomplete', 'tainacan'); ?>">
+                               placeholder="<?php _e('Type the 2 first letters at least to activate autocomplete', 'tainacan'); ?>">
                     </div>
                 </div>
             <?php endif; ?>           

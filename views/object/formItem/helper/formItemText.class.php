@@ -162,6 +162,17 @@ class FormItemText extends FormItem {
             var index_<?php echo $property['id'] ?> = <?php echo $index; ?> + 1;
 
             $('.js-append-property-<?php echo $property['id'] ?>').click(function(){
+                var block = false;
+                $.each($('[name="socialdb_property_<?php echo $property['id'] ?>[]"]'),function(index,value){
+                       if($(value).val()===''){
+                           toastr.error('<?php _e('Fill all fields before!', 'tainacan') ?>', '<?php _e('Attention!', 'tainacan') ?>', {positionClass: 'toast-bottom-right'});
+                           block = true;
+                       }
+                });
+
+                if(block)
+                    return false;
+
                 $('#loader-new-fields-<?php echo $property['id'] ?>').show();
                 $.ajax({
                     url: $('#src').val() + '/controllers/object/form_item_controller.php',

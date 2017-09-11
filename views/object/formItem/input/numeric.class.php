@@ -76,16 +76,16 @@ class NumericClass extends FormItem{
     public function initScriptsNumericClass($compound_id,$property_id, $item_id, $index_id) {
         ?>
         <script>
-            if('<?php echo $index_id; ?>' !=='0' && '<?php echo $property_id; ?>' ==='0'  && $('#numeric-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>').val()==''){
-                $('.js-append-property-<?php echo $compound_id ?>').hide();
-            }
-            $('#numeric-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>').keyup(function(){
-                if($(this).val()=='' && '<?php echo $property_id; ?>' === '0'){
-                    $('.js-append-property-<?php echo $compound_id ?>').hide();
-                }else if('<?php echo $property_id; ?>' === '0'){
-                    $('.js-append-property-<?php echo $compound_id ?>').show();
-                }
-            });
+//            if('<?php //echo $index_id; ?>//' !=='0' && '<?php //echo $property_id; ?>//' ==='0'  && $('#numeric-field-<?php //echo $compound_id ?>//-<?php //echo $property_id ?>//-<?php //echo $index_id; ?>//').val()==''){
+//                $('.js-append-property-<?php //echo $compound_id ?>//').hide();
+//            }
+//            $('#numeric-field-<?php //echo $compound_id ?>//-<?php //echo $property_id ?>//-<?php //echo $index_id; ?>//').keyup(function(){
+//                if($(this).val()=='' && '<?php //echo $property_id; ?>//' === '0'){
+//                    $('.js-append-property-<?php //echo $compound_id ?>//').hide();
+//                }else if('<?php //echo $property_id; ?>//' === '0'){
+//                    $('.js-append-property-<?php //echo $compound_id ?>//').show();
+//                }
+//            });
             $('#numeric-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>').blur(function(){
                 <?php if($this->isRequired):  ?>
                     validateFieldsMetadataText($(this).val().trim(),'<?php echo $compound_id ?>','<?php echo $property_id ?>','<?php echo $index_id ?>')
@@ -110,9 +110,9 @@ class NumericClass extends FormItem{
                          var json =JSON.parse(result);
                          if(json.value){
                             //$('#numeric-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>').val('');
-                                toastr.error(json.value+' <?php _e(' is already inserted!', 'tainacan') ?>', '<?php _e('Attention!', 'tainacan') ?>', {positionClass: 'toast-bottom-right'});
+                                toastr.error(json.value+' <?php _e(' is already inserted! The value will not be persisted!', 'tainacan') ?>', '<?php _e('Attention!', 'tainacan') ?>', {positionClass: 'toast-bottom-right'});
                          }
-                        <?php endif; ?>
+                        <?php endif ?>
                     });
                 }else{
                     Hook['<?php echo $compound_id.'_'.$index_id ?>'] = ( Hook['<?php echo $compound_id.'_'.$index_id ?>']) ?  Hook['<?php echo $compound_id.'_'.$index_id ?>'] : {};

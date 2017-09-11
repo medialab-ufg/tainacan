@@ -594,11 +594,11 @@
                 }
 
 
-                $('[name="socialdb_property_data_mask[]"]').removeAttr("checked");
+                $(meta_modal +' [name="socialdb_property_data_mask[]"]').removeAttr("checked");
                 if (elem.metas.socialdb_property_data_mask) {
                     var split = elem.metas.socialdb_property_data_mask.split(',');
                     $.each(split, function (index, value) {
-                        $('input:checkbox[value="' + value + '"]').attr("checked", "checked");
+                        $(meta_modal +' input:radio[value="' + value + '"]').attr("checked", "checked");
                     });
                 }
 
