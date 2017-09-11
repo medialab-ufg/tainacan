@@ -90,16 +90,16 @@ class TextClass extends FormItem{
 //                 $(this).trigger('blur');
 //             });
              
-            if('<?php echo $index_id; ?>' !=='0' && '<?php echo $property_id; ?>' ==='0'  && $('#text-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>').val()==''){
-                $('.js-append-property-<?php echo $compound_id ?>').hide();
-            }
-            $('#text-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>').keyup(function(){
-                if($(this).val()=='' && '<?php echo $property_id; ?>' === '0'){
-                    $('.js-append-property-<?php echo $compound_id ?>').hide();
-                }else if('<?php echo $property_id; ?>' === '0'){
-                    $('.js-append-property-<?php echo $compound_id ?>').show();
-                }
-            });
+//            if('<?php //echo $index_id; ?>//' !=='0' && '<?php //echo $property_id; ?>//' ==='0'  && $('#text-field-<?php //echo $compound_id ?>//-<?php //echo $property_id ?>//-<?php //echo $index_id; ?>//').val()==''){
+//                $('.js-append-property-<?php //echo $compound_id ?>//').hide();
+//            }
+//            $('#text-field-<?php //echo $compound_id ?>//-<?php //echo $property_id ?>//-<?php //echo $index_id; ?>//').keyup(function(){
+//                if($(this).val()=='' && '<?php //echo $property_id; ?>//' === '0'){
+//                    $('.js-append-property-<?php //echo $compound_id ?>//').hide();
+//                }else if('<?php //echo $property_id; ?>//' === '0'){
+//                    $('.js-append-property-<?php //echo $compound_id ?>//').show();
+//                }
+//            });
             //enviando valores
             $('#text-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>').blur(function(){
                 //validando campos dentro do mesmo metadado

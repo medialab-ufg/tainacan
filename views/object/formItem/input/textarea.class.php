@@ -73,22 +73,22 @@ class TextAreaClass extends FormItem{
     public function initScriptsTextAreaClass($compound_id,$property_id, $item_id, $index_id) {
         ?>
         <script>
-            if('<?php echo $index_id; ?>' !=='0' && '<?php echo $property_id; ?>' ==='0'  && $('#textarea-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>').val()==''){
-                $('.js-append-property-<?php echo $compound_id ?>').hide();
-            }
-            $('#textarea-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>').keyup(function(event){
-                if(event.keyCode === 13)
-                {
-                    $(this).val($(this).val()+"\n");
-                    this.scrollTop = this.scrollHeight;
-                }
-
-                if($(this).val()=='' && '<?php echo $property_id; ?>' === '0'){
-                    $('.js-append-property-<?php echo $compound_id ?>').hide();
-                }else if('<?php echo $property_id; ?>' === '0'){
-                    $('.js-append-property-<?php echo $compound_id ?>').show();
-                }
-            });
+//            if('<?php //echo $index_id; ?>//' !=='0' && '<?php //echo $property_id; ?>//' ==='0'  && $('#textarea-field-<?php //echo $compound_id ?>//-<?php //echo $property_id ?>//-<?php //echo $index_id; ?>//').val()==''){
+//                $('.js-append-property-<?php //echo $compound_id ?>//').hide();
+//            }
+//            $('#textarea-field-<?php //echo $compound_id ?>//-<?php //echo $property_id ?>//-<?php //echo $index_id; ?>//').keyup(function(event){
+//                if(event.keyCode === 13)
+//                {
+//                    $(this).val($(this).val()+"\n");
+//                    this.scrollTop = this.scrollHeight;
+//                }
+//
+//                if($(this).val()=='' && '<?php //echo $property_id; ?>//' === '0'){
+//                    $('.js-append-property-<?php //echo $compound_id ?>//').hide();
+//                }else if('<?php //echo $property_id; ?>//' === '0'){
+//                    $('.js-append-property-<?php //echo $compound_id ?>//').show();
+//                }
+//            });
             //enviando valores
             
             $('#textarea-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>').blur(function(){

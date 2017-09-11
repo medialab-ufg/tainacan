@@ -115,6 +115,7 @@ class DateClass extends FormItem {
                     id="date-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>"
                     class="input_date input auto-save form_autocomplete_value_<?php echo $property_id; ?>" 
                     aria-describedby="input2Status"
+                    name="socialdb_property_<?php echo $compound_id; ?>[]"
                     type="text" value="">
                 <?php endif; ?> 
                 <span style="display: none;" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
@@ -144,6 +145,7 @@ class DateClass extends FormItem {
                 <input 
                     style="margin-right: 5px;" 
                     size="13"
+                    name="socialdb_property_<?php echo $compound_id; ?>[]"
                     value="<?php echo ($values && isset($values[0]) && !empty($values[0])) ? $values[0] : ''; ?>"
                     id="date-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>"
                     class="input_date auto-save form_autocomplete_value_<?php echo $property_id; ?>" 
@@ -163,16 +165,16 @@ class DateClass extends FormItem {
     <script>
         init_metadata_date("#date-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>");
         
-        if('<?php echo $index_id; ?>' !=='0' && '<?php echo $property_id; ?>' ==='0'  && $('#date-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>').val()==''){
-            $('.js-append-property-<?php echo $compound_id ?>').hide();
-        }
-        $('#date-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>').keyup(function(){
-            if($(this).val()=='' && '<?php echo $property_id; ?>' === '0'){
-                $('.js-append-property-<?php echo $compound_id ?>').hide();
-            }else if('<?php echo $property_id; ?>' === '0'){
-                $('.js-append-property-<?php echo $compound_id ?>').show();
-            }
-        });
+//        if('<?php //echo $index_id; ?>//' !=='0' && '<?php //echo $property_id; ?>//' ==='0'  && $('#date-field-<?php //echo $compound_id ?>//-<?php //echo $property_id ?>//-<?php //echo $index_id; ?>//').val()==''){
+//            $('.js-append-property-<?php //echo $compound_id ?>//').hide();
+//        }
+//        $('#date-field-<?php //echo $compound_id ?>//-<?php //echo $property_id ?>//-<?php //echo $index_id; ?>//').keyup(function(){
+//            if($(this).val()=='' && '<?php //echo $property_id; ?>//' === '0'){
+//                $('.js-append-property-<?php //echo $compound_id ?>//').hide();
+//            }else if('<?php //echo $property_id; ?>//' === '0'){
+//                $('.js-append-property-<?php //echo $compound_id ?>//').show();
+//            }
+//        });
         //enviando valores
 
       /*  $('#date-field- <?php echo $compound_id ?> -<?php echo $property_id ?>-<?php echo $index_id; ?>').blur(function () {
