@@ -82,16 +82,18 @@ if(!isset($collection_post)){
                        onclick="delete_collection_redirect('<?php _e('Delete Collection', 'tainacan') ?>', '<?php echo __('Are you sure to remove the collection: ', 'tainacan') . $collection_post->post_title ?>', '<?php echo $collection_post->ID ?>', '<?= time() ?>', '<?php echo get_option('collection_root_id') ?>')" href="javascript:void(0)"><span class="glyphicon glyphicon-trash"></span>&nbsp;<?php _e('Delete', 'tainacan'); ?></a>
                 </li>
                 <li class="tainacan-museum-clear" style="cursor: pointer;">
-                    <a onclick="clean_collection('<?php _e('Clean Collection', 'tainacan') ?>', '<?php echo __('Are you sure to remove all items', 'tainacan') ?>', '<?php echo $collection_post->ID ?>')" style="cursor: pointer;"><span class="glyphicon glyphicon-unchecked"></span>&nbsp;<?php _e('Clean Collection', 'tainacan'); ?></a>
+                    <a onclick="clean_collection('<?php _e('Clean Collection', 'tainacan') ?>', '<?php echo __('Are you sure to remove all items', 'tainacan') ?>', '<?php echo $collection_post->ID ?>')" style="cursor: pointer;">
+                        <span class="glyphicon glyphicon-unchecked"></span>&nbsp;
+                        <?php _e('Clean Collection', 'tainacan'); ?>
+                    </a>
                 </li>
 
                 <li class="divider"></li>
 
                 <li>
-                    <a class="events-link" onclick="showEvents('<?php echo get_template_directory_uri() ?>');updateStateCollection('events');" style="cursor:pointer;color:<?php echo $border_color; ?>" >
-                        <span class="glyphicon glyphicon-flash"></span> <?php _e('Events', 'tainacan'); ?> &nbsp;
+                    <a onclick="showEvents('<?php echo get_template_directory_uri() ?>');updateStateCollection('events');" style="cursor:pointer;color:<?php echo $border_color; ?>" >
+                        <span class="glyphicon glyphicon-flash"></span> <?php _e('Events', 'tainacan'); ?> <span class="notification_events"></span>
                     </a>
-                    <span class="notification_events"></span>
                 </li>
 
                 <?php if (!verify_collection_moderators($current_collection_id, get_current_user_id()) && !current_user_can('manage_options')): ?>
