@@ -1482,7 +1482,7 @@ $_showH = ("disabled" === $_en_header) ? false : true ;
 
             <button type="button" class="btn btn-default pull-left btn-lg" onclick="backToMainPage()"><?php _e('Back to collection', 'tainacan'); ?></button>
 
-            <button type="submit" id="button_save_and_next" class="btn btn-success pull-right btn-lg"> <?php _e('Continue', 'tainacan'); ?> </button>
+            <button type="submit" id="button_save_and_next" class="btn btn-success pull-right btn-lg"> <?php _e('Save', 'tainacan'); ?> </button>
         </form>
     </div>
 </div>

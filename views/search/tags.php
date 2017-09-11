@@ -51,8 +51,8 @@ global $config;
             <input type="hidden" id="tag_collection_id" name="collection_id" value="<?php echo $collection_id; ?>">
             <input type="hidden" id="tag_id" name="tag_id" value="">
             <input type="hidden" id="operation_tag_form" name="operation" value="add">
+            <button type="button" onclick="clear_buttons()" class="btn btn-default" id="clear_categories"><?php _e('Clear', 'tainacan'); ?></button>
             <button type="submit" id="submit" class="btn btn-default"><?php _e('Submit', 'tainacan'); ?></button>
-            <button type="button" onclick="clear_buttons()" class="btn btn-default" id="clear_categories"><?php _e('New', 'tainacan'); ?></button>
         </form>
     </div>    
 </div> 
