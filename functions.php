@@ -1,13 +1,9 @@
 <?php
-// Report all PHP errors
 /** Acoes iniciais ** */
 //define('ALTERNATE_WP_CRON', true);
-// wp_register_script('jquery.min', get_template_directory_uri() . '/libraries/js/jquery.min.js', array('jquery'), '1.7');
-// wp_enqueue_script('jquery.min');
 add_action('init', 'wpdbfix');
 add_action('init', 'register_post_types');
 add_action('init', 'register_taxonomies');
-//load_theme_textdomain("tainacan", dirname(__FILE__) . "/languages");
 include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 include_once( dirname(__FILE__) . "/config/config.php" );
 require_once (dirname(__FILE__) . '/libraries/php/PDFParser/vendor/autoload.php');
@@ -17,6 +13,7 @@ include_once("models/log/log_model.php");
 include_once('views/widgets/widget_contact.php');
 include_once('views/widgets/widget_social_media.php');
 include_once('views/widgets/widget_site_map.php');
+include_once('views/widgets/widget_teaser.php');
 
 show_admin_bar(false);
 add_theme_support( 'post-thumbnails' );
@@ -3746,3 +3743,44 @@ function save_base_permalink_settings(){
     }
 }
 add_action( 'admin_init', 'save_base_permalink_settings' );
+
+function tainacan_home_widgets() {
+    register_sidebar(array(
+        'name' => __('Part 1', 'tainacan'),
+        'id' => 'part-1',
+        'description' => __('A widget to show at Home Page.', 'tainacan'),
+        'before_widget' => '<section id="%1$s" class="widget %2$s">',
+        'after_widget' => '</section>',
+        'before_title' => '<h5 class="widget-title">',
+        'after_title' => '</h5>',
+    ));
+    register_sidebar(array(
+        'name' => __('Part 2', 'tainacan'),
+        'id' => 'part-2',
+        'description' => __('A widget to show at Home Page.', 'tainacan'),
+        'before_widget' => '<section id="%1$s" class="widget %2$s">',
+        'after_widget' => '</section>',
+        'before_title' => '<h5 class="widget-title">',
+        'after_title' => '</h5>',
+    ));
+    register_sidebar(array(
+        'name' => __('Part 3', 'tainacan'),
+        'id' => 'part-3',
+        'description' => __('A widget to show at Home Page.', 'tainacan'),
+        'before_widget' => '<section id="%1$s" class="widget %2$s">',
+        'after_widget' => '</section>',
+        'before_title' => '<h5 class="widget-title">',
+        'after_title' => '</h5>',
+    ));
+    register_sidebar(array(
+        'name' => __('Part 4', 'tainacan'),
+        'id' => 'part-4',
+        'description' => __('A widget to show at Home Page.', 'tainacan'),
+        'before_widget' => '<section id="%1$s" class="widget %2$s">',
+        'after_widget' => '</section>',
+        'before_title' => '<h5 class="widget-title">',
+        'after_title' => '</h5>',
+    ));
+}
+
+add_action('widgets_init', 'tainacan_home_widgets');

@@ -75,3 +75,48 @@ body.archive, body.single-post, body.page-template-default {
 
   } // tainacan-page-area
 } // archive
+
+
+body.page-template-template-home {
+
+  h1,h2,h3,h4,h6 {
+    font-weight: bolder;
+  }
+
+  h2 {
+    font-size: 24px;
+    color: $brand-medium-blue;
+    border-bottom: 2px solid $brand-medium-blue;
+    padding-bottom: 20px;
+  }
+
+  .tainacan-page-area {
+    background: $collections-bg-color;
+  }
+  .home-widget-box {
+    background: white;
+    padding: 40px;
+    border: 3px solid $item-border;
+    margin-bottom: 20px;
+    height: 410px;
+
+    .teaser-cnt {
+      overflow: hidden;
+      max-height: 100%;
+      color: #2b2b2b;
+      line-height: 20px;
+      font-size: 16px;
+    }
+
+    .read-more {
+      text-align: right;
+      a {
+        bottom: 0;
+        color: $brand-medium-blue;
+        font-weight: bolder;
+        right: 0;
+      }
+    }
+
+  }
+} // home template
