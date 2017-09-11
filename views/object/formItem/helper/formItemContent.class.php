@@ -15,21 +15,16 @@ class FormItemContent extends FormItem {
                 <?php endif; ?>
                 <?php $this->validateIcon('alert-compound-'.$property['id'],__('Required field','tainacan')) ?>
             <?php echo ($isFocusMedia) ? '</h5>' : '</h2>' ?>
-            <div >
-               <input type="hidden"
-                     value="<?php echo get_post_meta($this->collection_id, 'socialdb_collection_property_'.$property['id'].'_mask_key', true) ?>">
-                  <div class="form-group"
-                       id="validation-<?php echo $property['id'] ?>-0-0"
-                       style="border-bottom:none;padding: 0px;">
-                      <?php $is_file = get_post($content); ?>
+            <div>
+               <input type="hidden" value="<?php echo get_post_meta($this->collection_id, 'socialdb_collection_property_'.$property['id'].'_mask_key', true) ?>" />
+                  <div class="form-group" id="validation-<?php echo $property['id'] ?>-0-0" style="border-bottom:none;padding: 0">
+                      <?php $is_file = ( !empty($content) ) ? get_post($content) : false; ?>
                       <?php if($is_file && is_object($is_file)): ?>
                           <?php $url = wp_get_attachment_url($is_file->ID) ?>
                           <a target="_blank" href="<?php echo $url ?>"><?php echo $url ?></a>
-                      <?php  else: ?>
-                                    <textarea class="form-control auto-save"
-                                              id="item_content"
-                                              name="item_content"
-                                              placeholder="<?php _e('Object Content', 'tainacan'); ?>"><?php echo $content; ?></textarea>
+                      <?php else: ?>
+                          <textarea class="form-control auto-save" id="item_content" name="item_content"
+                                    placeholder="<?php _e('Object Content', 'tainacan'); ?>"><?php echo $content; ?></textarea>
                                     <span style="display: none;" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
                                     <span style="display: none;" class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
                                     <span id="input2Status" class="sr-only">(status)</span>
@@ -57,27 +52,29 @@ class FormItemContent extends FormItem {
     public function initScriptsContentContainer($property, $item_id) {
         ?>
         <script>
-            if($('#item_content').length>0) {
-                showCKEditor('item_content');
-                CKEDITOR.instances.item_content.on('contentDom', function () {
-                    CKEDITOR.instances.item_content.document.on('keyup', function (event) {
-                        <?php if($this->isRequired === 'true'):  ?>
-                        validateFieldsMetadataText(CKEDITOR.instances.item_content.getData(), '<?php echo $property['id'] ?>', '0', '0')
-                        <?php endif; ?>
-                        $.ajax({
-                            url: $('#src').val() + '/controllers/object/form_item_controller.php',
-                            type: 'POST',
-                            data: {
-                                operation: 'saveContent',
-                                value: CKEDITOR.instances.item_content.getData(),
-                                item_id: '<?php echo $item_id ?>'
-                            }
-                        }).done(function (result) {
+            $(function() {
+                if($('#item_content').length > 0) {
+                    showCKEditor('item_content');
+                    CKEDITOR.instances.item_content.on('contentDom', function () {
+                        CKEDITOR.instances.item_content.document.on('keyup', function (event) {
+                            <?php if($this->isRequired === 'true'):  ?>
+                            validateFieldsMetadataText(CKEDITOR.instances.item_content.getData(), '<?php echo $property['id'] ?>', '0', '0')
+                            <?php endif; ?>
+                            $.ajax({
+                                url: $('#src').val() + '/controllers/object/form_item_controller.php',
+                                type: 'POST',
+                                data: {
+                                    operation: 'saveContent',
+                                    value: CKEDITOR.instances.item_content.getData(),
+                                    item_id: '<?php echo $item_id ?>'
+                                }
+                            }).done(function (result) {
 
+                            });
                         });
                     });
-                });
-            }
+                }
+            });
         </script>
         <?php
     }

@@ -237,6 +237,10 @@ button#iframebutton {
       background: #404040;
     }
 
+    &.current-menu-item {
+      border-top: 5px solid white !important;
+    }
+
     ul {
       background: $dark-gray;
       margin-top: -3px;

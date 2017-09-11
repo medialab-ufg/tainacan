@@ -1784,7 +1784,7 @@ if (!function_exists("theme_styles")) {
             $column = get_post_meta(get_the_ID(), 'socialdb_collection_submission_visualization', true);
             $_is_edit_page = (get_query_var('edit') &&  get_query_var('edit') === 'true');
 
-            if ($column && $column == 'one' || $_is_edit_page ) {
+            if ($column && $column == 'one' || $_is_edit_page || is_singular('socialdb_object')) {
                 $registered_css['item-page'] = '/libraries/css/item-page.css';
             } else {
                 if (wp_style_is('item-page')) {

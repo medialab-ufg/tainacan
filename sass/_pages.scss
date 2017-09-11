@@ -1,4 +1,4 @@
-body.archive, body.single-post {
+body.archive, body.single-post, body.page-template-default {
   .tainacan-page-area {
     background: $collections-bg-color;
 
@@ -8,6 +8,19 @@ body.archive, body.single-post {
 
     h2 {
       font-size: 20px;
+    }
+
+    header.custom-header {
+      background-size: cover !important;
+    }
+
+    .page-thumb {
+      margin-bottom: 20px;
+      width: 100%;
+      height: 235px;
+      float: left;
+      background-repeat: no-repeat;
+      background-position: 50% 50% !important;
     }
 
     .page-header {
@@ -50,7 +63,7 @@ body.archive, body.single-post {
           text-align: right;
           position: absolute;
           right: 10px;
-          bottom: 10px;
+          bottom: 0;
           
           a {
             color: $brand-medium-blue;

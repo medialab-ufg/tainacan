@@ -71,107 +71,110 @@ class MultipleTreeClass extends FormItem {
     public function initScriptsMultipleTreeClass($compound_id, $property_id, $item_id, $index_id, $children) {
         ?>
         <script>
-            $("#multiple-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>").dynatree({
-                selectionVisible: true, // Make sure, selected nodes are visible (expanded).
-                checkbox: true,
-                children: <?php echo $this->generateJson($compound_id, $property_id, $item_id, $index_id,$children) ?>,
-                onLazyRead: function (node) {
-                    node.appendAjax({
-                        url: $('#src').val() + '/controllers/collection/collection_controller.php',
-                        data: {
-                            collection: $("#collection_id").val(),
-                            key: node.data.key,
-                            classCss: node.data.addClass,
-                            //operation: 'findDynatreeChild'
-                            operation: 'expand_dynatree'
-                        }
-                    });
-                },
-                onSelect: function (flag, node) {
-                    if (node.bSelected) {
-                        if($('#AllFieldsShouldBeFilled'+<?php echo $compound_id ?>).length === 0) {
-                            $.ajax({
-                                url: $('#src').val() + '/controllers/object/form_item_controller.php',
-                                type: 'POST',
-                                data: {
+            $(function() {
+
+                $("#multiple-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>").dynatree({
+                    selectionVisible: true, // Make sure, selected nodes are visible (expanded).
+                    checkbox: true,
+                    children: <?php echo $this->generateJson($compound_id, $property_id, $item_id, $index_id,$children) ?>,
+                    onLazyRead: function (node) {
+                        node.appendAjax({
+                            url: $('#src').val() + '/controllers/collection/collection_controller.php',
+                            data: {
+                                collection: $("#collection_id").val(),
+                                key: node.data.key,
+                                classCss: node.data.addClass,
+                                //operation: 'findDynatreeChild'
+                                operation: 'expand_dynatree'
+                            }
+                        });
+                    },
+                    onSelect: function (flag, node) {
+                        if (node.bSelected) {
+                            if($('#AllFieldsShouldBeFilled'+<?php echo $compound_id ?>).length === 0) {
+                                $.ajax({
+                                    url: $('#src').val() + '/controllers/object/form_item_controller.php',
+                                    type: 'POST',
+                                    data: {
+                                        operation: 'saveValue',
+                                        type: 'term',
+                                        value: node.data.key,
+                                        item_id: '<?php echo $item_id ?>',
+                                        compound_id: '<?php echo $compound_id ?>',
+                                        property_children_id: '<?php echo $property_id ?>',
+                                        index: <?php echo $index_id ?>
+                                    }
+                                });
+                            }else{
+                                Hook['<?php echo $compound_id.'_'.$index_id ?>'] = ( Hook['<?php echo $compound_id.'_'.$index_id ?>']) ?  Hook['<?php echo $compound_id.'_'.$index_id ?>'] : {};
+                                Hook['<?php echo $compound_id.'_'.$index_id ?>']['<?php echo $property_id ?>'] = {
                                     operation: 'saveValue',
                                     type: 'term',
                                     value: node.data.key,
                                     item_id: '<?php echo $item_id ?>',
                                     compound_id: '<?php echo $compound_id ?>',
                                     property_children_id: '<?php echo $property_id ?>',
-                                    index: <?php echo $index_id ?>
-                                }
-                            });
-                        }else{
-                            Hook['<?php echo $compound_id.'_'.$index_id ?>'] = ( Hook['<?php echo $compound_id.'_'.$index_id ?>']) ?  Hook['<?php echo $compound_id.'_'.$index_id ?>'] : {};
-                            Hook['<?php echo $compound_id.'_'.$index_id ?>']['<?php echo $property_id ?>'] = {
-                                operation: 'saveValue',
-                                type: 'term',
-                                value: node.data.key,
-                                item_id: '<?php echo $item_id ?>',
-                                compound_id: '<?php echo $compound_id ?>',
-                                property_children_id: '<?php echo $property_id ?>',
-                                index: <?php echo $index_id ?>,
-                                indexCoumpound: 0
-                            };
-                        }
+                                    index: <?php echo $index_id ?>,
+                                    indexCoumpound: 0
+                                };
+                            }
 
-                        if($('#AllFieldsShouldBeFilled'+<?php echo $compound_id ?>).length > 0 && '<?php echo $property_id ?>' !== '0'){
-                            Hook.call('blockCompounds',['<?php echo $compound_id ?>','<?php echo $property_id ?>','<?php echo $index_id ?>']);
-                        }else{
-                            Hook.result = false;
-                        }
-                    } else {
-                        if($('#AllFieldsShouldBeFilled'+<?php echo $compound_id ?>).length === 0) {
-                            $.ajax({
-                                url: $('#src').val() + '/controllers/object/form_item_controller.php',
-                                type: 'POST',
-                                data: {
-                                    operation: 'removeValue',
+                            if($('#AllFieldsShouldBeFilled'+<?php echo $compound_id ?>).length > 0 && '<?php echo $property_id ?>' !== '0'){
+                                Hook.call('blockCompounds',['<?php echo $compound_id ?>','<?php echo $property_id ?>','<?php echo $index_id ?>']);
+                            }else{
+                                Hook.result = false;
+                            }
+                        } else {
+                            if($('#AllFieldsShouldBeFilled'+<?php echo $compound_id ?>).length === 0) {
+                                $.ajax({
+                                    url: $('#src').val() + '/controllers/object/form_item_controller.php',
+                                    type: 'POST',
+                                    data: {
+                                        operation: 'removeValue',
+                                        type: 'term',
+                                        value: node.data.key,
+                                        item_id: '<?php echo $item_id ?>',
+                                        compound_id: '<?php echo $compound_id ?>',
+                                        property_children_id: '<?php echo $property_id ?>',
+                                        index: <?php echo $index_id ?>
+                                    }
+                                });
+                            }else{
+                                Hook['<?php echo $compound_id.'_'.$index_id ?>'] = ( Hook['<?php echo $compound_id.'_'.$index_id ?>']) ?  Hook['<?php echo $compound_id.'_'.$index_id ?>'] : {};
+                                Hook['<?php echo $compound_id.'_'.$index_id ?>']['<?php echo $property_id ?>'] = {
+                                    operation: 'saveValue',
                                     type: 'term',
                                     value: node.data.key,
                                     item_id: '<?php echo $item_id ?>',
                                     compound_id: '<?php echo $compound_id ?>',
                                     property_children_id: '<?php echo $property_id ?>',
-                                    index: <?php echo $index_id ?>
-                                }
-                            });
-                        }else{
-                            Hook['<?php echo $compound_id.'_'.$index_id ?>'] = ( Hook['<?php echo $compound_id.'_'.$index_id ?>']) ?  Hook['<?php echo $compound_id.'_'.$index_id ?>'] : {};
-                            Hook['<?php echo $compound_id.'_'.$index_id ?>']['<?php echo $property_id ?>'] = {
-                                operation: 'saveValue',
-                                type: 'term',
-                                value: node.data.key,
-                                item_id: '<?php echo $item_id ?>',
-                                compound_id: '<?php echo $compound_id ?>',
-                                property_children_id: '<?php echo $property_id ?>',
-                                index: <?php echo $index_id ?>,
-                                indexCoumpound: 0
-                            };
-                        }
+                                    index: <?php echo $index_id ?>,
+                                    indexCoumpound: 0
+                                };
+                            }
 
-                        if($('#AllFieldsShouldBeFilled'+<?php echo $compound_id ?>).length > 0 && '<?php echo $property_id ?>' !== '0'){
-                            Hook.call('blockCompounds',['<?php echo $compound_id ?>','<?php echo $property_id ?>','<?php echo $index_id ?>']);
+                            if($('#AllFieldsShouldBeFilled'+<?php echo $compound_id ?>).length > 0 && '<?php echo $property_id ?>' !== '0'){
+                                Hook.call('blockCompounds',['<?php echo $compound_id ?>','<?php echo $property_id ?>','<?php echo $index_id ?>']);
+                            }else{
+                                Hook.result = false;
+                            }
+                        }
+                        var selKeys = $.map(node.tree.getSelectedNodes(), function (node) {
+                            return node;
+                        });
+                        if(selKeys.length > 0){
+                            appendCategoryMetadata(node.data.key, <?php echo $item_id ?>, '#appendCategoryMetadata_<?php echo $compound_id; ?>_0_0');
+                            <?php if ($this->isRequired): ?>
+                            validateFieldsMetadataText('true','<?php echo $compound_id ?>','<?php echo $property_id ?>','<?php echo $index_id ?>');
+                            <?php endif ?>
                         }else{
-                            Hook.result = false;
+                            $('#appendCategoryMetadata_<?php echo $compound_id; ?>_0_0').html('');
+                            <?php if ($this->isRequired): ?>
+                            validateFieldsMetadataText('','<?php echo $compound_id ?>','<?php echo $property_id ?>','<?php echo $index_id ?>');
+                            <?php endif ?>
                         }
                     }
-                    var selKeys = $.map(node.tree.getSelectedNodes(), function (node) {
-                        return node;
-                    });
-                    if(selKeys.length > 0){
-                        appendCategoryMetadata(node.data.key, <?php echo $item_id ?>, '#appendCategoryMetadata_<?php echo $compound_id; ?>_0_0');
-                        <?php if ($this->isRequired): ?>
-                        validateFieldsMetadataText('true','<?php echo $compound_id ?>','<?php echo $property_id ?>','<?php echo $index_id ?>');
-                        <?php endif ?>
-                    }else{
-                        $('#appendCategoryMetadata_<?php echo $compound_id; ?>_0_0').html('');
-                        <?php if ($this->isRequired): ?>
-                        validateFieldsMetadataText('','<?php echo $compound_id ?>','<?php echo $property_id ?>','<?php echo $index_id ?>');
-                        <?php endif ?>
-                    }
-                }
+                });
             });
         </script>
         <?php
