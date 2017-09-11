@@ -56,6 +56,7 @@ class FormItemController extends Controller {
                 }
                 //SE EXISITIR UM METADADOREVERSO ELE INSERE O VALOR NO REVERSO
                 if(isset($data['reverse']) && $data['reverse'] !== 'true'){
+                    //se o inverso estiver em um metadado composto
                     $meta = unserialize(get_term_meta($data['reverse'], 'socialdb_property_is_compounds', true));
                     if (!$meta || !is_array($meta)):
                         $compound_id = $data['reverse'];
