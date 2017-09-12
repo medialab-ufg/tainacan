@@ -12,6 +12,7 @@
         'whoami',
         'git pull',
         'git status',
+        'git stash',
         'git submodule sync',
         'git submodule update',
         'git submodule status',
