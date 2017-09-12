@@ -62,7 +62,7 @@ if("one" === $single_mode) {
         <button data-title="<?php printf(__("URL of %s", "tainacan"), $post->post_title); ?>" id="iframebuttonObject"
                 data-container="body"
                 class="btn bt-default content-back pull-right" data-toggle="popoverObject" data-placement="left"
-                data-content="">
+                data-content="<?php echo get_the_permalink($collection_id) . '?item=' . $post->post_name; ?>">
             <span class="glyphicon glyphicon-link"></span>
         </button>
     </ol>
