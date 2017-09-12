@@ -56,10 +56,10 @@ include_once ('js/list_file_js.php');
                 <h4 class="modal-title" id="myModalLabel"><?php _t('Attachments',1); ?> </h4>
             </div>
             <div class="modal-body">
-                <div id="carousel-attachment">
+                <div id="carousel-attachment" class="col-md-12">
                     <?php foreach ($attachments['image'] as $image): ?>
-                        <div class='slideshow-item' style="display:block;">
-                            <img src="<?= $image->guid ?>" />
+                        <div class='' style="display:block;">
+                            <img src="<?= $image->guid ?>" class="img-responsive"/>
                         </div>
                     <?php endforeach; ?>
                 </div>

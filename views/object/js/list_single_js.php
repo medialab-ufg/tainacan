@@ -140,38 +140,50 @@
         $('.item-attachments').show();
     }
 
-// mostra o formulario para criacao de propriedade de dados
+    // mostra o formulario para criacao de propriedade de dados
     function show_form_data_property_single(object_id) {
         $.ajax({
             type: "POST",
             url: $('#src').val() + "/controllers/object/objectsingle_controller.php",
             data: {collection_id: $('#collection_id').val(), operation: 'show_form_data_property', object_id: object_id}
         }).done(function (result) {
-            $('#single_list_all_properties_' + object_id).hide();
-            $('#single_object_property_form_' + object_id).hide();
-            $('#single_edit_data_property_form_' + object_id).hide();
-            $('#single_edit_object_property_form_' + object_id).hide();
-            $('#single_data_property_form_' + object_id).html(result).css('padding', 20).show();
-            $('.dropdown-toggle').dropdown();
+            finish_loading(object_id, result);
         });
     }
-// mostra o formulario para criacao de propriedade de objeto
+    // mostra o formulario para criacao de propriedade de objeto
     function show_form_object_property_single(object_id) {
         $.ajax({
             type: "POST",
             url: $('#src').val() + "/controllers/object/objectsingle_controller.php",
             data: {collection_id: $('#collection_id').val(), operation: 'show_form_object_property', object_id: object_id}
         }).done(function (result) {
-            $('#single_list_all_properties_' + object_id).hide();
-            $('#single_data_property_form_' + object_id).hide();
-            $('#single_edit_data_property_form_' + object_id).hide();
-            $('#single_edit_object_property_form_' + object_id).hide();
-            $('#single_object_property_form_' + object_id).html(result).css('padding', 20).show();
-            $('.dropdown-toggle').dropdown();
+            finish_loading(object_id, result);
             $('.nav-tabs').tab();
         });
     }
-// funcao acionando no bolta voltar que mostra a listagem principal
+
+    function show_form_term_property_single(object_id, result)
+    {
+        $.ajax({
+            type: "POST",
+            url: $('#src').val() + "/controllers/object/objectsingle_controller.php",
+            data: {collection_id: $('#collection_id').val(), operation: 'show_form_term_property', object_id: object_id}
+        }).done(function (result) {
+            finish_loading(object_id, result);
+        });
+    }
+
+    function finish_loading(object_id, result)
+    {
+        $('#single_list_all_properties_' + object_id).hide();
+        $('#single_data_property_form_' + object_id).hide();
+        $('#single_edit_data_property_form_' + object_id).hide();
+        $('#single_edit_object_property_form_' + object_id).hide();
+        $('#single_object_property_form_' + object_id).html(result).css('padding', 20).show();
+        $('.dropdown-toggle').dropdown();
+    }
+
+    // funcao acionando no bolta voltar que mostra a listagem principal
     function back_button_single(object_id) {
         $('#single_data_property_form_' + object_id).hide();
         $('#single_object_property_form_' + object_id).hide();

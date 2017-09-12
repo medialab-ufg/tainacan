@@ -37,9 +37,12 @@ if("one" === $single_mode) {
     $create_perm_object = verify_allowed_action($collection_id, 'socialdb_collection_permission_create_property_object');
     $edit_perm_object = verify_allowed_action($collection_id, 'socialdb_collection_permission_edit_property_object');
     $delete_perm_object = verify_allowed_action($collection_id, 'socialbd_collection_permission_delete_property_object');
+
     $create_perm_data = verify_allowed_action($collection_id, 'socialdb_collection_permission_create_property_data');
     $edit_perm_data = verify_allowed_action($collection_id, 'socialdb_collection_permission_edit_property_data');
     $delete_perm_data = verify_allowed_action($collection_id, 'socialdb_collection_permission_delete_property_data');
+
+    $create_perm_term = verify_allowed_action($collection_id, "socialdb_collection_permission_create_property_term");
 
     $meta_type = ucwords($metas['socialdb_object_dc_type'][0]);
     $item_opts = [
@@ -502,7 +505,7 @@ if("one" === $single_mode) {
                         <div class="meta-header" style="padding: 10px 20px 10px 20px">
                             <h4 class="title-pipe single-title"> <?php _e('Properties', 'tainacan') ?></h4>
                             <div <?php do_action('home_item_add_property') ?> class="btn-group edit-field-btn">
-                                <?php if ($create_perm_object || $create_perm_data): ?>
+                                <?php if ($create_perm_object || $create_perm_data || $create_perm_term): ?>
                                     <button data-toggle="dropdown" class="btn btn-default dropdown-toggle" type="button"
                                             id="btnGroupVerticalDrop1" style="font-size:11px;">
                                         <span class="glyphicon glyphicon-plus grayleft"></span> <span
@@ -510,6 +513,7 @@ if("one" === $single_mode) {
                                     </button>
                                     <ul aria-labelledby="btnGroupVerticalDrop1" role="menu"
                                         class="dropdown-menu add-metadata">
+
                                         <?php if ($create_perm_data): ?>
                                             <li>&nbsp;<span class="glyphicon glyphicon-th-list graydrop"></span>&nbsp;<span>
                                                     <a class="add_property_data"
@@ -517,12 +521,21 @@ if("one" === $single_mode) {
                                                        href="#property_form_<?php echo $post->ID ?>"><?php _e('Add new data property', 'tainacan'); ?></a></span>
                                             </li>
                                         <?php endif; ?>
+
                                         <?php if ($create_perm_object): ?>
                                             <li>&nbsp;<span class="glyphicon glyphicon-th-list graydrop"></span>&nbsp;<span>
                                                     <a class="add_property_object"
                                                        onclick="show_form_object_property_single('<?php echo $post->ID ?>')"
                                                        href="#property_form_<?php echo $post->ID ?>"><?php _e('Add new object property', 'tainacan'); ?></a></span>
                                             </li>
+                                        <?php endif; ?>
+
+                                        <?php if ($create_perm_term): ?>
+                                            <!--<li style="padding-top: 8px;">&nbsp;<span class="glyphicon glyphicon-th-list graydrop"></span>&nbsp;<span>
+                                                    <a style=""
+                                                       onclick="show_form_term_property_single('<?php echo $post->ID ?>')"
+                                                       href="#property_form_<?php echo $post->ID ?>"><?php _e('Add new term property', 'tainacan'); ?></a></span>
+                                            </li>-->
                                         <?php endif; ?>
                                     </ul>
                                 <?php endif; ?>
@@ -564,9 +577,10 @@ if("one" === $single_mode) {
                 </div>
             </div>
         </div>
-        <div class="col-md-3 item-attachments">
+        <div class="col-md-3 item-attachments" style="overflow-y: auto; overflow-x: hidden;">
             <div <?php if (has_action('home_item_attachments_div')) do_action('home_item_attachments_div') ?> >
-                <div id="single_list_files_<?php echo $post->ID ?>"></div>
+                <div id="single_list_files_<?php echo $post->ID ?>">
+                </div>
             </div>
         </div>
     </div>
