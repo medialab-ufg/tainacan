@@ -3,7 +3,7 @@
      * GIT DEPLOYMENT SCRIPT
      *
      * Used for automatically deploying websites via GitHub
-     *
+     * a
      */
 
     // array of commands
