@@ -57,7 +57,6 @@ class Teaser extends WP_Widget {
         <?php
     }
 
-// Updating widget replacing old instances with new
     public function update( $new_instance, $old_instance ) {
         $instance = [];
 
@@ -66,7 +65,7 @@ class Teaser extends WP_Widget {
         $instance['read_more_link'] = ( ! empty( $new_instance['read_more_link'] ) ) ? strip_tags( $new_instance['read_more_link'] ) : '';
         return $instance;
     }
-} // Class wpb_widget ends here
+}
 
 function teaser_widget() {
     register_widget( 'teaser' );

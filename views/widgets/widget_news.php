@@ -45,6 +45,13 @@ class HomeNews extends WP_Widget {
         </p>
         <?php
     }
+
+    public function update($new_instance, $old_instance) {
+        $instance = [];
+        $instance['title'] = ( ! empty( $new_instance['title'] ) ) ? strip_tags( $new_instance['title'] ) : '';
+
+        return $instance;
+    }
 }
 
 ?>
