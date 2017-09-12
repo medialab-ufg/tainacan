@@ -882,6 +882,9 @@ class Model {
             $query = " = $category_root_id ";
         }
         $array = implode(',', array_filter(array_unique($ancestors)));
+        if(empty($array))
+            return [];
+
         $query = ' IN (' . $array . ') ';
         $wp_posts = $wpdb->prefix . "posts";
         $wp_term_taxonomy = $wpdb->prefix . "term_taxonomy";
