@@ -1,17 +1,12 @@
 <?php
-function teaser_widget() {
-    register_widget( 'teaser' );
-}
-add_action( 'widgets_init', 'teaser_widget' );
-
-class teaser extends WP_Widget {
+class Teaser extends WP_Widget {
 
     function __construct() {
         $tease_config = [
             'description' => __( 'Write your text with some excerpt text, and a read more link', 'tainacan' ),
             'customize_selective_refresh' => true
         ];
-        parent::__construct('teaser', __('Teaser Content', 'tainacan'), $tease_config );
+        parent::__construct('teaser', _t('Teaser Content'), $tease_config );
     }
 
     public function widget( $args, $instance ) {
@@ -29,7 +24,7 @@ class teaser extends WP_Widget {
                 </div>
 
                 <div class="read-more">
-                    <a href="<?php echo $read_more_link; ?>" rel="noopener">
+                    <a href="<?php echo $read_more_link; ?>" rel="noopener" target="_blank">
                         <?php _t('Read more...',1) ?>
                     </a>
                 </div>
@@ -49,7 +44,7 @@ class teaser extends WP_Widget {
             <input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php echo esc_attr( $title ); ?>" />
         </p>
         <p>
-            <label for="teaser"> <?php _t('Teaser Text:', 'tainacan'); ?> </label>
+            <label for="teaser"> <?php _t('Teaser Text:', '1'); ?> </label>
             <textarea name="<?php echo $this->get_field_name('teaser')?>" class="widefat"
                       id="<?php echo $this->get_field_id('teaser')?>" cols="30" rows="10"><?php echo esc_attr($teaser); ?></textarea>
         </p>
@@ -72,4 +67,8 @@ class teaser extends WP_Widget {
         return $instance;
     }
 } // Class wpb_widget ends here
-?>
+
+function teaser_widget() {
+    register_widget( 'teaser' );
+}
+add_action( 'widgets_init', 'teaser_widget' );

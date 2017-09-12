@@ -14,6 +14,7 @@ include_once('views/widgets/widget_contact.php');
 include_once('views/widgets/widget_social_media.php');
 include_once('views/widgets/widget_site_map.php');
 include_once('views/widgets/widget_teaser.php');
+include_once('views/widgets/widget_news.php');
 
 show_admin_bar(false);
 add_theme_support( 'post-thumbnails' );
@@ -39,7 +40,7 @@ function MyAutoLoad($Class) {
 
         if ($Folder == 'api'):
             if (!$iDir && file_exists(__DIR__ . '/' . $Folder . '/' . $File . '.php') && !is_dir(__DIR__ . '/' . $Folder . '/' . $File . '.php')):
-                include_once (__DIR__ . '/' . $Folder . '/' . $File . '.php');
+                include_once (__DIR__ . '/' . $Folder . '/' .    $File . '.php');
                 $iDir = true;
             endif;
         else:
@@ -3746,41 +3747,13 @@ add_action( 'admin_init', 'save_base_permalink_settings' );
 
 function tainacan_home_widgets() {
     register_sidebar(array(
-        'name' => __('Part 1', 'tainacan'),
+        'name' => __('Home Page Sections', 'tainacan'),
         'id' => 'part-1',
-        'description' => __('A widget to show at Home Page.', 'tainacan'),
-        'before_widget' => '<section id="%1$s" class="widget %2$s">',
-        'after_widget' => '</section>',
-        'before_title' => '<h5 class="widget-title">',
-        'after_title' => '</h5>',
-    ));
-    register_sidebar(array(
-        'name' => __('Part 2', 'tainacan'),
-        'id' => 'part-2',
-        'description' => __('A widget to show at Home Page.', 'tainacan'),
-        'before_widget' => '<section id="%1$s" class="widget %2$s">',
-        'after_widget' => '</section>',
-        'before_title' => '<h5 class="widget-title">',
-        'after_title' => '</h5>',
-    ));
-    register_sidebar(array(
-        'name' => __('Part 3', 'tainacan'),
-        'id' => 'part-3',
-        'description' => __('A widget to show at Home Page.', 'tainacan'),
-        'before_widget' => '<section id="%1$s" class="widget %2$s">',
-        'after_widget' => '</section>',
-        'before_title' => '<h5 class="widget-title">',
-        'after_title' => '</h5>',
-    ));
-    register_sidebar(array(
-        'name' => __('Part 4', 'tainacan'),
-        'id' => 'part-4',
-        'description' => __('A widget to show at Home Page.', 'tainacan'),
+        'description' => _t('Select widgets to show at Home Page, and order them as you wish'),
         'before_widget' => '<section id="%1$s" class="widget %2$s">',
         'after_widget' => '</section>',
         'before_title' => '<h5 class="widget-title">',
         'after_title' => '</h5>',
     ));
 }
-
 add_action('widgets_init', 'tainacan_home_widgets');

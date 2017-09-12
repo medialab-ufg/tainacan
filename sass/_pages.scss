@@ -100,6 +100,16 @@ body.page-template-template-home {
     margin-bottom: 20px;
     height: 410px;
 
+    .entry-header {
+      h2 {
+        border: none !important;
+        margin: 0;
+        a {
+          color: $brand-medium-blue;
+        }
+      }
+    }
+
     .teaser-cnt {
       overflow: hidden;
       max-height: 100%;
