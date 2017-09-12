@@ -10,11 +10,9 @@ require_once (dirname(__FILE__) . '/libraries/php/PDFParser/vendor/autoload.php'
 require_once (dirname(__FILE__) . '/libraries/php/OfficeToPlainText/OfficeDocumentToPlainText.php');
 require_once('wp_bootstrap_navwalker.php');
 include_once("models/log/log_model.php");
-include_once('views/widgets/widget_contact.php');
-include_once('views/widgets/widget_social_media.php');
-include_once('views/widgets/widget_site_map.php');
-include_once('views/widgets/widget_teaser.php');
-include_once('views/widgets/widget_news.php');
+$tainacan_widgets = ["contact", "social_media", "site_map", "teaser", "news", "collections"];
+foreach ($tainacan_widgets as $wg)
+    include_once("views/widgets/widget_$wg.php");
 
 show_admin_bar(false);
 add_theme_support( 'post-thumbnails' );
@@ -22,7 +20,6 @@ add_theme_support( 'post-thumbnails' );
 /*
   AUTO LOAD DE CLASSES
  */
-
 function AutoLoad() {
     spl_autoload_register("MyAutoLoad");
 }
@@ -35,7 +32,6 @@ function MyAutoLoad($Class) {
         $ArrClass = $Matches[0];
         $Folder = strtolower(end($ArrClass));
         $File = strtolower(implode('_', $ArrClass));
-
         $iDir = null;
 
         if ($Folder == 'api'):
@@ -278,7 +274,6 @@ function prepareRepoStatSQL($_TABLE_NAME_, $_CHARSET_COLLATE_) {
 /*
  * Quick touchup to wpdb
  */
-
 function wpdbfix() {
     global $wpdb;
     if (!isset($wpdb->termmeta)) {
