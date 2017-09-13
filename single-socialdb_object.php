@@ -531,11 +531,11 @@ if("one" === $single_mode) {
                                         <?php endif; ?>
 
                                         <?php if ($create_perm_term): ?>
-                                            <!--<li style="padding-top: 8px;">&nbsp;<span class="glyphicon glyphicon-th-list graydrop"></span>&nbsp;<span>
+                                            <li style="padding-top: 8px;">&nbsp;<span class="glyphicon glyphicon-th-list graydrop"></span>&nbsp;<span>
                                                     <a style=""
                                                        onclick="show_form_term_property_single('<?php echo $post->ID ?>')"
                                                        href="#property_form_<?php echo $post->ID ?>"><?php _e('Add new term property', 'tainacan'); ?></a></span>
-                                            </li>-->
+                                            </li>
                                         <?php endif; ?>
                                     </ul>
                                 <?php endif; ?>

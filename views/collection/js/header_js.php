@@ -19,6 +19,7 @@
                     currentCategory = "";
             $.each(items, function (index, item) {
                 var li;
+
                 if (item.category != currentCategory) {
                     ul.append("<li class='ui-autocomplete-category'><b>" + item.category + "</b></li>");
                     currentCategory = item.category;

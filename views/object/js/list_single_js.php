@@ -162,7 +162,7 @@
         });
     }
 
-    function show_form_term_property_single(object_id, result)
+    function show_form_term_property_single(object_id)
     {
         $.ajax({
             type: "POST",

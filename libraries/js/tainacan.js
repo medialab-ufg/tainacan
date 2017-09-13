@@ -889,9 +889,9 @@ function toggle_disable_input(id)
 */    
 function redirectAdvancedSearch(field){
     if(field === false)
-         window.location = $('#collection_root_url').val()+'?search-advanced-text=@'
+         window.location = $('#collection_root_url').val()+'?search-advanced-text=@';
     else if($(field).val()!=='')
-        window.location = $('#collection_root_url').val()+'?search-advanced-text='+$(field).val()
+        window.location = $('#collection_root_url').val()+'?search-advanced-text='+$(field).val();
 }
 
 $("#expand-top-search").hover(function () {
