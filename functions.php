@@ -3761,6 +3761,7 @@ function facebook_meta() {
 
     if(is_single()) {
         $img_info = (has_post_thumbnail($post->ID)) ? wp_get_attachment_image_src(get_post_thumbnail_id($post->ID), "thumbnail") : '';
+        $url = get_the_post_thumbnail($post->ID, 'large', ['class' => 'img-responsive img-thumbnail'])
         $image = array(
             'url' => (!empty($img_info[0])) ? $img_info[0] : '',
             'width' => (!empty($img_info[1])) ? $img_info[1] : 0,
@@ -3780,9 +3781,9 @@ function facebook_meta() {
         <meta property="og:site_name" content="<?php echo get_bloginfo(); ?>"/>
         <meta property="og:description" content="<?php echo $excerpt; ?>"/>
         <meta property="og:url" content="<?php echo the_permalink(); ?>"/>
-        <meta property="og:image" content="<?php echo $image['url']; ?>"/>
-        <meta property="og:image:width" content="<?php echo $image['width']; ?>"/>
-        <meta property="og:image:height" content="<?php echo $image['height']; ?>"/>
+        <meta property="og:image" content="<?php echo $url ?>"/>
+        <!--<meta property="og:image:width" content="<?php echo $image['width']; ?>"/>
+        <meta property="og:image:height" content="<?php echo $image['height']; ?>"/>-->
         <?php
     } else {
         return;
