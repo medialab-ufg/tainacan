@@ -3783,8 +3783,8 @@ function facebook_meta() {
         <meta property="og:url" content="<?php echo the_permalink(); ?>"/>
         <meta property="og:image" content="<?php echo get_the_post_thumbnail_url(get_the_ID()) ?>"/>
 
-        <!--<meta property="og:image:width" content="<?php echo $image['width']; ?>"/>
-        <meta property="og:image:height" content="<?php echo $image['height']; ?>"/>-->
+        <meta property="og:image:width" content="200"/>
+        <meta property="og:image:height" content="200"/>
         <?php
     } else {
         return;
