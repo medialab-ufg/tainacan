@@ -3784,8 +3784,8 @@ function facebook_meta() {
         <meta property="og:image" content="<?php echo get_the_post_thumbnail_url(get_the_ID()) ?>"/>
 
         <meta property="og:image:secure_url" content="<?php echo get_the_post_thumbnail_url(get_the_ID()) ?>" />
-        <meta property="og:image:width" content="200"/>
-        <meta property="og:image:height" content="200"/>
+        <!--<meta property="og:image:width" content="200"/>
+        <meta property="og:image:height" content="200"/>-->
         <?php
     } else {
         return;
