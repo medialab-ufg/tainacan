@@ -332,11 +332,6 @@ if("one" === $single_mode) {
 
                             <div class="content-redesocial-NO" style="width: 100%">
                                 <div id="fb-root"></div>
-                                <meta property="og:url"           content="<?php echo get_the_permalink($collection_id) . '?item=' . $post->post_name; ?>" />
-                                <meta property="og:type"          content="website" />
-                                <meta property="og:title"         content="Tainacan" />
-                                <meta property="og:description"   content="Your description" />
-                                <meta property="og:image"         content="" />
                                 <script>(function(d, s, id) {
                                         var js, fjs = d.getElementsByTagName(s)[0];
                                         if (d.getElementById(id)) return;
@@ -346,7 +341,7 @@ if("one" === $single_mode) {
                                     }(document, 'script', 'facebook-jssdk'));</script>
 
                                 <div class="fb-share-button"
-                                     data-href="<?php echo get_the_permalink($collection_id) . '?item=' . $post->post_name; ?>"
+                                     data-href="<?php echo the_permalink(); ?>"
                                      data-layout="button_count">
                                 </div>
                                 <a class="fb" target="_blank"
