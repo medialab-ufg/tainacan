@@ -255,7 +255,7 @@ $view_helper = new ObjectHelper($collection_id);
                     </div>
                     <div class="item-share box-item-paddings box-item-right">
                         <h4 class="title-pipe single-title"> <?php _e('Sharing', 'tainacan'); ?></h4>
-                        <div class="content-redesocial-NO" style="width: 100%">
+                        <div class="content-redesocial-NO" style="width: 100%" >
                             <a class="fb" rel="noopener" target="_blank" href="http://www.facebook.com/sharer/sharer.php?s=100&amp;p[url]=<?php echo get_the_permalink($collection_id) . '?item=' . $object->post_name; ?>&amp;p[images][0]=<?php echo wp_get_attachment_url(get_post_thumbnail_id($object->ID)); ?>&amp;p[title]=<?php echo htmlentities($object->post_title); ?>&amp;p[summary]=<?php echo strip_tags($object->post_content); ?>">
                                 <img src="<?php echo get_template_directory_uri() . '/libraries/images/icons/icon-facebook.png'; ?>" />
                             </a>

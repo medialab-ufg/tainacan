@@ -4,6 +4,7 @@
     $(function () {
         set_containers_class($('#collection_id').val());
         show_collection_properties_root($('#collection_id').val());
+
         // *************** Iframe Popover Collection ****************
         $('[data-toggle="popover"]').popover();
         $('[data-toggle="tooltip"]').tooltip();
@@ -188,7 +189,7 @@
     // atualiza o container com as propriedades da colecao que foi selecionada no selectbox
     function show_collection_properties_root(collection_id) {
         //mostro o loader para carregar os metadados
-        if($('#collection_id').val()===$('#collection_root_id').val() && $('#search-advanced-text').val() != ''){
+        if($('#collection_id').val() === $('#collection_root_id').val() && $('#search-advanced-text').val() != ''){
             show_modal_main();
         }
         //ajax properties

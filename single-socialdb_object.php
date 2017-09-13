@@ -331,6 +331,24 @@ if("one" === $single_mode) {
                             <h4 class="title-pipe single-title"> <?php _e('Sharing', 'tainacan'); ?></h4>
 
                             <div class="content-redesocial-NO" style="width: 100%">
+                                <div id="fb-root"></div>
+                                <meta property="og:url"           content="<?php echo get_the_permalink($collection_id) . '?item=' . $post->post_name; ?>" />
+                                <meta property="og:type"          content="website" />
+                                <meta property="og:title"         content="Tainacan" />
+                                <meta property="og:description"   content="Your description" />
+                                <meta property="og:image"         content="" />
+                                <script>(function(d, s, id) {
+                                        var js, fjs = d.getElementsByTagName(s)[0];
+                                        if (d.getElementById(id)) return;
+                                        js = d.createElement(s); js.id = id;
+                                        js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1";
+                                        fjs.parentNode.insertBefore(js, fjs);
+                                    }(document, 'script', 'facebook-jssdk'));</script>
+
+                                <div class="fb-share-button"
+                                     data-href="<?php echo get_the_permalink($collection_id) . '?item=' . $post->post_name; ?>"
+                                     data-layout="button_count">
+                                </div>
                                 <a class="fb" target="_blank"
                                    href="http://www.facebook.com/sharer/sharer.php?s=100&amp;p[url]=<?php echo get_the_permalink($collection_id) . '?item=' . $post->post_name; ?>&amp;p[images][0]=<?php echo wp_get_attachment_url(get_post_thumbnail_id($post->ID)); ?>&amp;p[title]=<?php echo htmlentities($post->post_title); ?>&amp;p[summary]=<?php echo strip_tags($post->post_content); ?>">
                                     <img src="<?php echo get_template_directory_uri() . '/libraries/images/icons/icon-facebook.png'; ?>"/>

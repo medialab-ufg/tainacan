@@ -514,10 +514,10 @@ while (have_posts()) : the_post();
     </div>
 
     <?php
+
     include_once dirname(__FILE__) . "/views/collection/modals.php";
     require_once (dirname(__FILE__) . '/views/search/js/single_js.php');
     require_once (dirname(__FILE__) . '/extras/routes/routes.php');
-
 endwhile; // end of the loop.
 
 get_footer();
