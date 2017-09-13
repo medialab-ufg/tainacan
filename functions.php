@@ -3781,7 +3781,7 @@ function facebook_meta() {
         <meta property="og:site_name" content="<?php echo get_bloginfo(); ?>"/>
         <meta property="og:description" content="<?php echo $excerpt; ?>"/>
         <meta property="og:url" content="<?php echo the_permalink(); ?>"/>
-        <meta property="og:image" content="<?php echo get_the_post_thumbnail_url(get_the_ID()) ?>"/>
+        <meta property="og:image" content="https://images.wondershare.com.br/filmora/resoure/win/download-gif-from-twitter.gif"/>
 
         <meta property="og:image:width" content="200"/>
         <meta property="og:image:height" content="200"/>
