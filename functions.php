@@ -3781,7 +3781,7 @@ function facebook_meta() {
         <meta property="og:site_name" content="<?php echo get_bloginfo(); ?>"/>
         <meta property="og:description" content="<?php echo $excerpt; ?>"/>
         <meta property="og:url" content="<?php echo the_permalink(); ?>"/>
-        <meta property="og:image" content="<?php echo $url ?>"/>
+        <meta property="og:image" content="<?php echo get_the_post_thumbnail_url(get_the_ID()) ?>"/>
         <!--<meta property="og:image:width" content="<?php echo $image['width']; ?>"/>
         <meta property="og:image:height" content="<?php echo $image['height']; ?>"/>-->
         <?php
