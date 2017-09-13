@@ -340,10 +340,15 @@ if("one" === $single_mode) {
                                         fjs.parentNode.insertBefore(js, fjs);
                                     }(document, 'script', 'facebook-jssdk'));</script>
 
-                                <div class="fb-share-button"
-                                     data-href="<?php echo the_permalink(); ?>"
-                                     data-layout="button_count">
+                                <div class="fb-share-button" data-href="<?php echo the_permalink(); ?>"
+                                     data-layout="button_count"
+                                     data-size="small"
+                                     data-mobile-iframe="true">
+                                    <a class="fb-xfbml-parse-ignore" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fdevelopers.facebook.com%2Fdocs%2Fplugins%2F&amp;src=sdkpreparse">
+                                        Compartilhar
+                                    </a>
                                 </div>
+
                                 <a class="fb" target="_blank"
                                    href="http://www.facebook.com/sharer/sharer.php?s=100&amp;p[url]=<?php echo get_the_permalink($collection_id) . '?item=' . $post->post_name; ?>&amp;p[images][0]=<?php echo wp_get_attachment_url(get_post_thumbnail_id($post->ID)); ?>&amp;p[title]=<?php echo htmlentities($post->post_title); ?>&amp;p[summary]=<?php echo strip_tags($post->post_content); ?>">
                                     <img src="<?php echo get_template_directory_uri() . '/libraries/images/icons/icon-facebook.png'; ?>"/>
