@@ -3780,7 +3780,7 @@ function facebook_meta() {
         <meta property="og:site_name" content="<?php echo get_bloginfo(); ?>"/>
         <meta property="og:description" content="<?php echo $excerpt; ?>"/>
         <meta property="og:url" content="<?php echo the_permalink(); ?>"/>
-        <meta property="og:image" content="https://upload.wikimedia.org/wikipedia/en/2/2c/HotPursuit2010_screenshot.png"/>
+        <meta property="og:image" content="<?php echo $image['url']; ?>"/>
         <meta property="og:image:width" content="<?php echo $image['width']; ?>"/>
         <meta property="og:image:height" content="<?php echo $image['height']; ?>"/>
         <?php

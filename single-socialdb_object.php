@@ -341,7 +341,7 @@ if("one" === $single_mode) {
                                     }(document, 'script', 'facebook-jssdk'));</script>
 
                                 <div class="fb-share-button"
-                                     data-href="<?php echo the_permalink(); ?>"
+                                     data-href="<?php echo get_the_permalink($collection_id) . '?item=' . $post->post_name; ?>"
                                      data-layout="button_count">
                                 </div>
                                 <a class="fb" target="_blank"
