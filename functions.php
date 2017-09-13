@@ -3761,7 +3761,7 @@ function facebook_meta() {
 
     if(is_single()) {
         $img_info = (has_post_thumbnail($post->ID)) ? wp_get_attachment_image_src(get_post_thumbnail_id($post->ID), "thumbnail") : '';
-        $url = get_the_post_thumbnail($post->ID, 'large', ['class' => 'img-responsive img-thumbnail'])
+        $url = get_the_post_thumbnail($post->ID, 'large', ['class' => 'img-responsive img-thumbnail']);
         $image = array(
             'url' => (!empty($img_info[0])) ? $img_info[0] : '',
             'width' => (!empty($img_info[1])) ? $img_info[1] : 0,
