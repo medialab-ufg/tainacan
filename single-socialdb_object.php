@@ -313,7 +313,7 @@ if("one" === $single_mode) {
                                 <div id="thumb-wrapper">
                                     <?php if (get_the_post_thumbnail($post->ID, 'thumbnail')) {
                                         $url_image = wp_get_attachment_url(get_post_thumbnail_id($post->ID));
-                                        echo get_the_post_thumbnail($post->ID, 'medium');
+                                        echo get_the_post_thumbnail($post->ID, 'thumbnail');
                                     } else { ?>
                                         <img class="img-responsive" src="<?php echo get_item_thumbnail_default($post->ID); ?>" width="45%"/>
                                     <?php } ?>

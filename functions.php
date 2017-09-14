@@ -3781,9 +3781,9 @@ function facebook_meta() {
         <meta property="og:site_name" content="<?php echo get_bloginfo(); ?>"/>
         <meta property="og:description" content="<?php echo $excerpt; ?>"/>
         <meta property="og:url" content="<?php echo the_permalink(); ?>"/>
-        <meta property="og:image" content="<?php echo get_the_post_thumbnail_url(get_the_ID()) ?>"/>
+        <meta property="og:image" content="<?php echo wp_get_attachment_image_src(get_post_thumbnail_id(get_the_ID()), 'large')[0]; ?>"/>
 
-        <meta property="og:image:secure_url" content="<?php echo get_the_post_thumbnail_url(get_the_ID()) ?>" />
+        <meta property="og:image:secure_url" content="<?php echo wp_get_attachment_image_src(get_post_thumbnail_id(get_the_ID()), 'large')[0]; ?>" />
 
         <!--<meta property="og:image:width" content="200"/>
         <meta property="og:image:height" content="200"/>-->
