@@ -349,7 +349,7 @@ if("one" === $single_mode) {
                                     </a>
                                 </div>
 
-                                <a class="fb" target="_blank"
+                                <a class="facebook_share" target="_blank"
                                    href="http://www.facebook.com/sharer.php?u=<?php echo the_permalink(); ?>">
                                     <img src="<?php echo get_template_directory_uri() . '/libraries/images/icons/icon-facebook.png'; ?>"/>
                                 </a>
