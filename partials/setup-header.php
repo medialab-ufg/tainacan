@@ -30,6 +30,8 @@ $root_id = get_option('collection_root_id');
     <!-- PAGINA DA TAXONOMIA -->
     <input type="hidden" id="tax_page" name="tax_page" value="<?php echo $_special_configs['tax']; ?>" />
 
+    <input type="hidden" id="search-advanced-text" value="<?php echo (isset($_GET['search-advanced-text']) && !empty($_GET['search-advanced-text'])) ? $_GET['search-advanced-text'] : '' ?>" />
+
 <?php
 if(is_single()) {
     $parent = get_post($post->post_parent);
@@ -84,7 +86,6 @@ if(is_single()) {
         <input type="hidden" id="value_search" name="value_search" value=""> <!-- utilizado na busca -->
         <input type="hidden" id="flag_dynatree_ajax" name="flag_dynatree_ajax" value="true"> <!-- utilizado na busca -->
         <input type="hidden" id="global_tag_id" name="global_tag_id" value="<?php echo (get_term_by('slug', 'socialdb_property_fixed_tags', 'socialdb_property_type')->term_id) ? get_term_by('slug', 'socialdb_property_fixed_tags', 'socialdb_property_type')->term_id : 'tag' ?>"> <!-- utilizado na busca -->
-        <input type="hidden" id="search-advanced-text" value="<?php echo (isset($_GET['search-advanced-text']) && !empty($_GET['search-advanced-text'])) ? $_GET['search-advanced-text'] : '' ?>">
 
         <?php if( isset($_SESSION['instagramInsertedIds']) ): ?>
             <input type="hidden" id="instagramInsertedIds" name="instagramInsertedIds" value="<?php echo socialMediaResponse($_SESSION['instagramInsertedIds'], "instagram"); ?>">

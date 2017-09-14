@@ -130,32 +130,31 @@ body.page-template-template-home {
         right: 0;
         &:hover {
           opacity: 0.7;
-          //color: pink !important;
         }
       }
     }
-
-  }
+  } // home-box-widget
 
   .placeholder-no-thumb {
-    background-size: cover !important;
+    background-size: cover;
     background-repeat: no-repeat !important;
     background-position: center !important;
     background: url("../images/text.png");
     display: inline-block;
+    background-color: #a8a8a8;
   }
 
   .first {
     margin-right: 10px;
     height: $thumb-size;
     width: 94%;
+    background-size: contain;
   }
 
   .aside, .collec-thumb.aside img {
     height: 125px;
     width: 100%;
     background-size: 148px !important;
-    //background-color: #a8a8a8;
     object-fit: cover;
   }
 

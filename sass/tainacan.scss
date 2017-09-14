@@ -378,7 +378,8 @@ input[type="checkbox"]{
 
 /*------------------header e search------------------*/
 header{
-    background-size: 100% auto;
+    //background-size: 100% auto;
+    background-size: cover;
 }
 .search-collection.input-group{
     background-color: rgba(0, 0, 0, 0.8);
