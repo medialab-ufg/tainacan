@@ -3760,13 +3760,6 @@ function facebook_meta() {
     global $post;
 
     if(is_single()) {
-        $img_info = (has_post_thumbnail($post->ID)) ? wp_get_attachment_image_src(get_post_thumbnail_id($post->ID), "thumbnail") : '';
-        $url = get_the_post_thumbnail($post->ID, 'large', ['class' => 'img-responsive img-thumbnail']);
-        $image = array(
-            'url' => (!empty($img_info[0])) ? $img_info[0] : '',
-            'width' => (!empty($img_info[1])) ? $img_info[1] : 0,
-            'height' => (!empty($img_info[2])) ? $img_info[2] : 0,
-        );
         $content = wp_trim_words($post->post_content, 150, '[...]');
         if($excerpt = $content) {
             $excerpt = strip_tags($content);
@@ -3782,11 +3775,6 @@ function facebook_meta() {
         <meta property="og:description" content="<?php echo $excerpt; ?>"/>
         <meta property="og:url" content="<?php echo the_permalink(); ?>"/>
         <meta property="og:image" content="<?php echo wp_get_attachment_image_src(get_post_thumbnail_id(get_the_ID()), 'large')[0]; ?>"/>
-
-        <meta property="og:image:secure_url" content="<?php echo wp_get_attachment_image_src(get_post_thumbnail_id(get_the_ID()), 'large')[0]; ?>" />
-
-        <!--<meta property="og:image:width" content="200"/>
-        <meta property="og:image:height" content="200"/>-->
         <?php
     } else {
         return;
