@@ -1,5 +1,10 @@
 <?php
-
+    include_once ('../../../../../../wp-config.php');
+    include_once ('../../../../../../wp-load.php');
+    include_once ('../../../../../../wp-includes/wp-db.php');
+    require("js/single_term_property_js.php");
+    require_once(dirname(__FILE__) . "../../../../helpers/view_helper.php");
+    $view_helper = new ViewHelper();
 ?>
 <form id="submit_form_property_term" onkeypress="return event.keyCode != 13;" >
     <div >
@@ -56,9 +61,7 @@
                            id="property_term_new_category"
                            name="socialdb_property_term_new_category"
                            placeholder="<?php _e('Category name','tainacan'); ?>">
-                    <div style="margin-top: 15px;padding: 15px;border: 1px solid #ccc;border-radius: 4px;min-height: 65px;"
-                         onclick="verify_has_li()"
-                    >
+                    <div style="margin-top: 15px;padding: 15px;border: 1px solid #ccc;border-radius: 4px;min-height: 65px;" onclick="verify_has_li()">
                         <button type="button"
                                 class="btn btn-default pull-right"
                                 onclick="add_hierarchy_taxonomy_create_zone()">
@@ -100,11 +103,11 @@
                     <label for="socialdb_property_help"><?php _e('Property term text helper','tainacan'); ?></label>
                     <input type="text" class="form-control" id="socialdb_property_help" name="socialdb_property_help" />
                 </div>
-                <div class="form-group">
+                <!--<div class="form-group">
                     <label for="socialdb_property_term_widget"><?php _e('Property Term Widget','tainacan'); ?></label>
                     <select class="form-control" id="socialdb_property_term_widget" name="socialdb_property_term_widget">
                     </select>
-                </div>
+                </div>-->
                 <div class="form-group">
                     <label for="property_term_required" ><?php _e('Elements Quantity','tainacan'); ?> : </label>
                     <input type="radio"
@@ -122,18 +125,18 @@
                     &nbsp;<input type="radio" name="socialdb_event_property_visualization" id="socialdb_property_term_visualization_restrict" value="restrict">&nbsp;<?php _e('Restrict','tainacan') ?>
                 </div>
                 <div class="form-group category-fit-column" style="display: inline-block; width: 59%">
-                    <label style="display: block"><?php _e('Habilitate add new category','tainacan'); ?></label>
+                    <label style="display: block"><?php _e('Enable add new category','tainacan'); ?></label>
                     &nbsp;<input type="radio" name="socialdb_event_property_habilitate_new_category" id="new_item_true"   value="true">&nbsp;<?php _e('Yes','tainacan') ?>
                     &nbsp;<input type="radio" name="socialdb_event_property_habilitate_new_category" id="new_item_false" checked="checked" value="false">&nbsp;<?php _e('No','tainacan') ?>
                 </div>
                 <div class="form-group" >
                     <input type="checkbox" name="property_term_required" id="property_term_required_true" value="true">&nbsp;<b><?php _e('Required','tainacan'); ?></b>
                 </div>
-                <div class="form-group">
+                <!--<div class="form-group">
                     <label for="socialdb_event_property_tab"><?php _e('Select the tab','tainacan'); ?></label>
                     <select class="socialdb_event_property_tab form-control" name="socialdb_event_property_tab">
                     </select>
-                </div>
+                </div>-->
                 <div  class="form-group">
                     <label for="socialdb_property_default_value"><?php _e('Property data default value', 'tainacan'); ?></label>
                     <input type="text"
@@ -147,7 +150,7 @@
                 </div>
             </div>
 
-            <hr class="metadata-common-fields">
+            <!--<hr class="metadata-common-fields">
             <div class="form-group">
                 <label for="use-filter" style="display: inline-block"><?php _e('Use as a filter','tainacan'); ?></label>
                 <input type="checkbox" onchange="toggle_term_widget(this)" value="use_filter" name="property_data_use_filter" class="property_data_use_filter" />
@@ -181,7 +184,7 @@
                     &nbsp;<input type="radio" name="filter_ordenation" id="term_filter_ordenation_a" checked="checked"  value="alphabetic">&nbsp;<?php _e('Alphabetic','tainacan') ?>
                     &nbsp;<input type="radio" name="filter_ordenation" id="term_filter_ordenation_1" value="number">&nbsp;<?php _e('Items number','tainacan') ?>
                 </div>
-            </div>
+            </div>-->
         </div>
     </div>
 

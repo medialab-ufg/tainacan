@@ -369,12 +369,13 @@
 
         var $setViewMode = $('.selected-viewMode').attr('class');
         if($setViewMode) {
-            if($setViewMode.split(" ")[0] == 'gallery')
+            $setViewMode = $setViewMode.split(" ")[0];
+
+            if($setViewMode === 'gallery')
             {
                // $(".col-items-per-page").val(8).trigger('change');
             }
 
-            $setViewMode = $setViewMode.split(" ")[0];
             if("table" === $setViewMode) {
 
                 if (isMobile()) {
