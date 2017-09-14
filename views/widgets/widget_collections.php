@@ -26,18 +26,25 @@ class Collections extends WP_Widget {
                         <div class="col-md-6 tainacan-new-wrapper no-padding">
                             <?php if( has_post_thumbnail() ):
                                 $img = get_item_thumb_image(get_the_ID());
-                                echo "<div class='collec-thumb'> <a href='" . get_the_permalink() ."'> " . $img . "</a> </div>";
+                                echo "<div class='collec-thumb item-" . $counter . " " . $extra_class . "  '> <a href='" . get_the_permalink() ."'> " . $img . "</a> </div>";
                             else:
                                 ?>
                                 <a href="<?php echo the_permalink(); ?>">
-                                    <div class="placeholder-no-thumb <?php echo $extra_class; ?>"></div>
+                                    <div class="img-thumbnail placeholder-no-thumb <?php echo $extra_class; ?>"></div>
                                 </a>
-
                             <?php endif; ?>
                         </div>
                     <?php
                         $counter++;
                     endwhile;
+                    $col_root_id = get_option('collection_root_id');
+                    ?>
+                    <div class="read-more">
+                        <a href="<?php echo get_permalink($col_root_id); ?>">
+                            <?php _t('Read more...',1) ?>
+                        </a>
+                    </div>
+                <?php
                 } else {
                     echo "<h3>" . _t("No posts yet!") . "</h3>";
                 }

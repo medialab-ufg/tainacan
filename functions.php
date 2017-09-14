@@ -10,7 +10,7 @@ require_once (dirname(__FILE__) . '/libraries/php/PDFParser/vendor/autoload.php'
 require_once (dirname(__FILE__) . '/libraries/php/OfficeToPlainText/OfficeDocumentToPlainText.php');
 require_once('wp_bootstrap_navwalker.php');
 include_once("models/log/log_model.php");
-$tainacan_widgets = ["contact", "social_media", "site_map", "teaser", "news"];
+$tainacan_widgets = ["contact", "social_media", "site_map", "teaser", "news", "collections"];
 foreach ($tainacan_widgets as $wg)
     include_once("views/widgets/widget_$wg.php");
 
@@ -3211,7 +3211,7 @@ function get_item_thumb_image($item_id, $size = "thumbnail") {
             $_img_id = (int) $_post_img_id[0];
             $_img_url = get_post($_img_id)->guid;
 
-            return '<img src="' . $_img_url . '" alt="" class="img-responsive" style="max-width: 100%" />';
+            return '<img src="' . $_img_url . '" alt="" class="img-responsive img-thumbnail" style="max-width: 100%" />';
         } else {
             return '<img src="' . get_item_thumbnail_default($item_id) . '" class="img-responsive" style="max-width: 100%">';
         }
