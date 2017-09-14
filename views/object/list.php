@@ -5,7 +5,7 @@ include_once ('js/list_js.php');
 include_once ('js/geolocation_js.php');
 include_once ('helper/loader.php');
 
-$objHelper->renderCollectionPagination($loop->found_posts, $loop->post_count, $pagid, $show_string, 'top_pag');
+$objHelper->renderCollectionPagination($loop->found_posts, (isset($posts_per_page)) ? $posts_per_page : $loop->post_count, $pagid, $show_string, 'top_pag',$loop);
 if ( $loop->have_posts() ) { ?>
 
     <div id="collection-view-mode">
@@ -49,4 +49,4 @@ if ( $loop->have_posts() ) { ?>
 
 }
 
-$objHelper->renderCollectionPagination($loop->found_posts, $loop->post_count, $pagid, $show_string, 'bottom_pag');
+$objHelper->renderCollectionPagination($loop->found_posts, (isset($posts_per_page)) ? $posts_per_page : $loop->post_count, $pagid, $show_string, 'bottom_pag',$loop);

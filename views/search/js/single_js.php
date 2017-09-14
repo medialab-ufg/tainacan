@@ -1128,6 +1128,7 @@
             }
 
             setMenuContainerHeight();
+            $('.col-items-per-page').val(elem.items_per_page);
         });
     }
     /**

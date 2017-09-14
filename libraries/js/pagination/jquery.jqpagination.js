@@ -308,7 +308,10 @@
 			switch (method.toLowerCase()) {
 
 				case 'option':
-
+                    //added code
+                    if (value === undefined) {
+                        return base.options[key];
+                    }
 					// set default object to trigger the paged event (legacy opperation)
 					var options = {'trigger': true},
 					result = false;

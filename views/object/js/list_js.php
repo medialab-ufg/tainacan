@@ -147,48 +147,54 @@
         });
 
         $(".col-items-per-page").on('change', function() {
-            var pag_status_qtd = $("#pagination_current_page").val();
-            var base_calculus = 0;
-            var init = 1;
-            var limit = parseInt(this.value);
-            var total_items = $.trim($(".col-total-items").first().text());
-            var show_max_count = limit;
-
-            if(limit > total_items)
-                show_max_count = total_items;
-
-            if(pag_status_qtd != "" && pag_status_qtd > 1) {
-                base_calculus = parseInt(pag_status_qtd) - 1;
-                init = (base_calculus * limit) + 1;
-                var limit = parseInt(this.value);
-                var current_limit = init + limit;
-
-                if(current_limit > total_items)
-                    current_limit = total_items;
-
-                $('span.per-page').text(current_limit);
-            } else {
-                $('span.per-page').text(show_max_count);
-            }
-
-            var viewMode = $("#temp-viewMode").val();
-            var container = $('.' + viewMode +'-view-container');
-            $('span.base-page-init').text( init );
-            $(".col-items-per-page").val(limit);
-
-            $(container).each(function(idx, el) {
-              var item_num = parseInt( $(el).attr('data-order') );
-              if( $.isNumeric( item_num ) ) {
-                  if ( item_num <= limit ) {
-                      $(el).show();
-                  } else {
-                      $(el).hide();
-                  }
-              }
-           });
+            var trash_page = false;
+            var list_trash = $("#is_trash").val();
+            if(1===list_trash)
+                trash_page = true;
+            var current_mode = $('.selected-viewMode').attr('class').split(" ")[0];
+             wpquery_page(1, current_mode, trash_page)
+//            var pag_status_qtd = $("#pagination_current_page").val();
+//            var base_calculus = 0;
+//            var init = 1;
+//            var limit = parseInt(this.value);
+//            var total_items = $.trim($(".col-total-items").first().text());
+//            var show_max_count = limit;
+//
+//            if(limit > total_items)
+//                show_max_count = total_items;
+//
+//            if(pag_status_qtd != "" && pag_status_qtd > 1) {
+//                base_calculus = parseInt(pag_status_qtd) - 1;
+//                init = (base_calculus * limit) + 1;
+//                var limit = parseInt(this.value);
+//                var current_limit = init + limit;
+//
+//                if(current_limit > total_items)
+//                    current_limit = total_items;
+//
+//                $('span.per-page').text(current_limit);
+//            } else {
+//                $('span.per-page').text(show_max_count);
+//            }
+//
+//            var viewMode = $("#temp-viewMode").val();
+//            var container = $('.' + viewMode +'-view-container');
+//            $('span.base-page-init').text( init );
+//            $(".col-items-per-page").val(limit);
+//
+//            $(container).each(function(idx, el) {
+//              var item_num = parseInt( $(el).attr('data-order') );
+//              if( $.isNumeric( item_num ) ) {
+//                  if ( item_num <= limit ) {
+//                      $(el).show();
+//                  } else {
+//                      $(el).hide();
+//                  }
+//              }
+//           });
         });
 
-        $(".col-items-per-page").val(10).trigger('change');
+       // $(".col-items-per-page").val(10).trigger('change');
 
         var default_viewMode = $("#default-viewMode").val();
         var lat = $("#set-lat").val();
@@ -365,7 +371,7 @@
         if($setViewMode) {
             if($setViewMode.split(" ")[0] == 'gallery')
             {
-                $(".col-items-per-page").val(8).trigger('change');
+               // $(".col-items-per-page").val(8).trigger('change');
             }
 
             $setViewMode = $setViewMode.split(" ")[0];
