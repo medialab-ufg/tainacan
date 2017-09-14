@@ -249,6 +249,7 @@ class ObjectController extends Controller {
                 $collection_id = $data['collection_id'];
                 $recover_wpquery = $object_model->get_args($data);
                 $args = $object_model->list_all($data);
+                $recover_wpquery['posts_per_page'] = $args['posts_per_page'];
                 $data['loop'] = new WP_Query($args);
                 $data['collection_data'] = $collection_model->get_collection_data($collection_id);
                 $data["show_string"] = is_root_category($collection_id) ? __('Showing collections:', 'tainacan') : __('Showing Items:', 'tainacan');
@@ -273,6 +274,7 @@ class ObjectController extends Controller {
                 $return['page'] = $this->render(dirname(__FILE__) . '../../../views/object/list.php', $data ) ;
                 $return['args'] = serialize($recover_wpquery);
                 $return['preset_order'] = $recover_wpquery['order'];
+                $return['items_per_page'] = $args['posts_per_page'];
 
                 if (empty($object_model->get_collection_posts($data['collection_id']))) {
                     $return['empty_collection'] = true;

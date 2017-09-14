@@ -1002,6 +1002,7 @@ function showList(src) {
                 $('#loader_objects').hide();
                 $('#wp_query_args').val(elem.args);
                 $('#list').html(elem.page).show();
+                $('.col-items-per-page').val(elem.items_per_page);
                 if (elem.empty_collection) {
                     $('#collection_empty').show();
                     $('#items_not_found').hide();
