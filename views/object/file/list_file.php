@@ -57,11 +57,13 @@ include_once ('js/list_file_js.php');
             </div>
             <div class="modal-body">
                 <div id="carousel-attachment" class="col-md-12">
-                    <?php foreach ($attachments['image'] as $image): ?>
-                        <div class='' style="display:block;">
-                            <img src="<?= $image->guid ?>" class="img-responsive"/>
-                        </div>
-                    <?php endforeach; ?>
+                    <?php if(isset($attachments['image']) && is_array($attachments['image'])): ?>
+                        <?php foreach ($attachments['image'] as $image): ?>
+                            <div class='' style="display:block;">
+                                <img src="<?= $image->guid ?>" class="img-responsive"/>
+                            </div>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
