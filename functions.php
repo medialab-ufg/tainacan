@@ -10,7 +10,7 @@ require_once (dirname(__FILE__) . '/libraries/php/PDFParser/vendor/autoload.php'
 require_once (dirname(__FILE__) . '/libraries/php/OfficeToPlainText/OfficeDocumentToPlainText.php');
 require_once('wp_bootstrap_navwalker.php');
 include_once("models/log/log_model.php");
-$tainacan_widgets = ["contact", "social_media", "site_map", "teaser", "news", "collections"];
+$tainacan_widgets = ["contact", "social_media", "site_map", "teaser", "news", "collections", "spot"];
 foreach ($tainacan_widgets as $wg)
     include_once("views/widgets/widget_$wg.php");
 

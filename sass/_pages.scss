@@ -80,14 +80,34 @@ body.archive, body.single-post, body.page-template-default {
 
 
 body.page-template-template-home {
+  $home-box-gray: #4D4D4D;
 
   h1,h2,h3,h4,h6 {
+    //font-weight: bolder;
+  }
+
+  p {
+
+  }
+
+  h1, h2 {
+    color: $brand-medium-blue;
+  }
+
+  h1, h3,h4,h6 {
     font-weight: bolder;
+  }
+
+  h3,h4,h5,h6,p,li {
+    color: $home-box-gray;
+  }
+
+  a {
+    color: $brand-medium-blue;
   }
 
   h2 {
     font-size: 24px;
-    color: $brand-medium-blue;
     border-bottom: 2px solid $brand-medium-blue;
     padding-bottom: 10px;
   }
@@ -108,24 +128,32 @@ body.page-template-template-home {
         border: none !important;
         margin: 0;
         a {
-          color: $brand-medium-blue;
+          //color: $brand-medium-blue;
         }
+      }
+    }
+
+    .spot-box {
+      h4 {
+        margin-top: 0;
+        margin-bottom: 30px;
       }
     }
 
     .teaser-cnt {
       overflow: hidden;
-      max-height: 100%;
+      max-height: 95%;
       color: #4D4D4D;
-      line-height: 16.5px;
-      font-size: 14px;
+      line-height: 20px;
+      font-size: 130%;
+      margin-bottom: 2%;
     }
 
     .read-more {
       text-align: right;
       a {
         bottom: 0;
-        color: $brand-medium-blue;
+        //color: $brand-medium-blue;
         font-weight: bolder;
         right: 0;
         &:hover {

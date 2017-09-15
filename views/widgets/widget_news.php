@@ -17,7 +17,7 @@ class HomeNews extends WP_Widget {
         ?>
 
         <div class="col-md-6">
-            <h2> <?php echo $title; ?> </h2>
+            <h2> <?php echo wp_trim_words($title, 5, '...'); ?> </h2>
             <div class="col-md-12 home-widget-box no-padding">
                 <?php
                 if($latest_news->have_posts()) {

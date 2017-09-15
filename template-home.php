@@ -18,7 +18,7 @@
 
     <div class="col-md-12 tainacan-page-area">
 
-        <div class="col-md-10 no-padding center">
+        <div class="col-md-12 no-padding center">
             <header class="page-header col-md-12 no-padding"> </header>
 
             <div id="primary" class="tainacan-content-area">
