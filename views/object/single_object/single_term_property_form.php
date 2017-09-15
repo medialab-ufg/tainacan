@@ -204,11 +204,12 @@
 
 
     <br>
-    <button type="button" onclick="back_button('<?php echo $object_id; ?>')" class="btn btn-default" id="clear_categories">
-        <?php _e('Cancel','tainacan'); ?>
-    </button>
-    <button type="submit" class="btn btn-primary pull-right action-continue" form="submit_form_property_term">
+    <button type="submit" class="btn btn-primary pull-right action-continue" form="submit_form_property_term" style="margin-left: 5px;">
         <?php _e("Add", "tainacan")?>
+    </button>
+
+    <button type="button" onclick="back_button('<?php echo $object_id; ?>')" class="btn btn-default pull-right" id="clear_categories">
+        <?php _e('Cancel','tainacan'); ?>
     </button>
     <br>
 </form>

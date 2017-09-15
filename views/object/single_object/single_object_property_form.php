@@ -47,6 +47,12 @@ include_once ('js/object_property_form_js.php'); ?>
     <input type="hidden" id="single_event_add_property_object_create_time" name="socialdb_event_create_date" value="<?php echo mktime(); ?>">
     <input type="hidden" id="single_event_add_property_object_user_id" name="socialdb_event_user_id" value="<?php echo get_current_user_id(); ?>">
     <input type="hidden" id="single_operation_property_object" name="operation" value="add_event_property_object_create">
-    <button type="submit" id="submit" class="btn btn-default"><?php _e('Submit','tainacan'); ?></button>
-    <button type="button" onclick="back_button_single('<?php echo $object_id; ?>')" class="btn btn-default" id="clear_categories"><?php _e('Clear','tainacan'); ?></button>
+    <button type="submit" id="submit" class="btn btn-primary pull-right" style="margin-left: 5px;">
+        <?php _e('Submit','tainacan'); ?>
+    </button>
+
+    <button type="button" onclick="back_button_single('<?php echo $object_id; ?>')" class="btn btn-default pull-right" id="clear_categories">
+        <?php _e('Cancel','tainacan'); ?>
+    </button>
+    <br>
 </form>

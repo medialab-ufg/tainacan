@@ -521,7 +521,7 @@ if("one" === $single_mode) {
                                             <li>&nbsp;<span class="glyphicon glyphicon-th-list graydrop"></span>&nbsp;<span>
                                                     <a class="add_property_data"
                                                        onclick="show_form_data_property_single('<?php echo $post->ID ?>')"
-                                                       href="#property_form_<?php echo $post->ID ?>"><?php _e('Add new data property', 'tainacan'); ?></a></span>
+                                                       href="#property_form_<?php echo $post->ID ?>"><?php _e('Add data property', 'tainacan'); ?></a></span>
                                             </li>
                                         <?php endif; ?>
 
@@ -529,7 +529,7 @@ if("one" === $single_mode) {
                                             <li>&nbsp;<span class="glyphicon glyphicon-th-list graydrop"></span>&nbsp;<span>
                                                     <a class="add_property_object"
                                                        onclick="show_form_object_property_single('<?php echo $post->ID ?>')"
-                                                       href="#property_form_<?php echo $post->ID ?>"><?php _e('Add new object property', 'tainacan'); ?></a></span>
+                                                       href="#property_form_<?php echo $post->ID ?>"><?php _e('Add object property', 'tainacan'); ?></a></span>
                                             </li>
                                         <?php endif; ?>
 
@@ -537,7 +537,7 @@ if("one" === $single_mode) {
                                             <li style="padding-top: 8px;">&nbsp;<span class="glyphicon glyphicon-th-list graydrop"></span>&nbsp;<span>
                                                     <a style=""
                                                        onclick="show_form_term_property_single('<?php echo $post->ID ?>')"
-                                                       href="#property_form_<?php echo $post->ID ?>"><?php _e('Add new term property', 'tainacan'); ?></a></span>
+                                                       href="#property_form_<?php echo $post->ID ?>"><?php _e('Add term property', 'tainacan'); ?></a></span>
                                             </li>
                                         <?php endif; ?>
                                     </ul>

@@ -39,6 +39,11 @@ include_once ('js/data_property_form_js.php'); ?>
     <input type="hidden" id="single_event_add_property_data_user_id" name="socialdb_event_user_id" value="<?php echo get_current_user_id(); ?>">
     <input type="hidden" id="operation_property_data" name="operation" value="add_event_property_data_create">
 
-    <button type="button" onclick="back_button('<?php echo $object_id; ?>')" class="btn btn-default" id="clear_categories"><?php _e('Clear','tainacan'); ?></button>
-    <button type="submit" id="submit_property_data" class="btn btn-default"><?php _e('Submit','tainacan'); ?></button>
+    <button type="submit" id="submit_property_data" class="btn btn-primary pull-right" style="margin-left: 5px;">
+        <?php _e('Add','tainacan'); ?>
+    </button>
+    <button type="button" onclick="back_button('<?php echo $object_id; ?>')" class="btn btn-default pull-right" id="clear_categories">
+        <?php _e('Cancel','tainacan'); ?>
+    </button>
+    <br>
 </form>

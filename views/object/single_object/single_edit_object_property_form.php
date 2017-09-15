@@ -50,5 +50,5 @@ include_once ('js/edit_object_property_form_js.php');
     <input type="hidden" id="single_event_edit_property_object_post_id" name="event_edit_property_object_post_id" value="<?php  echo $object_id; ?>"><!-- ID DO OBJETO EM QUESTAO -->
     <input type="hidden" id="operation_event_edit_property_object" name="operation" value="add_event_property_object_edit"><!-- OPERACAO -->
     <button type="submit" id="submit" class="btn btn-default"><?php _e('Submit','tainacan'); ?></button>
-    <button type="button" onclick="back_button_sinlge('<?php echo $object_id; ?>')" class="btn btn-default" id="clear_categories"><?php _e('Back','tainacan'); ?></button>
+    <button type="button" onclick="back_button_sinlge('<?php echo $object_id; ?>')" cla ss="btn btn-default" id="clear_categories"><?php _e('Back','tainacan'); ?></button>
 </form>
