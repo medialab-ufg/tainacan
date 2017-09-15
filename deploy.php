@@ -1,6 +1,6 @@
 <?php
     /** 
-     * GIT DEPLOYMENT SCRIPT
+     * GIT DEPLOYMENT SCRIPT 
      *
      * Used for automatically deploying websites via GitHub
      * a
