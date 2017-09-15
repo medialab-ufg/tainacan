@@ -3176,7 +3176,7 @@ function repository_page_title() {
     if(get_option('blogname'))
         return get_option('blogname');
     else
-       return __('Tainacan', 'tainacan');
+       return _t('Tainacan');
 }
 
 function get_collection_item_href($collection_id, $item_id = 0, $viewHelper = null) {

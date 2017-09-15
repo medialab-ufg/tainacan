@@ -9,11 +9,9 @@ include_once('helpers/view_helper.php');
 $socialdb_logo = get_option('socialdb_logo');
 $socialdb_title = get_option('blogname');
 $col_root_id = get_option('collection_root_id');
-
 $stat_page = get_page_by_title(__('Statistics', 'tainacan'))->ID;
 $viewHelper = new ViewHelper();
 $_src_ = get_template_directory_uri();
-
 global $wp_query;
 
 if (is_object($wp_query->post)) {
@@ -23,15 +21,14 @@ if (is_object($wp_query->post)) {
     $collection_id = 0;
     $collection_owner = "";
 }
-
-// $user_owner = get_user_by('id', $collection_owner)->display_name;
 $_header_enabled = get_post_meta($collection_id, 'socialdb_collection_show_header', true);
 ?>
 <html <?php language_attributes(); ?> xmlns:fb="http://www.facebook.com/2008/fbml" class="no-js"><!--<![endif]-->
 <head>
-  <meta charset="<?php bloginfo('charset'); ?>"><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <meta name="google-site-verification" content="29Uww0bx9McdeJom1CDiXyGUZwK5mtoSuF5tA_i59F4" />
-  <link rel="icon" type="image/png" href="<?php echo $_src_ . '/libraries/images/icone.png' ?>">
+    <meta charset="<?php bloginfo('charset'); ?>"> <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="google-site-verification" content="29Uww0bx9McdeJom1CDiXyGUZwK5mtoSuF5tA_i59F4" />
+    <link rel="icon" type="image/png" href="<?php echo $_src_ . '/libraries/images/icone.png' ?>">
+
     <title> <?php echo repository_page_title() ?> </title>
     <?php if (is_front_page()) { ?>
         <link rel="alternate" type="application/rdf+xml" href="<?php echo site_url(); ?>/?.rdf">
@@ -97,3 +94,15 @@ $_header_enabled = get_post_meta($collection_id, 'socialdb_collection_show_heade
     </nav>
 
     <?php get_template_part("partials/modals","header"); ?>
+
+    <?php
+    // Renders custom header only for new template pages
+    if ( is_archive() || is_page_template() || is_page() || is_singular('post') ) {
+        $_menu_ = ['container_class' => 'container', 'container' => false, 'walker' => new wp_bootstrap_navwalker(), 'menu_class' => 'navbar navbar-inverse menu-ibram' ];
+    ?>
+        <header class="custom-header" style="<?php echo home_header_bg($socialdb_logo)?>">
+            <div class="menu-transp-cover"></div> <?php get_template_part("partials/header/main"); ?>
+        </header>
+    <?php wp_nav_menu($_menu_);
+
+    }

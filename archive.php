@@ -1,15 +1,4 @@
-<?php get_header();
-
-$_menu_args = [ 'container_class' => 'container', 'container' => false, 'walker' => new wp_bootstrap_navwalker(),
-    'menu_class' => 'navbar navbar-inverse menu-ibram' ];
-?>
-
-    <header class="custom-header" style="<?php echo home_header_bg($socialdb_logo)?>">
-        <div class="menu-transp-cover"></div>
-        <?php get_template_part("partials/header/main"); ?>
-    </header>
-
-<?php wp_nav_menu($_menu_args); ?>
+<?php get_header(); ?>
 
     <div class="col-md-12 tainacan-page-area">
 

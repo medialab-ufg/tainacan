@@ -17,35 +17,25 @@ class Spot extends WP_Widget {
         $city = empty($instance['city']) ? '' : $instance['city'];
         $state = empty($instance['state']) ? '' : $instance['state'];
         $read_more_link = empty($instance['read_more_link']) ? '' : $instance['read_more_link'];
-        $top_fields = [
+
+        $spot_fields = [
             ['title' => __('Title:'), 'id' => $this->get_field_id('title'), 'name' => $this->get_field_name('title') , 'value' => esc_attr($title)],
             ['title' => __('Institution Name:'), 'id' => $this->get_field_id('institution'), 'name' => $this->get_field_name('institution') , 'value' => esc_attr($institution)],
             ['title' => __('Main Phone:'), 'id' => $this->get_field_id('phone_1'), 'name' => $this->get_field_name('phone_1') , 'value' => esc_attr($phone_1)],
-            ['title' => __('Secondary Phone'), 'id' => $this->get_field_id('phone_2'), 'name' => $this->get_field_name('phone_2') , 'value' => esc_attr($phone_2)]
+            ['title' => __('Secondary Phone:'), 'id' => $this->get_field_id('phone_2'), 'name' => $this->get_field_name('phone_2') , 'value' => esc_attr($phone_2)],
+            ['title' => __('Complete Address Text:'), 'id' => $this->get_field_id('general_address'), 'name' => $this->get_field_name('general_address') , 'value' => esc_attr($general_address), 'type' => 'textarea'],
+            ['title' => __('CEP:'), 'id' => $this->get_field_id('cep'), 'name' => $this->get_field_name('cep') , 'value' => esc_attr($cep)],
+            ['title' => __('City:'), 'id' => $this->get_field_id('city'), 'name' => $this->get_field_name('city') , 'value' => esc_attr($city)],
+            ['title' => __('UF:'), 'id' => $this->get_field_id('state'), 'name' => $this->get_field_name('state') , 'value' => esc_attr($state)],
+            ['title' => __('Read More URL:'), 'id' => $this->get_field_id('read_more_link'), 'name' => $this->get_field_name('read_more_link') , 'value' => esc_attr($read_more_link)]
         ];
-        $text_fields = [
-          ['title' => __('CEP:'), 'id' => $this->get_field_id('cep'), 'name' => $this->get_field_name('cep') , 'value' => esc_attr($cep)],
-          ['title' => __('City:'), 'id' => $this->get_field_id('city'), 'name' => $this->get_field_name('city') , 'value' => esc_attr($city)],
-          ['title' => __('UF:'), 'id' => $this->get_field_id('state'), 'name' => $this->get_field_name('state') , 'value' => esc_attr($state)],
-          ['title' => __('Read More URL:'), 'id' => $this->get_field_id('read_more_link'), 'name' => $this->get_field_name('read_more_link') , 'value' => esc_attr($read_more_link)]
-        ];
-
-        foreach ($top_fields as $i => $_field) {
+        foreach ($spot_fields as $i => $_field) {
             echo "<p><label for='" . $_field['id'] . "'>" . $_field['title'] . "</label>";
-            echo "<input class='widefat' id='". $_field['id'] ."' type='text' name='". $_field['name'] ."' value='". $_field['value'] ."' /></p>";
-        }
-        ?>
-        <p>
-            <label for="general_address"> <?php _t('Complete Address Text:', '1'); ?> </label>
-            <textarea name="<?php echo $this->get_field_name('general_address')?>" class="widefat"
-                      id="<?php echo $this->get_field_id('general_address')?>" cols="30" rows="10"><?php echo esc_attr($general_address); ?></textarea>
-        </p>
-
-        <?php
-            foreach ($text_fields as $i => $_field) {
-                echo "<p><label for='" . $_field['id'] . "'>" . $_field['title'] . "</label>";
+            if( isset($_field['type']) && ( $_field['type'] === 'textarea') )
+                echo "<textarea class='widefat' id='". $_field['id'] ."' rows='5' type='text' name='". $_field['name'] ."' >". $_field['value'] ."</textarea></p>";
+            else
                 echo "<input class='widefat' id='". $_field['id'] ."' type='text' name='". $_field['name'] ."' value='". $_field['value'] ."' /></p>";
-            }
+        }
     }
 
     public function widget($args, $instance) {
