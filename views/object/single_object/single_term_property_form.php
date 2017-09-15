@@ -194,6 +194,7 @@
     <input type="hidden" id="property_term_id" name="property_term_id" value="">
     <input type="hidden" id="operation_property_term" name="operation" value="add_property_term">
     <input type="hidden" name="search_add_facet" id="search_add_facet" value="">
+    <input type="hidden" name="select_menu_style" value="menu_style_116">
 
     <!-- -->
     <input type="hidden" name="socialdb_property_term_widget" value="tree">
@@ -203,6 +204,9 @@
 
 
     <br>
+    <button type="button" onclick="back_button('<?php echo $object_id; ?>')" class="btn btn-default" id="clear_categories">
+        <?php _e('Cancel','tainacan'); ?>
+    </button>
     <button type="submit" class="btn btn-primary pull-right action-continue" form="submit_form_property_term">
         <?php _e("Add", "tainacan")?>
     </button>

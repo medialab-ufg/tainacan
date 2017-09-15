@@ -175,6 +175,14 @@ $('#socialdb_property_vinculate_category_create').click(function (e) {
     }
 });
 
+function back_button(object_id) {
+    $('#single_data_property_form_' + object_id).hide();
+    $('#single_object_property_form_' + object_id).hide();
+    $('#single_edit_data_property_form_' + object_id).hide();
+    $('#single_edit_object_property_form_' + object_id).hide();
+    $('#single_list_all_properties_' + object_id).show();
+}
+
 //verifica se o container possui algum li, funcao apenas caso estiver vazio
 function verify_has_li() {
     if ($('#taxonomy_create_zone').has('ul').length == 0) {
@@ -412,11 +420,14 @@ $('#submit_form_property_term').submit(function (e) {
 
         $("#meta-category").modal('hide');
         if(elem.operation != 'update_property_term'){
-            list_collection_metadata();
+            var object_id = $("#single_object_id").val();
+            back_button(object_id);
+            list_properties_single(object_id);
         }else{
             $('#meta-item-'+elem.property_term_id+' .property-name').text(elem.property_term_name)
         }
-        getRequestFeedback(elem.type, elem.msg);
+
+        showAlertGeneral(elem.title, elem.msg, elem.type);
         $("#dynatree_properties_filter").dynatree("getTree").reload();
         //limpando caches
         delete_all_cache_collection();
