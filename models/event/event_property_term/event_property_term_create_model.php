@@ -39,7 +39,7 @@ class EventPropertyTermCreate extends EventModel {
     public function verify_event($data,$automatically_verified = false) {
        $actual_state = get_post_meta($data['event_id'], 'socialdb_event_confirmed',true);
        if($actual_state!='confirmed'&&$automatically_verified||(isset($data['socialdb_event_confirmed'])&&$data['socialdb_event_confirmed']=='true')){// se o evento foi confirmado automaticamente ou pelos moderadores
-           $data = $this->add_property($data['event_id'],$data,$automatically_verified);    
+           $data = $this->add_property($data['event_id'],$data,$automatically_verified);
        }elseif($actual_state!='confirmed'){
            $this->set_approval_metas($data['event_id'], $data['socialdb_event_observation'], $automatically_verified);
            $this->update_event_state('not_confirmed', $data['event_id']);
@@ -82,6 +82,7 @@ class EventPropertyTermCreate extends EventModel {
         $data['property_locked'] = get_post_meta($event_id, 'socialdb_event_property_lock_field',true) ;
         $data['property_default_value'] = get_post_meta($event_id, 'socialdb_event_property_default_value',true) ;
         $data['property_habilitate_new_category'] = get_post_meta($event_id, 'socialdb_event_property_habilitate_new_category',true) ;
+
         //inserindo o metadado
         $property_category_id = get_post_meta($event_id, 'socialdb_event_property_term_create_category_root_id',true) ;
         if($property_category_id&&$property_category_id!=$this->get_category_root_of($data['collection_id'])){

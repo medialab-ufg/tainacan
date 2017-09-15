@@ -1,8 +1,12 @@
 <script>
 $(function(){
     var src = $('#src').val();
+    var collection_id = $("#collection_id").val();
+
+    $("#property_term_collection_id").val(collection_id);
     showTermsDynatree(src);
 });
+var src = $('#src').val();
 var selected_element;
 var new_category_html =
     '<span onclick="click_event_taxonomy_create_zone($(this).parent())"  style="display: none;" class="li-default taxonomy-list-name taxonomy-category-new">' +
@@ -367,4 +371,55 @@ function toggle_term_widget(el) {
         $("#meta-category .term-widget").hide();
     }
 }
+
+$('#submit_form_property_term').submit(function (e) {
+    e.preventDefault();
+    $('.modal').modal('hide');
+    $('#modalImportMain').modal('show');
+    $.ajax({
+        url: src + '/controllers/property/property_controller.php',
+        type: 'POST',
+        data: new FormData(this),
+        processData: false,
+        contentType: false
+    }).done(function (result) {
+        elem = jQuery.parseJSON(result);
+        $("#terms_dynatree").dynatree("getTree").reload();
+        $('#modalImportMain').modal('hide');
+        $('#socialdb_property_vinculate_category_exist').prop('checked', 'checked');
+        $('#socialdb_property_vinculate_category_exist').trigger('click');
+        $('#property_term_new_category').val('');
+        $('#taxonomy_create_zone').html('');
+
+        var item_was_dragged = $("#meta-category .term-widget").hasClass('select-meta-filter');
+        var current_operation = elem.operation;
+        var menu_style_id = elem.select_menu_style;
+        var term_root_id = elem.socialdb_property_term_root;
+        var ordenation = $('#meta-category input[name=filter_ordenation]:checked').val();
+
+        if (elem.property_data_use_filter == "use_filter") {
+            if (current_operation == "add_property_term") {
+                setCollectionFacet("add", term_root_id, elem.property_term_filter_widget, ordenation, elem.color_facet, "", menu_style_id);
+            } else if (current_operation == "update_property_term") {
+                if (item_was_dragged) {
+                    setCollectionFacet("add", term_root_id, elem.property_term_filter_widget, ordenation, elem.color_facet, "", menu_style_id);
+                    $("#meta-category .term-widget").removeClass('select-meta-filter');
+                } else {
+                    setCollectionFacet("update", term_root_id, elem.property_term_filter_widget, ordenation, elem.color_facet, "", menu_style_id);
+                }
+            }
+        }
+
+        $("#meta-category").modal('hide');
+        if(elem.operation != 'update_property_term'){
+            list_collection_metadata();
+        }else{
+            $('#meta-item-'+elem.property_term_id+' .property-name').text(elem.property_term_name)
+        }
+        getRequestFeedback(elem.type, elem.msg);
+        $("#dynatree_properties_filter").dynatree("getTree").reload();
+        //limpando caches
+        delete_all_cache_collection();
+    });
+});
 </script>
