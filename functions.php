@@ -146,14 +146,14 @@ function activate_widgets() {
     $contact_content = get_option('widget_contact');
 
     $site_map_content[$counter] = array(
-        'title' => __('Mapa do site'), 'handbook' => '',
+        'title' => _t('Site map'), 'handbook' => '',
         'option1_title' => '', 'option1_url' => '', 'option1_new_page' => '',
         'option2_title' => '', 'option2_url' => '', 'option2_new_page' => '',
         'option3_title' => '', 'option3_url' => '', 'option3_new_page' => '',
         'option4_title' => '', 'option4_url' => '', 'option4_new_page' => '',
     );
     $social_media_content[$counter] = array(
-        'title' => __('Redes sociais'), 'facebook_url' => '',
+        'title' => _t('Social Media'), 'facebook_url' => '',
         'youtube_url' => '', 'twitter_url' => '',
         'googleplus_url' => '', 'github_url' => ''
     );
@@ -3742,7 +3742,7 @@ add_action( 'admin_init', 'save_base_permalink_settings' );
 
 function tainacan_home_widgets() {
     register_sidebar(array(
-        'name' => __('Home Page Sections', 'tainacan'),
+        'name' => _t('Home Page Sections'),
         'id' => 'part-1',
         'description' => _t('Select widgets to show at Home Page, and order them as you wish'),
         'before_widget' => '<section id="%1$s" class="widget %2$s">',
@@ -3753,8 +3753,20 @@ function tainacan_home_widgets() {
 }
 add_action('widgets_init', 'tainacan_home_widgets');
 
+function tainacan_contact_widgets() {
+    register_sidebar([
+        'name' => _t('Contact Page Sections'),
+        'id' => 'contact-wids',
+        'description' => _t('Select widgets to show at Contact Page, and order them as you wish'),
+        'before_widget' => '<section id="%1$s" class="contact-widget widget %2$s">',
+        'after_widget' => '</section>',
+        'before_title' => '<h5 class="widget-title">',
+        'after_title' => '</h5>',
+    ]);
+}
+add_action('widgets_init', 'tainacan_contact_widgets');
 /*
-Função para Uso nos meta para os meios sociais.
+Função para uso nos meta para os meios sociais.
 */
 function facebook_meta() {
     global $post;
