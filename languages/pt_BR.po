@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: socialdb\n"
-"POT-Creation-Date: 2017-09-15 15:28-0300\n"
-"PO-Revision-Date: 2017-09-15 15:30-0300\n"
+"POT-Creation-Date: 2017-09-18 15:27-0300\n"
+"PO-Revision-Date: 2017-09-18 15:28-0300\n"
 "Last-Translator: Rodrigo de Oliveira <webmaster@rodrigodeoliveira.net>\n"
 "Language-Team: \n"
 "Language: pt_BR\n"
@@ -19,7 +19,7 @@ msgstr ""
 "X-Poedit-SearchPathExcluded-1: extras\n"
 "X-Poedit-SearchPathExcluded-2: .sass-cache\n"
 "X-Poedit-SearchPathExcluded-3: libraries/js\n"
-"X-Poedit-SearchPathExcluded-4: views/widgets\n"
+"X-Poedit-SearchPathExcluded-4: views/widgets/widget_site_map.php\n"
 
 #: 404.php:3
 msgid "Page not found!"
@@ -59,14 +59,14 @@ msgstr "Padrão"
 
 #: api/repository_api.php:137
 msgid "No items inserted in this repository or found with these arguments!"
-msgstr ""
+msgstr "Nenhum item encontrado neste repositório com estes argumentos!"
 
 #: api/tainacan_api.php:204 api/tainacan_api.php:225 api/tainacan_api.php:244
 #: api/tainacan_api.php:263
 msgid "message"
 msgstr "mensagem"
 
-#: archive.php:18
+#: archive.php:7 views/widgets/widget_news.php:39
 msgid "News"
 msgstr "Notícias"
 
@@ -87,7 +87,7 @@ msgstr "Logado como"
 msgid "Name:"
 msgstr "Nome:"
 
-#: comments.php:47
+#: comments.php:47 views/widgets/widget_contact.php:179
 msgid "Email:"
 msgstr "E-mail:"
 
@@ -259,7 +259,7 @@ msgstr "Nos conte porque este conteúdo é abusivo"
 #: views/object/edit_object_properties/js/edit_list_properties_accordion_js.php:162
 #: views/object/edit_object_properties/js/edit_list_properties_accordion_js.php:173
 #: views/object/edit_object_properties/js/edit_list_properties_accordion_js.php:531
-#: views/object/formItem/helper/formItem.class.php:1108
+#: views/object/formItem/helper/formItem.class.php:1109
 #: views/object/formItem/helper/formItemText.class.php:168
 #: views/object/formItem/helper/formItemTitle.class.php:78
 #: views/object/formItem/input/date.class.php:210
@@ -860,7 +860,7 @@ msgstr "Tags"
 #: helpers/log/log_helper.php:15 partials/actions-header.php:159
 #: single-socialdb_collection.php:367
 #: views/advanced_search/list_advanced_search.php:37
-#: views/search/root_menu_left.php:7
+#: views/search/root_menu_left.php:7 views/widgets/widget_collections.php:19
 msgid "Collections"
 msgstr "Coleções"
 
@@ -1058,18 +1058,20 @@ msgid "Footer C"
 msgstr "Rodapé C"
 
 #: functions.php:149
-msgid "Mapa do site"
-msgstr ""
+#, fuzzy
+#| msgid "Site:"
+msgid "Site map"
+msgstr "Site:"
 
-#: functions.php:156
-msgid "Redes sociais"
-msgstr ""
+#: functions.php:156 views/statistics/js/list_js.php:45
+msgid "Social Media"
+msgstr "Redes Sociais"
 
 #: functions.php:161
 msgid "Contatos"
 msgstr "Contatos"
 
-#: functions.php:214 header.php:13 helpers/view_helper.php:483
+#: functions.php:214 header.php:12 helpers/view_helper.php:483
 #: partials/actions-header.php:6 partials/actions-header.php:98
 #: views/collection/config_menu.php:74
 msgid "Statistics"
@@ -1621,6 +1623,20 @@ msgstr ""
 "Selecione widgets para exibir na Página Inicial, e ordene-os conforme "
 "desejado"
 
+#: functions.php:3758
+#, fuzzy
+#| msgid "Home Page Sections"
+msgid "Contact Page Sections"
+msgstr "Seções da Home Page"
+
+#: functions.php:3760
+#, fuzzy
+#| msgid "Select widgets to show at Home Page, and order them as you wish"
+msgid "Select widgets to show at Contact Page, and order them as you wish"
+msgstr ""
+"Selecione widgets para exibir na Página Inicial, e ordene-os conforme "
+"desejado"
+
 #: helpers/advanced_search/advanced_search_helper.php:76
 #: helpers/advanced_search/advanced_search_helper.php:88
 #: helpers/advanced_search/advanced_search_helper.php:100
@@ -1874,7 +1890,7 @@ msgstr "Mapear <<"
 #: views/import/import_configuration.php:118
 #: views/object/multiple_social_network/create.php:35
 msgid "URL"
-msgstr "URL "
+msgstr "URL"
 
 #: helpers/mapping/mapping_helper.php:85 views/collection/edit.php:383
 #: views/collection/edit.php:1021
@@ -2583,7 +2599,7 @@ msgstr "Ranking de Colaborações"
 msgid "Notifications"
 msgstr "Noificações"
 
-#: models/comment/comment_model.php:42
+#: models/comment/comment_model.php:39
 msgid "An unexpected error ocurred"
 msgstr "Um erro não esperado ocorreu!"
 
@@ -5172,7 +5188,8 @@ msgstr "Nada encontrado"
 msgid "Perhaps searching can help."
 msgstr "Talvez a busca possa ajudar."
 
-#: partials/content/content.php:27
+#: partials/content/content.php:27 views/widgets/widget_collections.php:44
+#: views/widgets/widget_spot.php:100 views/widgets/widget_teaser.php:28
 msgid "Read more..."
 msgstr "Leia mais..."
 
@@ -5543,7 +5560,7 @@ msgstr "Todas as coleções"
 #: views/object/append_properties_categories/js/properties_categories_accordion_js.php:115
 #: views/object/edit_object_properties/js/edit_list_properties_accordion_js.php:162
 #: views/object/edit_object_properties/js/edit_list_properties_accordion_js.php:173
-#: views/object/formItem/helper/formItem.class.php:1108
+#: views/object/formItem/helper/formItem.class.php:1109
 #: views/object/formItem/helper/formItemTitle.class.php:78
 #: views/object/formItem/input/date.class.php:210
 #: views/object/formItem/input/object.class.php:193
@@ -5569,8 +5586,8 @@ msgstr "já está inserido!"
 #: views/advanced_search/js/search_property_object_metadata_js.php:380
 #: views/advanced_search/js/show_insert_object_properties_js.php:321
 #: views/object/edit_object_properties/js/edit_list_properties_accordion_js.php:602
-#: views/object/formItem/helper/formItem.class.php:962
-#: views/object/formItem/helper/formItem.class.php:985
+#: views/object/formItem/helper/formItem.class.php:963
+#: views/object/formItem/helper/formItem.class.php:986
 #: views/object/formItem/helper/formItemCategory.class.php:77
 #: views/object/formItem/input/object.class.php:629
 #: views/object/formItemMultiple/helper/formItemCategory.class.php:69
@@ -7654,7 +7671,7 @@ msgstr "Remover imagem"
 msgid "Upload more files"
 msgstr " Inserir mais arquivos "
 
-#: views/object/formItem/helper/formItem.class.php:891
+#: views/object/formItem/helper/formItem.class.php:892
 #: views/object/formItemMultiple/formItemMultiple.class.php:512
 msgid "Saved at "
 msgstr "Salvo em "
@@ -10222,10 +10239,6 @@ msgstr "E-mail de Boas Vindas"
 msgid "Keys"
 msgstr "Chaves"
 
-#: views/statistics/js/list_js.php:45
-msgid "Social Media"
-msgstr "Redes Sociais"
-
 #: views/statistics/list.php:24
 msgid "Period"
 msgstr "Período"
@@ -10252,7 +10265,7 @@ msgstr "Meses"
 
 #: views/statistics/list.php:46
 msgid "No temporal scale"
-msgstr ""
+msgstr "Sem escala temporal"
 
 #: views/statistics/list.php:54
 msgid "Report type"
@@ -10581,6 +10594,192 @@ msgstr "Local de trabalho atual"
 #: views/user/register.php:119
 msgid "Professional Resume"
 msgstr "Resumo profissional"
+
+#: views/widgets/widget_collections.php:9
+msgid "Three latest three Tainacan collections"
+msgstr "As últimas três coleções do Tainacan"
+
+#: views/widgets/widget_collections.php:10
+msgid "Tainacan Collections"
+msgstr "Coleções do Tainacan"
+
+#: views/widgets/widget_collections.php:49 views/widgets/widget_news.php:30
+#, fuzzy
+#| msgid "Not implemented yet!"
+msgid "No posts yet!"
+msgstr "Não implementado ainda!"
+
+#: views/widgets/widget_contact.php:12
+msgid "Show contacts info on footer. By MediaLab"
+msgstr ""
+
+#: views/widgets/widget_contact.php:15
+#, fuzzy
+#| msgid "Contatos"
+msgid "Contacts"
+msgstr "Contatos"
+
+#: views/widgets/widget_contact.php:92 views/widgets/widget_news.php:42
+#: views/widgets/widget_social_media.php:58 views/widgets/widget_spot.php:22
+#: views/widgets/widget_teaser.php:43
+#, fuzzy
+#| msgid "Title"
+msgid "Title:"
+msgstr "Título"
+
+#: views/widgets/widget_contact.php:100
+#, fuzzy
+#| msgid "Destination"
+msgid "Institution:"
+msgstr "Destinação"
+
+#: views/widgets/widget_contact.php:108
+msgid "CNPJ:"
+msgstr "CPNJ:"
+
+#: views/widgets/widget_contact.php:116
+#, fuzzy
+#| msgid "tree"
+msgid "Street:"
+msgstr "árvore"
+
+#: views/widgets/widget_contact.php:125
+msgid "Address Number:"
+msgstr "Número:"
+
+#: views/widgets/widget_contact.php:134
+msgid "Complement:"
+msgstr "Complemento:"
+
+#: views/widgets/widget_contact.php:143 views/widgets/widget_spot.php:27
+msgid "CEP:"
+msgstr "CEP:"
+
+#: views/widgets/widget_contact.php:152 views/widgets/widget_spot.php:28
+msgid "City:"
+msgstr "Cidade:"
+
+#: views/widgets/widget_contact.php:161
+#, fuzzy
+#| msgid "State"
+msgid "State:"
+msgstr "Estado"
+
+#: views/widgets/widget_contact.php:170
+msgid "Country:"
+msgstr "País:"
+
+#: views/widgets/widget_contact.php:188
+msgid "Phone:"
+msgstr "Telefone:"
+
+#: views/widgets/widget_news.php:9
+msgid "Two latest posts"
+msgstr "Dois últimos posts"
+
+#: views/widgets/widget_news.php:10
+#, fuzzy
+#| msgid "News"
+msgid "Home News"
+msgstr "Notícias"
+
+#: views/widgets/widget_social_media.php:12
+msgid "Show social medias info on footer. By MediaLab"
+msgstr ""
+
+#: views/widgets/widget_social_media.php:15
+#, fuzzy
+#| msgid "Social Media"
+msgid "Social Medias"
+msgstr "Redes Sociais"
+
+#: views/widgets/widget_social_media.php:48
+msgid "Redes sociais"
+msgstr ""
+
+#: views/widgets/widget_social_media.php:66
+#, fuzzy
+#| msgid "Facebook"
+msgid "Facebook URL:"
+msgstr "Facebook"
+
+#: views/widgets/widget_social_media.php:74
+#, fuzzy
+#| msgid "Youtube"
+msgid "Youtube URL:"
+msgstr "Youtube"
+
+#: views/widgets/widget_social_media.php:82
+msgid "Twitter URL:"
+msgstr "URL do Twitter:"
+
+#: views/widgets/widget_social_media.php:91
+msgid "Google Plus URL:"
+msgstr "URL do Google Plus:"
+
+#: views/widgets/widget_social_media.php:100
+msgid "Github URL:"
+msgstr "URL do GitHub:"
+
+#: views/widgets/widget_spot.php:11
+msgid "Spot"
+msgstr "Local"
+
+#: views/widgets/widget_spot.php:12
+msgid "Institution Name"
+msgstr "Nome da Instituição"
+
+#: views/widgets/widget_spot.php:23
+msgid "Institution Name:"
+msgstr "Nome da Instituição:"
+
+#: views/widgets/widget_spot.php:24
+msgid "Main Phone:"
+msgstr "Telefone Principal:"
+
+#: views/widgets/widget_spot.php:25
+msgid "Secondary Phone:"
+msgstr "Telefone Secundário:"
+
+#: views/widgets/widget_spot.php:26
+msgid "Complete Address Text:"
+msgstr "Endereço completo:"
+
+#: views/widgets/widget_spot.php:29
+msgid "UF:"
+msgstr "UF:"
+
+#: views/widgets/widget_spot.php:30 views/widgets/widget_teaser.php:52
+msgid "Read More URL:"
+msgstr "URL do link Leia Mais"
+
+#: views/widgets/widget_teaser.php:6
+msgid "Write your text with some excerpt text, and a read more link"
+msgstr "Escreva seu texto com um resumo e um link de \"leia mais\""
+
+#: views/widgets/widget_teaser.php:9
+#, fuzzy
+#| msgid "Item Content"
+msgid "Teaser Content"
+msgstr "Conteúdo do Item"
+
+#: views/widgets/widget_teaser.php:38
+msgid "Widget Title"
+msgstr "Título do Widget"
+
+#: views/widgets/widget_teaser.php:47
+msgid "Teaser Text:"
+msgstr "Texto:"
+
+#, fuzzy
+#~| msgid "Templates"
+#~ msgid "Template Map"
+#~ msgstr "Modelos"
+
+#, fuzzy
+#~| msgid "Login with Facebook"
+#~ msgid "Link to handbook:"
+#~ msgstr "Entrar com Facebook"
 
 #~ msgid "Add new term property"
 #~ msgstr "Adicionar novo metadado de categoria"
@@ -10935,9 +11134,6 @@ msgstr "Resumo profissional"
 
 #~ msgid "You want to show labels?"
 #~ msgstr "Deseja mostrar legendas?"
-
-#~ msgid "Comment:"
-#~ msgstr "Comentário:"
 
 #~ msgid "Cancel:"
 #~ msgstr "Cancelar"
