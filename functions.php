@@ -493,7 +493,7 @@ function custom_rewrite_basic() {
     add_rewrite_rule('^oai', 'index.php?oaipmh=true', 'top');
     add_rewrite_rule('^' . __('advanced-search', 'tainacan'), 'index.php?collection=' . $collection->post_name . '&advancedSearch=true', 'top');
 
-    // Páginas de admin da colecao
+    // Paginas de admin da colecao
     add_rewrite_rule('^([^/]*)/admin/'. __('metadata', 'tainacan'), 'index.php?collection=$matches[1]&metadata=true', 'top');
     add_rewrite_rule('^([^/]*)/admin/'. __('layout', 'tainacan'), 'index.php?collection=$matches[1]&layout=true', 'top');
     add_rewrite_rule('^([^/]*)/admin/'. __('events', 'tainacan'), 'index.php?collection=$matches[1]&events=true', 'top');

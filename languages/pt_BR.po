@@ -1,15 +1,15 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: socialdb\n"
-"POT-Creation-Date: 2017-09-18 15:27-0300\n"
-"PO-Revision-Date: 2017-09-18 15:28-0300\n"
+"POT-Creation-Date: 2017-09-18 15:36-0300\n"
+"PO-Revision-Date: 2017-09-18 15:53-0300\n"
 "Last-Translator: Rodrigo de Oliveira <webmaster@rodrigodeoliveira.net>\n"
 "Language-Team: \n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.0.3\n"
+"X-Generator: Poedit 1.8.12\n"
 "X-Poedit-KeywordsList: __;_e;_t\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-SearchPath-0: languages\n"
@@ -1058,14 +1058,12 @@ msgid "Footer C"
 msgstr "Rodapé C"
 
 #: functions.php:149
-#, fuzzy
-#| msgid "Site:"
-msgid "Site map"
-msgstr "Site:"
+msgid "Mapa do site"
+msgstr ""
 
-#: functions.php:156 views/statistics/js/list_js.php:45
-msgid "Social Media"
-msgstr "Redes Sociais"
+#: functions.php:156 views/widgets/widget_social_media.php:48
+msgid "Redes sociais"
+msgstr ""
 
 #: functions.php:161
 msgid "Contatos"
@@ -1602,16 +1600,12 @@ msgid "Reindexation complete,Success"
 msgstr "Extração completa, Sucesso"
 
 #: functions.php:3718
-#, fuzzy
-#| msgid "Type the collection name"
 msgid "Register the Collection's base name"
-msgstr "Digite o nome da coleção"
+msgstr "Registre o nome base de suas coleções"
 
 #: functions.php:3720
-#, fuzzy
-#| msgid "Recent Collections"
 msgid "Enter Collection base URL"
-msgstr "Coleções Recentes"
+msgstr "Entre com a nome base de suas coleções"
 
 #: functions.php:3745
 msgid "Home Page Sections"
@@ -1619,20 +1613,6 @@ msgstr "Seções da Home Page"
 
 #: functions.php:3747
 msgid "Select widgets to show at Home Page, and order them as you wish"
-msgstr ""
-"Selecione widgets para exibir na Página Inicial, e ordene-os conforme "
-"desejado"
-
-#: functions.php:3758
-#, fuzzy
-#| msgid "Home Page Sections"
-msgid "Contact Page Sections"
-msgstr "Seções da Home Page"
-
-#: functions.php:3760
-#, fuzzy
-#| msgid "Select widgets to show at Home Page, and order them as you wish"
-msgid "Select widgets to show at Contact Page, and order them as you wish"
 msgstr ""
 "Selecione widgets para exibir na Página Inicial, e ordene-os conforme "
 "desejado"
@@ -3909,10 +3889,8 @@ msgid "password"
 msgstr "senha "
 
 #: models/user/user_model.php:460
-#, fuzzy
-#| msgid "Click here to change your password"
 msgid "Click here to resume your access with your new password"
-msgstr "Clique aqui para alterar sua senha"
+msgstr "Clique aqui para retomar seu acesso com sua nova senha"
 
 #: models/user/user_model.php:462
 msgid "Your new password is:"
@@ -5189,7 +5167,7 @@ msgid "Perhaps searching can help."
 msgstr "Talvez a busca possa ajudar."
 
 #: partials/content/content.php:27 views/widgets/widget_collections.php:44
-#: views/widgets/widget_spot.php:100 views/widgets/widget_teaser.php:28
+#: views/widgets/widget_spot.php:65 views/widgets/widget_teaser.php:28
 msgid "Read more..."
 msgstr "Leia mais..."
 
@@ -5727,10 +5705,8 @@ msgid "The download will start in few seconds"
 msgstr "O download será iniciado em alguns segundos"
 
 #: views/category/js/list_js.php:636
-#, fuzzy
-#| msgid "Create new item"
 msgid "There are not saved items"
-msgstr "Criar novo item"
+msgstr "Não há itens salvos!"
 
 #: views/category/js/list_js.php:637
 msgid "Modifications can be lost"
@@ -7798,8 +7774,6 @@ msgid "Loading new field"
 msgstr "Carregando novo campo"
 
 #: views/object/formItem/helper/formItemText.class.php:168
-#, fuzzy
-#| msgid "Fill all fields!"
 msgid "Fill all fields before!"
 msgstr "Preencha todos os campos!"
 
@@ -7822,20 +7796,16 @@ msgid " is already inserted! The value will not be persisted!"
 msgstr " já está inserido! O valor não será salvo!"
 
 #: views/object/formItem/input/object.class.php:774
-#, fuzzy
-#| msgid "Type the 3 first letters to activate autocomplete"
 msgid "Type the 2 first letters at least to activate autocomplete"
-msgstr "Digite as 3 primeiras letras para ativar o autocompletar"
+msgstr "Digite as 2 primeiras letras para ativar o autocompletar"
 
 #: views/object/formItem/input/object.class.php:1072
 msgid "Keyword"
 msgstr "Palavra Chave"
 
 #: views/object/formItem/input/text.class.php:110
-#, fuzzy
-#| msgid "this value is already inserted!"
 msgid "this value is already inserted! The value will not be persisted!"
-msgstr "valor já está inserido!"
+msgstr "Este valor já foi inserido! Este campo não será persistido!"
 
 #: views/object/formItem/input/user.class.php:44
 #: views/object/list_properties_accordion.php:260
@@ -8996,8 +8966,6 @@ msgid "Restrict"
 msgstr "Restrita"
 
 #: views/object/single_object/single_term_property_form.php:128
-#, fuzzy
-#| msgid "Habilitate add new category"
 msgid "Enable add new category"
 msgstr "Habilitar adicionar nova categoria"
 
@@ -9452,10 +9420,8 @@ msgid "Salve"
 msgstr "Salve"
 
 #: views/property/list_metadata.php:151
-#, fuzzy
-#| msgid "Filter removed successfully"
 msgid "Filters and metadata were saved successfully!"
-msgstr "Filtro removido com sucesso"
+msgstr "Filtros e metadados foram salvos com sucesso!"
 
 #: views/property/metadata/form_compounds.php:20
 #: views/property/metadata/form_user.php:52
@@ -10239,6 +10205,10 @@ msgstr "E-mail de Boas Vindas"
 msgid "Keys"
 msgstr "Chaves"
 
+#: views/statistics/js/list_js.php:45
+msgid "Social Media"
+msgstr "Redes Sociais"
+
 #: views/statistics/list.php:24
 msgid "Period"
 msgstr "Período"
@@ -10280,10 +10250,8 @@ msgid "Mode: "
 msgstr "Modo: "
 
 #: views/statistics/list.php:106
-#, fuzzy
-#| msgid "There is no data yet for this report!"
 msgid "There is no data for this report or report filter!"
-msgstr "Ainda não há dados para este relatório!"
+msgstr "Ainda não há dados para este relatório ou filtro de relatório!"
 
 #: views/statistics/list.php:111
 msgid "Change the chart type!"
@@ -10298,10 +10266,8 @@ msgid "Click on values to see more details"
 msgstr "Clique nos valores para ver mais detalhes"
 
 #: views/statistics/statistics_dashboard.php:14
-#, fuzzy
-#| msgid "User information"
 msgid "Users' Location"
-msgstr "Informação do usuário"
+msgstr "Localização dos usuários"
 
 #: views/statistics/statistics_dashboard.php:32
 msgid "Frequent Searches"
@@ -10508,10 +10474,8 @@ msgstr ""
 "Digite aqui seu usuário que você usará para seu login ou então seu email"
 
 #: views/user/login_header.php:86
-#, fuzzy
-#| msgid "Type here the username that you will use for login"
 msgid "Username or e-mail that you use to login"
-msgstr "Digite aqui o nome do usuário que será usado para efetuar o login"
+msgstr "Usuário ou email usado em seu login"
 
 #: views/user/profile.php:30
 msgid "Change"
@@ -10538,8 +10502,6 @@ msgid "Current work"
 msgstr "Trabalho atual"
 
 #: views/user/profile.php:74
-#, fuzzy
-#| msgid "Professional Resume"
 msgid "Professional resume"
 msgstr "Resumo profissional"
 
@@ -10604,44 +10566,34 @@ msgid "Tainacan Collections"
 msgstr "Coleções do Tainacan"
 
 #: views/widgets/widget_collections.php:49 views/widgets/widget_news.php:30
-#, fuzzy
-#| msgid "Not implemented yet!"
 msgid "No posts yet!"
-msgstr "Não implementado ainda!"
+msgstr "Nenhum item encontrado!"
 
 #: views/widgets/widget_contact.php:12
 msgid "Show contacts info on footer. By MediaLab"
-msgstr ""
+msgstr "Mostrar informações dos contatos no rodapé. Criado por MediaLab"
 
 #: views/widgets/widget_contact.php:15
-#, fuzzy
-#| msgid "Contatos"
 msgid "Contacts"
 msgstr "Contatos"
 
 #: views/widgets/widget_contact.php:92 views/widgets/widget_news.php:42
 #: views/widgets/widget_social_media.php:58 views/widgets/widget_spot.php:22
 #: views/widgets/widget_teaser.php:43
-#, fuzzy
-#| msgid "Title"
 msgid "Title:"
-msgstr "Título"
+msgstr "Título:"
 
 #: views/widgets/widget_contact.php:100
-#, fuzzy
-#| msgid "Destination"
 msgid "Institution:"
-msgstr "Destinação"
+msgstr "Instituição:"
 
 #: views/widgets/widget_contact.php:108
 msgid "CNPJ:"
 msgstr "CPNJ:"
 
 #: views/widgets/widget_contact.php:116
-#, fuzzy
-#| msgid "tree"
 msgid "Street:"
-msgstr "árvore"
+msgstr "Rua:"
 
 #: views/widgets/widget_contact.php:125
 msgid "Address Number:"
@@ -10660,8 +10612,6 @@ msgid "City:"
 msgstr "Cidade:"
 
 #: views/widgets/widget_contact.php:161
-#, fuzzy
-#| msgid "State"
 msgid "State:"
 msgstr "Estado"
 
@@ -10678,36 +10628,24 @@ msgid "Two latest posts"
 msgstr "Dois últimos posts"
 
 #: views/widgets/widget_news.php:10
-#, fuzzy
-#| msgid "News"
 msgid "Home News"
 msgstr "Notícias"
 
 #: views/widgets/widget_social_media.php:12
 msgid "Show social medias info on footer. By MediaLab"
-msgstr ""
+msgstr "Mostrar informações de redes sociais no rodapé. Criado por MediaLab"
 
 #: views/widgets/widget_social_media.php:15
-#, fuzzy
-#| msgid "Social Media"
 msgid "Social Medias"
 msgstr "Redes Sociais"
 
-#: views/widgets/widget_social_media.php:48
-msgid "Redes sociais"
-msgstr ""
-
 #: views/widgets/widget_social_media.php:66
-#, fuzzy
-#| msgid "Facebook"
 msgid "Facebook URL:"
-msgstr "Facebook"
+msgstr "Facebook URL:"
 
 #: views/widgets/widget_social_media.php:74
-#, fuzzy
-#| msgid "Youtube"
 msgid "Youtube URL:"
-msgstr "Youtube"
+msgstr "Youtube URL:"
 
 #: views/widgets/widget_social_media.php:82
 msgid "Twitter URL:"
@@ -10770,6 +10708,23 @@ msgstr "Título do Widget"
 #: views/widgets/widget_teaser.php:47
 msgid "Teaser Text:"
 msgstr "Texto:"
+
+#, fuzzy
+#~| msgid "Site:"
+#~ msgid "Site map"
+#~ msgstr "Site:"
+
+#, fuzzy
+#~| msgid "Home Page Sections"
+#~ msgid "Contact Page Sections"
+#~ msgstr "Seções da Home Page"
+
+#, fuzzy
+#~| msgid "Select widgets to show at Home Page, and order them as you wish"
+#~ msgid "Select widgets to show at Contact Page, and order them as you wish"
+#~ msgstr ""
+#~ "Selecione widgets para exibir na Página Inicial, e ordene-os conforme "
+#~ "desejado"
 
 #, fuzzy
 #~| msgid "Templates"
