@@ -737,7 +737,8 @@ class FormItem extends Model {
     public function initScripts() {
         ?>
         <script>
-            $('input ,select').focus(function(){
+            $('input[type="text"], input[type="numeric"], input[type="date"], input[type="radio"] , select').focus(function(event){
+                console.log(event);
                 showChangesUpdate();
             });
 
