@@ -380,6 +380,17 @@ function toggle_term_widget(el) {
     }
 }
 
+//vinculacao de categorias
+$('#socialdb_property_vinculate_category_exist').click(function (e) {
+    if ($('#socialdb_property_vinculate_category_exist').is(':checked')) {
+        $('#terms_dynatree').fadeIn();
+        $('#container_add_category').fadeOut();
+    } else {
+        $('#terms_dynatree').fadeOut();
+        $('#container_add_category').fadeIn();
+    }
+});
+
 $('#submit_form_property_term').submit(function (e) {
     e.preventDefault();
     $('.modal').modal('hide');
@@ -428,7 +439,7 @@ $('#submit_form_property_term').submit(function (e) {
         }
 
         showAlertGeneral(elem.title, elem.msg, elem.type);
-        $("#dynatree_properties_filter").dynatree("getTree").reload();
+        //$("#dynatree_properties_filter").dynatree("getTree").reload();
         //limpando caches
         delete_all_cache_collection();
     });

@@ -137,7 +137,7 @@
                     <select class="socialdb_event_property_tab form-control" name="socialdb_event_property_tab">
                     </select>
                 </div>-->
-                <div  class="form-group">
+                <!--<div  class="form-group">
                     <label for="socialdb_property_default_value"><?php _e('Property data default value', 'tainacan'); ?></label>
                     <input type="text"
                            class="form-control"
@@ -147,7 +147,7 @@
                            placeholder="<?php _e('Type the name of the category', 'tainacan'); ?>"><br>
                     <input type="hidden"
                            id="socialdb_property_term_default_value" name="socialdb_event_property_default_value"><br>
-                </div>
+                </div>-->
             </div>
 
             <!--<hr class="metadata-common-fields">
