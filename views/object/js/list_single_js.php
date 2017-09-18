@@ -164,7 +164,7 @@
 
     function show_form_term_property_single(object_id)
     {
-        $.ajax({
+        return $.ajax({
             type: "POST",
             url: $('#src').val() + "/controllers/object/objectsingle_controller.php",
             data: {collection_id: $('#collection_id').val(), operation: 'show_form_term_property', object_id: object_id}

@@ -67,12 +67,12 @@ if($property_term){
         <li>&nbsp;&nbsp;<?php echo $property['name']; ?>&nbsp;&nbsp;
             <?php
             // verifico se o metadado pode ser alterado
-            if(verify_allowed_action($collection_id,'socialdb_collection_permission_edit_property_data')): ?>
-                <button onclick="show_edit_data_property_form('<?php echo $object_id ?>','<?php echo $property['id'] ?>')" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-edit"></span></button>&nbsp;
+            if(verify_allowed_action($collection_id,'socialdb_collection_permission_edit_property_term')): ?>
+                <button onclick="show_edit_term_property_form('<?php echo $object_id ?>','<?php echo $property['id'] ?>')" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-edit"></span></button>&nbsp;
             <?php endif; ?>
             <?php
-            // verifico se o metadado pode ser alterado
-            if(verify_allowed_action($collection_id,'socialdb_collection_permission_delete_property_data')): ?>
+            // verifico se o metadado pode ser apagado
+            if(verify_allowed_action($collection_id,'socialdb_collection_permission_delete_property_term')): ?>
                 <button onclick="show_confirmation_delete_property_data_event('<?php echo $object_id ?>','<?php echo $property['id'] ?>','<?php echo $property['name'] ?>','<?php echo $category_root_id ?>')" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-remove"></span></button>
             <?php endif; ?>
         </li>

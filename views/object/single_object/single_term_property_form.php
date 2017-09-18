@@ -51,10 +51,12 @@
                        class="form-control" name='socialdb_property_term_root'>
                 <!-- se deseja criar uma nova categoria  -->
                 <br>
-                <input  type="radio"
+                <span id="create_new">
+                    <input  type="radio"
                         name="socialdb_property_vinculate_category"
                         id="socialdb_property_vinculate_category_create"
                         value="create">&nbsp;<?php _e('Create new','tainacan') ?>
+                </span>
                 <div style='display: none;margin-left: 15px;' id="container_add_category">
                     <input type="text"
                            class="form-control"
@@ -204,7 +206,7 @@
 
 
     <br>
-    <button type="submit" class="btn btn-primary pull-right action-continue" form="submit_form_property_term" style="margin-left: 5px;">
+    <button type="submit" id="submit_term_form" class="btn btn-primary pull-right action-continue" form="submit_form_property_term" style="margin-left: 5px;">
         <?php _e("Add", "tainacan")?>
     </button>
 

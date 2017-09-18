@@ -429,14 +429,9 @@ $('#submit_form_property_term').submit(function (e) {
             }
         }
 
-        $("#meta-category").modal('hide');
-        if(elem.operation != 'update_property_term'){
-            var object_id = $("#single_object_id").val();
-            back_button(object_id);
-            list_properties_single(object_id);
-        }else{
-            $('#meta-item-'+elem.property_term_id+' .property-name').text(elem.property_term_name)
-        }
+        var object_id = $("#single_object_id").val();
+        back_button(object_id);
+        list_properties_single(object_id);
 
         showAlertGeneral(elem.title, elem.msg, elem.type);
         //$("#dynatree_properties_filter").dynatree("getTree").reload();
