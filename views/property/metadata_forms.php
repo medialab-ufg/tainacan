@@ -143,6 +143,10 @@ foreach ($view_helper->get_metadata_types() as $type => $label):
                                         };
                                         ?>
                                     </div>
+                                    <div class="form-group" style="margin-top: 15px;margin-bottom: 15px;">
+                                        <label style="margin-right: 10px;" ><?php _e('More options','tainacan'); ?> : </label>
+                                        <input type="checkbox" name="habilitate_more_options" id="habilitate_more_options" value="true">&nbsp;<?php _e('Habilitate more options','tainacan') ?>
+                                    </div>
                                 </div>
 
                                 <div class="form-group" style="margin-top: 15px;margin-bottom: 15px;">

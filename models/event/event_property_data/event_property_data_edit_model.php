@@ -81,7 +81,8 @@ class EventPropertyDataEdit extends EventModel {
         // chamo a funcao do model de propriedade para fazer a insercao
         $result = json_decode($propertyModel->update_property_data($data));
         // verifying if is everything all right
-        if (get_term_by('id', $data['property_data_id'], 'socialdb_property_type') && $result->success != 'false') {
+        $term = get_term_by('id', $data['property_data_id'],'socialdb_property_type');
+        if ($term && $result->success != 'false') {
             if(isset(get_term_by('id', $data['property_data_id'], 'socialdb_property_type')->term_id)){
                 do_action('after_event_update_property_data',get_term_by('id', $data['property_data_id'], 'socialdb_property_type')->term_id,$event_id);
             }
@@ -90,7 +91,11 @@ class EventPropertyDataEdit extends EventModel {
             $data['msg'] = __('The event was successful', 'tainacan');
             $data['type'] = 'success';
             $data['title'] = __('Success', 'tainacan');
-        } else {
+        } else if($term && in_array($term->slug,$this->fixed_slugs)){
+            $data['msg'] = __('Filter updated successful', 'tainacan');
+            $data['type'] = 'success';
+            $data['title'] = __('Success', 'tainacan');
+        }else {
             $this->update_event_state('invalid', $data['event_id']); // seto a o evento como invalido
             if(isset($result->msg)):
              $data['msg'] = $result->msg;
