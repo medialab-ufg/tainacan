@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: socialdb\n"
 "POT-Creation-Date: 2017-09-19 15:14-0300\n"
-"PO-Revision-Date: 2017-09-19 15:21-0300\n"
+"PO-Revision-Date: 2017-09-19 16:11-0300\n"
 "Last-Translator: Rodrigo de Oliveira <webmaster@rodrigodeoliveira.net>\n"
 "Language-Team: \n"
 "Language: pt_BR\n"
@@ -1624,10 +1624,8 @@ msgstr ""
 "desejado"
 
 #: functions.php:3758
-#, fuzzy
-#| msgid "Home Page Sections"
 msgid "Contact Page Sections"
-msgstr "Seções da Home Page"
+msgstr "Seções da Página de Contato"
 
 #: functions.php:3760
 #, fuzzy

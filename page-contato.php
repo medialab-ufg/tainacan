@@ -62,15 +62,15 @@ get_header();
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-12 top-container">
-                        <?php
-                        if( is_active_sidebar("contact-widgets") ) {
+
+                    <?php
+                    if( is_active_sidebar("contact-widgets") ) {
+                        echo '<div class="col-md-12 top-container">';
                             dynamic_sidebar("contact-widgets");
-                        } else {
-                            echo '';
-                        }
-                        ?>
-                    </div>
+                        echo '</div>';
+                    }
+                    ?>
+
                 </main>
             </div>
         </div>
