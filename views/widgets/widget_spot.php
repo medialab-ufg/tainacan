@@ -56,8 +56,8 @@ class Spot extends WP_Widget {
             <?php
             if ( $is_contact_page && !empty($cep) && ((strlen($cep) === 8) || (strlen($cep) === 9)) ) { ?>
                 <div class="col-md-12 contact-map-container">
-                    <div id="map" style="margin-top: 10%; height: 250px;width: 80%;"></div>
-                    <div id="user_cep" style="color: white"> <?php echo str_replace("-", "",$cep); ?> </div>
+                    <div id="map"></div>
+                    <div id="user_cep"> <?php echo str_replace("-", "",$cep); ?> </div>
                 </div>
                 <script src="https://maps.google.com/maps/api/js"></script>
                 <script>
@@ -86,7 +86,7 @@ class Spot extends WP_Widget {
             }
             ?>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-6 contact-last-widget">
             <h2> <?php echo $title; ?> </h2>
             <div class='home-widget-box col-md-12'>
                 <div class="teaser-cnt spot-box">

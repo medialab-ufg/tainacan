@@ -16,7 +16,7 @@
                             </div>
                             <?php
                         endwhile;
-                        the_posts_pagination( );
+                        echo "<div class='col-md-12 text-center'>" . get_the_posts_pagination(['screen_reader_text' => _t('More news')]) . "</div>";
                     else:
                         get_template_part( 'partials/content/content', 'none' );
                     endif;

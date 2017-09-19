@@ -3756,7 +3756,7 @@ add_action('widgets_init', 'tainacan_home_widgets');
 function tainacan_contact_widgets() {
     register_sidebar([
         'name' => _t('Contact Page Sections'),
-        'id' => 'contact-wids',
+        'id' => 'contact-widgets',
         'description' => _t('Select widgets to show at Contact Page, and order them as you wish'),
         'before_widget' => '<section id="%1$s" class="contact-widget widget %2$s">',
         'after_widget' => '</section>',
@@ -3794,3 +3794,10 @@ function facebook_meta() {
 }
 
 add_action('wp_head', 'facebook_meta', 5);
+
+function tainacan_contact_form($type, $message) {
+    global $response;
+
+    if($type == "success") $response = "<div class='success'>{$message}</div>";
+    else $response = "<div class='error'>{$message}</div>";
+}

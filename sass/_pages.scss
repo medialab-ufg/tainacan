@@ -82,39 +82,37 @@ body.archive, body.single-post, body.page-template-default {
 body.page-template-template-home, body.page-template-page-contato {
   $home-box-gray: #4D4D4D;
 
-  h1,h2,h3,h4,h6 {
-    //font-weight: bolder;
-  }
-
-  p {
-
-  }
-
-  h1, h2 {
-    color: $brand-medium-blue;
-  }
-
-  h1, h3,h4,h6 {
-    font-weight: bolder;
-  }
-
-  h3,h4,h5,h6,p,li {
-    color: $home-box-gray;
-  }
-
-  a {
-    color: $brand-medium-blue;
-  }
-
-  h2 {
-    font-size: 24px;
-    border-bottom: 2px solid $brand-medium-blue;
-    padding-bottom: 10px;
-  }
-
   .tainacan-page-area {
     background: $collections-bg-color;
-  }
+
+    h1,h2,h3,h4,h6 {
+      //font-weight: bolder;
+    }
+
+    h1, h2 {
+      color: $brand-medium-blue;
+    }
+
+    h1, h3,h4,h6 {
+      font-weight: bolder;
+    }
+
+    h3,h4,h5,h6,p,li {
+      color: $home-box-gray;
+    }
+
+    a {
+      color: $brand-medium-blue;
+    }
+
+    h2 {
+      font-size: 24px;
+      border-bottom: 2px solid $brand-medium-blue;
+      padding-bottom: 10px;
+    }
+
+  } // tainacan-page-area
+
   .home-widget-box {
     background: white;
     padding: 40px;
@@ -203,3 +201,91 @@ body.page-template-template-home, body.page-template-page-contato {
   }
 
 } // home template
+
+body.page-template-page-contato {
+  h2.contact-title {
+    margin-bottom: 0;
+    margin-top: 5%;
+  }
+
+  .top-container {
+    background: white;
+    padding: 40px;
+    border: 3px solid $item-border;
+    margin-top: 2%;
+
+    h2 {
+      border: none;
+    }
+    .contact-map-container {
+      #map {
+        margin-top: 5%;
+        height: 260px;
+        width: 95%;
+      }
+      #user_cep {
+        display: none;
+      }
+    }
+
+    .contact-last-widget {
+      .home-widget-box {
+        padding: 0;
+        border: none;
+        height: 250px;
+      }
+    }
+
+    &:last-child {
+      margin-bottom: 5%;
+    }
+
+  } // top-container
+
+  .form-container {
+
+    .error{
+      padding: 5px 9px;
+      border: 1px solid red;
+      color: red;
+      border-radius: 3px;
+      margin-bottom: 20px;
+    }
+
+    .success{
+      padding: 5px 9px;
+      border: 1px solid green;
+      color: green;
+      border-radius: 3px;
+      margin-bottom: 20px;
+    }
+
+    #respond {
+      form {
+        span {
+          color: red;
+        }
+      }
+      input,p,textarea {
+        width: 100%;
+        background: #F1F2F2;
+        border: none;
+        padding: 5px;
+      }
+
+      p:last-child {
+        background: transparent;
+
+        button {
+          -webkit-border-radius: 4px;
+          -moz-border-radius: 4px;;
+          border-radius: 4px;
+          border: none;
+          background: $brand-medium-blue;
+          color: white;
+        }
+      }
+
+    } // #respond
+  }
+} // page-contato
