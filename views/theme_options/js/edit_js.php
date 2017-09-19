@@ -1,4 +1,6 @@
 <script>
+    $(function(){
+
     $('#formYoutubeApi').submit(function (e) {
         var verify =  $( this ).serializeArray();
         if(verify[1].value.trim() === '') {
@@ -159,4 +161,6 @@
 
     });
 
+
+    });
 </script>
