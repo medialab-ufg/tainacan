@@ -162,10 +162,10 @@
                                 </div>   
                             </div>
 
-                            <!--div class="form-group">
+                            <div class="form-group">
                                 <label for="use-filter" style="display: inline-block"><?php _e('Use as a filter', 'tainacan'); ?></label>
                                 <input type="checkbox" onchange="toggle_term_widget(this)" value="use_filter" name="property_data_use_filter" class="property_data_use_filter" />
-                            </div--
+                            </div>
 
                             <div class="term-widget" style="display: none">
 
@@ -190,7 +190,7 @@
                                         </optgroup>
                                     </select>
                                 </div>
-                            </div>-->
+                            </div>
                     </div>
 
                     <input type="hidden" name="property_category_id" value="<?php echo $category->term_id; ?>">

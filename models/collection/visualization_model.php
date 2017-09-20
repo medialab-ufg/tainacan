@@ -231,11 +231,22 @@ class VisualizationModel extends CollectionModel {
 
     public function initDynatree($data) {
         $propertyModel = new PropertyModel;
+        $search_model = new SearchModel();
+        $facets = array();
+        $arrFacets =  $search_model->get_saved_facets(get_option('collection_root_id'), true, $data['collection_id']);
+        if($arrFacets && is_array($arrFacets)){
+            foreach ($arrFacets as $arrFacet) {
+                $facets[] = $arrFacet['id'];
+                update_post_meta($data['collection_id'], 'socialdb_collection_facet_' . $arrFacet['id'] . '_color', 'color_property2');
+                update_post_meta($data['collection_id'], 'socialdb_collection_facet_' . $arrFacet['id'] . '_widget', $arrFacet['widget']);
+                update_post_meta($data['collection_id'], 'socialdb_collection_facet_' . $arrFacet['id'] . '_more_options', $arrFacet['more_options']);
+            }
+        }
+
         $this->collection_id = $data['collection_id'];
         $labels_collection = ($data['collection_id']!='') ? get_post_meta($data['collection_id'], 'socialdb_collection_fixed_properties_labels', true) : false;
         // $facets_id = CollectionModel::get_facets($data['collection_id']);
         $facets_id = array_filter(array_unique(get_post_meta($data['collection_id'], 'socialdb_collection_facets')));
-        $facets = array();
         if(is_array($facets_id)){
             foreach ($facets_id as  $facet_id) {
                 $index = get_post_meta($data['collection_id'], 'socialdb_collection_facet_' . $facet_id . '_priority', true);
@@ -261,9 +272,11 @@ class VisualizationModel extends CollectionModel {
             if($skip)
                 continue;
             $ordenation = $this->get_ordenation_facet($data['collection_id'],$facet_id);
-            if($facet){
+            if($facet && $facet->taxonomy == 'socialdb_category_type'){
                 $classCss = get_post_meta($data['collection_id'], 'socialdb_collection_facet_' . $facet_id . '_color', true);
-                if ($facet && get_post_meta($data['collection_id'], 'socialdb_collection_facet_' . $facet_id . '_widget', true) == 'tree') {
+                $widget = get_post_meta($data['collection_id'], 'socialdb_collection_facet_' . $facet_id . '_widget', true);
+                //$widget = ($widget !== '' ) ? $widget : (isset($repositoryFacets[$facet_id])) ? $repositoryFacets[$facet_id]['widget'] : '' ;
+                if ($facet && $widget == 'tree') {
                     $hide_checkbox = (!has_filter('show_checkbox_facet'))? true : apply_filters('show_checkbox_facet','');
                     if($hide_checkbox){
                         $key = $facet->term_id . '_facet_category';
@@ -290,6 +303,7 @@ class VisualizationModel extends CollectionModel {
             }elseif(get_term_by('id', $facet_id, 'socialdb_property_type')){
                 $facet = get_term_by('id', $facet_id, 'socialdb_property_type');
                 $widget = get_post_meta($data['collection_id'], 'socialdb_collection_facet_'.$facet_id.'_widget', true);
+                //$widget = ($widget !== '' ) ? $widget : (isset($repositoryFacets[$facet_id])) ? $repositoryFacets[$facet_id]['widget'] : $widget ;
                 $type = $propertyModel->get_property_type($facet_id); // pego o tipo da propriedade;
                 //METADADOS FIXOS
                 if ('socialdb_property_fixed_type'==$facet->slug) {

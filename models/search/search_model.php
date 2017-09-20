@@ -339,6 +339,7 @@ public function add($data) {
                 $property = get_term_by('id', $facet['id'], 'socialdb_property_type');
                 if ($facet['widget'] == 'tree') {
                     $facet['orientation'] = $default_tree_orientation;
+                    $facet['more_options'] = get_post_meta($collection_id, 'socialdb_collection_facet_' . $facet_id . '_more_options', true);
                     $facet['nome'] = $property->name;
                     $property = get_term_by('id', $facet['id'], 'socialdb_category_type');
                     if($property){
@@ -364,6 +365,7 @@ public function add($data) {
                     } elseif(is_numeric($facet['id'])) {
                         $category = get_term_by('id', $facet['id'], 'socialdb_category_type');
                         $facet['nome'] = $category->name;
+                        $facet['more_options'] = get_post_meta($collection_id, 'socialdb_collection_facet_' . $facet['id'] . '_more_options', true);
                     }
                 }
             }
