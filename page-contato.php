@@ -42,11 +42,13 @@ get_header();
                     <h2 class="contact-title"><?php _t('Contact',1);?></h2>
 
                     <div class="col-md-12 top-container">
-                        <div class="col-md-6">
-                            <?php if(is_active_sidebar('footer-b')):
+
+                        <?php if(is_active_sidebar('footer-b')):
+                            echo '<div class="col-md-6">';
                                 dynamic_sidebar('footer-b');
-                            endif; ?>
-                        </div>
+                            echo '</div>';
+                        endif; ?>
+
                         <div class="col-md-6 form-container">
                             <h2> <?php _t('Send your message',1); ?> </h2>
                             <div id="respond">

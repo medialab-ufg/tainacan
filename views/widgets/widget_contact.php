@@ -29,45 +29,77 @@ class contact extends WP_Widget {
         $country = empty($instance['country']) ? '' : $instance['country'];
         $email = empty($instance['email']) ? '' : $instance['email'];
         $phone = empty($instance['phone']) ? '' : $instance['phone'];
+        $is_contact_page = ("page-contato.php" === basename( get_page_template()));
 
         // before and after widget arguments are defined by themes
         echo $args['before_widget'];
 
-        if ($title)
-            echo $args['before_title'] . $title . $args['after_title'];
+        if($is_contact_page) {
+            $social = array_unique( get_option('widget_social_media', true) );
+            if($phone)
+                echo "<strong>" . _t('Phone') .   "</strong> <br/>" . $phone;
 
-        echo '<div>';
+            if($street) {
+                echo "<br/><br/><strong>" . _t('Address') .   "</strong> <br/>" . $street . " " . $address_number . " " .$complement;
+                echo " " . $city . "<br />" . $state . " " . $cep . " <br />" . $country;
+            }
 
-        // This is where you run the code and display the output
-        echo '<p class="contactContent">';
+            if($email)
+                echo "<br/><strong>" . _t('Email') .   "</strong> <br/>" . $email;
 
-        if ($institution) {
-            echo $institution .'<br/>';
-        }
-        if ($cnpj){
-            echo 'CNPJ: '. $cnpj .'<br/><br/>';
-        }
-        if($street || $address_number) {
-            echo $street .' '. $address_number .',<br/>';
-        }
-        if($complement) {
-            echo $complement .'.<br/>';
-        }
-        if($cep) {
-            echo 'CEP: '. $cep .'<br/>';
-        }
-        if($city || $state || $country) {
-            echo $city .' - '. $state .' - '. $country .'.<br/><br/>';
-        }
-        if($email) {
-            echo $email .'<br/>';
-        }
-        if($phone) {
-            echo 'Fone: '. $phone .'<br/>';
-        }
-        echo '</p>';
+            foreach ($social as $social_media) {
+                if(is_array($social_media)) {
+                    foreach ($social_media as $key => $mediaURL) {
+                        if("facebook_url" === $key && !empty($mediaURL))
+                            echo "<br /><br /><strong>" . _t('Facebook') .   "</strong> <br/> <a href='$mediaURL' target='_blank'>" . $mediaURL . "</a>";
 
-        echo '</div>';
+                        if("youtube_url" === $key && !empty($mediaURL))
+                            echo "<br /><br /><strong>" . _t('YouTube') .   "</strong> <br/> <a href='$mediaURL' target='_blank'>" . $mediaURL . "</a>";
+
+                        if("twitter_url" === $key && !empty($mediaURL))
+                            echo "<br /><br /><strong>" . _t('Twitter') .   "</strong> <br/> <a href='$mediaURL' target='_blank'>" . $mediaURL . "</a>";
+                    }
+                }
+            }
+
+        } else {
+
+            if ($title)
+                echo $args['before_title'] . $title . $args['after_title'];
+
+            echo '<div>';
+
+            // This is where you run the code and display the output
+            echo '<p class="contactContent">';
+
+            if ($institution) {
+                echo $institution . '<br/>';
+            }
+            if ($cnpj) {
+                echo 'CNPJ: ' . $cnpj . '<br/><br/>';
+            }
+            if ($street || $address_number) {
+                echo $street . ' ' . $address_number . ',<br/>';
+            }
+            if ($complement) {
+                echo $complement . '.<br/>';
+            }
+            if ($cep) {
+                echo 'CEP: ' . $cep . '<br/>';
+            }
+            if ($city || $state || $country) {
+                echo $city . ' - ' . $state . ' - ' . $country . '.<br/><br/>';
+            }
+            if ($email) {
+                echo $email . '<br/>';
+            }
+            if ($phone) {
+                echo 'Fone: ' . $phone . '<br/>';
+            }
+            echo '</p>';
+
+            echo '</div>';
+        }
         echo $args['after_widget'];
     }
 
