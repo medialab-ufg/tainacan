@@ -2,7 +2,7 @@
     $(function () {
         // #1 - breadcrumbs para localizacao da pagina
         $("#tainacan-breadcrumbs").show();
-        $("#tainacan-breadcrumbs .current-config").text('<?php _e('Edit item','tainacan') ?>');
+        $("#tainacan-breadcrumbs .current-config").text('> <?php  echo ($is_beta_text) ?  __('Continue inserting','tainacan')  : __('Edit item','tainacan') ?>');
         //#2  -  ativo os tootips
          $('[data-toggle="tooltip"]').tooltip();
         changeContainerBgColor();
@@ -24,14 +24,16 @@
                 }
             });
         }catch(err) {
-           console.log('No dynatree found!');
         }
         //inicializando os containers da pagina
-        $.when( 
+        initiate_tabs().done(function (result) {
+            $.when( 
                 list_ranking_update($("#object_id_edit").val()),//busca os rankings do item
                 show_object_properties_edit(),//mostra as propriedades do item, com os formularios e seus widgets
                 show_collection_licenses()//mostra as licencas disponiveis
             ).done(function ( v1, v2 ) {
+                append_property_in_tabs();
+                list_tabs();
                 $.ajax({
                     type: "POST",
                     url: $('#src').val() + "/controllers/collection/collection_controller.php",
@@ -39,22 +41,43 @@
                 }).done(function(result) {
                     var json = $.parseJSON(result);
                     if(json&&json.ordenation&&json.ordenation!==''){
-                        reorder_properties_edit_item(json.ordenation.split(','));
+                        for (var $property in json.ordenation) {
+                            if (json.ordenation.hasOwnProperty($property)) {
+                                reorder_properties_edit_item($property,json.ordenation[$property].split(','));
+                                if($property==='default')
+                                    reorder_properties_edit_item($property,json.ordenation[$property].split(','),"#text_accordion");
+                            }
+                        }
                     }
+                    //autocomplete na edicao
+                    var properties_autocomplete = edit_get_val($("#edit_properties_autocomplete").val());
+                    autocomplete_edit_item_property_data(properties_autocomplete); 
+                    //ckeditor
                     $("#text_accordion").accordion({
                         active: false,
                         collapsible: true,
                         header: "h2",
                         heightStyle: "content"
                     });
+                    if($('#mediaHabilitateContainer').length>0){
+                        $('#mediaHabilitateContainer').css('min-height','500px');
+                        $('#mediaHabilitateContainer').show();
+                    }
                     // esconde o carregamento do menu lateral
                     $('.menu_left_loader').hide();
                     $('.menu_left').show();
+                    <?php if(!isset($is_view_mode)): ?>
+                    showCKEditor('objectedit_editor');
+                    createDraft();
+                    set_content_valid();
+                    validate_all_fields()
+                     <?php else: ?>
+                     $('#submit_form_edit_object h2 span').hide(); 
+                     list_files_single( $("#object_id_edit").val());
+                    <?php endif; ?>
                 });
             });
-        //caminho dos controller
-        //ckeditor
-        showCKEditor('objectedit_editor');
+        });     
         //submit do editar
         $('#submit_form_edit_object').submit(function (e) {
             e.preventDefault();
@@ -70,11 +93,13 @@
             var selKeys = $.map($("#dynatree").dynatree("getSelectedNodes"), function (node) {
                 return node.data.key;
             });
-            $("#dynatree").dynatree("getRoot").visit(function (node) {
-                if (nodes_selected.indexOf(node.data.key) > -1 && selKeys.indexOf(node.data.key) < 0) {
-                    removed.push(node.data.key);
-                }
-            });
+            if( $("#dynatree").length>0){
+                $("#dynatree").dynatree("getRoot").visit(function (node) {
+                    if (nodes_selected.indexOf(node.data.key) > -1 && selKeys.indexOf(node.data.key) < 0) {
+                        removed.push(node.data.key);
+                    }
+                });
+            }
             
             $.each(nodes_selected, function (key, value) {
                 if (removed.indexOf(value.trim()) < 0 && selKeys.indexOf(value.trim()) < 0) {
@@ -88,7 +113,6 @@
                Hook.call( 'tainacan_validate_create_item_form', [ $( this ).serializeArray() ] );
                 if(!Hook.result.is_validated){
                     $('#modalImportMain').modal('hide');//mostro o modal de carregamento
-                    console.log(Hook.result);
                     showAlertGeneral('<?php _e('Attention','tainacan') ?>', Hook.result.message, 'info');
                     return false;
                 }
@@ -122,7 +146,6 @@
                 try {
                       $("#dynatree").dynatree("getTree").reload();
                 }catch(err) {
-                    console.log('No dynatree found!');
                 }
                 showAlertGeneral(elem_first.title, elem_first.msg, elem_first.type);
                 $('.dropdown-toggle').dropdown();
@@ -132,19 +155,23 @@
 
             e.preventDefault();
         });
-
+         <?php if(!isset($is_view_mode)): ?>
         var myDropzone = new Dropzone("div#dropzone_edit", {
             accept: function(file, done) {
-                     if (file.type === ".exe") {
-                         done("Error! Files of this type are not accepted");
-                     }
-                     else { done(); }
+                    if (file.type === ".exe") {
+                        done("Error! Files of this type are not accepted");
+                    }
+                    else { 
+                        done(); 
+                        set_attachments_valid(myDropzone.getAcceptedFiles().length);
+                    }
                },
             init: function () {
                 thisDropzone = this;
                 this.on("removedfile", function (file) {
                     //    if (!file.serverId) { return; } // The file hasn't been uploaded
                     $.get($('#src').val() + '/controllers/object/object_controller.php?operation=delete_file&object_id=' + $("#object_id_edit").val() + '&file_name=' + file.name, function (data) {
+                        set_attachments_valid(thisDropzone.getAcceptedFiles().length);
                         if (data.trim() === 'false') {
                             showAlertGeneral('<?php _e("Atention!", 'tainacan') ?>', '<?php _e("An error ocurred, File already removed or corrupted!", 'tainacan') ?>', 'error');
                         } else {
@@ -157,12 +184,15 @@
                 });
                 $.get($('#src').val() + '/controllers/object/object_controller.php?operation=list_files&object_id=' + $("#object_id_edit").val(), function (data) {
                     try {
+                        var count = 0
                         $.each(data, function (key, value) {
                             if (value.name !== undefined && value.name !== 0) {
                                 var mockFile = {name: value.name, size: value.size};
                                 thisDropzone.options.addedfile.call(thisDropzone, mockFile);
+                                count++;
                             }
                         });
+                        set_attachments_valid(count);
                     }
                     catch (e) {
                     }  // handle error
@@ -172,12 +202,12 @@
             addRemoveLinks: true
 
         });
-
+        <?php endif; ?>
 
         //upload file limit
         $("#object_file").on("change", function (e) {
             //check whether browser fully supports all File API
-            if (window.File && window.FileReader && window.FileList && window.Blob)
+            if (window.File && window.FileReader && window.FileList && window.Blob && $('#object_file')[0].files.length>0)
             {
                 //get the file size and file type from file input field
                 var fsize = $('#object_file')[0].files[0].size;
@@ -190,11 +220,57 @@
                 }
             }
         });
+        
+         //autocomplete para o titulo no caso maskara
+        if($('.title_mask').val()!==''){
+            $("#object_name").autocomplete({
+                source: $('#src').val() + '/controllers/object/object_controller.php?operation=search-items&collection_id='+$('#collection_id').val(),
+                messages: {
+                    noResults: '',
+                    results: function () {
+                    }
+                },
+                response: function( event, ui ) {
+                    if(ui.content && ui.content.length>0){
+                       $.each(ui.content,function(index,value){
+                           if(value.item_id && value.item_id == $("#object_id_edit").val()){
+                               $("#object_name").autocomplete('close');
+                               return true;
+                           }
+                           
+                           if(($(event.target).val().trim()==value.value || $(event.target).val().toLowerCase().trim()==value.value.toLowerCase().trim())){
+                                toastr.error($(event.target).val()+' <?php _e(' is already inserted!', 'tainacan') ?>', '<?php _e('Attention!', 'tainacan') ?>', {positionClass: 'toast-bottom-right'});
+                                $(event.target).val('');
+                                $("#object_name").trigger('keyup');
+                           }
+                           $("#object_name").autocomplete('close');
+                       }); 
+                    }
+                },
+                minLength: 2,
+                select: function (event, ui) {
+                    $("#object_name").val('');
+                    $(event.target).html(''); 
+                    $(event.target).val('');
+                    toastr.error(ui.item.value+' <?php _e(' is already inserted!', 'tainacan') ?>', '<?php _e('Attention!', 'tainacan') ?>', {positionClass: 'toast-bottom-right'});
+                    return false;
+                }
+            });
+            $("#object_name").hover(function(){
+                $("#object_name").trigger('keyup');
+            });
+            $("#object_name").change(function(){
+                $("#object_name").trigger('keyup');
+            });
+        }
     });
     // verifica se exite uma ordencao pre definida
-    function reorder_properties_edit_item(array_ids){
-        var $ul = $("#text_accordion"),
-        $items = $("#text_accordion").children();
+    function reorder_properties_edit_item(tab_id,array_ids,seletor){
+        if(!seletor){
+            seletor = "#accordeon-"+tab_id;
+        }
+        var $ul = $(seletor),
+        $items = $(seletor).children();
         $properties = $("#show_form_properties_edit").children();
         $rankings = $("#update_list_ranking_<?php echo $object->ID ?>").children();
       //  $("#text_accordion").html('');
@@ -218,7 +294,38 @@
                      $( $rankings.get(j) ).appendTo( $ul);
                  }
              }
-      }
+        }
+        $($ul).accordion({
+            active: false,
+            collapsible: true,
+            header: "h2",
+            heightStyle: "content",
+             beforeActivate: function(event, ui) {
+                            // The accordion believes a panel is being opened
+                           if (ui.newHeader[0]) {
+                               var currHeader  = ui.newHeader;
+                               var currContent = currHeader.next('.ui-accordion-content');
+                            // The accordion believes a panel is being closed
+                           } else {
+                               var currHeader  = ui.oldHeader;
+                               var currContent = currHeader.next('.ui-accordion-content');
+                           }
+                            // Since we've changed the default behavior, this detects the actual status
+                           var isPanelSelected = currHeader.attr('aria-selected') == 'true';
+
+                            // Toggle the panel's header
+                           currHeader.toggleClass('ui-corner-all',isPanelSelected).toggleClass('accordion-header-active ui-state-active ui-corner-top',!isPanelSelected).attr('aria-selected',((!isPanelSelected).toString()));
+
+                           // Toggle the panel's icon
+                           currHeader.children('.ui-icon').toggleClass('ui-icon-triangle-1-e',isPanelSelected).toggleClass('ui-icon-triangle-1-s',!isPanelSelected);
+
+                            // Toggle the panel's content
+                           currContent.toggleClass('accordion-content-active',!isPanelSelected)    
+                           if (isPanelSelected) { currContent.slideUp(); }  else { currContent.slideDown(); }
+
+                           return false; // Cancels the default action
+                       }
+        });
       $('[data-toggle="tooltip"]').tooltip();
     }
     
@@ -239,12 +346,13 @@
         var selKeys = $.map($("#dynatree").dynatree("getSelectedNodes"), function (node) {
             return node.data.key;
         });
-        var selectedCategories = selKeys.join(",");
+        //var selectedCategories = selKeys.join(",");
+        var selectedCategories = '';
         var promisse;
         promisse = $.ajax({
             url: $('#src').val() + '/controllers/object/object_controller.php',
             type: 'POST',
-            data: {operation: 'list_properties_edit_accordeon', object_id: $("#object_id_edit").val(), collection_id: $("#collection_id").val(), categories: selectedCategories}
+            data: {<?php echo ($is_view_mode)?'is_view_mode:true,':'' ?>operation: 'list_properties_edit_accordeon', object_id: $("#object_id_edit").val(), collection_id: $("#collection_id").val(), categories: selectedCategories}
         });
         promisse.done(function (result) {
             // $('html, body').animate({
@@ -260,7 +368,7 @@
         promisse = $.ajax({
             url: $('#src').val() + '/controllers/object/object_controller.php',
             type: 'POST',
-            data: {operation: 'show_collection_licenses', object_id: $("#object_id_edit").val(), collection_id: $("#collection_id").val()}
+            data: {<?php echo ($is_view_mode)?'is_view_mode:true,':'' ?>operation: 'show_collection_licenses', object_id: $("#object_id_edit").val(), collection_id: $("#collection_id").val()}
         });
         promisse.done(function (result) {
             // $('html, body').animate({
@@ -279,6 +387,16 @@
         $('#display_view_main_page').show();
         $("#container_three_columns").removeClass('white-background');
         $('#menu_object').show();
+        window.history.pushState('forward', null, $('#route_blog').val()+$('#slug_collection').val()+'/');
+        //remove o checkout in
+        //if(!id){
+            id = '';
+        //}
+//        $.ajax({
+//            url: $('#src').val() + '/controllers/object/object_controller.php',
+//            type: 'POST',
+//            data: {operation: 'check-in', value: '', object_id: id}
+//        })
     }
     function import_object_edit() {
         var url = $('#url_object_edit').val();
@@ -293,7 +411,6 @@
         $('#loading').fadeIn(1000);
         $('#loading').fadeTo("slow", 0.8);
         $.getJSON(ajaxurl, {}, function (json) {
-            console.log(json);
             var description = '', title = '';
             if (json.title !== undefined && json.title != null && json.title != false) {
                 title = json.title;
@@ -332,7 +449,6 @@
             $('#loading').hide('slow');
 
         }).fail(function (result) {
-            console.log('error', result, url);
             $('#loading').hide();
             showAlertGeneral('Atenção', 'URL inexistente ou indisponível', 'error');
         });
@@ -340,10 +456,10 @@
 //funcoes que mostram a visualizacao do item
     function edit_show_other_type_field(field) {
         if ($(field).val() === 'other') {
-            $('#object_type_other').attr('required', 'required');
+            //$('#object_type_other').attr('required', 'required');
             $('#object_type_other').show('slow');
         } else {
-            $('#object_type_other').removeAttr("required");
+           // $('#object_type_other').removeAttr("required");
             $('#object_type_other').hide('slow');
         }
         if ($(field).val() !== 'text') {
@@ -352,22 +468,22 @@
             $('#external_option').attr('checked', 'checked'); // se for externo o default e url
             $('#object_content_text_edit').hide();// ckeditor apenas para texto
             $('#object_url_text').hide();// esconde o campo de url para textos
-            $('#url_object').removeAttr("required");//retiro o campo de requirido deste input para urls que sejam do item do tipo texto
+           // $('#url_object').removeAttr("required");//retiro o campo de requirido deste input para urls que sejam do item do tipo texto
             $('#object_url_others').show('slow');// o campo para colocar a url do item sem ser texto
-            $('#object_url_others').attr('required', 'required');
+            //$('#object_url_others').attr('required', 'required');
             $('#object_file').hide();// esconde a submissao de items tipo arquivo
-            $('#object_file').removeAttr("required");// retiro o campo de requirido do arquivo
+           // $('#object_file').removeAttr("required");// retiro o campo de requirido do arquivo
         } else {
             CKEDITOR.instances.objectedit_editor.setData('');
             $('#object_url_others_input').val('');
             $('#url_object_edit').val('');
             $('#object_file').hide();// esconde a submissao de items tipo arquivo
-            $('#object_file').removeAttr("required");// retiro o campo de requirido do arquivo
+            //$('#object_file').removeAttr("required");// retiro o campo de requirido do arquivo
             $('#internal_option').attr('checked', 'checked');
             $('#object_url_text').hide();// escondo o campo de colocar url para textos
-            $('#url_object').removeAttr("required");//retiro o campo de requirido deste input para urls que sejam do item do tipo texto
+            //$('#url_object').removeAttr("required");//retiro o campo de requirido deste input para urls que sejam do item do tipo texto
             $('#object_url_others').hide();// escondo o campo de colocar a url para tipos de arquivo que nao seja texto
-            $('#object_url_others').removeAttr("required");//retiro o campo de requirido deste input para urls que nao seja do item do tipo texto
+           // $('#object_url_others').removeAttr("required");//retiro o campo de requirido deste input para urls que nao seja do item do tipo texto
             $('#object_content_text_edit').show();
         }
         //retirando o thumbnail
@@ -382,34 +498,34 @@
         if ($(field).val() === 'external') {
             if ($('input[name=object_type]:checked', '#submit_form_edit_object').val() === 'text') {
                 $('#object_url_others').hide();// o campo url para outros tipos 
-                $('#object_url_others').removeAttr("required");//retiro o campo de requirido deste input para urls que nao seja do item do tipo texto
+               // $('#object_url_others').removeAttr("required");//retiro o campo de requirido deste input para urls que nao seja do item do tipo texto
                 $('#object_url_text').show('slow');// o campo url para text
-                $('#url_object').attr('required', 'required');// coloco o campo de url para arquivos que nao seja texto como obrigatorio
+             //   $('#url_object').attr('required', 'required');// coloco o campo de url para arquivos que nao seja texto como obrigatorio
                 $('#object_file').hide('slow'); // escondo o campo para pegar arquivos internos
-                $('#object_file').removeAttr("required");// retiro o campo de requirido do arquivo
+               // $('#object_file').removeAttr("required");// retiro o campo de requirido do arquivo
             } else {
                 $('#object_file').hide();
-                $('#object_file').removeAttr("required");
+               // $('#object_file').removeAttr("required");
                 $('#object_url_text').hide('slow');// escondo o campo  de url para textos ja que o conteudo sera escrito dentro do ckeditor
                 $('#url_object').removeAttr("required");//retiro o campo de requirido deste input para urls que sejam do item do tipo texto
                 $('#object_url_others').show('slow');
-                $('#object_url_others').attr('required', 'required');// coloco o campo de url para arquivos que nao seja texto como obrigatorio
+               // $('#object_url_others').attr('required', 'required');// coloco o campo de url para arquivos que nao seja texto como obrigatorio
             }
         } else {
             if ($('input[name=object_type]:checked', '#submit_form_edit_object').val() === 'text') {
                 $('#object_file').hide(); // escondo o campo de upload de arquivos
-                $('#object_file').removeAttr("required");// retiro o campo de requirido do arquivo
+              //  $('#object_file').removeAttr("required");// retiro o campo de requirido do arquivo
                 $('#object_url_others').hide();//escondo o input para urls para tipos que nao seja texto
                 $('#object_url_others').removeAttr("required");//retiro o campo de requirido deste input para urls que nao seja do item do tipo texto
                 $('#object_url_text').hide('slow');// escondo o campo  de url para textos ja que o conteudo sera escrito dentro do ckeditor
-                $('#url_object').removeAttr("required");//retiro o campo de requirido deste input para urls que sejam do item do tipo texto
+               // $('#url_object').removeAttr("required");//retiro o campo de requirido deste input para urls que sejam do item do tipo texto
             } else {
                 $('#object_url_text').hide();// escondo o campo de colocar url para textos
                 $('#object_url_text').removeAttr("required");//retiro o campo de requirido deste input para urls que sejam do item do tipo texto
                 $('#object_url_others').hide();// escondo o campo de colocar a url para tipos de arquivo que nao seja texto
                 $('#url_object').removeAttr("required");//retiro o campo de requirido deste input para urls que nao seja do item do tipo texto
                 $('#object_file').show('slow'); // mostra o campo de submissao de arquivo
-                $('#object_file').attr('required', 'required');// coloco o campo de upload de arquivo como obrigatorio
+                //$('#object_file').attr('required', 'required');// coloco o campo de upload de arquivo como obrigatorio
             }
         }
     }

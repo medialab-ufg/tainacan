@@ -185,7 +185,6 @@
             data: {fb_id:$('#socialdb_fb_api_id').val(),collection_id: $('#collection_id').val(), operation: 'redirect_facebook', object_id: object_id}
         }).done(function (result) {
             json = jQuery.parseJSON(result);
-            //console.log(json);
             window.open(json.redirect, '_blank');
             // window.location = json.redirect;
         });

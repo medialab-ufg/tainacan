@@ -128,7 +128,8 @@ class YoutubeModel extends Model {
                             if (mb_detect_encoding($metadata, 'auto') == 'UTF-8'):
                                 $metadata = utf8_decode(iconv('ISO-8859-1', 'UTF-8', $metadata));
                             endif;
-                            $content .= $metadata;
+                            // $content .= $metadata;
+                            $content = $metadata;
                         elseif ($form[$identifier] == 'post_permalink'):
                             update_post_meta($object_id, 'socialdb_object_dc_source', $metadata);
                         elseif ($form[$identifier] == 'socialdb_object_content'):
@@ -157,6 +158,11 @@ class YoutubeModel extends Model {
 
                 $getCurrentIds[$object_id] = $this->arrVideo['idvideo'];
                 update_post_meta($mapping_id, 'socialdb_channel_youtube_inserted_ids', serialize($getCurrentIds));
+
+                $user_id = current_user_id_or_anon();
+                $logData = ['collection_id' => $data['collectionId'], 'item_id' => $object_id,
+                  'user_id' => $user_id, 'event_type' => 'user_items', 'event' => 'add' ];
+                Log::addLog($logData);
 
                 return $object_id;
             }
@@ -208,7 +214,9 @@ class YoutubeModel extends Model {
 
     private function getInfoFromVideo($urlBase, $identifier) {
         $url = sprintf($urlBase, $identifier);
-        $resposta = file_get_contents($url);
+        session_write_close();
+        ini_set('max_execution_time', '0');
+        $resposta = download_page($url);
 
         $json = &json_decode($resposta, true);
         if (is_array($json)) {
@@ -275,7 +283,9 @@ class YoutubeModel extends Model {
     //trabalhando com playlistis: pega videos de uma playlist específica
     public function getInfoFromVideoPlaylist($idPlaylist = '', $pageToken = '', $numVideos = 50) {
         $arrayIds = array();
-
+        set_time_limit(0);
+        session_write_close();
+        ini_set('max_execution_time', '0');
         $urlBase = 'https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=%s&pageToken=%s&playlistId=%s&fields=items/snippet,nextPageToken,pageInfo&key=' . $this->apiKey;
         $idChannelUploads = &$this->idUploads;
         $url = sprintf($urlBase, $numVideos, $pageToken, $idPlaylist);
@@ -305,7 +315,9 @@ class YoutubeModel extends Model {
 
     public function getInfoPlaylist($idPlaylist = '', $pageToken = '', $numVideos = 50) {
         $arrayIds = array();
-
+           set_time_limit(0);
+        session_write_close();
+        ini_set('max_execution_time', '0');
         $urlBase = 'https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=%s&pageToken=%s&playlistId=%s&fields=items/snippet,nextPageToken,pageInfo&key=' . $this->apiKey;
         $url = sprintf($urlBase, $numVideos, $pageToken, $idPlaylist);
 

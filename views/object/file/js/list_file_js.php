@@ -2,14 +2,19 @@
 function showSlideShow( item_index ) {
     $("#modalSlideShow").modal('show');
 
-    $('#carousel-attachment').slick({
+    var slider_opts = {
         dots: true,
         infinite: true,
-        speed: 500,
         fade: true,
-        cssEase: 'linear',
         adaptiveHeight: true,
+        arrows: true,
+        speed: 500,
+        cssEase: 'linear',
         initialSlide: item_index
-    });
+    };
+    
+    setTimeout(function () {
+        $('#carousel-attachment').slick(slider_opts);
+    }, 500);
 }
 </script>

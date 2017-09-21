@@ -10,15 +10,21 @@ include_once ('../../../../../wp-config.php');
 include_once ('../../../../../wp-load.php');
 include_once ('../../../../../wp-includes/wp-db.php');
 include_once ('js/page_js.php');
+$fixed_slugs = [
+    'socialdb_property_fixed_title',
+    'socialdb_property_fixed_description',
+    'socialdb_property_fixed_content',
+    'socialdb_property_fixed_source',
+    'socialdb_property_fixed_license',
+    'socialdb_property_fixed_thumbnail',
+    'socialdb_property_fixed_attachments',
+    'socialdb_property_fixed_tags',
+    'socialdb_property_fixed_type'
+];
+
 ?>
     <style>
-        .right_column{
-            background: white;
-            border: 3px solid #E8E8E8;
-            min-height: 260px;
-            padding: 15px;
-            border-top: none;
-        }
+      
     </style>
     <div class='right_column' >
         <h3>
@@ -85,6 +91,9 @@ include_once ('js/page_js.php');
         <p>
       <?php if($metadata&&is_array($metadata)): 
                 foreach ($metadata as $meta): 
+                    if($term->slug!=='socialdb_category' && in_array($meta['data']['slug'], $fixed_slugs)){
+                        continue;
+                    }
                     echo '<p>';             
                             if($meta['type']=='socialdb_property_data'):
                                 echo "<a href='javascript:showPageProperties(\"".$meta['data']['slug']."\", \"".get_template_directory_uri()."\")'>";
@@ -121,6 +130,6 @@ include_once ('js/page_js.php');
         </p>
         <hr>
         <div class="row">
-               <div id="comments_term"></div>
+            <div id="comments_term" class="item-comments no-padding"></div>
          </div>
     </div>

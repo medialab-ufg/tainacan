@@ -1,20 +1,19 @@
 <script>
     $(function () {
         change_breadcrumbs_title('<?php _e('Configurations','tainacan') ?>');
-
         showModerationDays();
         // Adiciona borda nas entidades criadas na configuração
         $('#configuration .col-md-6:not([id])').css('border-bottom', '1px solid #e3e3e3');
 
         $('[data-toggle="tooltip"]').tooltip();
 
-        $("#button_save_and_next").click(function(){
-            $("#submit_form_edit_collection").submit();
-        });
+        $("#conclude_config").click(function() {
+            goToCollectionHome();
+        });        
 
         if ($('#open_wizard').val() == 'true') {
             $('#btn_back_collection').hide();
-            $('#submit_configuration').hide();
+            // $('#submit_configuration').hide();
             $('#save_and_next').val('true');
         } else {
             $('#collection-steps').hide();
@@ -39,8 +38,7 @@
             if (verify[0].value.trim() === '') {
                 showAlertGeneral('<?php _e('Attention', 'tainacan') ?>', '<?php _e('Please set a valid name', 'tainacan') ?>', 'info');
                 return false;
-            }
-            else if ($("#verify_collection_name").val() !== 'block') {
+            } else if ($("#verify_collection_name").val() !== 'block') {
                 // $("#collection_content").val(CKEDITOR.instances.editor.getData());
                 e.preventDefault();
                 $.ajax({
@@ -56,8 +54,11 @@
                     $('#redirect_to_caegories').show();
                     showAlertGeneral('<?php _e('Success', 'tainacan') ?>', '<?php _e('Configuration saved successfully!', 'tainacan') ?>', 'success');
                     if (elem.save_and_next && elem.save_and_next == 'true') {
-                        showPropertiesAndFilters('<?php echo get_template_directory_uri() ?>');
+                        showTaxonomyZone('<?php echo get_template_directory_uri() ?>');
+                        change_breadcrumbs_title('<?php _e('Categories', 'tainacan') ?>');
+                        //showPropertiesAndFilters('< ? php echo get_template_directory_uri() ?>');
                     } else {
+                        window.location = $('#socialdb_permalink_collection').val();
                         if (elem.is_moderator) {
                             showCollectionConfiguration(src);
                         } else {
@@ -76,10 +77,19 @@
                 return false;
             }
         });
-        //
+
         list_ordenation();
         list_collections_parent();
-        //showCKEditor();
+
+
+        $("#enable_header").on('change', function() {
+            var v = $(this).attr('checked');
+            if(v) {
+               $('.enablelize').show();
+            } else {
+                $('.enablelize').hide();
+            }
+        });
     });
 
     function showModerationDays() {
@@ -113,7 +123,6 @@
                     }
                 });
             }
-            console.log(elem.rankings);
             if (elem.rankings) {
                 $("#collection_order").append("<optgroup label='<?php _e('Rankings', 'tainacan') ?>'>");
                 $.each(elem.rankings, function (idx, ranking) {
@@ -129,36 +138,46 @@
         });
     }
 
-    function autocomplete_moderators(collection_id) {
-        $("#autocomplete_moderator").autocomplete({
-            source: $('#src').val() + '/controllers/user/user_controller.php?operation=list_user&collection_id=' + collection_id,
-            messages: {
-                noResults: '',
-                results: function () {
-                }
-            },
-            minLength: 2,
-            select: function (event, ui) {
-                console.log(event);
-                //$("#moderators_" + collection_id).html('');
-                //$("#moderators_" + collection_id).val('');
-                //var temp = $("#chosen-selected2 [value='" + ui.item.value + "']").val();
-                var temp = $("#moderators_" + collection_id + " [value='" + ui.item.value + "']").val();
-                if (typeof temp == "undefined") {
-                    $("#moderators_" + collection_id).append("<option class='selected' value='" + ui.item.value + "' selected='selected' >" + ui.item.label + "</option>");
+    function autocomplete_moderators(collection_id, container) {
+        var _div_ = "#autocomplete_moderator",
+            base_temp = "#moderators_" + collection_id;
 
+        if(container)
+           _div_ = container;
+
+        $(_div_).autocomplete({
+            source: $('#src').val() + '/controllers/user/user_controller.php?operation=list_user&collection_id=' + collection_id,
+            messages: { noResults: '', results: function () {} }, minLength: 2,
+            select: function (event, ui) {
+                if(container && container != "#autocomplete_moderator") {
+                    var curr_owner = $('input[name="collection_owner"]').val();
+                    var new_own = ui.item.value;
+                    if( new_own != curr_owner ) {
+                        $('.new_own_cont').show();
+                        var own_str = '<?php _t('New owner: ',1); ?>' + ui.item.label;
+                        $('.new_owner_of_' + collection_id).html(own_str);
+                        $('input[name="collection_owner"]').val(new_own)
+                    }
+                } else {
+                    var temp = $(base_temp + " [value='" + ui.item.value + "']").val();
+                    if (typeof temp == "undefined") {
+                        $(base_temp).append("<option class='selected' value='" + ui.item.value + "' selected='selected' >" + ui.item.label + "</option>");
+                    }
                 }
+
                 setTimeout(function () {
-                    $("#autocomplete_moderator").val('');
+                    $(_div_).val('');
                 }, 100);
             }
         });
     }
+
     function clear_select_moderators(e) {
         $('option:selected', e).remove();
         //$('.chosen-selected2 option').prop('selected', 'selected');
     }
     function verify_name_collection() {
+        $('#suggested_collection_name').val(normalizate_name($('#suggested_collection_name').val()));
         $.ajax({
             url: $("#src").val() + '/controllers/collection/collection_controller.php',
             type: 'POST',
@@ -177,27 +196,39 @@
                 $("#verify_collection_name").val('allow');
                 $("#collection_name_error").hide('slow')
                 $("#collection_name_success").show('slow');
-                //$("#collection_name_success").delay(5000);
-                //$("#collection_name_success").hide('slow');
             }
         });
     }
+    
+    function normalizate_name(s){
+            var r=s.toLowerCase();
+            r = r.replace(' ',"-");
+            //r = r.replace(new RegExp("\\s", 'g'),"");
+            r = r.replace(new RegExp("[àáâãäå]", 'g'),"a");
+            r = r.replace(new RegExp("æ", 'g'),"ae");
+            r = r.replace(new RegExp("ç", 'g'),"c");
+            r = r.replace(new RegExp("[èéêë]", 'g'),"e");
+            r = r.replace(new RegExp("[ìíîï]", 'g'),"i");
+            r = r.replace(new RegExp("ñ", 'g'),"n");                            
+            r = r.replace(new RegExp("[òóôõö]", 'g'),"o");
+            r = r.replace(new RegExp("œ", 'g'),"oe");
+            r = r.replace(new RegExp("[ùúûü]", 'g'),"u");
+            r = r.replace(new RegExp("[ýÿ]", 'g'),"y");
+            //r = r.replace(new RegExp("\\W", 'g'),"");
+            return r;
+    }
+    
     function list_collections_parent() {
         $.ajax({
             url: $('#src').val() + '/controllers/collection/collection_controller.php',
             type: 'POST',
             data: {operation: 'list_collections_parent', collection_id: $("#collection_id").val()}
         }).done(function (result) {
-            //$("#socialdb_collection_parent").append("<option value='' selected='selected' >Selecione..</option>");
             $("#socialdb_collection_parent").append("<option value='collection_root' ><?php _e('Collection root', 'tainacan') ?></option>");
             elem = jQuery.parseJSON(result);
             generate_select_list_collections_parent(elem.children, '&nbsp;&nbsp;');
-            // $('#socialdb_collection_parent').combobox({bsVersion: '3'});
-            //console.log($("#selected_parent_collection").val());
             if ($("#selected_parent_collection").val() !== '') {
-                // $("[name=socialdb_collection_parent").val($("#selected_parent_collection").val());
                 $("#socialdb_collection_parent").val($("#selected_parent_collection").val());
-                // $('.combobox').val();
             }
         });
     }
@@ -241,29 +272,39 @@
         return '<?php echo get_template_directory_uri(); ?>';
     }
 
-    var cover_img_options = {
-        uploadUrl: '<?php echo get_stylesheet_directory_uri() ?>' + '/views/collection/upload_file.php',
-        cropUrl: '<?php echo get_stylesheet_directory_uri() ?>' + '/views/collection/crop_file.php',
+    var collection_id = $("#collection_id").val();
+    var common_config_options = {
+        uploadUrl: get_tainacan_base_url() + '/views/collection/upload_file.php',
+        cropUrl: get_tainacan_base_url() + '/views/collection/crop_file.php',
         imgEyecandy: true,
         imgEyecandyOpacity: 0.1,
         modal: true,
-        loaderHtml: '<div class="loader bubblingG"><span id="bubblingG_1"></span><span id="bubblingG_2"></span><span id="bubblingG_3"></span></div>',
-        onAfterImgCrop: function () {
-            var cropped = $('img.croppedImg').attr('src');
-            var collection_id = $("#collection_id").val();
-            $.ajax({
-                url: $('#src').val() + '/controllers/collection/collection_controller.php',
-                data: {operation: 'set_collection_cover_img', img_url: cropped, collection_id: collection_id}
-            });
-        },
-        onError: function () {
-            alert('Tente novamente mais tarde!');
+        loaderHtml: '<div class="loader bubblingG"><span id="bubblingG_1"></span><span id="bubblingG_2"></span><span id="bubblingG_3"></span></div>'
+    };
+
+    var cover_img_options = common_config_options;
+    cover_img_options.onAfterImgCrop = function() {
+        var img_height = this.objH;
+        var data = { operation: 'set_collection_cover', collection_id: collection_id, img_height: img_height};
+        if(img_height == 148) {
+            var cropped = $('img.croppedImg').get(0);
+            data.thumb_url = $(cropped).attr('src');
+        } else {
+            var cropped = $('img.croppedImg').get(1);
+            if(!cropped){
+                cropped = $('img.croppedImg').get(0);
+            }
+            data.img_url = $(cropped).attr('src');
         }
-    }
+        $.ajax({ url: $('#src').val() + '/controllers/collection/collection_controller.php', type: 'POST', data: data });
+    };
+
+    var croppicThumb = new Croppic('collection_crop_thumb', cover_img_options);
     var croppicContainer = new Croppic('collection_cover_image', cover_img_options);
 
     function show_edit_cover() {
-        $("#edit_cover_container").show();
+        $("#edit_cover_container").removeClass('hideCropBox');
+        $("#edit_cover_container").height(280);
     }
 
 </script>

@@ -1,8 +1,9 @@
 <?php
-
+/*
 include_once ('../../../../../wp-config.php');
 include_once ('../../../../../wp-load.php');
 include_once ('../../../../../wp-includes/wp-db.php');
+*/
 require_once(dirname(__FILE__) . '../../../event/event_model.php');
 
 class EventCollectionCreateModel extends EventModel {
@@ -72,6 +73,7 @@ class EventCollectionCreateModel extends EventModel {
         );
         // Update the post into the database
         $value = wp_update_post($object);
+        $data['url_collection_redirect'] = get_permalink($collection_create_id);
         if ($value>0) {
             $this->set_approval_metas($data['event_id'], $data['socialdb_event_observation'], $automatically_verified);
             $this->update_event_state('confirmed', $data['event_id']);

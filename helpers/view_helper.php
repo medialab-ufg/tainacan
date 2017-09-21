@@ -6,6 +6,8 @@ class ViewHelper {
     public $default_metadata;
     public $special_metadata;
     public $hide_main_container = false;
+    public $mediaHabilitate = false;
+    public $collection_id;
     public static $fixed_slugs = [
         'socialdb_property_fixed_title',
         'socialdb_property_fixed_description',
@@ -13,13 +15,21 @@ class ViewHelper {
         'socialdb_property_fixed_source',
         'socialdb_property_fixed_license',
         'socialdb_property_fixed_thumbnail',
-        'socialdb_property_fixed_attachments',
+        'socialdb_property_fixed_attachments', 
         'socialdb_property_fixed_tags',
         'socialdb_property_fixed_type'
         ];
    public $terms_fixed;
     
-    function __construct() {
+   public static $default_color_schemes = [
+        'blue'   => ['#7AA7CF', '#0C698B'],
+        'brown'  => ['#874A1D', '#4D311F'],
+        'green'  => ['#3D8B55', '#242D11'],
+        'violet' => ['#7852B2', '#31185C'],
+        'grey'   => ['#58595B', '#231F20'],
+    ];
+    
+    function __construct($collection_id = 0) {
         $this->terms_fixed = [
         'title'=> get_term_by('slug', 'socialdb_property_fixed_title','socialdb_property_type'),
         'description'=> get_term_by('slug', 'socialdb_property_fixed_description','socialdb_property_type'),
@@ -31,18 +41,50 @@ class ViewHelper {
         'tags'=> get_term_by('slug', 'socialdb_property_fixed_tags','socialdb_property_type'),
         'type'=> get_term_by('slug', 'socialdb_property_fixed_type','socialdb_property_type')
         ];
-        
-        if($this->get_visibility($this->terms_fixed['attachments'])!==''
-                &&$this->get_visibility($this->terms_fixed['title'])!==''
-                &&$this->get_visibility($this->terms_fixed['type'])!==''
-                &&$this->get_visibility($this->terms_fixed['content'])!==''
+        $this->collection_id = $collection_id;
+        //verifico se existe labels da colecao
+        if($this->collection_id):
+           $this->get_labels_fixed_properties($this->collection_id); 
+        endif;
+        //visibilidade dos metadados
+        if($this->get_visibility($this->terms_fixed['attachments'], $this->collection_id)!==''
+                &&$this->get_visibility($this->terms_fixed['title'], $this->collection_id)!==''
+                &&$this->get_visibility($this->terms_fixed['type'], $this->collection_id)!==''
+                &&$this->get_visibility($this->terms_fixed['content'], $this->collection_id)!==''
                 ){
              $this->hide_main_container = true;
         }
     }
-    
+
+    public function renderRepositoryLogo($_logo_id, $fallback_title) {
+        $extraClass = "";
+        $home = home_url();
+        if(isset($_logo_id)) {
+            $former_logo = get_the_post_thumbnail($_logo_id, 'thumbnail');
+            if($former_logo) {
+                $extraClass = "repository-logo";
+                $_img_url = wp_get_attachment_url( get_post_thumbnail_id($_logo_id) );
+                $ret = "<img class='tainacan-repo-logo' src='$_img_url' />";
+            } else {
+                $logo_obj = get_post($_logo_id);
+                if(is_object($logo_obj) && $logo_obj->post_type === "attachment") {
+                    $crop_logo = $logo_obj->guid;
+                    $ret = "<img class='tainacan-repo-logo' src='$crop_logo' />";
+                } else {
+                    $extraClass = "logo-tainacan";
+                    $default_logo = get_template_directory_uri() . '/libraries/images/Tainacan_pb.svg';
+                    $ret = "<img class='tainacan-repo-logo' src='$default_logo' />";
+                }
+            }
+        } else {
+            $ret = empty($fallback_title) ? _t("Tainacan") : $fallback_title;
+        }
+
+        return "<a class='col-md-3 navbar-brand $extraClass' href='$home'> $ret </a>";
+    }
+
     public function get_metadata_types() {
-        return $this->metadata_types = [
+        $this->metadata_types = [
             'text' => __('Text', 'tainacan'),
             'textarea' => __('Long text', 'tainacan'),
             'date' => __('Date', 'tainacan'),
@@ -50,8 +92,16 @@ class ViewHelper {
             'autoincrement' => __('Auto-Increment', 'tainacan'),
             'relationship' => __('Relationship', 'tainacan'),
             'category' => __('Category', 'tainacan'),
-            'voting' => __('Rankings', 'tainacan')
+            'voting' => __('Rankings', 'tainacan'),
+            'metadata_compound' => __('Compounds', 'tainacan'),
         ];
+
+        if(has_action("add_new_user_properties"))
+        {
+            $this->metadata_types['user'] = __('User', 'tainacan');
+        }
+
+        return $this->metadata_types;
     }
 
     public function get_property_data_types() {
@@ -79,15 +129,38 @@ class ViewHelper {
             $visibility = get_term_meta($property->term_id, 'socialdb_property_visibility',true);
             if($visibility=='hide'){
                 return 'style="display:none"';
+            }elseif($this->collection_id!=0){
+                $meta = get_post_meta($this->collection_id, 'socialdb_collection_fixed_properties_visibility', true);
+                $array = explode(',', $meta) ;
+                if(is_array($array) &&  ($key = array_search($property->term_id, $array)) !== false):
+                    return 'style="display:none"';
+                endif;
             }else{
               return '';   
             } 
         }
         return '';
     }
+    
+    public function get_labels_fixed_properties($collection_id){
+        $labels_collection = ($collection_id!='') ? get_post_meta($collection_id, 'socialdb_collection_fixed_properties_labels', true) : false;
+        foreach ($this->terms_fixed as $slug => $value) {
+            if($labels_collection):
+                $array = unserialize($labels_collection);
+                if(!isset($this->terms_fixed[$slug]->name))
+                    continue;
+                    
+                $this->terms_fixed[$slug]->name 
+                        = (isset($array[$this->terms_fixed[$slug]->term_id]))?$array[$this->terms_fixed[$slug]->term_id]:$this->terms_fixed[$slug]->name;
+            else:
+                $this->terms_fixed[$slug]->name = $this->terms_fixed[$slug]->name;
+            endif;
+        }
+        
+    }
 
     public function get_special_metadata() {
-        return $this->special_metadata = ['relationship', 'category', 'voting'];
+        return $this->special_metadata = ['relationship', 'category', 'voting','compounds','metadata_compound', 'user'];
     }
 
     public function get_metadata_icon($metadata_type) {
@@ -103,7 +176,16 @@ class ViewHelper {
             return "<option value='from_to'>" . __('From/To', 'tainacan') . "</option>";
         }
     }
-
+    
+    public function render_widgets_options()
+    {
+        ?>
+            <option value='tree'> <?php _e('Tree', 'tainacan'); ?> </option>
+            <option value='searchbox'><?php _e('Search box with autocomplete', 'tainacan'); ?></option>
+            <option value='cloud'><?php _e('Tag Cloud', 'tainacan'); ?>  </option>
+        <?php
+    }
+    
     public function render_tree_colors() {
         ?>
         <div id="color_field_property_search">
@@ -122,10 +204,28 @@ class ViewHelper {
 
     public function render_button_cardinality($property,$i) {
         if ($property['metas']['socialdb_property_data_cardinality'] && $property['metas']['socialdb_property_data_cardinality'] == 'n'):
-            ?>
+            ?> 
+                <?php if($i>0): ?>
+                <div class="col-md-1">
+                    <a style="cursor: pointer;" onclick="remove_container(<?php echo $property['id'] ?>,<?php echo $i ?>)" class="pull-right">
+                        <span class="glyphicon glyphicon-remove"></span>
+                    </a>
+                </div>    
+                <?php endif; ?>
+                <br>
                <button type="button" 
                        id="button_property_<?php echo $property['id']; ?>_<?php echo $i; ?>"
                        onclick="show_fields_metadata_cardinality(<?php echo $property['id'] ?>,<?php echo $i ?>)" 
+                       style="margin-top: 50px;<?php echo (isset($property['metas']['value'])&&is_array($property['metas']['value'])&&($i+1)<count($property['metas']['value']))? 'display:none':'' ?>" 
+                       class="btn btn-primary btn-lg btn-xs btn-block">
+                    <span class="glyphicon glyphicon-plus"></span><?php _e('Add field', 'tainacan') ?>
+                </button>
+            <?php
+        elseif ($property['metas']['socialdb_property_compounds_cardinality'] && $property['metas']['socialdb_property_compounds_cardinality'] == 'n'):
+            ?>
+               <button type="button" 
+                       id="button_property_<?php echo $property['id']; ?>_<?php echo $i; ?>"
+                       onclick="show_fields_metadata_cardinality_compounds(<?php echo $property['id'] ?>,<?php echo $i ?>)" 
                        style="margin-top: 5px;<?php echo (is_array($property['metas']['value'])&&($i+1)<count($property['metas']['value']))? 'display:none':'' ?>" 
                        class="btn btn-primary btn-lg btn-xs btn-block">
                     <span class="glyphicon glyphicon-plus"></span><?php _e('Add field', 'tainacan') ?>
@@ -134,19 +234,41 @@ class ViewHelper {
         endif;
     }
     
-     public function render_cardinality_property($property,$is_data = 'false') {
-        if ($property['metas']['socialdb_property_data_cardinality'] && $property['metas']['socialdb_property_data_cardinality'] == 'n'):
-            return 50;
-        else:
+     public function render_cardinality_property($property,$object_id = 0) {
+//         if (isset($property['metas']['socialdb_property_data_cardinality']) && $property['metas']['socialdb_property_data_cardinality'] == 'n'):
+//            return 25;
+//        elseif(isset($property['metas']['socialdb_property_object_cardinality']) && $property['metas']['socialdb_property_object_cardinality'] == 'n'):
+//             return 25;
+//        elseif(isset($property['metas']['socialdb_property_compounds_cardinality']) && $property['metas']['socialdb_property_compounds_cardinality'] == 'n'):
+//             return 25;
+//        else:
+//            return 1;
+//        endif;
+        if($object_id===0) 
             return 1;
-        endif;
+            
+        $meta = get_post_meta($object_id, 'socialdb_property_helper_' . $property['id'], true);
+        if($meta && $meta != ''){
+            $array = unserialize($meta);
+            return $array;
+        }else{
+            return [];
+        }
+    }
+    
+    public function get_date_edit($value){
+        if(strpos($value, '-')!==false){
+             return explode('-', $value)[2].'/' .explode('-',$value)[1].'/' .explode('-',$value)[0];
+        }else{
+            return $value;
+        }
     }
 
     public static function render_icon($icon, $ext = "svg", $alt="") {
         if ($alt == "") { $alt = __( ucfirst( $icon ), 'tainacan'); }
         $img_path = get_template_directory_uri() . '/libraries/images/icons/icon-'.$icon.'.'.$ext;
 
-        return "<img alt='$alt' title='$alt' src='$img_path' />";
+        return "<img alt='$alt' title='$alt' src='$img_path' class='icon-$icon'/>";
     }
     
      /**
@@ -165,7 +287,12 @@ class ViewHelper {
             }
         }
     }
-    
+    /**
+     * 
+     */
+    public function get_id_list_properties($id,$source) {
+        return ($this->terms_fixed[$id]) ? 'meta-item-'.$this->terms_fixed[$id]->term_id :  $source ;
+    }
     /**
      * function get_collection_by_category_root($user_id)
      * @param int a categoria raiz de uma colecao
@@ -213,28 +340,396 @@ class ViewHelper {
                         <h4> 1. <?php _e('Configurations', 'tainacan')?> </h4>
                     </a>
                 </li>
-                <li class="col-md-2 <?php $this->is_current($current_step,'metadata'); ?> metadata">
+                <li class="col-md-2 <?php $this->is_current($current_step,'categories'); ?> categories">
+                    <a onclick="showTaxonomyZone('<?php echo $path ?>');">
+                        <h4> 2. <?php _e('Categories', 'tainacan')?> </h4>
+                    </a>
+                </li>
+                <li class="col-md-3 <?php $this->is_current($current_step,'metadata'); ?> metadata">
                     <a onclick="showPropertiesAndFilters('<?php echo $path ?>');" class="config-section-header">
-                        <h4> 2. <?php _e('Metadata and Filters', 'tainacan')?> </h4>
+                        <h4> 3. <?php _e('Metadata and Filters', 'tainacan')?> </h4>
                     </a>
                 </li>
                 <li class="col-md-2 <?php $this->is_current($current_step,'layout'); ?> layout">
                     <a onclick="showLayout('<?php echo $path ?>');">
-                        <h4> 3. <?php _e('Layout', 'tainacan')?> </h4>
+                        <h4> 4. <?php _e('Layout', 'tainacan')?> </h4>
                     </a>
                 </li>
             </ul>
 
-            <button type="submit" id="button_save_and_next" class="btn btn-primary">
-                <?php _e('Save & Next', 'tainacan'); ?>
+            <button type="submit" id="conclude_config" class="btn btn-default btn-lg pull-right">
+                <?php _e('Conclude', 'tainacan'); ?>
             </button>
         </div>
 
     <?php }
 
-    public static function render_config_title($title) {
-        echo "<h3 class='topo'> $title <button onclick='backToMainPage();' class='btn btn-default pull-right'>";
-        echo  __('Back to collection','tainacan') . "</button></h3> <hr>";
+    public static function render_config_title($title,$has_link = false) {
+        $onclick = 'backToMainPage();';
+        $onclick = "backRoute($('#slug_collection').val());";
+        echo "<h3 class='topo'> $title ";
+        self::buttonVoltar((__("Events", 'tainacan') == $title) ? $has_link : false);
+        echo  "</h3><hr>";
     }
 
+    public function render_modal_header($span, $title, $extra_html="") {
+        $_modal_header = "<div class='modal-header'>";
+        $_modal_header .= "<button type='button' class='close' data-dismiss='modal' aria-label='Close'><span aria-hidden='true' class='glyphicon glyphicon-$span'></span></button>";
+        $_modal_header .= "<h4 class='modal-title' id='modal-$span'>" . $title . $extra_html  . "</h4>";
+        $_modal_header .= "</div>";
+        
+        return $_modal_header;
+    }
+
+    public function render_modal_footer($button_action="", $title) {
+        $close_string = __('Close', 'tainacan');
+        $_modal_footer = "<div class='modal-footer'>";
+        $_modal_footer .= "<button type='button' class='btn btn-default pull-left' data-dismiss='modal'> $close_string </button>";
+        $_modal_footer .= "<button type='button' class='btn btn-primary' onclick='$button_action'>$title</button>";
+        $_modal_footer .= "</div>";
+
+        return $_modal_footer;
+    }
+    
+    public static function render_default_submit_button() {
+        return "<input type='submit' class='btn btn-primary pull-right' value='". __('Save', 'tainacan') ."'/>";
+    }
+
+    public static function collection_view_modes() {
+        return [
+          'cards'   => __('Cards', 'tainacan'),
+          'list'    => __('List', 'tainacan'),
+          'gallery' => __('Gallery', 'tainacan'),
+          'slideshow' => __('Slideshow', 'tainacan'),
+        ];
+    }
+    
+    /**
+     * 
+     * @param type $data
+     * @return type
+     */
+    public function check_privacity_collection($collection_id) {
+        $result = array();
+        $get_privacity = wp_get_object_terms($collection_id, 'socialdb_collection_type');
+        if ($get_privacity) {
+            foreach ($get_privacity as $privacity) {
+                $privacity_name = $privacity->name;
+            }
+        }
+        $moderator =  verify_collection_moderators($collection_id, get_current_user_id());
+
+        if ($privacity_name == 'socialdb_collection_public' || current_user_can('manage_options')) {
+            return true;
+        } elseif ($privacity_name == 'socialdb_collection_private') {
+            if ($moderator) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
+    
+    /**
+     * function get_collection_by_category_root($user_id)
+     * @param int a categoria raiz de uma colecao
+     * @return array(wp_post) a colecao de onde pertence a categoria root
+     * @ metodo responsavel em retornar as colecoes de um determinando usuario
+     * @author: Eduardo Humberto 
+     */
+    public function get_collection_by_category_root($category_root_id) {
+        global $wpdb;
+        $wp_posts = $wpdb->prefix . "posts";
+        $wp_postmeta = $wpdb->prefix . "postmeta";
+        $query = "
+                    SELECT p.* FROM $wp_posts p
+                    INNER JOIN $wp_postmeta pm ON p.ID = pm.post_id    
+                    WHERE pm.meta_key LIKE 'socialdb_collection_object_type' and pm.meta_value like '$category_root_id'
+            ";
+        $result = $wpdb->get_results($query);
+
+
+        if ($result && is_array($result) && count($result) > 0) {
+            return $result;
+        } else {
+            return array();
+        }
+    }
+    
+    public static function getCollectionColors($col_id) {
+       return unserialize(get_post_meta($col_id,'socialdb_default_color_scheme', true) );
+    }
+    
+    public function render_statistic_menu() {
+        $current_step = 'sa';
+        $path = get_template_directory_uri();
+        ?>
+        <div class="row" id="collection-steps">
+            <ul class="row">
+                <li id="dashboard" class="hidden col-md-2 <?php $this->is_current($current_step,'config'); ?>">
+                    <a onclick="showDashboard(<?php get_template_directory_uri() ?>)">
+                        <h4> <?php _e('Dashboard', 'tainacan')?> </h4>
+                    </a>
+                </li>
+                <li id="stats" class="col-md-2 <?php $this->is_current($current_step,'categories'); ?>">
+                    <a onclick="showStats()"> 
+                        <h4> <?php _e('Statistics', 'tainacan')?> </h4> 
+                    </a>
+                </li>
+            </ul>
+
+            <button type="submit" id="conclude_config" class="btn btn-default btn-lg pull-right">
+                <?php _e('Conclude', 'tainacan'); ?>
+            </button>
+        </div>
+        <?php
+    }
+
+    private function prepareYouTubeVideo($URL) {
+        $_fst = explode("v=", $URL);
+        $_sec = explode("&", $_fst[1]);
+        $_video_id = $_sec[0];
+
+        return "http://www.youtube.com/embed/" . $_video_id . "?html5=1";
+    }
+
+    public function videoSlideItemHtml($_item_id) {
+        $_item_type = get_post_meta($_item_id, "socialdb_object_dc_type")[0];
+        
+        if($_item_type === "video") {
+            $_vd = get_post_meta($_item_id, 'socialdb_object_content')[0];
+            if (strpos($_vd, 'youtube') !== false) {
+                $videoURL = $this->prepareYouTubeVideo($_vd);
+            } elseif (strpos($_vd, 'vimeo') !== false) {
+                $step1 = explode('/', rtrim($_vd, '/'));
+                $video_id = end($step1);
+                $videoURL = "https://player.vimeo.com/video/" . $video_id;
+            } else {
+                $_check_val = intval($_vd);
+
+                if($_check_val > 0 && is_int($_check_val)) {
+                    $_vd = get_post_meta($_item_id, 'socialdb_object_dc_source')[0];
+                    $videoURL = $this->prepareYouTubeVideo($_vd);
+                } else {
+                    echo get_item_thumb_image($_item_id, "large");
+                    return;
+                }
+            }
+            echo "<div class='embed-responsive embed-responsive-16by9 $_item_type'><iframe class='embed-responsive-item' src='$videoURL'></iframe></div>";
+        } else { ?>           
+            <div class="col-md-12">               
+                <?php echo get_item_thumb_image($_item_id, "large"); ?>
+            </div>
+            <?php 
+        }
+    }
+    
+    public static function buttonVoltar($redirect = false){
+        if($redirect){ ?>
+            <!--button onclick="backToMainPage();" class="btn btn-default pull-right"><?php _e('Back to collection', 'tainacan') ?></button-->
+            <button onclick="window.location = '<?php echo $redirect ?>'" id="btn_back_collection" class="btn btn-default pull-right"><?php _e('Back to collection','tainacan') ?></button>
+            <?php
+        }else{
+            ?>
+            <!--button onclick="backToMainPage();" class="btn btn-default pull-right"><?php _e('Back to collection', 'tainacan') ?></button-->
+            <button onclick="backRoute($('#slug_collection').val());" id="btn_back_collection" class="btn btn-default pull-right"><?php _e('Back to collection','tainacan') ?></button>
+            <?php
+        }
+    }
+    
+    /**
+     * 
+     * @param type $show_target_properties
+     */
+    public function commomFieldsProperties($show_target_properties = false) {
+        if($show_target_properties)
+            $this->getTargetProperties();
+        ?>
+        <div  class="form-group" style="margin-top:15px;">
+            <label for="property_lock_field"><?php _e('Lock this field','tainacan'); ?></label><br>
+            <input type="checkbox" name="socialdb_event_property_lock_field" class="property_lock_field"  value="true">&nbsp;<?php _e('Lock this field','tainacan'); ?>
+        </div>
+        <?php
+    }
+######################### Propriedades filtro ##################################    
+    /**
+     * 
+     */
+    public function getTargetProperties() {
+        $this->setJavascriptTragetProperties();
+        ?>
+        <div class="form-group" style="margin-top:15px;">
+            <label for="property_object_required"><?php _e('Properties to use in search','tainacan'); ?></label>
+            <div id="properties_target" style="height: 150px;overflow-y: scroll;" >
+                <center><?php _e('No properties found','tainacan') ?>!</center>
+            </div>
+            <input type="hidden" name="socialdb_event_property_to_search_in" id="properties_to_search_in">
+        </div>
+        <div class="form-group">
+            <label for="property_avoid_items"><?php _e('Avoid selected items','tainacan'); ?></label><br>
+            <input type="checkbox" name="socialdb_event_property_avoid_items" class="property_avoid_items"  value="true">&nbsp;<?php _e('Search only no selected items','tainacan'); ?><br>
+        </div>
+        <?php
+    }
+    
+    private function setJavascriptTragetProperties(){
+        ?>
+        <script>
+            function setTargetProperties(seletor){
+                $('#properties_target').html('');
+                if($(seletor).val()===''){
+                     $('#properties_target').html('<center><?php _e('No properties found','tainacan') ?>!</center>');
+                }else{
+                    $.ajax({
+                       type: "POST",
+                       url: $('#src').val() + "/controllers/property/property_controller.php",
+                       data: { operation: 'setTargetProperties',categories:$(seletor).val() }
+                   }).done(function(result) {
+                       var json = JSON.parse(result);
+                       $('#properties_target').html('');
+                       if(json.properties.length == 0){
+                            $('#properties_target').html('<center><?php _e('No properties found','tainacan') ?>!</center>');
+                       }else{
+                            var is_checked_title = '';
+                            if($('#properties_to_search_in').val().split(',').indexOf(json.title.id.toString()) >= 0)
+                            {
+                                is_checked_title = 'checked="checked"'
+                            }
+
+                            if(json.title.id)
+                                $('#properties_target').append('<input type="checkbox" '+is_checked_title+' value="'+json.title.id+'" onchange="setValuesTargetProperties()" class="target_values">&nbsp;'+json.title.labels.join('/')+'<br>');
+
+                            $.each(json.properties,function(index,property){
+                                var is_checked = '';
+                                if($('#properties_to_search_in').val().split(',').indexOf(property.id.toString())>=0)
+                                {
+                                    is_checked = 'checked="checked"'
+                                }
+
+                                if(property.category.name)
+                                {
+                                    $('#properties_target').append('<input type="checkbox" '+is_checked+' value="'+property.id+'" onchange="setValuesTargetProperties()" class="target_values">&nbsp;'+property.name+' ('+property.type+') - ' + property.category.name + '<br>');
+                                }
+                            })
+                       }
+                   });
+               }
+            }
+            
+            /**
+            *
+            ** @returns {undefined}             */
+            function setValuesTargetProperties(){
+                var size = $('.target_values').length;
+                var values = [];
+                if(size>0){
+                    $.each($('.target_values'),function(index,value){
+                        if($(value).is(':checked')){
+                           values.push($(value).val());
+                        }
+                    });
+                }
+                $('#properties_to_search_in').val(values.join(','));
+            }
+        </script>
+        <?php
+    }
+    
+    
+    /**
+     * 
+     */
+    public function getValuesViewSingle($meta,$property_id, $property_type = null) {
+        $cont = 0;
+        if ($meta && $meta != '')
+        {
+            $array = unserialize($meta);
+            foreach ($array as $property) {
+                foreach ($property as $atom) {
+                    $type = $atom['type'];
+                    $values = $atom['values'];
+                    foreach ($values as $value) {
+                        $value = $this->sdb_get_post_meta($value)->meta_value;
+                        if(isset($value) && trim($value) != ''){
+                            $cont++;
+                        }
+
+                        if($type == 'data'){
+                            if($property_type != null && strcmp($property_type, 'textarea') == 0)
+                            {
+                                ?>
+                                <p>
+                                    <i>
+                                        <?php echo '<a style="cursor:pointer;" onclick="wpquery_link_filter(' . "'" . preg_replace('/\s+/', ' ', $value) . "'" . ',' . $property_id . ')">
+                                                    <textarea class="form-control" rows="9" disabled="disabled">'.
+                                                        $value.
+                                                    '</textarea>
+                                                    </a>'; ?>
+                                    </i>
+                                </p>
+                                <?php
+                            }
+                            else
+                            {
+                                ?>
+                                <p>
+                                    <i>
+                                        <?php echo '<a style="cursor:pointer;" onclick="wpquery_link_filter(' . "'" . $value . "'" . ',' . $property_id . ')">' .
+                                            $value
+                                            . '</a>'; ?>
+                                    </i>
+                                </p>
+                                <?php
+                            }
+
+                        }else if($type == 'object'){
+                            $ob = get_post($value);
+                            if ($ob && $ob->post_status == 'publish') {
+                                // echo '<b><a href="'. get_the_permalink($property['metas']['collection_data'][0]->ID) . '?item=' . $ob->post_name . '" >'. $ob->post_title . '</a></b><br>';
+                                echo '<input type="hidden" name="socialdb_property_'.$property_id.'[]" value="'.$ob->ID.'"><p style="color:black"><i>' . $ob->post_title . '</i></p> <br >';
+                            }
+                        }else{
+                            $ob = get_term_by('id',$value,'socialdb_category_type');
+                            if ($ob) {
+                                ?>
+                                <p>
+                                    <i>
+                                       <a style="cursor:pointer;" onclick="wpquery_term_filter('<?php echo $ob->term_id ?>','<?php echo $property['id'] ?>')">
+                                           <?php echo $ob->name  ?>
+                                       </a>
+                                    </i>   
+                                </p><br>
+                                 <script>
+                                    setTimeout(function(){
+                                        append_category_properties('<?php echo $ob->term_id ?>',0,'<?php echo $property_id ?>');
+                                    }, 3000);
+                                </script>
+                                <?php
+                            }
+                        }  
+                    }
+                }
+            }
+        }
+        
+        if($cont===0){
+             echo '<p>' . __('empty field', 'tainacan') . '</p>';
+        }
+    }
+    
+    /**
+     * funcao que busca o postmeta e retorna seu valor
+     */
+    public function sdb_get_post_meta($meta_id) {
+        global $wpdb;
+        $query = "SELECT * FROM $wpdb->postmeta WHERE meta_id = $meta_id";
+        $result = $wpdb->get_results($query);
+        if ($result && is_array($result)) {
+            return $result[0];
+        } elseif ($result && isset($result->ID)) {
+            return $result;
+        } else {
+            return false;
+        }
+    }
 } // ViewHelper

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Author: Eduardo HUmberto
+ * Author: Eduardo Humberto
  */
 if(is_file(dirname(__FILE__) .'../../../../../wp-config.php')){
 include_once (dirname(__FILE__) .'../../../../../wp-config.php');
@@ -43,14 +43,14 @@ class HarvestingOAIPMHModel extends Model {
             //error_log( print_r(' URL  = '.$url, true ),0);
             //error_log( print_r($response_xml_data, true ),0);  
             $xml = new SimpleXMLElement($response_xml_data);
-            if (isset($xml->error) && (string) $xml->error == 'The requested resumptionToken is invalid or has expired' && $data['lastpage'] <= 1) {
+             if (isset($xml->error) && (string) $xml->error == 'The requested resumptionToken is invalid or has expired' && $data['lastpage'] <= 1) {
                 $response_xml_data = download_page($data['url'] . '?verb=ListRecords&metadataPrefix=oai_dc'); // pego o xml 
                 $xml = new SimpleXMLElement($response_xml_data);
             }
             $json_response['token'] = (string) $xml->ListRecords->resumptionToken; // pego o token da proxima list records
             $tam = count($xml->ListRecords->record); // verifico o tamanho dos list record para o for
             
-                  //  error_log( print_r(' TAM = '.$tam, true ),0);
+            //  error_log( print_r(' TAM = '.$tam, true ),0);
             for ($j = 0; $j < $tam; $j++) {
                 $record = $record = $xml->ListRecords->record[$j];
                 $dc = $record->metadata->children("http://www.openarchives.org/OAI/2.0/oai_dc/");
@@ -64,8 +64,8 @@ class HarvestingOAIPMHModel extends Model {
                     $record_response['identifier'] = (string) $record->header->identifier;
                     $record_response['datestamp'] = (string) $record->header->datestamp;
                     $record_response['list_sets'] = $this->get_set_specs($record->header->setSpec, $data['collection_id']);
-                    $record_response['title'] = $metadata->title;
-                    $record_response['date'] = $record->header->datestamp;
+                    $record_response['title'] = (string)$metadata->title;
+                    $record_response['date'] = (string)$record->header->datestamp;
                     $tam_metadata = count($metadata);
                     for ($i = 0; $i < $tam_metadata; $i++) {
                         $value = (string) $metadata[$i];
@@ -117,7 +117,11 @@ class HarvestingOAIPMHModel extends Model {
         $array_categories = [];
         $category_model = new CategoryModel;
         foreach ($object_specs as $object_spec) {
-            $category_spec = $category_model->get_term_by_slug((string) $object_spec . '_' . $collection_id);
+            if($collection_id==get_option('collection_root_id')||$collection_id==''){
+                $category_spec = $category_model->get_term_by_slug((string) $object_spec );
+            }else{
+                $category_spec = $category_model->get_term_by_slug((string) $object_spec . '_' . $collection_id);
+            }
             if ($category_spec) {
                 $array_categories[] = $category_spec[0]->term_id;
             }
@@ -190,6 +194,7 @@ class HarvestingOAIPMHModel extends Model {
                 if ($form[$identifier] !== '') {
                     if ($form[$identifier] == 'post_title'):
                         $this->update_title($object_id, $metadata);
+                        $this->set_common_field_values($object_id, 'title', (string)$metadata);
                     elseif ($form[$identifier] == 'post_content'):
                         $content .= $metadata . ",";
                     elseif ($form[$identifier] == 'post_permalink'):
@@ -318,7 +323,7 @@ class HarvestingOAIPMHModel extends Model {
         $query = "
                     SELECT p.* FROM $wp_posts p
                     INNER JOIN $wp_postmeta pm ON p.ID = pm.post_id    
-                    WHERE pm.meta_key LIKE 'socialdb_collection_object_type' and pm.meta_value like '$identifier'
+                    WHERE pm.meta_key LIKE 'socialdb_object_identifier' and pm.meta_value like '$identifier'
             ";
         $result = $wpdb->get_results($query);
         if ($result && is_array($result) && count($result) > 0) {

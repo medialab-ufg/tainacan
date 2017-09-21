@@ -9,6 +9,9 @@ require_once(dirname(__FILE__).'../../../models/event/event_property_object/even
 require_once(dirname(__FILE__).'../../../models/event/event_property_term/event_property_term_create_model.php');
 require_once(dirname(__FILE__).'../../../models/event/event_property_term/event_property_term_edit_model.php');
 require_once(dirname(__FILE__).'../../../models/event/event_property_term/event_property_term_delete_model.php');
+require_once(dirname(__FILE__).'../../../models/event/event_property_compounds/event_property_compounds_create_model.php');
+require_once(dirname(__FILE__).'../../../models/event/event_property_compounds/event_property_compounds_edit_model.php');
+require_once(dirname(__FILE__).'../../../models/event/event_property_compounds/event_property_compounds_delete_model.php');
 require_once(dirname(__FILE__).'../../general/general_controller.php');  
 
  class PropertyController extends Controller{
@@ -42,27 +45,95 @@ require_once(dirname(__FILE__).'../../general/general_controller.php');
                 //return $property_model->add_property_term($data);
                 return $this->insert_event_property_term_add($data);
                 break;
+            case "add_property_compounds":
+                return $this->insert_event_property_compounds_add($data);
+                break;
             case "edit_property_data":
                 return $property_model->edit_property($data);
                 break;
             case "edit_property_object":
                 return $property_model->edit_property($data);
                 break;
-            case 'edit_property_term':
-
+            case 'edit_property_term':  
+                return $property_model->edit_property($data);
+                break;
+            case 'edit_property_compounds':
                 return $property_model->edit_property($data);
                 break;
             case "update_property_data":
-                //return $property_model->update_property_data($data);
-                return $this->insert_event_property_data_update($data);
+                $property_model->update_tab_organization($data['collection_id'], $data["socialdb_event_property_tab"], $data['property_data_id']);
+                if(isset($data['is_property_fixed'])&&$data['is_property_fixed']=='true'){
+                    $labels_collection = ($data['collection_id']!='') ? get_post_meta($data['collection_id'], 'socialdb_collection_fixed_properties_labels', true) : false;
+                    if($labels_collection):
+                        $array = unserialize($labels_collection);
+                        if($data['property_fixed_name']&&trim($data['property_fixed_name'])!=''):
+                            $array[ $data['property_data_id'] ] = $data['property_fixed_name'];
+                        elseif($array[ $data['property_data_id'] ]):    
+                            unset($array[ $data['property_data_id'] ]);
+                        endif;
+                       update_post_meta($data['collection_id'], 'socialdb_collection_fixed_properties_labels',  serialize($array));
+                    elseif($data['property_fixed_name']&&trim($data['property_fixed_name'])!=''):
+                        update_post_meta($data['collection_id'], 'socialdb_collection_fixed_properties_labels',  serialize([$data['property_data_id']=>$data['property_fixed_name']]));
+                    endif;
+                    $data['new_property_id'] = $data['property_data_id'];
+                    $data['type'] = 'success';
+                    $data['msg'] =__('Operation was successfully','tainacan');
+                    return json_encode($data);
+                }else{
+                     return $this->insert_event_property_data_update($data);
+                }
                 break;
             case "update_property_object":
+                $property_model->update_tab_organization($data['collection_id'], $data["socialdb_event_property_tab"], $data['property_object_id']);
                 //return $property_model->update_property_object($data);
                 return $this->insert_event_property_object_update($data);
                 break;
             case "update_property_term":
+                $property_model->update_tab_organization($data['collection_id'], $data["socialdb_event_property_tab"], $data['property_term_id']);
                 //return $property_model->update_property_term($data);
-                return $this->insert_event_property_term_update($data);
+                if(isset($data['is_property_fixed'])&&$data['is_property_fixed']=='true'){
+                    $labels_collection = ($data['collection_id']!='') ? get_post_meta($data['collection_id'], 'socialdb_collection_fixed_properties_labels', true) : false;
+                    if($labels_collection):
+                        $array = unserialize($labels_collection);
+                        if($data['property_fixed_name']&&trim($data['property_fixed_name'])!=''):
+                            $array[ $data['property_term_id'] ] = $data['property_fixed_name'];
+                        elseif($array[ $data['property_term_id'] ]):    
+                            unset($array[ $data['property_term_id'] ]);
+                        endif;
+                       update_post_meta($data['collection_id'], 'socialdb_collection_fixed_properties_labels',  serialize($array));
+                    elseif($data['property_fixed_name']&&trim($data['property_fixed_name'])!=''):
+                        update_post_meta($data['collection_id'], 'socialdb_collection_fixed_properties_labels',  serialize([$data['property_term_id']=>$data['property_fixed_name']]));
+                    endif;
+                    $data['new_property_id'] = $data['property_term_id'];
+                    $data['type'] = 'success';
+                    $data['msg'] =__('Operation was successfully','tainacan');
+                    return json_encode($data);
+                }else{
+                    return $this->insert_event_property_term_update($data);
+                }
+                break;
+            case "update_property_compounds":
+                $property_model->update_tab_organization($data['collection_id'], $data["socialdb_event_property_tab"], $data['compound_id']);
+                if(isset($data['is_property_fixed'])&&$data['is_property_fixed']=='true'){
+                    $labels_collection = ($data['collection_id']!='') ? get_post_meta($data['collection_id'], 'socialdb_collection_fixed_properties_labels', true) : false;
+                    if($labels_collection):
+                        $array = unserialize($labels_collection);
+                        if($data['property_fixed_name']&&trim($data['property_fixed_name'])!=''):
+                            $array[ $data['property_term_id'] ] = $data['property_fixed_name'];
+                        elseif($array[ $data['property_term_id'] ]):    
+                            unset($array[ $data['property_term_id'] ]);
+                        endif;
+                       update_post_meta($data['collection_id'], 'socialdb_collection_fixed_properties_labels',  serialize($array));
+                    elseif($data['property_fixed_name']&&trim($data['property_fixed_name'])!=''):
+                        update_post_meta($data['collection_id'], 'socialdb_collection_fixed_properties_labels',  serialize([$data['property_term_id']=>$data['property_fixed_name']]));
+                    endif;
+                    $data['new_property_id'] = $data['property_term_id'];
+                    $data['type'] = 'success';
+                    $data['msg'] =__('Operation was successfully','tainacan');
+                    return json_encode($data);
+                }else{
+                    return $this->insert_event_property_compounds_update($data);
+                }
                 break;
             case "delete":
                 if($data['type']=='1'):
@@ -71,6 +142,8 @@ require_once(dirname(__FILE__).'../../general/general_controller.php');
                     return $this->insert_event_property_object_delete($data);
                 elseif($data['type']=='3'):
                     return $this->insert_event_property_delete($data);
+                elseif($data['type']=='4'):
+                    return $this->insert_event_property_compounds_delete($data);
                 endif;
                 break;
             case "list":
@@ -84,6 +157,11 @@ require_once(dirname(__FILE__).'../../general/general_controller.php');
                 $data['menu_style_ids'] = $this->get_menu_styles_ids();
                 return $this->render(dirname(__FILE__).'../../../views/property/list_metadata.php', $data);
                 break;
+            case "list_metadata_category":
+                $data = $property_model->list_data($data);
+                $data['menu_style_ids'] = $this->get_menu_styles_ids();
+                return $this->render(dirname(__FILE__).'../../../views/property/list_metadata_category.php', $data);
+                break;
             case "list_property_terms":
                 return $property_model->list_property_terms($data);
             case "list_property_data":
@@ -92,11 +170,17 @@ require_once(dirname(__FILE__).'../../general/general_controller.php');
             case "list_property_object":
                 return $property_model->list_property_object($data);
                 break;
+            case "list_property_compounds":
+                return $property_model->list_property_compounds($data);
+                break;
+            case "update_default_search_widget":
+                $property_model->update_default_search_widget($data['collection_id'], $data['info']);
+                break;
             case 'show_reverses':// utiliza a mesma funcao porem muda a categoria para procuar suas propriedades
                 $array_final = [];
                 if(strpos($data['category_id'], ',')!==false):
                     $return['property_object'] = [];
-                    $categories = explode(',', $data['category_id']);
+                    $categories = array_filter(explode(',', $data['category_id']));
                     foreach ($categories as $category) {
                         $data['category_id'] = $category;
                         $object = json_decode($property_model->list_property_object($data,true));
@@ -106,15 +190,18 @@ require_once(dirname(__FILE__).'../../general/general_controller.php');
                     }
                     if(empty($return['property_object'])){
                         $return['no_properties'] = true;
+                        $return = json_encode($return);
                     }else{
                         $return['no_properties'] = false;
+                        return json_encode($return);
                     }
-                    $return = json_encode($return);
                 else:
                     $return =  $property_model->list_property_object($data,true);
                 endif;
+
                 $return = json_decode($return);
-                //retorno apenas as propriedades que se relacionam com a categoria atual 
+
+                //retorno apenas as propriedades que se relacionam com a categoria atual
                 //(a qual pertence a propriedade que esta criando a reversa)
                 if(!$return->no_properties){
                     foreach ($return->property_object as $property) {
@@ -126,6 +213,7 @@ require_once(dirname(__FILE__).'../../general/general_controller.php');
                     } 
                     $return->property_object = $array_final;
                 }
+
                 return json_encode($return);
             // properties repository
             case "list_repository_default":
@@ -169,9 +257,162 @@ require_once(dirname(__FILE__).'../../general/general_controller.php');
                     return json_encode(['slug'=>$category->slug]);
                 }    
                 return json_encode(['slug'=>'']);
+            case 'initDynatreePropertiesFilter':
+                    return $property_model->initDynatreePropertiesFilter($data['collection_id'],false);  
+            case 'initDynatreePropertiesFilterCategory':
+                    return $property_model->categoryPropertiesDynatree($data['category_id'],false);       
+            //colocando a obrigatoriadade nas propriedades fixas
+            case 'alter_fixed_property_collection':
+                $labels_collection = ($data['collection_id']!='') ? get_post_meta($data['collection_id'], 'socialdb_collection_fixed_properties_labels', true) : false;
+                if($labels_collection):
+                    $array = unserialize($labels_collection);
+                    if($data['property_fixed_name']&&trim($data['property_fixed_name'])!=''):
+                        $array[ $data['property_id'] ] = $data['property_fixed_name'];
+                    elseif($array[  $data['property_id'] ]):    
+                        unset($array[ $data['property_id'] ]);
+                    endif;
+                    update_post_meta($data['collection_id'], 'socialdb_collection_fixed_properties_labels',  serialize($array));
+                elseif($data['property_fixed_name']&&trim($data['property_fixed_name'])!=''):
+                    update_post_meta($data['collection_id'], 'socialdb_collection_fixed_properties_labels',  serialize([ $data['property_id']=>$data['property_fixed_name']]));
+                endif;
+                $property_model->update_tab_organization($data['collection_id'], $data["tab"], $data['property_id']);
+                update_post_meta($data['collection_id'], 'socialdb_collection_property_'.$data['property_id'].'_required', $data['required']);
+                update_post_meta($data['collection_id'], 'socialdb_collection_property_'.$data['property_id'].'_mask_key', $data['mask_key']);
+                return json_encode($data);
+            //buscando os dados da coleccao    
+            case 'get_data_fixed_property_collection':
+                $data['is_required'] = get_post_meta($data['collection_id'], 'socialdb_collection_property_'.$data['property_id'].'_required', true);
+                $data['is_mask_key'] = get_post_meta($data['collection_id'], 'socialdb_collection_property_'.$data['property_id'].'_mask_key', true);
+                $data['term'] = get_term_by('id', $data['property_id'], 'socialdb_property_type');
+                return json_encode($data);
+            //salvando a faceta de usuarios
+            case 'save_ranking_colaboration_facet':
+                $meta = get_post_meta($data['collection_id'], 'socialdb_collection_facets');
+                if(!in_array('ranking_colaborations', $meta)){
+                    add_post_meta($data['collection_id'], 'socialdb_collection_facets', 'ranking_colaborations');
+                    update_post_meta($data['collection_id'], 'socialdb_collection_facet_ranking_colaborations_widget', 'ranking_colaborations');
+                    //update_post_meta($data['collection_id'], 'socialdb_collection_facet_ranking_colaborations_priority', '3');
+                }
+                return json_encode($data);
+            case 'get_property_compounds':
+                $compounds_id = explode(',', $data['compounds_id']);
+                foreach ($compounds_id as $compound_id) {
+                    $data['compounds'][] = $property_model->get_all_property($compound_id,true, $data['collection_id']);
+                }
+                return json_encode($data);
+            case 'get_properties_categories_dynatree':
+                return $property_model->initDynatreePropertiesFilter($data['collection_id'],false,true);
+            case 'is_part_of_property':
+                $all_metas = $property_model->get_all_property($data['property_id'], true);
+                if(isset($all_metas['metas']['socialdb_property_term_root']) && !empty($all_metas['metas']['socialdb_property_term_root']) ){
+                    $parent_id = $all_metas['metas']['socialdb_property_term_root'];
+                    $categories = (isset($data['categories']) && is_array($data['categories'])) ? $data['categories'] : [] ;
+                    foreach ($categories as $category) {
+                        $ancestors = get_ancestors($category, 'socialdb_category_type');
+                        if(is_array($ancestors) && in_array($parent_id, $ancestors)){
+                            $data['terms'][] = get_term_by('id',$category,'socialdb_category_type');
+                        }
+                    }
+                }
+                return json_encode($data);
+            case 'setTargetProperties':
+                $title = get_term_by('slug', 'socialdb_property_fixed_title','socialdb_property_type');
+                $categories = explode(',', $data['categories']);
+                $all_properties_id = [];
+                $properties = [];
+                $title_labels = [];
+                if(has_filter('alter_categories_to_find_properties')){
+                    $categories = apply_filters('alter_categories_to_find_properties',$categories);
+                }
+                foreach ($categories as $value) {
+                    $properties_raw = get_term_meta($value, 'socialdb_category_property_id');
+                    if(is_array($properties_raw)){
+                        $all_properties_id = array_merge($all_properties_id, array_filter($properties_raw));
+                    }
+                    $collection = $property_model->get_collection_by_category_root($value);
+                    if($collection && isset($collection[0])){
+                        $labels_collection = ($collection[0]->ID!='') ? get_post_meta($collection[0]->ID, 'socialdb_collection_fixed_properties_labels', true) : false;
+                        $labels_collection = ($labels_collection) ? unserialize($labels_collection) : false;
+                        if($labels_collection && $labels_collection[$title->term_id]){
+                            $title_labels[] = $labels_collection[$title->term_id];
+                        }else{
+                            $title_labels[] = $title->name;
+                        }
+                    }
+                    
+                }
+                if(is_array($all_properties_id)){
+                    $all_properties_id = array_filter($all_properties_id);
+                }
+                foreach ($all_properties_id as $property_id) {
+                    $array = $property_model->get_all_property($property_id, true);
+                    if(isset($array['metas']['socialdb_property_created_category'])){
+                        $array['category'] = get_term_by('id', $array['metas']['socialdb_property_created_category'],'socialdb_category_type');
+                    }
+                    $properties[] = $array;
+                }
+                return json_encode(['properties'=>$properties,'title'=>['id'=>$title->term_id,'labels' => $title_labels ]]);
+                
                 
         }
-	}
+    }
+    /**
+     * @signature - function insert_event_add($object_id, $data )
+     * @param int $object_id O id do Objeto
+     * @param array $data Os dados vindos do formulario
+     * @return array os dados para o evento
+     * @description - 
+     * @author: Eduardo 
+     */
+    public function insert_event_property_compounds_add($data) {
+        $eventProperty = new EventPropertyCompoundsCreate();
+        $data['socialdb_event_property_compounds_create_help'] = $data['socialdb_property_help'];
+        $data['socialdb_event_property_compounds_create_name'] = $data['compounds_name'];
+        $data['socialdb_event_property_compounds_create_properties_id'] = $data['compounds_id'];
+        $data['socialdb_event_property_compounds_create_cardinality'] = $data['cardinality'];
+        $data['socialdb_event_property_compounds_create_required'] = ($data['required']) ? $data['required'] : 'false';
+        $data['socialdb_event_property_compounds_create_category_root_id'] = $data['property_category_id'];
+        $data['socialdb_event_collection_id'] = $data['collection_id'];
+        $data['socialdb_event_user_id'] = get_current_user_id();
+        $data['socialdb_event_create_date'] = mktime();
+        /* 
+         * filtro que trabalha com os dados do formulario de adicao de propriedade de compostas
+         * para os eventos
+         */
+        if(has_filter('modificate_values_event_property_compounds_add')):
+            $data = apply_filters( 'modificate_values_event_property_compounds_add', $data); 
+        endif;  
+        return $eventProperty->create_event($data);
+    }
+    /**
+     * @signature - function insert_event_update($object_id, $data )
+     * @param int $object_id O id do Objeto
+     * @param array $data Os dados vindos do formulario
+     * @return array os dados para o evento
+     * @description - 
+     * @author: Eduardo 
+     */
+    public function insert_event_property_compounds_update($data) {
+        $eventProperty = new EventPropertyCompoundsEdit();
+        $data['socialdb_event_property_compounds_edit_id'] = $data['compound_id'];
+        $data['socialdb_event_property_compounds_edit_help'] = $data['socialdb_property_help'];
+        $data['socialdb_event_property_compounds_edit_name'] = $data['compounds_name'];
+        $data['socialdb_event_property_compounds_edit_properties_id'] = $data['compounds_id'];
+        $data['socialdb_event_property_compounds_edit_cardinality'] = $data['cardinality'];
+        $data['socialdb_event_property_compounds_edit_required'] = $data['required'];
+        $data['socialdb_event_property_compounds_edit_category_root_id'] = $data['property_category_id'];
+        $data['socialdb_event_collection_id'] = $data['collection_id'];
+        $data['socialdb_event_user_id'] = get_current_user_id();
+        $data['socialdb_event_create_date'] = mktime();
+        /* 
+         * filtro que trabalha com os dados do formulario de alteracao de propriedade de dados
+         * para os eventos
+         */
+        if(has_filter('modificate_values_event_property_compounds_update')):
+            $data = apply_filters( 'modificate_values_event_property_compounds_update', $data); 
+        endif;    
+        return $eventProperty->create_event($data);
+    }
         /**
      * @signature - function insert_event_add($object_id, $data )
      * @param int $object_id O id do Objeto
@@ -184,6 +425,7 @@ require_once(dirname(__FILE__).'../../general/general_controller.php');
         $eventAddProperty = new EventPropertyDataCreate();
         $data['socialdb_property_default_value'] = $data['socialdb_property_default_value'];
         $data['socialdb_event_property_data_create_help'] = $data['socialdb_property_data_help'];
+        $data['socialdb_event_property_data_create_mask'] = (isset($data['socialdb_property_data_mask']) && is_array($data['socialdb_property_data_mask'])) ? implode(',', $data['socialdb_property_data_mask']) : ((isset($data['socialdb_property_data_mask'])) ? $data['socialdb_property_data_mask'] : '');
         $data['socialdb_event_property_data_create_name'] = $data['property_data_name'];
         $data['socialdb_event_property_data_create_widget'] = $data['property_data_widget'];
         $data['socialdb_event_property_data_create_ordenation_column'] = $data['property_data_column_ordenation'];
@@ -214,6 +456,7 @@ require_once(dirname(__FILE__).'../../general/general_controller.php');
         $data['socialdb_event_property_data_edit_id'] = $data['property_data_id'];
         $data['socialdb_property_default_value'] = $data['socialdb_property_default_value'];
         $data['socialdb_event_property_data_edit_help'] = $data['socialdb_property_data_help'];
+        $data['socialdb_event_property_data_edit_mask'] = (isset($data['socialdb_property_data_mask']) && is_array($data['socialdb_property_data_mask'])) ? implode(',', $data['socialdb_property_data_mask']) : ((isset($data['socialdb_property_data_mask'])) ? $data['socialdb_property_data_mask'] : '');
         $data['socialdb_event_property_data_edit_name'] = $data['property_data_name'];
         $data['socialdb_event_property_data_edit_widget'] = $data['property_data_widget'];
         $data['socialdb_event_property_data_edit_ordenation_column'] = $data['property_data_column_ordenation'];
@@ -305,6 +548,9 @@ require_once(dirname(__FILE__).'../../general/general_controller.php');
         $data['socialdb_event_property_term_create_root'] = $data['socialdb_property_term_root'];
         $data['socialdb_event_property_term_create_widget'] = $data['socialdb_property_term_widget'];
         $data['socialdb_event_property_term_create_required'] = $data['property_term_required'];
+        $data['socialdb_event_property_term_create_vinculate_category'] = $data['socialdb_property_vinculate_category'];
+        $data['socialdb_event_property_term_create_new_taxonomy'] = $data['socialdb_property_term_new_taxonomy'];
+        $data['socialdb_event_property_term_create_new_category'] = $data['socialdb_property_term_new_category'];
         $data['socialdb_event_property_term_create_help'] = $data['socialdb_property_help'];
         $data['socialdb_event_property_term_create_category_root_id'] = $data['property_category_id'];
         $data['socialdb_event_collection_id'] = $data['collection_id'];
@@ -328,6 +574,9 @@ require_once(dirname(__FILE__).'../../general/general_controller.php');
         $data['socialdb_event_property_term_edit_root'] = $data['socialdb_property_term_root'];
         $data['socialdb_event_property_term_edit_widget'] = $data['socialdb_property_term_widget'];
         $data['socialdb_event_property_term_edit_required'] = $data['property_term_required'];
+        $data['socialdb_event_property_term_edit_vinculate_category'] = $data['socialdb_property_vinculate_category'];
+        $data['socialdb_event_property_term_edit_new_taxonomy'] = $data['socialdb_property_term_new_taxonomy'];
+        $data['socialdb_event_property_term_edit_new_category'] = $data['socialdb_property_term_new_category'];
         $data['socialdb_event_property_term_edit_help'] = $data['socialdb_property_help'];
         $data['socialdb_event_collection_id'] = $data['collection_id'];
         $data['socialdb_event_user_id'] = get_current_user_id();
@@ -387,6 +636,24 @@ require_once(dirname(__FILE__).'../../general/general_controller.php');
         $data['socialdb_event_user_id'] = get_current_user_id();
         $data['socialdb_event_create_date'] = mktime();
         return $eventAddProperty->create_event($data);
+    }
+     /**
+     * @signature - function insert_event_update($object_id, $data )
+     * @param int $object_id O id do Objeto
+     * @param array $data Os dados vindos do formulario
+     * @return array os dados para o evento
+     * @description - 
+     * @author: Eduardo 
+     */
+    public function insert_event_property_compounds_delete($data) {
+        $eventProperty = new EventPropertyCompoundsDelete();
+        $data['socialdb_event_property_compounds_delete_id'] = $data['property_delete_id'];
+        $data['socialdb_event_property_compounds_delete_category_root_id'] = $data['property_category_id'];
+        $data['socialdb_event_property_compounds_delete_all_properties'] = (isset($data['remove_subproperties'])&&$data['remove_subproperties']=='true') ? 'true': 'false';
+        $data['socialdb_event_collection_id'] = $data['collection_id'];
+        $data['socialdb_event_user_id'] = get_current_user_id();
+        $data['socialdb_event_create_date'] = mktime();
+        return $eventProperty->create_event($data);
     }
  }
  /*

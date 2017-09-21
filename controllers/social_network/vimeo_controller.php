@@ -9,16 +9,11 @@ class VimeoController extends Controller {
 
     public function operation($operation, $data) {
         $vimeo_model = new VimeoModel();
-        //$vimeo_ch = new ChannelModel();
-        //var_dump($operation, $data);
-        //exit();
-
         switch ($operation) {
             case "import_vimeo_items":
                 $data['import_type'] = (empty($data['import_type']) ? 'users' : $data['import_type']);
                 $result = $vimeo_model->getVimeoVideos($data);
 
-                //var_dump($result);
                 if ($result) {
                     return json_encode($result);
                 } else {

@@ -1,17 +1,24 @@
-<div class="search-resultset prime-color-bg">
+<div class="search-resultset">
     <?php
-    // include_once ('../../../../../wp-config.php');
-    // include_once ('../../../../../wp-load.php');
-    // include_once ('../../../../../wp-includes/wp-db.php');
     include_once ('js/filters_dynatree_js.php');
-
+    
+    //author
+    if (isset($author) && $author != '') { ?>
+         <a onclick="remove_search_author()" href="#"> <span class="glyphicon glyphicon-remove white"></span> </a>
+        <?php
+        echo $author;
+    }
     //keyword
-    if (isset($keyword) && $keyword != '') { ?>
-         <a onclick="remove_search_word()"
-            href="#"><span class="glyphicon glyphicon-remove white"></span>
-         </a>
+    if (isset($keyword) && !is_array($keyword) && $keyword != '') { ?>
+         <a onclick="remove_search_word()" href="#"> <span class="glyphicon glyphicon-remove white"></span> </a>
         <?php
         echo $keyword;
+    }else if(isset($keyword) && is_array($keyword)){
+        foreach($keyword as $key): ?>
+            <a onclick="remove_search_word('<?php echo $key ?>')" href="#"> <span class="glyphicon glyphicon-remove white"></span> </a>
+            <?php
+            echo $key;
+        endforeach;
     }
 
     //categories
@@ -60,7 +67,8 @@
 
     //properties_data_tree
     if (isset($properties_data_tree)) {
-        foreach ($properties_data_tree as $property) { ?>
+        foreach ($properties_data_tree as $property) { 
+            ?>
             <a class="remove-link-filters" onclick="remove_filter_property_data_tree('<?php echo $property['property_id']; ?>','<?php echo $property['id']; ?>')"
                href="#"><span class="glyphicon glyphicon-remove-sign white"></span>
             </a>

@@ -243,7 +243,6 @@
             data: {fb_id:$('#socialdb_fb_api_id').val(),collection_id: $('#collection_id').val(), operation: 'redirect_facebook', object_id: object_id}
         }).done(function (result) {
             json = jQuery.parseJSON(result);
-            //console.log(json);
             window.open(json.redirect, '_blank');
             // window.location = json.redirect;
         });
@@ -275,15 +274,12 @@
             }
         });
     }
-     function showPopoverSearch(id) {
-        // pop up #example1, #example2, #example3 with same content
-        $('#popover_network' + id+'_search').popover({
-            html: true,
-            content: function () {
-                return $('#popover_content_wrapper' + id+'_search').html();
-            }
-        });
+    
+    function showModalShareNetwork(id) {
+        $('#adv_modal_share_network' + id).modal('show');
+        init_autocomplete('#collections_object_share' + id);
     }
+    
     //retorno para as vusca
     function back_to_search_form(){
         $('#container_filtros').show();

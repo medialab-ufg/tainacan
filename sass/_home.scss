@@ -3,13 +3,51 @@
 body.home {
  background: black;
 
+  .repository-sharings {
+    display: none !important;
+  }
+
+  .user-actions.collapse {
+    border-bottom: 0 !important;
+  }
+
+  .config_default_style{
+    margin-top: 20px !important;
+  }
+
+  .metadata-actions {
+    padding-top: 20px !important;
+  }
+
   .menu-ibram {
     padding-left: 25px !important;
+    .dropdown-menu > .active > a {
+      background: none !important;
+    }
+  }
+
+  #login-out {
+    margin-top: 40px;
   }
 
   .ibram-home-container {
     background: $collections-bg-color;
     text-align: center;
+
+
+    .index-menu{
+      border: 4px solid #E8E8E8;
+      background: white;
+      padding: 10px 40px 30px 40px;
+      margin: 0 0 40px 0;
+      font-size: 13pt;
+      text-align: left;
+      color:black;
+
+      p {
+        color:black;
+      }
+    }
 
     .col-md-3 {
       padding: 20px;
@@ -75,6 +113,7 @@ body.home {
 }
 
 .home {
+  @include header_style();
 
   header {
     background-size: cover;
@@ -115,6 +154,7 @@ body.home {
   .container-fluid {
     a.logo-tainacan {
       margin: 0 !important;
+      margin-top: -10px !important;
     }
   }
 
@@ -135,22 +175,6 @@ body.home {
     }
   }
 
-  .project-info {
-
-    h1, h3 {
-      color: white;
-      text-shadow: -2px 1px 4px #27272d;
-    }
-    h1 {
-      font-size: 400%;
-      margin-bottom: 0;
-    }
-    h3 {
-      font-size: 150%;
-      margin-top: 0;
-    }
-  } // .project-info
-
   .carousel-home, .carousel-home-ajax {
 
     .item-box-container {
@@ -160,10 +184,12 @@ body.home {
     .panel {
       width: 190px;
       height: 215px;
+      background: #f5f5f5;
 
       .panel-body {
-        padding: 10px !important;
-        height: 185.5px;
+        // padding: 10px !important;
+        height: 178px;
+        background: white;
 
         a {
           img {
@@ -270,6 +296,7 @@ body.home {
 
   .home-title {
     text-align: center;
+    padding: 4px 3px;
   }
 
   .home-type-title {

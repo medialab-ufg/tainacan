@@ -1,5 +1,9 @@
 <script>
 
+    $(function () {
+        change_breadcrumbs_title('<?php _e('API Keys Configuration','tainacan') ?>');
+    })
+
     $('#formYoutubeApi').submit(function (e) {
         var verify =  $( this ).serializeArray();
         if(verify[1].value.trim() === ''){
@@ -127,7 +131,26 @@
             showAlertGeneral('<?php _e('Attention','tainacan') ?>', '<?php _e('Please, there are emtpy fields','tainacan') ?>', 'info');
             return false;
         }
-    console.log('3');
+        $.ajax({
+            url: $("#src").val() + '/controllers/theme_options/theme_options_controller.php',
+            type: 'POST',
+            data: new FormData(this),
+            processData: false,
+            contentType: false
+        }).done(function (result) {
+            elem = jQuery.parseJSON(result);
+            showAlertGeneral(elem.title, elem.msg, elem.type);
+        });
+
+    });
+    
+    $('#formEuropeanaApi').submit(function (e) {
+        var verify =  $( this ).serializeArray();
+        if(verify[1].value.trim() === ''||verify[2].value.trim() === ''){
+            showAlertGeneral('<?php _e('Attention','tainacan') ?>', '<?php _e('Please set a valid API KEY or Private Key','tainacan') ?>', 'info');
+            return false;
+        }
+        e.preventDefault();
         $.ajax({
             url: $("#src").val() + '/controllers/theme_options/theme_options_controller.php',
             type: 'POST',

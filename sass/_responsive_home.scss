@@ -55,7 +55,7 @@
   .user-actions {
     li {
       a {
-        padding: 17px 8px 15px 8px;
+        //padding: 17px 8px 15px 8px;
         font-size: 13px;
       }
     }
@@ -98,6 +98,19 @@
 @media all and (max-width: 991px) {
   #main_part .container-fluid .row {
     // margin-right: 0 !important;
+  }
+
+  #submit_form .add-item-container {
+    width: 98% !important;
+  }
+
+  #div_left, .menu_left {
+    padding: 1% 2% 0 1% !important;
+    min-height: none;
+    border-bottom: 3px solid $item-border !important;
+    //height: 1300px;
+    overflow-y: auto;
+    margin-bottom: 20px;
   }
 
   #div_central {
@@ -144,4 +157,127 @@
     width: auto !important;
     margin-bottom: 10px;
   }
+}
+
+@media all and (min-width: 992px) and (max-width: 1211px) {
+
+  .header-colecao {
+    label {
+      &.order-by-label {
+        width: 100% !important;
+      }
+    } // label
+
+    .viewMode-control {
+      label.sec-color {
+        font-size: 90%;
+        width: 10%;
+      }
+      #collectionViewMode {
+        float: right !important;
+        padding: 3px 7px !important;
+      }
+    } // .viewMode-control
+    .trash-div {
+      width: 12%;
+      button {
+        padding: 3px 6.5px !important;
+        margin-left: 0 !important;
+        &.export-btn {
+          span {
+            font-size: 10px !important;
+          }
+          margin-right: 10px;
+        }
+      }
+    }
+  } // .header-colecao
+} // responsiveness for home collection actions and filters
+
+@media all and (min-width: 992px) and (max-width: 1016px) {
+  .trash-div {
+    button {
+      &.export-btn {
+        margin-right: 5px !important;
+      }
+    }
+  }
+}
+
+@media all and (min-width: 650px) and (max-width: 991px) {
+  .header-colecao {
+    margin-top: 10px;
+
+    .row > div {
+      float: left;
+      &.col-md-5 {
+        width: 40%;
+      }
+    }
+
+    #collectionViewMode {
+      float: left !important;
+      padding: 3px 7px !important;
+    }
+
+    label {
+      &.order-by-label {
+        width: 60% !important;
+      }
+      &.sec-color {
+        float: left;
+        font-size: 85%;
+        width: 40%;
+      }
+    }
+    .trash-div {
+      //width: 12% !important;
+      button {
+        padding: 3px 6px !important;
+        margin-left: 0 !important;
+        &.export-btn {
+          span {
+            font-size: 10px !important;
+          }
+          margin-right: 10px;
+        }
+      }
+    }
+  } // header-colecao
+}
+
+@media all and (max-width: 650px){
+  .header-colecao {
+    margin-top: 20px !important;
+
+    .row > div {
+      float: left;
+      //border: 1px solid;
+
+      &.tainacan-add-item {
+        width: 20% !important;
+      }
+
+      &.col-md-5 {
+        width: 75%;
+      }
+
+      &.col-md-2 {
+        margin-top: 15px;
+        margin-left: 0 !important;
+        width: 25% !important;
+
+        .selectable-items .selectors {
+          width: 70% !important;
+        }
+      }
+    } // .row
+
+    .trash-div {
+      width: 35% !important;
+      float: left !important;
+      margin-left: 10%;
+      margin-top: 15px;
+    }
+  } // header-colecao
 }

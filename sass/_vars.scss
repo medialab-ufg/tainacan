@@ -16,6 +16,8 @@ $item-border: #E8E8E8;
 
 $default-golden: #d2a96D;
 
+$notification-red: #A41E22;
+
 /* Border-left color for home page titles */
 $populars: #77a6ce;
 $recents: #CAAD5B;
@@ -65,7 +67,7 @@ $default-margin: 20px 0 20px 0;
   box-shadow:         $spread $distance $blur 0 rgba($r, $g, $b, $opacity);
 }
 
-@mixin accordion_label_style() {
+@mixin accordion_label_style($padding: 8px 0 8px 0) {
   border-left: 4px solid $brand-light-blue;
   text-align: left;
   font-size: 12px;
@@ -74,10 +76,8 @@ $default-margin: 20px 0 20px 0;
   background: white;
   width: 100%;
   overflow: hidden;
-  // border-top-right-radius: 2px;
-  // border-bottom-right-radius: 2px;
   border-radius: 0 2px 2px 0;
-  padding: 8px 0 8px 0;
+  padding: $padding;
   span {
     font-size: 10px;
     text-indent: 0;
@@ -116,3 +116,80 @@ $default-margin: 20px 0 20px 0;
   padding: 20px;
 }
 
+@mixin action_buttons_style() {
+  a {
+    &:last-child {
+      margin-left: 10px;
+    }
+    img {
+      height: 15px;
+      &:hover {
+        opacity: 0.6;
+      }
+    } // img
+  } // a
+}
+
+@mixin table_common_spacing() {
+  padding-top: 10px;
+  padding-bottom: 10px;
+
+  .table > tbody + tbody {
+    border-top: 0;
+  }
+
+  table {
+    margin-bottom: 0;
+    th {
+      color: $brand-medium-blue;
+      border-bottom: 1px solid $brand-medium-blue;
+      padding-left: 15px;
+    }
+    td {
+      padding: 10px 0 10px 15px;
+      border-bottom: 1px solid $bs-button-gray-border;
+      border-right: 0;
+    }
+  }
+}
+
+@mixin mode_view_highlight($padding: 3px 2px 5px 5px) {
+    padding: $padding;
+    border: 2px solid $item-border;
+    border-radius: 2px;
+}
+
+@mixin header_style() {
+  .project-info {
+
+    h1, h3 {
+      color: white;
+      text-shadow: -2px 1px 4px #27272d;
+    }
+    h1 {
+      font-size: 400%;
+      margin-bottom: 0;
+    }
+    h3 {
+      font-size: 150%;
+      margin-top: 0;
+    }
+  } // .project-info
+}
+
+@mixin context-item-menu-style($margintop: -3px, $padding: 0 15px 0 20px) {
+  li.open_item_actions {
+    & > a {
+      padding: $padding;
+      margin-top: $margintop;
+
+      &:hover {
+        background: transparent !important;
+      }
+    }
+
+    a {
+      cursor: pointer;
+    }
+  }
+}

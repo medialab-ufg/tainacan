@@ -5,8 +5,6 @@
  */
 require_once(dirname(__FILE__) . '/rdf_collection_model.php');
 
-
-
 class RDFTagModel extends RDFCollectionModel {
 ################################# begin:tag ###################################    
     /**

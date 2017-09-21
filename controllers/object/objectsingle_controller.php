@@ -42,7 +42,6 @@ class ObjectSingleController extends Controller {
                 $data = $object_model->list_properties($data);
                 $data['categories_id'] = wp_get_object_terms($data['object_id'], 'socialdb_category_type',array('fields'=>'ids'));
                 return $this->render(dirname(__FILE__) . '../../../views/object/single_object/single_show_list_event_properties_renew.php', $data);
-                break;
             case 'list_properties_edit_remove':// pega todas as propriedade para serem mostradas no formulario de edicao e remocao
                 $data = $object_model->list_properties($data);
                 return $this->render(dirname(__FILE__) . '../../../views/object/single_object/single_show_list_event_properties_edit_remove.php', $data);

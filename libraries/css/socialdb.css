@@ -160,9 +160,9 @@ legend.scheduler-border {
 }
 
 .menuFixo {
-    //position: fixed;
-    //top: 0;
-    //z-index: 99;  
+    /*position: fixed;
+    top: 0;
+    z-index: 99;  */
 }
 
 .form-signin {
@@ -463,57 +463,12 @@ table.sorting-table tbody tr:not(.sorting-row) td {opacity: 0.2;}
     -ms-filter: grayscale(100%); 
     -o-filter: grayscale(100%); 
     filter: grayscale(100%); 
-    //filter: url(grayscale.svg); /* Firefox 4+ */ 
+    /*filter: url(grayscale.svg); /* Firefox 4+ */ 
     filter: gray; /* IE 6-9 */ 
 }
+
 /****** CLASSES PARA O MENU ESQUERDO DO ADICIONAR ITEM **********/
 
-
-.menu_left {
-  padding: 1% 2% 0 0;
-  background: white;
-  border: 3px solid #E8E8E8;
-  margin-left: -3px;
-  min-height: 380px;
-  border-top: none;
-  border-bottom: 0;
-}
-.menu_left .accordion .ui-accordion-content {
-  border: none;
-  padding: 10px 0 0 10px;
-}
-.menu_left .accordion .cssmenumaker-menu {
-  overflow: visible !important;
-}
-.menu_left .tainacan-default-tags {
-  width: 100%;
-}
-.menu_left .expand-all-item {
-  background: #79a6ce;
-  text-align: right;
-  margin: 0 0 10% 0;
-  padding-right: 10%;
-  border-radius: 0 4px 4px 0;
-}
-.menu_left .expand-all-item:hover {
-  color: #0c698b;
-}
-.menu_left .title-pipe {
-  border-left: 4px solid #79a6ce;
-  text-align: left;
-  font-size: 12px;
-  text-indent: 5%;
-  font-weight: normal;
-  background: white;
-  width: 100%;
-  overflow: hidden;
-  border-radius: 0 2px 2px 0;
-  padding: 8px 0 8px 0;
-}
-.menu_left .title-pipe span {
-  font-size: 10px;
-  text-indent: 0;
-}
 .menu_left .from_to_filter span {
   font-weight: bolder;
   font-size: 12px;
@@ -526,7 +481,6 @@ table.sorting-table tbody tr:not(.sorting-row) td {opacity: 0.2;}
 .menu_left .date-range-filter a {
   font-size: 11px;
 }
-
 
 .menu_left_files .accordion .ui-accordion-content {
   border: none;
@@ -579,3 +533,185 @@ table.sorting-table tbody tr:not(.sorting-row) td {opacity: 0.2;}
 /*************** WATERMARK SYLES *************************/
 .ui-autocomplete-loading { background:url('../images/ajaxLoader.gif')  no-repeat right center;background-size: 25px 25px; }
 /*************** WATERMARK SYLES *************************/
+/*************** MODAL MAX HEIGHT *************************/
+.modal-content{
+    max-height: 500px;
+    overflow-y: scroll;
+}
+/************* Taxonomy zone **************/
+.style-input{
+    padding: 5px;border: 1px solid #ccc;border-radius: 4px; 
+}
+.margin-buttons{
+    margin-left: 15px;
+    margin-top: 15px;
+}
+.label-button{
+    color: #0c698b;
+}
+#taxonomy_create_zone ul{
+    list-style: square;
+}
+/************* ADD multiple items*************************/
+#selectable .ui-selecting 
+  { 
+      /* border: 3px solid rgb(122,167,207) ;*/ 
+  }
+  #container_images,
+  #container_text,
+  #container_pdfs,
+  #container_videos,
+  #container_audios,
+  #container_office,
+  #container_others {
+      background-color: #c1d0dd;
+      padding-right: 0px;
+      padding-left: 15px;
+      margin-top: 15px;
+      padding-top: 5px;
+  }
+  
+  .item-default{
+      background: white;  
+      margin-bottom: 15px;
+      padding-bottom: 15px;
+      padding-right: 15px;
+      border: 3px solid #E8E8E8; 
+      margin-right: 10px;
+      width:19%;
+  }
+  .selected-border{
+      border: 3px solid rgb(122,167,207); 
+  }
+  .input_title{
+        text-align: center;
+        width: 100%;
+        padding:5px;
+        border: none;
+        background-color: rgb(209,211,212);
+        font: 13px Arial;
+        border-radius: 5px;
+    }  
+    .menu-left-size{
+        width: 23%;
+        height: auto;
+        padding-bottom: 15px;
+    }
+/********** PAGINA DOS ITEMS **************/   
+.right_column{
+    background: white;
+    border: 3px solid #E8E8E8;
+    min-height: 260px;
+    padding: 15px;
+    border-top: none;
+}
+.right_column .item-comments {
+    background: white;
+    border-radius: 2px;
+    margin: 0 0 0 0;
+    padding-top: 0.7%;
+    padding-left: 15px;
+    padding-left: 0;
+        font-size: 14px;
+    line-height: 1.42857143;
+    color: #333;
+}
+
+.right_column .item-comments textarea.leave-comment {
+    width: 80%;
+    margin-left: 15px;
+    display: inline-block;
+    height: 65px;
+}
+
+.right_column  .item-comments .comment-box-container {
+    margin-bottom: 20px;
+}
+
+.right_column .item-comments ul.commentlist>li:last-child {
+    border-bottom: none;
+}
+
+.right_column .item-comments ul.commentlist>li:first-child {
+    margin-top: 0;
+}
+
+.right_column .item-comments ul.commentlist>li {
+    border-bottom: 3px solid #E8E8E8;
+    float: left;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.right_column .item-comments ul.commentlist {
+    padding-left: 0;
+}
+
+.dropdown:hover .dropdown-menu.dropdown-show {
+    display: block !important;
+    margin-top: 0 !important; // remove the gap so it doesn't close
+ }
+ 
+ .dropdown:hover .dropdown-menu.dropdown-hover-show {
+    display: block;
+    z-index: 9999999999;
+ }
+ 
+ /********/
+ .selected-items-property-object{
+    margin-left: -40px;
+    font-size: 12pt;
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    padding: 10px;
+ }
+ 
+ .metadata-related{
+     border-style: solid;
+     border-width: 1px;
+     border-color: #ccc; 
+     padding-top: 10px;
+     padding-bottom: 40px;
+     padding-right: 10px;
+     padding-left: 10px;
+ }
+ 
+ .metadata-search{
+     border-style: solid;
+     border-width: 1px;
+     border-color: #ccc; 
+     padding-top: 10px;
+     padding-bottom: 40px;
+     padding-right: 10px;
+     padding-left: 10px;
+     float: left;
+     width: 100%;
+ } 
+ .metadata-matching{
+     border-style: solid;
+     border-width: 1px;
+     border-color: #ccc; 
+     padding-top: 10px;
+     padding-bottom: 40px;
+     padding-right: 10px;
+     padding-left: 10px;
+      float: left;
+     width: 100%;
+ }
+
+.can_short {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    display: block;
+}
+
+.hide_elem
+{
+    display: none;
+}
+
+.comment-item
+{
+    cursor: pointer;
+}

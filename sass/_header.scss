@@ -1,3 +1,8 @@
+/*
+#wpadminbar {
+  display: none !important;
+}
+*/
 #tainacan-breadcrumbs {
   padding: 10px 0 10px 15px;
   background: $collections-bg-color;
@@ -12,9 +17,9 @@
   }
 }
 
-.navbar-toggle {
- margin-top: 15px;
-}
+// .navbar-toggle {
+//  margin-top: 3px;
+// }
 .navbar-form {
   margin-top: 10px;
 }
@@ -25,14 +30,29 @@
   a.repository-logo {
     padding-top: 3px !important;
   }
-}
+
+  .repository {
+    float: left;
+    h4, h5 {
+      color: white;
+      text-align: left;
+      margin: 13px 0 0 0;
+    }
+    // h6 { margin-top: 3px !important; }
+  }
+
+} // .logo-container
 
 ul.repository-settings, .admin-configs {
   li {
     img {
       height: 12px;
       margin: -2px 2px 0 0;
-    }
+
+      &.icon-wordpress {
+        height: 20px;
+      }
+    } // img
 
     &.manual {
       a {
@@ -48,11 +68,35 @@ ul.repository-settings, .admin-configs {
       }
     }
 
+    &.wp-admin {
+      a {
+        padding-right: 7px !important;
+      }
+      span {
+        color: #9e9a9a;
+      }
+    }
+
   } // li
+.login-dropdown button {
+  border: 1px solid whitesmoke;
 }
 
+} // .admin-configs
+
+// .login-dropdown:hover .dropdown-menu, .root-notifications:hover .dropdown-menu {
+//     display: block;
+//     margin-top: 0; // remove the gap so it doesn't close
+// }
+
 .header-navbar {
-  padding: 5px 0 5px 0;
+  // padding: 5px 0 5px 0;
+  // height: 50px;
+  // position: fixed;
+  margin-bottom: 0px;
+  width: 100%;
+  z-index: 99;
+  top: 0;
 
   a.logo-tainacan {
     padding: 0;
@@ -102,6 +146,7 @@ ul.repository-settings, .admin-configs {
       img {
         height: 12px;
       }
+
       &.showing-input {
         border-left: none !important;
         border-radius: 0 4px 4px 0;
@@ -111,7 +156,9 @@ ul.repository-settings, .admin-configs {
   }
 } // .header-navbar
 
-.user-actions {
+.user-actions.collapse {
+  //border-bottom: 2px solid white !important;
+  //height: 45px !important;
 
   ul {
     span.glyphicon {
@@ -124,6 +171,11 @@ ul.repository-settings, .admin-configs {
     padding: 5px;
   }
 
+  .right-menu-container {
+    float: right;
+    margin-top: -7px
+  }
+
 } // .user-actions
 
 li.admin-config-menu {
@@ -132,7 +184,7 @@ li.admin-config-menu {
     font-size: 13px;
   }
   ul.admin-config-submenu {
-    padding: 10px;
+    padding: 10px 0 0 0;
     margin: 0;
     font-size: 12px;
 
@@ -163,9 +215,16 @@ button#iframebutton {
   min-height: 40px !important;
   padding-left: 15px;
 
+  .dropdown-submenu {
+    position:relative;
+    > .dropdown-menu {
+      /* top:0; left:100%; margin-top:-60px; margin-left:-1px; */
+    }
+  }
+
   li {
     display: inline-table;
-    padding: 10px 20px 0 20px;
+    padding: 10px 20px 8px 20px;
 
     &:first-child {
       padding-left: 0 !important;
@@ -177,16 +236,24 @@ button#iframebutton {
 
     ul {
       background: $dark-gray;
+      margin-top: -3px;
+
       li {
         padding-top: 0 !important;
+        padding-left: 0 !important;
 
         a {
           &:hover {
             background: transparent;
           }
-        }
+
+          span {
+            display: none;
+          }
+
+        } // a
       }
-    }
+    } // ul
 
     a {
       color: white !important;
@@ -209,4 +276,206 @@ button#iframebutton {
   }
   h5 {
     margin-bottom: 5px; }
+}
+
+ul{list-style-type:none}
+
+a{text-decoration:none}
+
+a:hover{text-decoration:underline}
+
+#collections-menu {
+    width: 130px;
+    padding-left: 10px;
+    position: relative;
+    margin-top: -5px;
+    cursor: pointer;
+
+    &:hover {
+        cursor: pointer;
+    }
+
+    .collections {
+        text-align: center;
+
+        &:hover {
+            background: #1d1d1d;
+            cursor: pointer;
+        }
+        a {
+
+          img {
+             width: 12%;
+             margin-top: -3px;
+           }
+
+          &.collecs {
+              color: white;
+              padding-top: 17px;
+              height: 55px;
+          }
+        } // a
+    } // li.collections
+
+    .sub-menu {
+       background: #fff;
+       border:1px solid #ccc;
+       padding-left: 0px;
+       width: 150px;
+       border-radius: 4px;
+       position: absolute;
+       z-index: 31;
+       overflow: visible;
+    }
+
+    li {
+       position :relative;
+       _float: left; /*Hack para o IE6*/
+
+        &.divider {
+            border-bottom: 1px solid $lightest-gray;
+        }
+
+        a {
+            display: block;
+            line-height: 25px;
+            color: black;
+
+            &:hover {
+                // background:#e5e5e5;/*define a cor do fundo*/
+                // color:#333;/*define a cor da fonte*/
+             }
+        }
+
+        &:hover ul ul {
+            display: none;
+            position: absolute;
+            top: 0px;
+            left: 135px;
+            overflow: visible;
+            z-index: 20;
+
+
+            li.tmpl {
+                a {
+                    padding: 4px;
+                    font-size: 12px;
+                    &:hover {
+                        background: #f2f2f2;
+                    }
+                }
+            }
+         }
+    } // li
+} // #collections-menu
+
+.menu-ibram li:hover > ul,
+#collections-menu li:hover ul,
+#collections-menu ul li:hover ul{
+   display:block;
+}
+
+.new-collection .modal-header {
+    border-bottom: 0;
+}
+
+.collec_menu_opnr {
+  padding: 10px 0;
+  text-align:right;
+
+  a.dropdown-toggle {
+    padding-bottom: 10px;
+    height: 50px;
+    margin: 0;
+    &:hover, &:active, &:visited {
+      background: transparent !important;
+    }
+  }
+
+  ul.dropdown-menu {
+    margin-top: -5px !important;
+    margin-right: 10px !important;
+  }
+} // .collec_menu_opnr
+
+.nav .open.collec_menu_opnr > a {
+  background-color: transparent !important;
+}
+
+#tainacan-menu {
+  border-radius: 4px;
+  background-color: white !important;
+}
+
+.login-inner-container {
+  background: white;
+  margin-bottom: 100px;
+  border: 2px solid #d8d6d6;
+  padding: 25px;
+  margin-top: 50px;
+}
+
+.login-outer-container {
+    background: #E8E8E8;
+    padding-top: 50px;
+    margin-top: -20px;
+    padding-bottom: 50px;
+}
+
+#login-box {
+  .dropdown-menu {
+    width: auto;
+    background-color: white;
+    border: 1px solid rgba(0,0,0,.15);
+    min-width: 300px;
+  }
+
+  hr {
+    margin-bottom: 0;
+  }
+
+  #login-out {
+    margin-top: 0 !important;
+  }
+
+  button.send-login {
+    background: $brand-medium-blue;
+    width: 100%;
+    &:hover {
+      background: $bs-button-gray-border;
+    }
+  }
+}
+
+.root-notifications {
+    ul.dropdown-menu {
+        // min-width: 250px;
+        // text-align: center
+    }
+}
+
+.collection_repo_config {
+  @include header_style();
+  background-size: cover !important;
+}
+
+.headers_container {
+  .collection_header {
+    padding: 0;
+    margin: 0;
+    border: none;
+    border-radius: 0;
+    background-image: url(../images/capa-colecao.png);
+  }
+  .sharings-container {
+    padding-bottom: 10px;
+    .share-link {
+      float: right;
+    }
+  }
+} // .headers_container
+
+img.tainacan-repo-logo {
+  max-width: 100%;
+  max-height: 120%;
 }

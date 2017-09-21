@@ -1,8 +1,9 @@
 <?php
-
-include_once ('../../../../../wp-config.php');
-include_once ('../../../../../wp-load.php');
-include_once ('../../../../../wp-includes/wp-db.php');
+/*
+include_once (dirname(__FILE__) . '/../../../../../../wp-config.php');
+include_once (dirname(__FILE__) . '/../../../../../../wp-load.php');
+include_once (dirname(__FILE__) . '/../../../../../../wp-includes/wp-db.php');
+*/
 require_once(dirname(__FILE__) . '../../../event/event_model.php');
 require_once(dirname(__FILE__) . '../../../category/category_model.php');
 
@@ -72,7 +73,7 @@ class EventTermCreate extends EventModel {
         $data['category_parent_id'] = get_post_meta($event_id, 'socialdb_event_term_parent',true) ;
        // chamo a funcao do model de categoria para fazer a insercao e/ou vincular como faceta
         $result = json_decode($categoryModel->add($data));
-        if($data['category_parent_id']=='socialdb_category'){
+        if($data['category_parent_id']=='socialdb_category' || $data['category_parent_id']=='socialdb_taxonomy'){
             $categoryModel->add_facet($result->term_id, $data['collection_id']);
         }
         // verifying if is everything all right

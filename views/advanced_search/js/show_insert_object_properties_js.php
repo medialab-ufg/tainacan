@@ -26,7 +26,6 @@
                             },
                             minLength: 2,
                             select: function (event, ui) {
-                                console.log(event);
                                 $("#autocomplete_value_" + property_id).val('');
                                 //var temp = $("#chosen-selected2 [value='" + ui.item.value + "']").val();
                                 var temp = $("#property_value_" + property_id).val();
@@ -78,7 +77,9 @@
                         //  if (property.id == selected) {
                         //     $('#property_object_reverse').append('<option selected="selected" value="' + property.id + '">' + property.name + ' - (' + property.type + ')</option>');
                         //  } else {
-                        $('#search_field_property_term_' + radio).append('<input '+required+' type="radio" name="socialdb_propertyterm_'+radio+'" value="' + children.term_id + '">&nbsp;' + children.name + '<br>');
+                        var name = "'socialdb_propertyterm_"+radio+"'";
+                        $('#search_field_property_term_' + radio)
+                                .append('<input '+required+' onchange="onRadioChecked('+name+','+radio+')" type="radio" name="socialdb_propertyterm_'+radio+'" value="' + children.term_id + '">&nbsp;' + children.name + '<br>');
                         //  }
                     });
                 });
@@ -96,14 +97,15 @@
                 }).done(function (result) {
                     elem = jQuery.parseJSON(result);
                     $('#search_field_property_term_' + checkbox).html('');
+                    var name =  "'socialdb_propertyterm_"+checkbox+"[]'";
                     $.each(elem.children, function (idx, children) {
-                        $('#search_field_property_term_' + checkbox).append('<input type="checkbox" name="socialdb_propertyterm_'+checkbox+'[]" value="' + children.term_id + '">&nbsp;' + children.name + '<br>');
+                        $('#search_field_property_term_' + checkbox).append('<input onchange="onCheckboxValue('+name+','+checkbox+')" type="checkbox" name="socialdb_propertyterm_'+checkbox+'[]" value="' + children.term_id + '">&nbsp;' + children.name + '<br>');
                     });
                     var required = '';
                     if(elem.metas.socialdb_property_required==='true'){
                         required = 'required';
                     }
-                    $('#search_field_property_term_' + checkbox).append('<input type="hidden" name="checkbox_required_'+checkbox+'" value="'+required+'" >');
+                    //$('#search_field_property_term_' + checkbox).append('<input type="hidden" name="checkbox_required_'+checkbox+'" value="'+required+'" >');
                 });
             });
         }
@@ -131,7 +133,8 @@
             });
         }
     }
-     // multiple
+    
+    // multiple
     function search_list_multipleselectboxes(multipleSelects) {
         if (multipleSelects) {
             $.each(multipleSelects, function (idx, multipleSelect) {
@@ -153,6 +156,7 @@
             });
         }
     }
+    
     // treecheckboxes
     function search_list_treecheckboxes(treecheckboxes) {
         if (treecheckboxes) {
@@ -200,11 +204,17 @@
                         var selKeys = $.map(node.tree.getSelectedNodes(), function (node) {
                             return node;
                         });
+                        var selKeysValue = $.map(node.tree.getSelectedNodes(), function (node) {
+                            return node.data.key;
+                        });
                         $("#socialdb_propertyterm_" + treecheckbox).html('');
                         $.each(selKeys, function (index, key) {
                             cont++;
                             $("#socialdb_propertyterm_" + treecheckbox).append('<input type="hidden" name="socialdb_propertyterm_'+treecheckbox+'[]" value="' + key.data.key + '" >');
                         });
+                        if(selKeysValue.length>0){
+                            append_category_properties_adv(selKeysValue.join(','),treecheckbox );
+                        }
                     },
                     dnd: {
                     }
@@ -268,6 +278,7 @@
                              $('#core_validation_'+tree).val('false');
                         } else {
                             $("#socialdb_propertyterm_" + tree).val(node.data.key);
+                             append_category_properties_adv(node.data.key,tree );
                             $('#core_validation_'+tree).val('true');
                         }
                     },
@@ -278,11 +289,9 @@
         }
     }
     
-    
-    
     // get value of the property
     function search_get_val(value) {
-        if (value === '') {
+        if (!value || value === '') {
             return false;
         } else if (value.split(',')[0] === '' && value !== '') {
             return [value];
@@ -303,6 +312,38 @@
             $('#show_form_licenses').html(result); 
         });
     }
-
-
+/******************************* Category Properties***************************/
+     function append_category_properties_adv(id,property_id ){
+        //busco os metadados da categoria selecionada    
+        if(id!==''){
+            //adicionando metadados
+            $('#append_properties_categories_'+property_id+'_adv')
+                     .html('<center><img width="100" heigth="100" src="<?php echo get_template_directory_uri() . '/libraries/images/catalogo_loader_725.gif' ?>"><?php _e('Loading metadata for this field','tainacan') ?></center>');
+            $.ajax({
+                url: $('#src').val() + '/controllers/advanced_search/advanced_search_controller.php',
+                type: 'POST',
+                data: { operation: 'get_categories_properties',properties_to_avoid:$('#properties_id_avoid').val(),categories: id,property_searched_id:property_id}
+            }).done(function (result) {
+                hide_modal_main();
+                //list_all_objects(selKeys.join(", "), $("#collection_id").val());
+                $('#append_properties_categories_'+property_id+'_adv').html(result);
+            });
+        }
+    }
+    
+    function onRadioChecked(name,property_id){
+        append_category_properties_adv($('input[name='+name+']:checked').val(),property_id);
+    }
+    
+    function onSelectValue(seletor,property_id){
+         append_category_properties_adv($( seletor ).val(),property_id);
+    }
+    
+    function onCheckboxValue(name,property_id){
+        var values = [];
+        $.each($('input[name='+name+']:checked'),function(index,value){
+            values.push($(value).val());
+        });
+        append_category_properties_adv(values.join(','),property_id);
+    }
 </script>

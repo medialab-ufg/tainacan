@@ -5,7 +5,6 @@ function show_edit_data_property_form(object_id,property_id){
         url: $('#src').val()+"/controllers/object/object_controller.php",
         data: {collection_id:  $('#collection_id').val(),operation:'show_edit_data_property_form',property_id:property_id,object_id:object_id}
     }).done(function( result ) {
-        console.log('#list_all_properties_'+object_id);
         $('#edit_data_property_form_'+object_id).html(result);
         $('#list_all_properties_'+object_id).hide();
         $('#data_property_form_'+object_id).hide();
@@ -22,7 +21,6 @@ function show_edit_object_property_form(object_id,property_id){
         url: $('#src').val()+"/controllers/object/object_controller.php",
         data: {collection_id:  $('#collection_id').val(),operation:'show_edit_object_property_form',property_id:property_id,object_id:object_id}
     }).done(function( result ) {
-        console.log('#list_all_properties_'+object_id);
          $('#edit_object_property_form_'+object_id).html(result);
         $('#list_all_properties_'+object_id).hide();
         $('#data_property_form_'+object_id).hide();
@@ -58,7 +56,6 @@ function show_confirmation_delete_property_object_event(object_id,property_id,pr
                     socialdb_event_collection_id: $('#collection_id').val()}
             }).done(function (result) {
                 elem_first = jQuery.parseJSON(result);
-                console.log(elem_first);
                 back_button(object_id);
                 //$("#dynatree").dynatree("getTree").reload();
                 list_properties(object_id);

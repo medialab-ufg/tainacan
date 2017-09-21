@@ -1,4 +1,3 @@
-
 # BEGIN WordPress Theme
 php_value memory_limit 2048M
 php_value upload_max_filesize 2000M

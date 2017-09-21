@@ -3,9 +3,15 @@
     $(function () {
         var src = $('#src').val();
         listStandartLicenses();
+        change_breadcrumbs_title('<?php _e('Repository Licenses','tainacan') ?>');
 
         $('#formAddLicense').submit(function (e) {
+            if($('#add_license_name').val().trim()===''){
+                showAlertGeneral('<?php _e('Attention','tainacan') ?>', '<?php _e('Name is empty','tainacan') ?>', 'info');
+                return false;
+            }
             e.preventDefault();
+            show_modal_main();
             $.ajax({
                 url: $("#src").val() + '/controllers/theme_options/theme_options_controller.php',
                 type: 'POST',
@@ -13,6 +19,7 @@
                 processData: false,
                 contentType: false
             }).done(function (result) {
+                hide_modal_main();
                 elem = jQuery.parseJSON(result);
                 showAlertGeneral(elem.title, elem.msg, elem.type);
                 listStandartLicenses();
@@ -30,8 +37,7 @@
         var src = $('#src').val();
 
         $.ajax({
-            url: src + '/controllers/theme_options/theme_options_controller.php',
-            type: 'POST',
+            url: src + '/controllers/theme_options/theme_options_controller.php', type: 'POST',
             data: {operation: 'listStandartLicenses'},
             success: function (data) {
                 if (data) {
@@ -40,11 +46,9 @@
                         $("#list_licenses_content").html('');
                         $.each(jsonObject.licenses, function (id, object) {
                             $("#list_licenses_content").append("<tr><td>" + object.nome + "</td>" +
-                                    "<td><input type='radio' name='standartLicense' id='radio" + object.id + "' value=" + object.id + " onclick='changeStandartLicense(this," + object.id + ");'/></td>" +
-                                    "<td><a href='#' style='opacity:0.4'><span class='glyphicon glyphicon-pencil'></span></a></td>" +
-                                    "<td><a href='#' style='opacity:0.4'><span class='glyphicon glyphicon-trash'></span></a></td>" +
-                                    "</tr>");
-
+                                   // "<td><input type='radio' name='standartLicense' id='radio" + object.id + "' value=" + object.id + " onclick='changeStandartLicense(this," + object.id + ");'/></td>" +
+                                    "<td><a href='#' style='opacity:0.4'><span class='glyphicon glyphicon-trash'></span></a> " +
+                                    "<a href='#' style='opacity:0.4'><span class='glyphicon glyphicon-edit'></span></a></td></tr>");
                         });
                         listCustomLicenses();
                         $("#list_licenses_content").show();
@@ -58,8 +62,7 @@
         var src = $('#src').val();
 
         $.ajax({
-            url: src + '/controllers/theme_options/theme_options_controller.php',
-            type: 'POST',
+            url: src + '/controllers/theme_options/theme_options_controller.php', type: 'POST',
             data: {operation: 'listCustomLicenses'},
             success: function (data) {
                 if (data) {
@@ -68,11 +71,9 @@
                         if (jsonObject.licenses) {
                             $.each(jsonObject.licenses, function (id, object) {
                                 $("#list_licenses_content").append("<tr><td>" + object.nome + "</td>" +
-                                        "<td><input type='radio' name='standartLicense' id='radio" + object.id + "' value=" + object.id + " onclick='changeStandartLicense(this," + object.id + ");'/></td>" +
-                                        "<td><a onclick='editCustomLicense(" + object.id + ")' href='#formAddLicense'><span class='glyphicon glyphicon-pencil'></span></a></td>" +
-                                        "<td><a onclick='deleteCustomLicense(" + object.id + ")' href='#formAddLicense'><span class='glyphicon glyphicon-trash'></span></a></td>" +
-                                        "</tr>");
-
+                                  //  "<td><input type='radio' name='standartLicense' id='radio" + object.id + "' value=" + object.id + " onclick='changeStandartLicense(this," + object.id + ");'/></td>" +
+                                    "<td><a onclick='deleteCustomLicense(" + object.id + ")' href='#formAddLicense'><span class='glyphicon glyphicon-trash'></span></a> " +
+                                    "<a onclick='editCustomLicense(" + object.id + ")' href='#formAddLicense'><span class='glyphicon glyphicon-edit'></span></a></td> </tr>");
                             });
                         }
                         $('#radio' + jsonObject.pattern).attr("checked", "checked");
@@ -97,6 +98,7 @@
     }
 
     function editCustomLicense(id) {
+        $('.edit-license').click().text('<?php _e("Edit license", "tainacan") ?>');
         $.ajax({
             url: src + '/controllers/theme_options/theme_options_controller.php',
             type: 'POST',

@@ -3,53 +3,11 @@ include_once ('../../../../../wp-config.php');
 include_once ('../../../../../wp-load.php');
 include_once ('../../../../../wp-includes/wp-db.php');
 include_once ('js/create_js.php');
+include_once ('js/extract_metadata_js.php');
 /**
  * View responsavel em inicializar o envio de arquivos locais
  */
 ?>
-<style>
-  #selectable .ui-selecting 
-  { 
-      /* border: 3px solid rgb(122,167,207) ;*/ 
-  }
-  #container_images,
-  #container_pdfs,
-  #container_videos,
-  #container_audios, 
-  #container_others {
-      background-color: #c1d0dd;
-      padding-right: 0px;
-      padding-left: 15px;
-      margin-top: 15px;
-      padding-top: 5px;
-  }
-  
-  .item-default{
-      background: white;  
-      margin-bottom: 15px;
-      padding-bottom: 15px;
-      padding-right: 15px;
-      border: 3px solid #E8E8E8; 
-      margin-right: 10px;
-      width:19%;
-  }
-  .selected-border{
-      border: 3px solid rgb(122,167,207); 
-  }
-  .input_title{
-        text-align: center;
-        width: 150px;
-        padding:5px;
-        border: none;
-        background-color: rgb(209,211,212);
-        font: 13px Arial;
-        border-radius: 5px;
-    }  
-    .menu-left-size{
-        width: 23%;
-        padding-bottom: 15px;
-    }
-</style>
 <div class="row" id='upload_container' >
     <div class="col-md-3 menu-left-size" id='container-menu-left' 
          style="background: white;border: 3px solid #E8E8E8;font: 13px Arial;min-height: 500px;padding-right: 15px;">
@@ -66,26 +24,26 @@ include_once ('js/create_js.php');
     </div> 
     <div class="col-md-9" style=" background: white;border: 3px solid #E8E8E8;margin-left: 15px;">
         <h3>
-                <?php _e('Add new item - Insert URL','tainacan') ?>
-                <button onclick="back_main_list();" 
-                        class="btn btn-default pull-right">
-                            <?php _e('Cancel','tainacan') ?>
-                </button>
+          <?php _e('Add new item - Insert URL','tainacan') ?>
+          <button onclick="back_main_list();" class="btn btn-default pull-right">
+            <?php _e('Cancel','tainacan') ?>
+          </button>
         </h3>
         <hr>
         <div id='container-input' class="col-md-12" style="padding-left: 0px;">
             <div class="form-group">
-                <label  class="col-sm-1" for="item_url_import_all"><?php _e('URL', 'tainacan'); ?>:</label>
+                <label class="col-sm-1" for="item_url_import_all"><?php _e('URL', 'tainacan'); ?>:</label>
                 <div class="col-sm-9">
-                    <input type="text" 
-                       onkeyup="verify_import_type()"  
-                       name="item_url_import_all" 
-                       id="item_url_import_all" 
-                       placeholder="<?php _e('Type here', 'tainacan'); ?>" 
-                       class="form-control"
-                       /> 
+                    <input type="text" onkeyup="verify_import_type()"
+                       name="item_url_import_all" id="item_url_import_all" class="form-control"
+                       placeholder="<?php _e('Type here', 'tainacan'); ?>" />
                 </div>
-                <button type="button" onclick="importAll_verify()" class="col-sm-2 btn btn-primary"><?php _e('Submit', 'tainacan'); ?></button>
+                <div class="col-sm-2 no-padding">
+                    <button type="button" style="padding-bottom: 5px;padding-top: 5px;" onclick="importAll_verify()" class="col-sm-12 no-padding btn btn-primary"><?php _e('Submit', 'tainacan'); ?></button>
+                    <div class="col-sm-12 no-padding">
+                        <input type="checkbox" id="extract_metadata" name="extract_metadata">&nbsp;<?php _e('Extract metadata','tainacan') ?>
+                    </div>    
+                </div>
             </div>
             
         </div> 
@@ -107,4 +65,11 @@ include_once ('js/create_js.php');
 <!-- TAINACAN: MAPEAMENTO DOS ITEMS -->
 <div style="margin-bottom: 50px;" id='editor_items'>
     <!-- MOSTRA O EDITOR DOS ITENS AO FINAL DO UPLOAD -->
+</div>
+<div class="modal fade" id="modal_mapping_metadata" tabindex="-1" role="dialog" aria-labelledby="modal_mapping_metadata" aria-hidden="true">
+    <div class="modal-dialog">
+        <div  class="modal-content" id="mapping_metadata_content"> 
+            
+        </div>
+    </div>
 </div>

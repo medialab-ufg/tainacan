@@ -17,6 +17,7 @@ class OAIPMHController extends Controller {
     
 
     public function operation($operation, $data) {
+        ob_end_clean();
         $oaipmh_listrecords_model = new OAIPMHListRecordsModel();
         $oaipmh_listsets_model = new OAIPMHListSetsModel();
         $oaipmh_listidentifiers_model = new OAIPMHListIdentifiersModel();

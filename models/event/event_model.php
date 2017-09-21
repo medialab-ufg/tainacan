@@ -1,8 +1,9 @@
 <?php
-
-include_once (dirname(__FILE__) . '/../../../../../wp-config.php');
-include_once (dirname(__FILE__) . '/../../../../../wp-load.php');
-include_once (dirname(__FILE__) . '/../../../../../wp-includes/wp-db.php');
+/*
+include_once (dirname(__FILE__) . '/../../../../../../wp-config.php');
+include_once (dirname(__FILE__) . '/../../../../../../wp-load.php');
+include_once (dirname(__FILE__) . '/../../../../../../wp-includes/wp-db.php');
+*/
 require_once(dirname(__FILE__) . '../../general/general_model.php');
 require_once(dirname(__FILE__) . '../../collection/collection_model.php');
 require_once(dirname(__FILE__) . '../../user/user_model.php');
@@ -12,7 +13,56 @@ abstract class EventModel extends Model {
 
     var $parent;
     var $permission_name;
+    
+    /**
+     * function list_events($data)
+     * @param array $data Os dados vindos do formulario
+     * @return array com os dados a serem montados na view
+     * 
+     * @author: Eduardo Humberto 
+     */
+    public static function list_events_notification($data) {
+        $collectionModel = new CollectionModel;
 
+        $data['moderation_type'] = get_post_meta($data['collection_id'], 'socialdb_collection_moderation_type', true);
+        $data['moderation_type'] = (empty($data['moderation_type']) ? 'moderador' : $data['moderation_type']);
+        if ($data['moderation_type'] == 'democratico') {
+            $data['moderation_days'] = get_post_meta($data['collection_id'], 'socialdb_collection_moderation_days', true);
+            $collection_events = EventModel::list_all_events_terms($data);
+        } else {
+            if (current_user_can('manage_options') || $collectionModel->is_moderator($data['collection_id'], get_current_user_id())) {
+                $collection_events = EventModel::list_all_events_terms($data);
+            } else {
+                $collection_events = EventModel::list_all_events_by_user($data);
+            }
+        }
+
+        $ranking_model = new RankingModel;
+
+        if (!empty($collection_events)) {
+            foreach ($collection_events as $event) {
+                $info['state'] = get_post_meta($event->ID, 'socialdb_event_confirmed', true);
+                $info['name'] = $event->post_title;
+                $info['date'] = get_post_meta($event->ID, 'socialdb_event_create_date', true);
+                $info['type'] = EventModel::get_type($event);
+                $info['id'] = $event->ID;
+                $info['dump'] = $collectionModel->get_collection_by_user(get_current_user_id());
+                if ($data['moderation_type'] == 'democratico') {
+                    $info['democratic_vote_id'] = get_post_meta($event->ID, 'socialdb_event_democratic_vote_id', true);
+                    $count = $ranking_model->count_votes_binary($info['democratic_vote_id'], $event->ID);
+                    $info['count_up'] = $count['count_up'];
+                    $info['count_down'] = $count['count_down'];
+                }
+                if ($info['state'] == '') {
+                    $data['events_not_observed'][] = $info;
+                } else {
+                    $data['events_observed'][] = $info;
+                }
+            }
+        }
+
+        return $data;
+    }
     /**
      * function list_events($data)
      * @param array $data Os dados vindos do formulario
@@ -62,6 +112,29 @@ abstract class EventModel extends Model {
         return $data;
     }
 
+    public static function get_user_notifications() {
+        $collectionModel = new CollectionModel();
+        $_sum = 0;
+        $_root_id = get_option('collection_root_id');
+        foreach($collectionModel->get_collection_by_user(get_current_user_id()) as $col) {
+            $d['collection_id'] = $col->ID;
+            $info['colecao'] = $col->post_title;
+            if($col->ID == $_root_id) {
+                $info['is_root'] = true;
+                $info['colecao'] = _t('Repository\'s events');
+            }
+            $info['counting'] = count(EventModel::list_events($d)['events_not_observed']);
+            $info['path'] = $col->post_name;
+            if($info['counting'] > 0) {
+                $_sum += $info['counting'];
+                $_collections_evts['evts'][] = $info;
+            }
+        }
+        $_collections_evts['total_evts'] = $_sum;
+
+        return $_collections_evts;
+    }
+
     /**
      * function list_events($data)
      * @param array $data Os dados vindos do formulario
@@ -92,6 +165,11 @@ abstract class EventModel extends Model {
             $count = $ranking_model->count_votes_binary($info['democratic_vote_id'], $event->ID);
             $info['count_up'] = $count['count_up'];
             $info['count_down'] = $count['count_down'];
+        }
+        if(in_array($info['operation'], ['socialdb_event_object_create','socialdb_event_object_edit','socialdb_event_object_delete'])){
+            $collection_id  = get_post_meta($event->ID, 'socialdb_event_collection_id', true);
+            $link = get_the_permalink($collection_id). get_post(get_post_meta($event->ID, 'socialdb_event_object_item_id', true))->post_name;
+            $info['link'] = '<br><a target="_blank" href="'.$link.'">'.__('See item','tainacan').'</a>';
         }
         return json_encode($info);
     }
@@ -188,62 +266,71 @@ abstract class EventModel extends Model {
      * @author: Eduardo Humberto 
      */
     public static function get_type($event) {
-        $terms = wp_get_object_terms($event->ID, 'socialdb_event_type');
-        $parent = get_term_by('id', $terms[0]->term_id, 'socialdb_event_type');
-        switch ($parent->name) {
-            case 'socialdb_event_object_create':
-                return __('Create Object', 'tainacan');
-            case 'socialdb_event_object_delete':
-                return __('Delete Object', 'tainacan');
-            case 'socialdb_event_classification_create':
-                return __('Add Classification', 'tainacan');
-            case 'socialdb_event_classification_delete':
-                return __('Delete Classification', 'tainacan');
-            case 'socialdb_event_term_delete':
-                return __('Delete Category', 'tainacan');
-            case 'socialdb_event_term_create':
-                return __('Create Category', 'tainacan');
-            case 'socialdb_event_term_edit':
-                return __('Edit Category', 'tainacan');
-            case 'socialdb_event_tag_delete':
-                return __('Delete Tag', 'tainacan');
-            case 'socialdb_event_tag_create':
-                return __('Create Tag', 'tainacan');
-            case 'socialdb_event_tag_edit':
-                return __('Edit Tag', 'tainacan');
-            case 'socialdb_event_property_data_delete':
-                return __('Delete Data Property', 'tainacan');
-            case 'socialdb_event_property_data_create':
-                return __('Create Data Property', 'tainacan');
-            case 'socialdb_event_property_data_edit':
-                return __('Edit Data Property', 'tainacan');
-            case 'socialdb_event_property_data_edit_value':
-                return __('Edit Data Property value', 'tainacan');
-            case 'socialdb_event_property_object_delete':
-                return __('Delete Object Property', 'tainacan');
-            case 'socialdb_event_property_object_create':
-                return __('Create Object Property', 'tainacan');
-            case 'socialdb_event_property_object_edit':
-                return __('Edit Object Property', 'tainacan');
-            case 'socialdb_event_property_object_edit_value':
-                return __('Edit Object Property value', 'tainacan');
-
-            case 'socialdb_event_property_term_delete':
-                return __('Delete Property', 'tainacan');
-            case 'socialdb_event_property_term_create':
-                return __('Create Term Property', 'tainacan');
-            case 'socialdb_event_property_term_edit':
-                return __('Edit Term Property', 'tainacan');
-            case 'socialdb_event_collection_delete':
-                return __('Delete Collection', 'tainacan');
-            case 'socialdb_event_collection_create':
-                return __('Create Collection', 'tainacan');
-            case 'socialdb_event_comment_create':
-                return __('Create Comment', 'tainacan');
-            case 'socialdb_event_comment_edit':
-                return __('Edit Comment', 'tainacan');
-            case 'socialdb_event_comment_delete':
-                return __('Delete Comment', 'tainacan');
+        $terms = socialdb_relations_item($event->ID, 'socialdb_event_type');
+        if(isset($terms[0]) && isset($terms[0]->term_id) ){
+            $parent = get_term_by('id', $terms[0]->term_id, 'socialdb_event_type');
+            switch ($parent->name) {
+                case 'socialdb_event_object_create':
+                    return __('Create Object', 'tainacan');
+                case 'socialdb_event_object_delete':
+                    return __('Delete Object', 'tainacan');
+                case 'socialdb_event_classification_create':
+                    return __('Add Classification', 'tainacan');
+                case 'socialdb_event_classification_delete':
+                    return __('Delete Classification', 'tainacan');
+                case 'socialdb_event_term_delete':
+                    return __('Delete Category', 'tainacan');
+                case 'socialdb_event_term_create':
+                    return __('Create Category', 'tainacan');
+                case 'socialdb_event_term_edit':
+                    return __('Edit Category', 'tainacan');
+                case 'socialdb_event_tag_delete':
+                    return __('Delete Tag', 'tainacan');
+                case 'socialdb_event_tag_create':
+                    return __('Create Tag', 'tainacan');
+                case 'socialdb_event_tag_edit':
+                    return __('Edit Tag', 'tainacan');
+                case 'socialdb_event_property_data_delete':
+                    return __('Delete Data Property', 'tainacan');
+                case 'socialdb_event_property_data_create':
+                    return __('Create Data Property', 'tainacan');
+                case 'socialdb_event_property_data_edit':
+                    return __('Edit Data Property', 'tainacan');
+                case 'socialdb_event_property_data_edit_value':
+                    return __('Edit Data Property value', 'tainacan');
+                case 'socialdb_event_property_object_delete':
+                    return __('Delete Object Property', 'tainacan');
+                case 'socialdb_event_property_object_create':
+                    return __('Create Object Property', 'tainacan');
+                case 'socialdb_event_property_object_edit':
+                    return __('Edit Object Property', 'tainacan');
+                case 'socialdb_event_property_object_edit_value':
+                    return __('Edit Object Property value', 'tainacan');
+                 case 'socialdb_event_property_compounds_create':
+                    return __('Create Compound Property', 'tainacan');
+                case 'socialdb_event_property_compounds_edit':
+                    return __('Edit Compound Property', 'tainacan'); 
+                    
+                    
+                case 'socialdb_event_property_term_delete':
+                    return __('Delete Property', 'tainacan');
+                case 'socialdb_event_property_term_create':
+                    return __('Create Term Property', 'tainacan');
+                case 'socialdb_event_property_term_edit':
+                    return __('Edit Term Property', 'tainacan');
+                case 'socialdb_event_collection_delete':
+                    return __('Delete Collection', 'tainacan');
+                case 'socialdb_event_collection_create':
+                    return __('Create Collection', 'tainacan');
+                case 'socialdb_event_comment_create':
+                    return __('Create Comment', 'tainacan');
+                case 'socialdb_event_comment_edit':
+                    return __('Edit Comment', 'tainacan');
+                case 'socialdb_event_comment_delete':
+                    return __('Delete Comment', 'tainacan');
+            }
+        }else{
+            return  __('Operation', 'tainacan');
         }
     }
 
@@ -298,16 +385,18 @@ abstract class EventModel extends Model {
      * 
      * Autor: Eduardo Humberto 
      */
-    public function instantiate_metas_event($id, $name, $data) {
+    public function instantiate_metas_event($id, $name, $data)
+    {
         global $wpdb;
         $term = get_term_by('name', $name, 'socialdb_event_type');
-        if ($term) {
+        if ($term)
+        {
             $metas = $wpdb->get_results("SELECT meta_value FROM {$wpdb->prefix}termmeta"
                     . " WHERE meta_key like '{$name}_metas' ");
             if (is_array($metas)) {
                 foreach ($metas as $meta) {
                     update_post_meta($id, $meta->meta_value, $data[$meta->meta_value]);
-//create_metas($id, $meta->meta_value, $data[$meta->meta_value], $data[$meta->meta_value]);
+                    //create_metas($id, $meta->meta_value, $data[$meta->meta_value], $data[$meta->meta_value]);
                 }
             }
             $parent = get_term_by('id', $term->parent, 'socialdb_event_type');
@@ -329,29 +418,39 @@ abstract class EventModel extends Model {
         $this->notificate_moderators_email($data['socialdb_event_collection_id'], $title);
         $event_created = $this->insert_event($title); // insere o termo do evento no banco
         $this->create_democratic_vote(array('event_id' => $event_created['ID'], 'collection_id' => $data['socialdb_event_collection_id']));
-        if ($event_created && $event_created['ID']) {// se criou com sucesso
+
+        if ($event_created && $event_created['ID'])// se criou com sucesso
+        {
             $this->instantiate_metas_event($event_created['ID'], $this->parent->name, $data); // instancia e coloca os valores nos meta dados do evento
-            if ($this->is_automatically_verify_event($data['socialdb_event_collection_id'], $this->permission_name, $data['socialdb_event_user_id'], $event_created['ID'])) {
+            if ($this->is_automatically_verify_event($data['socialdb_event_collection_id'], $this->permission_name, $data['socialdb_event_user_id'], $event_created['ID']))
+            {
                 $data['event_id'] = $event_created['ID'];
                 $data = $this->verify_event($data, true);
                 return $data;
-            } elseif (isset($data['socialdb_event_delete_collection_id']) && get_post($data['socialdb_event_delete_collection_id'])->post_author == get_current_user_id()) {
+
+            } elseif (isset($data['socialdb_event_delete_collection_id']) && get_post($data['socialdb_event_delete_collection_id'])->post_author == get_current_user_id())
+            {
                 $data['event_id'] = $event_created['ID'];
                 $data = $this->verify_event($data, true);
                 return $data;
-            } else {
-                if (isset($data['socialdb_event_observation']) && $data['socialdb_event_observation'] !== '') {
+            } else
+            {
+                if (isset($data['socialdb_event_observation']) && $data['socialdb_event_observation'] !== '')
+                {
                     update_post_meta($event_created['ID'], 'socialdb_event_observation', $data['socialdb_event_observation']);
-                } elseif ($this->parent->name == 'socialdb_event_object_create') {
+                } elseif ($this->parent->name == 'socialdb_event_object_create')
+                {
                     $object = get_post($data['socialdb_event_object_item_id']);
                     $url = '<a target="_blanck" href="' . get_the_permalink($data['socialdb_event_collection_id']) . '?item=' . $object->post_name . '">' . __('See item (Open a new Tab)') . '</a>';
                     update_post_meta($event_created['ID'], 'socialdb_event_observation', $url);
                 }
+
                 $data['msg'] = __('The event was sent for approval', 'tainacan');
                 $data['type'] = 'info';
                 $data['title'] = __('Attention', 'tainacan');
             }
-        } else {
+        } else
+        {
             $data['msg'] = __('An error happened, please try again', 'tainacan');
             $data['type'] = 'error';
             $data['title'] = 'Erro';
@@ -379,6 +478,8 @@ abstract class EventModel extends Model {
     }
 
     /**
+     * metodo que verifica se acao pode ser executada
+     *
      * funcao que verifica se o evento deve ser verificado automaticamente
      * @param int $collection_id O id da colecao que sera feito o evento
      * @param string $action A acao que sera executada
@@ -387,7 +488,12 @@ abstract class EventModel extends Model {
      * 
      * @author Eduardo Humberto 
      */
-    public function is_automatically_verify_event($collection_id, $action, $user_id, $event_id = 0) {
+    public function is_automatically_verify_event($collection_id, $action, $user_id, $event_id = 0)
+    {
+        if (has_filter('tainacan_alter_permission_actions')) {
+            return apply_filters('tainacan_alter_permission_actions',$action, $collection_id, $event_id);
+        }
+
         $is_repository_action = in_array($action, ['socialdb_collection_permission_create_collection', 'socialdb_collection_permission_delete_collection']);
         if ($collection_id == get_option('collection_root_id') && $is_repository_action) {
             $options = get_option('socialdb_repository_permissions');
@@ -395,7 +501,8 @@ abstract class EventModel extends Model {
         } else {
             $permission = get_post_meta($collection_id, $action, true);
         }
-// se for permissoes do repositorio
+
+        // se for permissoes do repositorio
         if ($is_repository_action) {
             if (!isset($permission) || $permission == 'approval') {
                 if (CollectionModel::is_moderator($collection_id, $user_id) || current_user_can('manage_options')) {
@@ -413,7 +520,8 @@ abstract class EventModel extends Model {
                 return true;
             }
         }
-//demais acoes para colecoes
+
+        //demais acoes para colecoes
         if ($permission == 'approval') {
             if (CollectionModel::is_moderator($collection_id, $user_id) || current_user_can('manage_options')) {
                 return true;
@@ -429,7 +537,9 @@ abstract class EventModel extends Model {
                     'socialdb_collection_permission_edit_property_term',
                     'socialdb_collection_permission_delete_property_term'
                 ];
-                if (in_array($action, ['socialdb_collection_permission_edit_category', 'socialdb_collection_permission_delete_category'])) {
+
+                if (in_array($action, ['socialdb_collection_permission_edit_category', 'socialdb_collection_permission_delete_category']))
+                {
                     $category_id = get_post_meta($event_id, 'socialdb_event_term_id', true);
                     if (strpos($category_id, '_facet_category') !== false) {
                         $category_id = str_replace('_facet_category', '', $category_id);
@@ -450,6 +560,10 @@ abstract class EventModel extends Model {
                         return false;
                     }
                 } else {
+                    /*$is_item = get_post_meta($event_id,'socialdb_event_object_item_id',true);
+                    if( get_post($is_item) && get_post($is_item)->post_author == get_current_user_id()){
+                        return true;
+                    }*/
                     return false;
                 }
             }

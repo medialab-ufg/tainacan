@@ -4,6 +4,8 @@ include_once (dirname(__FILE__) . '/../../../../../../../wp-load.php');
 include_once (dirname(__FILE__) . '/../../../../../../../wp-includes/wp-db.php');
 include_once ('js/list_js.php');
 global $config;
+$subject_id = get_post_meta($collection_id, 'socialdb_collection_subject_category', true);
+$category_root_id = ($subject_id) ? $subject_id : $category_root_id;
 ?>  
 <div id="categories_title" class="row"> 
     <div class="col-md-10 col-md-offset-1">

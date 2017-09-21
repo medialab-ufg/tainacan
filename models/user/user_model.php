@@ -12,6 +12,7 @@ if (isset($_GET['by_function'])) {
 }
 require_once(dirname(__FILE__) . '../../general/general_model.php');
 include_once (dirname(__FILE__) . '../../collection/collection_model.php');
+include_once (dirname(__FILE__) . '../../log/log_model.php');
 
 class UserModel extends Model {
 
@@ -25,33 +26,32 @@ class UserModel extends Model {
         $this->usuario_id = $usuario_id;
     }
 
-     /**
+    /**
      * function show_username($data)
      * @param array $data os dados vindo do formulario com o nome do usua\rio e o id da colecao
      * @return mix Retorna uma string com o nome do usuario ja no estado fi nal
      * 
      * @author: Eduardo
-      * 
-      */
-     public function show_username($data) {
+     * 
+     */
+    public function show_username($data) {
         $login = strip_tags(trim($data['username']));
         $login = str_replace(' ', '-', $login);
-        $login = str_replace(array('-----', '----', '---', '--'), '-',$login);
-        $login = sanitize_user( $login, true );
-        if(username_exists($login)){
-            return '<br><span style="font-size:small;" class="label label-danger">'.__( 'Sorry, that username already exists!' ).'</span>';
-        }elseif(!empty($login)){
-            return '<br><span style="font-size:small;" class="label label-success">'.__('Your valid username will be','tainacan').': <b>'.$login.'</b></span>';
+        $login = str_replace(array('-----', '----', '---', '--'), '-', $login);
+        $login = sanitize_user($login, true);
+        if (username_exists($login)) {
+            return '<br><span style="font-size:small;" class="label label-danger">' . __('Sorry, that username already exists!') . '</span>';
+        } elseif (!empty($login)) {
+            return '<br><span style="font-size:small;" class="label label-success">' . __('Your valid username will be', 'tainacan') . ': <b>' . $login . '</b></span>';
+        } else {
+            return '<br><span style="font-size:small;" class="label label-danger">' . __('Please type a username', 'tainacan') . '</span>';
         }
-        else{
-            return '<br><span style="font-size:small;" class="label label-danger">'.__('Please type a username','tainacan').'</span>';
-        }
-     }
-    
+    }
+
     /**
      * function list_user($data)
      * @param array $data os dados vindo do formulario
-     * @return json  com os dados do usuario
+     * @return json com os dados do usuario
      * 
      * Autor: Eduardo Humberto 
      */
@@ -63,12 +63,14 @@ class UserModel extends Model {
                 WHERE u.user_nicename LIKE '%{$data['term']}%'
                 ORDER BY u.user_nicename";
         $items = $wpdb->get_results($query);
+
         foreach ($items as $item) {
             $altCompleteL[] = array(
                 'value' => $item->ID,
                 'label' => $item->user_nicename
             );
         }
+
         return json_encode($altCompleteL);
     }
 
@@ -83,10 +85,7 @@ class UserModel extends Model {
      * @param type $data
      * @return \mix */
     public function register_user($data) {
-        global $wpdb;
-//        $login = remove_accent($data['user_login']);
-//        $login = str_replace(' ', '-', $login);
-//        $login = str_replace(array('--', '---', '----'), '-', $login);
+        // global $wpdb;
         $login = strip_tags(trim($data['user_login']));
         $login = str_replace(' ', '-', $login);
         $login = str_replace(array('-----', '----', '---', '--'), '-', $login);
@@ -105,7 +104,52 @@ class UserModel extends Model {
             'wp_capabilities' => 'a:1:{s:10:"subscriber";b:1;}'
         );
 
+        //Verifica se o novo usuario esta sendo cadastrado com funcionario da biblioteca, caso sim então ele é cadastrado como administrador
+        if(key_exists('user_type', $data) && strcmp(sanitize_text_field($data['user_type']), 'employee') == 0)
+        {
+            $userdata['wp_user_level'] = 10; //Admin Level
+        }
+
         $user_id = wp_insert_user($userdata);
+
+        if(isset($data['about_you'])) {
+            $about_you = sanitize_text_field($data['about_you']);
+            update_user_meta($user_id, 'about_you', $about_you);
+        }
+        if ( isset($data['current_work']) ) {
+            $current_work = sanitize_text_field($data['current_work']);
+            update_user_meta($user_id, 'current_work', $current_work);
+        }
+        if (isset($data['prof_resume'])) {
+            $p_resume = sanitize_text_field($data['prof_resume']);
+            update_user_meta($user_id, 'prof_resume', $p_resume);
+        }
+
+        if(has_action('add_new_user_properties')) //Verifica se é biblioteca
+        {
+            //Bib User Properties
+            $user_properties = [];
+            foreach($data as $index => $value)
+            {
+                $user_properties[$index] = sanitize_text_field($data[$index]);
+            }
+
+            if(!key_exists("user_type", $data))
+            {
+                $user_properties['user_type'] = 'reader';
+            }
+
+            if(!key_exists('user_situation', $data))
+            {
+                $user_properties['user_situation'] = 'active';
+            }
+
+            foreach ($user_properties as $index => $value)
+            {
+                update_user_meta($user_id, $index, $value);
+            }
+            
+        }
 
         $get_login = get_user_by('id', $user_id);
 
@@ -113,20 +157,21 @@ class UserModel extends Model {
         if (!is_wp_error($user_id)) {
             $resultRegister['id'] = $user_id;
             $resultRegister['result'] = '1';
-            $resultRegister['title'] = __('Success','tainacan');
-            $resultRegister['msg'] = __('User registered successfully! Your login is: ','tainacan'). $get_login->user_login;
+            $resultRegister['title'] = __('Success', 'tainacan');
+            $resultRegister['msg'] = __('User registered successfully! Your login is: ', 'tainacan') . $get_login->user_login;
             $resultRegister['url'] = get_the_permalink(get_option('collection_root_id')) . '?open_login=true';
 
-//            $to = $data['user_email'];
-//            $subject = __('Welcome on the Tainacan Repository ');
-//            $body = __('Welcome');
-//            $headers = array('Content-Type: text/html; charset=UTF-8');
-//            wp_mail($to, $subject, $body, $headers);
+            /* $user_info = get_userdata($user_id);
+            $user_role = implode(', ', $user_info->roles);
+            Log::addLog(['user_id' => $user_id, 'event_type' => 'user_profile', 'event' => $user_role]);
+            */
+            Log::addLog(['user_id' => $user_id, 'event_type' => 'user_status', 'event' => 'register']);
+            
             $this->send_welcome_email($data, $get_login->user_login);
         } else {
             $resultRegister['result'] = '0';
-            $resultRegister['title'] = __('Error','tainacan');
-            $resultRegister['msg'] = __('Email already exists or login already exists!','tainacan');
+            $resultRegister['title'] = __('Error', 'tainacan');
+            $resultRegister['msg'] = __('Email already exists or login already exists!', 'tainacan');
             $resultRegister['type'] = 'error';
         }
 
@@ -135,27 +180,19 @@ class UserModel extends Model {
 
     public function send_welcome_email($data, $user_login) {
         $site_name = (get_option('blogname') == '' ? 'Tainacan' : get_option('blogname'));
-        $content = (get_option('socialdb_welcome_email') == '' ? __('Welcome on the Tainacan Repository ','tainacan') : get_option('socialdb_welcome_email'));
-
+        $content = (get_option('socialdb_welcome_email') == '' ? __('Welcome on the Tainacan Repository ', 'tainacan') : get_option('socialdb_welcome_email'));
         $content = str_replace('__USER_NAME__', $data['first_name'] . ' ' . $data['last_name'], $content);
         $content = str_replace('__USER_LOGIN__', $user_login, $content);
 
         $to = $data['user_email'];
-        $subject = __("Welcome - ",'tainacan') . $site_name;
+        $subject = __("Welcome - ", 'tainacan') . $site_name;
 
         add_filter('wp_mail_content_type', 'set_html_content_type');
 
-        //$site_url = get_site_url();
-        
-        //$headers = 'From: No-Reply <noreply@example.com>' . "\r\n";
-        
-        //$status = wp_mail($to, $subject, $content, $headers);
         $status = wp_mail($to, $subject, $content);
 
         // Reset content-type to avoid conflicts
         remove_filter('wp_mail_content_type', 'set_html_content_type');
-
-        //return $status;
     }
 
     /**
@@ -180,8 +217,6 @@ class UserModel extends Model {
     }
 
     public function create_user_gplus($me, $access_token) {
-
-        $result = array();
         $result = $this->token_save_gplus($me, $access_token);
         return $this->login_gplus($result['user_login'], $result['user_pass']);
     }
@@ -215,7 +250,6 @@ class UserModel extends Model {
                 //retornando os dados do usuÃ¡rio;
                 return $user_data;
             } else {
-
                 //atualizando os dados do usuÃ¡rio.
                 $data_user = get_user_by('email', $user['emails'][0]['value']);
 
@@ -319,7 +353,6 @@ class UserModel extends Model {
      * Logar usuario no wordpress 
      */
     public function do_login($login = '', $pass = "") {
-
         $user = wp_signon(array('user_login' => $login, 'user_password' => $pass, 'remember' => true), false);
 
         wp_clear_auth_cookie();
@@ -334,7 +367,6 @@ class UserModel extends Model {
     }
 
     public function login_gplus($login = '', $pass = "") {
-
         $user = wp_signon(array('user_login' => $login, 'user_password' => $pass, 'remember' => true), false);
 
         wp_clear_auth_cookie();
@@ -353,8 +385,8 @@ class UserModel extends Model {
             $email_user = email_exists($user_login);
             if ($email_user == false) {
                 //Email nao existe no banco
-                $result['title'] = __('Error','tainacan');
-                $result['msg'] = __('Your email was not found in our database!','tainacan');
+                $result['title'] = __('Error', 'tainacan');
+                $result['msg'] = __('Your email was not found in our database!', 'tainacan');
                 $result['type'] = 'error';
             } else {
                 //Email existe no banco
@@ -365,12 +397,12 @@ class UserModel extends Model {
 
                 if ($status) {
                     wp_set_password($new_password, $email_user);
-                    $result['title'] = __('Success','tainacan');
-                    $result['msg'] = __('Your new password was sent to your email!','tainacan');
+                    $result['title'] = __('Success', 'tainacan');
+                    $result['msg'] = __('Your new password was sent to your email!', 'tainacan');
                     $result['type'] = 'success';
                 } else {
-                    $result['title'] = __('Error','tainacan');
-                    $result['msg'] = __('Something went wrong. Error sending email.','tainacan');
+                    $result['title'] = __('Error', 'tainacan');
+                    $result['msg'] = __('Something went wrong. Error sending email.', 'tainacan');
                     $result['type'] = 'error';
                 }
             }
@@ -378,8 +410,8 @@ class UserModel extends Model {
             $username_user = username_exists($user_login);
             if ($username_user == null) {
                 //Username nao existe no banco
-                $result['title'] = __('Error','tainacan');
-                $result['msg'] = __('Your username was not found in our database!','tainacan');
+                $result['title'] = __('Error', 'tainacan');
+                $result['msg'] = __('Your username was not found in our database!', 'tainacan');
                 $result['type'] = 'error';
             } else {
                 //Username existe no banco
@@ -390,12 +422,12 @@ class UserModel extends Model {
 
                 if ($status) {
                     wp_set_password($new_password, $username_user);
-                    $result['title'] = __('Success','tainacan');
-                    $result['msg'] = __('Your new password was sent to your email!','tainacan');
+                    $result['title'] = __('Success', 'tainacan');
+                    $result['msg'] = __('Your new password was sent to your email!', 'tainacan');
                     $result['type'] = 'success';
                 } else {
-                    $result['title'] = __('Error','tainacan');
-                    $result['msg'] = __('Something went wrong. Error sending email.','tainacan');
+                    $result['title'] = __('Error', 'tainacan');
+                    $result['msg'] = __('Something went wrong. Error sending email.', 'tainacan');
                     $result['type'] = 'error';
                 }
             }
@@ -405,22 +437,34 @@ class UserModel extends Model {
     }
 
     public function send_reset_password_email($user, $new_password) {
+
+        if(get_option("tainacan_show_support_email") === 'true')
+        {
+            $email_msg = __("Send us an email to:", "tainacan");
+
+            $email = get_option("tainacan_reset_password_support_email");
+            if($email_msg)
+            {
+                $email_msg .= " <a href='mailto:". $email ."' target='_top'> $email </a>";
+            }else $email_msg = '';
+        }
+
         $site_name = get_option('blogname');
-        $link = get_the_permalink(get_option('collection_root_id')) . "?recovery_password=" . base64_encode($user->data->ID);
+        $link = get_the_permalink(get_option('collection_root_id'));
 
         $to = $user->data->user_email;
-        $subject = __("You requested a new ",'tainacan') . $site_name . __(" password",'tainacan');
-        $content = __('Hi','tainacan')." {$user->data->display_name},<br><br>
-                    ".__(' You recently asked to reset your ','tainacan')." " . $site_name . " 
-                    ". __('password','tainacan')." .<br>
-                    <a href='{$link}' target='_blank'>". __('Click here to change your password','tainacan').".</a><br><br>
+        $subject = __("You requested a new ", 'tainacan') . $site_name . __(" password", 'tainacan');
+        $content = __('Hi', 'tainacan') . " {$user->data->display_name},<br><br>
+                    " . __(' You recently asked to reset your ', 'tainacan') . " " . $site_name . " 
+                    " . __('password', 'tainacan') . " .<br>
+                    <a href='{$link}' target='_blank'>" . __('Click here to resume your access with your new password', 'tainacan') . ".</a><br><br>
 
-                    ".__('Your new password is:','tainacan')."<br><hr>
+                    " . __('Your new password is:', 'tainacan') . "<br><hr>
                     {$new_password}<hr><br><br>
-                    ".__("Didn't request this change?",'tainacan')."<br>
-                     ".__("If you didn't request a new password, let us know immediately",'tainacan').".<br><br><hr>
+                    " . __("Didn't request this change?", 'tainacan') . "<br>
+                     " . __("If you didn't request a new password, let us know immediately", 'tainacan') . ".<br>  $email_msg <br><hr>
 
-                    <small>".__("This message was sent to",'tainacan')." {$user->data->user_email} ".__("at your request",'tainacan').".<br>
+                    <small>" . __("This message was sent to", 'tainacan') . " {$user->data->user_email} " . __("at your request", 'tainacan') . ".<br>
                     {$site_name}</small>
                     ";
 
@@ -441,16 +485,68 @@ class UserModel extends Model {
         if ($user && wp_check_password($old_password, $user->data->user_pass, $user->ID)) {
             wp_set_password($new_password, $user->ID);
 
-            $result['title'] = __('Success','tainacan');
-            $result['msg'] = __('Password changed successfully! Redirecting to login page...','tainacan');
+            $result['title'] = __('Success', 'tainacan');
+            $result['msg'] = __('Password changed successfully! Redirecting to login page...', 'tainacan');
             $result['type'] = "success";
         } else {
-            $result['title'] = __('Error','tainacan');
-            $result['msg'] = __('Your old password do not match!','tainacan');
+            $result['title'] = __('Error', 'tainacan');
+            $result['msg'] = __('Your old password do not match!', 'tainacan');
             $result['type'] = "error";
         }
 
         return $result;
+    }
+
+    public function send_share_email($data) {
+        $site_name = get_option('blogname');
+        $link = get_the_permalink($data['collection_id']) . '?item=' . get_post($data['object_id'])->post_name;
+
+        $to = $data['email'];
+        $subject = __("An item has been shared with you! - ", 'tainacan') . $site_name;
+        $content = __('Hi', 'tainacan') . " ,<br><br>
+                    " . __(' Someone shared an item with you in the ', 'tainacan') . " " . $site_name . " 
+                    " . __('website.', 'tainacan') . " .<br>
+                    <a href='{$link}' target='_blank'>" . __('Click here to see', 'tainacan') . ".</a><br><br><hr>
+                    <small>{$site_name}</small>
+                    ";
+
+        add_filter('wp_mail_content_type', 'set_html_content_type');
+
+        $status = wp_mail($to, $subject, $content);
+
+        // Reset content-type to avoid conflicts
+        remove_filter('wp_mail_content_type', 'set_html_content_type');
+
+        return $status;
+    }
+    
+    /**
+     * funcao que busca os autores mais participativos de uma colecao a partir
+     * da quantidade de items inseridos
+     * @param int $collection_id O id da colecao que esa sendo montado o autocomplete
+     * @author: Eduardo Humberto 
+     */
+    public function search_participatory_authors($collection_id,$search) {
+        global $wpdb;
+        $category_root_id = $this->get_category_root_of($collection_id);
+        $wp_term_relationships = $wpdb->prefix . "term_relationships";
+        $wp_posts = $wpdb->prefix . "posts";
+        $wp_term_taxonomy = $wpdb->prefix . "term_taxonomy";
+        $wp_users = $wpdb->base_prefix . "users";
+        $query = "
+	SELECT p.post_author, u.display_name, u.user_nicename, count(*) AS num_posts
+	FROM $wp_posts p
+		INNER JOIN $wp_term_relationships tr ON p.ID = tr.object_id
+		INNER JOIN $wp_term_taxonomy tt ON tr.term_taxonomy_id = tt.term_taxonomy_id
+		INNER JOIN $wp_users u ON p.post_author = u.ID
+	WHERE tt.term_id = $category_root_id
+        AND u.display_name LIKE '%$search%'
+	GROUP BY p.post_author
+	ORDER BY num_posts DESC
+	LIMIT 10";
+
+        $authors = $wpdb->get_results($query);
+        return $authors;
     }
 
 }

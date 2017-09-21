@@ -104,7 +104,8 @@ if (isset($property_object)):
                                 <?php if ($property['metas']['value']) echo $property['metas']['value'][0]; ?>
                 </textarea>
         <?php }elseif ($property['type'] == 'numeric') { ?>   
-                <input type="number" 
+                <input  type="text" 
+                        onkeypress='return onlyNumbers(event)' 
                        class="form-control"
                        onkeypress='return onlyNumbers(event)'
                        id="form_edit_autocomplete_value_<?php echo $property['id']; ?>" 

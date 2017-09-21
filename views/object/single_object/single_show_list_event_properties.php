@@ -8,8 +8,8 @@ include_once ('js/show_list_event_properties_js.php');
 $ids = [];
 ?>
 
-<?php if (!isset($property_object) && !isset($property_data)): ?>
-    <?php _e('No Properties available', 'tainacan'); ?>
+<?php if (!isset($property_object) && !isset($property_data)  && !isset($property_term)): ?>
+        <center><h4><?php _e('No Properties available', 'tainacan'); ?></h4></center>
 <?php endif; ?>
 <?php if (isset($property_object)):
     ?>
@@ -141,7 +141,7 @@ $ids = [];
                            id="single_property_value_<?php echo $property['id']; ?>_<?php echo $object_id; ?>"
                            type="text" class="form-control input_date"
                            name="socialdb_property_<?php echo $property['id']; ?>"
-                           >
+                    >
               <?php
               }else{
                 ?>
@@ -253,12 +253,9 @@ if (isset($property_term)):
     <input type="hidden" name="properties_terms_multipleselect" id='event_single_properties_terms_multipleselect' value="<?php echo implode(',', $properties_terms_multipleselect); ?>">
     <input type="hidden" name="properties_terms_treecheckbox" id='event_single_properties_terms_treecheckbox' value="<?php echo implode(',', $properties_terms_treecheckbox); ?>">
     <input type="hidden" id="object_classifications_event_single_<?php echo $object_id; ?>" name="object_classifications" value="<?php echo implode(',', $categories_id); ?>">
-
-
-
-    <?php if (isset($all_ids)): ?>
-        <input type="hidden" name="properties_id" value="<?php echo $all_ids; ?>">
-        <?php
+<?php if (isset($all_ids)): ?>
+    <input type="hidden" name="properties_id" value="<?php echo $all_ids; ?>">
+<?php
 
 
 

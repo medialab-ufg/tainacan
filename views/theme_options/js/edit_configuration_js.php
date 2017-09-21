@@ -1,9 +1,10 @@
 <script>
     $(function () {
         var src = $('#src').val();
+        change_breadcrumbs_title('<?php _e('Repository Configuration','tainacan') ?>');
         showCKEditor();
-        list_templates();
         autocomplete_collection_templates();
+        init_dynatree_collection_template();
         $('#submit_form_edit_repository_configuration').submit(function (e) {
             $("#repository_content").val(CKEDITOR.instances.editor.getData());
             e.preventDefault();
@@ -15,17 +16,54 @@
                 contentType: false
             }).done(function (result) {
                 elem = jQuery.parseJSON(result);
+                if(elem.reload&&elem.reload===true){
+                    window.location = '<?php echo site_url(); ?>'
+                }
                 showAlertGeneral(elem.title, elem.msg, elem.type);
                 showRepositoryConfiguration(src);
-                get_collections_template($('#src').val());  
+                get_collections_template(src);
             });
         });
+        var cropOpts = {
+            uploadUrl: src + '/views/collection/upload_file.php',
+            cropUrl: src + '/views/collection/crop_file.php',
+            imgEyecandy: true,
+            imgEyecandyOpacity: 0.1,
+            modal: true,
+            loaderHtml: '<div class="loader bubblingG"><span id="bubblingG_1"></span><span id="bubblingG_2"></span><span id="bubblingG_3"></span></div>'
+        };
+
+        cropOpts.onAfterImgCrop = function() {
+            var repo_config = this.id;
+            var croppd_imgs = $("img.croppedImg").length;
+            var img = $("img.croppedImg").get( (croppd_imgs-1) ) ;
+            var img_url = $(img).attr("src");
+            var data = { operation: 'set_repository_img', collection_id: $("#collection_id").val(),
+                img_url: img_url, img_title: getCroppedFileName(img_url), type: repo_config };
+            var path = src + '/controllers/collection/collection_controller.php';
+            $.ajax({url: path, type: 'POST', data: data});
+        };
+
+        var logo  = new Croppic("logo_crop", cropOpts);
+        var cover = new Croppic("cover_crop", cropOpts);
+
+        function getCroppedFileName(st) {
+            if(st && (typeof st === "string")) {
+                var fileName = st.split("/").reverse()[0];
+                var fileExt = fileName.substr(fileName.lastIndexOf('.'));
+                fileName = fileName.replace(fileExt,"");
+
+                return fileName;
+            } else {
+                return st;
+            }
+        }
     });
-    
-    
+
     function autocomplete_collection_templates() {
+        var src = $('#src').val();
         $("#collection_template").autocomplete({
-            source: $('#src').val() + '/controllers/collection/collection_controller.php?operation=get_collections_json',
+            source: src + '/controllers/collection/collection_controller.php?operation=get_collections_json',
             messages: {
                 noResults: '',
                 results: function () {
@@ -57,9 +95,8 @@
                         }).done(function (result) {
                             $('#modalImportMain').modal('hide');//escondo o modal de carregamento
                             elem_first = jQuery.parseJSON(result);
-                            if(elem_first.result){
-                                //var temp = $("#chosen-selected2 [value='" + ui.item.value + "']").val();
-                                get_collections_template($('#src').val()); 
+                            if(elem_first.d){
+                                get_collections_template(src);
                                 list_templates();
                             }
                         });
@@ -106,42 +143,47 @@
     
     }
     
-    function list_templates(){
-         $.ajax({
-            type: "POST",
-            url: $('#src').val() + "/controllers/collection/collection_controller.php",
-            data: {
-                operation: 'list-collection-templates',
-                is_json:true
-               }
-        }).done(function (result) {
-            $('#collection_templates').html('');
-            elem_first = jQuery.parseJSON(result);
-            if(elem_first&&elem_first.length>0){
-                $.each(elem_first,function(index,value){
-                     $('#collection_templates').append('<option selected="selected" value="'+value.directory+'">'+value.title+'</option>');
-                });
-                $('#show_collection_empty').show();
-            }else{
-                $('#show_collection_empty').hide();
+    function init_dynatree_collection_template(){
+        $("#dynatree-collection-templates").dynatree({
+            selectionVisible: true, // Make sure, selected nodes are visible (expanded).
+            checkbox: true,
+            initAjax: {
+                url: $('#src').val() + '/controllers/collection/collection_controller.php',
+                data: {
+                    collection_id: $("#collection_id").val(),
+                    operation: 'initDynatreeCollectionTemplates'
+                },
+                addActiveKey: true
+            },
+            autoFocus: false, // Evita que o Dynatree faça Scroll para si mesmo quando iniciar
+            onSelect: function (flag, node) {
+                if(node.bSelected&&node.childList){
+                    $.each(node.childList,function(index,node){
+                        node.select(true);
+                    });
+                } else if(node.childList){
+                    $.each(node.childList,function(index,node){
+                        node.select(false);
+                    });
+                }
+                if(node.data.key!=='false'){
+                    toggleHabilitateTemplate(node.data.key,node.data.type);
+                }
             }
         });
     }
-    // desabilita as colecaoes vazia no repositorio
-//    function disable_empty_collection(selector){
-//        selector = $(selector);
-//        console.log(selector.prop( "checked" ));
-//        $.ajax({
-//                url: $("#src").val() + '/controllers/theme_options/theme_options_controller.php',
-//                type: 'POST',
-//                data: {
-//                    operation:'disable_empty_collection';
-//                    situ
-//                }
-//        }).done(function (result) {
-//            elem = jQuery.parseJSON(result);
-//            showAlertGeneral(elem.title, elem.msg, elem.type);
-//            showRepositoryConfiguration(src);
-//        });
-//    }
+    
+    function toggleHabilitateTemplate(key,type) {
+        $.ajax({
+            type: "POST",
+            url: $('#src').val() + "/controllers/collection/collection_controller.php",
+            data: {
+                operation: 'habilitate-collection-templates',
+                key:key,
+                type:type
+               }
+        }).done(function (result) {
+            list_templates();
+        });
+    }
 </script>

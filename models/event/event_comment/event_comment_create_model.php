@@ -1,8 +1,9 @@
 <?php
-
+/*
 include_once ('../../../../../wp-config.php');
 include_once ('../../../../../wp-load.php');
 include_once ('../../../../../wp-includes/wp-db.php');
+*/
 require_once(dirname(__FILE__) . '../../../event/event_model.php');
 require_once(dirname(__FILE__) . '../../../comment/comment_model.php');
 
@@ -89,6 +90,11 @@ class EventCommentCreate extends EventModel {
         if (isset($result['comment_id'])) {
             $this->set_approval_metas($data['event_id'], $data['socialdb_event_observation'], $automatically_verified);
             $this->update_event_state('confirmed', $data['event_id']);
+
+            $logData = ['collection_id' => $collection_id, 'item_id' => $object_id, 'resource_id' => $result['comment_id'],
+                'user_id' => $user_id, 'event_type' => 'comment', 'event' => 'add' ];
+            Log::addLog($logData);
+            
             $data['msg'] = __('The event was successful','tainacan');
             $data['type'] = 'success';
             $data['title'] =  __('Success','tainacan');

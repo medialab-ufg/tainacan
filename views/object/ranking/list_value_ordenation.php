@@ -46,8 +46,9 @@ include_once ('js/list_ranking_js.php');
     <?php else: ?>
          <!-- TAINACAN: mostra os rankings do tipo estrela -->
         <div id="single_stars_<?php echo $object_id; ?>" class="single_stars">
-            <?php if (isset($stars)): ?>    
+            <?php if (isset($stars)): ?>
                 <?php foreach ($stars as $star) { ?>
+                    <input type="hidden" name='prop_star' value="<?php echo $star['id']; ?>" />
                     <input type="hidden" id="single_star_<?php echo $object_id; ?>_<?php echo $star['id']; ?>" value="<?php echo $star['value']; ?>">
                     <!--span><!--b><?php echo $star['name']; ?></b></span>&nbsp;(<?php echo __('Votes: ') ?>
                     <span id="single_counter_<?php echo $object_id; ?>_<?php echo $star['id']; ?>"><?php echo $star['count'] ?></span>)
@@ -71,7 +72,7 @@ include_once ('js/list_ranking_js.php');
             <?php endif; ?>
         </div>  
          <!-- TAINACAN: mostra os rankings do tipo like, icones do glyphicons  -->
-        <div id="single_binaries_<?php echo $object_id; ?>">
+        <div id="single_binaries_<?php echo $object_id; ?>" class="single-binaries">
             <?php if (isset($binaries)): ?>    
                 <?php foreach ($binaries as $binary) { ?>
                     <!--span><b><?php echo $binary['name']; ?></b></span>&nbsp;<br-->
@@ -83,7 +84,9 @@ include_once ('js/list_ranking_js.php');
                         <span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span>
                     </a>
                     <span id="single_counter_down_<?php echo $object_id; ?>_<?php echo $binary['id']; ?>"><?php echo $binary['count_down'] ?></span>
-                    (<b> <?php _e('Score: ','tainacan') ?><span id="single_score_<?php echo $object_id; ?>_<?php echo $binary['id']; ?>"><?php echo $binary['value'] ?></span> </b>)<br>
+                    <div class="score-counter">
+                        (<b><?php _e('Score: ','tainacan') ?> <span id="single_score_<?php echo $object_id; ?>_<?php echo $binary['id']; ?>"><?php echo $binary['value'] ?></span></b>)<br>
+                    </div>
                     
                 <?php } ?>
             <?php endif; ?>

@@ -5,8 +5,6 @@
  */
 require_once(dirname(__FILE__) . '/rdf_collection_model.php');
 
-
-
 class RDFRepositoryModel extends RDFCollectionModel {
     var $root;
     var $root_url;

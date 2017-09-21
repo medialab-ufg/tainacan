@@ -16,7 +16,7 @@ class FiltersModel extends Model {
      * @param int $collection_id O id da colecao que sera gerado o json
      * @return json O conteudo do dynatree
      */
-   public function initDynatreePropertiesFilter($collection_id,$hide_checkbox = true) {
+   public function initDynatreePropertiesFilter($collection_id,$hide_checkbox = true,$is_layout = false) {
         $dynatree = [];
         $roots_parents = [
         get_term_by('name','socialdb_property_data','socialdb_property_type')->term_id,
@@ -44,19 +44,21 @@ class FiltersModel extends Model {
                  //insiro a propriedade da classe no dynatree
                  $children = $this->getChildren($propertyObject->term_id);
                  if (count($children) > 0) {
+                     $class= $this->get_class_property_type($this->get_property_type($propertyObject->term_id));
                     $dynatree[] = array(
-                            'title' => Words($propertyObject->name, 30), 
+                            'title' => Words(utf8_encode(utf8_decode($propertyObject->name)), 30),
                             'key' => $propertyObject->term_id,  
                             'expand' => true, 
                             'hideCheckbox' => $hide_checkbox, 
-                            'children' => $this->childrenDynatreePropertiesFilter($propertyObject->term_id, 'color_property4'),
-                            'addClass' => 'color_property4');      
+                            'children' => $this->childrenDynatreePropertiesFilter($propertyObject->term_id, $class),
+                            'addClass' => $class);      
                  }else{
+                     $class= $this->get_class_property_type($this->get_property_type($propertyObject->term_id));
                      $dynatree[] = array(
-                            'title' => Words($propertyObject->name, 30), 
+                            'title' => Words(utf8_encode(utf8_decode($propertyObject->name)), 30),
                             'key' => $propertyObject->term_id,  
                             'hideCheckbox' => $hide_checkbox, 
-                            'addClass' => 'color_property4'); 
+                            'addClass' => $class);   
                  }
             }
         }
@@ -64,6 +66,58 @@ class FiltersModel extends Model {
         return json_encode($dynatree);
     }
     
+    /**
+     * @signature initDynatreePropertiesFilter($collection_id)
+     * @param int $collection_id O id da colecao que sera gerado o json
+     * @return json O conteudo do dynatree
+     */
+   public function initDynatreeTypePropertiesFilter($collection_id,$hide_checkbox = true,$type = 'socialdb_property_data') {
+        $dynatree = [];
+        $roots_parents = [
+        get_term_by('name','socialdb_property_data','socialdb_property_type')->term_id,
+        get_term_by('name','socialdb_property_object','socialdb_property_type')->term_id,
+        get_term_by('name','socialdb_property_term','socialdb_property_type')->term_id ];
+        $facets_id = array_filter(array_unique((get_post_meta($collection_id, 'socialdb_collection_facets'))?get_post_meta($collection_id, 'socialdb_collection_facets'):[]));
+        $properties = [];
+        $this->get_collection_properties($properties,0,$facets_id);
+        $properties = array_unique($properties);
+        //busco as propriedades sem domain
+        $properties_with_no_domain = $this->list_properties_by_collection($collection_id);
+        if($properties_with_no_domain&&is_array($properties_with_no_domain)){
+            foreach ($properties_with_no_domain as $property_with_no_domain) {
+                if(!in_array($property_with_no_domain->term_id, $properties)){
+                    $properties[] = $property_with_no_domain->term_id;
+                }
+            }
+        }
+        if($properties&&  is_array($properties)){
+            foreach ($properties as $property) {
+                 // busco o objeto da propriedade
+                 $propertyObject = get_term_by('id', $property, 'socialdb_property_type');
+                 if(!$propertyObject||!in_array($propertyObject->parent, $roots_parents)||$this->get_property_type($property)!=$type)
+                     continue;
+                 //insiro a propriedade da classe no dynatree
+                 $children = $this->getChildren($propertyObject->term_id);
+                 if (count($children) > 0) {
+                    $dynatree[] = array(
+                            'title' => Words($propertyObject->name, 30), 
+                            'key' => $propertyObject->term_id,  
+                            'expand' => true, 
+                            'hideCheckbox' => $hide_checkbox, 
+                            'children' => $this->childrenDynatreePropertiesFilter($propertyObject->term_id, 'color_property4'),
+                            'addClass' => $this->get_class_property_type($type));      
+                 }else{
+                     $dynatree[] = array(
+                            'title' => Words($propertyObject->name, 30), 
+                            'key' => $propertyObject->term_id,  
+                            'hideCheckbox' => $hide_checkbox, 
+                            'addClass' => $this->get_class_property_type($type)); 
+                 }
+            }
+        }
+       $this->sortDynatree($dynatree);
+        return json_encode($dynatree);
+    }
     /** function getChildrenDynatree() 
     * receive ((int,string) id,(array) dynatree) 
     * Return the children of the facets and insert in the array of the dynatree 
@@ -126,6 +180,17 @@ class FiltersModel extends Model {
         }                
     }
     
+    /**
+     * 
+     * @param type $param
+     */
+    public function get_class_property_type($type) {
+        if($type=='socialdb_property_data'){
+            return 'attribute';
+        }else{
+             return 'relation';
+        }
+    }
     
     
     

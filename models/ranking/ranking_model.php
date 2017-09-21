@@ -23,7 +23,7 @@ class RankingModel extends Model {
      * Metodo responsavel por instanciar o model property
      * @autor: Marco Tulio 
      */
-    public function RankingModel() {
+    public function __construct() {
         $this->property_model = new PropertyModel();
     }
 
@@ -115,6 +115,10 @@ class RankingModel extends Model {
             }
             $edit_ranking = wp_update_term($data['ranking_id'], 'socialdb_property_type', array('name' => $data['ranking_name']) );
             $data['edited'] = $edit_ranking;
+            if($edit_ranking){
+                $data['msg'] = __('Operation is successfully','tainacan');
+                $data['success'] = 'true';
+            }
 
             return json_encode($data);
 
@@ -172,6 +176,7 @@ class RankingModel extends Model {
         //$all_properties_id = get_term_meta($category_root, 'socialdb_category_property_id');
         $all_properties_id = $this->get_parent_properties($category_root, [], $category_root_id);
         $data['category_root'] = $category_root; // coloco no array que sera utilizado na view
+        $all_properties_id = array_unique($all_properties_id);
         foreach ($all_properties_id as $property_id) {// varro todas propriedades
             $type = $this->property_model->get_property_type($property_id); // pego o tipo da propriedade
             $all_data = $this->property_model->get_all_property($property_id,true); // pego todos os dados possiveis da propriedade
@@ -335,6 +340,10 @@ class RankingModel extends Model {
      */
     public function save_vote($data, $update_value = true,$is_binary = false) {
 
+        $logData = ['collection_id' => $data['collection_id'], 'item_id' => $data['object_id'],
+            'resource_id' => $data['property_id'], 'event_type' => 'user_items', 'event' => 'vote'];
+        Log::addLog($logData);
+        
         $property = get_term_by('id', $data['property_id'], 'socialdb_property_type');
         $is_voted = $this->is_already_voted(get_current_user_id(), $property->term_taxonomy_id, $data['object_id']);
         if (!$is_voted) {

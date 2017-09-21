@@ -31,6 +31,7 @@ include_once ('js/edit_data_property_form_js.php'); ?>
         <input type="radio" <?php if($value->metas->socialdb_property_required=='true') echo 'checked="checked";' ?> name="socialdb_event_property_data_edit_required" id="single_event_edit_property_data_required_true" value="true">&nbsp;<?php _e('Yes','tainacan'); ?>
         <input type="radio" <?php if($value->metas->socialdb_property_required=='false') echo 'checked="checked";' ?> name="socialdb_event_property_data_edit_required" id="single_event_edit_property_data_required_false"  value="false">&nbsp;<?php _e('No','tainacan'); ?>
     </div>
+    <?php  do_action('form_modify_property_data') ?>
     <input type="hidden" id="single_event_edit_property_data_collection_id" name="socialdb_event_collection_id" value="<?php echo $collection_id; ?>">
     <input type="hidden" id="single_event_edit_property_data_object_id" name="property_data_object_id" value="<?php echo $object_id; ?>">
     <input type="hidden" id="single_event_edit_property_data_create_time" name="socialdb_event_create_date" value="<?php echo mktime(); ?>">

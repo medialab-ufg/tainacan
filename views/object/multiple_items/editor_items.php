@@ -1,11 +1,16 @@
 <?php
+/*
 include_once ('../../../../../wp-config.php');
 include_once ('../../../../../wp-load.php');
 include_once ('../../../../../wp-includes/wp-db.php');
+*/
 include_once ('js/editor_items_js.php');
+include_once (dirname(__FILE__).'/../js/multiple_draft_js.php');
 include_once(dirname(__FILE__).'/../../../helpers/view_helper.php');
+include_once(dirname(__FILE__).'/../../../helpers/object/object_properties_widgets_helper.php');
 
 $view_helper = new ViewHelper();
+$object_properties_widgets_helper = new ObjectWidgetsHelper();
 
 $properties_terms_radio = [];
 $properties_terms_tree = [];
@@ -23,20 +28,21 @@ $filesVideo= [];
 $filesAudio= [];
 $filesPdf= [];
 $filesOther= [];
+//referencias
+$references = [
+    'properties_autocomplete' => &$properties_autocomplete,
+    'properties_terms_radio' => &$properties_terms_radio,
+    'properties_terms_checkbox' => &$properties_terms_checkbox,
+    'properties_terms_tree' => &$properties_terms_tree,
+    'properties_terms_selectbox' => &$properties_terms_selectbox,
+    'properties_terms_multipleselect' => &$properties_terms_multipleselect,
+    'properties_terms_treecheckbox' => &$properties_terms_treecheckbox   
+];
 ?>
-
 <div class="row" style="padding-right: 0px;padding-left: 0px;">
       <!-------------- METADADOS - BLOCO ESQUERDO (COL-MD-3) --------------------->
-    <div style="
-         display:none;
-         background: white;
-         border: 3px solid #E8E8E8;
-         font: 11px Arial;
-         max-height: 655px;
-         overflow-y: scroll;
-         min-height: 449px;" 
-             id='form_properties_items' 
-             class="col-md-3 menu_left_files menu-left-size">
+    <div id='form_properties_items' class="col-md-3 menu_left_files menu-left-size">
+            <input type="hidden" class="is_first_time" name="is_first_time" value="true">
             <h3 style="display:none;" id='labels_items_selected' ><?php _e('Editting ','tainacan') ?>
                 <span id='number_of_items_selected'></span>
                 <?php _e(' item/items ','tainacan') ?>
@@ -77,9 +83,9 @@ $filesOther= [];
                     <?php echo ($view_helper->terms_fixed['title']) ? $view_helper->terms_fixed['title']->name :  _e('Title','tainacan') ?>
                 </h2>
                 <div class="form-group">                
-                    <input class="form-control" 
+                    <input 
                            type="text" 
-                           class="form-control" 
+                           class="form-control auto-save" 
                            id="multiple_object_name" 
                            name="object_name" 
                            required="required" 
@@ -95,7 +101,7 @@ $filesOther= [];
                     <?php echo ($view_helper->terms_fixed['description']) ? $view_helper->terms_fixed['description']->name :  __('Description','tainacan') ?> 
                 </h2>
                 <div id="object_description" class="form-group">          
-                    <textarea class="form-control" 
+                    <textarea class="form-control auto-save" 
                               id="multiple_object_description" 
                               onblur="setDescription(this)"
                                name="multiple_object_description" ></textarea>     
@@ -107,8 +113,8 @@ $filesOther= [];
                     <?php echo ($view_helper->terms_fixed['tags']) ? $view_helper->terms_fixed['tags']->name :  _e('Tags','tainacan') ?> 
                 </h2>
                 <div class="form-group">                
-                    <input onblur="setTags(this)" type="text" class="form-control" id="multiple_object_tags" name="object_tags"  >
-                    <span style="font-size: 8px;" class="label label-default">*<?php _e('The set of tags may be inserted by commas','tainacan') ?></span>
+                    <input onblur="setTags(this)" type="text" class="form-control auto-save" id="multiple_object_tags" name="object_tags"  >
+                    <span style="font-size: 7px;" class="label label-default">*<?php _e('The set of tags may be inserted by commas','tainacan') ?></span>
                 </div> 
             </div>   
             <div id="socialdb_object_dc_source"
@@ -118,7 +124,7 @@ $filesOther= [];
                     <?php echo ($view_helper->terms_fixed['source']) ? $view_helper->terms_fixed['source']->name :  _e('Source','tainacan') ?>
                 </h2>
                  <div class="form-group">                
-                     <input onblur="setSource(this)" type="text" class="form-control" id="multiple_object_source" name="object_source"  placeholder="<?php _e('Source of the item','tainacan') ?>">
+                     <input onblur="setSource(this)" type="text" class="form-control auto-save" id="multiple_object_source" name="object_source"  placeholder="<?php _e('Source of the item','tainacan') ?>">
                 </div> 
             </div>    
 
@@ -185,7 +191,7 @@ $filesOther= [];
                                    class="chosen-selected form-control"  />  
                             <select onclick="clear_select_object_property(this,'<?php echo $property['id']; ?>');" 
                                     id="multiple_property_value_<?php echo $property['id']; ?>_<?php echo $object_id; ?>_add" 
-                                    multiple class="chosen-selected2 form-control" 
+                                    multiple class="chosen-selected2 form-control auto-save" 
                                     style="height: auto;" 
                                     name="socialdb_property_<?php echo $property['id']; ?>[]" 
                                         <?php if($property['metas']['socialdb_property_required']=='true'): echo 'required="required"'; endif; ?> >
@@ -221,14 +227,14 @@ $filesOther= [];
                                            onchange="setPropertyData(this,'<?php echo $property['id']  ?>')"
                                            type="text" 
                                            id='multiple_socialdb_property_<?php echo $property['id']; ?>'
-                                           class="form-control multiple_socialdb_property_<?php echo $property['id']; ?>" 
+                                           class="form-control auto-save multiple_socialdb_property_<?php echo $property['id']; ?>" 
                                            value="<?php if($property['metas']['socialdb_property_default_value']): echo $property['metas']['socialdb_property_default_value']; endif; ?>" 
                                            name="socialdb_property_<?php echo $property['id']; ?>"
                                            <?php if($property['metas']['socialdb_property_required']=='true'): echo 'required="required"'; endif; ?>>
                             <?php }elseif($property['type']=='textarea') { ?>   
                                   <textarea onblur="setPropertyData(this,'<?php echo $property['id']  ?>')"
                                             onchange="setPropertyData(this,'<?php echo $property['id']  ?>')"
-                                            class="form-control multiple_socialdb_property_<?php echo $property['id']; ?>" 
+                                            class="form-control auto-save multiple_socialdb_property_<?php echo $property['id']; ?>" 
                                              id='multiple_socialdb_property_<?php echo $property['id']; ?>'
                                             name="socialdb_property_<?php echo $property['id']; ?>"
                                             <?php if($property['metas']['socialdb_property_required']=='true'): echo 'required="required"'; endif; ?>><?php if($property['metas']['socialdb_property_default_value']): echo $property['metas']['socialdb_property_default_value']; endif; ?>
@@ -236,10 +242,11 @@ $filesOther= [];
                              <?php }elseif($property['type']=='numeric') { ?>   
                                   <input onblur="setPropertyData(this,'<?php echo $property['id']  ?>')"
                                          onchange="setPropertyData(this,'<?php echo $property['id']  ?>')"
-                                         type="number" 
+                                         type="text" 
+                                         onkeypress='return onlyNumbers(event)' 
                                          id='multiple_socialdb_property_<?php echo $property['id']; ?>'
                                          value="<?php if($property['metas']['socialdb_property_default_value']): echo $property['metas']['socialdb_property_default_value']; endif; ?>" 
-                                         class="form-control multiple_socialdb_property_<?php echo $property['id']; ?>"
+                                         class="form-control auto-save multiple_socialdb_property_<?php echo $property['id']; ?>"
                                          name="socialdb_property_<?php echo $property['id']; ?>" 
                                          <?php if($property['metas']['socialdb_property_required']=='true'): echo 'required="required"'; endif; ?>>
                              <?php }elseif($property['type']=='autoincrement') {  ?>   
@@ -248,17 +255,22 @@ $filesOther= [];
                                          disabled="disabled"  
                                          onkeypress='return onlyNumbers(event)'
                                          id='multiple_socialdb_property_<?php echo $property['id']; ?>'
-                                         type="number" 
-                                         class="form-control multiple_socialdb_property_<?php echo $property['id']; ?>" 
+                                         type="text" 
+                                         onkeypress='return onlyNumbers(event)'
+                                         class="form-control auto-save multiple_socialdb_property_<?php echo $property['id']; ?>" 
                                          name="only_showed_<?php echo $property['id']; ?>" value="<?php if(is_numeric($property['metas']['socialdb_property_data_value_increment'])): echo $property['metas']['socialdb_property_data_value_increment']+1; endif; ?>">
                                   <!--input type="hidden"  name="socialdb_property_<?php echo $property['id']; ?>" value="<?php if($property['metas']['socialdb_property_data_value_increment']): echo $property['metas']['socialdb_property_data_value_increment']+1; endif; ?>" -->
-                            <?php }else{ ?>
+                           <?php }else if($property['type'] == 'radio' && $property['name'] == 'Status'){ ?>
+                                  <input   type="radio" onchange="setCategoriesRadio(<?php echo $property['id']; ?>,'current')" checked="checked" name="socialdb_property_<?php echo $property['id']; ?>" value="current">&nbsp;<?php _e('Current', 'tainacan') ?><br>
+                                  <input   type="radio" onchange="setCategoriesRadio(<?php echo $property['id']; ?>,'intermediate')" name="socialdb_property_<?php echo $property['id']; ?>" value="intermediate">&nbsp;<?php _e('Intermediate', 'tainacan') ?><br>
+                                  <input   type="radio" onchange="setCategoriesRadio(<?php echo $property['id']; ?>,'permanently')" name="socialdb_property_<?php echo $property['id']; ?>" value="permanently">&nbsp;<?php _e('Permanently', 'tainacan') ?><br>
+                           <?php }else{ ?>
                                   <input onblur="setPropertyData(this,'<?php echo $property['id']  ?>')"
                                          onchange="setPropertyData(this,'<?php echo $property['id']  ?>')"
                                          type="date" 
                                           id='multiple_socialdb_property_<?php echo $property['id']; ?>'
                                          value="<?php if($property['metas']['socialdb_property_default_value']): echo $property['metas']['socialdb_property_default_value']; endif; ?>" 
-                                         class="form-control multiple_socialdb_property_<?php echo $property['id']; ?>" 
+                                         class="form-control auto-save multiple_socialdb_property_<?php echo $property['id']; ?>" 
                                          name="socialdb_property_<?php echo $property['id']; ?>" <?php if($property['metas']['socialdb_property_required']=='true'): echo 'required="required"'; endif; ?>>
                             <?php } ?> 
                             <?php echo $view_helper->render_button_cardinality($property,$i) ?>    
@@ -270,7 +282,6 @@ $filesOther= [];
         <?php endif; 
         //lista as propriedades de dados
          if((isset($properties['property_term']))): ?>
-            <!--h4><?php _e('Term properties','tainacan'); ?></h4-->
             <?php foreach ( $properties['property_term'] as $property ) { 
 //                if(!isset($property['has_children'])||empty($property['has_children'])){
 //                    continue;
@@ -312,7 +323,7 @@ $filesOther= [];
                             $properties_terms_selectbox[] = $property['id']; 
                              ?>
                              <select onchange="setCategoriesSelect('<?php echo $property['id']; ?>',this)" 
-                                     class="form-control" 
+                                     class="form-control auto-save" 
                                      name="multiple_socialdb_propertyterm_<?php echo $property['id']; ?>" 
                                      id='multiple_field_property_term_<?php echo $property['id']; ?>' <?php if($property['metas']['socialdb_property_required']=='true'): echo 'required="required"'; endif; ?>>
                                
@@ -331,7 +342,7 @@ $filesOther= [];
                             $properties_terms_multipleselect[] = $property['id']; 
                              ?>
                              <select onchange="setCategoriesSelectMultiple('<?php echo $property['id']; ?>',this)" 
-                                     multiple class="form-control" 
+                                     multiple class="form-control auto-save" 
                                      name="multiple_socialdb_propertyterm_<?php echo $property['id']; ?>" 
                                      id='multiple_field_property_term_<?php echo $property['id']; ?>' <?php if($property['metas']['socialdb_property_required']=='true'): echo 'required="required"'; endif; ?>></select>
                             <?php
@@ -350,9 +361,11 @@ $filesOther= [];
                           }
                          ?> 
                     </div>  
+                    <div id="append_properties_categories_<?php echo $property['id']; ?>"></div>
                 </div>
              <?php  } ?>
         <?php endif; ?>
+        <?php $object_properties_widgets_helper->list_properties_compounds($properties['property_compounds'], 0,$references)  ?>
         <!-- TAINACAN: a licencas do item -->
         <div id="list_licenses_items"
              <?php echo $view_helper->get_visibility($view_helper->terms_fixed['license']) ?>  
@@ -371,30 +384,26 @@ $filesOther= [];
         <?php endif; ?>
 
     </div> 
-    <div id='no_properties_items' style="height: 655px;background: white;border: 3px solid #E8E8E8;font: 11px Arial;"  
-         class="col-md-3 menu-left-size">
+    <div id='no_properties_items' class="col-md-3 menu-left-size">
          <h3> <?php _e('Select items to edit...','tainacan') ?> </h3>
     </div>
-    <div id='selectingAttachment'
-         style="height: 655px;display:none;background: white;border: 3px solid #E8E8E8;font: 11px Arial;"  
-         class="col-md-3 menu-left-size">
-         <h3 ><?php _e('Select attachments to ','tainacan') ?>
-             <span id="nameItemAttachment"></span>
+    <div id='selectingAttachment' class="col-md-3 menu-left-size">
+         <h3> <?php _e('Select attachments to ','tainacan') ?> <span id="nameItemAttachment"></span>
          </h3>
     </div>
 <!------------------------------- LISTA ITEMS UPADOS - BLOCO CENTRO DIREITO (COL-MD-9) -------------------------------------------------------------->
     <form id='sumbit_multiple_items'>
         <div class='col-md-9' id="no_item_uploaded" style='display:none;'>
-            <h3 style="text-align: center;"><?php _e('No items uploaded','tainacan') ?></h3>
+            <h3 style="text-align: center;"> <?php _e('No items uploaded','tainacan') ?> </h3>
         </div>
-        <div class='col-md-9 pull-right' 
-             style="background-color: white;border: 3px solid #E8E8E8;margin-left: 15px;">
+        <div class='col-md-9 pull-right' style="background-color: white;border: 3px solid #E8E8E8;margin-left: 15px;">
             <h3>
                 <?php _e('Add new item - Send local file','tainacan') ?>
-                <button type="button" onclick="back_main_list();"
-                        class="btn btn-default pull-right"> 
-                            <?php _e('Cancel','tainacan') ?>
+                <button type="button" onclick="back_main_list();" class="btn btn-default pull-right">
+                    <?php _e('Cancel','tainacan') ?>
                 </button>
+                <br>
+                <small id="draft-text"></small>
             </h3>
             <hr>
             <!--------------- BOTOES PARA MANIPULACAO DOS ITENS ---------------->
@@ -558,7 +567,7 @@ $filesOther= [];
                                <div style="padding-top: 20px;padding-bottom: 20px;cursor: pointer;" class="item" id="panel_<?php echo $file['ID'] ?>"   ><!-- container do item -->      
                                <input style="display:none" class="class_selected_items" id="item_option_<?php echo $file['ID'] ?>" onchange="selectedItems()" type="checkbox" name="selected_items" value="<?php echo $file['ID'] ?>" >
                                <input id="attachment_option_<?php echo $file['ID'] ?>" onchange="manipulateAttachaments('<?php echo $file['ID'] ?>')" class="class_checkboxAttachments" style="display:none" type="checkbox" name="checkboxAttachments"  value="<?php echo $file['ID'] ?>">
-                               <?php echo wp_get_attachment_image( $file['ID'],'thumbnail',1,['alt'   =>'' ] ); ?>  
+                               <?php echo wp_get_attachment_image( $file['ID'],'thumbnail',1,['alt'=>'' ] ); ?>
                                </div>     
                                <input required="required" 
                                       class='input_title'
@@ -659,6 +668,7 @@ $filesOther= [];
                                 <!-- Hidden para as categorias, tags e attachments  -->
                                 <input type="hidden" id="source_<?php echo $file['ID'] ?>" name="source_<?php echo $file['ID'] ?>" value=''>
                                 <input type="hidden" name="type_<?php echo $file['ID'] ?>" value='pdf'>
+                                <input type="hidden" id="pdf_url_<?php echo $file['ID'] ?>" name="pdf_url_<?php echo $file['ID'] ?>" value='<?php echo wp_get_attachment_url($file['ID']); ?>'>
                                 <input type="hidden" id='parent_<?php echo $file['ID'] ?>' name="parent_<?php echo $file['ID'] ?>" value=''>
                                 <input type="hidden" id='attachments_<?php echo $file['ID'] ?>' name="attachments_<?php echo $file['ID'] ?>" value=''>
                                 <input type="hidden" id='description_<?php echo $file['ID'] ?>' name="description_<?php echo $file['ID'] ?>" value=''>
@@ -791,6 +801,92 @@ $filesOther= [];
                 <hr>
                 <?php
             }
+
+            //OFFICE DOCUMENTS
+            if(is_array($items['office'])){
+                ?>
+                <div id="container_office" class='col-md-12'>
+                    <h4>
+                        <input class="class_selected_items"
+                               type='checkbox'
+                               id='selectAllOther'
+                               onclick="selectOther()"
+                               value='#'> &nbsp;<?php _e('Others Files','tainacan') ?>
+                    </h4>
+                    <?php
+                    foreach ($items['office'] as $file) {
+                        $files[] = $file['ID'];
+                        $filesOther[] = $file['ID'];
+                        ?>
+                        <div onclick="focusItem('<?php echo $file['ID'] ?>')" >
+                            <div
+                                id="wrapper_<?php echo $file['ID'] ?>"
+                                class="col-md-3 item-default"
+                                style="padding-top: 20px;cursor: pointer;">
+                                <center>
+                                    <div style="padding-top: 20px;padding-bottom: 20px;cursor: pointer;" class="item" id="panel_<?php echo $file['ID'] ?>"  ><!-- container do item -->
+                                        <input style="display:none" class="class_selected_items" id="item_option_<?php echo $file['ID'] ?>"  onchange="selectedItems()" type="checkbox" name="selected_items" value="<?php echo $file['ID'] ?>" >
+                                        <input id="attachment_option_<?php echo $file['ID'] ?>" onchange="manipulateAttachaments('<?php echo $file['ID'] ?>')" class="class_checkboxAttachments" style="display:none" type="checkbox" name="checkboxAttachments"  value="<?php echo $file['ID'] ?>">
+                                        <?php echo wp_get_attachment_image( $file['ID'],'thumbnail',1,['alt'   =>'' ] ); ?>
+                                    </div>
+                                    <input required="required"
+                                           class='input_title'
+                                           placeholder="<?php _e('Add a title','tainacan') ?>"
+                                           type="text" id='title_<?php echo $file['ID'] ?>'
+                                           name='title_<?php echo $file['ID'] ?>'
+                                           value='<?php echo $file['name'] ?>'>
+                                    <!-- Hidden para as categorias, tags e attachments  -->
+                                    <input type="hidden" id="source_<?php echo $file['ID'] ?>" name="source_<?php echo $file['ID'] ?>" value=''>
+                                    <input type="hidden" name="type_<?php echo $file['ID'] ?>" value='office'>
+                                    <input type="hidden" name="ext_<?php echo $file['ID'] ?>" value='<?php echo $file['ext'];?>'>
+                                    <input type="hidden" id='parent_<?php echo $file['ID'] ?>' name="parent_<?php echo $file['ID'] ?>" value=''>
+                                    <input type="hidden" id='attachments_<?php echo $file['ID'] ?>' name="attachments_<?php echo $file['ID'] ?>" value=''>
+                                    <input type="hidden" id='description_<?php echo $file['ID'] ?>' name="description_<?php echo $file['ID'] ?>" value=''>
+                                    <input type="hidden" id='categorias_<?php echo $file['ID'] ?>' name="categorias_<?php echo $file['ID'] ?>" value=''>
+                                    <input type="hidden" id='tags_<?php echo $file['ID'] ?>' name="tags_<?php echo $file['ID'] ?>" value=''>
+                                    <input type="hidden" id='license_<?php echo $file['ID'] ?>' name="license_<?php echo $file['ID'] ?>" value=''>
+                                    <!-- hiddens para valores das propriedades de dados dos items a serem criados -->
+                                    <?php
+                                    if(is_array($data_properties)):
+                                        foreach ($data_properties as $value) { ?>
+                                            <input type="hidden"
+                                                   name='socialdb_property_<?php echo $value['id'] ?>_<?php echo $file['ID'] ?>'
+                                                   id='socialdb_property_<?php echo $value['id'] ?>_<?php echo $file['ID'] ?>'
+                                                   value='<?php if($value['default_value']&&!empty($value['default_value'])): echo $value['default_value']; endif; ?>'>
+                                        <?php  }
+                                    endif;
+                                    ?>
+                                    <!-- hiddens para valores das propriedades de OBJETO dos items a serem criados -->
+                                    <?php
+                                    if(is_array($object_properties)):
+                                        foreach ($object_properties as $value) { ?>
+                                            <input type="hidden"
+                                                   name='socialdb_property_<?php echo $value ?>_<?php echo $file['ID'] ?>'
+                                                   id='socialdb_property_<?php echo $value ?>_<?php echo $file['ID'] ?>'
+                                                   value=''>
+                                        <?php  }
+                                    endif;
+                                    ?>
+                                    <?php
+                                    if(is_array($term_properties_id)):
+                                        foreach ($term_properties_id as $value) { ?>
+                                            <input type="hidden"
+                                                   name='socialdb_property_<?php echo $value ?>_<?php echo $file['ID'] ?>'
+                                                   id='socialdb_property_<?php echo $value ?>_<?php echo $file['ID'] ?>'
+                                                   value=''>
+                                        <?php  }
+                                    endif;
+                                    ?>
+                                </center>
+                            </div>
+                        </div>
+                        <?php
+                    }
+                    ?>
+                </div>
+                <?php
+            }
+
              // OUTROS
             if(is_array($items['others'])){ 
                 ?>
@@ -803,7 +899,7 @@ $filesOther= [];
                            value='#'> &nbsp;<?php _e('Others Files','tainacan') ?>
                 </h4>
                 <?php
-                    foreach ($items['others'] as $file) { 
+                    foreach ($items['others'] as $file) {
                         $files[] = $file['ID'];
                         $filesOther[] = $file['ID'];
                         ?>
@@ -892,18 +988,17 @@ $filesOther= [];
                         class="btn btn-lg btn-default pull-left"> 
                             <?php _e('Cancel','tainacan') ?>
                 </button>
-                 <button type="submit" 
-                          
-                         id="submit_button" 
-                         class="btn btn-lg btn-success pull-right">
-                             <?php _e('Submit','tainacan'); ?>
+                 <button type="submit" id="submit_button" class="btn btn-lg btn-success pull-right">
+                     <?php _e('Submit','tainacan'); ?>
                  </button>
              </div>
               
-        </div>    
+        </div>
+        
         <div class="col-md-12">
-        <input type="hidden" name="collection_id" value="<?php echo $collection_id; ?>">
-        <input type="hidden" name="operation" value="add_multiples">
+            <input type="hidden" name="collection_id" value="<?php echo $collection_id; ?>">
+            <input type="hidden" name="do_extract" value="<?php echo $extract_exif; ?>">
+            <input type="hidden" name="operation" value="add_multiples">
         <input type="hidden" name="multiple_properties_terms_radio" id='multiple_properties_terms_radio' value="<?php echo implode(',',$properties_terms_radio); ?>">
         <input type="hidden" name="multiple_properties_terms_tree" id='multiple_properties_terms_tree' value="<?php echo implode(',',$properties_terms_tree); ?>">
         <input type="hidden" name="multiple_properties_terms_selectbox" id='multiple_properties_terms_selectbox' value="<?php echo implode(',',$properties_terms_selectbox); ?>">
@@ -923,6 +1018,7 @@ $filesOther= [];
         <input type="hidden" id="property_origin" name="property_origin" value="<?php echo $all_ids; ?>">
         <input type="hidden" id="property_added" name="property_added" value="">
         <input type="hidden" id="selected_categories" name="selected_categories" value="">
+        <input type="hidden" class="is_first_time" name="is_first_time" value="true">
         <div id="append_properties_categories" class="hide"></div>
       </div>
     </form>    

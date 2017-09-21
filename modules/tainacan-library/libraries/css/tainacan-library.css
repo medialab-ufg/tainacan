@@ -1,0 +1,95 @@
+/*Classes*/
+.add_padding
+{
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.users-button
+{
+    color: white;
+    margin-top: 26%;
+    margin-left: 10%;
+}
+.users-button:hover{
+    cursor: pointer;
+}
+
+.signed-up-users
+{
+    border: 4px solid #E8E8E8;
+    background: white;
+    padding: 10px 40px 30px 40px;
+    margin: 10px 0 40px 0;
+    text-align: left;
+    color: black;
+}
+
+.table-view-container #table-users.table-bordered {
+    border: none !important;
+    border-collapse: collapse !important;
+    border-right: 0;
+    color: #0c698b;
+    border-bottom: 1px solid #0c698b;
+}
+
+.user_result
+{
+    border: lightgray solid 1px;
+    border-radius: 3px;
+    padding: 6px;
+    margin-left: 8px;
+    margin-right: 8px;
+    margin-top: 4px;
+}
+
+.selected_user
+{
+    border: lightgray solid 1px;
+    border-radius: 3px;
+    min-height: 21.2em;
+
+}
+
+.user_result:hover
+{
+    background-color: lightgrey;
+}
+
+.user_result_selected
+{
+    background-color: grey;
+    color: white;
+}
+
+.user-row:hover{
+    cursor: pointer;
+}
+
+.label_info
+{
+    margin-top: 4px;
+}
+
+/*Seletores*/
+#formmarc
+{
+    padding: 13px;
+}
+
+#place_to_show_user_info
+{
+    padding-left: 6px;
+    padding-right: 6px;
+    padding-top: 6px;
+}
+
+#users_found
+{
+    overflow: auto;
+    height: 155px;
+    border: lightgray solid 1px;
+    border-radius: 3px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}

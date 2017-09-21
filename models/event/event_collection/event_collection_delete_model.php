@@ -1,8 +1,9 @@
 <?php
-
+/*
 include_once ('../../../../../wp-config.php');
 include_once ('../../../../../wp-load.php');
 include_once ('../../../../../wp-includes/wp-db.php');
+*/
 require_once(dirname(__FILE__) . '../../../event/event_model.php');
 
 class EventCollectionDeleteModel extends EventModel {
@@ -68,10 +69,10 @@ class EventCollectionDeleteModel extends EventModel {
             'post_status' => 'draft'
         );
 
-        $collection_items = $this->get_collection_posts($collection_delete_id, "ID");
+        /*$collection_items = $this->get_collection_posts($collection_delete_id, "ID");
         foreach ( $collection_items as $item) {
-            wp_update_post( ['ID' => $item->ID, 'post_status' => 'trash'] );
-        }
+            wp_update_post( ['ID' => $item->ID, 'post_status' => 'draft'] );
+        }*/
 
         // Update the post into the database
         $value = wp_update_post($object);

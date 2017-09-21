@@ -167,15 +167,5 @@ include_once ('js/list_js.php');
         <hr>
         <?php endwhile;
     endif; ?> 
-</div> 
-	<!--	
- <div class="col-md-2"><input type="hidden" class="post_id" name="post_id" value="<?= get_the_ID() ?>"><a href="#" class="edit"><span class="glyphicon glyphicon-edit"></span></a></div>
-                  
-                    <div class="col-md-2"><input type="hidden" class="post_id" name="post_id" value="<?= get_the_ID() ?>"><a href="#" class="remove"> <span class="glyphicon glyphicon-remove"></span></a></div>
-             
-    <script>
-               $(function(){
-						console.log('here');
-               });
-    </script> -->
+</div>
             

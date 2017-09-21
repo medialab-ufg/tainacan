@@ -226,14 +226,14 @@
             $.ajax({
                 url: $('#src').val() + '/controllers/property/property_controller.php',
                 type: 'POST',
-                data: {collection_id: $("#collection_id").val(), category_id: $("#property_object_category_id").val(), operation: 'show_reverses', property_id: $('#property_category_id').val()}
+                data: {collection_id: $("#collection_id").val(), category_id: $("#property_object_category_id").val(), operation: 'show_reverses', property_id: $('#property_object_domain_category_id').val()}
             }).done(function (result) {
                 elem = jQuery.parseJSON(result);
                 $('#property_object_reverse').html('');
                 if (elem.no_properties === false) {
                     $('#property_object_reverse').html('<option value=""><?php _e('None','tainacan') ?></option>');
+        
                     $.each(elem.property_object, function (idx, property) {
-                        //console.log(property.id,selected);
                         if (property.id == selected) {
                             $('#property_object_reverse').append('<option selected="selected" value="' + property.id + '">' + property.name + ' - (' + property.type + ')</option>');
                         } else {
@@ -308,6 +308,8 @@
     }
 <?php // edicao das propriedades de objeto     ?>
     function edit_object(id) {
+        showDynatreesDomains($('#src').val());
+        showPropertyCategoryDynatree($('#src').val());
         $.ajax({
             url: $('#src').val() + '/controllers/property/property_controller.php',
             type: 'POST',
@@ -345,9 +347,7 @@
                 }
             }
            //relacionamento da propriedade de objeto
-           // console.log(elem.metas.socialdb_property_object_category_id.constructor ===Array);
-            if(elem.metas.socialdb_property_object_category_id.constructor === Array){
-               //  console.log('first');
+            if(elem.metas.socialdb_property_object_category_id && elem.metas.socialdb_property_object_category_id.constructor === Array){
                 if($("#property_category_dynatree")){
                        $("#property_category_dynatree").dynatree("getRoot").visit(function (node) {
                                node.select(false);
@@ -365,7 +365,6 @@
                        });
                 }
             }else if(elem.metas.socialdb_property_object_category_id){
-               //  console.log('second');
                  if($("#property_category_dynatree")){
                        $("#property_category_dynatree").dynatree("getRoot").visit(function (node) {
                                node.select(false);
@@ -420,7 +419,6 @@
             $("#property_term_id").val(elem.id);
             $("#property_term_name").val(elem.name);
              //dominio da propriedade
-             console.log(elem);
             var created_categories = elem.metas.socialdb_property_created_category;
             var used_by_categories = elem.metas.socialdb_property_used_by_categories;
             if(created_categories||used_by_categories){
@@ -578,8 +576,6 @@
                 <?php if(has_action('javascript_onselect_relationship_dynatree_property_object')): ?>
                     <?php do_action('javascript_onselect_relationship_dynatree_property_object') ?>
                 <?php endif; ?>
-                    
-                console.log($('#property_object_category_id').val());
             }
         });
     }
@@ -695,7 +691,6 @@
                     url: $('#src').val() + "/controllers/category/category_controller.php",
                     data: {collection_id: $('#collection_id').val(), operation: 'verify_has_children', category_id: node.data.key}
                 }).done(function (result) {
-                    console.log($("#socialdb_property_term_root").val());
                     $('.dropdown-toggle').dropdown();
                     elem_first = jQuery.parseJSON(result);
                     if (elem_first.type === 'error') {
@@ -705,7 +700,6 @@
                         showAlertGeneral(elem_first.title, elem_first.msg, elem_first.type);
                         $("#socialdb_property_term_root").html('');
                         $("#socialdb_property_term_root").append('<option selected="selected" value="' + node.data.key + '">' + node.data.title + '</option>');
-
                     }
 
                 });
@@ -800,10 +794,8 @@
                     type:type
                   },
                   success: function( data ) {
-                    console.log(data);
                     response( data );
                   },error: function (qXHR,textStatus,errorThrown){
-                      console.log(qXHR,textStatus,errorThrown);
                   }
                 });
             },

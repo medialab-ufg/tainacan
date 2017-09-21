@@ -1,8 +1,9 @@
 <?php
-
+/*
 include_once (dirname(__FILE__) . '/../../../../../../wp-config.php');
 include_once (dirname(__FILE__) . '/../../../../../../wp-load.php');
 include_once (dirname(__FILE__) . '/../../../../../../wp-includes/wp-db.php');
+*/
 require_once(dirname(__FILE__) . '../../../event/event_model.php');
 require_once(dirname(__FILE__) . '../../../property/property_model.php');
 
@@ -72,6 +73,12 @@ class EventPropertyObjectEdit extends EventModel {
         $data['property_object_required'] = get_post_meta($event_id, 'socialdb_event_property_object_edit_required',true) ;
         $data['property_object_facet'] = get_post_meta($event_id, 'socialdb_event_property_object_edit_is_facet',true) ;
         $data['property_object_is_reverse'] = get_post_meta($event_id, 'socialdb_event_property_object_edit_is_reverse',true) ;
+        $data['property_visualization'] = get_post_meta($event_id, 'socialdb_event_property_visualization',true) ;
+        $data['property_locked'] = get_post_meta($event_id, 'socialdb_event_property_lock_field',true) ;
+        $data['property_to_search_in'] = get_post_meta($event_id, 'socialdb_event_property_to_search_in',true) ;
+        $data['property_avoid_items'] = get_post_meta($event_id, 'socialdb_event_property_avoid_items',true) ;
+        $data['property_habilitate_new_item'] = get_post_meta($event_id, 'socialdb_event_property_habilitate_new_item',true) ;
+        $data['property_default_value'] = get_post_meta($event_id, 'socialdb_event_property_default_value',true) ;
         if($data['property_object_is_reverse']=='true'){
            $data['property_object_reverse'] = get_post_meta($event_id, 'socialdb_event_property_object_edit_reverse',true) ;   
         }

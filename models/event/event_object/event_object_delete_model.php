@@ -1,13 +1,9 @@
 <?php
-
-include_once ('../../../../../wp-config.php');
-include_once ('../../../../../wp-load.php');
-include_once ('../../../../../wp-includes/wp-db.php');
 require_once(dirname(__FILE__) . '../../../event/event_model.php');
 
 class EventObjectDeleteModel extends EventModel {
 
-    public function EventObjectDeleteModel() {
+    public function __construct() {
         $this->parent = get_term_by('name', 'socialdb_event_object_delete', 'socialdb_event_type');
         $this->permission_name = 'socialdb_collection_permission_delete_object';
     }
@@ -15,7 +11,8 @@ class EventObjectDeleteModel extends EventModel {
     /**
      * function generate_title($data)
      * @param string $data  Os dados vindo do formulario
-     * @return ara  
+     * @return ara
+     *
      * 
      * Autor: Eduardo Humberto 
      */
@@ -35,9 +32,25 @@ class EventObjectDeleteModel extends EventModel {
      */
     public function verify_event($data,$automatically_verified = false) {
        $actual_state = get_post_meta($data['event_id'], 'socialdb_event_confirmed',true);
-       if($actual_state!='confirmed'&&$automatically_verified||(isset($data['socialdb_event_confirmed'])&&$data['socialdb_event_confirmed']=='true')){// se o evento foi confirmado automaticamente ou pelos moderadores
+
+        if (has_filter('tainacan_alter_permission_actions')) {
+            if(is_null($actual_state) && $data['socialdb_event_confirmed']=='true') {
+                $this->update_event_state('confirmed', $data['event_id']);
+                $actual_state = get_post_meta($data['event_id'], 'socialdb_event_confirmed',true);
+            }
+        }
+        //filtro que altera o retorno do evento
+        if(has_filter('tainacan_alter_delete_object'))
+        {
+            $break =  apply_filters('tainacan_alter_delete_object',$data);
+            if($break){
+                return json_encode($break);
+            }
+        }
+       // se o evento foi confirmado automaticamente ou pelos moderadores
+       if( $actual_state!='confirmed'&&$automatically_verified  ||(isset($data['socialdb_event_confirmed'])&&$data['socialdb_event_confirmed']=='true') ) {
            $data = $this->update_post_status(get_post_meta($data['event_id'], 'socialdb_event_object_item_id',true),$data,$automatically_verified);    
-       }elseif($actual_state!='confirmed'){
+       } elseif($actual_state!='confirmed'){
            $this->set_approval_metas($data['event_id'], $data['socialdb_event_observation'], $automatically_verified);
            $this->update_event_state('not_confirmed', $data['event_id']);
            $data['msg'] = __('The event was successful NOT confirmed','tainacan');
@@ -61,16 +74,42 @@ class EventObjectDeleteModel extends EventModel {
      * Autor: Eduardo Humberto 
      */
     public function update_post_status($object_id,$data,$automatically_verified) {
-         $collection_id = get_post_meta($data['event_id'],'socialdb_event_collection_id',true);
-        // Update the post
-        $object = array(
-            'ID' => $object_id,
-            'post_status' => 'trash'
-        );
-        // Update the post into the database
-        $value = wp_update_post($object);
-        if ($value>0) {
-            $this->set_approval_metas($data['event_id'], $data['socialdb_event_observation'], $automatically_verified);
+        $collection_id = get_post_meta($data['event_id'],'socialdb_event_collection_id',true);
+        // verifico se o item nao eh apenas vinculado
+        $array =  get_post_meta($collection_id, 'socialdb_collection_vinculated_object');
+        if($array && is_array($array) && in_array($object_id, $array) && is_numeric($object_id)) {
+            delete_post_meta($collection_id, 'socialdb_collection_vinculated_object',$object_id);
+            $category_id = $this->get_category_root_of($collection_id);
+            if(is_numeric($category_id))
+              $result = wp_remove_object_terms( $object_id,[absint($category_id)],'socialdb_category_type');
+            $value = $object_id;
+        } else {
+            // Update the post
+            $object = array(
+                'ID' => $object_id,
+                'post_status' => 'draft'
+            );
+            // Update the post into the database
+            $value = wp_update_post($object);
+
+            if(has_filter('tainacan_delete_item_perm')) {
+                $this->update_event_state('confirmed', $data['event_id']); // seto a o evento como invalido
+                //return apply_filters('tainacan_delete_item_perm', $value, $collection_id);
+                apply_filters('tainacan_delete_item_perm', $value, $collection_id);
+                $data['msg'] = __('The event was successful','tainacan');
+                $data['type'] = 'success';
+                $data['title'] = __('Success','tainacan');
+                return $data;
+            }
+        }
+        //verificando se todo
+        if ($value > 0) {
+            if ( !array_key_exists("socialdb_event_observation", $data) ) {
+                $_event_observation = "";
+            } else {
+                $_event_observation = $data['socialdb_event_observation'];
+            }
+            $this->set_approval_metas($data['event_id'], $_event_observation, $automatically_verified);
             $this->update_event_state('confirmed', $data['event_id']);
             $data['msg'] = __('The event was successful','tainacan');
             $data['type'] = 'success';

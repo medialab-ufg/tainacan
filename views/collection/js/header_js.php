@@ -31,11 +31,15 @@
         }
     });
 
-    var collection_data = { name: $('.titulo-colecao h3 a').text(), url: $('.titulo-colecao h3 a').attr('href') };
+    var _col_id_ = $("#collection_id").val();
+    var _root_repo_id_ = $("#collection_root_id").val();    
+    setAdminHeader(_root_repo_id_, _col_id_);
+
+    var curr_col_title = $('.titulo-colecao h3 a').text() || $('.titulo-colecao h3').text();
+    var collection_data = { name: curr_col_title, url: $('.titulo-colecao h3 a').attr('href') };
     $("#tainacan-breadcrumbs span.collection-title").text(collection_data.name);
 
     $(function () {
-
         if ( $(".ibram-header").is(":visible") ) {
             $(".collection_header_img").hide();
         }
@@ -48,16 +52,6 @@
             select: function (event, ui) {
                 var str = '' + ui.item.id+'';
                 $("#search_objects").val('');
-                //var temp = $("#chosen-selected2 [value='" + ui.item.value + "']").val();
-//                $("#dynatree").dynatree("getRoot").visit(function (node) {
-//                    //console.log(node.data.key, ui.item.id, '' + node.data.key + '' === '' + ui.item.id + '');
-//                    if ('' + node.data.key + '' === '' + ui.item.id + '') {
-//                        match = node;
-//                        node.toggleExpand();
-//                        node.select(node);
-//                        return true; // stop traversal (if we are only interested in first match)
-//                    }
-//                });
                 if (str.indexOf("_keyword") >= 0) {
                     wpquery_keyword("'" + str.replace('_keyword', '')+ "'");
                 }else{
@@ -78,33 +72,24 @@
         });
 
         notification_events();
-
-        //popover
-        //$('[data-toggle="popover"]').popover();
-
-//        // *************** Iframe Popover Collection ****************
-//        //$('#iframebutton').attr('data-content', 'Teste').data('bs.popover').setContent();
-//        var myPopover = $('#iframebutton').data('popover');
-//        $('#iframebutton').popover('hide');
-//        myPopover.options.html = true;
-//        //<iframe width="560" height="315" src="https://www.youtube.com/embed/CGyEd0aKWZE" frameborder="0" allowfullscreen></iframe>
-//        myPopover.options.content = '<form><input type="text" style="width:200px;" value="<iframe width=\'800\' height=\'600\' src=\'' + $("#socialdb_permalink_collection").val() + '\' frameborder=\'0\'></iframe>" /></form>';
+        get_user_notifications();
+        /*
+        $('.root-notifications a').mouseenter(function() {
+            get_user_notifications();
+        });
+        */
 
     });
-
 
     function clear_list() {
         $("#value_search").val('');
         $("#search_objects").val('');
         $("#search_collections").val('');
         $("#search_collection_field").val('');
-        $("#dynatree").dynatree("getRoot").visit(function (node) {
-            node.select(false);
-        });
 
-        list_main_ordenation();
+        //list_main_ordenation();
         wpquery_clean();
-
+        //reboot_form();
         $("button#clear").fadeOut();
     }
 
@@ -118,49 +103,48 @@
      */
     function notification_events() {
         $.ajax({
-            type: "POST",
-            url: $('#src').val() + "/controllers/event/event_controller.php",
+            type: "POST", url: $('#src').val() + "/controllers/event/event_controller.php",
             data: {collection_id: $('#collection_id').val(), operation: 'notification_events'}
         }).done(function (result) {
-            $('#notification_events').html(result);
-            $('.dropdown-toggle').dropdown();
-            $('.nav-tabs').tab();
+            if(result.length > 6 && result != undefined) {
+                $('.notification_events').html(result).css('padding', '0 4px 2px 1px');
+            } else {
+                $('.notification_events').hide();
+            }
         });
     }
-    /**
-     * funcao que gera o arquivo csv
-     * @returns {.csv}
-     */
-    function export_selected_objects() {
-        var search_for = $("#search_objects").val();
-        var selKeys = $.map($("#dynatree").dynatree("getSelectedNodes"), function (node) {
-            return node.data.key;
-        });
 
-        window.location = $('#src').val() + '/controllers/export/export_controller.php?operation=export_selected_objects' +
-                '&collection_id=' + $("#collection_id").val() +
-                '&classifications=' + selKeys.join(", ") +
-                '&ordenation_id=' + $('#collection_single_ordenation').val() +
-                '&order_by=' +
-                '&keyword=' + search_for;
-//        $('#loader_objects').show();
-//        $.ajax({
-//            url: $('#src').val() + '/controllers/export/export_controller.php',
-//            type: 'POST',
-//            data: {
-//                operation: 'export_selected_objects',
-//                collection_id: $("#collection_id").val(),
-//                classifications: selKeys.join(", "),
-//                ordenation_id: $('#collection_single_ordenation').val(),
-//                order_by: '',
-//                keyword: search_for
-//            }
-//        }).done(function (result) {
-//            $('#loader_objects').hide();
-//            $('#list').html(result);
-//            $('#list').show();
-//        });
+    function get_user_notifications() {
+        $.ajax({
+            type: "POST",
+            url: $('#src').val() + "/controllers/event/event_controller.php",
+            data: { collection_id: $('#collection_id').val(), operation: 'user_notification' }
+        }).done(function(r) {
+            var _ev_ = $.parseJSON(r);
+            if(_ev_ && _ev_.total_evts > 0) {
+                var _item_html = "";
+                $(_ev_.evts).each(function(id, el) {
+                    var events_path = '<?php _e("events", "tainacan")?>';
+                    var extra_class = '';
+                    if(el.is_root && el.is_root == true) {
+                        var URL = $("#site_url").val() + '/admin/'+ events_path;
+                        extra_class = 'trigger-events';
+                    } else {
+                        var URL = $("#site_url").val() + '/' + el.path + '/admin/'+ events_path +'/';
+                    }
+
+                    var content = "<span class='evt_col'> " + el.colecao + "</span> <span class='evts_cnt'>" + el.counting + "</span>";
+                    _item_html += "<li class='col-md-12 no-padding'> <a class='evt_container evt-"+ id + ' ' + extra_class + "' href='" + URL + "'> ";
+                    _item_html += content;
+                    _item_html += "</a></li>";                                    
+                });
+                $(_item_html).appendTo('li.root-notifications ul');
+                $('li.root-notifications').removeClass('hide');
+                $('li.root-notifications .notification_events_repository').text(_ev_.total_evts);
+            }
+        });
     }
+
     /**
      * 
      * @param {type} collection_id
@@ -214,6 +198,5 @@
 //mostrar modal de denuncia
     function show_report_abuse_collection(collection_id) {
         $('#modal_delete_collection' + collection_id).modal('show');
-        console.log($('#modal_delete_collection' + collection_id));
     }
 </script>

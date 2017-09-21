@@ -259,7 +259,6 @@
                 if (elem.no_properties === false) {
                     $('#property_object_reverse').html('<option value=""><?php _e('None','tainacan') ?></option>');
                     $.each(elem.property_object, function (idx, property) {
-                        //console.log(property.id,selected);
                         if (property.id == selected) {
                             $('#property_object_reverse').append('<option selected="selected" value="' + property.id + '">' + property.name + ' - (' + property.type + ')</option>');
                         } else {
@@ -325,9 +324,7 @@
             $("#property_object_id").val(elem.id);
             $("#property_object_name").val(elem.name);
             //relacionamento da propriedade de objeto
-           // console.log(elem.metas.socialdb_property_object_category_id.constructor ===Array);
-            if(elem.metas.socialdb_property_object_category_id.constructor === Array){
-               //  console.log('first');
+            if(elem.metas.socialdb_property_object_category_id && elem.metas.socialdb_property_object_category_id.constructor === Array){
                 if($("#property_category_dynatree")){
                        $("#property_category_dynatree").dynatree("getRoot").visit(function (node) {
                                node.select(false);
@@ -345,7 +342,6 @@
                        });
                 }
             }else if(elem.metas.socialdb_property_object_category_id){
-               //  console.log('second');
                  if($("#property_category_dynatree")){
                        $("#property_category_dynatree").dynatree("getRoot").visit(function (node) {
                                node.select(false);
@@ -505,7 +501,7 @@
             selectionVisible: true, // Make sure, selected nodes are visible (expanded).  
             checkbox: true,
             initAjax: {
-                 url: src + '/controllers/collection/collection_controller.php',
+                 url: $('#src').val() + '/controllers/collection/collection_controller.php',
                 data: {
                     collection_id: $("#collection_id").val(),
                     operation: 'initDynatreeSingleEdit',
@@ -519,6 +515,7 @@
                     data: {
                         collection_id: $("#collection_id").val(),
                         category_id: node.data.key,
+                        classCss: node.data.addClass,
                         operation: 'findDynatreeChild'
                     }
                 });
@@ -534,8 +531,6 @@
                 <?php if(has_action('javascript_onselect_relationship_dynatree_property_object')): ?>
                     <?php do_action('javascript_onselect_relationship_dynatree_property_object') ?>
                 <?php endif; ?>
-                    
-                console.log($('#property_object_category_id').val());
             }
         });
     }
@@ -565,13 +560,13 @@
                 $.each(elem.property_data, function (idx, property) {
                     var is_used_by = (property.metas.socialdb_property_used_by_categories&&property.metas.socialdb_property_used_by_categories.indexOf($('#property_category_id').val())>=0)? true : false;
                     if(is_used_by){
-                        $('#table_property_data').append('<tr><td>' + property.name + '</td><td>' + property.type + '</td><td><input type="hidden" class="property_data_id" value="' + property.id + '"><a onclick="edit_data(this)" class="edit_property_data" href="#submit_form_property_data"><span class="glyphicon glyphicon-edit"><span></a></td><td><input type="hidden" class="property_id" value="' + property.id + '"><input type="hidden" class="property_name" value="' + property.name + '"><a onclick="delete_property(this,1)" class="delete_property" href="#"><span class="glyphicon glyphicon-remove"><span></a></td></tr>');
+                        $('#table_property_data').append('<tr><td>' + property.name + '</td><td>' + property.type + '</td><td><input type="hidden" class="property_data_id" value="' + property.id + '"><a onclick="edit_data(this)" class="edit_property_data" href="javascript:void(0)"><span class="glyphicon glyphicon-edit"><span></a></td><td><input type="hidden" class="property_id" value="' + property.id + '"><input type="hidden" class="property_name" value="' + property.name + '"><a onclick="delete_property(this,1)" class="delete_property" href="javascript:void(0)"><span class="glyphicon glyphicon-remove"><span></a></td></tr>');
                     }
                     else if (property.metas.is_repository_property && property.metas.is_repository_property === true ||
                           (property.metas.socialdb_property_created_category && $('#property_category_id').val() !== property.metas.socialdb_property_created_category)) {
                         $('#table_property_data').append('<tr><td>' + property.name + '</td><td>' + property.type + '</td><td></td><td></td></tr>');
                     } else {
-                        $('#table_property_data').append('<tr><td>' + property.name + '</td><td>' + property.type + '</td><td><input type="hidden" class="property_data_id" value="' + property.id + '"><a onclick="edit_data(this)" class="edit_property_data" href="#submit_form_property_data"><span class="glyphicon glyphicon-edit"><span></a></td><td><input type="hidden" class="property_id" value="' + property.id + '"><input type="hidden" class="property_name" value="' + property.name + '"><a onclick="delete_property(this,1)" class="delete_property" href="#"><span class="glyphicon glyphicon-remove"><span></a></td></tr>');
+                        $('#table_property_data').append('<tr><td>' + property.name + '</td><td>' + property.type + '</td><td><input type="hidden" class="property_data_id" value="' + property.id + '"><a onclick="edit_data(this)" class="edit_property_data" href="javascript:void(0)"><span class="glyphicon glyphicon-edit"><span></a></td><td><input type="hidden" class="property_id" value="' + property.id + '"><input type="hidden" class="property_name" value="' + property.name + '"><a onclick="delete_property(this,1)" class="delete_property" href="javascript:void(0)"><span class="glyphicon glyphicon-remove"><span></a></td></tr>');
                     }
 
                 });
@@ -608,7 +603,6 @@
         }).done(function (result) {
              $('#loader_object').hide();
             elem = jQuery.parseJSON(result);
-            console.log(elem);
             if (elem.no_properties !== true) {
                 $('#no_properties_object').hide();
                 $('#list_properties_object').show();
@@ -616,13 +610,13 @@
                 $.each(elem.property_object, function (idx, property) {
                     var is_used_by = (property.metas.socialdb_property_used_by_categories&&property.metas.socialdb_property_used_by_categories.indexOf($('#property_category_id').val())>=0)? true : false;
                     if(is_used_by){
-                         $('#table_property_object').append('<tr><td>' + property.name + '</td><td>' + property.type + '</td><td><input type="hidden" class="property_object_id" value="' + property.id + '"><a onclick="edit_object(this)" class="edit_property_object" href="#submit_form_property_object"><span class="glyphicon glyphicon-edit"><span></a></td><td><input type="hidden" class="property_id" value="' + property.id + '"><input type="hidden" class="property_name" value="' + property.name + '"><a onclick="delete_property(this,2)" class="delete_property" href="#"><span class="glyphicon glyphicon-remove"><span></a></td></tr>');
+                         $('#table_property_object').append('<tr><td>' + property.name + '</td><td>' + property.type + '</td><td><input type="hidden" class="property_object_id" value="' + property.id + '"><a onclick="edit_object(this)" class="edit_property_object" href="javascript:void(0)"><span class="glyphicon glyphicon-edit"><span></a></td><td><input type="hidden" class="property_id" value="' + property.id + '"><input type="hidden" class="property_name" value="' + property.name + '"><a onclick="delete_property(this,2)" class="delete_property" href="javascript:void(0)"><span class="glyphicon glyphicon-remove"><span></a></td></tr>');
                      }
                     else if (property.metas.is_repository_property && property.metas.is_repository_property === true ||
                             (property.metas.socialdb_property_created_category && $('#property_category_id').val() !== property.metas.socialdb_property_created_category)) {
                         $('#table_property_object').append('<tr><td>' + property.name + '</td><td>' + property.type + '</td><td></td></tr>');
                     } else {
-                        $('#table_property_object').append('<tr><td>' + property.name + '</td><td>' + property.type + '</td><td><input type="hidden" class="property_object_id" value="' + property.id + '"><a onclick="edit_object(this)" class="edit_property_object" href="#submit_form_property_object"><span class="glyphicon glyphicon-edit"><span></a></td><td><input type="hidden" class="property_id" value="' + property.id + '"><input type="hidden" class="property_name" value="' + property.name + '"><a onclick="delete_property(this,2)" class="delete_property" href="#"><span class="glyphicon glyphicon-remove"><span></a></td></tr>');
+                        $('#table_property_object').append('<tr><td>' + property.name + '</td><td>' + property.type + '</td><td><input type="hidden" class="property_object_id" value="' + property.id + '"><a onclick="edit_object(this)" class="edit_property_object" href="javascript:void(0)"><span class="glyphicon glyphicon-edit"><span></a></td><td><input type="hidden" class="property_id" value="' + property.id + '"><input type="hidden" class="property_name" value="' + property.name + '"><a onclick="delete_property(this,2)" class="delete_property" href="javascript:void(0)"><span class="glyphicon glyphicon-remove"><span></a></td></tr>');
                     }
                 });
             } else {
@@ -655,14 +649,14 @@
                 $.each(elem.property_terms, function (idx, property) {
                     var is_used_by = (property.metas.socialdb_property_used_by_categories&&property.metas.socialdb_property_used_by_categories.indexOf($('#property_category_id').val())>=0)? true : false;
                     if(is_used_by){
-                        $('#table_property_term').append('<tr><td>' + property.name + '</td><td>' + property.type + '</td><td><input type="hidden" class="property_term_id" value="' + property.id + '"><a onclick="edit_term(this)" class="edit_property_term" href="#submit_form_property_term"><span class="glyphicon glyphicon-edit"><span></a></td><td><input type="hidden" class="property_id" value="' + property.id + '"><input type="hidden" class="property_name" value="' + property.name + '"><a onclick="delete_property(this,3)" class="delete_property" href="#"><span class="glyphicon glyphicon-remove"><span></a></td></tr>');
+                        $('#table_property_term').append('<tr><td>' + property.name + '</td><td>' + property.type + '</td><td><input type="hidden" class="property_term_id" value="' + property.id + '"><a onclick="edit_term(this)" class="edit_property_term" href="javascript:void(0)"><span class="glyphicon glyphicon-edit"><span></a></td><td><input type="hidden" class="property_id" value="' + property.id + '"><input type="hidden" class="property_name" value="' + property.name + '"><a onclick="delete_property(this,3)" class="delete_property" href="javascript:void(0)"><span class="glyphicon glyphicon-remove"><span></a></td></tr>');
                     }
                     else if (property.metas.is_repository_property && property.metas.is_repository_property === true ||
                             is_used_by||
                              (property.metas.socialdb_property_created_category && $('#property_category_id').val() !== property.metas.socialdb_property_created_category)) {
                         $('#table_property_term').append('<tr><td>' + property.name + '</td><td>' + property.type + '</td><td></td></tr>');
                     } else {
-                        $('#table_property_term').append('<tr><td>' + property.name + '</td><td>' + property.type + '</td><td><input type="hidden" class="property_term_id" value="' + property.id + '"><a onclick="edit_term(this)" class="edit_property_term" href="#submit_form_property_term"><span class="glyphicon glyphicon-edit"><span></a></td><td><input type="hidden" class="property_id" value="' + property.id + '"><input type="hidden" class="property_name" value="' + property.name + '"><a onclick="delete_property(this,3)" class="delete_property" href="#"><span class="glyphicon glyphicon-remove"><span></a></td></tr>');
+                        $('#table_property_term').append('<tr><td>' + property.name + '</td><td>' + property.type + '</td><td><input type="hidden" class="property_term_id" value="' + property.id + '"><a onclick="edit_term(this)" class="edit_property_term" href="javascript:void(0)"><span class="glyphicon glyphicon-edit"><span></a></td><td><input type="hidden" class="property_id" value="' + property.id + '"><input type="hidden" class="property_name" value="' + property.name + '"><a onclick="delete_property(this,3)" class="delete_property" href="javascript:void(0)"><span class="glyphicon glyphicon-remove"><span></a></td></tr>');
                     }
                 });
                 $('#list_properties_term').show();
@@ -683,10 +677,11 @@
             selectMode: 1,
             selectionVisible: true, // Make sure, selected nodes are visible (expanded). 
             initAjax: {
-                url: src + '/controllers/category/category_controller.php',
+                url:  $('#src').val() + '/controllers/collection/collection_controller.php',
                 data: {
                     collection_id: $("#collection_id").val(),
-                    operation: 'initDynatreeTerms'
+                    operation: 'initDynatreeSingleEdit',
+                    hideCheckbox: 'false'
                 }
                 , addActiveKey: true
             },
@@ -785,7 +780,6 @@
                     url: $('#src').val() + "/controllers/category/category_controller.php",
                     data: {collection_id: $('#collection_id').val(), operation: 'verify_has_children', category_id: node.data.key}
                 }).done(function (result) {
-                    console.log($("#socialdb_property_term_root").val());
                     $('.dropdown-toggle').dropdown();
                     elem_first = jQuery.parseJSON(result);
                     if (elem_first.type === 'error') {
@@ -890,10 +884,8 @@
                     type:type
                   },
                   success: function( data ) {
-                    console.log(data);
                     response( data );
                   },error: function (qXHR,textStatus,errorThrown){
-                      console.log(qXHR,textStatus,errorThrown);
                   }
                 });
             },

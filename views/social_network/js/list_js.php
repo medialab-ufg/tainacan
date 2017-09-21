@@ -274,8 +274,7 @@
             data: {operation: 'show_mapping', collection_id: $("#collection_id").val(), 'social_network': social}
         }).done(function (result) {
             $('#list_social_network').hide();
-            $('#edit_mapping').html(result);
-            $('#edit_mapping').show();
+            $('#edit_mapping').html(result).show();
         });
     }
 

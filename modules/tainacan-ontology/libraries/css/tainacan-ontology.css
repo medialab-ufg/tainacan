@@ -55,7 +55,7 @@
 
     background-image: url("../images/class.png");
 }
-//propriedades
+/* propriedades */
 .color_property1 span.dynatree-icon{
 
     background-image: url("../images/property.png");
@@ -103,6 +103,12 @@
 }
 .default span.dynatree-icon{
     background-image: url("../images/individue.png");
+}
+.attribute span.dynatree-icon{
+     background-image: url("../images/attribute.png");
+}
+.relation span.dynatree-icon{
+     background-image: url("../images/relation.png");
 }
 
 

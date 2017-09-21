@@ -1,10 +1,8 @@
 <?php
-
-include_once ('../../../../../wp-config.php');
-include_once ('../../../../../wp-load.php');
-include_once ('../../../../../wp-includes/wp-db.php');
+include_once (dirname(__FILE__) . '/../../../../../wp-config.php');
+include_once (dirname(__FILE__) . '/../../../../../wp-load.php');
+include_once (dirname(__FILE__) . '/../../../../../wp-includes/wp-db.php');
 include_once (dirname(__FILE__) . '../../../models/collection/collection_model.php');
-include_once (dirname(__FILE__) . '../../../models/property/property_model.php');
 include_once (dirname(__FILE__) . '../../../models/category/category_model.php');
 include_once (dirname(__FILE__) . '../../../models/event/event_object/event_object_create_model.php');
 require_once(dirname(__FILE__) . '../../general/general_model.php');
@@ -40,11 +38,12 @@ class ObjectFileModel extends Model {
             $arquivos = get_post_meta($post->ID, '_file_id');
             if ($attachments) {
                 foreach ($attachments as $attachment) {
-                    if (in_array($attachment->ID, $arquivos)) {
+                    if (is_array($arquivos)&&in_array($attachment->ID, $arquivos)) {
                         $object_content = get_post_meta($data['object_id'],'socialdb_object_content',true);
                         if($object_content!=$attachment->ID){
                             $metas = wp_get_attachment_metadata($attachment->ID);
                             $obj['name'] = $attachment->post_title;
+                            $obj['ID'] = $attachment->ID;
                             $obj['size'] = filesize(get_attached_file($attachment->ID));
                             $result[] = $obj;
                         }
@@ -104,8 +103,15 @@ class ObjectFileModel extends Model {
                 $arquivos = get_post_meta($post->ID, '_file_id');
                 if ($attachments) {
                     foreach ($attachments as $attachment) {
-                        if (in_array($attachment->ID, $arquivos) && $data['file_name'] == $attachment->post_title) {
-                            $result = wp_delete_attachment($attachment->ID);
+                        if(is_numeric($data['file_name'])){
+                            if (in_array($attachment->ID, $arquivos) && $data['file_name'] == $attachment->ID) {
+                                $result = wp_delete_attachment($attachment->ID);
+                            }
+                        }else{
+                            $filename = explode('.', $data['file_name'])[0];
+                            if (in_array($attachment->ID, $arquivos) && str_replace(' ','-',urldecode($filename)) == urldecode($attachment->post_title)) {
+                                $result = wp_delete_attachment($attachment->ID);
+                            }
                         }
                     }
                 }
@@ -173,6 +179,93 @@ class ObjectFileModel extends Model {
         }
     }
     
+    /**
+     * 
+     * @param type $data
+     * @return type
+     */
+    public function create_item_by_files($data){
+        $post = get_post($data['object_id']);
+        $result = array();
+        if (!is_object(get_post_thumbnail_id())) {
+            $args = array(
+                'post_type' => 'attachment',
+                'numberposts' => -1,
+                'post_status' => null,
+                'post_parent' => $post->ID,
+                'exclude' => get_post_thumbnail_id()
+            );
+            //  var_dump($args);
+            $attachments = get_posts($args);
+            $arquivos = get_post_meta($post->ID, '_file_id');
+            if ($attachments) {
+                foreach ($attachments as $attachment) {
+                    if (in_array($attachment->ID, $arquivos)) {
+                        $_file_path_ = get_attached_file($attachment->ID);
+                        $metas = wp_get_attachment_metadata($attachment->ID);
+                        $item_id = socialdb_insert_object($attachment->post_title);
+                        update_post_meta($item_id, 'socialdb_object_content', $attachment->ID);
+                        wp_update_post(array(
+                            'ID' => $attachment->ID,
+                            'post_parent' => $item_id
+                        ));
+                        update_post_meta($item_id, 'socialdb_object_from','internal');
+                        $obj['ID'] = $item_id;
+                        $obj['name'] = $attachment->post_title;
+                        $obj['size'] = filesize($_file_path_);
+                        $extension = $attachment->guid;
+                        $ext = pathinfo($extension, PATHINFO_EXTENSION);
+                        if(in_array($ext, ['mp4','m4v','wmv','avi','mpg','ogv','3gp','3g2'])){
+                            update_post_meta($item_id, 'socialdb_object_dc_type', 'video');
+                            $result['videos'][] = $obj;     
+                        }elseif (in_array($ext, ['jpg','jpeg','png','gif', 'tiff'])) {
+                           set_post_thumbnail($item_id, $attachment->ID);
+                           update_post_meta($item_id, 'socialdb_object_dc_type', 'image'); 
+                           $obj['metas'] = $metas;
+                           $result['image'][] = $obj;
+                           /*
+                            * TODO: confirm if code below should be removed
+                            * */
+                           if( in_array($ext, ['jpg', 'jpeg', 'tiff']) ) {
+                               /*
+                               $property_model = new PropertyModel();
+                               $_exif_data = exif_read_data($_file_path_, 0, true);
+                               unset($_exif_data['FILE']);
+                               unset($_exif_data['COMPUTED']);
+                               */
+                           }
+
+                        }
+                        elseif (in_array($ext, ['mp3','m4a','ogg','wav','wma']))
+                        {
+                           update_post_meta($item_id, 'socialdb_object_dc_type', 'audio');  
+                           $result['audio'][] = $obj;
+                        }
+                        elseif(in_array($ext, ['pdf']))
+                        {
+                           update_post_meta($item_id, 'socialdb_object_dc_type', 'pdf');   
+                           $result['pdf'][] = $obj;
+                        }
+                        elseif (in_array($ext, ['doc', 'docx', 'pptx', 'xlsx']))
+                        {
+                             update_post_meta($item_id, 'socialdb_object_dc_type', 'other');  
+                            $result['office'][] = $obj;
+
+                            $last_position = count($result['office']) - 1;
+                            
+                            $result['office'][$last_position]['ext'] = $ext;
+                        }
+                        else{
+                            update_post_meta($item_id, 'socialdb_object_dc_type', 'other');  
+                            $result['others'][] = $obj;
+                        }
+                        
+                    }
+                }
+            }
+        }
+        return $result;
+    }
       /**
      * @signature - get_files($data)
      * @param array $data Os dados vindos do formulario
@@ -197,24 +290,51 @@ class ObjectFileModel extends Model {
             if ($attachments) {
                 foreach ($attachments as $attachment) {
                     if (in_array($attachment->ID, $arquivos)) {
+                        $_file_path_ = get_attached_file($attachment->ID);
                         $metas = wp_get_attachment_metadata($attachment->ID);
                         $obj['ID'] = $attachment->ID;
                         $obj['name'] = $attachment->post_title;
-                        $obj['size'] = filesize(get_attached_file($attachment->ID));
+                        $obj['url'] = $attachment->guid;
+                        $obj['size'] = filesize($_file_path_);
                         $extension = $attachment->guid;
                         $ext = pathinfo($extension, PATHINFO_EXTENSION);
                         if(in_array($ext, ['mp4','m4v','wmv','avi','mpg','ogv','3gp','3g2'])){
-                                $result['videos'][] = $obj;     
-                         }elseif (in_array($ext, ['jpg','jpeg','png','gif'])) {
-                                 $obj['metas'] = $metas;
-                                $result['image'][] = $obj;     
-                         }elseif (in_array($ext, ['mp3','m4a','ogg','wav','wma'])) {
-                                $result['audio'][] = $obj;     
-                         }elseif(in_array($ext, ['pdf'])){
-                                $result['pdf'][] = $obj;   
-                         }else{
-                                $result['others'][] = $obj;
-                         }
+                            $result['videos'][] = $obj;     
+                        }elseif (in_array($ext, ['jpg','jpeg','png','gif', 'tiff'])) {
+                           $obj['metas'] = $metas;
+                           $result['image'][] = $obj;
+                           /*
+                            * TODO: confirm if code below should be removed
+                            * */
+                           if( in_array($ext, ['jpg', 'jpeg', 'tiff']) ) {
+                               /*
+                               $property_model = new PropertyModel();
+                               $_exif_data = exif_read_data($_file_path_, 0, true);
+                               unset($_exif_data['FILE']);
+                               unset($_exif_data['COMPUTED']);
+                               */
+                           }
+
+                        }
+                        elseif (in_array($ext, ['mp3','m4a','ogg','wav','wma']))
+                        {
+                           $result['audio'][] = $obj;
+                        }
+                        elseif(in_array($ext, ['pdf']))
+                        {
+                           $result['pdf'][] = $obj;
+                        }
+                        elseif (in_array($ext, ['doc', 'docx', 'pptx', 'xlsx']))
+                        {
+                            $result['office'][] = $obj;
+
+                            $last_position = count($result['office']) - 1;
+                            
+                            $result['office'][$last_position]['ext'] = $ext;
+                        }
+                        else{
+                            $result['others'][] = $obj;
+                        }
                         
                     }
                 }
@@ -246,7 +366,12 @@ class ObjectFileModel extends Model {
                     }
                     $obj['tags'] = implode(',', $tags_name);
                 }
+                $properties = $this->get_properties_object($item->ID); 
+                if($properties && is_array($properties)){
+                    $obj['properties'] = $properties;
+                }
                 $type = get_post_meta($item_id,'socialdb_object_dc_type',true);
+                $obj['source'] = get_post_meta($item_id,'socialdb_object_dc_source',true);;
                 if($type=='video'){
                     $result['videos'][] = $obj;   
                 }elseif($type=='image'){
@@ -254,11 +379,13 @@ class ObjectFileModel extends Model {
                 }elseif($type=='text'){
                      $result['text'][] = $obj;   
                 }elseif($type=='pdf'){
-                     $result['text'][] = $obj;   
+                     $result['pdf'][] = $obj;   
                 }elseif($type=='other'||$type=='others'){
-                     $result['text'][] = $obj;   
+                     $result['other'][] = $obj;   
                 }elseif($type=='audio'){
-                     $result['text'][] = $obj;   
+                     $result['audio'][] = $obj;   
+                }else{
+                    $result['text'][] = $obj;  
                 }
                 $result['items'][] = $obj;
             }

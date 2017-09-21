@@ -38,18 +38,12 @@ function init() {
             }
     }).done(function (result) {
         json = jQuery.parseJSON(result);
-
-
-
-        //console.log(json);
         var tamanhoTelaW = $(window).width();
         var hypertree = document.getElementById('hypertree');
         var w = (tamanhoTelaW / 2) - 100, h = (tamanhoTelaW / 2) - 100;
         //var w = hypertree.offsetWidth - 50, h = hypertree.offsetHeight - 50;
 
-
         //init Hypertree
-        console.log(json);
         var ht = new $jit.Hypertree({
             
             //id of the visualization container
@@ -127,7 +121,6 @@ function init() {
             Events: {
                 enable: true,
                 onClick: function (node, eventInfo, e) {
-                    console.log(node.id);
                     if (typeof node.id != "undefined")
                     {
                        list_all_objects(node.id, $("#collection_id").val(), $('#collection_single_ordenation').val());

@@ -155,7 +155,6 @@
                     onActivate: function (node, event) {
                     },
                     onSelect: function (flag, node) {
-                         console.log('certo!!!!!!!');
                         var selKeys = $.map(node.tree.getSelectedNodes(), function (node) {
                             return node.data.key;
                         });

@@ -1,16 +1,18 @@
 <?php
-
-include_once (dirname(__FILE__) .'/../../../../../wp-config.php');
-include_once (dirname(__FILE__) .'/../../../../../wp-load.php');
-include_once (dirname(__FILE__) .'/../../../../../wp-includes/wp-db.php');
+include_once (dirname(__FILE__) . '/../../../../../wp-config.php');
+include_once (dirname(__FILE__) . '/../../../../../wp-load.php');
+include_once (dirname(__FILE__) . '/../../../../../wp-includes/wp-db.php');
 include_once (dirname(__FILE__) . '../../../models/collection/collection_model.php');
 include_once (dirname(__FILE__) . '../../../models/license/license_model.php');
 include_once (dirname(__FILE__) . '../../../models/property/property_model.php');
 include_once (dirname(__FILE__) . '../../../models/category/category_model.php');
 include_once (dirname(__FILE__) . '../../../models/event/event_object/event_object_create_model.php');
+include_once (dirname(__FILE__) . '../../../models/event/event_object/event_object_delete_model.php');
 require_once(dirname(__FILE__) . '../../general/general_model.php');
 require_once(dirname(__FILE__) . '../../user/user_model.php');
 require_once(dirname(__FILE__) . '../../tag/tag_model.php');
+
+
 
 /**
  * The class ObjectModel
@@ -21,7 +23,7 @@ class ObjectModel extends Model {
     public $collection_model;
     public $user_model;
 
-    public function ObjectModel() {
+    public function __construct() {
         $this->collection_model = new CollectionModel();
         $this->user_model = new UserModel();
     }
@@ -42,40 +44,75 @@ class ObjectModel extends Model {
     }
 
     public function add($data) {
+        //ini_set('max_input_vars', '10000');
         $data = $this->validate_form($data);
+        $col_id = $data['collection_id'];
+
+        //Taincan IBRAM
+       if (has_action('tainacan_delete_related_item')) {
+            do_action('tainacan_delete_related_item', $data, $col_id);
+        }
+
+        //Tainacan Biblioteca
+        $mapping = get_option('socialdb_general_mapping_collection');
+        if(has_filter("add_book_loan") && $mapping['Emprestimo'] == $col_id)
+        {
+            $result = apply_filters("add_book_loan", $data);
+
+            if(!$result['ok'])
+            {
+                $result['unavailable_item'] = true;
+
+                return json_encode($result);
+            }
+        }
+
         if (isset($data['validation_error'])) {
             return json_encode($data);
         }
-        $category_root_id = $this->collection_model->get_category_root_of($data['collection_id']);
+
+        $category_root_id = $this->collection_model->get_category_root_of($col_id);
         $user_id = get_current_user_id();
         if ($user_id == 0) {
             $user_id = get_option('anonimous_user');
         }
         $post = array(
             'ID' => $data['object_id'],
-            'post_title' => $data['object_name'],
+            'post_title' => ($data['object_name']) ? $data['object_name'] : time(),
             'post_content' => $data['object_description'],
             'post_status' => 'inherit',
             'post_author' => $user_id,
-            'post_type' => 'socialdb_object'
+            'post_type' => 'socialdb_object',
+            'post_parent' => $col_id
         );
+
         $data['ID'] = wp_update_post($post);
+        //deleto o rascunho assim que adiciono
+        delete_user_meta(get_current_user_id(), 'socialdb_collection_' . $data['collection_id'] . '_betatext');
+        $this->insert_rankings_value($data['ID'], $data['collection_id']);
         $slug = wp_unique_post_slug(sanitize_title_with_dashes($data['object_name']), $data['ID'], 'inherit', 'socialdb_object', 0);
         $post = array(
             'ID' => $data['object_id'],
             'post_name' => $slug
         );
+
         $data['ID'] = wp_update_post($post);
+
         //inserindo o objecto do item e o seu tipo
         $this->insert_item_resource($data);
+
         //categoria raiz da colecao
         wp_set_object_terms($data['ID'], array((int) $category_root_id), 'socialdb_category_type');
+
         //inserindo as classificacoes
         $this->insert_classifications($data['object_classifications'], $data['ID']);
+
         //inserindo tags
-        $this->insert_tags($data['object_tags'], $data['collection_id'], $data['ID']);
+        $this->insert_tags($data['object_tags'], $col_id, $data['ID']);
+
         //inserindo os valores das propriedades
         $this->insert_properties_values($data, $data['ID']);
+
         //verificando se existe aquivos para ser incluidos
         if ($_FILES) {
             $attachment_id = $this->add_thumbnail($data['ID']);
@@ -83,18 +120,22 @@ class ObjectModel extends Model {
                 set_post_thumbnail($data['ID'], $attachment_id);
             }
         }
+
         //inserido via img via url
         if (isset($data['thumbnail_url']) && $data['thumbnail_url']) {
             $this->add_thumbnail_url($data['thumbnail_url'], $data['ID']);
         }
+
         //inserindo a url fonte dos dados
         if (isset($data['object_url']) && $data['object_url']) {
             update_post_meta($data['ID'], 'socialdb_uri_imported', $data['object_url']);
         }
+
         //verificando se existe mapeamento ativo
-        if (get_post_meta($data['collection_id'], 'socialdb_collection_mapping_exportation_active')) {
-            add_post_meta($data['ID'], 'socialdb_channel_id', get_post_meta($data['collection_id'], 'socialdb_collection_mapping_exportation_active', true));
+        if (get_post_meta($col_id, 'socialdb_collection_mapping_exportation_active')) {
+            add_post_meta($data['ID'], 'socialdb_channel_id', get_post_meta($col_id, 'socialdb_collection_mapping_exportation_active', true));
         }
+
         // propriedade de termos
         $this->insert_properties_terms($data, $data['ID']);
 
@@ -103,10 +144,27 @@ class ObjectModel extends Model {
             update_post_meta($data['ID'], 'socialdb_license_id', $data['object_license']);
         }
 
-        // inserindo o evento
-        $data = $this->insert_object_event($data['ID'], $data);
+        //salvo o id da colecao onde esta sendo atualizado o item e sua
+        update_post_meta($data['ID'], 'socialdb_object_collection_init', $col_id);
+        update_post_meta($data['ID'], 'socialdb_object_guid', site_url().'/'. get_post($col_id)->post_name.'/'.get_post($data['ID'])->post_name);
+        update_user_meta(get_current_user_id(), 'socialdb_collection_' . $data['collection_id'] . '_betatext', '');
 
-        return $data;
+        //propriedades compostas
+        $this->insert_compounds($data, $data['ID']);
+
+        // inserindo o evento
+        $logData = ['collection_id' => $col_id, 'item_id' => $data['ID'],
+            'user_id' => $user_id, 'event_type' => 'user_items', 'event' => 'add'];
+        try{
+            $data = $this->insert_object_event($data['ID'], $data);
+            $resource_json = json_decode($data);
+        }catch(Exception $e){
+            $error =  (string) $e;
+        }
+
+        Log::addLog($logData);
+
+        return json_encode(['title'=>$resource_json->title,'type'=>$resource_json->type,'error' => ((isset($error)) ? $error  : ''),'msg'=>$resource_json->msg]);
     }
 
     /**
@@ -114,7 +172,7 @@ class ObjectModel extends Model {
      * @param array $data Os dados vindos do formulario
      * @return void
      * @description - Insere o objeto do item
-     * @author: Eduardo 
+     * @author: Eduardo
      */
     public function insert_item_resource($data) {
         update_post_meta($data['ID'], 'socialdb_object_from', $data['object_from']);
@@ -152,12 +210,12 @@ class ObjectModel extends Model {
                 }
             }
         }
-         //insiro os valores no metadado comum
-        if(isset($data['object_name'])){
-             $data['title'] = $data['object_name'];
-             $data['description'] = $data['object_description'];
+        //insiro os valores no metadado comum
+        if (isset($data['object_name'])) {
+            $data['title'] = $data['object_name'];
+            $data['description'] = $data['object_description'];
         }
-        $this->set_common_field_values($data['ID'], 'title', $data['title']);  
+        $this->set_common_field_values($data['ID'], 'title', $data['title']);
         $this->set_common_field_values($data['ID'], 'description', $data['description']);
         $this->set_common_field_values($data['ID'], 'object_from', $data['object_from']);
         $this->set_common_field_values($data['ID'], 'object_source', $data['object_source']);
@@ -170,7 +228,7 @@ class ObjectModel extends Model {
      * @param array $data Os dados vindos do formulario
      * @return json com os dados do resultado do evento criado
      * @description - Verificacao de campios do formulario
-     * @author: Eduardo 
+     * @author: Eduardo
      */
     public function validate_form($data) {
         if ($data['properties_id'] !== '') {
@@ -254,7 +312,7 @@ class ObjectModel extends Model {
      * @param array $data Os dados vindos do formulario
      * @return json com os dados do resultado do evento criado
      * @description - Insere um objeto vindo da importacao url
-     * @author: Eduardo 
+     * @author: Eduardo
      */
     public function fast_insert_url($data) {
         $user_id = get_current_user_id();
@@ -267,12 +325,13 @@ class ObjectModel extends Model {
             'post_content' => $data['description'],
             'post_status' => 'draft',
             'post_author' => $user_id,
-            'post_type' => 'socialdb_object'
+            'post_type' => 'socialdb_object',
+            'post_parent' => $data['collection_id']
         );
         $data['ID'] = wp_insert_post($post);
         //categoria raiz da colecao
         wp_set_object_terms($data['ID'], array((int) $category_root_id), 'socialdb_category_type');
-       
+
         //inserindo as classificacoes
         if (isset($data['classifications']) && $data['classifications']) {
             $this->insert_classifications($data['classifications'], $data['ID']);
@@ -299,7 +358,7 @@ class ObjectModel extends Model {
      * @param array $data Os dados vindos do formulario
      * @return json com os dados do resultado do evento criado
      * @description - Insere um objeto apenas com o titulo
-     * @author: Eduardo 
+     * @author: Eduardo
      */
     public function fast_insert($data) {
         $category_root_id = $this->collection_model->get_category_root_of($data['collection_id']);
@@ -312,15 +371,16 @@ class ObjectModel extends Model {
             'post_content' => '',
             'post_status' => 'draft',
             'post_author' => $user_id,
-            'post_type' => 'socialdb_object'
+            'post_type' => 'socialdb_object',
+            'post_parent' => $data['collection_id']
         );
         $data['ID'] = wp_insert_post($post);
-        $post['ID'] =  $data['ID'];
+        $post['ID'] = $data['ID'];
         //categoria raiz da colecao
         wp_set_object_terms($data['ID'], array((int) $category_root_id), 'socialdb_category_type');
-        
-        update_post_meta( $data['ID'], 'socialdb_object_dc_type', 'text');
-        update_post_meta( $data['ID'], 'socialdb_object_from', 'internal');
+
+        update_post_meta($data['ID'], 'socialdb_object_dc_type', 'text');
+        update_post_meta($data['ID'], 'socialdb_object_from', 'internal');
         //inserindo as classificacoes
         if (isset($data['classifications']) && $data['classifications']) {
             $this->insert_classifications($data['classifications'], $data['ID']);
@@ -332,27 +392,27 @@ class ObjectModel extends Model {
         // inserindo o evento
         $data['item'] = $post;
         $data = $this->insert_object_event($data['ID'], $data);
-        
+
         return $data;
     }
-    
+
     public function add_item_not_published($data) {
-        $object_id = socialdb_insert_object_socialnetwork([$data['title']], 'draft',$data['description']);
+        $object_id = socialdb_insert_object_socialnetwork([$data['title']], 'draft', $data['description']);
         update_post_meta($object_id, 'socialdb_object_dc_type', $data['type']);
         update_post_meta($object_id, 'socialdb_uri_imported', $data['url']);
         update_post_meta($object_id, 'socialdb_object_from', 'external');
-        if($data['type']=='text'){
+        if ($data['type'] == 'text') {
             update_post_meta($object_id, 'socialdb_object_dc_source', $data['thumbnail_url']);
             if (isset($data['thumbnail_url']) && $data['thumbnail_url'] && $data['thumbnail_url'] !== '') {
                 $this->add_thumbnail_url($data['thumbnail_url'], $object_id);
             }
-        }else{
-            if($data['content']){
+        } else {
+            if ($data['content']) {
                 update_post_meta($object_id, 'socialdb_object_dc_source', $data['content']);
-                 if($data['type']=='image'){
-                    $this->add_thumbnail_url($data['content'],$object_id);
-                 }
-                 update_post_meta($object_id, 'socialdb_object_content',$data['content']);
+                if ($data['type'] == 'image') {
+                    $this->add_thumbnail_url($data['content'], $object_id);
+                }
+                update_post_meta($object_id, 'socialdb_object_content', $data['content']);
             }
         }
         return json_encode([$object_id]);
@@ -364,7 +424,7 @@ class ObjectModel extends Model {
      * @param int $object_id O id do Objeto
      * @return void
      * @description - Insere os valores selecionados no dynatree no objeto criado
-     * @author: Eduardo 
+     * @author: Eduardo
      */
     public function insert_classifications($classification_string, $object_id) {
         $classification_array = explode(',', $classification_string);
@@ -393,7 +453,7 @@ class ObjectModel extends Model {
      * @param int $object_id O id do Objeto
      * @return void
      * @description - Atualiza os valores selecionados no dynatree no objeto criado
-     * @author: Eduardo 
+     * @author: Eduardo
      */
     public function update_classifications($classification_string, $object_id, $collection_id = null) {
         $properties = array();
@@ -448,18 +508,18 @@ class ObjectModel extends Model {
      * @param int $object_id O id do Objeto
      * @return void
      * @description - Insere os valores das tags colocadas pelo usuario
-     * @author: Eduardo 
+     * @author: Eduardo
      */
     public function insert_tags($string_tags, $collection_id, $object_id) {
         $tagModel = new TagModel();
-        $this->concatenate_commom_field_value( $object_id, "socialdb_propertyterm_tag", '');
+        $this->concatenate_commom_field_value($object_id, "socialdb_propertyterm_tag", '');
         $tags = explode(',', $string_tags);
         if (is_array($tags) && !empty($tags)) {
             foreach ($tags as $tag) {
                 if ($tag !== ''):
                     $tag_array = $tagModel->add($tag, $collection_id);
                     $tagModel->add_tag_object($tag_array['term_id'], $object_id);
-                    $this->concatenate_commom_field_value( $object_id, "socialdb_propertyterm_tag", $tag_array['term_id']);
+                    $this->concatenate_commom_field_value($object_id, "socialdb_propertyterm_tag", $tag_array['term_id']);
                 endif;
             }
         }
@@ -469,41 +529,61 @@ class ObjectModel extends Model {
      * @signature - function insert_properties_values($data)
      * @param array $data Com os dados vindo do formulario
      * @return void
-     * @description - Insere os valores das propriedades 
-     * @author: Eduardo 
+     * @description - Insere os valores das propriedades
+     * @author: Eduardo
      */
     public function insert_properties_values($data, $object_id) {
         $property_model = new PropertyModel;
-        if ($data['properties_id'] !== '') {
-            $properties_id = explode(',', $data['properties_id']);
-
+        $properties_id = $this->get_all_properties_form_values($data);
+        if (!empty($properties_id) ){
+            $properties_object_id = explode(',', $data['properties_object_ids']);
             foreach ($properties_id as $property_id) {
-                if(!isset($data["socialdb_property_$property_id"])){
+                if(in_array($property_id, $properties_object_id) && !isset($data["socialdb_property_$property_id"])){
+                    $data["socialdb_property_$property_id"] = [];
+                }else if (!isset($data["socialdb_property_$property_id"])) {
                     continue;
                 }
+
                 $dados = json_decode($property_model->edit_property(array('property_id' => $property_id)));
+                //filtro que altera a forma de atualizacao do metadado no item
+                if(has_filter('alter_update_item_property_value')){
+                     // se o filtro nao deseja que a forma de execucao  continue
+                     // ele retorna TRUE
+                    if(apply_filters('alter_update_item_property_value', $dados,$data))
+                            continue;
+                }
+
+                $data["socialdb_property_$property_id"] = $this->updateDateValues($dados,$data["socialdb_property_$property_id"]);
                 if ($dados->type && in_array($dados->type, ['stars', 'like', 'binary'])) {
                     add_post_meta($object_id, 'socialdb_property_' . $dados->id, 0);
                     continue;
                 }
+
+
                 //se for para inserir os valores das propriedades de dados
                 if (!is_array($data["socialdb_property_$property_id"]) && $data["socialdb_property_$property_id"] !== '') {
                     update_post_meta($object_id, "socialdb_property_$property_id", $data["socialdb_property_$property_id"]);
-                    //inserir o valor no metadado de valor comu
-                    $this->set_common_field_values($object_id,  "socialdb_property_$property_id", $data["socialdb_property_$property_id"]);
-                }// se estiver inserindo propriedade de objeto e tiver valores relacionado 
-                elseif (is_array($data["socialdb_property_$property_id"]) && !empty(is_array($data["socialdb_property_$property_id"]))) {
+                    //inserir o valor no metadado de valor comum
+                    $this->set_common_field_values($object_id, "socialdb_property_$property_id", $data["socialdb_property_$property_id"]);
+                }// se estiver inserindo propriedade de objeto e tiver valores relacionado
+                elseif (is_array($data["socialdb_property_$property_id"]) && !empty(is_array($data["socialdb_property_$property_id"])))
+                {
                     delete_post_meta($object_id, "socialdb_property_$property_id");
-                    $this->set_common_field_values($object_id,  "socialdb_property_$property_id", $data["socialdb_property_$property_id"],'item');
+                    if (isset($dados->metas->socialdb_property_object_is_reverse) && ($dados->metas->socialdb_property_object_is_reverse === 'true'))
+                    {
+                        $this->remove_itens_property_reverse($object_id, $data["collection_id"], $dados->metas->socialdb_property_object_reverse);
+                    }
+
+                    $this->set_common_field_values($object_id, "socialdb_property_$property_id", $data["socialdb_property_$property_id"], 'item');
                     foreach ($data["socialdb_property_$property_id"] as $value) {
-                        if(empty(trim($value)))
+                        if (empty(trim($value)))
                             continue;
-                        
+
                         add_post_meta($object_id, "socialdb_property_$property_id", $value);
                         if (isset($dados->metas->socialdb_property_object_is_reverse) && ($dados->metas->socialdb_property_object_is_reverse === 'true')) {
                             add_post_meta($value, "socialdb_property_" . $dados->metas->socialdb_property_object_reverse, $object_id);
                         }//adicionando a propriedade simetrica
-                        else if(get_post($value)&&isset($dados->metas->socialdb_property_object_is_reverse)) {
+                        else if (get_post($value) && isset($dados->metas->socialdb_property_object_is_reverse)) {
                             delete_post_meta($value, "socialdb_property_$property_id", $object_id);
                             add_post_meta($value, "socialdb_property_$property_id", $object_id);
                         }
@@ -517,10 +597,48 @@ class ObjectModel extends Model {
                         $this->clean_simetric_property($object_id, $property_id);
                     }
                     update_post_meta($object_id, "socialdb_property_$property_id", '');
-                     $this->set_common_field_values($object_id,  "socialdb_property_$property_id", '');
+                    $this->set_common_field_values($object_id, "socialdb_property_$property_id", '');
                 }
             }
         }
+    }
+
+    public function updateDateValues($property,$value) {
+        if($property->type=='date'){
+            if(!is_array($value) &&$value !== ''){
+                 $value = explode('/', $value)[2].'-' .explode('/',$value)[1].'-' .explode('/',$value)[0];
+            }else if(is_array($value) && !empty(is_array($value))){
+                $date_sql = [];
+                foreach ($value as $date) {
+                      if($date !== '')
+                            $date_sql[] = explode('/', $date)[2].'-' .explode('/',$date)[1].'-' .explode('/',$date)[0];
+                }
+                $value = $date_sql;
+            }
+        }
+        return $value;
+    }
+
+    /**
+     * metodod que retorna todos os metadados possivies para insercao de valores
+     * @param type $data
+     * @return type
+     */
+    public function get_all_properties_form_values($data) {
+        $all_properties_id = [];
+        if ($data['properties_id'] !== '') {
+            $all_properties_id = explode(',', $data['properties_id']);
+        }
+        if(isset($data['pc_properties']) && !is_array($data['pc_properties'])){
+            $array = explode(',', $data['properties_id']);
+            $all_properties_id = array_merge($all_properties_id, $array);
+        }else if(isset($data['pc_properties']) && !is_array($data['pc_properties'])){
+            foreach ($data['pc_properties'] as $array_properties) {
+                $array = explode(',', $array_properties);
+                $all_properties_id = array_merge($all_properties_id, $array);
+            }
+        }
+        return $all_properties_id;
     }
 
     /**
@@ -528,7 +646,7 @@ class ObjectModel extends Model {
      * @param array $data Com os dados vindo do formulario
      * @return void
      * @description - deleta os valores simetricos
-     * @author: Eduardo 
+     * @author: Eduardo
      */
     public function clean_simetric_property($object_id, $property_id) {
         $itens = get_post_meta($object_id, "socialdb_property_$property_id");
@@ -543,20 +661,32 @@ class ObjectModel extends Model {
      * @signature - function insert_properties_terms($data)
      * @param array $data Com os dados vindo do formulario
      * @return void
-     * @description - Insere os valores das propriedades 
-     * @author: Eduardo 
+     * @description - Insere os valores das propriedades
+     * @author: Eduardo
      */
     public function insert_properties_terms($data, $object_id) {
-        if ($data['properties_id'] !== '') {
-            $properties_id = explode(',', $data['properties_id']);
+        $properties_id = $this->get_all_properties_form_values($data);
+        if (!empty($properties_id)) {
             foreach ($properties_id as $property_id) {
-                if (isset($data["socialdb_propertyterm_$property_id"])&&!is_array($data["socialdb_propertyterm_$property_id"]) && $data["socialdb_propertyterm_$property_id"] !== '') {
+                $old_values =  get_post_meta($object_id, 'socialdb_property_'. $property_id.'_cat');
+                if($old_values && is_array($old_values)){
+                    foreach ($old_values as $old_value) {
+                        $categories = [];
+                        $categories[] = (int) $old_value;
+                        delete_post_meta($object_id, 'socialdb_property_'. $property_id.'_cat');
+                        wp_remove_object_terms($object_id, $categories, 'socialdb_category_type');
+                    }
+                }
+
+                if (isset($data["socialdb_propertyterm_$property_id"]) && !is_array($data["socialdb_propertyterm_$property_id"]) && $data["socialdb_propertyterm_$property_id"] !== '') {
+                    add_post_meta($object_id, 'socialdb_property_'. $property_id.'_cat',$data["socialdb_propertyterm_$property_id"]);
                     wp_set_object_terms($object_id, array((int) $data["socialdb_propertyterm_$property_id"]), 'socialdb_category_type', true);
-                     $this->set_common_field_values($object_id, "socialdb_propertyterm_$property_id", [(int) $data["socialdb_propertyterm_$property_id"]],'term');
+                    $this->set_common_field_values($object_id, "socialdb_propertyterm_$property_id", [(int) $data["socialdb_propertyterm_$property_id"]], 'term');
                 } elseif (is_array($data["socialdb_propertyterm_$property_id"]) && !empty(is_array($data["socialdb_propertyterm_$property_id"]))) {
                     foreach ($data["socialdb_propertyterm_$property_id"] as $value) {
+                        add_post_meta($object_id, 'socialdb_property_'. $property_id.'_cat',$value);
                         wp_set_object_terms($object_id, array((int) $value), 'socialdb_category_type', true);
-                        $this->set_common_field_values($object_id, "socialdb_propertyterm_$property_id", $data["socialdb_propertyterm_$property_id"],'term');
+                        $this->set_common_field_values($object_id, "socialdb_propertyterm_$property_id", $data["socialdb_propertyterm_$property_id"], 'term');
                     }
                 }
             }
@@ -568,8 +698,8 @@ class ObjectModel extends Model {
      * @param int $object_id O id do Objeto
      * @param array $data Os dados vindos do formulario
      * @return array os dados para o evento
-     * @description - 
-     * @author: Eduardo 
+     * @description -
+     * @author: Eduardo
      */
     public function insert_object_event($object_id, $data) {
         $eventAddObject = new EventObjectCreateModel();
@@ -585,7 +715,7 @@ class ObjectModel extends Model {
      * @paramters - ($collection_id, $name, $content)
      * @return - boolean confirmação da inserção do post
      * @description - métdo responsável pela inserção de vídeos em uma coleção
-     * @author: Eduardo 
+     * @author: Eduardo
      */
     public function add_video($collection_id, $name, $content) {
         $category_root_id = $this->collection_model->get_category_root_of($collection_id);
@@ -598,7 +728,8 @@ class ObjectModel extends Model {
             'post_content' => $content,
             'post_status' => 'publish',
             'post_author' => $user_id,
-            'post_type' => 'socialdb_object'
+            'post_type' => 'socialdb_object',
+            'post_parent' => $collection_id
         );
         $data['ID'] = wp_insert_post($post);
         //categoria raiz da colecao
@@ -615,7 +746,7 @@ class ObjectModel extends Model {
      * @paramters - ($collection_id, $name, $content)
      * @return - boolean confirmação da inserção do post
      * @description - métdo responsável pela inserção de vídeos em uma coleção
-     * @author: saymon 
+     * @author: saymon
      */
     public function add_photo($collection_id, $name, $content, $type = 'image', $source = '') {
         $category_root_id = $this->collection_model->get_category_root_of($collection_id);
@@ -628,7 +759,8 @@ class ObjectModel extends Model {
             'post_content' => '',
             'post_status' => 'publish',
             'post_author' => $user_id,
-            'post_type' => 'socialdb_object'
+            'post_type' => 'socialdb_object',
+            'post_parent' => $collection_id
         );
         $data['ID'] = wp_insert_post($post);
         update_post_meta($data['ID'], 'socialdb_object_from', 'external');
@@ -650,7 +782,7 @@ class ObjectModel extends Model {
      * @param int $collection_id O id da colecao do objeto
      * @return array  Os dados a serem usados na view
      * @description - metodo responsavel em buscar os dados de um objeto
-     * @author: Eduardo 
+     * @author: Eduardo
      */
     public function edit($object_id, $collection_id) {
         $data = [];
@@ -679,7 +811,7 @@ class ObjectModel extends Model {
      * @paramters - ($collection_id, $name, $content)
      * @return - boolean confirmação da inserção do post
      * @description - métdo responsável pela inserção de vídeos em uma coleção
-     * @author: Eduardo 
+     * @author: Eduardo
      */
     public function update($data) {
         $post = array(
@@ -688,7 +820,12 @@ class ObjectModel extends Model {
             'post_content' => $data['object_description'],
             'post_type' => 'socialdb_object'
         );
+        if ($data['post_status']) {
+            $post['post_status'] = $data['post_status'];
+        }
         $data['ID'] = wp_update_post($post);
+        //deleto o rascunho assim que adiciono
+        delete_user_meta(get_current_user_id(), 'socialdb_collection_' . $data['collection_id'] . '_betatext');
         if ($data['remove_thumbnail_object']) {
             delete_post_thumbnail($data['ID']);
         }
@@ -720,7 +857,14 @@ class ObjectModel extends Model {
         }
         // propriedade de termos
         $this->insert_properties_terms($data, $data['ID']);
-
+        //propriedades compostas
+        $this->insert_compounds($data, $data['ID']);
+        $_log_data = [ 'collection_id' => $data['collection_id'], 'user_id' => get_current_user_id(),
+            'event_type' => 'user_items', 'item_id' => $data['ID'], 'event' => 'edit'];
+        Log::addLog($_log_data);
+         //salvo o id da colecao onde esta sendo atualizado o item e sua
+        update_post_meta($data['ID'], 'socialdb_object_collection_init', $col_id);
+        update_post_meta($data['ID'], 'socialdb_object_guid', site_url().'/'. get_post($data['collection_id'])->post_name.'/'.get_post($data['ID'])->post_name);
         //msg
         $data['msg'] = __('The event was successful', 'tainacan');
         $data['type'] = 'success';
@@ -731,17 +875,17 @@ class ObjectModel extends Model {
     /**
      * function delete($data)
      * @param array Array com os dados do post a ser excluido
-     * @return void 
+     * @return void
      * Metodo reponsavel em excluir o objeto
-     * Autor: Eduardo Humberto 
+     * Autor: Eduardo Humberto
      */
     public function delete($data) {
         wp_delete_post($data['ID']);
         return json_encode($data);
     }
-    
+
     /**
-     * 
+     *
      * @param array $data Os dados vindo do modal de upload de imagem
      */
     public function insert_attachment_event($data) {
@@ -753,9 +897,9 @@ class ObjectModel extends Model {
         );
         $object_id = wp_insert_post($post);
         $attachment_id = $this->add_object_item($object_id);
-        if($attachment_id&&$attachment_id>0){
-            return json_encode(['attachment_id'=>$attachment_id]);
-        } else{
+        if ($attachment_id && $attachment_id > 0) {
+            return json_encode(['attachment_id' => $attachment_id]);
+        } else {
             return json_encode(false);
         }
     }
@@ -763,24 +907,24 @@ class ObjectModel extends Model {
     /**
      * function list_all()
      * @param array Array com os dados da colecao
-     * @return void 
+     * @return void
      * Metodo reponsavel em determinar se deve listar as colecoes ou objetos
-     * Autor: Eduardo Humberto 
+     * Autor: Eduardo Humberto
      */
-    public function list_all($args = null) {
+    public function list_all($args = null, $post_status = 'publish') {
         if ($args['collection_id'] == get_option('collection_root_id')) {
-            return $this->list_collection($args);
+            return $this->list_collection($args, $post_status);
         } else {
-            return $this->list_object($args);
+            return $this->list_object($args, $post_status);
         }
     }
 
     /**
      * function list_all()
      * @param array Array com os dados da colecao
-     * @return void 
+     * @return void
      * Metodo reponsavel em determinar se deve listar as colecoes ou objetos
-     * Autor: Eduardo Humberto 
+     * Autor: Eduardo Humberto
      */
     public function filter($args = null) {
         if ($args['collection_id'] == get_option('collection_root_id')) {
@@ -793,9 +937,9 @@ class ObjectModel extends Model {
     /**
      * function get_args($data)
      * @param array Array com os dados da colecao
-     * @return void 
+     * @return void
      * Metodo reponsavel em determinar se deve listar as colecoes ou objetos
-     * Autor: Eduardo Humberto 
+     * Autor: Eduardo Humberto
      */
     public function get_args($data) {
         $args['category_root_id'] = $this->collection_model->get_category_root_of($data['collection_id']);
@@ -827,17 +971,21 @@ class ObjectModel extends Model {
     /**
      * function list_object()
      * @param array Array com os dados da colecao
-     * @return void 
+     * @return void
      * Metodo reponsavel em  listar apenas objetos
-     * Autor: Eduardo Humberto 
+     * Autor: Eduardo Humberto
      */
-    public function list_object($args = null) {
-        $tax_query = array('relation' => 'IN');
+    public function list_object($args = null, $post_status = 'publish') {
+        $tax_query = array('relation' => 'AND');
         $tax_query[] = array(
             'taxonomy' => 'socialdb_category_type',
             'field' => 'id',
-            'terms' => array($this->collection_model->get_category_root_of($args['collection_id']))
+            'terms' => array($this->collection_model->get_category_root_of($args['collection_id'])),
+            'operator' => 'IN'
         );
+        if (has_filter('update_tax_query')) {
+            $tax_query = apply_filters('update_tax_query', $tax_query, $args['collection_id']);
+        }
         //tipo de ordenacao
         $orderby = $this->set_order_by($args);
         $array_defaults = ['socialdb_object_from', 'socialdb_object_dc_type', 'socialdb_object_dc_source', 'title', 'socialdb_license_id'];
@@ -854,8 +1002,9 @@ class ObjectModel extends Model {
         //a forma de ordenacao
         $order = $this->set_type_order($args);
         $args = array(
-            'posts_per_page' => 10,
+            'posts_per_page' => 50, // -1 to fetchs all items
             'post_type' => 'socialdb_object',
+            'post_status' => array($post_status),
             'paged' => 1,
             'tax_query' => $tax_query,
             'orderby' => $orderby,
@@ -873,9 +1022,9 @@ class ObjectModel extends Model {
     /**
      * function filter()
      * @param array Array com os dados a serem utilizados para realizar os filtros
-     * @return void 
+     * @return void
      * Metodo reponsavel em  realizar a filtragem dos items que estao listados
-     * @author Eduardo Humberto 
+     * @author Eduardo Humberto
      */
     public function filter_objects($data) {
         // pego as classificacoes
@@ -898,7 +1047,7 @@ class ObjectModel extends Model {
         }
         //a forma de ordenacao
         $order = $this->set_type_order($data);
-        //a pagina 
+        //a pagina
         $page = $this->set_page($data);
         //all_data_inside
         $args = array(
@@ -929,7 +1078,7 @@ class ObjectModel extends Model {
      * @param array $data O array de dados vindo do formulario
      * @return int com a pagina a ser visualizada
      * Metodo reponsavel em  retornar o fromato que sera ordenado (crescente ou decrescente)
-     * @author Eduardo Humberto 
+     * @author Eduardo Humberto
      */
     public function set_page($data) {
         if ($data['pagid'] && $data['pagid'] != '' && is_numeric($data['pagid'])) {
@@ -944,7 +1093,7 @@ class ObjectModel extends Model {
      * @param array $data O array de dados vindo do formulario
      * @return string com o tipo de pesquisa que sera realizada
      * Metodo reponsavel em  retornar o fromato que sera ordenado (crescente ou decrescente)
-     * @author Eduardo Humberto 
+     * @author Eduardo Humberto
      */
     public function set_type_order($data) {
         if (!isset($data['order_by']) || $data['order_by'] == '') {
@@ -966,7 +1115,7 @@ class ObjectModel extends Model {
      * @param array $data O array de dados vindo do formulario
      * @return string com o tipo de pesquisa que sera realizada
      * Metodo reponsavel em  retornar o tipo de ordem que sera utilizado no wp_query
-     * @author Eduardo Humberto 
+     * @author Eduardo Humberto
      */
     public function set_order_by($data) {
         $defaults = false;
@@ -999,9 +1148,9 @@ class ObjectModel extends Model {
      * @param array $categories as categorias selecionadas no dynatree a serem utilizadas na filtragem das colecoes
      * @param int $collection_id O id da colecao
      * @param array $tags as tags selecionadas no dynatree
-     * @return array com os dados a serem utilizados no wp_query 
+     * @return array com os dados a serem utilizados no wp_query
      * Metodo reponsavel em  montar o array que sera utilizado no Wp_query
-     * @author Eduardo Humberto 
+     * @author Eduardo Humberto
      */
     public function get_tax_query($categories, $collection_id, $tags) {
         // coloco categorias no array tax query
@@ -1038,8 +1187,8 @@ class ObjectModel extends Model {
      * @signature categories_by_facet($categories, $collection_id)
      * @param array $categories as categorias selecionadas no dynatree a serem utilizadas na filtragem das colecoes
      * @param int $collection_id O id da colecao
-     * @return array com os categorias separadas pela faceta (faceta como chave no array) 
-     * @author Eduardo Humberto 
+     * @return array com os categorias separadas pela faceta (faceta como chave no array)
+     * @author Eduardo Humberto
      */
     public function categories_by_facet($categories, $collection_id) {
         $categories_by_facet = array();
@@ -1058,9 +1207,9 @@ class ObjectModel extends Model {
      * @param array $categories as categorias selecionadas no dynatree a serem utilizadas na filtragem das colecoes
      * @param int $collection_id O id da colecao
      * @param array $tags as tags selecionadas no dynatree
-     * @return array com os dados a serem utilizados no wp_query 
+     * @return array com os dados a serem utilizados no wp_query
      * Metodo reponsavel em  montar o array que sera utilizado no Wp_query
-     * @author Eduardo Humberto 
+     * @author Eduardo Humberto
      */
     public function get_meta_query($properties) {
         $meta_query = array();
@@ -1080,26 +1229,44 @@ class ObjectModel extends Model {
     /**
      * function list_collection()
      * @param void
-     * @return void 
+     * @return void
      * Metodo reponsavel em listar as colecoes
-     * Autor: Eduardo Humberto 
+     * Autor: Eduardo Humberto
      */
-    public function list_collection($data = null) {
+    public function list_collection($data = null, $post_status = 'publish') {
         global $wp_query;
         $page = $this->set_page($data);
         $args = array(
+            'posts_per_page' => 50,
             'post_type' => 'socialdb_collection',
-            'post_status' => array('publish'),
+            'post_status' => array($post_status),
             'post__not_in' => array(get_option('collection_root_id')),
             'paged' => $page,
             'orderby' => 'date',
-            'order' => 'DESC',
+            'order' => 'DESC'
         );
         if (isset($data['keyword']) && $data['keyword'] != '') {
             $args['s'] = $data['keyword'];
         }
         if ($data['mycollections'] && $data['mycollections'] == 'true') {
             $args['author'] = get_current_user_id();
+        }else if ($data['sharedcollections'] && $data['sharedcollections'] == 'true') {
+            $meta_query = array('relation' => 'AND');
+            $meta_query[] = array(
+                'key' => 'socialdb_collection_moderator',
+                'value' => (string) get_current_user_id(),
+                'compare' => 'LIKE'
+            );
+            $args['meta_query'] = $meta_query;
+        }else{
+            $tax_query = array('relation' => 'AND'); // devem ter a relacao AND para filtrar dentro da colecao
+            $tax_query[] = array(
+                    'taxonomy' => 'socialdb_collection_type',
+                    'field' => 'id',
+                    'terms' => get_term_by('name', 'socialdb_collection_public', 'socialdb_collection_type')->term_id,
+                    'operator' => 'IN'
+                );
+            $args['tax_query'] = $tax_query;
         }
         return $args;
     }
@@ -1108,9 +1275,9 @@ class ObjectModel extends Model {
      * function get_object_author()
      * @param int $user_id O id do usuario que deseja visualizar
      * @param string field O campo que deseja visualizar
-     * @return mix o campo desejado 
+     * @return mix o campo desejado
      * Metodo reponsavel em listar as colecoes
-     * Autor: Eduardo Humberto 
+     * Autor: Eduardo Humberto
      */
     public function get_object_author($user_id, $field = 'id') {
         $array = $this->user_model->get_user($user_id);
@@ -1228,9 +1395,9 @@ class ObjectModel extends Model {
     }
 
     /**
-     * Metodo responsavel em retornar as configuracoes de cada metadado para a montagem 
+     * Metodo responsavel em retornar as configuracoes de cada metadado para a montagem
      * de sua view <i> show_object_properties</i>
-     * 
+     *
      * function show_object_properties()
      * @param array Array com os dados da colecao
      * @return As propriedades da colecao mais das categorias selecionadas
@@ -1246,19 +1413,22 @@ class ObjectModel extends Model {
         } else {
             $all_categories = array();
         }
-        // busco todos os ids de propriedades que este item possui, incluindo 
+        // busco todos os ids de propriedades que este item possui, incluindo
         // as propriedades das categorias, por isso eh necessario o id das categorias
         // o qual foi classificado
         $all_properties = $category_model->get_properties($data['collection_id'], $all_categories);
-        $data['all_ids'] = implode(',', $all_properties);
+        $data['all_ids'] = implode(',', array_unique($all_properties));
         // este metodo no retorno tem como objetivo  pegar os valores das propriedades
         // do item para ser mostrado na view
-        $result = $this->set_data_object_properties($all_properties, $data);
+        $result = $this->set_data_object_properties(array_unique($all_properties), $data);
         return $result;
     }
 
     /**
      * function set_data_object_properties()
+     *
+     *
+     * @uses element Description
      * @param array Array com as popriedades
      * @return Os dados que serao utilizados para construcao da view
      * @author Eduardo Humberto
@@ -1269,38 +1439,31 @@ class ObjectModel extends Model {
             foreach ($properties as $property_id) {
                 $type = $property_model->get_property_type_hierachy($property_id); // pego o tipo da propriedade
                 $all_data = $property_model->get_all_property($property_id, true); // pego todos os dados possiveis da propriedade
-                //var_dump($all_data);
-                if(isset($all_data['slug'])&& in_array($all_data['slug'], $this->fixed_slugs) ):
+                //retirando os metadados fixos
+                if (isset($all_data['slug']) && in_array($all_data['slug'], $this->fixed_slugs)):
+                    $data['fixeds'][] = $all_data;
+                    continue;
+                endif;
+                //retirando os metadados compostos
+                if (isset($all_data['metas']["socialdb_property_is_compounds"]) && in_array('true', $all_data['metas']["socialdb_property_is_compounds"])):
                     continue;
                 endif;
                 //diferenciando os tipos
-                if ($type == 'socialdb_property_object') {// pego o tipo
-                    $all_data['metas']['objects'] = $this->get_category_root_posts($all_data['metas']['socialdb_property_object_category_id']);
-                    $all_data['metas']['collection_data'] = $this->get_collection_by_category_root($all_data['metas']['socialdb_property_object_category_id']);
-                    // pegando os valores se necessario
-                    if ($data['object_id']) {
-                        $all_data['metas']['value'] = $property_model->get_object_property_value($data['object_id'], $property_id);
-                        $all_data['metas']['object_id'] = $data['object_id'];
+                if (in_array($type, ['socialdb_property_object', 'socialdb_property_data', 'socialdb_property_term'])) {
+                    $this->get_data_generic_types($type, $all_data, $property_id, $data);
+                } elseif ($type == 'socialdb_property_compounds') {
+                    // as propriedades
+                    $properties = explode(',', $all_data['metas']['socialdb_property_compounds_properties_id']);
+                    if (is_array($properties)) {
+                        $all_data['metas']['socialdb_property_compounds_properties_id'] = [];
+                        foreach ($properties as $id) {
+                            $_all_data = $property_model->get_all_property($id, true);
+                            $_type = $property_model->get_property_type_hierachy($id); // pego o tipo da propriedade
+                            $copy_data = $data;
+                            $all_data['metas']['socialdb_property_compounds_properties_id'][$id] = $this->get_data_generic_types($_type, $_all_data, $id, $copy_data);
+                        }
                     }
-                    $data['property_object'][] = $all_data;
-                } elseif ($type == 'socialdb_property_data') {
-                    // pegando os valores se necessario
-                    if ($data['object_id']) {
-                        $all_data['metas']['value'] = $property_model->get_object_property_value($data['object_id'], $property_id);
-                        $all_data['metas']['object_id'] = $data['object_id'];
-                    }
-                    //se caso for autoincrement
-                    if ($all_data['metas']['socialdb_property_data_widget'] == 'autoincrement') {
-                        $all_data['metas']['socialdb_property_data_value_increment'] = $this->get_last_counter($property_id);
-                    }
-                    $data['property_data'][] = $all_data;
-                } else if ($type == 'socialdb_property_term') {
-                    if ($data['object_id']) {
-                        $all_data['metas']['value'] = $property_model->get_object_property_value($data['object_id'], $property_id);
-                        $all_data['metas']['object_id'] = $data['object_id'];
-                    }
-                    $all_data['has_children'] = $this->getChildren($all_data['metas']['socialdb_property_term_root']);
-                    $data['property_term'][] = $all_data;
+                    $data['property_compounds'][] = $all_data;
                 } else {
                     $data['rankings'][] = $all_data;
                 }
@@ -1311,10 +1474,54 @@ class ObjectModel extends Model {
     }
 
     /**
+     *
+     *
+     * @param string $type
+     * @param array $all_data
+     * @param int  $property_id
+     * @param array (reference) $data
+     *
+     * metodo que busca as informacoes necessarias para os tipos primitivos
+     * (data,object,term) de metadados
+     */
+    public function get_data_generic_types($type, $all_data, $property_id, &$data) {
+        $property_model = new PropertyModel();
+        if ($type == 'socialdb_property_object') {// pego o tipo
+            $all_data['metas']['objects'] = ($all_data['metas']['socialdb_property_object_category_id']) ? $this->get_category_root_posts($all_data['metas']['socialdb_property_object_category_id']) : [];
+            $all_data['metas']['collection_data'] = $this->get_collection_by_category_root($all_data['metas']['socialdb_property_object_category_id']);
+            // pegando os valores se necessario
+            if ($data['object_id']) {
+                $all_data['metas']['value'] = $property_model->get_object_property_value($data['object_id'], $property_id);
+                $all_data['metas']['object_id'] = $data['object_id'];
+            }
+            $data['property_object'][] = $all_data;
+        } elseif ($type == 'socialdb_property_data') {
+            // pegando os valores se necessario
+            if ($data['object_id']) {
+                $all_data['metas']['value'] = $property_model->get_object_property_value($data['object_id'], $property_id);
+                $all_data['metas']['object_id'] = $data['object_id'];
+            }
+            //se caso for autoincrement
+            if ($all_data['metas']['socialdb_property_data_widget'] == 'autoincrement') {
+                $all_data['metas']['socialdb_property_data_value_increment'] = $this->get_last_counter($property_id);
+            }
+            $data['property_data'][] = $all_data;
+        } else if ($type == 'socialdb_property_term') {
+            if ($data['object_id']) {
+                $all_data['metas']['value'] = $property_model->get_object_property_value($data['object_id'], $property_id);
+                $all_data['metas']['object_id'] = $data['object_id'];
+            }
+            $all_data['has_children'] = $this->getChildren($all_data['metas']['socialdb_property_term_root'],'t.name ASC');
+            $data['property_term'][] = $all_data;
+        }
+        return $all_data;
+    }
+
+    /**
      * function list_properties()
-     * 
+     *
      * Metdoo que retorna todas propriedades de um objeto ja buscando as propriedades de suas categorias
-     * 
+     *
      * @param array Array com os dados do formulario
      * @return Os dados que serao utilizados para construcao da view
      * @author Eduardo Humberto
@@ -1341,7 +1548,6 @@ class ObjectModel extends Model {
         return $categories_id;
     }
 
-
     /**
      * function get_objects_by_property_json()
      * @param int Os dados vindo do formulario
@@ -1353,20 +1559,89 @@ class ObjectModel extends Model {
         $wp_posts = $wpdb->prefix . "posts";
         $term_relationships = $wpdb->prefix . "term_relationships";
         $property_model = new PropertyModel;
+        $data['term'] = trim($data['term']);
         $all_data = $property_model->get_all_property($data['property_id'], true); // pego todos os dados possiveis da propriedad
+        $categories = (is_array($all_data['metas']['socialdb_property_object_category_id'])) ? implode(',', array_filter($all_data['metas']['socialdb_property_object_category_id'])) : $all_data['metas']['socialdb_property_object_category_id'];
+//        if(has_filter('alter_categories_to_find_properties')){
+//            $categories = implode(',',apply_filters('alter_categories_to_find_properties',array_filter(explode(',',$categories))));
+//        }
         //$category_root_id = get_term_by('id', $all_data['metas']['socialdb_property_object_category_id'], 'socialdb_category_type');
-//        $query = "
-//                        SELECT p.* FROM $wp_posts p
-//                        INNER JOIN $term_relationships t ON p.ID = t.object_id    
-//                        WHERE t.term_taxonomy_id = {$category_root_id->term_taxonomy_id}
-//                        AND p.post_type like 'socialdb_object' and p.post_status like 'publish' and p.post_title LIKE '%{$data['term']}%'
-//                ";
-//        $result = $wpdb->get_results($query);
-        $result = $this->get_category_root_posts($all_data['metas']['socialdb_property_object_category_id']);
+        $query = "
+                        SELECT DISTINCT p.ID, p.* FROM $wp_posts p
+                        INNER JOIN $term_relationships t ON p.ID = t.object_id
+                        WHERE t.term_taxonomy_id IN ({$categories})
+                        AND p.post_type like 'socialdb_object' and p.post_status in ('publish') and p.post_title LIKE '%{$data['term']}%'
+                ";
+        $result = $wpdb->get_results($query);
+        //$result = $this->get_category_root_posts($all_data['metas']['socialdb_property_object_category_id']);
         if ($result) {
             foreach ($result as $object) {
-                if(strpos(strtolower($object->post_title), strtolower($data['term']))!==false){
-                     $json[] = array('value' => $object->ID, 'label' => $object->post_title);
+                if (strpos(strtolower($object->post_title), strtolower($data['term'])) !== false) {
+                    $array =  array('value' => $object->ID, 'label' => $object->post_title);
+                    $avoid_selected_items = $all_data['metas']['socialdb_property_avoid_items'];
+                    if(($avoid_selected_items === '1'|| $avoid_selected_items == 'true') && $this->is_selected_property($data['property_id'],  $object->ID)){
+                        continue;
+                    }
+
+                    if(has_filter('avoid-items-list-items-property-object') && apply_filters('avoid-items-list-items-property-object', $data['property_id'],0, $object->ID)){
+                        continue;
+                    }
+                   $json[] = $array;
+                }
+            }
+        }
+        return json_encode($json);
+    }
+
+    /**
+     *
+     * @param type $property_id
+     * @param type $item_id
+     * @return boolean
+     */
+    public function is_selected_property($property_id,$item_id) {
+        global $wpdb;
+        $wp_posts = $wpdb->prefix . "posts";
+        $wp_postmeta = $wpdb->prefix . "postmeta";
+        if ($meta_key == '') {
+            $meta_key = 'socialdb_property_' . $property_id;
+        }
+        $query = "
+                        SELECT pm.* FROM $wp_posts p
+                        INNER JOIN $wp_postmeta pm ON p.ID = pm.post_id
+                        WHERE p.post_status LIKE 'publish' and pm.meta_key like '$meta_key' and pm.meta_value LIKE '%{$item_id}%'
+                ";
+        $result = $wpdb->get_results($query);
+        if ($result && is_array($result) && count(array_filter($result)) > 0) {
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    /**
+     * function get_objects_by_selected_categories()
+     * @param string $categories Os dados vindo do formulario
+     * @return json com o id e o nome de cada objeto
+     * @author Eduardo Humberto
+     */
+    public function search_term_by_parent($parent,$term) {
+        $json = [];
+        if($parent != ''){
+            global $wpdb;
+            $wp_terms = $wpdb->prefix . "terms";
+            $wp_term_taxonomy = $wpdb->prefix . "term_taxonomy";
+            $property_model = new PropertyModel;
+            $query = "
+                            SELECT * FROM $wp_terms t
+                            INNER JOIN $wp_term_taxonomy tt ON t.term_id = tt.term_id
+                            WHERE tt.parent = {$parent}
+                            AND t.name LIKE '%{$term}%'
+                    ";
+            $result = $wpdb->get_results($query);
+            if ($result) {
+                foreach ($result as $object) {
+                    $json[] = array('value' => $object->term_id, 'label' => $object->name);
                 }
             }
         }
@@ -1400,7 +1675,7 @@ class ObjectModel extends Model {
         $categories = wp_get_object_terms($data['object_id'], 'socialdb_category_type');
         if (is_array($categories)) {
             foreach ($categories as $category) {
-                if($this->get_category_root_of($data['collection_id'])==$category->term_id){
+                if ($this->get_category_root_of($data['collection_id']) == $category->term_id) {
                     continue;
                 }
                 $category_data['term'] = $category;
@@ -1412,10 +1687,10 @@ class ObjectModel extends Model {
                 $data['categories'][] = $category_data;
             }
         }
-        $properties = $this->get_all_object_properties($data['object_id'], $data['collection_id']);
-        if (is_array($properties) && !empty($properties)) {
-            $data['properties'] = $properties;
-        }
+         //$properties = $this->get_all_object_properties($data['object_id'], $data['collection_id']);
+        //if (is_array($properties) && !empty($properties)) {
+            //$data['properties'] = $properties;
+        //}
 
         $tags = wp_get_object_terms($data['object_id'], 'socialdb_tag_type');
         $data['tags'] = $tags;
@@ -1435,7 +1710,7 @@ class ObjectModel extends Model {
         $wp_postmeta = $wpdb->prefix . "postmeta";
         $query = "
                       SELECT pm.* FROM $wp_posts p
-                      INNER JOIN $wp_postmeta pm ON p.ID = pm.post_id    
+                      INNER JOIN $wp_postmeta pm ON p.ID = pm.post_id
                       WHERE p.ID = $object_id AND pm.meta_key LIKE 'socialdb_property_%'
              ";
         $array_results = $wpdb->get_results($query);
@@ -1510,7 +1785,7 @@ class ObjectModel extends Model {
         if ($order == 'desc') {
             $result = '<span class="glyphicon glyphicon-sort-by-attributes-alt"></span>&nbsp;' . $result;
         } else {
-            $result = '<span class="glyphicon glyphicon-sort-by-attributes"></span>&nbsp;' . $result;
+            $result = '<span class="glyphicon glyphicon-sort-by-attributes"></span>& nbsp;' . $result;
         }
         return $result;
     }
@@ -1521,6 +1796,20 @@ class ObjectModel extends Model {
         $permissions['delete'] = get_post_meta($collection_id, 'socialdb_collection_permission_delete_comment', true);
 
         return $permissions;
+    }
+
+    public function move_to_trash($objs_ids, $collection_id) {
+        $event_delete = new EventObjectDeleteModel();
+        $events = [];
+
+        if (is_array($objs_ids)) {
+            foreach ($objs_ids as $item_id) {
+                $ev_d = $event_delete->update_post_status($item_id, ['event_id' => $collection_id], true);
+                array_push($events, $ev_d);
+            }
+        }
+
+        return [ 'deleted' => $events];
     }
 
     /**
@@ -1667,16 +1956,487 @@ class ObjectModel extends Model {
     }
 
     public function set_attachment_description($post_parent, $post_content) {
-        if ( isset($data['post_content']) && isset($data['post_parent']) ) {
+        if (isset($data['post_content']) && isset($data['post_parent'])) {
             $post_content = $data['post_content'];
             $post_parent = $data['post_parent'];
         }
-        $newest_attachment = get_posts( ['post_type' => 'attachment', 'post_parent' => $post_parent, 'exclude' => get_post_thumbnail_id($post_parent), 'numberposts' => 1] )[0];
-        wp_update_post( ['ID' => $newest_attachment->ID, 'post_content' => $post_content] );
+        $newest_attachment = get_posts(['post_type' => 'attachment', 'post_parent' => $post_parent, 'exclude' => get_post_thumbnail_id($post_parent), 'numberposts' => 1])[0];
+        wp_update_post(['ID' => $newest_attachment->ID, 'post_content' => $post_content]);
     }
 
     public function update_attachment_legend($item_id, $item_content) {
-        wp_update_post( [ 'ID' => $item_id, 'post_content' => $item_content ] );
+        wp_update_post([ 'ID' => $item_id, 'post_content' => $item_content]);
+    }
+
+    public function restoreItem($object_id) {
+        if(has_filter('before_restore_item')){
+            $result = apply_filters('before_restore_item',$object_id);
+            if($result){
+                return json_encode($result);
+            }
+        }
+
+        $my_post = array(
+            'ID' => $object_id,
+            'post_status' => 'publish'
+        );
+
+        $result = wp_update_post($my_post);
+
+        if (is_wp_error($result)) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public function delete_permanently_item($object_id) {
+        $my_post = array(
+            'ID' => $object_id,
+            'post_status' => 'trash'
+        );
+
+        $result = wp_update_post($my_post);
+
+        if (is_wp_error($result)) {
+            return false;
+        } else {
+            return true;
+        }
+        /* if(wp_delete_post( $object_id, true )){
+          return true;
+          }else{
+          return false;
+          } */
+    }
+
+    /**
+     *
+     * @param array $data Os dados vindo do formulario
+     * @param int $object_id O id do item a ser adicionado
+     */
+    public function insert_compounds($data, $object_id) {
+        $compounds = [];
+        // propriedade de categorias
+        if (isset($data['pc_properties_compounds']) && !is_array($data['pc_properties_compounds']) && trim($data['pc_properties_compounds']) != '') {
+            $pc_compounds = explode(',', $data['pc_properties_compounds']);
+            $compounds = array_merge($compounds, $pc_compounds);
+        }else if(isset($data['pc_properties_compounds']) && is_array($data['pc_properties_compounds']) && !empty($data['pc_properties_compounds'])){
+            foreach ($data['pc_properties_compounds'] as $array_properties) {
+                $pc_compounds = explode(',', $array_properties);
+                $compounds = array_merge($compounds, $pc_compounds);
+            }
+        }
+        if ($data['properties_compounds'] !== '') {
+            $compounds_origin = explode(',', $data['properties_compounds']);
+            $compounds = array_merge($compounds, $compounds_origin);
+        }
+        //se existir propriedades compostas
+        if ($compounds && is_array($compounds)) {
+            $compounds = array_unique($compounds);
+            foreach ($compounds as $compound) {
+                $properties_coumpounded = array_values(array_filter(explode(',', $data['compounds_' . $compound])));
+                $cardinality = $data['cardinality_' . $compound];
+                for ($i = 0; $i < $cardinality; $i++):
+                    $ids_metas = [];
+                    foreach ($properties_coumpounded as $index => $property_coumpounded) {
+                        $id = 0;
+                        if (isset($data['socialdb_property_' . $compound . '_' . $property_coumpounded . '_' . $i][0])) {
+                            $id = $this->add_value_compound($object_id, $compound, $property_coumpounded, $index, $i, $data['socialdb_property_' . $compound . '_' . $property_coumpounded . '_' . $i][0]);
+                        }
+                        if ($id != 0) {
+                            $ids_metas[] = $id;
+                        }else{
+                            $ids_metas[] = false;
+                        }
+                    }
+                    //salvando os valores
+                    if (!empty($ids_metas) && count($ids_metas) == count($properties_coumpounded)) {
+                        update_post_meta($object_id, 'socialdb_property_' . $compound . '_' . $i, implode(',', $ids_metas));
+                    }
+                endfor;
+            }
+        }
+    }
+
+    /**
+     *
+     * @param type $object_id
+     * @param type $compound_id
+     * @param type $property_id
+     * @param type $index O indice da propriedade na position passada
+     * @param type $position Aposicao na cardinalidade
+     * @param type $value
+     * @return type
+     */
+    public function add_value_compound($object_id, $compound_id, $property_id, $index, $position, $value) {
+        $type = $this->get_property_type_hierachy($property_id);
+        $has_value = get_post_meta($object_id, 'socialdb_property_' . $compound_id . '_' . $position, true);
+        if ($has_value) {
+            $value_before = explode(',', $has_value)[$index];
+            if (get_term_by('id', str_replace('_cat', '', $value_before), 'socialdb_category_type')) {
+                wp_remove_object_terms($object_id, get_term_by('id', $value_before, 'socialdb_category_type')->term_id, 'socialdb_category_type');
+            } else {
+                $this->sdb_delete_post_meta($value_before);
+            }
+        }
+        //inserindo
+        if ($type == 'socialdb_property_data' || $type == 'socialdb_property_object') {
+            return $this->sdb_add_post_meta($object_id, 'socialdb_property_' . $property_id, $value);
+        } else if ($type == 'socialdb_property_term') {
+            if($value==''){
+                return '';
+            }
+            wp_set_object_terms($object_id, get_term_by('id', str_replace('_cat', '', $value), 'socialdb_category_type')->term_id, 'socialdb_category_type', true);
+            return str_replace('_cat', '', $value) . '_cat';
+        }
+    }
+
+    public function insert_rankings_value($item_id, $collection_id) {
+        $property_model = new PropertyModel;
+        $category_root = $this->get_category_root_of($collection_id);
+        $category_root_id = $this->get_category_root_id();
+        //$all_properties_id = get_term_meta($category_root, 'socialdb_category_property_id');
+        $all_properties_id = $this->get_parent_properties($category_root, [], $category_root_id);
+        $data['category_root'] = $category_root; // coloco no array que sera utilizado na view
+        foreach ($all_properties_id as $property_id) {// varro todas propriedades
+            $type = $property_model->get_property_type($property_id); // pego o tipo da propriedade
+            if (($type == 'socialdb_property_ranking_like') || ($type == 'socialdb_property_ranking_binary') || ($type == 'socialdb_property_ranking_stars')) {// pego o tipo
+                add_post_meta($item_id, 'socialdb_property_' . $property_id, '');
+            }
+        }
+    }
+
+    public function copyItem($item, $collection_id, $update = false) {
+        $id = ($update ? $item->ID : 0);
+        $arrItem = [
+            'ID' => $id,
+            'post_author' => $item->post_author,
+            //'post_date' =>  $item->post_date,
+            //'post_date_gmt' =>  $item->post_date_gmt,
+            'post_content' => $item->post_content,
+            'post_title' => __('Copy of ') . $item->post_title,
+            'post_excerpt' => $item->post_excerpt,
+            'post_status' => $item->post_status,
+            'comment_status' => $item->comment_status,
+            //'ping_status' =>  $item->ping_status,
+            //'post_password' =>  $item->post_password,
+            //'post_name' =>  $item->post_name,
+            //'to_ping' =>  $item->to_ping,
+            //'pinged' =>  $item->pinged,
+            //'post_modified' =>  $item->post_modified,
+            //'post_modified_gmt' =>  $item->post_modified_gmt,
+            'post_content_filtered' => $item->post_content_filtered,
+            'post_parent' => $item->post_parent,
+            //'guid' =>  $item->guid,
+            //'menu_order' =>  $item->menu_order,
+            'post_type' => $item->post_type,
+                //'post_mime_type' =>  $item->post_mime_type,
+                //'comment_count' =>  $item->comment_count,
+                //'filter' =>  $item->filter,
+        ];
+
+        $newItem = wp_insert_post($arrItem);
+
+        $category_root_id = $this->get_category_root_of($collection_id);
+        wp_set_object_terms($newItem, array((int) $category_root_id), 'socialdb_category_type');
+
+        return $newItem;
+    }
+
+    public function copyItemMetas($itemID, array $oldMetas, $same_collection = true) {
+        if ($same_collection) {
+            foreach ($oldMetas as $key => $value) {
+                foreach ($value as $row) {
+                    add_post_meta($itemID, $key, $row);
+                }
+            }
+        } else {
+            foreach ($oldMetas as $key => $value) {
+                foreach ($value as $row) {
+                    if (strpos($key, 'social_property_') === false) {
+                        add_post_meta($itemID, $key, $row);
+                    }
+                }
+            }
+        }
+    }
+
+    public function copyItemCategories($itemID, $oldID, $category_root_id = 0) {
+        $categories = $this->get_object_categories_id($oldID);
+        foreach ($categories as $category) {
+            if ($category != $category_root_id) {
+                wp_set_object_terms($itemID, array((int) $category), 'socialdb_category_type', true);
+            }
+        }
+    }
+
+    public function copyItemCategoriesOtherCol($itemID, $oldID, $category_root_id = 0) {
+        $categories = $this->get_object_categories_id($oldID);
+        foreach ($categories as $category) {
+            if ($category != $category_root_id) {
+                $ancestors = get_ancestors($category, 'socialdb_category_type');
+                //var_dump($category_root_id, $ancestors);
+                if (!in_array($category_root_id, $ancestors)) {
+                    wp_set_object_terms($itemID, array((int) $category), 'socialdb_category_type', true);
+                }
+            }
+        }
+    }
+
+    public function copyItemTags($itemID, $oldID) {
+        $tags = $this->get_object_tags_id($oldID);
+        foreach ($tags as $tag) {
+            wp_set_object_terms($itemID, array((int) $tag), 'socialdb_tag_type', true);
+        }
+    }
+
+    public function createVersionItem($item, $collection_id, $update = false) {
+        $id = ($update ? $item->ID : 0);
+        $arrItem = [
+            'ID' => $id,
+            'post_author' => $item->post_author,
+            'post_date' => $item->post_date,
+            //'post_date_gmt' =>  $item->post_date_gmt,
+            'post_content' => $item->post_content,
+            'post_title' => $item->post_title,
+            'post_excerpt' => $item->post_excerpt,
+            'post_status' => $item->post_status,
+            'comment_status' => $item->comment_status,
+            //'ping_status' =>  $item->ping_status,
+            //'post_password' =>  $item->post_password,
+            //'post_name' =>  $item->post_name,
+            //'to_ping' =>  $item->to_ping,
+            //'pinged' =>  $item->pinged,
+            //'post_modified' =>  $item->post_modified,
+            //'post_modified_gmt' =>  $item->post_modified_gmt,
+            'post_content_filtered' => $item->post_content_filtered,
+            'post_parent' => $item->post_parent,
+            //'guid' =>  $item->guid,
+            //'menu_order' =>  $item->menu_order,
+            'post_type' => $item->post_type
+                //'post_mime_type' =>  $item->post_mime_type,
+                //'comment_count' =>  $item->comment_count,
+                //'filter' =>  $item->filter,
+        ];
+
+        $newItem = wp_insert_post($arrItem);
+
+        if (!is_wp_error($newItem) || $newItem != 0) {
+            $this->changeStatusOldVersion($item, $newItem);
+
+            $category_root_id = $this->get_category_root_of($collection_id);
+            wp_set_object_terms($newItem, array((int) $category_root_id), 'socialdb_category_type');
+
+            return $newItem;
+        } else {
+            return false;
+        }
+    }
+
+    public function changeStatusOldVersion($item, $newItem) {
+        $newItem = get_post($newItem);
+
+        // Update old post
+        $old_post = array(
+            'ID' => $item->ID,
+            'post_status' => 'inherit',
+            'post_type' => 'revision',
+            'post_name' => $newItem->post_name
+        );
+
+        // Update the post into the database
+        wp_update_post($old_post);
+
+        // Update new post
+        $new_post = array(
+            'ID' => $newItem->ID,
+            'post_name' => $item->post_name
+        );
+
+        // Update the post into the database
+        wp_update_post($new_post);
+    }
+
+    public function revertItem($item, $newItem) {
+        $newItem = get_post($newItem);
+
+        // Update old post
+        $old_post = array(
+            'ID' => $item->ID,
+            'post_status' => 'inherit',
+            'post_type' => 'revision',
+            'post_name' => $newItem->post_name
+        );
+
+        // Update the post into the database
+        wp_update_post($old_post);
+
+        // Update new post
+        $new_post = array(
+            'ID' => $newItem->ID,
+            'post_status' => 'publish',
+            'post_type' => 'socialdb_object',
+            'post_name' => $item->post_name
+        );
+
+        // Update the post into the database
+        wp_update_post($new_post);
+    }
+
+    public function checkVersionNumber($object) {
+        $version = get_post_meta($object->ID, 'socialdb_version_number', true);
+
+        if (!$version) {
+            add_post_meta($object->ID, 'socialdb_version_number', 1);
+            add_post_meta($object->ID, 'socialdb_version_comment', __('Original Item', 'tainacan'));
+            add_post_meta($object->ID, 'socialdb_version_date', $object->post_date);
+            add_post_meta($object->ID, 'socialdb_version_user', $object->post_author);
+        }
+
+        $return = ($version ? $version : 1);
+        return $return;
+    }
+
+    public function checkVersionActive($original) {
+        global $wpdb;
+        $wp_posts = $wpdb->prefix . "posts";
+        $wp_postmeta = $wpdb->prefix . "postmeta";
+        $query = "
+                    SELECT p.* FROM $wp_posts p
+                    INNER JOIN $wp_postmeta pm ON p.ID = pm.post_id
+                    WHERE pm.meta_key LIKE 'socialdb_version_postid' and pm.meta_value like '$original' AND p.post_status LIKE 'publish'
+            ";
+        $result = $wpdb->get_results($query);
+
+
+        if ($result && is_array($result) && count($result) > 0) {
+            return $result[0]->ID;
+        } else {
+            return $original;
+        }
+    }
+
+    public function checkOriginalItem($object_id) {
+        $original = get_post_meta($object_id, 'socialdb_version_postid', true);
+
+        $return = ($original ? $original : $object_id);
+        return $return;
+    }
+
+    public function checkVersions($original) {
+        global $wpdb;
+        $wp_posts = $wpdb->prefix . "posts";
+        $wp_postmeta = $wpdb->prefix . "postmeta";
+
+        $query = "
+                    SELECT * FROM $wp_postmeta
+                    WHERE meta_key LIKE 'socialdb_version_postid' AND meta_value = {$original}
+            ";
+        $result = $wpdb->get_results($query);
+
+        if ($result && is_array($result) && count($result) > 0) {
+            return $result;
+        } else {
+            return array();
+        }
+    }
+
+    public function createMetasVersion($post_id, $original, $new_version, $motive) {
+        update_post_meta($post_id, 'socialdb_version_postid', $original);
+        update_post_meta($post_id, 'socialdb_version_number', $new_version);
+        update_post_meta($post_id, 'socialdb_version_comment', $motive);
+        update_post_meta($post_id, 'socialdb_version_date', date_i18n( 'Y-m-d H:i:s'));
+        update_post_meta($post_id, 'socialdb_version_user', get_current_user_id());
+    }
+
+    public function get_all_versions($original) {
+        global $wpdb;
+        $wp_posts = $wpdb->prefix . "posts";
+        $wp_postmeta = $wpdb->prefix . "postmeta";
+        $query = "
+                    SELECT p.* FROM $wp_posts p
+                    INNER JOIN $wp_postmeta pm ON p.ID = pm.post_id
+                    WHERE pm.meta_key LIKE 'socialdb_version_postid' and pm.meta_value like '$original' AND (p.post_status LIKE 'publish' OR p.post_status LIKE 'inherit')
+            ";
+        $result = $wpdb->get_results($query);
+
+
+        if ($result && is_array($result) && count($result) > 0) {
+            return $result;
+        } else {
+            return array();
+        }
+    }
+
+    public function send_version_to_trash($object_id) {
+        $my_post = array(
+            'ID' => $object_id,
+            'post_status' => 'trash'
+        );
+
+        $result = wp_update_post($my_post);
+
+        if (is_wp_error($result)) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public function get_facet_category_for_select($collection_id) {
+        $post_meta = get_post_meta($collection_id, 'socialdb_collection_facets');
+        $result = array();
+        if ($post_meta) {
+            foreach ($post_meta as $pmeta) {
+                $term = get_term_by('id', $pmeta, 'socialdb_category_type');
+                if ($term) {
+                    $result[] = $term;
+                }
+            }
+        }
+        return $result;
+    }
+
+    /**
+     *
+     * @param type $item_id
+     * @param type $collection_id
+     * @param type $property_id
+     */
+    public function remove_itens_property_reverse($item_id,$collection_id,$property_id){
+        $items = $this->get_category_root_posts(get_term_meta($property_id, 'socialdb_property_created_category', true));
+        foreach ($items as $item) {
+            delete_post_meta($item->ID, 'socialdb_property_'.$property_id, $item_id);
+        }
+    }
+
+    public function getItemTabs($collection_id) {
+        if($collection_id && ctype_digit($collection_id)) {
+            return [
+                'order' => get_post_meta($collection_id, 'socialdb_collection_properties_ordenation'),
+                'organize' => unserialize(get_post_meta($collection_id, 'socialdb_collection_update_tab_organization', true))[0],
+                'names' => get_post_meta($collection_id, 'socialdb_collection_tab')
+            ];
+        }
+
+        return [];
+    }
+
+    public function getPDFBase($post_id) {
+        $obj = get_post($post_id);
+
+        if( is_object($obj) ) {
+            return [
+                "author" => $this->user_model->get_user($obj->post_author)['name'],
+                "title" => $obj->post_title,
+                "desc" => $obj->post_content,
+                "output" => substr($obj->post_name, 0, 15) . mktime(),
+                "data_c" => explode(" ", $obj->post_date)[0]
+            ];
+        }
+
+        return false;
     }
 
 }

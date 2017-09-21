@@ -1,16 +1,23 @@
-<?php ?>
 <script>
+    var search_items_query = $('#wp_query_args').val();
+    var search_collections_query = $('#wp_query_args').val();
     $(function () {
         set_containers_class($('#collection_id').val());
+        show_collection_properties_root($('#collection_id').val());
         // *************** Iframe Popover Collection ****************
-        //$('#iframebutton').attr('data-content', 'Teste').data('bs.popover').setContent();
         $('[data-toggle="popover"]').popover();
-        $('[data-toggle="tooltip"]').tooltip(); 
-        // var myPopover = $('#iframebutton').data('popover');
-        // $('#iframebutton').popover('hide');
-        // myPopover.options.html = true;
-        //<iframe width="560" height="315" src="https://www.youtube.com/embed/CGyEd0aKWZE" frameborder="0" allowfullscreen></iframe>
-        // myPopover.options.content = '<form><input type="text" style="width:200px;" value="<iframe width=\'800\' height=\'600\' src=\'' + $("#socialdb_permalink_collection").val() + '\' frameborder=\'0\'></iframe>" /></form>';
+        $('[data-toggle="tooltip"]').tooltip();
+        $("textarea").on("keydown",function(e) {
+            var key = e.keyCode;
+            // If the user has pressed enter
+            if (key == 13) {
+                $(this).val($(this).val()+"\n");
+                return false;
+            }
+            else {
+                return true;
+            }
+        });
         if ($('#is_filter').val() == '1') {
             $('#form').hide();
             $('#list').hide();
@@ -32,22 +39,220 @@
                     $('#items_not_found').hide();
                 }
             });
+        }else{
+            set_popover_content($("#socialdb_permalink_collection").val());
         }
+        //advanced search submit
+        $('#advanced_search_collection_form').submit(function (e) {
+            e.preventDefault();
+            show_modal_main();
+            $.ajax({
+                url: $('#src').val() + '/controllers/advanced_search/advanced_search_controller.php',
+                type: 'POST',
+                data: new FormData(this),
+                processData: false,
+                contentType: false
+            }).done(function (result) {
+                elem = jQuery.parseJSON(result);
+                hide_modal_main();
+                if (elem.args_collection) {
+
+                    search_collections_query = elem.args_collection;
+                    $('#wp_query_args').val(search_collections_query);
+                    if (elem.args_item)
+                    {
+                        search_items_query = elem.args_item;
+                    }
+
+                    $("#items_not_found").hide();
+
+                    if(elem.has_collection && elem.has_item)
+                    {
+                        $('#click_ad_search_collection').parent().show();
+                        $('#click_ad_search_items').parent().show();
+                        $('#click_ad_search_collection').trigger('click');
+                    }else if(elem.has_collection && !elem.has_item)
+                    {
+                        $('#click_ad_search_collection').trigger('click');
+                        $('#click_ad_search_collection').parent().show();
+                        $('#click_ad_search_items').parent().hide();
+                    }else if(!elem.has_collection && elem.has_item)
+                    {
+                        $('#click_ad_search_collection').parent().hide();
+                        $('#click_ad_search_items').parent().show();
+                        $('#click_ad_search_items').trigger('click');
+                    }else if(!elem.has_collection && !elem.has_item)
+                    {
+                        $('#click_ad_search_items').trigger('click');
+                        $('#click_ad_search_collection').parent().hide();
+                        $('#click_ad_search_items').parent().hide();
+                        $("#items_not_found").show();
+
+                    }
+                    
+                }
+                else if (elem.args_item)
+                {
+                    search_items_query = elem.args_item;
+                    $('#wp_query_args').val(search_items_query);
+                    if( $('#click_ad_search_items').length>0){
+                        $('#click_ad_search_items').trigger('click');
+                    }else{
+                        wpquery_filter();
+                    }
+                }else{
+                    wpquery_filter();
+                }
+            });
+            e.preventDefault();
+        });
+
+        $(".sort_list").on('click', function() {
+            var action = $(this).attr("id");
+            $(".sort_list").css('background', 'white');
+            $(this).css('background', 'buttonface');
+            change_ordenation(action);
+        });
+        
+        
+        
+        $('a.move_edition').on('click', function(event) {
+            event.preventDefault();
+            var edit_data = [];
+            show_modal_main();
+            
+            //$('.list-mode-set').hide();
+            $('.selected-item').each(function(idx, el) {
+                var item_id = $(el).parent().attr("id").replace("object_", "");
+                var item_title = $("#object_" + item_id + " h4.item-display-title").text().trim();
+                var item_desc = $("#object_" + item_id + " .item-desc-hidden-full").text().trim();
+                edit_data.push( { id: item_id, title: item_title, desc: item_desc } );
+            });
+            $.ajax({
+                type: "POST",
+                url: $('#src').val() + "/controllers/object/object_controller.php",
+                data: { operation: 'edit_multiple_items', items_data: edit_data,collection_id:$('#collection_id').val() }
+            }).done(function(html_res){
+                hide_modal_main();
+                isLoading = false;
+                $('#main_part').hide();
+                $('#configuration').html(html_res).show();
+                //$("#main_part").html(html_res);
+            });
+        });
     });
-/**************************** Comentarios **************************************************/
-function list_comments_general(){
-    if($('#socialdb_event_comment_term_id').val()=='collection'){
-       list_comments_term('comments_term','collection'); 
-    }else if($('#socialdb_event_comment_term_id').val()==''){
-         list_comments($('#single_object_id').val());
-    }else{
-       list_comments_term('comments_term',$('#socialdb_event_comment_term_id').val()); 
+    
+    $(document).ready(function() {
+        document.title = '<?php echo html_entity_decode(get_the_title()) ?>';
+    });
+    //search repeated items
+    function clear_repeated_values(main_value,classes){
+       $.each($(classes),function(index,value){
+           if($(value).attr('id') !== $(main_value).attr('id') && 
+                   $(value).val() &&
+                   $(main_value).val() &&
+                   $(value).val().trim().toLowerCase() === $(main_value).val().trim().toLowerCase() ){
+                 toastr.error($(main_value).val()+' <?php _e(' is already inserted!', 'tainacan') ?>', '<?php _e('Attention!', 'tainacan') ?>', {positionClass: 'toast-bottom-right'});
+                $(main_value).val('');
+           }
+       });
     }
-}
+    //slideUp
+    function slideFormAdvancedDown(){
+        if($('#propertiesRootAdvancedSearch').is(':visible')){
+            $('#propertiesRootAdvancedSearch').hide();
+            $('#filters_collection').show();
+            $('.text-left .clear-top-search').parent().show();
+            $('#icon-search-bottom').show();
+            $('#icon-search-top').hide();
+            $('.search-colecao').show();
+        }else{
+            $('#icon-search-bottom').hide();
+            $('#filters_collection').hide();
+             $('.text-left .clear-top-search').parent().hide();
+            $('#icon-search-top').show();
+            $('#propertiesRootAdvancedSearch').show();
+            $('.search-colecao').hide();
+        }
+    }
+    //limpando do formulario de busca avancada
+    function reboot_form(){ 
+        if($('#propertiesRootAdvancedSearch').length>0){
+            $('#propertiesRootAdvancedSearch').html('<center><img src="<?php echo get_template_directory_uri() . '/libraries/images/catalogo_loader_725.gif' ?>"><h3><?php _e('Please wait...', 'tainacan') ?></h3></center>');   
+            show_collection_properties_root($('#collection_id').val());
+            //wpquery_clean(); 
+            search_collections_query = '';
+            search_items_query = '';
+            $('#click_ad_search_collection').parent().show();
+            $('#click_ad_search_items').parent().show();
+            $('#click_ad_search_collection').trigger('click');
+        }
+    }
+    // atualiza o container com as propriedades da colecao que foi selecionada no selectbox
+    function show_collection_properties_root(collection_id) {
+        //mostro o loader para carregar os metadados
+        if($('#collection_id').val()===$('#collection_root_id').val() && $('#search-advanced-text').val() != ''){
+            show_modal_main();
+        }
+        //ajax properties
+        $.ajax({
+            url: $('#src').val() + '/controllers/advanced_search/advanced_search_controller.php',
+            type: 'POST',
+            data: {operation: 'show_object_properties_auto_load', collection_id: collection_id}
+        }).done(function (result) {
+            $('#propertiesRootAdvancedSearch').html(result);
+            //$('#propertiesRootAdvancedSearch').show();
+            revalidate_adv_autocomplete(collection_id);
+            //se estiver buscando algo nos campos de busca externos e que esteja na home de colecoes
+            if($('#collection_id').val()===$('#collection_root_id').val() && $('#search-advanced-text').val() != ''){
+                if($('#search-advanced-text').val()!=='@')
+                    $('#advanced_search_title').val($('#search-advanced-text').val());
+
+                slideFormAdvancedDown();
+                $('#advanced_search_collection_form').trigger('submit');
+                $('#search-advanced-text').val('');
+            }
+        });
+    }
+
+    function revalidate_adv_autocomplete(collection_id) {
+        $("#advanced_search_title").autocomplete({
+            source: $('#src').val() + '/controllers/collection/collection_controller.php?operation=list_items_search_autocomplete_advanced_search&collection_id=' + collection_id,
+            messages: {
+                noResults: '',
+                results: function () {
+                }
+            },
+            minLength: 2,
+            select: function (event, ui) {
+                $("#advanced_search_title").val('');
+                //var temp = $("#chosen-selected2 [value='" + ui.item.value + "']").val();
+                var temp = $("#property_value_").val();
+                if (typeof temp == "undefined") {
+                    $("#advanced_search_title").val(ui.item.value);
+                }
+            }
+        });
+
+    }
+
+    /**************************** Comentarios **************************************************/
+    function list_comments_general() {
+        if ($('#socialdb_event_comment_term_id').val() == 'collection') {
+            list_comments_term('comments_term', 'collection');
+        } else if ($('#socialdb_event_comment_term_id').val() == '') {
+            list_comments($('#single_object_id').val());
+        } else {
+            list_comments_term('comments_term', $('#socialdb_event_comment_term_id').val());
+        }
+    }
 
 
-function submit_comment(object_id) {
-        if ($('#comment').val().trim() === '') {
+    function submit_comment(object_id) {
+        let comment_content = $('#comment').val().trim();
+        comment_content = remove_script_tags(comment_content);
+
+        if (comment_content === '') {
             showAlertGeneral('<?php _e('Attention!', 'tainacan') ?>', '<?php _e('Fill your comment', 'tainacan') ?>', 'info');
         } else {
             show_modal_main();
@@ -59,7 +264,7 @@ function submit_comment(object_id) {
                     socialdb_event_create_date: '<?php echo mktime() ?>',
                     socialdb_event_user_id: $('#current_user_id').val(),
                     socialdb_event_comment_create_object_id: object_id,
-                    socialdb_event_comment_create_content: $('#comment').val(),
+                    socialdb_event_comment_create_content: comment_content,
                     socialdb_event_comment_author_name: $('#author').val(),
                     socialdb_event_comment_author_email: $('#email').val(),
                     socialdb_event_comment_author_website: $('#url').val(),
@@ -71,11 +276,24 @@ function submit_comment(object_id) {
                 elem_first = jQuery.parseJSON(result);
                 showAlertGeneral(elem_first.title, elem_first.msg, elem_first.type);
                 list_comments_general();
-                $('.dropdown-toggle').dropdown();
-                $('.nav-tabs').tab();
+                $("#comment_item"+object_id).modal('hide');
             });
         }
     }
+
+    function remove_script_tags(text)
+    {
+        //Opening tags
+        var div = document.createElement('div');
+        div.innerHTML = text;
+        var scripts = div.getElementsByTagName('script');
+        var i = scripts.length;
+        while (i--) {
+            scripts[i].parentNode.removeChild(scripts[i]);
+        }
+        return div.innerHTML;
+    }
+
     // submissao da resposta a um comentario
     function submit_comment_reply(object_id) {
         if ($('#comment_msg_reply').val().trim() === '') {
@@ -113,7 +331,6 @@ function submit_comment(object_id) {
     }
     // mostra modal de resposta
     function showModalReply(comment_parent_id) {
-        console.log($('#modalReplyComment'));
         $('#comment_id').val(comment_parent_id);
         $('#modalReplyComment').modal("show");
     }
@@ -169,22 +386,19 @@ function submit_comment(object_id) {
         },
         function (isConfirm) {
             if (isConfirm) {
-                  show_modal_main();
+                show_modal_main();
                 $.ajax({
                     type: "POST",
                     url: $('#src').val() + "/controllers/event/event_controller.php",
-                    data: {
-                        operation: 'add_event_comment_delete',
-                        socialdb_event_create_date: time,
-                        socialdb_event_user_id: $('#current_user_id').val(),
-                        socialdb_event_comment_delete_id: comment_id,
+                    data: {operation: 'add_event_comment_delete', socialdb_event_create_date: time,
+                        socialdb_event_user_id: $('#current_user_id').val(), socialdb_event_comment_delete_id: comment_id,
+                        socialdb_event_comment_delete_object_id: $("#single_object_id").val(),
                         socialdb_event_collection_id: $('#collection_id').val()}
                 }).done(function (result) {
                     hide_modal_main();
                     list_comments_general();
                     elem_first = jQuery.parseJSON(result);
                     showAlertGeneral(elem_first.title, elem_first.msg, elem_first.type);
-
                 });
             }
         });
@@ -207,8 +421,8 @@ function submit_comment(object_id) {
                     socialdb_event_comment_delete_id: $('#comment_id_report').val(),
                     socialdb_event_collection_id: $('#collection_id').val()}
             }).done(function (result) {
-            hide_modal_main();
-                 list_comments_general();
+                hide_modal_main();
+                list_comments_general();
                 elem_first = jQuery.parseJSON(result);
                 showAlertGeneral(elem_first.title, elem_first.msg, elem_first.type);
             });
@@ -223,16 +437,13 @@ function submit_comment(object_id) {
             $.ajax({
                 type: "POST",
                 url: $('#src').val() + "/controllers/event/event_controller.php",
-                data: {
-                    operation: 'add_event_comment_edit',
-                    socialdb_event_create_date: '<?php echo mktime() ?>',
-                    socialdb_event_user_id: $('#current_user_id').val(),
-                    socialdb_event_comment_edit_id: comment_id,
+                data: {operation: 'add_event_comment_edit', socialdb_event_create_date: '<?php echo mktime() ?>',
+                    socialdb_event_user_id: $('#current_user_id').val(), socialdb_event_comment_edit_id: comment_id,
+                    socialdb_event_comment_edit_object_id: $("#single_object_id").val(),
                     socialdb_event_comment_edit_content: $('#edit_field_value_' + comment_id).val(),
-                    socialdb_event_collection_id: $('#collection_id').val()
-                }
+                    socialdb_event_collection_id: $('#collection_id').val()}
             }).done(function (result) {
-                 list_comments_general();
+                list_comments_general();
                 hide_modal_main();
                 $('.dropdown-toggle').dropdown();
                 $('.nav-tabs').tab();
@@ -245,19 +456,27 @@ function submit_comment(object_id) {
         }
     }
 
-/******************************************************************************/
+    /******************************************************************************/
 
     function set_popover_content(content) {
-        $('[data-toggle="popover"]').popover();
-        var myPopover = $('#iframebutton').data('popover');
-        $('#iframebutton').popover('hide');
-        if (myPopover) {
-            myPopover.options.html = true;
-            //<iframe width="560" height="315" src="https://www.youtube.com/embed/CGyEd0aKWZE" frameborder="0" allowfullscreen></iframe>
-            myPopover.options.content = '<form><input type="text" style="width:200px;" value="<iframe width=\'800\' height=\'600\' src=\'' + content + '\' frameborder=\'0\'></iframe>" /></form>';
+        //$('[data-toggle="popover"]').popover();
+        //var myPopover = $('#iframebutton').data('popover');
+        //$('#iframebutton').popover('hide');
+        if ($('#iframebutton_dropdown').length>0) {
+            $('#iframebutton_dropdown').html('<form style="margin:5px;">Search URL:&nbsp<input type="text" style="width:165px;" value="' + content + '" /><br><br>Iframe:&nbsp<input type="text" style="width:200px;" value="<iframe style=\'width:100%\' height=\'1000\' src=\'' + content + '\' frameborder=\'0\'></iframe>" /></form>'); 
         }
     }
 
+    function set_popover_content_link(content) {
+        $('[data-toggle="popover"]').popover();
+        var myPopover = $('#linkbutton').data('popover');
+        $('#linkbutton').popover('hide');
+        if (myPopover) {
+            myPopover.options.html = true;
+            //<iframe width="560" height="315" src="https://www.youtube.com/embed/CGyEd0aKWZE" frameborder="0" allowfullscreen></iframe>
+            myPopover.options.content = '<form><input type="text" style="width:200px;" value="' + content + '" /></form>';
+        }
+    }
 
     function set_containers_class(collection_id) {
         $.ajax({
@@ -267,29 +486,25 @@ function submit_comment(object_id) {
         }).done(function (result) {
             $('.dropdown-toggle').dropdown();
             elem = jQuery.parseJSON(result);
-            if (elem.has_left && elem.has_left == 'true' && (!elem.has_right || elem.has_right !== 'true')) {
-                $('#div_central').show();
-                $('#div_central').removeClass('col-md-12');
-                $('#div_central').addClass('col-md-9');
+            if ($('#collection_root_id').val() == elem.collection_id) {
+                $('#div_central').show().removeClass('col-md-12').addClass('col-md-9');
+                $('#div_left').show();
+                load_root_menu_left(collection_id);
+            } else if (elem.has_left && elem.has_left == 'true' && (!elem.has_right || elem.has_right !== 'true')) {
+                $('#div_central').show().removeClass('col-md-12').addClass('col-md-9');
                 $('#div_left').show();
                 load_menu_left(collection_id);
             } else {
-                <?php if(!has_filter('category_root_as_facet')||apply_filters('category_root_as_facet', true)): ?>
-                $('#div_left').hide();
-                $('#div_central').removeClass('col-md-9');
-                $('#div_central').removeClass('col-md-10');
-                $('#div_central').removeClass('col-md-12');
-                $('#div_central').addClass('col-md-12');
-                $('#div_central').show();
-                $('#div_left').html('');
+                <?php if (!has_filter('category_root_as_facet') || apply_filters('category_root_as_facet', true)): ?>
+                $('#div_left').hide().html('');
+                $('#div_central').removeClass('col-md-9 col-md-10').addClass('col-md-12').show();
                 <?php else: ?>
-                 load_menu_left(collection_id);   
+                load_menu_left(collection_id);
                 <?php endif; ?>
                 // load_menu_top(collection_id);
             }
         });
     }
-
 
     function load_menu_left(collection_id) {
         $.ajax({
@@ -302,20 +517,36 @@ function submit_comment(object_id) {
         });
     }
 
+    function load_root_menu_left(collection_id) {
+        $.ajax({
+            type: "POST",
+            url: $('#src').val() + "/controllers/collection/collection_controller.php",
+            data: {operation: 'load_root_menu_left', collection_id: collection_id}
+        }).done(function (result) {
+            $('.dropdown-toggle').dropdown();
+            $('#div_left').html(result);
+        });
+    }
+
     function list_category_property_single(category_id) {
         if (!category_id) {
             category_id = $("#category_single_edit_id").val();
         }
+        var operation = '<?php echo (has_filter('tainacan_operation_metadata_category')) ? apply_filters('tainacan_operation_metadata_category', '') : 'list_metadata_category' ?>';
         $('#modalEditCategoria').modal('hide');
         $.ajax({
             url: $('#src').val() + '/controllers/property/property_controller.php',
             type: 'POST',
-            data: {operation: 'list', hide_wizard: 'true', category_id: category_id, collection_id: $("#collection_id").val()}
+            data: {
+                operation: operation,
+                hide_wizard: 'true',
+                category_id: category_id,
+                collection_id: $("#collection_id").val()}
         }).done(function (result) {
             $("#menu_object").hide();
             $("#container_socialdb").hide('slow');
             $("#list").hide('slow');
-            $("#loader_objects").hide();            
+            $("#loader_objects").hide();
             $("#form").html(result);
             $('#form').show('slow');
             //$('#single_category_property').html(result);
@@ -338,7 +569,6 @@ function submit_comment(object_id) {
                 item_id: item_id}
         }).done(function (result) {
             json = JSON.parse(result);
-            console.log(json);
             if (json.is_removed) {
                 showAlertGeneral('<?php _e('Attention', 'tainacan') ?>', '<?php _e('This item has been removed, redirecting to collection home page! ', 'tainacan') ?>', 'error');
                 window.location = json.url;
@@ -365,20 +595,37 @@ function submit_comment(object_id) {
     }
 
 
-    function bindContextMenuSingle(span,dynatree_id) {
+    function bindContextMenuSingle(span, dynatree_id) {
         // Add context menu to this node:
         var menu;
-        if(dynatree_id){
-            menu = 'myMenuNoList'; 
-        }else{
-            menu = 'myMenuSingle'; 
+        if (dynatree_id) {
+            menu = 'myMenuNoList';
+        } else {
+            menu = 'myMenuSingle';
         }
-        $(span).contextMenu({menu: menu}, function (action, el, pos) {
+        $(span).contextMenu({menu: menu, trigger: 'hover'}, function (action, el, pos) {
             // The event was bound to the <span> tag, but the node object
             // is stored in the parent <li> tag
             var node = $.ui.dynatree.getNode(el);
-            console.log(node.data.key);
             switch (action) {
+                case "see":
+                    var src = $('#src').val();
+                    // Close menu on click
+                    show_modal_main();
+                    // Close menu on click
+                    var promisse = get_url_category(node.data.key);
+                    promisse.done(function (result) {
+                        elem = jQuery.parseJSON(result);
+                        var n = node.data.key.toString().indexOf("_");
+                        if (node.data.key.indexOf('_tag') >= 0) {
+                            showPageTags(elem.slug, src);
+                            node.deactivate();
+                        } else if (n < 0 || node.data.key.indexOf('_facet_category') >= 0) {
+                            showPageCategories(elem.slug, src);
+                            node.deactivate();
+                        }
+                    });
+                    break;
                 case "add":
                     var promisse = verifyAction($('#collection_id').val(), 'socialdb_collection_permission_create_category', 0);
                     promisse.done(function (result) {
@@ -391,7 +638,7 @@ function submit_comment(object_id) {
                             $('#modalAddCategoria').modal('show');
                             $('.dropdown-toggle').dropdown();
                             //ativando para um dynatree especifico
-                            if(dynatree_id){
+                            if (dynatree_id) {
                                 $("#category_single_add_dynatree_id").val(dynatree_id);
                             }
                         }
@@ -404,7 +651,7 @@ function submit_comment(object_id) {
                         if (!json.isAllowed) {
                             showAlertGeneral('<?php _e('Attention', 'tainacan') ?>', '<?php _e('This action was configured as "NOT ALLOWED" by moderators!', 'tainacan') ?>', 'info');
                         } else {
-                             
+
                             //$("#category_single_parent_name_edit").val(node.data.title);
                             //$("#category_single_parent_id_edit").val(node.data.key);
                             $("#category_single_edit_name").val(node.data.title);
@@ -412,7 +659,7 @@ function submit_comment(object_id) {
                             $("#category_edit_description").val('');
                             $("#category_single_edit_id").val(node.data.key);
                             //ativando para um dynatree especifico
-                            if(dynatree_id){
+                            if (dynatree_id) {
                                 $("#category_single_edit_dynatree_id").val(dynatree_id);
                             }
                             $('#modalEditCategoria').modal('show');
@@ -448,16 +695,16 @@ function submit_comment(object_id) {
                                 }
                                 //sinonimos
                                 clear_synonyms_tree();
-                                if(elem.socialdb_term_synonyms&&elem.socialdb_term_synonyms.length>0){
+                                if (elem.socialdb_term_synonyms && elem.socialdb_term_synonyms.length > 0) {
                                     $('#category_synonyms').val(elem.socialdb_term_synonyms.join(','));
-                                    $("#dynatree_synonyms").dynatree("getRoot").visit(function(node){
+                                    $("#dynatree_synonyms").dynatree("getRoot").visit(function (node) {
                                         var str = node.data.key.replace("_tag", "");
-                                        if(elem.socialdb_term_synonyms.indexOf(str)>=0){
-                                           node.select(true);
+                                        if (elem.socialdb_term_synonyms.indexOf(str) >= 0) {
+                                            node.select(true);
                                         }
                                     });
                                 }
-                                <?php do_action('javascript_metas_category') ?>
+<?php do_action('javascript_metas_category') ?>
                                 //if (elem.socialdb_category_permission) {
                                 //  $("#category_permission").val(elem.socialdb_category_permission);
                                 //}
@@ -485,7 +732,7 @@ function submit_comment(object_id) {
                             $("#category_single_delete_id").val(node.data.key);
                             $("#delete_category_single_name").text(node.data.title);
                             //ativando para um dynatree especifico
-                            if(dynatree_id){
+                            if (dynatree_id) {
                                 $("#category_single_delete_dynatree_id").val(dynatree_id);
                             }
                             $('#modalExcluirCategoria').modal('show');
@@ -514,8 +761,26 @@ function submit_comment(object_id) {
             // The event was bound to the <span> tag, but the node object
             // is stored in the parent <li> tag
             var node = $.ui.dynatree.getNode(el);
-            console.log(node.data.key);
             switch (action) {
+                case "see":
+                    var src = $('#src').val();
+                    // Close menu on click
+                    show_modal_main();
+                    // Close menu on click
+                    var promisse = get_url_category(node.data.key);
+                    promisse.done(function (result) {
+                        elem = jQuery.parseJSON(result);
+                        hide_modal_main();
+                        var n = node.data.key.toString().indexOf("_");
+                        if (node.data.key.indexOf('_tag') >= 0) {
+                            showPageTags(elem.slug, src);
+                            node.deactivate();
+                        } else if (n < 0 || node.data.key.indexOf('_facet_category') >= 0) {
+                            showPageCategories(elem.slug, src);
+                            node.deactivate();
+                        }
+                    });
+                    break;
                 case "add":
                     var promisse = verifyAction($('#collection_id').val(), 'socialdb_collection_permission_create_tags', 0);
                     promisse.done(function (result) {
@@ -551,13 +816,12 @@ function submit_comment(object_id) {
                                 }
                                 //sinonimos
                                 clear_synonyms_tree();
-                                if(elem.socialdb_term_synonyms&&elem.socialdb_term_synonyms.length>0){
+                                if (elem.socialdb_term_synonyms && elem.socialdb_term_synonyms.length > 0) {
                                     $('#tag_synonyms').val(elem.socialdb_term_synonyms.join(','));
-                                    $("#dynatree_synonyms_tag").dynatree("getRoot").visit(function(node){
+                                    $("#dynatree_synonyms_tag").dynatree("getRoot").visit(function (node) {
                                         var str = node.data.key.replace("_tag", "");
-                                        console.log(str,elem.socialdb_term_synonyms.indexOf(str)>=0);
-                                        if(elem.socialdb_term_synonyms.indexOf(str)>=0){
-                                           node.select(true);
+                                        if (elem.socialdb_term_synonyms.indexOf(str) >= 0) {
+                                            node.select(true);
                                         }
                                     });
                                 }
@@ -593,7 +857,8 @@ function submit_comment(object_id) {
      * */
     //wp query functions #######################################################
     // faz as filtragens de links externos e retorna para a pagina de listagem
-    function wpquery_link_filter(value, facet_id) {
+    function wpquery_link_filter(value, facet_id)
+    {
         $('#display_view_main_page').show();
         $('#collection_post').show();
         $('#configuration').hide().html('');
@@ -621,8 +886,10 @@ function submit_comment(object_id) {
             setMenuContainerHeight();
         });
     }
+
     // faz as filtragens de links externos e retorna para a pagina de listagem PARA termos
-    function wpquery_term_filter(value, facet_id) {
+    function wpquery_term_filter(value, facet_id)
+    {
         $('#display_view_main_page').show();
         $('#collection_post').show();
         $('#configuration').hide();
@@ -648,18 +915,34 @@ function submit_comment(object_id) {
                 $('#collection_empty').show();
                 $('#items_not_found').hide();
             }
+            var curr_viewMode = $("#collection_single_ordenation").attr('data-viewMode');
+            if (curr_viewMode) {
+                changeViewMode(curr_viewMode);
+            }
             setMenuContainerHeight();
         });
     }
 
-    function wpquery_filter_by_facet(value, facet_id, operation) {
+    function wpquery_filter_by_facet(value, facet_id, operation)
+    {
+        //Check box
         $("#list").hide();
         $('#loader_objects').show();
         var facet_id = facet_id || "";
+
+        var args = $('#wp_query_args').val();
+        //Caso seja a home do repositorio
+        if($("#click_ad_search_items").length > 0)
+        {
+            $("#ul_menu_search > li:not(.active)").addClass("active");
+            $("#ul_menu_search > li:first").removeClass("active");
+            args = search_items_query;//Search itens query possui o parametro para ser usado na busca de itens
+        }
+
         $.ajax({
             type: "POST",
             url: $('#src').val() + "/controllers/wp_query/wp_query_controller.php",
-            data: {operation: operation, value: value, facet_id: facet_id, wp_query_args: $('#wp_query_args').val(), collection_id: $('#collection_id').val()}
+            data: {operation: operation, value: value, facet_id: facet_id, wp_query_args: args, collection_id: $('#collection_id').val()}
         }).done(function (result) {
             var elem = $.parseJSON(result);
             $('#loader_objects').hide();
@@ -671,6 +954,10 @@ function submit_comment(object_id) {
             if (elem.empty_collection) {
                 $('#collection_empty').show();
                 $('#items_not_found').hide();
+            }
+            var curr_viewMode = $("#collection_single_ordenation").attr('data-viewMode');
+            if (curr_viewMode) {
+                changeViewMode(curr_viewMode);
             }
 
             setMenuContainerHeight();
@@ -698,12 +985,17 @@ function submit_comment(object_id) {
                 $('#items_not_found').hide();
             }
             setMenuContainerHeight();
+             var curr_viewMode = $("#collection_single_ordenation").attr('data-viewMode');
+            if (curr_viewMode) {
+                changeViewMode(curr_viewMode);
+            }
         });
     }
 
     function wpquery_checkbox(seletor, facet_id) {
         $('#list').hide();
         $('#loader_objects').show();
+
         var value = $('input:checkbox:checked#' + seletor).map(function () {
             return this.value;
         }).get().join(",");
@@ -724,11 +1016,16 @@ function submit_comment(object_id) {
                 $('#items_not_found').hide();
             }
             setMenuContainerHeight();
+             var curr_viewMode = $("#collection_single_ordenation").attr('data-viewMode');
+            if (curr_viewMode) {
+                changeViewMode(curr_viewMode);
+            }
         });
     }
 
     function wpquery_multipleselect(facet_id, seletor) {
         $('#list').hide();
+
         var value = '';
         $('#loader_objects').show();
         if (!$('#' + seletor)) {
@@ -740,16 +1037,31 @@ function submit_comment(object_id) {
                 value = '';
             }
         }
+
+        var args = $('#wp_query_args').val();
+        //Caso seja a home do repositorio
+        if($("#click_ad_search_items").length > 0)
+        {
+            $("#ul_menu_search > li:not(.active)").addClass("active");
+            $("#ul_menu_search > li:first").removeClass("active");
+            args = search_items_query;//Search itens query possui o parametro para ser usado na busca de itens
+        }
+
         $.ajax({
             type: "POST",
             url: $('#src').val() + "/controllers/wp_query/wp_query_controller.php",
-            data: {operation: 'wpquery_multipleselect', facet_id: facet_id, wp_query_args: $('#wp_query_args').val(), value: value, collection_id: $('#collection_id').val()}
+            data: {operation: 'wpquery_multipleselect', facet_id: facet_id, wp_query_args: args, value: value, collection_id: $('#collection_id').val()}
         }).done(function (result) {
             elem = jQuery.parseJSON(result);
+            
             $('#loader_objects').hide();
-            $('#list').html(elem.page);
+            
+            $("#list").html(elem.page);
+
             $('#wp_query_args').val(elem.args);
+
             set_popover_content($("#socialdb_permalink_collection").val() + '?' + elem.url + '&is_filter=1');
+
             show_filters($('#collection_id').val(), elem.args);
             $('#list').show();
             if (elem.empty_collection) {
@@ -780,35 +1092,73 @@ function submit_comment(object_id) {
                 $('#collection_empty').show();
                 $('#items_not_found').hide();
             }
+            var curr_viewMode = $("#collection_single_ordenation").attr('data-viewMode');
+            if (curr_viewMode) {
+                changeViewMode(curr_viewMode);
+            }
             setMenuContainerHeight();
         });
     }
 
     function wpquery_fromto(facet_id, facet_type) {
-
         if ($('#facet_' + facet_id + '_1').val() !== '' && $('#facet_' + facet_id + '_2').val() !== '') {
-            $('#list').hide();
-            $('#loader_objects').show();
-            var value = $('#facet_' + facet_id + '_1').val() + ',' + $('#facet_' + facet_id + '_2').val();
-            $.ajax({
-                type: "POST",
-                url: $('#src').val() + "/controllers/wp_query/wp_query_controller.php",
-                data: {operation: 'wpquery_fromto', facet_id: facet_id, facet_type: facet_type, wp_query_args: $('#wp_query_args').val(), value: value, collection_id: $('#collection_id').val()}
-            }).done(function (result) {
-                elem = jQuery.parseJSON(result);
-                $('#loader_objects').hide();
-                $('#list').html(elem.page);
-                $('#wp_query_args').val(elem.args);
-                set_popover_content($("#socialdb_permalink_collection").val() + '?' + elem.url + '&is_filter=1');
-                show_filters($('#collection_id').val(), elem.args);
-                $('#list').show();
-                if (elem.empty_collection) {
-                    $('#collection_empty').show();
-                    $('#items_not_found').hide();
-                }
-                setMenuContainerHeight();
-            });
+            var date_from = $('#facet_' + facet_id + '_1').val();
+            var date_to = $('#facet_' + facet_id + '_2').val();
+            var value = date_from + ',' + date_to;
+
+            if(dataValida(date_from) && dataValida(date_to)) {
+                $('#list').hide();
+                $('#loader_objects').show();
+
+                $.ajax({
+                    type: "POST",
+                    url: $('#src').val() + "/controllers/wp_query/wp_query_controller.php",
+                    data: {operation: 'wpquery_fromto', facet_id: facet_id, facet_type: facet_type, wp_query_args: $('#wp_query_args').val(), value: value, collection_id: $('#collection_id').val()}
+                }).done(function (result) {
+                    elem = jQuery.parseJSON(result);
+                    $('#loader_objects').hide();
+                    $('#list').html(elem.page);
+                    $('#wp_query_args').val(elem.args);
+                    set_popover_content($("#socialdb_permalink_collection").val() + '?' + elem.url + '&is_filter=1');
+                    show_filters($('#collection_id').val(), elem.args);
+                    $('#list').show();
+                    if (elem.empty_collection) {
+                        $('#collection_empty').show();
+                        $('#items_not_found').hide();
+                    }
+                    var curr_viewMode = $("#collection_single_ordenation").attr('data-viewMode');
+                    if (curr_viewMode) {
+                        changeViewMode(curr_viewMode);
+                    }
+                    setMenuContainerHeight();
+                });
+            } else {
+                swal("Data inválida!");
+                return false;
+            }
         }
+    }
+
+    function dataValida(dateString) {
+        var regex_date = /^\d{1,2}\/\d{1,2}\/\d{4}$/;
+
+        if(!regex_date.test(dateString))
+            return false;
+
+        var parts   = dateString.split("/");
+        var dia     = parseInt(parts[0]);
+        var mes   = parseInt(parts[1]);
+        var ano    = parseInt(parts[2]);
+        var qtdDiaMes = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+
+        if(ano < 1000 || ano > 3000 || mes == 0 || mes > 12)
+            return false;
+
+        // Anos bissextos
+        if(ano % 400 == 0 || (ano % 100 != 0 && ano % 4 == 0))
+            qtdDiaMes[1] = 29;
+
+        return (dia > 0 && dia <= qtdDiaMes[mes - 1]);
     }
 
     function wpquery_ordenation(value, temp_list_mode) {
@@ -829,7 +1179,7 @@ function submit_comment(object_id) {
                 $('#items_not_found').hide();
             }
 
-            if(temp_list_mode) {
+            if (temp_list_mode) {
                 changeViewMode(temp_list_mode);
             }
 
@@ -854,7 +1204,7 @@ function submit_comment(object_id) {
                 $('#items_not_found').hide();
             }
 
-            if(temp_list_mode) {
+            if (temp_list_mode) {
                 changeViewMode(temp_list_mode);
             }
 
@@ -882,17 +1232,30 @@ function submit_comment(object_id) {
                 $('#collection_empty').show();
                 $('#items_not_found').hide();
             }
+            if(!elem.has_post && $("#collection_id").val() ===  $("#collection_root_id").val()){
+                search_items_query = $('#wp_query_args').val();
+                search_collections_query = $('#wp_query_args').val();
+               $('#click_ad_search_items').trigger('click');
+            }else{
+               search_collections_query = $('#wp_query_args').val();
+            }
             setMenuContainerHeight();
+            var curr_viewMode = $("#collection_single_ordenation").attr('data-viewMode');
+            if (curr_viewMode) {
+                changeViewMode(curr_viewMode);
+            }
         });
     }
 
-    function wpquery_page(value) {
+    function wpquery_page(value, collection_viewMode, is_trash) {
         $('#list').hide();
         $('#loader_objects').show();
+        var src =  "'"+$('#src').val()+"'";
         $.ajax({
             type: "POST",
             url: $('#src').val() + "/controllers/wp_query/wp_query_controller.php",
-            data: {operation: 'wpquery_page', wp_query_args: $('#wp_query_args').val(), value: value, collection_id: $('#collection_id').val()}
+            data: { operation: 'wpquery_page', wp_query_args: $('#wp_query_args').val(), value: value,
+                posts_per_page: $('.col-items-per-page').val(), collection_id: $('#collection_id').val(), is_trash: is_trash}
         }).done(function (result) {
             elem = jQuery.parseJSON(result);
             $('#loader_objects').hide();
@@ -903,24 +1266,131 @@ function submit_comment(object_id) {
                 $('#collection_empty').show();
                 $('#items_not_found').hide();
             }
+            if (collection_viewMode) {
+                changeViewMode(collection_viewMode);
+            }
+
+            if(is_trash) {
+                <?php if(!apply_filters('tainacan_show_restore_options', get_the_ID())): ?>
+                        $('#table-view tr').each(function(num, item) {
+                            var curr_id = $(item).find('td').first().find('a').attr('data-id');
+                            $(item).find('td').last().html('<li> <a onclick="showSingleObject(' + curr_id + ','+src+','+is_trash+')"> <span class="glyphicon glyphicon-eye-open"></span> </a></li>');     
+                        });
+                         $('li.item-redesocial').hide();
+                         $('ul.item-menu-container').hide();
+                        $('.item-colecao').each(function(num, item) {
+                              var curr_id = $(this).find('.post_id').last().val();
+                              $(this).find('.item-funcs').last().append('<li style="float: right; margin-left: 10px;"> <a onclick="showSingleObject(' + curr_id + ','+src+','+is_trash+')"> <span class="glyphicon glyphicon-eye-open"></span> </a></li>');
+                        });
+                 <?php else:  ?>     
+                        $('li.item-redesocial').hide();
+                        $('ul.item-menu-container').hide();
+                        $('#table-view tr').each(function(num, item) {
+                            var curr_id = $(item).find('td').first().find('a').attr('data-id');  
+                             $(item).find('td').last().html('<li> <a onclick="delete_permanently_object(\'Deletar Item\', \'Deletar este item permanentemente?\', ' + curr_id + ')" class="remove"> <span class="glyphicon glyphicon-trash"></span> </a> </li><li> <a onclick="restore_object(' + curr_id + ')"> <span class="glyphicon glyphicon-retweet"></span> </a></li>');
+                        });
+                <?php endif; ?> 
+            }
+
             setMenuContainerHeight();
         });
     }
-
-    function wpquery_filter() {
+    /**
+     * filtra os itens pelo autor
+     
+     * @param {type} value
+     * @param {type} collection_viewMode
+     * @returns {undefined}     */
+    function wpquery_author(value, collection_viewMode) {
         $('#list').hide();
         $('#loader_objects').show();
         $.ajax({
             type: "POST",
             url: $('#src').val() + "/controllers/wp_query/wp_query_controller.php",
-            data: {operation: 'filter', wp_query_args: $('#wp_query_args').val(), collection_id: $('#collection_id').val()}
+            data: {operation: 'wpquery_author', wp_query_args: $('#wp_query_args').val(), value: value, collection_id: $('#collection_id').val()}
+        }).done(function (result) {
+            elem = jQuery.parseJSON(result);
+            show_filters($('#collection_id').val(), elem.args);
+            $('#loader_objects').hide();
+            $('#list').html(elem.page);
+            $('#wp_query_args').val(elem.args);
+            $('#list').show();
+            if (elem.empty_collection) {
+                $('#collection_empty').show();
+                $('#items_not_found').hide();
+            }
+            if (collection_viewMode) {
+                changeViewMode(collection_viewMode);
+            }
+
+            setMenuContainerHeight();
+        });
+    }
+    
+    function wpquery_menu_left(type){
+        $('#list').hide();
+        $('#loader_objects').show();
+        $.ajax({
+            type: "POST",
+            url: $('#src').val() + "/controllers/wp_query/wp_query_controller.php",
+            data: {operation: 'filter', wp_query_args: $('#wp_query_args').val(), collection_id: $('#collection_id').val(), post_type: 'socialdb_object',author:type }
         }).done(function (result) {
             elem = jQuery.parseJSON(result);
             $('#loader_objects').hide();
             $('#list').html(elem.page);
             $('#wp_query_args').val(elem.args);
+            if (type && type == 'socialdb_collection') {
+                search_collections_query = $('#wp_query_args').val();
+            } else if (type && type == 'socialdb_object') {
+                search_items_query = $('#wp_query_args').val();
+            }
             set_popover_content($("#socialdb_permalink_collection").val() + '?' + elem.url + '&is_filter=1');
             show_filters($('#collection_id').val(), elem.args);
+            $('#list').show();
+            if (elem.empty_collection) {
+                $('#collection_empty').show();
+                $('#items_not_found').hide();
+            }
+            setMenuContainerHeight();
+        });
+    }
+
+    function wpquery_filter(type) {
+        if (!type) {
+            type = '';
+        } else if (type == 'socialdb_collection') {
+            $('#wp_query_args').val(search_collections_query);
+            $('#options-collections-search').show();
+            $('#options-items-search').hide();
+        } else if (type == 'socialdb_object') {
+            $('#wp_query_args').val(search_items_query);
+            $('#options-items-search').show();
+            $('#options-collections-search').hide();
+        }
+        $('#list').hide();
+        $('#loader_objects').show();
+        $.ajax({
+            type: "POST",
+            url: $('#src').val() + "/controllers/wp_query/wp_query_controller.php",
+            data: {operation: 'filter', wp_query_args: $('#wp_query_args').val(), collection_id: $('#collection_id').val(), post_type: type}
+        }).done(function (result) {
+            elem = jQuery.parseJSON(result);
+            $('#loader_objects').hide();
+            $('#list').html(elem.page);
+            $('#wp_query_args').val(elem.args);
+            if (type && type == 'socialdb_collection') {
+                if(!elem.has_post && $("#collection_id").val() ===  $("#collection_root_id").val()){
+                    search_items_query = $('#wp_query_args').val();
+                    search_collections_query = $('#wp_query_args').val();
+                   $('#click_ad_search_items').trigger('click');
+                }else{
+                   search_collections_query = $('#wp_query_args').val();
+                }
+            } else if (type && type == 'socialdb_object') {
+                search_items_query = $('#wp_query_args').val();
+            }
+            set_popover_content($("#socialdb_permalink_collection").val() + '?' + elem.url + '&is_filter=1');
+            //show_filters($('#collection_id').val(), elem.args);
             $('#list').show();
             if (elem.empty_collection) {
                 $('#collection_empty').show();
@@ -933,6 +1403,8 @@ function submit_comment(object_id) {
     function wpquery_clean() {
         $('#list').hide();
         $('#loader_objects').show();
+        search_collections_query = '';
+        search_items_query = '';
         $.ajax({
             type: "POST",
             url: $('#src').val() + "/controllers/wp_query/wp_query_controller.php",
@@ -942,7 +1414,6 @@ function submit_comment(object_id) {
             $('#loader_objects').hide();
             $('#list').html(elem.page);
             $('#wp_query_args').val(elem.args);
-            //console.log(elem.listed_by_value);
             $('#collection_single_ordenation').val(elem.listed_by_value);
             set_popover_content($("#socialdb_permalink_collection").val() + '?' + elem.url + '&is_filter=1');
             show_filters($('#collection_id').val(), elem.args);
@@ -951,6 +1422,9 @@ function submit_comment(object_id) {
                 $('#items_not_found').hide();
             }
             $('#list').show();
+            if ($("#dynatree")) {
+                $("#dynatree").dynatree("getTree").reload();
+            }
             setMenuContainerHeight();
         });
     }
@@ -998,27 +1472,30 @@ function submit_comment(object_id) {
     }
 
     // funcao que captura a action on change no selectbox na pagina single.php
-    function change_ordenation( order ) {
+    function change_ordenation(order) {
         var curr_viewMode = $("#collection_single_ordenation").attr('data-viewMode');
         wpquery_orderBy(order, curr_viewMode);
     }
 
     function search_objects(e) {
-        // $("button#clear").show();
         var search_for = $(e).val();
         wpquery_keyword(search_for);
-        // list_all_objects(selKeys.join(", "), $("#collection_id").val(), $('#collection_single_ordenation').val(), '', search_for);
     }
 
-    function backToMainPage(reload_container) {
-        // wpquery_filter();
-        // var showing_breadcrumbs = $("#tainacan-breadcrumbs").attr('style');
-        if ( $('#tainacan-breadcrumbs').is(':visible') ) {
-            $("#tainacan-breadcrumbs").hide();
+    function backToMainPage(reload_container, keep_search) {
+        change_breadcrumbs_title('', ' ');
+
+        if(keep_search && keep_search == true) {
+        } else {
+            wpquery_clean();
+            if (!reload_container) {
+                set_containers_class($('#collection_id').val());
+            }
         }
-        
-        wpquery_clean();
+
         list_main_ordenation_filter();
+        $('.modal-backdrop').hide();
+        $('#main_part_collection').hide();
         $("#category_page").val('');
         $("#property_page").val('');
         $('#display_view_main_page').show();
@@ -1031,13 +1508,11 @@ function submit_comment(object_id) {
         $("#container_socialdb").show('fast');
         $('#main_part').show('slow');
         reinit_synonyms_tree();
-        if(!reload_container){
-             set_containers_class($('#collection_id').val());
-        }
     }
 
     //apenas para a pagina de demonstracao do item
     function backToMainPageSingleItem() {
+        change_breadcrumbs_title('', ' ');
         wpquery_filter();
         set_containers_class($('#collection_id').val());
         list_main_ordenation_filter();
@@ -1046,13 +1521,13 @@ function submit_comment(object_id) {
         $('#configuration').hide().html('');
         $('#main_part').show('slow');
         var stateObj = {foo: "bar"};
-        history.replaceState(stateObj, "page 2", '?');
+        backRoute($('#slug_collection').val());
         //set_containers_class($('#collection_id').val());
     }
 
     // volta a listagem e limpa as url
     function back_and_clean_url() {
-         $("#category_page").val('');
+        $("#category_page").val('');
         $("#property_page").val('');
         $('#form').hide();
         $('#create_button').show();
@@ -1063,7 +1538,8 @@ function submit_comment(object_id) {
         history.replaceState(stateObj, "page 2", '?');
     }
 
-    function show_filters(collection_id, filters) {
+    function show_filters(collection_id, filters)
+    {
         $.ajax({
             url: $('#src').val() + '/controllers/collection/collection_controller.php',
             type: 'POST',
@@ -1076,7 +1552,7 @@ function submit_comment(object_id) {
             $('#filters_collection').html(result);
             $('.remove-link-filters').show();
             var result_set = $('.search-resultset').find('a').length;
-            if (result_set > 0) {
+            if (result_set > 0 && !$('#propertiesRootAdvancedSearch').is(':visible')) {
                 $("button#clear").fadeIn();
             } else {
                 $("button#clear").fadeOut('fast');
@@ -1086,170 +1562,170 @@ function submit_comment(object_id) {
 
     //***************************************** BEGIN SOCIAL NETWORK IMPORT *********************************************//
 
-//    function import_youtube_video_url() {
-//        var youtube_video_url = $('#youtube_video_url').val().trim();
-//        var collectionId = $('#collection_id').val();
-//
-//        if (youtube_video_url) {
-//            $('#modalImportMain').modal('show');
-//            var src = $('#src').val();
-//
-//            $.ajax({
-//                url: src + '/controllers/social_network/youtube_controller.php',
-//                type: 'POST',
-//                data: {operation: 'import_video_url',
-//                    video_url: youtube_video_url,
-//                    collectionId: collectionId},
-//                success: function (response) {
-//                    $('#modalImportMain').modal('hide');
-//                    if (response) {
-//                        showAlertGeneral('<?php _e('Success', 'tainacan'); ?>', '<?php _e('Video imported successfully', 'tainacan'); ?>', 'success');
-//                        set_containers_class(collectionId);
-//                        wpquery_clean();
-//                    } else {
-//                        showAlertGeneral('<?php _e('Error', 'tainacan'); ?>', '<?php _e('Invalid URL or Video already inserted.', 'tainacan'); ?>', 'error');
-//                    }
-//                }
-//            });
-//            $('#youtube_video_url').val('');
-//            $('#modalshowModalImportSocialNetwork').modal('hide');
-//        } else {
-//            showAlertGeneral('<?php _e('Error', 'tainacan'); ?>', '<?php _e('Necessary to inform Youtube video url', 'tainacan'); ?>', 'error');
-//        }
-//    }
+/*    function import_youtube_video_url() {
+        var youtube_video_url = $('#youtube_video_url').val().trim();
+        var collectionId = $('#collection_id').val();
 
-//    function import_youtube_channel() {
-//        var inputIdentifierYoutube = $('#youtube_identifier_input').val().trim();
-//        var inputPlaylistYoutube = $('#youtube_playlist_identifier_input').val().trim();
-//        var collectionId = $('#collection_id').val();
-//
-//        if (inputIdentifierYoutube) {
-//            $('#modalImportMain').modal('show');
-//            var src = $('#src').val();
-//
-//            //ajax
-//            $.ajax({
-//                url: src + '/controllers/social_network/youtube_controller.php',
-//                type: 'POST',
-//                data: {operation: 'import_video_channel',
-//                    identifier: inputIdentifierYoutube,
-//                    playlist: inputPlaylistYoutube,
-//                    collectionId: collectionId},
-//                success: function (response) {
-//                    $('#modalImportMain').modal('hide');
-//                    var json = JSON.parse(response);
-//                    if (json.length > 0) {
-//                        showViewMultipleItemsSocialNetwork(json);
-//                        //showAlertGeneral('<?php _e('Success', 'tainacan'); ?>', '<?php _e('OK', 'tainacan'); ?>', 'success');
-//                        //wpquery_clean();
-//                    }
-//                    else {
-//                        showAlertGeneral('<?php _e('Error', 'tainacan'); ?>', '<?php _e('Invalid Channel/Playlist or no videos to be imported', 'tainacan'); ?>', 'error');
-//                    }
-//                }
-//            });
-//            //end ajax
-//
-//            $('#youtube_identifier_input').val('');
-//            $('#youtube_playlist_identifier_input').val('');
-//            $('#modalshowModalImportSocialNetwork').modal('hide');
-//        } else {
-//            showAlertGeneral('<?php _e('Error', 'tainacan'); ?>', '<?php _e('Necessary to inform Youtube channel identifier', 'tainacan'); ?>', 'error');
-//        }
-//    }
+        if (youtube_video_url) {
+            $('#modalImportMain').modal('show');
+            var src = $('#src').val();
 
-//    function import_flickr() {
-//        var inputIdentifierFlickr = $('#flickr_identifier_input').val().trim();
-//        var collectionId = $('#collection_id').val();
-//
-//        if (inputIdentifierFlickr) {
-//            $('#modalImportMain').modal('show');
-//            var src = $('#src').val();
-//
-//            $.ajax({
-//                url: src + '/controllers/social_network/flickr_controller.php',
-//                type: 'POST',
-//                data: {operation: 'import_flickr_items',
-//                    identifier: inputIdentifierFlickr,
-//                    collectionId: collectionId},
-//                success: function (response) {
-//                    //se a gravação no banco foi realizado, a tabela é incrementada
-//                    $('#modalImportMain').modal('hide');
-//                    var json = JSON.parse(response);
-//                    if (json.length > 0) {
-//                        showViewMultipleItemsSocialNetwork(json);
-//                        //showAlertGeneral('<?php _e('Success', 'tainacan'); ?>', '<?php _e('OK', 'tainacan'); ?>', 'success');
-//                        //wpquery_clean();
-//                    }
-//                    else {
-//                        showAlertGeneral('<?php _e('Error', 'tainacan'); ?>', '<?php _e('Invalid Flickr identifier or no items to be imported', 'tainacan'); ?>', 'error');
-//                    }
-//                }
-//            });
-//            $('#flickr_identifier_input').val('');
-//            $('#modalshowModalImportSocialNetwork').modal('hide');
-//        }
-//        else {
-//            showAlertGeneral('<?php _e('Error', 'tainacan'); ?>', '<?php _e('Necessary to inform Flickr identifier', 'tainacan'); ?>', 'error');
-//            $('#flickr_identifier_input').val('');
-//        }
-//    }
+            $.ajax({
+                url: src + '/controllers/social_network/youtube_controller.php',
+                type: 'POST',
+                data: {operation: 'import_video_url',
+                    video_url: youtube_video_url,
+                    collectionId: collectionId},
+                success: function (response) {
+                    $('#modalImportMain').modal('hide');
+                    if (response) {
+                        showAlertGeneral('<?php _e('Success', 'tainacan'); ?>', '<?php _e('Video imported successfully', 'tainacan'); ?>', 'success');
+                        set_containers_class(collectionId);
+                        wpquery_clean();
+                    } else {
+                        showAlertGeneral('<?php _e('Error', 'tainacan'); ?>', '<?php _e('Invalid URL or Video already inserted.', 'tainacan'); ?>', 'error');
+                    }
+                }
+            });
+            $('#youtube_video_url').val('');
+            $('#modalshowModalImportSocialNetwork').modal('hide');
+        } else {
+            showAlertGeneral('<?php _e('Error', 'tainacan'); ?>', '<?php _e('Necessary to inform Youtube video url', 'tainacan'); ?>', 'error');
+        }
+    }
 
-//    function import_instagram() {
-//        var inputIdentifierInstagram = $('#instagram_identifier_input').val().trim();
-//        var collection_id = $('#collection_id').val();
-//
-//        if (inputIdentifierInstagram) {
-//            $('#modalImportMain').modal('show');
-//            var src = $('#src').val();
-//
-//            window.location = src + "/controllers/social_network/instagram_controller.php?collection_id=" + collection_id + "&operation=getPhotosInstagram&identifier=" + inputIdentifierInstagram;
-//
-//            $('#instagram_identifier_input').val('');
-//            $('#modalshowModalImportSocialNetwork').modal('hide');
-//        }
-//        else {
-//            showAlertGeneral('<?php _e('Error', 'tainacan'); ?>', '<?php _e('Necessary to inform Instagram identifier', 'tainacan'); ?>', 'error');
-//        }
-//    }
+    function import_youtube_channel() {
+        var inputIdentifierYoutube = $('#youtube_identifier_input').val().trim();
+        var inputPlaylistYoutube = $('#youtube_playlist_identifier_input').val().trim();
+        var collectionId = $('#collection_id').val();
 
-//    function import_vimeo() {
-//        var inputIdentifierVimeo = $('#vimeo_identifier_input').val().trim();
-//        var collectionId = $('#collection_id').val();
-//
-//        if (inputIdentifierVimeo) {
-//            $('#modalImportMain').modal('show');
-//            var src = $('#src').val();
-//
-//            $.ajax({
-//                url: src + '/controllers/social_network/vimeo_controller.php',
-//                type: 'POST',
-//                data: {operation: 'import_vimeo_items',
-//                    identifier: inputIdentifierVimeo,
-//                    import_type: $('input[name="optradio_vimeo"]:checked').val(),
-//                    collectionId: collectionId},
-//                success: function (response) {
-//                    //se a gravação no banco foi realizado, a tabela é incrementada
-//                    $('#modalImportMain').modal('hide');
-//                    var json = JSON.parse(response);
-//                    if (json.length > 0) {
-//                        showViewMultipleItemsSocialNetwork(json);
-//                        //showAlertGeneral('<?php _e('Success', 'tainacan'); ?>', '<?php _e('OK', 'tainacan'); ?>', 'success');
-//                        //wpquery_clean();
-//                    }
-//                    else {
-//                        showAlertGeneral('<?php _e('Error', 'tainacan'); ?>', '<?php _e('Invalid Vimeo identifier or no items to be imported', 'tainacan'); ?>', 'error');
-//                    }
-//                }
-//            });
-//            $('#vimeo_identifier_input').val('');
-//            $('#modalshowModalImportSocialNetwork').modal('hide');
-//        }
-//        else {
-//            showAlertGeneral('<?php _e('Error', 'tainacan'); ?>', '<?php _e('Necessary to inform Vimeo identifier', 'tainacan'); ?>', 'error');
-//            $('#vimeo_identifier_input').val('');
-//        }
-//    }
+        if (inputIdentifierYoutube) {
+            $('#modalImportMain').modal('show');
+            var src = $('#src').val();
+
+            //ajax
+            $.ajax({
+                url: src + '/controllers/social_network/youtube_controller.php',
+                type: 'POST',
+                data: {operation: 'import_video_channel',
+                    identifier: inputIdentifierYoutube,
+                    playlist: inputPlaylistYoutube,
+                    collectionId: collectionId},
+                success: function (response) {
+                    $('#modalImportMain').modal('hide');
+                    var json = JSON.parse(response);
+                    if (json.length > 0) {
+                        showViewMultipleItemsSocialNetwork(json);
+                        //showAlertGeneral('<?php _e('Success', 'tainacan'); ?>', '<?php _e('OK', 'tainacan'); ?>', 'success');
+                        //wpquery_clean();
+                    }
+                    else {
+                        showAlertGeneral('<?php _e('Error', 'tainacan'); ?>', '<?php _e('Invalid Channel/Playlist or no videos to be imported', 'tainacan'); ?>', 'error');
+                    }
+                }
+            });
+            //end ajax
+
+            $('#youtube_identifier_input').val('');
+            $('#youtube_playlist_identifier_input').val('');
+            $('#modalshowModalImportSocialNetwork').modal('hide');
+        } else {
+            showAlertGeneral('<?php _e('Error', 'tainacan'); ?>', '<?php _e('Necessary to inform Youtube channel identifier', 'tainacan'); ?>', 'error');
+        }
+    }
+
+    function import_flickr() {
+        var inputIdentifierFlickr = $('#flickr_identifier_input').val().trim();
+        var collectionId = $('#collection_id').val();
+
+        if (inputIdentifierFlickr) {
+            $('#modalImportMain').modal('show');
+            var src = $('#src').val();
+
+            $.ajax({
+                url: src + '/controllers/social_network/flickr_controller.php',
+                type: 'POST',
+                data: {operation: 'import_flickr_items',
+                    identifier: inputIdentifierFlickr,
+                    collectionId: collectionId},
+                success: function (response) {
+                    //se a gravação no banco foi realizado, a tabela é incrementada
+                    $('#modalImportMain').modal('hide');
+                    var json = JSON.parse(response);
+                    if (json.length > 0) {
+                        showViewMultipleItemsSocialNetwork(json);
+                        //showAlertGeneral('<?php _e('Success', 'tainacan'); ?>', '<?php _e('OK', 'tainacan'); ?>', 'success');
+                        //wpquery_clean();
+                    }
+                    else {
+                        showAlertGeneral('<?php _e('Error', 'tainacan'); ?>', '<?php _e('Invalid Flickr identifier or no items to be imported', 'tainacan'); ?>', 'error');
+                    }
+                }
+            });
+            $('#flickr_identifier_input').val('');
+            $('#modalshowModalImportSocialNetwork').modal('hide');
+        }
+        else {
+            showAlertGeneral('<?php _e('Error', 'tainacan'); ?>', '<?php _e('Necessary to inform Flickr identifier', 'tainacan'); ?>', 'error');
+            $('#flickr_identifier_input').val('');
+        }
+    }
+
+    function import_instagram() {
+        var inputIdentifierInstagram = $('#instagram_identifier_input').val().trim();
+        var collection_id = $('#collection_id').val();
+
+        if (inputIdentifierInstagram) {
+            $('#modalImportMain').modal('show');
+            var src = $('#src').val();
+
+            window.location = src + "/controllers/social_network/instagram_controller.php?collection_id=" + collection_id + "&operation=getPhotosInstagram&identifier=" + inputIdentifierInstagram;
+
+            $('#instagram_identifier_input').val('');
+            $('#modalshowModalImportSocialNetwork').modal('hide');
+        }
+        else {
+            showAlertGeneral('<?php _e('Error', 'tainacan'); ?>', '<?php _e('Necessary to inform Instagram identifier', 'tainacan'); ?>', 'error');
+        }
+    }
+
+    function import_vimeo() {
+        var inputIdentifierVimeo = $('#vimeo_identifier_input').val().trim();
+        var collectionId = $('#collection_id').val();
+
+        if (inputIdentifierVimeo) {
+            $('#modalImportMain').modal('show');
+            var src = $('#src').val();
+
+            $.ajax({
+                url: src + '/controllers/social_network/vimeo_controller.php',
+                type: 'POST',
+                data: {operation: 'import_vimeo_items',
+                    identifier: inputIdentifierVimeo,
+                    import_type: $('input[name="optradio_vimeo"]:checked').val(),
+                    collectionId: collectionId},
+                success: function (response) {
+                    //se a gravação no banco foi realizado, a tabela é incrementada
+                    $('#modalImportMain').modal('hide');
+                    var json = JSON.parse(response);
+                    if (json.length > 0) {
+                        showViewMultipleItemsSocialNetwork(json);
+                        //showAlertGeneral('<?php _e('Success', 'tainacan'); ?>', '<?php _e('OK', 'tainacan'); ?>', 'success');
+                        //wpquery_clean();
+                    }
+                    else {
+                        showAlertGeneral('<?php _e('Error', 'tainacan'); ?>', '<?php _e('Invalid Vimeo identifier or no items to be imported', 'tainacan'); ?>', 'error');
+                    }
+                }
+            });
+            $('#vimeo_identifier_input').val('');
+            $('#modalshowModalImportSocialNetwork').modal('hide');
+        }
+        else {
+            showAlertGeneral('<?php _e('Error', 'tainacan'); ?>', '<?php _e('Necessary to inform Vimeo identifier', 'tainacan'); ?>', 'error');
+            $('#vimeo_identifier_input').val('');
+        }
+    }*/
 
     //--------------------------- TELA DE IMPORTACAO DE MULTIPLO ARQUIVOS --------------------------
     function showViewMultipleItemsSocialNetwork(imported_ids) {
@@ -1282,28 +1758,24 @@ function submit_comment(object_id) {
             var youtube_url = validateYouTubeUrl();
             if (youtube_url) {
                 // É uma URL de um vídeo do youtube. Executar a importação do vídeo.
-                console.log(youtube_url);
                 import_youtube_video_url();
             } else {
                 var youtube_channel_url = validateYouTubeChannelUrl();
                 if (youtube_channel_url) {
                     // É uma URL de um canal do youtube. Executar a importação dos vídeos de canal.
                     var res = inputImportAll.split(youtube_channel_url[4]);
-                    console.log(res[1]);
                     import_youtube_channel(res[1]);
                 }
                 else {
                     var youtube_playlist_url = validateYouTubePlaylistUrl();
                     if (youtube_playlist_url) {
                         // É uma URL de uma playlist do youtube. Executar a importação dos vídeos da playlist.
-                        console.log(youtube_playlist_url);
                         import_youtube_playlist(youtube_playlist_url);
                     }
                     else {
                         var instagram_url = validateInstagramUrl();
                         if (instagram_url) {
                             // É uma URL do instagram. Executar a importação dos imagens e vídeos do usuario.
-                            console.log(instagram_url);
                             import_instagram(instagram_url);
                         } else {
                             var vimeo_url = validateVimeoUrl();
@@ -1311,10 +1783,8 @@ function submit_comment(object_id) {
                                 // É uma URL do vimeo. Executar a importação dos vídeos.
                                 vimeo_url = vimeo_url.split("/");
                                 if (vimeo_url[3].localeCompare('channels') === 0) {
-                                    console.log('Canal: ' + vimeo_url[4]);
                                     import_vimeo('channels', vimeo_url[4]);
                                 } else {
-                                    console.log('Usuario: ' + vimeo_url[3]);
                                     import_vimeo('users', vimeo_url[3]);
                                 }
                             }
@@ -1322,18 +1792,17 @@ function submit_comment(object_id) {
                                 var flickr_url = validateFlickrUrl();
                                 if (flickr_url) {
                                     // É uma URL do Flickr. Executar a importação dos itens do usuário.
-                                    console.log(flickr_url);
                                     import_flickr(flickr_url);
                                 }
                                 else {
                                     var facebook_url = validateFacebookUrl();
                                     if (facebook_url) {
                                         // É uma URL do Facebook. Executar a importação dos itens do usuário.
-                                        console.log(facebook_url);
                                     }
                                     else {
                                         var any_file_type = validateAnyFile();
                                         if (any_file_type) {
+                                            
                                             // É uma URL de um arquivo. Executar a importação deste arquivo.
                                             show_modal_main();
                                             //showFormCreateURLFile($('#item_url_import_all').val(), any_file_type);
@@ -1344,14 +1813,25 @@ function submit_comment(object_id) {
                                         } else {
                                             var any_url = validateAnyUrl();
                                             if (any_url) {
-                                                // É uma URL regular. Executar a importação através do Embed.ly.
-                                                show_modal_main();
-                                               // showFormCreateURL($('#item_url_import_all').val());
-                                                import_text($('#item_url_import_all').val());
-                                                $('#item_url_import_all').val('');
-                                                $("#sites_import_icon").addClass("grayscale");
-                                                $('#modalshowModalImportAll').modal('hide');
-                                                console.log('URL Regular. Enviar pro Embed.ly.');
+                                                var split_url = $('#item_url_import_all').val().replace('http://', '').replace('https://', '').split('/');
+                                                var index = split_url.indexOf('handle');
+                                                var article = split_url.indexOf('article');
+                                                var view = split_url.indexOf('view');
+                                                if ($('#extract_metadata').is(':checked') && index >= 0) {
+                                                    extract_metadata($('#item_url_import_all').val());
+                                                } else if ($('#extract_metadata').is(':checked') && article >= 0 && view >= 0) {
+                                                    extract_metadata($('#item_url_import_all').val());
+                                                } else if ($('#extract_metadata').is(':checked')) {
+                                                    extract_metatags($('#item_url_import_all').val());
+                                                } else {
+                                                    // É uma URL regular. Executar a importação através do Embed.ly.
+                                                    show_modal_main();
+                                                    // showFormCreateURL($('#item_url_import_all').val());
+                                                    import_text($('#item_url_import_all').val());
+                                                    $('#item_url_import_all').val('');
+                                                    $("#sites_import_icon").addClass("grayscale");
+                                                    $('#modalshowModalImportAll').modal('hide');
+                                                }
                                             } else {
                                                 showAlertGeneral("<?php _e('Alert', 'tainacan'); ?>", "<?php _e('Please, insert a valid URL', 'tainacan'); ?>", "error");
                                             }
@@ -1413,9 +1893,9 @@ function submit_comment(object_id) {
             var regExp = /(?:(?:http|https):\/\/)?(?:www.)?(?:youtube.com|youtu.be)\/([A-Za-z0-9-_]+)/im;
             var match_youtube = url.match(regExp);
             if (match_youtube) {
-                var reg = new RegExp("[&?]list=([a-z0-9_]+)", "i");
+                var reg = new RegExp("[&?]list=([a-z0-9_-]+)", "i");
                 var match = reg.exec(url);
-
+                
                 if (match) {
                     return match[1];
                 }
@@ -1469,7 +1949,13 @@ function submit_comment(object_id) {
             var match = url.match(regExp);
             if (match) {
                 var result = url.split('/');
-                return result[4];
+                if (typeof result[6] != 'undefined' && result[6] != '' && (result[5] == 'albums' || result[5] == 'sets')) {
+                    return 'albums/' + result[4] + '/' + result[6];
+                } else if (typeof result[5] != 'undefined' && result[5] != '') {
+                    return 'singleitem/' + result[4] + '/' + result[5];
+                } else {
+                    return 'all/' + result[4];
+                }
             }
             else {
                 // Do anything for not being valid
@@ -1519,7 +2005,7 @@ function submit_comment(object_id) {
                             var match_audio = url.match(regExp_audio);
                             if (match_audio) {
                                 return 'audio';
-                            }else{
+                            } else {
                                 return 'other';
                             }
                         }
@@ -1726,24 +2212,86 @@ function submit_comment(object_id) {
                     }
                 }
             });
-           
+
         } else {
             showAlertGeneral('<?php _e('Error', 'tainacan'); ?>', '<?php _e('Necessary to inform Youtube video url', 'tainacan'); ?>', 'error');
         }
     }
+
     // faz a importacao do tipo texto e joga para a tela de multiplos
-    function import_text(url){
-       var key = $('#socialdb_embed_api_id').val();
+    function import_text(url) {
+        var key = $('#socialdb_embed_api_id').val();
         var ajaxurl = 'http://api.embed.ly/1/oembed?key=:' + key + '&url=' + url;
         //div loader
+        if (key == '') {
+            import_text_alternative(url);
+        } else {
+            $.getJSON(ajaxurl, {}, function (json) {
+                var description = '', title = '';
+                if (json.title !== undefined && json.title != null && json.title != false) {
+                    title = json.title;
+                }
+                else {
+                    hide_modal_main();
+                    showAlertGeneral('Atenção', 'Esta URL não possui items disponíveis para importação', 'error');
+                    return;
+                }
+                // se nao tiver descricao ele coloca o titulo na descricao
+                if (json.description !== undefined && json.description != null && json.description != false) {
+                    description += json.description;
+                }
+                else {
+                    description = title;
+                }
+                //concatena o html na descricao
+                if (json.html !== undefined && json.html != null && json.html != false) {
+                    json.html = json.html.replace('width="854"', 'width="200"');
+                    json.html = json.html.replace('height="480"', 'height="200"');
+                    description = json.html + description;
+                }
+                //pegando a imagem
+                var img = '';
+                if (json.thumbnail_url !== undefined && json.thumbnail_url != null && json.thumbnail_url != false) {
+                    img = json.thumbnail_url;
+                }
+                // verifico se existe imagem para ser importada
+                $.ajax({
+                    url: $('#src').val() + '/controllers/object/object_controller.php',
+                    type: 'POST',
+                    data: {
+                        operation: 'add_item_not_published',
+                        collection_id: $("#collection_id").val(),
+                        description: description,
+                        thumbnail_url: img,
+                        type: 'text',
+                        url: url,
+                        title: title}
+                }).done(function (result) {
+                    var json = JSON.parse(result);
+                    if (json.length > 0) {
+                        showViewMultipleItemsSocialNetwork(json);
+                    }
+                    else {
+                        hide_modal_main();
+                        showAlertGeneral('<?php _e('Error', 'tainacan'); ?>', '<?php _e('Invalid Channel/Playlist or no videos to be imported', 'tainacan'); ?>', 'error');
+                    }
+                });
+            }).fail(function (result) {
+                hide_modal_main();
+                showAlertGeneral('Atenção', 'URL inexistente ou indisponível', 'error');
+            });
+        }
+    }
+
+    function import_text_alternative(url) {
+        var ajaxurl = $('#src').val() + '/controllers/object/object_controller.php?operation=parse_url_alternative&url=' + url;
         $.getJSON(ajaxurl, {}, function (json) {
-            console.log(json);
             var description = '', title = '';
             if (json.title !== undefined && json.title != null && json.title != false) {
                 title = json.title;
             }
             else {
-                 hide_modal_main();
+                hide_modal_main();
                 showAlertGeneral('Atenção', 'Esta URL não possui items disponíveis para importação', 'error');
                 return;
             }
@@ -1763,7 +2311,7 @@ function submit_comment(object_id) {
             //pegando a imagem
             var img = '';
             if (json.thumbnail_url !== undefined && json.thumbnail_url != null && json.thumbnail_url != false) {
-                 img = json.thumbnail_url;
+                img = json.thumbnail_url;
             }
             // verifico se existe imagem para ser importada
             $.ajax({
@@ -1787,49 +2335,44 @@ function submit_comment(object_id) {
                     showAlertGeneral('<?php _e('Error', 'tainacan'); ?>', '<?php _e('Invalid Channel/Playlist or no videos to be imported', 'tainacan'); ?>', 'error');
                 }
             });
-        }).fail(function (result) {
-            // console.log('error', result, url);
-            hide_modal_main();
-            showAlertGeneral('Atenção', 'URL inexistente ou indisponível', 'error');
         });
     }
- 
-    function import_files_url(url,type){
-            var title = '';
-            if(type=='image'){
-                title = '<?php _e('Image','tainacan') ?>';
-            }else if(type=='video'){
-                title = '<?php _e('Video','tainacan') ?>';
-            }else if(type=='audio'){
-                title = '<?php _e('Audio','tainacan') ?>';
-            }else if(type=='other'){
-                title = '<?php _e('Other','tainacan') ?>';
-            }else if(type=='pdf'){
-                title = '<?php _e('PDF','tainacan') ?>';
+
+    function import_files_url(url, type) {
+        var title = '';
+        if (type == 'image') {
+            title = '<?php _e('Image', 'tainacan') ?>';
+        } else if (type == 'video') {
+            title = '<?php _e('Video', 'tainacan') ?>';
+        } else if (type == 'audio') {
+            title = '<?php _e('Audio', 'tainacan') ?>';
+        } else if (type == 'other') {
+            title = '<?php _e('Other', 'tainacan') ?>';
+        } else if (type == 'pdf') {
+            title = '<?php _e('PDF', 'tainacan') ?>';
+        }
+        $.ajax({
+            url: $('#src').val() + '/controllers/object/object_controller.php',
+            type: 'POST',
+            data: {
+                operation: 'add_item_not_published',
+                collection_id: $("#collection_id").val(),
+                content: url,
+                description: '',
+                type: type,
+                url: url,
+                title: title}
+        }).done(function (result) {
+            var json = JSON.parse(result);
+            if (json.length > 0) {
+                showViewMultipleItemsSocialNetwork(json);
             }
-            $.ajax({
-                url: $('#src').val() + '/controllers/object/object_controller.php',
-                type: 'POST',
-                data: {
-                    operation: 'add_item_not_published',
-                    collection_id: $("#collection_id").val(),
-                    content: url,
-                    description:'',
-                    type: type,
-                    url: url,
-                    title: title}
-            }).done(function (result) {
-                var json = JSON.parse(result);
-                if (json.length > 0) {
-                    showViewMultipleItemsSocialNetwork(json);
-                }
-                else {
-                    hide_modal_main();
-                    showAlertGeneral('<?php _e('Error', 'tainacan'); ?>', '<?php _e('Invalid Channel/Playlist or no videos to be imported', 'tainacan'); ?>', 'error');
-                }
-            });
+            else {
+                hide_modal_main();
+                showAlertGeneral('<?php _e('Error', 'tainacan'); ?>', '<?php _e('Invalid Channel/Playlist or no videos to be imported', 'tainacan'); ?>', 'error');
+            }
+        });
     }
-   
 
     function import_youtube_channel(inputIdentifierYoutube) {
         var collectionId = $('#collection_id').val();
@@ -1844,7 +2387,7 @@ function submit_comment(object_id) {
                 type: 'POST',
                 data: {operation: 'import_video_channel',
                     identifier: inputIdentifierYoutube,
-                    //playlist: inputPlaylistYoutube,
+                    url: $('#item_url_import_all').val(),
                     playlist: '',
                     collectionId: collectionId},
                 success: function (response) {
@@ -1884,6 +2427,7 @@ function submit_comment(object_id) {
                 data: {operation: 'import_video_channel',
                     //identifier: inputIdentifierYoutube,
                     //playlist: inputPlaylistYoutube,
+                    url: $('#item_url_import_all').val(),
                     playlist: inputIdentifierYoutube,
                     collectionId: collectionId},
                 success: function (response) {
@@ -2004,50 +2548,131 @@ function submit_comment(object_id) {
             $('#item_url_import_all').val('');
         }
     }
-    //*****************************************  END IMPORT ALL  *********************************************//
-    /**
-    * funcao que concatena um array em um input, separado por virgulas
-    * @param {int} o ID do item que sera inserido no array
-    * @param {string} O id do input que esta sendo concatenado
-    * @returns {void}     */
-    function concatenate_in_array(key,seletor){
-    var ids = [];
-    if($(seletor).val()!==''){
-        ids = $(seletor).val().split(',');
-        index = ids.indexOf(key);
-        if(index>=0){
-            ids.splice(index, 1);
-        }else{
-            ids.push(key);
-        }
-        $(seletor).val(ids.join(','));
-    }else{
-        ids.push(key);
-        $(seletor).val(ids.join(','));
-    }
-}
-/**
-* 
 
- * @param {type} url
- * @returns {String} */
-function get_type_url(url){
-    var fileExtension = url.replace(/^.*\./, '');     // USING JAVASCRIPT REGULAR EXPRESSIONS.
-    switch (fileExtension) {
-        case 'png': case 'jpeg': case 'jpg':case 'gif':
-            return 'image';
-            break;
-        case 'mp4': case 'wmv': case 'ogv':case 'mpg':
-             return 'video';
-        case 'pdf':
-            return 'pdf';
-            break;
-        case 'mp3': case 'wav': case 'm4a':case 'ogg':
-             return 'audio';    
-        default:
-            return 'other';
+    //*****************************************  END IMPORT ALL  *********************************************//
+    function onlyUnique(value, index, self) {
+        return self.indexOf(value) === index;
+    }
+    /**
+     * funcao que concatena um array em um input, separado por virgulas
+     * @param {int} o ID do item que sera inserido no array
+     * @param {string} O id do input que esta sendo concatenado
+     * @returns {void}     */
+    function concatenate_in_array(key, seletor) {
+        let ids = [];
+        let result;
+        if ($(seletor).val() !== '')
+        {
+            ids = $(seletor).val().split(',');
+            let index = ids.indexOf(key);
+            if (index >= 0) {
+                ids.splice(index, 1);
+                result = false;
+            } else {
+                ids.push(key);
+                result = true;
+            }
+            $(seletor).val(ids.join(','));
+        } else {
+            ids.push(key);
+            $(seletor).val(ids.join(','));
+            result = true;
+        }
+
+        return result;
+    }
+
+    function add_label_box(id, name, seletor) {
+        $(seletor).append('<span id="label-box-' + id + '" class="label label-primary">'
+                + name + ' <a style="color:white;cursor:pointer;" onclick="remove_label_box(' + id + ')">x</a></span>&nbsp;');
+    }
+
+    function remove_label_box(id, dynatree) {
+        let cont = 0;
+        if (!dynatree)
+            dynatree = "#property_category_dynatree";
+        $(dynatree).dynatree("getRoot").visit(function (node) {
+            if (node.data.key == id) {
+                cont++;
+                node.select(false);
+            }
+        });
+        if (cont === 0) {
+            let ids = $('#property_object_category_id').val().split(',');
+            let index = ids.indexOf(id.toString());
+            if (index >= 0) {
+                ids.splice(index, 1);
+                $('#property_object_category_id').val(ids.join(','));
+            }
+        }
+        $('#label-box-' + id).remove();
+    }
+    /**
+     * 
+     
+     * @param {type} url
+     * @returns {String} */
+    function get_type_url(url) {
+        var fileExtension = url.replace(/^.*\./, '');     // USING JAVASCRIPT REGULAR EXPRESSIONS.
+        switch (fileExtension) {
+            case 'png':
+            case 'jpeg':
+            case 'jpg':
+            case 'gif':
+                return 'image';
+                break;
+            case 'mp4':
+            case 'wmv':
+            case 'ogv':
+            case 'mpg':
+                return 'video';
+            case 'pdf':
+                return 'pdf';
+                break;
+            case 'mp3':
+            case 'wav':
+            case 'm4a':
+            case 'ogg':
+                return 'audio';
+            default:
+                return 'other';
+        }
+    }
+    /************************************************ HELPERS **********************************************************/
+    function setValueReverse(seletor) {
+        if ($(seletor).val() !== 'false') {
+            $('#property_object_is_reverse').val('true');
+        } else {
+            $('#property_object_is_reverse').val('false');
+        }
+    }
+
+/************************************************ LIXEIRA **********************************************************/    
+function show_trash_page()
+{
+    $('#icon-search-bottom').parent().hide();
+    $('#normal-selectable').hide();
+    $('.button-trash').hide();
+    $('#trash-selectable').show();
+
+    showTrash('<?php echo get_template_directory_uri(); ?>');
+
+    if($('#ul_menu_search').length > 0)
+    {
+        $('#ul_menu_search').hide();
     }
 }
-    /************************************************ HELPERS **********************************************************/
-    
+
+function hide_trash_page(){
+    $('#icon-search-bottom').parent().show(); 
+    $('#normal-selectable').show();
+    $("#hideTrash").hide();
+    $('#trash-selectable').hide();
+    showList('<?php echo get_template_directory_uri(); ?>');
+    if($('#ul_menu_search').length>0){
+        $('#ul_menu_search').show();
+    }
+
+    $('.button-trash').show();
+}
 </script>

@@ -40,7 +40,16 @@ class RankingController extends Controller {
                 return $this->render(dirname(__FILE__) . '../../../views/object/single_object/ranking/list_ranking.php', $data);
                 break;
             case "create_list_ranking_object":
-                $data = $ranking_model->list_ranking_object($data);
+                if(!session_id()) {
+                        session_start();
+                }
+                $cache = $_SESSION['collection_'.$data['collection_id'].'_ranking'];
+                if(!$cache){
+                   $data = $ranking_model->list_ranking_object($data);
+                   $_SESSION['collection_'.$data['collection_id'].'_ranking'] = $data;
+                }else{
+                   $data = $cache;
+                }
                 return $this->render(dirname(__FILE__) . '../../../views/object/ranking/list_ranking_create.php', $data);
                 break;
             case "update_list_ranking_object":

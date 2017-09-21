@@ -24,7 +24,6 @@ function importVideosYoutube(object, id, playlist){
                 collection_id: $("#collection_id").val()
             },
         success: function(data) {
-            //console.log(data);
             if(data) {
                 $("#loader_videos").hide();
                 //$('#myModal').modal("hide");
@@ -63,7 +62,6 @@ function importVideosVimeo(object){
                 collection_id: $("#collection_id").val()
             },
         success: function(data) {
-            //console.log(data);
             if(data) {
                 $("#loader_videos").hide();
                 showAlertGeneral('socialDB import', 'videos importaos com sucesso', 'success');
@@ -104,7 +102,6 @@ function importPhotosFlickr(object, id){
                 collection_id: $("#collection_id").val()
             },
         success: function(data) {
-            //console.log(data);
             if(data) {
                 $("#loader_videos").hide();
                 showAlertGeneral('socialDB import', 'fotos importadas com sucesso', 'success');
@@ -142,7 +139,6 @@ function importPhotosFacebook(object, id){
                 collection_id: $("#collection_id").val()
             },
         success: function(data) {
-            //console.log(data);
             if(data) {
                 $("#loader_videos").hide();
                 showAlertGeneral('socialDB import', 'fotos importadas com sucesso', 'success');
@@ -180,7 +176,6 @@ function importPhotosInstagram(object, id){
                 collection_id: $("#collection_id").val()
             },
         success: function(data) {
-            //console.log(data);
             if(data) {
                 $("#loader_videos").hide();
                 showAlertGeneral('socialDB import', 'fotos importadas com sucesso', 'success');

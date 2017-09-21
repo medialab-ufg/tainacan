@@ -1,0 +1,367 @@
+.gly-spin {
+  -webkit-animation: spin 1s infinite linear;
+  -moz-animation: spin 1s infinite linear;
+  -o-animation: spin 1s infinite linear;
+  animation: spin 1s infinite linear;
+}
+@-moz-keyframes spin {
+  0% {
+    -moz-transform: rotate(0deg);
+  }
+  100% {
+    -moz-transform: rotate(359deg);
+  }
+}
+@-webkit-keyframes spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(359deg);
+  }
+}
+@-o-keyframes spin {
+  0% {
+    -o-transform: rotate(0deg);
+  }
+  100% {
+    -o-transform: rotate(359deg);
+  }
+}
+@keyframes spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(359deg);
+    transform: rotate(359deg);
+  }
+}
+
+#tainacan-stats{
+  margin-bottom: 0;
+  padding-top: 0;
+
+  .padd-r{
+    padding-right: 0;
+  }
+}
+
+#configuration{
+  .padd-r{
+    padding-right: 0;
+    padding-bottom: 48px;
+  }
+}
+
+.bgc-widget{
+    background-color: white;
+    a {
+      text-decoration: none !important;
+    }
+}
+
+#dashb{
+  margin-bottom: 0px;
+
+  // div row
+  .margin-rl{
+    margin-left: 80px !important;
+  }
+
+  // widgets
+  .margin-r10px{
+    margin-right: 10px;
+  }
+  .margin-t10px{
+    margin-top: 10px;
+  }
+}
+
+.statistics-container {
+  #dynatree-estatisticas{
+    background-color: white;
+    margin-top: -10px;
+  }
+
+  #collection-steps {
+    margin-bottom: 10px;
+    #conclude_config {
+      display: none;
+    }
+
+    ul {
+      margin-bottom: 5px;
+
+      li {
+        padding: 5px 0 0 0;
+
+        &#dashboard {
+          width: 10%;
+        }
+        &#stats {
+          width: 10%;
+          border-top: 3px solid rgb(210, 169, 109);
+        }
+
+      } // li
+    } // ul
+
+  } // dashboard & stats link
+
+  //#charts-display {
+  //   background-color: $collections-bg-color;
+  //   padding-top: 20px;
+  //}
+
+  /* Left side */
+  .statistics-config {
+    background: white;
+    border: none;
+    font-size: 12px;
+    //border-top: 1px solid $item-border;
+    //border-right: 3px solid $item-border;
+    padding-top: 20px;
+
+    .period-config {
+      h6 {
+        color: black;
+      }
+      .input-size {
+        width: 80%;
+      }
+    } // .period-config
+    label.title-pipe {
+      @include accordion_label_style($padding: 4px 0 4px 0);
+      padding-left: 5px;
+      //font-weight: bolder;
+      width: 90% !important;
+
+      span {
+        color: red !important;
+      }
+    }
+  } // #statistics-config
+
+  /* Right side */
+  .chart-header {
+    //@include single_item_container_style();
+    background-color: white;
+    margin: 0 40px 0 40px;
+    //border: 3px solid $item-border;
+    padding: 10px 15px;
+
+    h3.topo {
+      color: $brand-medium-blue;
+      margin: 0;
+
+      button { display: none }
+    }
+
+    hr {
+      margin-top: 10px;
+      margin-bottom: 10px;
+    }
+
+    .user-config-control {
+      // .inputPeriod{
+      //   font-size: 14x;
+      //   background-color: #fff;
+      //   border: 1px solid #ccc;
+      //   border-radius: 4px;
+      //   box-shadow: inset 0 1px 1px rgba(0,0,0, .075);
+      //   transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+      // }
+
+      label.label-from{
+        font-weight: normal !important;
+      }
+      
+      label.label-until{
+        font-weight: normal !important;
+      }
+
+      span.config-title {
+        color: $brand-medium-blue;
+        font-weight: bolder;
+      }
+
+      .current-chart span {
+        font-size: 11px;
+        font-weight: bolder;
+      }
+
+      div {
+        text-align: right;
+        &:first-child {
+          text-align: left;
+        }
+        &.col-md-1 {
+          margin-left: 10px;
+        }
+      }
+    }
+
+    ul.downloadStat {
+      min-width: 30% !important;
+      /* li {
+        text-align: right;
+      } */
+    }
+
+  } // .chart-header
+
+  #charts-container {
+    //@include single_item_container_style();
+    margin: 0 40px 0 40px;
+    background-color: white;
+    margin-top: 20px;
+    padding: 20px;
+  }
+} // statistics-container
+
+#values-details{
+  table {
+    tr {
+      border-top: 1px solid $brand-medium-blue;}
+      th{
+        font-weight: bolder;
+        color: $brand-medium-blue;
+      }
+  }
+}
+
+#charts-resume {
+  //@include single_item_container_style();
+  margin: 0 40px 0 40px;
+  background-color: white;
+  padding: 20px;
+  margin-top: 20px;
+
+  table {
+    // text-align: center;
+    width: 100%;
+    
+    tr {
+      border-top: 1px solid $brand-medium-blue;
+      th, td {
+        padding: 5px 10px;
+      }
+      th{
+        font-weight: bolder;
+        color: $brand-medium-blue;
+      }
+      .more-detail-message{
+        font-size: 7pt;
+        color: rgba(12, 105, 139, 0.5);
+      }
+      &:nth-child(2) {
+        td {
+          padding: 5px 10px;
+          // &:first-child {
+          //   font-weight: bolder;
+          // }
+        } // td
+      }
+    }
+  } // table
+  .a-color{
+    color: rgba(0, 0, 0, 0.8) !important;
+    text-decoration: none;
+    span{
+      color: rgba(12, 105, 139, 0.5);
+      font-size: 8pt;
+    }
+  }
+  .mg0{
+    margin: 0 !important;
+  }
+} // #charts-resume
+
+.right-caret {
+  border-bottom: 4px solid transparent;
+  border-top: 4px solid transparent;
+  border-left: 4px solid #000000;
+  display: inline-block;
+  height: 0;
+  opacity: 0.3;
+  vertical-align: top;
+  width: 0;
+}
+
+#report-type-stat {
+  padding: 0;
+    
+    span.hllog {
+        a {
+            // color: $item-light-gray !important;
+        }
+        p {
+            // color: $brand-light-blue;
+        }
+    } // highlight chart
+    
+  .dynatree-icon {
+    display: none;
+  }
+  .dynatree-container {
+    border: none;
+    font-size: 12px;
+    padding: 5px 0 0 20px;
+
+    a {
+      outline: 0 !important;
+    }
+
+    .dynatree-title{
+      font-weight: normal;
+      font-family: Oscine;
+    }
+
+    span.dynatree-active a {
+      border: none !important;
+    }
+
+    p {
+      font-size: 10px;
+    }
+    ul {
+      padding-left: 0;
+      li {
+        a.dynatree-title {
+          border: none !important;
+        }
+      }
+    }
+  }
+} // report-type-stat -> dynatree
+
+// Ul that changes current chart
+ul.statChartType {
+  min-width: 15% !important;
+  // right: 72px !important;
+  // li {
+  //   a {
+  //     padding: 3px 12px !important;
+  //   }
+  // }
+} // .statChartType
+
+#stats-cover {
+  height: 130px;
+  h1,h3 {
+    color: white;
+    text-shadow: -2px 1px 4px #27272d;
+    text-align: center;
+  }
+
+  h1 {
+    font-size: 400%;
+    margin-bottom: 0;
+  }
+  h3 {
+    font-size: 150%;
+    margin-top: 0;
+  }
+} // #stats-cover

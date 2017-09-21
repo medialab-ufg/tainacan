@@ -1,23 +1,36 @@
 <script>
-    function remove_search_word() {
+    function remove_search_word(title) {
         var selKeys = $.map($("#dynatree").dynatree("getSelectedNodes"), function (node) {
-            return node.data.key;
+            if(title && title === node.data.title)
+                node.select(false);
         });
         $("#value_search").val('');
         $("#search_objects").val('');
         $("#search_collections").val('');
         $("#search_collection_field").val('');
        // list_main_ordenation();
-        wpquery_remove('keyword','_','_');
+       if(!title)
+            wpquery_remove('keyword','_','_');
+        //list_all_objects(selKeys.join(", "), $("#collection_id").val(), $('#collection_single_ordenation').val());
+    }
+    function remove_search_author() {
+        $("#value_search").val('');
+        $("#search_objects").val('');
+        $("#search_collections").val('');
+        $("#search_collection_field").val('');
+       // list_main_ordenation();
+        wpquery_remove('author','_','_');
         //list_all_objects(selKeys.join(", "), $("#collection_id").val(), $('#collection_single_ordenation').val());
     }
     function remove_filter_category(facet,key) {
+        var nod;
         $('.remove-link-filters').hide(); 
          //wpquery_remove('facets',facet,key);
         $("#dynatree").dynatree("getRoot").visit(function (node) {
             if(node.data.key===key.trim()){
               $('#flag_dynatree_ajax').val('false'); 
-               node.select(false);
+              node.select(false);
+              $(node.span).removeClass('dynatree-selected');
             }
         });
         var selKeys = $.map($("#dynatree").dynatree("getSelectedNodes"), function (node) {

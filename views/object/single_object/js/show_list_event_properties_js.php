@@ -7,10 +7,12 @@
     function edit_term_property(property_id, object_id) {
         $("#single_cancel_" + property_id + "_" + object_id).show();
         $("#single_edit_" + property_id + "_" + object_id).hide();
+        $(".single_edit_" + property_id + "_" + object_id).hide();
         $("#labels_" + property_id + "_" + object_id).hide();
         $("#widget_" + property_id + "_" + object_id).fadeIn();
     }
     function cancel_term_property(property_id, object_id) {
+        $(".single_edit_" + property_id + "_" + object_id).show();
         $("#single_edit_" + property_id + "_" + object_id).show();
         $("#single_cancel_" + property_id + "_" + object_id).hide();
         $("#widget_" + property_id + "_" + object_id).hide();
@@ -18,17 +20,20 @@
     }
 
     function edit_data_property(property_id, object_id) {
-        $("#single_cancel_" + property_id + "_" + object_id).show();
         $("#single_edit_" + property_id + "_" + object_id).hide();
+        $("#single_cancel_" + property_id + "_" + object_id).show();
         $("#single_save_" + property_id + "_" + object_id).show();
-        $("#single_property_value_" + property_id + "_" + object_id).prop({
-            disabled: false
-        });
-        $("#single_property_value_" + property_id + "_" + object_id).show();
+
         $(".single_socialdb_property_" + property_id ).prop({
             disabled: false
         });
         $("#value_" + property_id + "_" + object_id).hide();
+
+        //Show edition box
+        $("input[id ^= 'single_property_value_" + property_id + "_" + object_id + "']").prop({
+            disabled: false
+        });
+        $("input[id ^= 'single_property_value_" + property_id + "_" + object_id + "']").show();
     }
     function cancel_data_property(property_id, object_id) {
 //        $("#single_property_value_" + property_id + "_" + object_id).val($("#property_" + property_id + "_" + object_id + "_value_before").val());
@@ -54,27 +59,13 @@
                 $("#single_cancel_" + property_id + "_" + object_id).hide();
                 $("#single_edit_" + property_id + "_" + object_id).show();
                 $("#single_save_" + property_id + "_" + object_id).hide();
-                $("#single_property_value_" + property_id + "_" + object_id).prop({
+                $("input[id ^= 'single_property_value_" + property_id + "_" + object_id + "']").prop({
                     disabled: true
                 });
                 $(".single_socialdb_property_" + property_id ).prop({
                     disabled: true
                 });
-                $("#single_property_value_" + property_id + "_" + object_id).hide();
-                $("#value_" + property_id + "_" + object_id).show();
-            } else {
-
-                $("#single_property_value_" + property_id + "_" + object_id).val($("#single_property_" + property_id + "_" + object_id + "_value_before").val());
-                $("#single_cancel_" + property_id + "_" + object_id).hide();
-                $("#single_edit_" + property_id + "_" + object_id).show();
-                $("#single_save_" + property_id + "_" + object_id).hide();
-                $("#single_property_value_" + property_id + "_" + object_id).prop({
-                    disabled: true
-                });
-                $(".single_socialdb_property_" + property_id ).prop({
-                    disabled: true
-                });
-                $("#single_property_value_" + property_id + "_" + object_id).hide();
+                $("input[id ^= 'single_property_value_" + property_id + "_" + object_id + "']").hide();
                 $("#value_" + property_id + "_" + object_id).show();
             }
         });
@@ -83,12 +74,20 @@
         //hook para validacao do formulario
         if(Hook.is_register( 'tainacan_validate_single_save_data_property')){
             Hook.call( 'tainacan_validate_single_save_data_property', [ property_id,object_id] );
-            console.log(Hook.result.is_validated);
             if(!Hook.result.is_validated){
                 showAlertGeneral('<?php _e('Attention','tainacan') ?>', Hook.result.message, 'info');
                 return false;
             }
         }
+
+        var index_val_list = [];
+        $("input[id ^= 'single_property_value_" + property_id + "_" + object_id + "']").each(function(){
+            index_val_list.push({
+                val: $(this).val(),
+                index: $(this).attr('data-index')
+            });
+        });
+
         //inserindo a propriedade
         if(Hook.is_register( 'tainacan_insert_single_save_data_property')){
              Hook.call( 'tainacan_insert_single_save_data_property', [ property_id,object_id,'<?php echo mktime(); ?>'] );
@@ -103,7 +102,8 @@
                     socialdb_event_user_id: $('#current_user_id').val(),
                     socialdb_event_property_data_edit_value_object_id: object_id,
                     socialdb_event_property_data_edit_value_property_id: property_id,
-                    socialdb_event_property_data_edit_value_attribute_value: $("#single_property_value_" + property_id + "_" + object_id).val()}
+                    socialdb_event_property_data_edit_value_attribute_value: index_val_list
+                }
             }).done(function (result) {
                 verifyPublishedItem(object_id);
                 elem = jQuery.parseJSON(result);
@@ -115,6 +115,8 @@
                 $("#labels_" + property_id + "_" + object_id).fadeIn();
                 list_properties_single(object_id);
                 showAlertGeneral(elem.title, elem.msg, elem.type);
+                //limpando caches
+                delete_all_cache_collection();
             });
         }
     }
@@ -122,6 +124,7 @@
     function edit_object_property(property_id, object_id) {
         $("#single_cancel_" + property_id + "_" + object_id).show();
         $("#single_edit_" + property_id + "_" + object_id).hide();
+        $(".single_edit_" + property_id + "_" + object_id).hide();
         $("#single_save_" + property_id + "_" + object_id).show();
         $("#labels_" + property_id + "_" + object_id).hide();
         $("#widget_" + property_id + "_" + object_id).fadeIn();
@@ -144,7 +147,6 @@
                     data: {property_id: property_id, object_id: object_id, operation: 'get_property_object_value', }
                 }).done(function (result) {
                     elem = jQuery.parseJSON(result);
-                    console.log(elem);
                     if (elem.values) {
                         $("#single_property_value_" + property_id + "_" + object_id).html('');
                         $.each(elem.values, function (idx, value) {
@@ -159,6 +161,7 @@
                 });
                 $("#single_cancel_" + property_id + "_" + object_id).hide();
                 $("#single_edit_" + property_id + "_" + object_id).show();
+                $(".single_edit_" + property_id + "_" + object_id).show();
                 $("#single_save_" + property_id + "_" + object_id).hide();
                 $("#widget_" + property_id + "_" + object_id).hide();
                 $("#labels_" + property_id + "_" + object_id).fadeIn();
@@ -173,7 +176,6 @@
         //hook para validacao do formulario
         if(Hook.is_register( 'tainacan_validate_single_save_object_property')){
             Hook.call( 'tainacan_validate_single_save_object_property', [ property_id,object_id] );
-            console.log(Hook.result.is_validated);
             if(!Hook.result.is_validated){
                 showAlertGeneral('<?php _e('Attention','tainacan') ?>', Hook.result.message, 'info');
                 return false;
@@ -198,11 +200,8 @@
             elem = jQuery.parseJSON(result);
             list_properties_single(object_id);
             showAlertGeneral(elem.title, elem.msg, elem.type);
-            // if (elem.pre_approved) {
-            // //    $("#property_" + property_id + "_" + object_id + "_value_before").val($("#property_value_" + property_id + "_" + object_id).val());
-            // } else {
-            //    cancel_data_property(property_id, object_id)
-            //}
+            //limpando caches
+            delete_all_cache_collection();
         });
         return;
 
@@ -217,7 +216,6 @@
             },
             minLength: 2,
             select: function (event, ui) {
-                console.log(event);
                 $("#single_autocomplete_value_" + property_id + "_" + object_id).html('');
                 $("#single_autocomplete_value_" + property_id + "_" + object_id).val('');
                 //var temp = $("#chosen-selected2 [value='" + ui.item.value + "']").val();
@@ -290,10 +288,27 @@
                         //     $('#property_object_reverse').append('<option selected="selected" value="' + property.id + '">' + property.name + ' - (' + property.type + ')</option>');
                         //  } else {
                         if (categories.indexOf(children.term_id) > -1) {
+                            var title = '<?php _e('Remove classification', 'tainacan') ?>';
+                            var text = '<?php _e('Are you sure to remove this classification', 'tainacan') ?>';
+                            var object_id = <?php echo $object_id; ?>;
+                            var time = '<?php echo mktime(); ?>';
+
+                            /*var remove_button = '';
+                            if(!elem.metas.socialdb_property_required)
+                            {
+                                remove_button =
+                                    ' <a type="button" onclick="remove_classication(\'' + title + '\', \'' + text + '\',' + children.term_id + ',' + object_id + ',\'' + time + '\')" style="cursor: pointer;">'
+                                    + "<span class='glyphicon glyphicon-remove-circle'></span>"
+                                    +"</a>";
+                            }*/
+
                             checked = 'checked="checked"';
                             $('#value_single_radio_' + radio + '_<?php echo $object_id; ?>').val(children.term_id);
                             $("#labels_" + radio + "_<?php echo $object_id; ?>").html('');
-                            $("#labels_" + radio + "_<?php echo $object_id; ?>").append('<b><a style="cursor:pointer;" onclick="wpquery_term_filter(' + children.term_id + ',' + radio + ')">' + children.name + '</a></b><br>');//inserindo os termos escolhidos
+                            $("#labels_" + radio + "_<?php echo $object_id; ?>").append('<b><a style="cursor:pointer;" onclick="wpquery_term_filter(' + children.term_id + ',' + radio + ')">'
+                                + children.name
+                                + '</a>' /*+ remove_button*/
+                                + '</b><br>');//inserindo os termos escolhidos
                         }
                         //delete_value(children.term_id);
                         $('#field_event_single_property_term_' + radio + '_<?php echo $object_id; ?>').append('<input ' + checked + ' onchange="get_event_single_radio(this,' + radio + ',<?php echo $object_id; ?>)" type="radio" name="socialdb_propertyterm_' + radio + '" value="' + children.term_id + '">&nbsp;' + children.name + '<br>');
@@ -316,25 +331,27 @@
                     $('#field_event_single_property_term_' + checkbox).html('');
                     
                     $("#labels_" + checkbox + "_<?php echo $object_id; ?>").html('');
-                    $.each(elem.children, function (idx, children) {
-                        var required = '';
-                        var checked = '';
-                        // event_single_delete_value(children.term_id);
-                        if (elem.metas.socialdb_property_required === 'true') {
-                            required = 'required="required"';
-                        }
-                        if (categories.indexOf(children.term_id) > -1) {
-                            checked = 'checked="checked"';
-                            //$("#labels_" + checkbox + "_<?php echo $object_id; ?>").html('');//zero o html do container que recebera os
-                            // insiro o html do link do valor atribuido
-                            $("#labels_" + checkbox + "_<?php echo $object_id; ?>").append('<b><a style="cursor:pointer;" onclick="wpquery_term_filter(' + children.term_id + ',' + checkbox + ')">' + children.name + '</a></b><br>');//inserindo os termos escolhidos
-                        }
-                        //  if (property.id == selected) {
-                        //     $('#property_object_reverse').append('<option selected="selected" value="' + property.id + '">' + property.name + ' - (' + property.type + ')</option>');
-                        //  } else {
-                        $('#field_event_single_property_term_' + checkbox + '_<?php echo $object_id; ?>').append('<input onchange="get_event_single_checkbox(this,<?php echo $object_id; ?>)" ' + checked + ' ' + required + ' type="checkbox" name="socialdb_propertyterm_' + checkbox + '[]" value="' + children.term_id + '">&nbsp;' + children.name + '<br>');
-                        //  }
-                    });
+                    if(elem.children){
+                        $.each(elem.children, function (idx, children) {
+                            var required = '';
+                            var checked = '';
+                            // event_single_delete_value(children.term_id);
+                            if (elem.metas.socialdb_property_required === 'true') {
+                                required = 'required="required"';
+                            }
+                            if (categories.indexOf(children.term_id) > -1) {
+                                checked = 'checked="checked"';
+                                //$("#labels_" + checkbox + "_<?php echo $object_id; ?>").html('');//zero o html do container que recebera os
+                                // insiro o html do link do valor atribuido
+                                $("#labels_" + checkbox + "_<?php echo $object_id; ?>").append('<b><a style="cursor:pointer;" onclick="wpquery_term_filter(' + children.term_id + ',' + checkbox + ')">' + children.name + '</a></b><br>');//inserindo os termos escolhidos
+                            }
+                            //  if (property.id == selected) {
+                            //     $('#property_object_reverse').append('<option selected="selected" value="' + property.id + '">' + property.name + ' - (' + property.type + ')</option>');
+                            //  } else {
+                            $('#field_event_single_property_term_' + checkbox + '_<?php echo $object_id; ?>').append('<input onchange="get_event_single_checkbox(this,<?php echo $object_id; ?>)" ' + checked + ' ' + required + ' type="checkbox" name="socialdb_propertyterm_' + checkbox + '[]" value="' + children.term_id + '">&nbsp;' + children.name + '<br>');
+                            //  }
+                        });
+                    }
                 });
             });
         }
@@ -356,8 +373,8 @@
                         //delete_value(children.term_id);
                         if (categories.indexOf(children.term_id) > -1) {
                             checked = 'selected="selected"';
-                            $("#labels_" + radio + "_<?php echo $object_id; ?>").html('');
-                            $("#labels_" + radio + "_<?php echo $object_id; ?>").append('<b><a style="cursor:pointer;" onclick="wpquery_term_filter(' + children.term_id + ',' + radio + ')">' + children.name + '</a></b><br>');//inserindo os termos escolhidos
+                            $("#labels_" + selectbox + "_<?php echo $object_id; ?>").html('');
+                            $("#labels_" + selectbox + "_<?php echo $object_id; ?>").append('<b><a style="cursor:pointer;" onclick="wpquery_term_filter(' + children.term_id + ',' + selectbox + ')">' + children.name + '</a></b><br>');//inserindo os termos escolhidos
                             $('#value_single_select_' + selectbox + '_<?php echo $object_id; ?>').val(children.term_id);
                         }
                         $('#field_event_single_property_term_' + selectbox + '_<?php echo $object_id; ?>').append('<option ' + checked + ' value="' + children.term_id + '">' + children.name + '</option>');
@@ -461,7 +478,6 @@
                     onActivate: function (node, event_single) {
                     },
                     onSelect: function (flag, node) {
-                        console.log(flag);
                         if (categories.indexOf(node.data.key) < 0) {
                             add_classification(<?php echo $object_id; ?>, node.data.key);
                         } else {
@@ -488,7 +504,9 @@
                             $("#socialdb_propertyterm_" + tree + "_<?php echo $object_id; ?>").html('');
                             $("#labels_" + tree + "_<?php echo $object_id; ?>").html('');//zero o html do container que recebera os
                             // insiro o html do link do valor atribuido
-                            $("#labels_" + tree + "_<?php echo $object_id; ?>").html('<b><a style="cursor:pointer;" onclick="wpquery_term_filter(' + elem.term.term_id + ',' + tree + ')">' + elem.term.name + '</a></b>');//zero o html do container que recebera os
+
+                            $("#labels_" + tree + "_<?php echo $object_id; ?>").html('<b><a style="cursor:pointer;" onclick="wpquery_term_filter(' + elem.term.term_id + ',' + tree + ')">'
+                                + elem.term.name + '</a></b>');//zero o html do container que recebera os
                             // coloco no selectbox o valor selecionado
                             $("#socialdb_propertyterm_" + tree + "_<?php echo $object_id; ?>").append('<option selected="selected" value="' + elem.term.term_id + '" >' + elem.term.name + '</option>');
                             //coloco o valor atual no hidden para poder remove-lo caso necessario 
@@ -525,9 +543,10 @@
                         });
                     },
                     onSelect: function (flag, node) {
+                        //Tree = ID da propriedade
                         $("#socialdb_propertyterm_" + tree + "_<?php echo $object_id; ?>").html('');
                         $("#socialdb_propertyterm_" + tree + "_<?php echo $object_id; ?>").append('<option selected="selected" value="' + node.data.key + '" >' + node.data.title + '</option>');
-                        get_event_single_tree(node.data.key, $('#value_single_tree_' + tree + '_<?php echo $object_id; ?>').val(), tree,<?php echo $object_id; ?>);
+                        get_event_single_tree(node.data.key, $('#value_single_tree_' + tree + '_<?php echo $object_id; ?>').val(), tree, <?php echo $object_id; ?>);
                         $('#value_single_tree_' + tree + '_<?php echo $object_id; ?>').val(node.data.key);
                     }
                 });
@@ -588,7 +607,8 @@
                     show_classifications_single(object_id);
                     list_properties_single(object_id);
                     showAlertGeneral(elem_first.title, elem_first.msg, elem_first.type);
-
+                    //limpando caches
+                    delete_all_cache_collection();
                 });
             } else {
                 list_properties_single(object_id);
@@ -626,11 +646,12 @@
                     show_classifications_single(object_id);
                     list_properties_single(object_id);
                     showAlertGeneral(elem_first.title, elem_first.msg, elem_first.type);
-
+                    //limpando caches
+                    delete_all_cache_collection();
                 });
-            } else {
+            } /*else {
                 list_properties_single(object_id);
-            }
+            }*/
         });
     }
 
@@ -670,6 +691,7 @@
         verifyPublishedItem(object_id);
         var before_category = $('#value_single_radio_' + property_id + '_' + object_id).val();
         $('#value_single_radio_' + property_id + '_' + object_id).val($(e).val());
+
         swal({
             title: '<?php _e('Add classification', 'tainacan') ?>',
             text: '<?php _e('Are you sure to include this classification? This action removes the previous selected category', 'tainacan') ?>',
@@ -690,16 +712,21 @@
                         socialdb_event_create_date: '<?php echo mktime(); ?>',
                         socialdb_event_user_id: $('#current_user_id').val(),
                         socialdb_event_classification_object_id: object_id,
+                        socialdb_event_classification_property_id: property_id,
                         socialdb_event_classification_term_id: $(e).val(),
                         socialdb_event_classification_type: 'category',
-                        socialdb_event_collection_id: $('#collection_id').val()}
+                        socialdb_event_collection_id: $('#collection_id').val()
+                    }
                 }).done(function (result) {
                     elem_first = jQuery.parseJSON(result);
                     show_classifications(object_id);
                     list_properties_single(object_id);
-                    showAlertGeneral(elem_first.title, elem_first.msg, elem_first.type);
+                    //limpando caches
+                    delete_all_cache_collection();
 
+                    showAlertGeneral(elem_first.title, elem_first.msg, elem_first.type);
                 });
+
                 //retira a anterior
                 $.ajax({
                     type: "POST",
@@ -709,12 +736,11 @@
                         socialdb_event_create_date: '<?php echo mktime(); ?>',
                         socialdb_event_user_id: $('#current_user_id').val(),
                         socialdb_event_classification_object_id: object_id,
+                        socialdb_event_classification_property_id: property_id,
                         socialdb_event_classification_term_id: before_category,
                         socialdb_event_classification_type: 'category',
                         socialdb_event_collection_id: $('#collection_id').val()}
-                }).done(function (result) {
-                    elem_first = jQuery.parseJSON(result);
-                });
+                })
 
             } else {
                 list_properties_single(object_id);
@@ -755,7 +781,8 @@
                         show_classifications(object_id);
                         list_properties_single(object_id);
                         showAlertGeneral(elem_first.title, elem_first.msg, elem_first.type);
-
+                        //limpando caches
+                        delete_all_cache_collection();
                     });
                     //retira a anterior
                     $.ajax({
@@ -793,7 +820,8 @@
         },
         function (isConfirm) {
             if (isConfirm) {
-                //adiciona a escolhida 
+
+                //adiciona a escolhida
                 $.ajax({
                     type: "POST",
                     url: $('#src').val() + "/controllers/event/event_controller.php",
@@ -802,6 +830,7 @@
                         socialdb_event_create_date: '<?php echo mktime(); ?>',
                         socialdb_event_user_id: $('#current_user_id').val(),
                         socialdb_event_classification_object_id: object_id,
+                        socialdb_event_classification_property_id: property_id,
                         socialdb_event_classification_term_id: value_actual,
                         socialdb_event_classification_type: 'category',
                         socialdb_event_collection_id: $('#collection_id').val()}
@@ -811,7 +840,10 @@
                     list_properties_single(object_id);
                     showAlertGeneral(elem_first.title, elem_first.msg, elem_first.type);
 
+                    //limpando caches
+                    delete_all_cache_collection();
                 });
+
                 //retira a anterior
                 $.ajax({
                     type: "POST",
@@ -821,6 +853,7 @@
                         socialdb_event_create_date: '<?php echo mktime(); ?>',
                         socialdb_event_user_id: $('#current_user_id').val(),
                         socialdb_event_classification_object_id: object_id,
+                        socialdb_event_classification_property_id: property_id,
                         socialdb_event_classification_term_id: value_before,
                         socialdb_event_classification_type: 'category',
                         socialdb_event_collection_id: $('#collection_id').val()}

@@ -8,7 +8,9 @@
 @import "responsive_home";
 @import "metadata_filters";
 @import "single_item";
+@import "charts";
 @import "configs";
+@import "pdf_chart";
 @import "general";
 
 @font-face {font-family: 'Oscine';font-weight: normal;font-style: normal;src: url(../fonts/Oscine_Trial_Rg.ttf) format('truetype');} 
@@ -167,8 +169,6 @@
 
 
 /*
-                Logs
-Jordão
 J1 - iguala altura de colunas na mesma row
 J2 - ajuste de titulo de colecao da home
 J3 - delimitando tamanho do item da coleção
@@ -415,13 +415,13 @@ header{
 }
 .adv_search{
     text-align: right;
-    text-shadow: 0px 0px 10px rgba(0, 0, 0, 1);
+    text-shadow: 0 0 10px rgba(0, 0, 0, 1);
 }
 
 /*------------------main------------------*/
-#main_part.home{
+#main_part.home {
     // padding: 15% 0 5% 0;
-    padding: 0 0 5% 0;
+    padding: 3% 0 3% 0;
     overflow: hidden;
 }
 center.container{
@@ -437,15 +437,8 @@ center.container{
     padding: 0;
     margin: 0;
 }
-.titulo-blocos{
+.titulo-blocos {
     text-align: left;
-}
-.collection_header{
-    padding: 0;
-    margin: 0;
-    border: none;
-    border-radius: 0;
-    background-image: url(../images/capa-colecao.png);
 }
 .avatar-edit{
     position: absolute;
@@ -538,19 +531,6 @@ span.dynatree-icon{
     //display: none;
 }
 
-/*------------------footer------------------*/
-#footer{
-    min-height: 200px;
-    background-color: #ccc;
-    padding: 20px 0;
-    width: 100%;
-    float: left;
-}
-.logo-footer{
-    text-align: right;
-}
-
-
 /*---------------------------------------------
                 P2 - Coleções
 -----------------------------------------------*/
@@ -571,7 +551,7 @@ span.dynatree-icon{
 
 .item-info{
     max-height: 160px;
-    overflow: hidden;
+    /*overflow: hidden;*/
 }
 /*J3 - delimitando tamanho do item da coleção*/
 .item-interaction{
@@ -733,3 +713,13 @@ button.tainacan-filter-range {
 } // .multiple-items-accordion
 
 #accordion .ui-accordion-content { padding: 10px; }
+
+body.page-template-page-statistics {
+
+    .header-navbar {
+        position: relative !important;
+    }
+    .user-actions.collapse {
+        border-bottom: 0 !important;
+    }
+}

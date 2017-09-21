@@ -40,7 +40,7 @@
                     <select class="form-control" id="socialdb_property_type_operation" name="socialdb_property_type_operation">
                         <option value="1"><?php _e('Equals','tainacan'); ?></option>
                         <option value="2"><?php _e('Not equals','tainacan'); ?></option>
-                        <option value="3"><?php _e('Contains','tainacan'); ?></option>
+                        <option value="3" selected><?php _e('Contains','tainacan'); ?></option>
                         <option value="4"><?php _e('Does not Contain','tainacan'); ?></option>
                     </select>
              </div>
@@ -59,7 +59,7 @@
                     <select class="form-control" id="socialdb_property_source_operation" name="socialdb_property_source_operation">
                         <option value="1"><?php _e('Equals','tainacan'); ?></option>
                         <option value="2"><?php _e('Not equals','tainacan'); ?></option>
-                        <option value="3"><?php _e('Contains','tainacan'); ?></option>
+                        <option value="3" selected><?php _e('Contains','tainacan'); ?></option>
                         <option value="4"><?php _e('Does not Contain','tainacan'); ?></option>
                     </select>
              </div>
@@ -77,7 +77,7 @@
                    <select class="form-control" id="socialdb_property_tag_operation" name="socialdb_property_tag_operation">
                        <option value="1"><?php _e('Equals','tainacan'); ?></option>
                        <option value="2"><?php _e('Not equals','tainacan'); ?></option>
-                       <option value="3"><?php _e('Contains','tainacan'); ?></option>
+                       <option value="3" selected><?php _e('Contains','tainacan'); ?></option>
                        <option value="4"><?php _e('Does not Contain','tainacan'); ?></option>
                    </select>
             </div>     
@@ -88,7 +88,10 @@
     include_once ('../../../../../wp-config.php');
     include_once ('../../../../../wp-load.php');
     include_once ('../../../../../wp-includes/wp-db.php');
+    include_once(dirname(__FILE__).'/../../helpers/view_helper.php');
+    include_once(dirname(__FILE__).'/../../helpers/advanced_search/advanced_search_helper.php');
     include_once ('js/show_insert_object_properties_js.php');
+    $advanced_search_helper = new AdvancedSearchHelper();
     $properties_terms_radio = [];
     $properties_terms_tree = [];
     $properties_terms_selectbox = [];
@@ -126,7 +129,7 @@
                                 <select class="form-control" id="advanced_search_property_<?php echo $property['id']; ?>_operation" name="socialdb_property_<?php echo $property['id']; ?>_operation">
                                     <option value="1"><?php _e('Equals','tainacan'); ?></option>
                                     <option value="2"><?php _e('Not equals','tainacan'); ?></option>
-                                    <option value="3"><?php _e('Contains','tainacan'); ?></option>
+                                    <option value="3" selected><?php _e('Contains','tainacan'); ?></option>
                                     <option value="4"><?php _e('Does not Contain','tainacan'); ?></option>
                                 </select>
                            </div>
@@ -138,7 +141,7 @@
                                 <select class="form-control" id="socialdb_property_<?php echo $property['id']; ?>_operation" name="socialdb_property_<?php echo $property['id']; ?>_operation">
                                     <option value="1"><?php _e('Equals','tainacan'); ?></option>
                                     <option value="2"><?php _e('Not equals','tainacan'); ?></option>
-                                    <option value="3"><?php _e('Contains','tainacan'); ?></option>
+                                    <option value="3" selected><?php _e('Contains','tainacan'); ?></option>
                                     <option value="4"><?php _e('Does not Contain','tainacan'); ?></option>
                                 </select>
                            </div> 
@@ -211,7 +214,10 @@
                         } elseif ($property['type'] == 'selectbox') {
                             $properties_terms_selectbox[] = $property['id'];
                             ?>
-                            <select class="form-control" name="socialdb_property_<?php echo $property['id']; ?>" id='search_field_property_term_<?php echo $property['id']; ?>' <?php
+                            <select class="form-control"
+                                    onchange="onSelectValue(this,<?php echo $property['id']; ?>)"
+                                    name="socialdb_propertyterm_<?php echo $property['id']; ?>" 
+                                    id='search_field_property_term_<?php echo $property['id']; ?>' <?php
                             
                             ?>></select>
                                     <?php
@@ -223,7 +229,7 @@
                         } elseif ($property['type'] == 'multipleselect') {
                             $properties_terms_multipleselect[] = $property['id'];
                             ?>
-                             <select multiple class="form-control" name="socialdb_propertyterm_<?php echo $property['id']; ?>" id='search_field_property_term_<?php echo $property['id']; ?>' ></select>
+                             <select   onchange="onSelectValue(this,<?php echo $property['id']; ?>)" multiple class="form-control" name="socialdb_propertyterm_<?php echo $property['id']; ?>" id='search_field_property_term_<?php echo $property['id']; ?>' ></select>
                             <?php
                         } elseif ($property['type'] == 'tree_checkbox') {
                             $properties_terms_treecheckbox[] = $property['id']; 
@@ -238,10 +244,12 @@
                 </div>              
                 <div class="col-md-4 no-padding padding-left-space">
                     <select class="form-control" id="socialdb_property_<?php echo $property['id']; ?>_operation" name="socialdb_property_<?php echo $property['id']; ?>_operation">
-                       <option value="in"><?php _e('Contains','tainacan'); ?></option>
-                            <option value="not_in"><?php _e('Does not Contain','tainacan'); ?></option>
+                       <option value=""><?php _e('Select','tainacan'); ?>...</option>
+                       <option value="3"><?php _e('Contains','tainacan'); ?></option>
+                       <option value="4"><?php _e('Does not Contain','tainacan'); ?></option>
                     </select>
-               </div>              
+               </div>  
+               <div class="col-md-12" id="append_properties_categories_<?php echo $property['id']; ?>_adv"></div> 
            </div> 
             <?php } ?>
         <?php endif;
@@ -277,8 +285,8 @@
                     </div>
                     <div class="col-md-4 no-padding padding-left-space">
                         <select class="form-control" id="socialdb_property_<?php echo $property['id']; ?>_operation" name="socialdb_property_<?php echo $property['id']; ?>_operation">
-                            <option value="in"><?php _e('Contains','tainacan'); ?></option>
-                            <option value="not_in"><?php _e('Does not Contain','tainacan'); ?></option>
+                            <option value="3"><?php _e('Contains','tainacan'); ?></option>
+                            <option value="4"><?php _e('Does not Contain','tainacan'); ?></option>
                         </select>
                    </div>   
                  </div>                
@@ -332,6 +340,9 @@
                  </div>                
             <?php } ?>
         <?php endif; ?>
+        <?php if(isset($property_compounds)): ?>
+            <?php $advanced_search_helper->list_properties_compounds_search($property_compounds) ?>
+        <?php endif; ?>
         <div id="list_licenses_items" class="form-group col-md-12 no-padding" >
              <label class="col-md-12 no-padding" for="object_tags">
                         <?php echo __('Licenses','tainacan'); ?>
@@ -361,7 +372,7 @@
         <input type="hidden" name="properties_terms_multipleselect" id='search_properties_terms_multipleselect' value="<?php echo implode(',', $properties_terms_multipleselect); ?>">
         <input type="hidden" name="properties_terms_treecheckbox" id='search_properties_terms_treecheckbox' value="<?php echo implode(',', $properties_terms_treecheckbox); ?>">
         <?php if (isset($all_ids)): ?>
-            <input type="hidden" name="properties_id" value="<?php echo $all_ids; ?>">
+            <input type="hidden" id="properties_id_avoid" name="properties_id" value="<?php echo $all_ids; ?>">
         <?php endif; ?>
 <?php endif; ?>
     </div>        

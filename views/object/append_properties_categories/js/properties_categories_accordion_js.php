@@ -1,10 +1,22 @@
 <script>
     $(function () {
         var src = $('#src').val();
-       // var properties_autocomplete = edit_get_val($("#edit_properties_autocomplete").val());
+        var properties_autocomplete = edit_get_val($("#pc_properties_autocomplete_<?php echo $categories ?>").val());
        // autocomplete_edit_item_property_data(properties_autocomplete); 
         $('[data-toggle="tooltip"]').tooltip();
+        $("textarea").on("keydown",function(e) {
+            var key = e.keyCode;
+            // If the user has pressed enter
+            if (key == 13) {
+                $(this).val($(this).val()+"\n");
+                return false;
+            }
+            else {
+                return true;
+            }
+        });
         pc_list_properties_term_insert_objects();
+        pc_autocomplete_edit_item_property_data(properties_autocomplete)
     });
     function autocomplete_object_property_edit(property_id, object_id) {
         $("#autocomplete_value_" + property_id + "_" + object_id).autocomplete({
@@ -54,7 +66,7 @@
      * @param {type} e
      * @returns {undefined}
      */
-    function autocomplete_edit_item_property_data(properties_autocomplete) {
+    function pc_autocomplete_edit_item_property_data(properties_autocomplete) {
          if (properties_autocomplete) {
             $.each(properties_autocomplete, function (idx, property_id) {
                         //validate
@@ -65,7 +77,6 @@
                                     cont++;
                                 }
                             });
-
                             if( cont===0){
                                 $('#core_validation_'+property_id).val('false');
                             }else{
@@ -95,6 +106,17 @@
                             messages: {
                                 noResults: '',
                                 results: function () {
+                                }
+                            },
+                            response: function( event, ui ) {
+                                if(ui.content && ui.content.length>0 && $('.form_autocomplete_value_'+property_id+'_mask').val()!==''){
+                                   $.each(ui.content,function(index,value){
+                                       if($(event.target).val()==value.value || $(event.target).val().toLowerCase().trim()==value.value){
+                                            toastr.error($(event.target).val()+' <?php _e(' is already inserted!', 'tainacan') ?>', '<?php _e('Attention!', 'tainacan') ?>', {positionClass: 'toast-bottom-right'});
+                                            $(event.target).val('');
+                                       }
+                                       $(event.target).autocomplete('close');
+                                   }); 
                                 }
                             },
                             minLength: 2,
@@ -136,13 +158,17 @@
     
     //************************* properties terms ******************************************//
     function pc_list_properties_term_insert_objects() {
+       // var categories = edit_get_val($("#pc_categories").val());
         var categories = edit_get_val($("#pc_categories").val());
-        var radios = edit_get_val($("#pc_properties_terms_radio").val());
-        var selectboxes = edit_get_val($("#pc_properties_terms_selectbox").val());
-        var trees = edit_get_val($("#pc_properties_terms_tree").val());
-        var checkboxes = edit_get_val($("pc_#properties_terms_checkbox").val());
-        var multipleSelects = edit_get_val($("#pc_properties_terms_multipleselect").val());
-        var treecheckboxes = edit_get_val($("#pc_properties_terms_treecheckbox").val());
+        if($("#edit_object_categories_id").length>0){
+            var categories = edit_get_val($("#edit_object_categories_id").val());
+        }
+        var radios = edit_get_val($("#pc_properties_terms_radio_<?php echo $categories ?>").val());
+        var selectboxes = edit_get_val($("#pc_properties_terms_selectbox_<?php echo $categories ?>").val());
+        var trees = edit_get_val($("#pc_properties_terms_tree_<?php echo $categories ?>").val());
+        var checkboxes = edit_get_val($("#pc_properties_terms_checkbox_<?php echo $categories ?>").val());
+        var multipleSelects = edit_get_val($("#pc_properties_terms_multipleselect_<?php echo $categories ?>").val());
+        var treecheckboxes = edit_get_val($("#pc_properties_terms_treecheckbox_<?php echo $categories ?>").val());
         pc_list_radios(radios,categories);
         pc_list_tree(trees,categories);
         pc_list_selectboxes(selectboxes,categories);
@@ -154,6 +180,7 @@
     function pc_list_radios(radios,categories) {
         if (radios) {
             $.each(radios, function (idx, radio) {
+                addLabelViewPage(radio,categories);
                 $.ajax({
                     url: $('#src').val() + '/controllers/property/property_controller.php',
                     type: 'POST',
@@ -170,8 +197,10 @@
                         //  if (property.id == selected) {
                         //     $('#property_object_reverse').append('<option selected="selected" value="' + property.id + '">' + property.name + ' - (' + property.type + ')</option>');
                         //  } else {
-                        if(categories.indexOf(children.term_id)>-1){
+                        if(categories&&categories.indexOf(children.term_id)>-1){
                             checked = 'checked="checked"';
+                            $('#core_validation_'+selectbox).val('true');
+                            set_field_valid(selectbox,'core_validation_'+selectbox);
                         }
                        //  delete_value(children.term_id);//retiro
                         $('#field_property_term_' + radio).append('<input '+checked+' '+required+' type="radio" name="socialdb_propertyterm_'+radio+'" value="' + children.term_id + '">&nbsp;' + children.name + '<br>');
@@ -185,6 +214,7 @@
     function pc_list_checkboxes(checkboxes,categories) {
         if (checkboxes) {
             $.each(checkboxes, function (idx, checkbox) {
+                addLabelViewPage(checkbox,categories);
                 $.ajax({
                     url: $('#src').val() + '/controllers/property/property_controller.php',
                     type: 'POST',
@@ -201,6 +231,8 @@
                         }
                         if(categories&&categories.indexOf(children.term_id)>-1){
                             checked = 'checked="checked"';
+                            $('#core_validation_'+checkbox).val('true');
+                            set_field_valid(checkbox,'core_validation_'+checkbox);
                         }
                         //  if (property.id == selected) {
                         //     $('#property_object_reverse').append('<option selected="selected" value="' + property.id + '">' + property.name + ' - (' + property.type + ')</option>');
@@ -216,14 +248,15 @@
     function pc_list_selectboxes(selectboxes,categories) {
         if (selectboxes) {
             $.each(selectboxes, function (idx, selectbox) {
+                addLabelViewPage(selectbox,categories);
                 //validation
-                $('#field_property_term_' + selectbox).select(function(){
+                $('#field_property_term_' + selectbox).change(function(){
                     if( $("#field_property_term_" + selectbox).val()===''){
                         $('#core_validation_'+selectbox).val('false');
                     }else{
                          $('#core_validation_'+selectbox).val('true');
                     }
-                    set_field_valid(property_id,'core_validation_'+selectbox);
+                    set_field_valid(selectbox,'core_validation_'+selectbox);
                 });
                 //
                 $.ajax({
@@ -234,15 +267,19 @@
                     elem = jQuery.parseJSON(result);
                     $('#field_property_term_' + selectbox).html('');
                     $('#field_property_term_' + selectbox).append('<option value=""><?php _e('Select','tainacan') ?>...</option>');
-                    $.each(elem.children, function (idx, children) {
-                        var checked = '';
-                       //  delete_value(children.term_id);
-                        if(categories&&categories.indexOf(children.term_id)>-1){
-                            checked = 'selected="selected"';
-                        }
-                        $('#field_property_term_' + selectbox).append('<option '+checked+' value="' + children.term_id + '">' + children.name + '</option>');
-                        //  }
-                    });
+                    if(elem.children){
+                        $.each(elem.children, function (idx, children) {
+                            var checked = '';
+                           //  delete_value(children.term_id);
+                            if(categories&&categories.indexOf(children.term_id)>-1){
+                                checked = 'selected="selected"';
+                                $('#core_validation_'+selectbox).val('true');
+                                set_field_valid(selectbox,'core_validation_'+selectbox);
+                            }
+                            $('#field_property_term_' + selectbox).append('<option '+checked+' value="' + children.term_id + '">' + children.name + '</option>');
+                            //  }
+                        });
+                    }
                 });
             });
         }
@@ -251,6 +288,7 @@
     function pc_list_multipleselectboxes(multipleSelects,categories) {
         if (multipleSelects) {
             $.each(multipleSelects, function (idx, multipleSelect) {
+                addLabelViewPage(multipleSelect,categories);
                 //validation
                 $('#field_property_term_' + multipleSelect).select(function(){
                     if( $("#field_property_term_" + multipleSelects).val()===''){
@@ -285,6 +323,7 @@
     function pc_list_treecheckboxes(treecheckboxes,categories) {
         if (treecheckboxes) {
             $.each(treecheckboxes, function (idx, treecheckbox) {
+                addLabelViewPage(treecheckbox,categories);
                 $("#field_property_term_"+treecheckbox).dynatree({
                     selectionVisible: true, // Make sure, selected nodes are visible (expanded).  
                     checkbox: true,
@@ -321,7 +360,7 @@
                     onCreate: function (node, span) {
                         $("#field_property_term_"+treecheckbox).dynatree("getRoot").visit(function(node){
                            // delete_value(node.data.key);
-                           if(categories.indexOf(node.data.key)>-1){
+                           if(categories&&categories.indexOf(node.data.key)>-1){
                                 node.select();
                             }
                         });
@@ -354,6 +393,7 @@
     function pc_list_tree(trees,categories) {
         if (trees) {
             $.each(trees, function (idx, tree) {
+                addLabelViewPage(tree,categories);
                 $("#field_property_term_"+tree).dynatree({
                     checkbox: true,
                     // Override class name for checkbox icon:
@@ -389,7 +429,7 @@
                     onCreate: function (node, span) {
                          $("#field_property_term_"+tree).dynatree("getRoot").visit(function(node){
                           // delete_value(node.data.key); 
-                           if(categories.indexOf(node.data.key)>-1){
+                           if(categories&&categories.indexOf(node.data.key)>-1){
                                 node.select();
                             }
                         });
@@ -425,13 +465,43 @@
     }
     
     function delete_value(category_id){
-       var classifications =   $("#object_classifications_edit").val().split(',');
+       var seletor = ($("#object_classifications_edit").length > 0 ) ?  $("#object_classifications_edit") :  $("#object_classifications");
+       if($(seletor).length === 0){
+           return false;
+       }
+        var classifications = $(seletor).val().split(',');
        if(classifications.length>0&&category_id){
            var index = classifications.indexOf(category_id);
            if(index>-1){
                classifications.splice(index, 1);
-               $("#object_classifications_edit").val(classifications.join());
+               $(seletor).val(classifications.join());
            }
        }
+    }
+    
+   /**
+   * funcao que verifica se a categoria eh filha da categoria raiz da prorpriedade atual
+    */
+    function addLabelViewPage(property,categories){
+        if($("#labels_" + property + "_<?php echo $object_id; ?>") && $("#labels_" + property + "_<?php echo $object_id; ?>").length > 0) {
+            $.ajax({
+                url: $('#src').val() + '/controllers/property/property_controller.php',
+                type: 'POST',
+                data: {collection_id: $("#collection_id").val(), operation: 'is_part_of_property', property_id: property, categories: categories}
+            }).done(function (result) {
+                elem = jQuery.parseJSON(result);
+                if (elem.terms && elem.terms.length > 0) {
+                    $.each(elem.terms, function (index, term) {
+                        if (term.term_id) {
+                            $("#labels_" + property + "_<?php echo $object_id; ?>").append('<input type="hidden" name="socialdb_propertyterm_'+property+'[]" value="'+term.term_id+'"><p><a style="cursor:pointer;" onclick="wpquery_term_filter(' + term.term_id + ',' + property + ')">' + term.name + '</a></p><br>');//zero o html do container que recebera os
+                        }
+                    });
+                    $('#core_validation_'+property).val('true');
+                    set_field_valid(property,'core_validation_'+property);
+                }else{
+                    $("#labels_" + property + "_<?php echo $object_id; ?>").append('<p><?php  _e('empty field', 'tainacan') ?></p>');
+                }
+            });
+        }
     }
 </script>

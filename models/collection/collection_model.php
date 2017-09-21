@@ -16,7 +16,7 @@ require_once(dirname(__FILE__) . '../../mapping/mapping_model.php');
 
 class CollectionModel extends Model {
 
-    public function CollectionModel() {
+    public function __construct() {
         //  $this->propertymodel = new PropertyModel();
     }
 
@@ -41,19 +41,21 @@ class CollectionModel extends Model {
 
     /**
      * function simple_add($data)
-     * @param mix $data  O id do colecao
+     * @param mix $data O id do colecao
+     * @param string $status O status inicial da coleção em questão
      * @return wp_post  
      * Funcao que insere a colecao apenas com o nome e o tipo de objeto
      * Autor: Eduardo Humberto 
      */
-    public function simple_add($data) {
+    public function simple_add($data, $status = 'draft') {
+        error_reporting(0);
         if ($this->verify_collection($data['collection_name'])) {
             return false;
         }
         $collection = array(
             'post_type' => 'socialdb_collection',
             'post_title' => $data['collection_name'],
-            'post_status' => 'draft',
+            'post_status' => $status,
             'post_author' => get_current_user_id(),
         );
         $collection_id = wp_insert_post($collection);
@@ -71,12 +73,14 @@ class CollectionModel extends Model {
         update_post_meta($collection_id, 'socialdb_collection_object_name', $data['collection_object']);
         //filtro para o nome da colecao
         if (has_filter('collection_object')) {
-            $name = (isset( $data['collection_object'])&&!empty($data['collection_object'])?$data['collection_object']:$data['collection_name']);
+            $name = (isset($data['collection_object']) && !empty($data['collection_object']) ? $data['collection_object'] : $data['collection_name']);
             $object_name = apply_filters('collection_object', $name);
         } else {
-            $object_name = __('Categories of ', 'tainacan') . $data['collection_name'];
+            $object_name = $data['collection_name'];
         }
         create_root_collection_category($post->ID, $object_name); //(Criada em: functions.php) cria a categoria inicial que identifica os objetos da colecao
+
+        Log::addLog(['collection_id' => $collection_id, 'event_type' => 'user_collection', 'event' => 'add']);
         return $post->ID;
     }
 
@@ -85,6 +89,13 @@ class CollectionModel extends Model {
      * @param type $collection_id
      */
     public function createSocialMappingDefault($collection_id) {
+        /*         * *** MAPEAMENTO PADRAO DUBLIN CORE * */
+        $mapping_model_dc = new MappingModel('socialdb_channel_oaipmhdc');
+        $mapping_dc_default_id = $mapping_model_dc->create_mapping(__('Mapping Default', 'tainacan'), $collection_id);
+        add_post_meta($mapping_dc_default_id, 'socialdb_channel_oaipmhdc_initial_size', '1');
+        add_post_meta($mapping_dc_default_id, 'socialdb_channel_oaipmhdc_mapping', serialize([]));
+        update_post_meta($collection_id, 'socialdb_collection_mapping_import_active', $mapping_dc_default_id);
+        delete_post_meta($collection_id, 'socialdb_collection_channel');
         /** YOUTUBE * */
         $mapping_model_youtube = new MappingModel('socialdb_channel_youtube');
         $mapping_id_youtube = $mapping_model_youtube->create_mapping('socialdb_channel_youtube', $collection_id);
@@ -164,28 +175,42 @@ class CollectionModel extends Model {
      * Autor: Eduardo Humberto 
      */
     function insert_permissions_default_values($collection_id) {
+        /*Category*/
         update_post_meta($collection_id, 'socialdb_collection_permission_create_category', 'members');
         update_post_meta($collection_id, 'socialdb_collection_permission_edit_category', 'approval');
         update_post_meta($collection_id, 'socialdb_collection_permission_delete_category', 'approval');
+
+        /*Classification*/
         update_post_meta($collection_id, 'socialdb_collection_permission_add_classification', 'members');
         update_post_meta($collection_id, 'socialdb_collection_permission_delete_classification', 'approval');
+
+        /*Object*/
         update_post_meta($collection_id, 'socialdb_collection_permission_create_object', 'members');
+        //update_post_meta($collection_id, 'socialdb_collection_permission_edit_object', 'unallowed');
         update_post_meta($collection_id, 'socialdb_collection_permission_delete_object', 'approval');
+
+        /*Property data*/
         update_post_meta($collection_id, 'socialdb_collection_permission_create_property_data', 'members');
         update_post_meta($collection_id, 'socialdb_collection_permission_edit_property_data', 'approval');
         update_post_meta($collection_id, 'socialdb_collection_permission_delete_property_data', 'approval');
         update_post_meta($collection_id, 'socialdb_collection_permission_edit_property_data_value', 'approval');
+
+        /*Property Objects*/
         update_post_meta($collection_id, 'socialdb_collection_permission_create_property_object', 'members');
         update_post_meta($collection_id, 'socialdb_collection_permission_edit_property_object', 'approval');
         update_post_meta($collection_id, 'socialdb_collection_permission_delete_property_object', 'approval');
         update_post_meta($collection_id, 'socialdb_collection_permission_edit_property_object_value', 'approval');
+
+        /*Property term*/
         update_post_meta($collection_id, 'socialdb_collection_permission_create_property_term', 'members');
         update_post_meta($collection_id, 'socialdb_collection_permission_edit_property_term', 'approval');
         update_post_meta($collection_id, 'socialdb_collection_permission_delete_property_term', 'approval');
+
         //Permissions Comments
         update_post_meta($collection_id, 'socialdb_collection_permission_create_comment', 'member');
         update_post_meta($collection_id, 'socialdb_collection_permission_edit_comment', 'approval');
         update_post_meta($collection_id, 'socialdb_collection_permission_delete_comment', 'approval');
+
         //Permissions Comments
         update_post_meta($collection_id, 'socialdb_collection_permission_create_tags', 'member');
         update_post_meta($collection_id, 'socialdb_collection_permission_edit_tags', 'approval');
@@ -208,7 +233,7 @@ class CollectionModel extends Model {
      * metodo que atualiza os dados da colecao
      * Autor: Eduardo Humberto 
      */
-    public function update($data) {      
+    public function update($data) {
         $post = array(
             'ID' => $data['collection_id'],
             'post_title' => $data['collection_name'],
@@ -217,6 +242,11 @@ class CollectionModel extends Model {
             'post_type' => 'socialdb_collection',
             'post_name' => $data['socialdb_collection_address']
         );
+
+        if (isset($data['collection_owner'])) {
+            $post["post_author"] = $data['collection_owner'];
+        }
+
         $post_id = wp_update_post($post);
         //verificando se existe aquivos para ser incluidos
         if ($data['remove_cover']) {
@@ -232,7 +262,15 @@ class CollectionModel extends Model {
         if ($data['remove_thumbnail']) {
             delete_post_thumbnail($post_id);
         }
-        
+
+        if ($data['enable_header']) {
+            update_post_meta($post_id, 'socialdb_collection_show_header', 'enabled');
+        } else {
+            update_post_meta($post_id, 'socialdb_collection_show_header', 'disabled');
+        }
+
+        Log::addLog(['collection_id' => $data['collection_id'], 'event_type' => 'user_collection', 'event' => 'edit']);
+
         if ($_FILES) {
             $this->add_thumbnail($post_id);
             $id_cover = $this->add_cover($post_id);
@@ -247,10 +285,10 @@ class CollectionModel extends Model {
         }
         if ($data['add_watermark']) {
             update_post_meta($post_id, 'socialdb_collection_add_watermark', true);
-        }else{
+        } else {
             update_post_meta($post_id, 'socialdb_collection_add_watermark', false);
         }
-        
+
         if ($data['collection_moderators'] && is_array($data['collection_moderators'])) {
             delete_post_meta($post_id, 'socialdb_collection_moderator');
             foreach ($data['collection_moderators'] as $moderator) {
@@ -258,7 +296,7 @@ class CollectionModel extends Model {
             }
         } else {
             delete_post_meta($post_id, 'socialdb_collection_moderator');
-        }               
+        }
         if ($data['socialdb_collection_parent'] != '' && ($data['socialdb_collection_parent'] != get_post_meta($post_id, 'socialdb_collection_parent', true))) {
             $old_parent = get_post_meta($post_id, 'socialdb_collection_parent', true);
             if ($old_parent && $old_parent != '' && get_term_by('id', $old_parent, 'socialdb_category_type')) {
@@ -300,34 +338,50 @@ class CollectionModel extends Model {
         update_post_meta($post_id, 'socialdb_collection_download_control', $data['socialdb_collection_download_control']);
 
         //Permissions
+        /*Category*/
         update_post_meta($post_id, 'socialdb_collection_permission_create_category', $data['socialdb_collection_permission_create_category']);
         update_post_meta($post_id, 'socialdb_collection_permission_edit_category', $data['socialdb_collection_permission_edit_category']);
         update_post_meta($post_id, 'socialdb_collection_permission_delete_category', $data['socialdb_collection_permission_delete_category']);
+
+        /*Classification*/
         update_post_meta($post_id, 'socialdb_collection_permission_add_classification', $data['socialdb_collection_permission_add_classification']);
         update_post_meta($post_id, 'socialdb_collection_permission_delete_classification', $data['socialdb_collection_permission_delete_classification']);
+
+        /*Object*/
         update_post_meta($post_id, 'socialdb_collection_permission_create_object', $data['socialdb_collection_permission_create_object']);
         update_post_meta($post_id, 'socialdb_collection_permission_delete_object', $data['socialdb_collection_permission_delete_object']);
+
+        /*Property data*/
         update_post_meta($post_id, 'socialdb_collection_permission_create_property_data', $data['socialdb_collection_permission_create_property_data']);
         update_post_meta($post_id, 'socialdb_collection_permission_edit_property_data', $data['socialdb_collection_permission_edit_property_data']);
         update_post_meta($post_id, 'socialdb_collection_permission_delete_property_data', $data['socialdb_collection_permission_delete_property_data']);
         update_post_meta($post_id, 'socialdb_collection_permission_edit_property_data_value', $data['socialdb_collection_permission_edit_property_data_value']);
+
+        /*Property object*/
         update_post_meta($post_id, 'socialdb_collection_permission_create_property_object', $data['socialdb_collection_permission_create_property_object']);
         update_post_meta($post_id, 'socialdb_collection_permission_edit_property_object', $data['socialdb_collection_permission_edit_property_object']);
         update_post_meta($post_id, 'socialdb_collection_permission_delete_property_object', $data['socialdb_collection_permission_delete_property_object']);
         update_post_meta($post_id, 'socialdb_collection_permission_edit_property_object_value', $data['socialdb_collection_permission_edit_property_object_value']);
+
+        /*Property term*/
         update_post_meta($post_id, 'socialdb_collection_permission_create_property_term', $data['socialdb_collection_permission_create_property_term']);
         update_post_meta($post_id, 'socialdb_collection_permission_edit_property_term', $data['socialdb_collection_permission_edit_property_term']);
         update_post_meta($post_id, 'socialdb_collection_permission_delete_property_term', $data['socialdb_collection_permission_delete_property_term']);
+
         //Permissions Comments
         update_post_meta($post_id, 'socialdb_collection_permission_create_comment', $data['socialdb_collection_permission_create_comment']);
         update_post_meta($post_id, 'socialdb_collection_permission_edit_comment', $data['socialdb_collection_permission_edit_comment']);
         update_post_meta($post_id, 'socialdb_collection_permission_delete_comment', $data['socialdb_collection_permission_delete_comment']);
+
         //Permissions Tags
         update_post_meta($post_id, 'socialdb_collection_permission_create_tags', $data['socialdb_collection_permission_create_tags']);
         update_post_meta($post_id, 'socialdb_collection_permission_edit_tags', $data['socialdb_collection_permission_edit_tags']);
         update_post_meta($post_id, 'socialdb_collection_permission_delete_tags', $data['socialdb_collection_permission_delete_tags']);
-        
-        
+
+        $data['collection_id'] = $post_id;
+        if (has_action('update_collection_configuration')) {
+            do_action('update_collection_configuration', $data);
+        }
         $this->update_privacity($post_id, $data['collection_privacy']);
         return json_encode($data);
     }
@@ -386,33 +440,22 @@ class CollectionModel extends Model {
     }
 
     public function update_privacity($collection_id, $privacity = 'public') {
+        $private_collections = get_option('socialdb_private_collections');
+        $private_collections = ($private_collections) ?  unserialize($private_collections) : [];
         if ($privacity == 'public') {
             $type = get_term_by('name', 'socialdb_collection_public', 'socialdb_collection_type');
             wp_set_post_terms($collection_id, array($type->term_id), 'socialdb_collection_type');
+            if($private_collections && is_array($private_collections) && isset($private_collections[$collection_id])){
+                unset($private_collections[$collection_id]);
+            }
         } else {
+            if(!isset($private_collections[$collection_id])){
+                $private_collections[$collection_id] = $this->get_category_root_of($collection_id);
+            }
             $type = get_term_by('name', 'socialdb_collection_private', 'socialdb_collection_type');
             wp_set_post_terms($collection_id, array($type->term_id), 'socialdb_collection_type');
         }
-    }
-
-    public function list_collection($args = null) {
-        global $wp_query;
-        $tax_query = array('relation' => 'IN');
-        $tax_query[] = array(
-            'taxonomy' => 'category-ideas',
-            'field' => 'id',
-            'terms' => array('8')
-        );
-        $args = array(
-            'post_type' => 'ideas',
-            'paged' => 1,
-            'tax_query' => $tax_query,
-            'orderby' => 'date',
-            'order' => 'DESC',
-        );
-        query_posts($args);
-
-        include(dirname(__FILE__) . '../../../views/collection/list.php');
+        update_option('socialdb_private_collections', serialize($private_collections));
     }
 
     public function delete($data) {
@@ -487,6 +530,7 @@ class CollectionModel extends Model {
      * @author: Eduardo Humberto 
      */
     public function get_collection_by_user($user_id) {
+        error_reporting(0);
         global $wpdb;
         $wp_posts = $wpdb->prefix . "posts";
 //        $query_old = "
@@ -526,7 +570,7 @@ class CollectionModel extends Model {
      * @ metodo responsavel em retornar as colecoes de um determinando usuario
      * @author: Eduardo Humberto 
      */
-    public function list_ordenation($data) {
+    public function list_ordenation($data, $_get_all_meta = false) {
         $data['selected'] = $this->set_default_ordenation($data['collection_id']);
         $category_root = $this->get_category_root_of($data['collection_id']);
         //$all_properties_id = get_term_meta($category_root, 'socialdb_category_property_id');
@@ -535,27 +579,58 @@ class CollectionModel extends Model {
         $data['general_ordenation'][] = array('id' => $recent_property->term_id, 'name' => $recent_property->name);
         $data['general_ordenation'][] = array('id' => 'comment_count', 'name' => __('Populars', 'tainacan'));
         $data['general_ordenation'][] = array('id' => 'title', 'name' => __('Title', 'tainacan'));
+        /*
         if ($data['collection_id'] != get_option('collection_root_id')):
             $data['general_ordenation'][] = array('id' => 'socialdb_object_dc_type', 'name' => __('Type', 'tainacan'));
             $data['general_ordenation'][] = array('id' => 'socialdb_object_from', 'name' => __('Format', 'tainacan'));
             $data['general_ordenation'][] = array('id' => 'socialdb_license_id', 'name' => __('Licenses', 'tainacan'));
         endif;
+        */
         if ($all_properties_id && is_array($all_properties_id) && $all_properties_id[0]) {
             foreach ($all_properties_id as $property_id) {
                 $property_object = get_term_by('id', $property_id, 'socialdb_property_type');
                 $parent_name = PropertyModel::get_property_type($property_id);
                 $all_data = $this->get_all_property($property_id, true);
-                $array = array('id' => $property_object->term_id, 'name' => $property_object->name, 'type' => $all_data['type']);
-                if ($parent_name == 'socialdb_property_data') {
-                    // $is_ordenation = get_term_meta($property_object->term_id, 'socialdb_property_data_column_ordenation')[0];
-                    // if ($is_ordenation == 'true')
-                    $data['property_data'][] = $array;
-                } elseif ($parent_name != 'socialdb_property_term' && isset($parent_name) && $parent_name != 'socialdb_property_object') {
-                    $data['rankings'][] = $array;
+                if (in_array($property_object->slug, $this->fixed_slugs)) {
+                    $labels_collection = ($data['collection_id'] != '') ? get_post_meta($data['collection_id'], 'socialdb_collection_fixed_properties_labels', true) : false;
+                    if ($labels_collection):
+                        $array = unserialize($labels_collection);
+                        $property_object->name = (isset($array[$property_object->term_id])) ? $array[$property_object->term_id] : $property_object->name;
+                    endif;
+                }
+                
+                //if( $this->filter_ordenation($property_object->name, $all_data["type"]) && !in_array($property_object->slug, $this->fixed_slugs) ) {
+                if( $this->filter_ordenation($property_object->name, $all_data["type"])) {
+                    $array = array('id' => $property_object->term_id, 'name' => $property_object->name, 'type' => $all_data['type']);
+                    if ($parent_name == 'socialdb_property_data') {
+                        // $is_ordenation = get_term_meta($property_object->term_id, 'socialdb_property_data_column_ordenation')[0];
+                        // if ($is_ordenation == 'true')
+                        if(in_array($property_object->slug, $this->fixed_slugs)){
+                            $array['hide'] = true;
+                        }
+                        $data['property_data'][] = $array;
+                    } elseif ($parent_name != 'socialdb_property_term' && isset($parent_name) && $parent_name != 'socialdb_property_object') {
+                        $data['rankings'][] = $array;
+                    } else if ($_get_all_meta === "true") {
+                        if ($parent_name == 'socialdb_property_term') {
+                            $data['property_term'][] = $array;
+                        } else if ($parent_name == 'socialdb_property_object') {
+                            $data['property_object'][] = $array;
+                        }
+                    }
                 }
             }
         }
         return $data;
+    }
+
+    private function filter_ordenation($str, $type) {
+        $unused_filters = [_t("Source"),_t("Description"), _t("Content"),_t("Thumbnail"),_t("Attachments"),_t("Type"),_t("License")];
+        $filter = true;
+        if( ("radio" === $type || "textarea" === $type || "file" === $type ) && in_array(_t($str), $unused_filters)) {
+            $filter = false;
+        }
+        return $filter;
     }
 
     /**
@@ -583,7 +658,7 @@ class CollectionModel extends Model {
     public static function is_moderator($collection_id, $user_id) {
         $owner = get_post($collection_id)->post_author;
         $moderators = get_post_meta($collection_id, 'socialdb_collection_moderator');
-        if ($user_id != 0 && ($user_id == $owner || (is_array($moderators) && in_array($user_id, $moderators)))) {
+        if ($user_id != 0 && ($user_id == $owner || (is_array($moderators) && in_array($user_id, $moderators)) || user_can($user_id, 'manage_options'))) {
             return true;
         } else {
             return false;
@@ -695,7 +770,8 @@ class CollectionModel extends Model {
                     'label' => $facet->name,
                     'category' => $facet->name,
                     'id' => $facet->term_id);
-                $this->get_objects_autocomplete($property['id'], $property['metas']['socialdb_property_object_category_id'], $array_autocomplete);
+                if ($property['metas']['socialdb_property_object_category_id'])
+                    $this->get_objects_autocomplete($property['id'], $property['metas']['socialdb_property_object_category_id'], $array_autocomplete);
             }
         }
     }
@@ -790,6 +866,7 @@ class CollectionModel extends Model {
         $authors = $wpdb->get_results($query);
         return $authors;
     }
+
     /**
      * funcao que busca os autores mais participativos de uma colecao a partir
      * da quantidade de eventos criados na colecao
@@ -813,7 +890,8 @@ class CollectionModel extends Model {
 	LIMIT 10";
         $authors = $wpdb->get_results($query);
         return $authors;
-    }                
+    }
+
     /**
      * funcao que busca as propriedades de acategoria para montar na ordenacao
      * @param array $data Os dados vindos do formulario
@@ -861,7 +939,7 @@ class CollectionModel extends Model {
 
         $moderator = CollectionModel::is_moderator($data['collection_id'], get_current_user_id());
 
-        if ($privacity_name == 'socialdb_collection_public') {
+        if ($privacity_name == 'socialdb_collection_public' || current_user_can('manage_options')) {
             $result['privacity'] = true;
         } elseif ($privacity_name == 'socialdb_collection_private') {
             if ($moderator) {
@@ -938,6 +1016,10 @@ class CollectionModel extends Model {
 
     public function get_filters($data) {
         $recover_data = unserialize(stripslashes($data['filters']));
+        //author
+        if (isset($recover_data['author'])) {
+            $data['author'] = get_user_by('id', $recover_data['author'])->nickname;
+        }
         //keyword
         if (isset($recover_data['keyword'])) {
             $data['keyword'] = $recover_data['keyword'];
@@ -1113,14 +1195,35 @@ class CollectionModel extends Model {
         if (isset($recover_data['properties_data_fromto_date'])) {
             $property = array();
             foreach ($recover_data['properties_data_fromto_date'] as $property_id => $value) {
-                //$filter['node_key'] = $category;
                 $property['property_id'] = $property_id;
                 $property['value'] = implode(',', $value);
-                $property['name'] = str_replace(',', ' ' . __('until', 'tainacan') . ' ', implode(',', $value));
+
+                $from = date("d/m/Y", strtotime($value[0]));
+                $to = date("d/m/Y", strtotime($value[1]));
+                
+                $property['name'] = $from . " " ._t('until') . " " . $to;
                 $data['properties_data_fromto_date'][] = $property;
             }
         }
         return $data;
+    }
+
+    /**
+     * metodo que realoca as propriedades de uma tab excluida
+     * 
+     * @param int $tab_id O id da aba
+     * @param int $collection_id O id da colecao
+     */
+    public function realocate_tabs_collection($tab_id, $collection_id) {
+        $array = unserialize(get_post_meta($collection_id, 'socialdb_collection_update_tab_organization', true));
+        if ($array && is_array($array) && $array[0]):
+            foreach ($array[0] as $index => $value) {
+                if ($tab_id == $value) {
+                    $array[0][$index] = 'default';
+                }
+            }
+        endif;
+        update_post_meta($collection_id, 'socialdb_collection_update_tab_organization', serialize($array));
     }
 
 }

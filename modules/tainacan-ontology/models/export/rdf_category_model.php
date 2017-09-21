@@ -70,15 +70,21 @@ class RDFOntologyCategoryModel extends OntologyRDFCollectionModel {
         endif;
         
         $xml .= '<owl:Class rdf:about="'. $url.'?category='.$category->slug.'"  >';
-         if(isset($category->name)&&!empty($category->name)):
-            $xml .= "<rdfs:label>{$category->name}</rdfs:label>";
+        if(isset($category->name)&&!empty($category->name)):
+            if(mb_detect_encoding($category->name)=='UTF-8')
+              $xml .= "<rdfs:label>".$category->name."</rdfs:label>";
+            else    
+              $xml .= "<rdfs:label>".utf8_decode($category->name)."</rdfs:label>";
         endif;
-        if(isset($category->description)&&!empty($category->description)):
-            $xml .= "<rdfs:comment>".utf8_decode (htmlspecialchars($category->description))."</rdfs:comment>";
+        if(isset($category->description)&&!empty($category->description)
+                &&(mb_detect_encoding($category->name)=='UTF-8')||mb_detect_encoding($category->name)=='ASCII'):
+            $xml .= "<rdfs:comment>".htmlspecialchars($category->description)."</rdfs:comment>";
+        elseif(isset($category->description)&&!empty($category->description)):
+            $xml .= "<rdfs:comment>".utf8_encode(htmlspecialchars($category->description))."</rdfs:comment>";
         endif;
          $xml .= $this->get_restrictions_rdf($category->term_id);
          $xml .= $this->others_restrictions_classes($category->term_id);
-        if($category->slug!='socialdb_category'){
+        if($category->slug!='socialdb_category'&&$category->slug!='socialdb_taxonomy'){
              $xml .= '<rdfs:subClassOf rdf:resource="'.$url.'?category='.$parent->slug.'" />';
         }else{
             $xml .= '<rdfs:subClassOf rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>';

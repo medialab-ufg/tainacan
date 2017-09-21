@@ -40,14 +40,13 @@ $('.carousel-home-ajax').slick( getSlickSettings() );
           data: { operation: 'load_item_type', item_type: type },
           complete: ajax_carousel,
           error: function (jqXHR, textStatus, errorThrown) {
-              console.log(textStatus + " in JSON data " + errorThrown + " " + jqXHR)
           }
       }).done( function(result) {
           var element = JSON.parse(result);
 
           $(element).each( function(index, el) {
               var thumb = el.thumbnail;
-              var item_url = '<?php echo home_url('/collection/') ?>' + el.collection_name + '/?item=' + el.object.post_name;
+              var item_url = '<?php echo home_url('/') ?>' + el.collection_name + '/' + el.object.post_name;
 
               var item_html = '<div class="item-individual-box item-box-container"> <div class="panel panel-default"> <div class="panel-body">';
               item_html = item_html + '<a href="' + item_url + '">' + thumb + '</a></div>';
@@ -64,4 +63,8 @@ $('.carousel-home-ajax').slick( getSlickSettings() );
           });
       });
   });
+  
+  function showModalCreateCollection() {
+        $('#myModal').modal('show');
+    }
 </script>

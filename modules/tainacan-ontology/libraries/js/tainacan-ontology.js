@@ -279,7 +279,7 @@ function reInitDynatree() {
         selectionVisible: true, // Make sure, selected nodes are visible (expanded).  
         checkbox: true,
         initAjax: {
-            url: src + '/controllers/collection/collection_controller.php',
+            url: $('#src').val() + '/controllers/collection/collection_controller.php',
             data: {
                 collection_id: $("#collection_id").val(),
                 operation: 'initDynatreeSingleEdit',
@@ -327,7 +327,6 @@ function ontologyBindContextMenu(span) {
             // The event was bound to the <span> tag, but the node object
             // is stored in the parent <li> tag
             var node = $.ui.dynatree.getNode(el);
-            console.log(node.data.key);
             switch (action) {
                 case "equivalentclassAdd":
                     ontology_insert_category(node.data.key,node.data.title,'equivalentclass');
@@ -351,7 +350,6 @@ function ontologyBindContextMenu(span) {
 function ontology_insert_category(id,name,type){
     var html = '<span id="'+type+'_'+id+'" style="margin:4px;padding:2px;background:#73AD21;color:white;">'+name+'<a style="color:white;" onclick="ontology_remove_category('+"'"+id+"'"+','+"'"+name+"'"+','+"'"+type+"'"+')"><span class="glyphicon glyphicon-remove"></span></a></div>';
     var values =  $('#add_'+type+'_ids').val().split(',');
-    console.log(id,name,type);
     if(!values||values.indexOf(id)<0){
         if(!values){
            values = []; 
@@ -478,21 +476,6 @@ function initDynatrees(src){
             }
     }).done(function (result) {
         var json_propriedades = jQuery.parseJSON(result);
-        //parent
-        $("#dynatree_property_data_parent").empty();
-        $("#dynatree_property_data_parent").dynatree({
-            checkbox: true,
-            // Override class name for checkbox icon:
-            classNames: {checkbox: "dynatree-radio"},
-            selectMode: 1,
-            children: json_propriedades,
-            onSelect: function (flag, node) {
-               
-                //equivalent properties
-                console.log(node);
-                    $('#data_socialdb_property_parent').val(node.data.key);
-            }
-        });
         //dynatree_restriction_1 
         $("#dynatree_data_restriction_1").empty();
         $("#dynatree_data_restriction_1").dynatree({
@@ -508,10 +491,33 @@ function initDynatrees(src){
             }
         });
     });
+    $.ajax({
+        type: "POST",
+        url: src + '/controllers/filters/filters_controller.php',
+        data: {
+                collection_id: $("#collection_id").val(),
+                order: 'name',
+                operation: 'parentDataDynatreeProperties'
+            }
+    }).done(function (result) {
+        var json_propriedades = jQuery.parseJSON(result);
+        //parent
+        $("#dynatree_property_data_parent").empty();
+        $("#dynatree_property_data_parent").dynatree({
+            checkbox: true,
+            // Override class name for checkbox icon:
+            classNames: {checkbox: "dynatree-radio"},
+            selectMode: 1,
+            children: json_propriedades,
+            onSelect: function (flag, node) {
+                //equivalent properties
+                $('#data_socialdb_property_parent').val(node.data.key);
+            }
+        });
+    });
 }
 
 function set_fields_edit_property_data(elem){
-    console.log(elem);
     //toggleSlide('submit_form_property_data','list_properties_data');
     $('#socialdb_property_data_description').val(elem.description);
     if(elem.parent!==0){
@@ -645,23 +651,6 @@ function initDynatreesObject(src){
             }
     }).done(function (result) {
         var json_propriedades = jQuery.parseJSON(result);
-        //parent
-        $("#dynatree_property_object_parent").empty();
-        $("#dynatree_property_object_parent").dynatree({
-            checkbox: true,
-            // Override class name for checkbox icon:
-            classNames: {checkbox: "dynatree-radio"},
-            selectMode: 1,
-            children: json_propriedades,
-            onSelect: function (flag, node) {
-               
-                //equivalent properties
-                console.log(node);
-                    $('#object_socialdb_property_parent').val(node.data.key);
-            }
-        });
-        
-        
         //dynatree_restriction_1 
         $("#dynatree_object_restriction_1").empty();
         $("#dynatree_object_restriction_1").dynatree({
@@ -673,6 +662,30 @@ function initDynatreesObject(src){
                 if($('#select_restriction_1_object').val()=='equivalentproperty'){
                     set_values_restrictions(node.data.key,'#object_equivalentproperty_ids');
                 } 
+            }
+        });
+    });
+    $.ajax({
+        type: "POST",
+        url: src + '/controllers/filters/filters_controller.php',
+        data: {
+                collection_id: $("#collection_id").val(),
+                order: 'name',
+                operation: 'parentObjectDynatreeProperties'
+            }
+    }).done(function (result) {
+        var json_propriedades = jQuery.parseJSON(result);
+        //parent
+        $("#dynatree_property_object_parent").empty();
+        $("#dynatree_property_object_parent").dynatree({
+            checkbox: true,
+            // Override class name for checkbox icon:
+            classNames: {checkbox: "dynatree-radio"},
+            selectMode: 1,
+            children: json_propriedades,
+            onSelect: function (flag, node) {
+                //equivalent properties
+                $('#object_socialdb_property_parent').val(node.data.key);
             }
         });
     });
@@ -751,7 +764,6 @@ function initDynatreesObjectRestriction(src){
 }
 
 function set_fields_edit_property_object(elem){
-    console.log(elem);
    // toggleSlide('submit_form_property_object','list_properties_object');
     $('#socialdb_property_object_description').val(elem.description);
     if(elem.parent!==0){
@@ -1235,3 +1247,242 @@ Hook.register(
   function ( args ) {
       //args[0].expand();
   });
+// ao selecionar uma categoria
+Hook.register(
+  'tainacan_onselect_dynatree',
+  function ( args ) {
+    if (typeof show_object_properties == 'function'){
+        show_object_properties(); 
+    }
+    if (typeof show_object_properties_edit == 'function'){
+        show_object_properties_edit(); 
+    }
+    if(args[0].length>0){
+        $('.has-selected-class').show();
+        $('.none-selected-class').hide();
+    }else{
+        $('.has-selected-class').hide();
+        $('.none-selected-class').show();
+    }
+  });
+  //funcao que mostra o form de adicao
+    function show_form_add_item_ontology(){
+        var src = $('#src').val();
+        $("#menu_object").hide();
+        $("#container_socialdb").hide('slow');
+        $("#form").hide('slow');
+        $("#list").hide('slow');
+        show_modal_main();
+        $.ajax({
+            url: src + '/controllers/object/object_controller.php',
+            type: 'POST',
+            data: {operation: 'create', collection_id: $("#collection_id").val()}
+        }).done(function (result) {
+            hide_modal_main();
+            $("#form").html(result);
+            $('#form').show('slow');
+            $('#create_button').hide();
+        });
+    }
+/******************************************************************************/
+function validate_mapa_cultural(url_base)
+{
+    if(url_base !== "") {
+        //http://mapasculturais.local/api/space/find
+        url_base = url_base.split('/api')[0];
+
+        $('#modalImportLoading').modal('show');
+        $('#modalImportLoading h3').text('Validando...');
+        $('#divprogress').css('padding', 20);
+        $('#progressbarmapas').css('padding', 3);
+        $('#progressbarmapas').val(0);
+
+        var agents, projects, spaces, events;
+        $.when(
+            $.getJSON(
+                //Agentes
+                url_base + "/api/agent/find",
+                {
+                    '@select': 'id',
+                    '@count': 1
+                },function (returned_agents) {
+                    agents = returned_agents;
+                    $('#progressbarmapas').val($('#progressbarmapas').val() + 25);
+                }
+            ),
+            $.getJSON(
+                //Espaços
+                url_base + "/api/space/find",
+                {
+                    '@select': 'id',
+                    '@count': 1
+                },function (returned_spaces) {
+                    spaces = returned_spaces;
+                    $('#progressbarmapas').val($('#progressbarmapas').val() + 25);
+                }
+            ),
+            $.getJSON(
+                //Projects
+                url_base + "/api/project/find",
+                {
+                    '@select': 'id',
+                    '@count': 1
+                },function (returned_projects) {
+                    projects = returned_projects;
+                    $('#progressbarmapas').val($('#progressbarmapas').val() + 25);
+                }
+            ),
+            $.getJSON(
+                //Events
+                url_base + "/api/event/find",
+                {
+                    '@select': 'id',
+                    '@count': 1
+                },function (returned_events) {
+                    events = returned_events;
+                    $('#progressbarmapas').val($('#progressbarmapas').val() + 25);
+                }
+            )
+        ).then(function () {
+            $('#modalImportLoading h3').text('Validação concluída!');
+            $('#modalImportLoading').modal('hide');
+
+            $('#modalImportConfirm').modal('show');
+
+            $('#agents').text(agents);
+            $('#projects').text(projects);
+            $('#spaces').text(spaces);
+            $('#events').text(events);
+
+            window.sessionStorage.setItem('count_all', agents+spaces+projects+events);
+            window.sessionStorage.setItem('count_agents', agents);
+            window.sessionStorage.setItem('count_spaces', spaces);
+            window.sessionStorage.setItem('count_projects', projects);
+            window.sessionStorage.setItem('count_events', events);
+        });
+    }
+    else
+    {
+        showAlertGeneral('Erro', 'URL inválida', 'error');
+    }
+}
+
+function import_mapas_culturais(url_base)
+{
+    url_base = url_base.split('/api')[0];
+
+    $('#modalImportConfirm').modal('hide');
+    $('#modalImportLoading').modal('show');
+    $('#modalImportLoading h3').text('Recuperando dados, isso pode demorar...');
+    $('#progressbarmapas').val(0);
+    var url_send = $('#src').val() + '/controllers/collection/collection_controller.php?operation=mapa_cultural_import&collection_id='+$('#collection_id').val();
+
+    var count = window.sessionStorage.getItem('count_all');
+    var projects, events, agents, spaces;
+
+    var limite = 7800;
+
+    $.when(
+        $.getJSON(
+            //Agentes
+            url_base + "/api/agent/find",
+            {
+                '@select': 'name, shortDescription, isVerified, nomeCompleto, dataDeNascimento, emailPublico, telefonePublico, endereco, site, facebook',
+                '@limit': limite
+            },
+            function (returned_agents)
+            {
+                agents = returned_agents;
+                $('#progressbarmapas').val($('#progressbarmapas').val() + 25);
+            }
+        ),
+        $.getJSON(
+            //Espaços
+            url_base + "/api/space/find",
+            {
+                '@select': 'name, location, public, shortDescription, longDescription, endereco, site, facebook, telefonePublico, telefone1, telefone2'
+            },
+            function (returned_spaces)
+            {
+                spaces = returned_spaces;
+                $('#progressbarmapas').val($('#progressbarmapas').val() + 25);
+            }
+        ),
+        $.getJSON(
+            //Projetos
+            url_base + "/api/project/find",
+            {
+                '@select': 'name, shortDescription, longDescription, isVerified, site, facebook'
+            },
+            function (returned_projects)
+            {
+                projects = returned_projects;
+                $('#progressbarmapas').val($('#progressbarmapas').val() + 25);
+            }
+        ),
+        $.getJSON(
+            url_base + "/api/event/find",
+            {
+                '@select': 'name, shortDescription, longDescription, rules, subtitle, preco, site, facebook'
+            },
+            function (returned_events)
+            {
+                events = returned_events;
+                $('#progressbarmapas').val($('#progressbarmapas').val() + 25);
+            }
+        )
+    ).then(function () {
+        $('#modalImportLoading h3').text('Recuperação concluída!');
+        $('#modalImportLoading h3').text('Cadastrando dados...');
+        $('#progressbarmapas').val(0);
+        do_ajax(url_send, projects, events, agents, spaces, count);
+    });
+}
+
+function do_ajax(url_send, projects, events, agents, spaces, count_elem)
+{
+    var agents_spliced, spaces_spliced, projects_spliced, events_spliced, qtd = 400;
+
+    agents_spliced = agents.splice(0, qtd);
+    spaces_spliced = spaces.splice(0, qtd);
+    projects_spliced = projects.splice(0, qtd);
+    events_spliced = events.splice(0, qtd);
+
+    var data = [{"agents":agents_spliced, "projects":projects_spliced, "spaces":spaces_spliced, "events": events_spliced}];
+    $.when($.ajax({
+            url: url_send,
+            type: 'POST',
+            data: {result: data}
+        })
+    ).then(function (data, textStatus, jqXHR) {
+        var agents_length = parseInt(Object.keys(agents).length);
+        var projects_length = parseInt(Object.keys(projects).length);
+        var events_length = parseInt(Object.keys(events).length);
+        var spaces_length = parseInt(Object.keys(spaces).length);
+
+        var elem = jQuery.parseJSON(data);
+
+        if(elem.result)
+        {
+            if(agents_length+projects_length+events_length+spaces_length > 0)
+            {
+                var count_recorded = count_elem - (agents_length+projects_length+events_length+spaces_length);
+                var progress = count_recorded / count_elem * 100;
+
+                $('#progressbarmapas').val(progress);
+                do_ajax(url_send, projects, events, agents, spaces, count_elem);
+            }
+            else
+            {
+                $('#progressbarmapas').val(100);
+                window.location = elem.url;
+            }
+        }
+
+    });
+}
+
+function go_to_ontology()
+{
+    window.location = window.sessionStorage.getItem("url_to_go");
+}

@@ -14,7 +14,7 @@
         });
     }
     function cancel_data_property(property_id, object_id) {
-         swal({
+        swal({
                 title: '<?php _e('Attention!'); ?>',
                 text: '<?php _e('You going to lose all changes unsaved!'); ?>',
                 type: "info",
@@ -89,11 +89,9 @@
                         data: {property_id: property_id, object_id: object_id, operation: 'get_property_object_value', }
                     }).done(function (result) {
                         elem = jQuery.parseJSON(result);
-                        console.log(elem);
                         if (elem.values) {
                             $("#property_value_" + property_id + "_" + object_id).html('');
                             $.each(elem.values, function (idx, value) {
-                                console.log(value);
                                 if (value && value !== false) {
                                     $("#property_value_" + property_id + "_" + object_id).append("<option class='selected' value='" + value.id + "' selected='selected' >" + value.name + "</option>");
                                 }
@@ -118,7 +116,6 @@
         }
     function save_object_property(property_id, object_id) {
          var delete_all_values = false;
-         console.log( $("#property_value_" + property_id + "_" + object_id),$("#property_value_" + property_id + "_" + object_id).val());
         if( $("#property_value_" + property_id + "_" + object_id).val()===''){
             delete_all_values = true;
         }
@@ -158,7 +155,6 @@
             },
             minLength: 2,
             select: function (event, ui) {
-                console.log(event);
                 $("#autocomplete_value_" + property_id + "_" + object_id).html('');
                 $("#autocomplete_value_" + property_id + "_" + object_id).val('');
                 //var temp = $("#chosen-selected2 [value='" + ui.item.value + "']").val();
@@ -510,7 +506,6 @@ function event_list_properties_term_insert_objects() {
     }
     
     function remove_classication(title, text, category_id, object_id, time) {
-         console.log(category_id);
         swal({
             title: title,
             text: text,

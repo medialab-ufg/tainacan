@@ -559,8 +559,6 @@
                 $('#no_properties_term').hide();
                 $('#table_property_term').html('');
                 $.each(elem.property_terms, function (idx, property) {
-                    console.log( $('#property_category_id').val() , property.metas.socialdb_property_created_category);
-                
                     if ((property.metas.is_repository_property && property.metas.is_repository_property === true&&$('#property_category_id').val() !== property.metas.socialdb_property_created_category) ||
                             (property.metas.socialdb_property_created_category && $('#property_category_id').val() !== property.metas.socialdb_property_created_category)) {
                         $('#table_property_term').append('<tr><td>' + property.name + '</td><td>' + property.type + '</td><td></td></tr>');

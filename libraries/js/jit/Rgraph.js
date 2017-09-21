@@ -111,7 +111,6 @@ function init() {
             Events: {
                 enable: true,
                 onClick: function (node, eventInfo, e) {
-                    console.log(node.id);
                     if (typeof node.id != "undefined")
                     {
                        list_all_objects(node.id, $("#collection_id").val(), $('#collection_single_ordenation').val())

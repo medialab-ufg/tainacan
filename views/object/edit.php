@@ -36,33 +36,33 @@ $item_attachments = get_posts( ['post_type' => 'attachment', 'exclude' => get_po
                name="object_type" 
                <?php if($socialdb_object_dc_type=='text'): echo 'checked="checked"'; endif;  ?>
                value="text" 
-               required>&nbsp;<?php _e('Text','tainacan'); ?><br>
+               >&nbsp;<?php _e('Text','tainacan'); ?><br>
         <input type="radio" 
                name="object_type"
                <?php if($socialdb_object_dc_type=='video'): echo 'checked="checked"'; endif;  ?>
                id="video_type"
                onchange="edit_show_other_type_field(this)" 
-               value="video" required>&nbsp;<?php _e('Video','tainacan'); ?><br>
+               value="video" >&nbsp;<?php _e('Video','tainacan'); ?><br>
         <input type="radio" 
                onchange="edit_show_other_type_field(this)" 
                name="object_type" 
                <?php if($socialdb_object_dc_type=='image'): echo 'checked="checked"'; endif;  ?>
-               value="image" required>&nbsp;<?php _e('Image','tainacan'); ?><br>
+               value="image" >&nbsp;<?php _e('Image','tainacan'); ?><br>
         <input type="radio" 
                onchange="edit_show_other_type_field(this)" 
                name="object_type" 
                 <?php if($socialdb_object_dc_type=='pdf'): echo 'checked="checked"'; endif;  ?>
-               value="pdf" required>&nbsp;<?php _e('PDF','tainacan'); ?><br>
+               value="pdf" >&nbsp;<?php _e('PDF','tainacan'); ?><br>
         <input type="radio" 
                name="object_type" 
                <?php if($socialdb_object_dc_type=='audio'): echo 'checked="checked"'; endif;  ?>
                onchange="edit_show_other_type_field(this)" 
-               value="audio" required>&nbsp;<?php _e('Audio','tainacan'); ?><br>
+               value="audio" >&nbsp;<?php _e('Audio','tainacan'); ?><br>
         <input type="radio"
                onchange="edit_show_other_type_field(this)" 
                <?php if(!in_array($socialdb_object_dc_type, $fields)): echo 'checked="checked"'; endif;  ?>
                name="object_type" 
-               value="other"  required>&nbsp;<?php _e('Other','tainacan'); ?>
+               value="other"  >&nbsp;<?php _e('Other','tainacan'); ?>
         <!--  TAINACAN:  Field extra para outro formato -->
         <input <?php if(!in_array($socialdb_object_dc_type, $fields)): echo 'style="display:block"';else:echo 'style="display:none"'; endif;  ?>
                type="text" 
@@ -81,7 +81,7 @@ $item_attachments = get_posts( ['post_type' => 'attachment', 'exclude' => get_po
                id="external_option"
                onchange="edit_toggle_from(this)" 
                <?php if($socialdb_object_from=='external'): echo 'checked="checked"'; endif;  ?>
-               value="external" required>&nbsp;<?php _e('Web Address','tainacan'); ?>
+               value="external" >&nbsp;<?php _e('Web Address','tainacan'); ?>
             <!--  TAINACAN: Campo para importacao de noticias ou outros item VIA URL do tipo texto -->
             <div style="display:<?php if($socialdb_object_from=='external'&&$socialdb_object_dc_type=='text'): echo 'block';else: echo 'none'; endif;  ?>;
                 padding-top: 10px;" 
@@ -117,7 +117,7 @@ $item_attachments = get_posts( ['post_type' => 'attachment', 'exclude' => get_po
                onchange="edit_toggle_from(this)" 
                <?php if($socialdb_object_from=='internal'): echo 'checked="checked"'; endif;  ?>
                name="object_from" 
-               value="internal"  required>&nbsp;<?php _e('Local','tainacan'); ?>
+               value="internal" >&nbsp;<?php _e('Local','tainacan'); ?>
           <!-- TAINACAN: input file para fazer o upload de arquivo --> 
          <input style="display: <?php if($socialdb_object_from=='internal'&&$socialdb_object_dc_type!='text'): echo 'block';else: echo 'none'; endif;  ?>;padding-top: 10px;" 
                 type="file" size="50" 

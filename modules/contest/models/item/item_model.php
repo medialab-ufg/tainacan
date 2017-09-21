@@ -44,6 +44,8 @@ class ItemModel extends Model {
         }
         //inserindo as classificacoes
         $this->insert_classifications($classification, $post_id);
+        //
+        $this->insert_rankings_value($post_id, $collection_id);
         //postmetas
         update_post_meta($post_id, 'socialdb_object_contest_type', $type);
         if($position){
@@ -53,6 +55,29 @@ class ItemModel extends Model {
         $data = $this->insert_item_event($post_id, $collection_id);
 
         return $data;
+    }
+    
+    /**
+     * 
+     * @param type $item_id
+     * @param type $collection_id
+     */
+    public function insert_rankings_value($item_id, $collection_id) {
+        $property_model = new PropertyModel;
+        $category_root = $this->get_category_root_of($collection_id);
+        $category_root_id = $this->get_category_root_id();
+        //$all_properties_id = get_term_meta($category_root, 'socialdb_category_property_id');
+        $all_properties_id = $this->get_parent_properties($category_root, [], $category_root_id);
+        $data['category_root'] = $category_root; // coloco no array que sera utilizado na view
+        foreach ($all_properties_id as $property_id) {// varro todas propriedades
+            $type = $property_model->get_property_type($property_id); // pego o tipo da propriedade
+            if (($type == 'socialdb_property_ranking_like') || ($type == 'socialdb_property_ranking_binary') || ($type == 'socialdb_property_ranking_stars')) {// pego o tipo
+                $value = get_post_meta($item_id, 'socialdb_property_' . $property_id, true);
+                if(!$value || $value === '' ){
+                    add_post_meta($item_id, 'socialdb_property_' . $property_id, '');
+                }
+            }
+        }
     }
     
     /**
@@ -124,6 +149,24 @@ class ItemModel extends Model {
                 endif;
             }
         }
+    }
+    
+    /**
+     * 
+     * @param array $data
+     * @return type
+     */
+    public function update_argument($data) {
+          $post = array(
+            'ID' => $data['argument_id'],
+            'post_title' => $data['argument'],
+            'post_type' => 'socialdb_object'
+        );
+        $data['ID'] = wp_update_post($post);
+        update_post_meta($data['ID'], 'socialdb_object_contest_position', $data['argument-type']); 
+        //
+        $this->insert_rankings_value($data['ID'], $data['collection_id']);
+        return $data;
     }
 
 }

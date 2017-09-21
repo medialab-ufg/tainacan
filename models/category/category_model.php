@@ -35,22 +35,26 @@ class CategoryModel extends Model {
         $is_new = $this->verify_category($data);
         if (!$is_new) {
             if ($data['category_parent_id'] == '0' ||
-                    $data['category_parent_id'] == 'public_categories' || $data['category_parent_id'] == 'shared_categories'||$data['category_parent_id'] == 'socialdb_category') {// se nao o usuario nao setou o parent
-                $new_category = wp_insert_term($data['category_name'], 'socialdb_category_type', array('parent' => $this->get_category_root(),
+                    $data['category_parent_id'] == 'public_categories' || 
+                    $data['category_parent_id'] == 'shared_categories'||$data['category_parent_id'] == 'socialdb_category'||$data['category_parent_id'] == 'socialdb_taxonomy') {// se nao o usuario nao setou o parent
+                $new_category = wp_insert_term($data['category_name'], 'socialdb_category_type', array('parent' => $this->get_category_taxonomy_root(),
                     'slug' => $this->generate_slug($data['category_name'], $data['collection_id']), 'description' => $this->set_description($data)));
             } else {
-                $data['category_parent_id'] = ($data['category_parent_id'] == 'user_categories' ? $this->get_category_root() : $data['category_parent_id']);
+                $data['category_parent_id'] = (($data['category_parent_id'] == 'user_categories' || $data['category_parent_id'] == 'socialdb_taxonomy' ) ? $this->get_category_taxonomy_root() : $data['category_parent_id']);
                 $new_category = create_register($data['category_name'], 'socialdb_category_type', array('parent' => $data['category_parent_id'],
                     'slug' => $this->generate_slug($data['category_name'], $data['collection_id']), 'description' => $this->set_description($data)));
             }
         }
         //apos a insercao
         if (!is_wp_error($new_category) && $new_category['term_id']) {// se a categoria foi inserida com sucesso
-            instantiate_metas($new_category['term_id'], 'socialdb_category', 'socialdb_category_type', true);
+            instantiate_metas($new_category['term_id'], 'socialdb_taxonomy', 'socialdb_category_type', true);
             insert_meta_default_values($new_category['term_id']);
             $this->update_metas($new_category['term_id'], $data);
             $data['success'] = 'true';
             $data['term_id'] = $new_category['term_id'];
+            $log_data = ['collection_id' => $data['collection_id'], 'user_id' => get_current_user_id(),
+                'resource_id' => $data['term_id'], 'event_type' => 'user_category', 'event' => 'add' ];
+            Log::addLog($log_data);
         } else {
             $data['success'] = 'false';
             if ($is_new) {
@@ -115,12 +119,10 @@ class CategoryModel extends Model {
      */
     public function update($data) {
         $data['category_parent_id'] = ($data['category_parent_id'] == 'user_categories' ? '0' : $data['category_parent_id']);
-        if (($data['category_parent_id'] == '0' || $data['category_parent_id'] == $this->get_category_root()) && trim($data['category_name'])) {
+        if (($data['category_parent_id'] == '0' || $data['category_parent_id'] == $this->get_category_taxonomy_root()) && trim($data['category_name'])) {
             $update_category = wp_update_term($data['category_id'], 'socialdb_category_type', array(
-                'name' => $data['category_name'],
-                'parent' => $this->get_category_root()
-                , 'description' => $this->set_description($data)
-            ));
+                'name' => $data['category_name'], 'parent' => $this->get_category_taxonomy_root(),
+                'description' => $this->set_description($data) ));
         } elseif (trim($data['category_name'])!='') {
             $update_category = wp_update_term($data['category_id'], 'socialdb_category_type', array(
                 'name' => $data['category_name'],
@@ -130,8 +132,17 @@ class CategoryModel extends Model {
             ));
         }
         if ($update_category && !is_wp_error($update_category) && $update_category['term_id']) {// se a categoria foi atualizada com sucesso
+            $has_property = get_term_meta($update_category['term_id'], 'socialdb_category_property_change_label', true);
+            if($has_property && is_numeric($has_property)){
+                // mudo o nome da propriedade que contem a categoria ruaz
+                 $update = wp_update_term($has_property, 'socialdb_property_type', array(
+                'name' => $data['category_name']));
+            }
             $this->update_metas($update_category['term_id'], $data);
             $this->insert_synonyms($update_category['term_id'], $data);
+            $log_data = ['collection_id' => $data['collection_id'], 'resource_id' => $update_category['term_id'],
+                'user_id' => get_current_user_id(), 'event_type' => 'user_category', 'event' => 'edit' ];
+            Log::addLog($log_data);
             $data['success'] = 'true';
         } else {
             $data['success'] = 'false';
@@ -199,11 +210,16 @@ class CategoryModel extends Model {
         if (isset($config['mode']) && $config['mode'] == 1) {
             $current_phase = 0;
             $intermediate_phase = 0;
-            if ($data['current_phase_year']) {
-                $current_phase = intval(trim($data['current_phase_year'])) * 12;
-            }
-            if ($data['current_phase_month']) {
-                $current_phase += intval(trim($data['current_phase_month']));
+            $current_phase_string = $data['current_phase_string'];
+            if($current_phase_string){
+                $current_phase = $current_phase_string;
+            }else{
+                    if ($data['current_phase_year']) {
+                        $current_phase = intval(trim($data['current_phase_year'])) * 12;
+                    }
+                    if ($data['current_phase_month']) {
+                        $current_phase += intval(trim($data['current_phase_month']));
+                    }
             }
             update_term_meta($category_id, "socialdb_category_current_phase", $current_phase);
             if ($data['intermediate_phase_year']) {
@@ -226,14 +242,16 @@ class CategoryModel extends Model {
 
     public function delete($data) {
         if (!$this->verify_collection_category_root($data['category_delete_id'])) {
-            if (wp_delete_term($data['category_delete_id'], 'socialdb_category_type')) {
+            if ($data['category_delete_id'] != $this->get_category_root() && wp_delete_term($data['category_delete_id'], 'socialdb_category_type')) {
                 $data['success'] = 'true';
+                $log_data = ['collection_id' => $data['collection_id'], 'resource_id' => $data['category_delete_id'], 'user_id' => get_current_user_id(), 'event_type' => 'user_category', 'event' => 'delete' ];
+                Log::addLog($log_data);
             } else {
                 $data['success'] = 'false';
             }
         } else {
             $data['success'] = 'false';
-            $data['message'] = 'Collection root category cannot be deleted';
+            $data['message'] = __('Collection root category cannot be deleted', 'tainacan');
         }
         return json_encode($data);
     }
@@ -288,7 +306,10 @@ class CategoryModel extends Model {
 
     public function initCategoriesDynatree($data) {
         $dynatree = [];
-        $dynatree = $this->generate_user_categories_dynatree($data, $dynatree, true);
+        $dynatree = $this->generate_user_categories_dynatree($data, $dynatree, true, true);
+        //if(has_nav_menu('menu-ibram')){
+            $dynatree = $this->generate_collection_categories_dynatree($data, $dynatree, true, false);  
+        //}
         $dynatree = $this->generate_shared_categories_dynatree($data, $dynatree, true);
         $dynatree = $this->generate_public_categories_dynatree($data, $dynatree, true);
         return json_encode($dynatree);
@@ -307,6 +328,7 @@ class CategoryModel extends Model {
             $hide_checkbox = false;
         }
         $dynatree = $this->generate_user_categories_dynatree($data, $dynatree, $hide_checkbox, false);
+        $dynatree = $this->generate_collection_categories_dynatree($data, $dynatree, $hide_checkbox, false);
         $dynatree = $this->generate_shared_categories_dynatree($data, $dynatree, $hide_checkbox, false);
         $dynatree = $this->generate_public_categories_dynatree($data, $dynatree, $hide_checkbox, false);
         return json_encode($dynatree);
@@ -319,12 +341,45 @@ class CategoryModel extends Model {
       /* Retorna os filhos para as categorias no dynatree */
     /* @author Eduardo */
 
+    public function generate_collection_categories_dynatree($data, $dynatree, $hide_checkbox = false,$show_select = true) {
+        if(has_filter('remove_collection_categories') && apply_filters('remove_collection_categories', '')){
+            return $dynatree;
+        }
+        $classCss = 'category_property_img';
+        $dynatree[] = array('title' => __('Collection Categories', 'tainacan'), 'isLazy' => false,
+            'key' => $this->get_category_root(), 'activate' => false, 'expand' => true,
+            'hideCheckbox' => true, 'children' => array(), 'addClass' => $classCss);
+        $facets_id = $this->get_categories_by_owner(get_current_user_id(), $this->get_category_root());
+        foreach ($facets_id as &$facet_id) {
+            $facet = get_term_by('id', $facet_id->term_id, 'socialdb_category_type');
+            //pegando os indices do array
+            $dynatree_index_parent = end(array_keys($dynatree)); //pega o index do parent maior, no caso seria o noh (User categories)
+            // inserir os dados no dynatree
+            if ($facet) {
+                if (in_array($facet_id->term_id, CollectionModel::get_facets($data['collection_id']))) { // verifico se e uma faceta
+                    $dynatree[$dynatree_index_parent]['children'][] = array('title' => ucfirst($facet->name), 'key' => $facet->term_id, 'isLazy' => true, 'data' => $url,
+                        'expand' => true, 'hideCheckbox' => $hide_checkbox, 'addClass' => $classCss, 'select' => $show_select, 'activate' => false, 'expand' => false);
+                } else {
+                    $dynatree[$dynatree_index_parent]['children'][] = array('title' => ucfirst($facet->name), 'key' => $facet->term_id, 'isLazy' => true, 'data' => $url, 'expand' => true,
+                        'hideCheckbox' => $hide_checkbox, 'addClass' => $classCss, 'activate' => false, 'expand' => false);
+                }
+            }
+        }
+        return $dynatree;
+    }
+    /* function getChildrenDynatree() */
+    /* @param array $data Os dados vindo do formulario
+      /* @param array $dynatree O dynatree a ser populado
+      /* @return array O dynatree com os categorias do usuario
+      /* Retorna os filhos para as categorias no dynatree */
+    /* @author Eduardo */
+
     public function generate_user_categories_dynatree($data, $dynatree, $hide_checkbox = false,$show_select = true) {
         $classCss = 'user_img';
         $dynatree[] = array('title' => __('User Categories', 'tainacan'), 'isLazy' => false,
             'key' => 'user_categories', 'activate' => false, 'expand' => true,
             'hideCheckbox' => true, 'children' => array(), 'addClass' => $classCss);
-        $facets_id = $this->get_categories_by_owner(get_current_user_id(), $this->get_category_root());
+        $facets_id = $this->get_categories_by_owner(get_current_user_id(), $this->get_category_taxonomy_root());
         foreach ($facets_id as &$facet_id) {
             $facet = get_term_by('id', $facet_id->term_id, 'socialdb_category_type');
             //pegando os indices do array
@@ -486,29 +541,43 @@ class CategoryModel extends Model {
     /* @author: Eduardo */
 
     public function find_dynatree_children($data) {
+        //print_r($data);
+        $property_model = new PropertyModel();
+        $collection_id = ($data['collection_id'])? $data['collection_id'] : '';
+        $info = $property_model->get_all_property($data['property_id'], true,$collection_id); // pego todos os dados possiveis da propriedade
+        $selected_ids = (!isset($data['selectedCategories'])) ? $info['metas']['socialdb_property_object_category_id'] : array_filter(explode(',', $data['selectedCategories']));
         $dynatree = [];
+
         if (isset($data['hide_checkbox'])) {
             $hide_checkbox = true;
         } else {
             $hide_checkbox = false;
         }
+
         $data['classCss'] = ($data['classCss'])?$data['classCss']:'color4';
-        $childrens = $this->get_categories($data['category_id']);
-        if (is_array($childrens) && count($childrens) > 0) {
-            foreach ($childrens as $child) {
+        $children = $this->get_categories($data['category_id']);
+        if (is_array($children) && count($children) > 0) {
+            foreach ($children as $child)
+            {
+                $selected = false;
+                if(is_array($selected_ids) && in_array($child->term_id, $selected_ids) )
+                {
+                    $selected = true;
+                }
+
                 //verifica se o proximo nivel possui mais descendentes
                 $sub_childrens = $this->get_categories($child->term_id);
                 if (is_array($sub_childrens) && count($sub_childrens) > 0) {
                     if (is_array(CollectionModel::get_facets($data['collection_id']))&&in_array($child->term_id, CollectionModel::get_facets($data['collection_id']))) {
                         $dynatree[] = array('title' => $child->name, 'hideCheckbox' => $hide_checkbox, 'key' => $child->term_id, 'addClass' => $data['classCss'], 'isLazy' => true, 'select' => true);
                     } else {
-                        $dynatree[] = array('title' => $child->name, 'hideCheckbox' => $hide_checkbox, 'key' => $child->term_id, 'addClass' => $data['classCss'], 'isLazy' => true);
+                        $dynatree[] = array('title' => $child->name, 'hideCheckbox' => $hide_checkbox, 'key' => $child->term_id, 'addClass' => $data['classCss'], 'isLazy' => true, 'select' => $selected);
                     }
                 } else {
                     if (is_array(CollectionModel::get_facets($data['collection_id']))&&in_array($child->term_id,CollectionModel::get_facets($data['collection_id']))) {
                         $dynatree[] = array('title' => $child->name, 'hideCheckbox' => $hide_checkbox, 'key' => $child->term_id, 'addClass' => $data['classCss'], 'select' => true);
                     } else {
-                        $dynatree[] = array('title' => $child->name, 'hideCheckbox' => $hide_checkbox, 'key' => $child->term_id, 'addClass' => $data['classCss']);
+                        $dynatree[] = array('title' => $child->name, 'hideCheckbox' => $hide_checkbox, 'key' => $child->term_id, 'addClass' => $data['classCss'], 'select' => $selected);
                     }
                 }
             }
@@ -646,17 +715,7 @@ class CategoryModel extends Model {
         return $result;
     }
 
-    /**
-     * function get_category_root()
-     * @return int O term_id da categoria root de todas as categorias.
-     * 
-     * metodo responsavel em retornar a categoria root de TODAS as categorias
-     * Autor: Eduardo Humberto 
-     */
-    public function get_category_root() {
-        $term = get_term_by('name', 'socialdb_category', 'socialdb_category_type');
-        return $term->term_id;
-    }
+    
 
     /**
      * function get_collection_category_root($collection_id)
@@ -679,7 +738,10 @@ class CategoryModel extends Model {
      */
     public function get_category_array($data) {
         $array = [];
-        if ($data->name == 'socialdb_category') {
+        if ($data->name == 'socialdb_category' || $data->name == 'socialdb_taxonomy') {
+            $array['term_id'] = $data->term_id;
+            $array['name'] = $data->name;
+            $array['parent'] = $data->parent;
             return $array;
         } else {
             $array['term_id'] = $data->term_id;
@@ -796,13 +858,13 @@ class CategoryModel extends Model {
         global $wpdb;
         $data['category_id'] = str_replace('_facet_category', '',  $data['category_id']);
         $wp_taxonomymeta = $wpdb->prefix . "termmeta";
-        $query = "
-			SELECT * FROM $wp_taxonomymeta 
-				WHERE term_id = {$data['category_id']}
-		";
+        $query = "SELECT * FROM $wp_taxonomymeta WHERE term_id = {$data['category_id']}";
         $category_datas = $wpdb->get_results($query);
         foreach ($category_datas as $category_data) {
             if (($category_data->meta_key == 'socialdb_category_property_id') && $category_data->meta_value != '') {
+                if(!is_array($config[$category_data->meta_key])){
+                    $config[$category_data->meta_key] = array();
+                }
                 $config[$category_data->meta_key][] = $category_data->meta_value;
             } elseif ($category_data->meta_key == 'socialdb_category_moderators' && $category_data->meta_value != '') {
                 $user = $this->usermodel->get_user($category_data->meta_value);
@@ -817,6 +879,7 @@ class CategoryModel extends Model {
         if(has_filter('modificate_returned_metas_categories')){
             $config = apply_filters('modificate_returned_metas_categories', ['config'=>$config,'all_metas'=>$category_datas]);
         }
+
         return $config;
     }
 
@@ -941,18 +1004,21 @@ class CategoryModel extends Model {
     /** function export_zip_taxonomies($terms_id) 
      * @param array  terms_id com as categorias serem exportadas
      * @param string O dir aonde sera gerado os   arquivos
+     * @param string O id da colecao
      * @return array  Gera os arquivos xml dentro da pasta a ser zipada para exportacao
       @author: Eduardo */
-    public function export_zip_taxonomies($terms_id,$dir = '') {
+    public function export_zip_taxonomies($terms_id,$dir = '',$collection_id = 0) {
         if($dir==''){
            $dir =  dirname(__FILE__) . '/../export';
         }
         if (!empty($terms_id)) {
             foreach ($terms_id as $term_id) {
+                if(!is_numeric($term_id))
+                    continue;
                 ob_clean();
                 $df = fopen($dir. '/package/taxonomies/' . $term_id . '.xml', 'w');
                 $xml = '<?xml version="1.0" encoding="UTF-8"?>';
-                $this->get_hierarchy_categories_xml($term_id, $xml, '');
+                $this->get_hierarchy_categories_xml($term_id, $xml, '',$collection_id);
                 fwrite($df, $xml);
                 fclose($df);
             }
@@ -1066,12 +1132,13 @@ class CategoryModel extends Model {
      * @return void eh atribuido dinamicamente no xml a ser printado
      * @author Eduardo Humberto 
      */
-    public function get_hierarchy_categories_xml($parent_id, &$xml, $type) {
+    public function get_hierarchy_categories_xml($parent_id, &$xml, $type,$collection_id = 0) {
         $term = get_term_by('id', $parent_id, 'socialdb_category_type');
         $xml .= '<node id="' . $term->term_id . '" label="' . $term->name . '">';
+        $xml = $this->insert_properties_category($term->term_id,$xml,$collection_id);
         $children = $this->get_category_children($parent_id);
         if (!empty($children) && is_array($children)) {
-            //$xml .= '<isComposedBy>';
+            $xml .= '<isComposedBy>';
             foreach ($children as $child) {
                 //verificando o tipo de categoria que esta seedo exportado
                 if ($type == 'user' && $this->get_category_root() == $parent_id && get_current_user_id() != get_term_meta($child, 'socialdb_category_owner', true)) {
@@ -1084,18 +1151,44 @@ class CategoryModel extends Model {
                 $child_term = get_term_by('id', $child, 'socialdb_category_type');
                 // $xml .= '<node id="'.$child_term->term_id.'" label="'.$child_term->name.'">';
                 $children_of_child = $this->get_category_children($child);
+                //$xml .= '<isComposedBy>';
                 if (!empty($children_of_child) && is_array($children_of_child)) {
-                    $xml .= '<isComposedBy>';
                     $this->get_hierarchy_categories_xml($child, $xml, $type);
-                    $xml .= '</isComposedBy>';
                 } else {
-                    $xml .= '<node id="' . $child_term->term_id . '" label="' . $child_term->name . '"></node>';
+                    $xml .= '<node id="' . $child_term->term_id . '" label="' . $child_term->name . '">';
+                    $xml = $this->insert_properties_category($child,$xml,$collection_id);
+                    $xml .= '</node>';
                 }
-                // $xml .= '</node>';
+                //$xml .= '</isComposedBy>';
+                //$xml .= '</node>';
             }
-            // $xml .= '</isComposedBy>';
+            $xml .= '</isComposedBy>';
         }
         $xml .= '</node>';
+    }
+    
+    /**
+     * metodo que adiciona os metadados de uma categoria se existir
+     * 
+     * @param type $term_id
+     * @param type $xml
+     * @return string
+     */
+    public function insert_properties_category($term_id,$xml,$collection_id) {
+        $properties = [];
+        $properties_raw = get_term_meta($term_id, 'socialdb_category_property_id');
+        if($properties_raw  &&  is_array($properties_raw) && $term_id != $this->get_category_root_of($collection_id)){
+            $properties_raw = array_unique(array_filter($properties_raw));
+            foreach ($properties_raw as $property_id) {
+                $properties[] = $property_id;
+            }
+        }
+        if(count($properties)>0){
+            $xml .= '<properties>';
+            $xml = $this->generate_properties_xml($properties, $xml);
+            $xml .= '</properties>';
+        }
+        return $xml;
     }
 
     /**
@@ -1115,7 +1208,7 @@ class CategoryModel extends Model {
             return json_encode($result);
         }
         $result = [];
-        // se  estiver editando alguma categoria, ou seja existir algum id 
+        // se estiver editando alguma categoria, ou seja existir algum id
         // para esta categoria
         if ($data['category_id'] != '') {
             $term = get_term_by('id', $data['category_id'], 'socialdb_category_type');
@@ -1174,6 +1267,66 @@ class CategoryModel extends Model {
         }
         return false;
     }
+    /**
+     * Metodo que executa as atividades da tela de criacao de taxonomia
+     * @param array $data
+     */
+    public function taxonomy_zone($data) {
+        if(!function_exists('str_get_html')){
+            include_once (dirname(__FILE__) . '../../../extras/SimpleHTMLDomParser/simple_html_dom.php');        
+        }
+        //$category_root_id = $this->get_category_root_of($data['collection_id']);
+        $category_meta = get_post_meta($data['collection_id'], 'socialdb_collection_subject_category', true);
+        if($category_meta){
+           $category_root_id = get_term_by('id', $category_meta,'socialdb_category_type')->term_id;
+        }else{
+            $category_root_id = $this->get_category_root_of($data['collection_id']);
+        }
+        //alterar o nome da categoria raiz
+        if($data['category_root_name']&&trim($data['category_root_name'])!=''){
+            wp_update_term($category_root_id, 'socialdb_category_type', array(
+                'name' => $data['category_root_name']
+            ));
+            $has_property = get_term_meta($category_root_id, 'socialdb_category_property_change_label', true);
+            if($has_property && is_numeric($has_property)){
+                 $update_category = wp_update_term($has_property, 'socialdb_property_type', array(
+                'name' => $data['category_name']));
+            }
+        }
+        //cria a taxonomia
+        if($data['socialdb_property_term_new_taxonomy']&&trim($data['socialdb_property_term_new_taxonomy'])!=''){
+            $html = str_get_html((stripslashes ( $data['socialdb_property_term_new_taxonomy'])));
+            if($html->find( '.root_ul', 0)){
+                foreach($html->find( '.root_ul', 0)->children() as $li){
+                    $this->add_nodes_taxonomy($li,$category_root_id);
+                }
+            }
+        }
+        return json_encode($data);
+    }
+    
+    /**
+     * 
+     * @param object $li
+     */
+    public function add_nodes_taxonomy($li,$parent_id = 0) {
+        $name = $li->children(0)->plaintext;
+        if($li->getAttribute('term')&&is_numeric($li->getAttribute('term'))):
+           $array =   wp_update_term((int)$li->getAttribute('term'), 'socialdb_category_type', array(
+                'name' => $name,
+               'parent' => $parent_id
+            ));
+        else:
+            $array = wp_insert_term(trim($name), 'socialdb_category_type', array('parent' => $parent_id,
+                    'slug' => sanitize_title(remove_accent(trim($li->plaintext))).'_'.  mktime()));
+        endif;
+        $find = $li->find('ul',0);
+        if($find){
+            foreach($find->children() as $li_child){
+                $this->add_nodes_taxonomy($li_child,$array['term_id']);
+            }
+        }
+    } 
     
 
 }

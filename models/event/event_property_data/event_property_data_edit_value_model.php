@@ -1,8 +1,10 @@
 <?php
-
+/*
 include_once (dirname(__FILE__) . '/../../../../../../wp-config.php');
 include_once (dirname(__FILE__) . '/../../../../../../wp-load.php');
 include_once (dirname(__FILE__) . '/../../../../../../wp-includes/wp-db.php');
+*/
+require_once(dirname(__FILE__) . '../../../../models/object/object_save_values.php');
 require_once(dirname(__FILE__) . '../../../event/event_model.php');
 
 class EventPropertyDataEditValue extends EventModel {
@@ -50,9 +52,11 @@ class EventPropertyDataEditValue extends EventModel {
      * 
      * Autor: Eduardo Humberto 
      */
-    public function verify_event($data,$automatically_verified = false) {
+    public function verify_event($data,$automatically_verified = false)
+    {
        $actual_state = get_post_meta($data['event_id'], 'socialdb_event_confirmed',true);
-       if($actual_state!='confirmed'&&$automatically_verified||(isset($data['socialdb_event_confirmed'])&&$data['socialdb_event_confirmed']=='true')){// se o evento foi confirmado automaticamente ou pelos moderadores
+       if($actual_state != 'confirmed' && $automatically_verified || (isset($data['socialdb_event_confirmed']) && $data['socialdb_event_confirmed'] == 'true'))// se o evento foi confirmado automaticamente ou pelos moderadores
+       {
            $data = $this->update_property_value($data['event_id'],$data,$automatically_verified);    
        }elseif($actual_state!='confirmed'){
            $this->set_approval_metas($data['event_id'], $data['socialdb_event_observation'], $automatically_verified);
@@ -82,42 +86,53 @@ class EventPropertyDataEditValue extends EventModel {
         $object_id = get_post_meta($event_id, 'socialdb_event_property_data_edit_value_object_id',true);
         $property = get_post_meta($event_id, 'socialdb_event_property_data_edit_value_property_id',true);
         $value = get_post_meta($event_id, 'socialdb_event_property_data_edit_value_attribute_value',true);
+
         //alterando o valor de fato das propriedades fixas ou das demais
-        if($property=='title'){
+        if($property == 'title'){
             $post = array(
                 'ID' => $object_id,
                 'post_title' => $value
             );
             $result = wp_update_post($post);
             $this->set_common_field_values($object_id, 'title', $value);
-        }else if($property=='description'){
+        }else if($property == 'description'){
             $post = array(
                 'ID' => $object_id,
                 'post_content' => $value
             );
             $result = wp_update_post($post);
             $this->set_common_field_values($object_id, 'description', $value);
-        }else if($property=='source'){
+        }else if($property == 'source'){
             $result =  update_post_meta($object_id, 'socialdb_object_dc_source', $value);
             $this->set_common_field_values($object_id, 'object_source', $value);
-        }else if($property=='type'){
+        }else if($property == 'type'){
             $result =  update_post_meta($object_id, 'socialdb_object_dc_type', $value);
             $this->set_common_field_values($object_id, 'object_type', $value);
-        }else if($property=='thumbnail'){
+        }else if($property == 'thumbnail'){
             $result = set_post_thumbnail($object_id, $value);
-        }else if($property=='license'){
+        }else if($property == 'license'){
             $result = update_post_meta($object_id, 'socialdb_license_id', $value);
-        }else if(is_array($value)||is_array(unserialize($value))){
-            $clean_array = [];
-            delete_post_meta($object_id,'socialdb_property_'.$property);
+        }else if(is_array($value) || is_array(unserialize($value))){
             foreach ($value as $meta) {
-                if($meta!=''){
-                    add_post_meta($object_id,'socialdb_property_'.$property, $meta);
-                    $clean_array[] = $meta;
+                if($meta['index'] == '0')
+                {
+                    $class = new ObjectSaveValuesModel();
+                    $class->saveValue($object_id,
+                        $property,
+                        0,
+                        'data',
+                        0,
+                        $meta['val'],
+                        false
+                    );
+                }else
+                {
+                    $this->sdb_update_post_meta($meta['index'], $meta['val']);
+                    $this->set_common_field_values($object_id, "socialdb_property_$property",$meta['val']);
                 }
             }
+
             $result = true;
-            $this->set_common_field_values($object_id, "socialdb_property_$property",$clean_array);
         }else{
             $meta = array($value);
             $clean_array = [];

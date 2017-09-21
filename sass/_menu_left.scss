@@ -5,13 +5,15 @@
   border: 3px solid $item-border;
   margin-left: -3px;
   min-height: 380px;
-  border-top: none;
   border-bottom: 0;
+  height: 1300px;
+  overflow-y: auto;
 
   #accordion {
     .ui-accordion-content {
       border: none;
       padding: 10px 0 0 10px;
+      font-size: 75%;
     }
 
     .cssmenumaker-menu {
@@ -24,7 +26,7 @@
   }
 
   .expand-all {
-    background: $brand-light-blue;
+    //background: $brand-light-blue;
     text-align: right;
     margin: 0 0 8.5% 0;
     padding-right: 10%;
@@ -58,3 +60,60 @@
   }
 
 } // div_left
+
+.menu_left {
+  font: 11px Arial;
+  padding: 1% 2% 0 0;
+  background: white;
+  border: 3px solid $item-border;
+  margin-left: -3px;
+  min-height: 380px;
+  border-top: none;
+  border-bottom: 0;
+
+  .tainacan-default-tags {
+    width: 100%;
+  }
+
+  .title-pipe {
+    border-left: 4px solid #79a6ce;
+    text-align: left;
+    font-size: 12px;
+    text-indent: 5%;
+    font-weight: normal;
+    background: white;
+    width: 100%;
+    overflow: hidden;
+    border-radius: 0 2px 2px 0;
+    padding: 8px 0 8px 0;
+
+    span {
+      font-size: 10px;
+      text-indent: 0;
+    }
+
+  } // title-pipe
+
+  .expand-all-item {
+    background: #79a6ce;
+    text-align: right;
+    margin: 0 0 10px 0;
+    padding-right: 10%;
+    border-radius: 0 4px 4px 0;
+    &:hover {
+      // color: #0c698b;
+      color: white;
+      font-weight: bolder;
+    }
+  }
+
+  .accordion {
+    .ui-accordion-content {
+      border: none;
+      padding: 10px 0 0 10px;
+    }
+    .cssmenumaker-menu {
+      overflow: visible !important;
+    }
+  } // .accordion
+}

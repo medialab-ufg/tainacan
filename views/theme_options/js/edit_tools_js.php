@@ -3,7 +3,7 @@
 
     $(function () {
         var src = $('#src').val();
-
+        change_breadcrumbs_title('<?php _e('Tools','tainacan') ?>');
         autocomplete_collection();
 
         $('#submit_form_integrity_test').submit(function (e) {

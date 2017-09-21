@@ -4,6 +4,7 @@
  */
 //include_once ('../../../../../wp-config.php');
 //include_once ('../../../../../wp-includes/wp-db.php');
+include_once(dirname(__FILE__).'/../../helpers/view_helper.php');
 include_once ('../../../../../wp-load.php');
 require_once(dirname(__FILE__) . '../../general/general_model.php');
 
@@ -46,10 +47,18 @@ class HomeModel extends Model {
      * @author: Rodrigo de Oliveira
      */
     public function get_items_of_type($type) {
-        return get_posts( [ 'post_type' => 'socialdb_object', 'meta_key' => 'socialdb_object_dc_type',
+        $public_values = [];
+        $viewHelper = new ViewHelper();
+        $array_posts = get_posts( [ 'post_type' => 'socialdb_object','post_status' => 'publish', 'meta_key' => 'socialdb_object_dc_type',
                 'meta_value' => $type, 'posts_per_page' => 20 ] );
+        foreach ($array_posts as $post) {
+            $collection = $viewHelper->helper_get_collection_by_object($post->ID)[0];
+            if(isset($collection->ID) && $viewHelper->check_privacity_collection($collection->ID))
+               $public_values[] =  $post;
+        }
+        return $public_values;
     }
-
+    
     /**
      * @signature - format_item_data
      * @param $items_array - array of items to be formatted
@@ -79,8 +88,24 @@ class HomeModel extends Model {
      * @author: Rodrigo de Oliveira
      */
     private function get_item_thumbnail($item_id, $title) {
-        $no_thumb = '<div class="tainacan-thumbless">'.ucwords($title[0]{0}) . ucwords($title[1]{0}).'</div>';
-        return has_post_thumbnail($item_id) ? get_the_post_thumbnail($item_id, 'thumbnail') : $no_thumb;
+        $no_thumb = '<div class="tainacan-thumbless">'.ucwords(htmlentities($title[0]{0})) . ucwords(htmlentities($title[1]{0})).'</div>';
+        $return = has_post_thumbnail($item_id) ? get_the_post_thumbnail($item_id, 'thumbnail') : $no_thumb;
+
+        $html_image = wp_get_attachment_image(get_post_thumbnail_id($item_id), 'thumbnail', false, array('class' => 'img-responsive'));
+        $image = wp_get_attachment_image_src(get_post_thumbnail_id($item_id), "thumbnail", false);
+
+        if(preg_match("/pdf_thumb_/", basename($image[0])))
+        {
+            $DOM = simplexml_load_string($html_image);
+            $DOM->attributes()->height = "150";
+            $DOM->attributes()->width = "150";
+
+            $html_image = $DOM->asXML();
+
+            return $html_image;
+        }
+
+        return $return;
     }
 
     /**

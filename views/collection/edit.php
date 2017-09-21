@@ -2,6 +2,11 @@
 include_once ('js/edit_js.php');
 include_once(dirname(__FILE__).'/../../helpers/view_helper.php');
 $view_helper = new ViewHelper();
+$collection_thumb_id = get_post_meta($collection_post->ID, '_thumbnail_id', true);
+$thumb_url = wp_get_attachment_url($collection_thumb_id);
+$image_cover_url = wp_get_attachment_url(get_post_meta($collection_post->ID, 'socialdb_collection_cover_id', true));
+$_en_header = get_post_meta($collection_post->ID, 'socialdb_collection_show_header', 1);
+$_showH = ("disabled" === $_en_header) ? false : true ;
 ?>
 <div class="col-md-12 config-temp-box">
 
@@ -10,7 +15,7 @@ $view_helper = new ViewHelper();
     <div class="col-md-12 tainacan-config-container">
         <h3>
             <?php _e('Collection Configuration', 'tainacan'); ?>
-            <button onclick="backToMainPage();" id="btn_back_collection" class="btn btn-default pull-right"><?php _e('Back to collection', 'tainacan') ?></button>
+            <?php ViewHelper::buttonVoltar() ?>
         </h3>
         <hr>
 
@@ -19,68 +24,94 @@ $view_helper = new ViewHelper();
                 <label for="collection_name"><?php _e('Collection name', 'tainacan'); ?></label>
                 <input type="text" class="form-control" id="collection_name" name="collection_name" required="required" value="<?php echo $collection_post->post_title; ?>">
             </div>
-            <div id="thumb-idea-form">
-                <label for="collection_thumbnail"><?php _e('Collection thumbnail', 'tainacan'); ?></label>
-                <br>
-                <?php has_post_thumbnail($collection_post->ID) ? print_r(get_the_post_thumbnail($collection_post->ID, 'thumbnail')) : ''; ?>
-                <br><br>
-                <label for="remove_thumbnail"><?php _e('Remove Thumbnail', 'tainacan'); ?></label>
-                <input type="checkbox"  id="remove_thumbnail" name="remove_thumbnail" value="true">
-               <!--<button onclick="remove_thumbnail('<?php echo $collection_post->ID; ?>')" class="btn btn-default" ><?php _e('Remove thumbnail') ?></button>-->
-                <br><br>
-                <label for="remove_thumbnail"><?php _e("Change collection's thumbnail", "tainacan"); ?></label>
-                <input type="file" size="50" id="collection_thumbnail" name="collection_thumbnail" class="btn btn-default btn-sm">
-                <br />
-            </div>
-
-            <div id="socialdb_cover">
-                <?php
-                $image_cover_url = wp_get_attachment_url(get_post_meta($collection_post->ID, 'socialdb_collection_cover_id', true));
-                if ($image_cover_url) { ?>
-                    <label for="socialdb_collection_cover"><?php _e('Cover', 'tainacan'); ?></label> <br />
-                    <img src="<?= $image_cover_url ?>" style='max-height:190px;' />
-                    <br /><br />
-                    <label for="remove_cover"><?php _e('Remove Cover', 'tainacan'); ?></label>
-                    <input type="checkbox"  id="remove_cover" name="remove_cover" value="true">
-                    <a href="javascript:void(0)" onclick="show_edit_cover()" class="btn btn-default"> <?php _e('Edit Cover', 'tainacan'); ?>  </a>
-                    <br /><br />
-                <?php } ?>
-                <div id="edit_cover_container" style="display: <?php print_r(($image_cover_url) ? 'none' : 'block') ?>">
-                    <label for="collection_cover_img_id"> <?php _e('Select Collection Cover', 'tainacan'); ?> </label> <br />
-                    <div class="alert alert-info" role="alert">
-                        <strong> <?php _e('After positioning the image cover as wished, click the green button to crop it.', 'tainacan'); ?> </strong>
-                        <i>(<?php _e('Minimum width recommended: 1920px', 'tainacan') ?>)</i>
-                    </div>
-                    <div id="collection_cover_image"></div>
-                    <input type="hidden" id="collection_cover_img_id" name="collection_cover_img_id" value=""/>
-                </div>
-            </div>
 
             <!------------------- Descricao-------------------------->
             <div class="form-group">
-                <label for="collection_description"><?php _e('Collection description', 'tainacan'); ?></label>           
-                <textarea class="form-control" rows="4" id="collection_content" name="collection_content" placeholder='<?= __("Describe your collection in few words", 'tainacan'); ?>'><?php echo $collection_post->post_content; ?></textarea>
-
+                <label for="collection_description"> <?php _t('Collection description', 1); ?> </label>
+                <textarea class="form-control" rows="4" id="collection_content" name="collection_content" placeholder='<?php _t("Describe your collection in few words", 1); ?>'><?php echo $collection_post->post_content; ?></textarea>
             </div>
+
+
+
+            <?php if(!has_action('disable_header_collection')): ?>
+                <hr class='tainacanRow' />
+            <div class="form-group" style="margin-bottom: 40px">
+                <label for="enable_header"> <?php _t('Collection header',1); ?> </label>
+                <div class="col-md-12">
+                    <input type="checkbox" id="enable_header" name="enable_header"
+                        <?php echo ($_showH) ? 'checked="checked"' : '' ?> >
+                    <?php _t('Enable',1); ?>
+
+                    <div id="thumb-idea-form" class="form-group enablelize" style="<?php echo ($_showH) ? '' : 'display:none'; ?>">
+                        <div>
+                            <label for="collection_thumbnail"> <?php _e('Collection thumbnail', 'tainacan'); ?> </label>
+                            <?php if($collection_thumb_id): ?>
+                                <img src="<?php echo $thumb_url ?>"
+                                     alt="<?php _t("Collection thumbnail"); ?>" title="<?php _t("Collection thumbnail"); ?>" />
+                                <label for="remove_thumbnail"><?php _e('Remove Thumbnail', 'tainacan'); ?></label> &nbsp;
+                                <input type="checkbox"  id="remove_thumbnail" name="remove_thumbnail" value="true">
+                            <?php endif; ?>
+                        </div>
+                        <div class="crop-wrapper">
+                            <p><?php _e("Image aspect ratio", "tainacan"); ?>  <strong>1:1</strong></p>
+                            <div id="collection_crop_thumb"></div>
+                        </div>
+                    </div>
+
+                    <div id="socialdb_cover" class="form-group enablelize" style="<?php echo ($_showH) ? '':'display:none'?>">
+                        <?php if ($image_cover_url) { ?>
+                            <hr />
+                            <label for="socialdb_collection_cover"><?php _e('Collection cover', 'tainacan'); ?></label> <br />
+                            <img src="<?= $image_cover_url ?>" style='max-height:190px;' />
+                            <br /><br />
+                            <label for="remove_cover"><?php _e('Remove Cover', 'tainacan'); ?></label>
+                            <input type="checkbox"  id="remove_cover" name="remove_cover" value="true">
+                            &nbsp;&nbsp;&nbsp;
+                            <a href="javascript:void(0)" onclick="show_edit_cover()" class="btn btn-default"> <?php _e('Edit Cover', 'tainacan'); ?>  </a>
+                            <br /><br />
+                        <?php } ?>
+
+                        <div id="edit_cover_container" <?php echo ($image_cover_url) ? 'class="hideCropBox"' : ''; ?>>
+                            <label for="collection_cover_img_id"> <?php _e('Select Collection Cover', 'tainacan'); ?> </label>
+                            <a href="javascript:void(0)" data-toggle="tooltip" title="<?php _e('After positioning the image cover as wished, click the green button to crop it.', 'tainacan'); ?>
+                        (<?php _t('Minimum width recommended: 1920px',1) ?>)">
+                                <span class="glyphicon glyphicon-question-sign"></span>
+                            </a>
+                            <div id="collection_cover_image"></div>
+                            <input type="hidden" id="collection_cover_img_id" name="collection_cover_img_id" value=""/>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+                <hr class='tainacanRow' />
+            <?php endif; ?>
+
+
             <div class="form-group">
-                <a href="#advanced_config" id="show_adv_config_link" onclick="showAdvancedConfig();"><?php _e('Advanced Configuration', 'tainacan'); ?></a>
-                <a href="#advanced_config" id="hide_adv_config_link" onclick="hideAdvancedConfig();" style="display: none;"><?php _e('Hide Advanced Configuration', 'tainacan'); ?></a>
+                <a id="show_adv_config_link" onclick="showAdvancedConfig();" style="cursor:pointer;">
+                    <span class="caret"></span>&nbsp;<?php _e('Advanced Configuration', 'tainacan'); ?>                    
+                </a>
+                <a id="hide_adv_config_link" onclick="hideAdvancedConfig();" style="display: none;cursor:pointer;">
+                    <span class="caret-right"></span>&nbsp; <?php _e('Hide Advanced Configuration', 'tainacan'); ?></a>
             </div>
 
             <!------------------- DIV ADVANCED -------------------------->
             <div id="advanced_config" style="display: none;">
+                <?php do_action('insert_form_edit_collection',$collection_post,$collection_metas); ?>
                 <!------------------- Endereco da colecao -------------------------->
                 <div class="form-group">
                     <label for="collection_description"><?php _e('Collection Address', 'tainacan'); ?></label>
-                    <a href="#" data-toggle="tooltip" title="<?php _e('The address must not contain spaces or special characters. If it contains will be removed by the system.', 'tainacan'); ?>">
+                    <a href="javascript:void(0)" data-toggle="tooltip" title="<?php _e('The address must not contain spaces or special characters. If it contains will be removed by the system. Limit of 200 characters.', 'tainacan'); ?>">
                         <span class="glyphicon glyphicon-question-sign"></span>
                     </a>
                 </div>
                 <div class="form-inline form-group">
                     <div class="alert alert-success" style="display: none;width: 30%;" id="collection_name_success"><span class="glyphicon glyphicon-ok" ></span>&nbsp;&nbsp;<?php _e('Valid name!', 'tainacan') ?></div>
                     <div class="alert alert-danger" style="display: none;width: 30%;" id="collection_name_error"><span class="glyphicon glyphicon-warning-sign" >&nbsp;&nbsp;</span><?php _e('Invalid name!', 'tainacan') ?></div>
-                    <label class="control-label" ><?php echo site_url() . '/collection/'; ?></label>
-                    <input onkeyup="verify_name_collection();" id="suggested_collection_name" required="required" type="text" class="form-control" name="socialdb_collection_address"  value="<?php echo $collection_post->post_name; ?>" >
+                    <label class="control-label" ><?php echo site_url() . '/'; ?></label>
+                    <input onkeyup="verify_name_collection();" id="suggested_collection_name" required="required" type="text" class="form-control" name="socialdb_collection_address"  value="<?php echo $collection_post->post_name; ?>" maxlength="200" >
                     <input type="hidden" id="initial_address"  name="initial_address"  value="<?php echo $collection_post->post_name; ?>" >
                 </div>
                 <!----------------------- Objeto da colecao ----------------->
@@ -123,7 +154,7 @@ $view_helper = new ViewHelper();
                             echo 'selected = "selected"';
                         }
                         ?>>
-                                    <?php _e('Public', 'tainacan'); ?>
+                            <?php _e('Public', 'tainacan'); ?>
                         </option>
                         <option value="private" <?php
                         if ($collection_metas['sociadb_collection_privacity'][0]->name == 'socialdb_collection_private') {
@@ -148,7 +179,7 @@ $view_helper = new ViewHelper();
                 <!------------------- Hierarquia-------------------------->
                 <div class="form-group">
                     <label for="socialdb_collection_allow_hierarchy"><?php _e('Collection Hierarchy', 'tainacan'); ?></label>
-                    <a href="#" data-toggle="tooltip" title="<?php _e('Changing the collection parent allows this collection to extend all metadata and rankings from another collection', 'tainacan'); ?>">
+                    <a href="javascript:void(0)" data-toggle="tooltip" title="<?php _e('Changing the collection parent allows this collection to extend all metadata and rankings from another collection', 'tainacan'); ?>">
                         <span class="glyphicon glyphicon-question-sign"></span>
                     </a>
                     <select name="socialdb_collection_allow_hierarchy" class="form-control">
@@ -192,7 +223,7 @@ $view_helper = new ViewHelper();
                             echo 'selected = "selected"';
                         }
                         ?>>
-                                    <?php _e('Controlled - Only admins of the collection and the owners of the items can make downloads. Thumbnails of images are displayed.', 'tainacan'); ?>
+                            <?php _e('Controlled - Only admins of the collection and the owners of the items can make downloads. Thumbnails of images are displayed.', 'tainacan'); ?>
                         </option>
                     </select>
                     <input type="checkbox" id="add_watermark" name="add_watermark" value="true" <?php if($collection_metas['socialdb_collection_add_watermark']){ echo 'checked="checked"';}?>> <?php _e('Generate thumbnail with watermark', 'tainacan'); ?>
@@ -256,6 +287,23 @@ $view_helper = new ViewHelper();
                 </div-->
 
                 <div class="form-group">
+                    <label for=""><?php _t('Change collection owner',1); ?></label>
+                    <?php /* <div class="form-control"> <div><?php echo _t('Current owner: ',1) .  get_the_author_meta("display_name", $collection_post->post_author); ?></div></div>*/ ?>
+                    <input type="text" id="get_users_auto" class="chosen-selected form-control ui-autocomplete-input"
+                           onkeyup="autocomplete_moderators('<?php echo $collection_post->ID; ?>', '#get_users_auto');"
+                           placeholder="<?php _t('Type the three first letters of the user name ', 1);?>"
+                           autocomplete="off">
+
+                    <div class="col-md-12 no-padding new_own_cont">
+                        <div class="new_owner_of_<?php echo $collection_post->ID; ?>">
+                            <?php _t('New owner: ',1); ?>
+                        </div>
+                        <input type="hidden" class="new_owner_of_<?php echo $collection_post->ID?>"
+                               name="collection_owner" id="collection_owner" value="<?php echo $collection_post->post_author; ?>" />
+                    </div>
+                </div>
+
+                <div class="form-group">
                     <label for="collection_moderation_type"><?php _e('Type of Moderation', 'tainacan'); ?></label> 
                     <select name="socialdb_collection_moderation_type" id="socialdb_collection_moderation_type" class="form-control" onchange="showModerationDays();">
                         <option value="moderador"  <?php
@@ -313,7 +361,7 @@ $view_helper = new ViewHelper();
                 <div class="form-group">
                     <label for=""><?php _e('Collection Moderators', 'tainacan'); ?></label> 
                     <input type="text" onkeyup="autocomplete_moderators('<?php echo $collection_post->ID; ?>');" id="autocomplete_moderator" placeholder="<?php _e('Type the three first letters of the user name ', 'tainacan'); ?>"  class="chosen-selected form-control"  />
-                    <select onclick="clear_select_moderators(this);"  id="moderators_<?php echo $collection_post->ID; ?>" multiple class="chosen-selected2 form-control" style="height: auto;" multiple name="collection_moderators[]" id="chosen-selected2-user"  >
+                    <select onclick="clear_select_moderators(this);" id="moderators_<?php echo $collection_post->ID; ?>" multiple class="chosen-selected2 form-control" style="height: auto;" multiple name="collection_moderators[]" id="chosen-selected2-user"  >
                         <?php if ($collection_metas['socialdb_collection_moderator']) { ?>
                             <?php foreach ($collection_metas['socialdb_collection_moderator'] as $moderator) {  // percoro todos os objetos     ?>
                                 <option selected='selected' value="<?php echo $moderator['id'] ?>"><?php echo $moderator['name'] ?></option>
@@ -885,7 +933,8 @@ $view_helper = new ViewHelper();
                         </div>
                     </div>
                     <!-- Property Terms -->
-                    <div class="col-md-12">
+                    <!--Temporariamente desativada -->
+                    <!--<div class="col-md-12">
                         <div class="form-group row">
                             <div class="col-md-6"><?php _e('Property Term', 'tainacan'); ?></div>
                             <div class="col-md-2">
@@ -961,7 +1010,7 @@ $view_helper = new ViewHelper();
                                 </select>
                             </div>
                         </div>
-                    </div>
+                    </div>-->
                     <div class="col-md-12">
                         <div class="form-group row">
                             <div class="col-md-6" id="entity"><strong><?php _e('Entity', 'tainacan'); ?></strong></div>
@@ -1422,8 +1471,10 @@ $view_helper = new ViewHelper();
             <input type="hidden" id="collection_id" name="collection_id" value="<?php echo $collection_post->ID; ?>">
             <input type="hidden" id="operation" name="operation" value="update">
             <input type="hidden" id="save_and_next" name="save_and_next" value="false">
-            <button type="submit" id="submit_configuration" class="btn btn-success" style="float: right"><?php _e('Save', 'tainacan'); ?></button>
-            <button type="submit" id="button_save_and_next"  class="btn btn-primary" style="float: right;" ><?php _e('Save & Next', 'tainacan'); ?></button>
+            
+            <button type="button" class="btn btn-default pull-left btn-lg" onclick="backToMainPage()"><?php _e('Back to collection', 'tainacan'); ?></button>
+            
+            <button type="submit" id="button_save_and_next" class="btn btn-success pull-right btn-lg"> <?php _e('Continue', 'tainacan'); ?> </button>
         </form>
     </div>
 </div>

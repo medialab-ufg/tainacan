@@ -12,6 +12,9 @@ class HelpersController extends Controller {
             case '0002':
                 HelpersModel::update_all_collections();
                 break;
+            case '0003':
+                HelpersModel::create_helper_item();
+                break;
         endswitch;
     }
 }

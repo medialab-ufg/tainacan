@@ -34,20 +34,17 @@
                 collection_id: $("#collection_id").val()
             }
         }).done(function (result) {
-             elem_first =jQuery.parseJSON(result); 
-             console.log(elem_first);
+             elem_first =jQuery.parseJSON(result);
              $('#update_rating_' + object_id + '_' + property_id).raty({
                     score: Math.ceil((elem_first.results.final_score*2))/2,
                     half: true,
                     starType: 'i',
                     click: function (score, evt) {
-                        console.log('sddsdf');
                         update_save_vote_stars(score, property_id, object_id)
                         return false;
                     }
                 });   
             $('#update_counter_' + object_id + '_' + property_id).text(elem_first.results.count);
-            console.log(elem_first);
             if(elem_first.is_user_logged_in){
                 score = Math.ceil((score*2))/2;
                 elem_first.results.final_score = Math.ceil((elem_first.results.final_score*2))/2;

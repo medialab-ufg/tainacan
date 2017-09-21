@@ -3,9 +3,12 @@ include_once ('../../../../../wp-config.php');
 include_once ('../../../../../wp-load.php');
 include_once ('../../../../../wp-includes/wp-db.php');
 include_once ('js/editor_items_js.php');
+if(!isset($edit_multiple)){
+    include_once (dirname(__FILE__).'/../js/multiple_draft_js.php');
+}
 include_once(dirname(__FILE__).'/../../../helpers/view_helper.php');
 
-$view_helper = new ViewHelper();
+$view_helper = new ViewHelper($collection_id);
 
 $properties_terms_radio = [];
 $properties_terms_tree = [];
@@ -24,50 +27,6 @@ $filesAudio= [];
 $filesPdf= [];
 $filesOther= [];
 ?>
-<style>
-  #selectable .ui-selecting 
-  { 
-      /* border: 3px solid rgb(122,167,207) ;*/ 
-  }
-  #container_images,
-  #container_text,
-  #container_pdfs,
-  #container_videos,
-  #container_audios, 
-  #container_others {
-      background-color: #c1d0dd;
-      padding-right: 0px;
-      padding-left: 15px;
-      margin-top: 15px;
-      padding-top: 5px;
-  }
-  
-  .item-default{
-      background: white;  
-      margin-bottom: 15px;
-      padding-bottom: 15px;
-      padding-right: 15px;
-      border: 3px solid #E8E8E8; 
-      margin-right: 10px;
-      width:19%;
-  }
-  .selected-border{
-      border: 3px solid rgb(122,167,207); 
-  }
-  .input_title{
-        text-align: center;
-        width: 150px;
-        padding:5px;
-        border: none;
-        background-color: rgb(209,211,212);
-        font: 13px Arial;
-        border-radius: 5px;
-    }  
-    .menu-left-size{
-        width: 23%;
-        padding-bottom: 15px;
-    }
-</style>
 <div class="row" style="padding-right: 0px;padding-left: 0px;">
        
         <!-------------- METADADOS - BLOCO ESQUERDO (COL-MD-3) --------------------->
@@ -121,9 +80,9 @@ $filesOther= [];
                     <?php echo ($view_helper->terms_fixed['title']) ? $view_helper->terms_fixed['title']->name :  _e('Title','tainacan') ?>
                 </h2>
                 <div class="form-group">                
-                    <input class="form-control" 
+                    <input 
                            type="text" 
-                           class="form-control" 
+                           class="form-control auto-save" 
                            id="multiple_object_name" 
                            name="object_name" 
                            required="required" 
@@ -139,7 +98,7 @@ $filesOther= [];
                     <?php echo ($view_helper->terms_fixed['description']) ? $view_helper->terms_fixed['description']->name :  __('Description','tainacan') ?> 
                 </h2>
                 <div id="object_description" class="form-group">          
-                    <textarea class="form-control" 
+                    <textarea class="form-control auto-save" 
                               id="multiple_object_description" 
                               onkeyup="setDescription(this)"
                                name="multiple_object_description" ></textarea>     
@@ -151,8 +110,8 @@ $filesOther= [];
                     <?php echo ($view_helper->terms_fixed['tags']) ? $view_helper->terms_fixed['tags']->name :  _e('Tags','tainacan') ?> 
                 </h2>
                 <div class="form-group">                
-                    <input onkeyup="setTags(this)" type="text" class="form-control" id="multiple_object_tags" name="object_tags" >
-                    <span style="font-size: 8px;" class="label label-default">*<?php _e('The set of tags may be inserted by commas','tainacan') ?></span>
+                    <input onkeyup="setTags(this)" type="text" class="form-control auto-save" id="multiple_object_tags" placeholder="" name="object_tags" >
+                    <span style="font-size: 7px;word-wrap: break-word;" class="label label-default">*<?php _e('The set of tags may be inserted by commas','tainacan') ?></span>
                </div> 
             </div>    
             <div id="socialdb_object_dc_source"
@@ -162,7 +121,7 @@ $filesOther= [];
                     <?php echo ($view_helper->terms_fixed['source']) ? $view_helper->terms_fixed['source']->name :  _e('Source','tainacan') ?>
                 </h2>
                 <div class="form-group">                
-                    <input onkeyup="setSource(this)" type="text" class="form-control" id="multiple_object_source" name="object_source"  placeholder="<?php _e('Source of the item','tainacan') ?>">
+                    <input onkeyup="setSource(this)" type="text" class="form-control auto-save" id="multiple_object_source" name="object_source"  placeholder="<?php _e('Source of the item','tainacan') ?>">
                 </div> 
             </div>       
         <?php
@@ -228,7 +187,7 @@ $filesOther= [];
                                    class="chosen-selected form-control"  />  
                             <select onclick="clear_select_object_property(this,'<?php echo $property['id']; ?>');" 
                                     id="multiple_property_value_<?php echo $property['id']; ?>_<?php echo $object_id; ?>_add" 
-                                    multiple class="chosen-selected2 form-control" 
+                                    multiple class="chosen-selected2 form-control auto-save" 
                                     style="height: auto;" 
                                     name="socialdb_property_<?php echo $property['id']; ?>[]" 
                                         <?php if($property['metas']['socialdb_property_required']=='true'): echo 'required="required"'; endif; ?> >
@@ -265,7 +224,7 @@ $filesOther= [];
                                        onchange="setPropertyData(this,'<?php echo $property['id']  ?>')"
                                        type="text" 
                                        id='multiple_socialdb_property_<?php echo $property['id']; ?>'
-                                       class="form-control multiple_socialdb_property_<?php echo $property['id']; ?>" 
+                                       class="form-control auto-save multiple_socialdb_property_<?php echo $property['id']; ?>" 
                                        value="<?php if($property['metas']['socialdb_property_default_value']): echo $property['metas']['socialdb_property_default_value']; endif; ?>" 
                                        name="socialdb_property_<?php echo $property['id']; ?>"
                                        <?php if($property['metas']['socialdb_property_required']=='true'): echo 'required="required"'; endif; ?>>
@@ -281,11 +240,11 @@ $filesOther= [];
                          <?php }elseif($property['type']=='numeric') { ?>   
                               <input onblur="setPropertyData(this,'<?php echo $property['id']  ?>')"
                                       onchange="setPropertyData(this,'<?php echo $property['id']  ?>')"
-                                     type="number" 
+                                     type="text" 
                                      onkeypress='return onlyNumbers(event)'
                                      id='multiple_socialdb_property_<?php echo $property['id']; ?>'
                                      value="<?php if($property['metas']['socialdb_property_default_value']): echo $property['metas']['socialdb_property_default_value']; endif; ?>" 
-                                     class="form-control multiple_socialdb_property_<?php echo $property['id']; ?>"
+                                     class="form-control auto-save multiple_socialdb_property_<?php echo $property['id']; ?>"
                                      name="socialdb_property_<?php echo $property['id']; ?>" 
                                      <?php if($property['metas']['socialdb_property_required']=='true'): echo 'required="required"'; endif; ?>>
                          <?php }elseif($property['type']=='autoincrement') {  ?>   
@@ -294,7 +253,7 @@ $filesOther= [];
                                      disabled="disabled"  
                                       id='multiple_socialdb_property_<?php echo $property['id']; ?>'
                                      type="number" 
-                                     class="form-control multiple_socialdb_property_<?php echo $property['id']; ?>" 
+                                     class="form-control auto-save multiple_socialdb_property_<?php echo $property['id']; ?>" 
                                      name="only_showed_<?php echo $property['id']; ?>" value="<?php if(is_numeric($property['metas']['socialdb_property_data_value_increment'])): echo $property['metas']['socialdb_property_data_value_increment']+1; endif; ?>">
                               <!--input type="hidden"  name="socialdb_property_<?php echo $property['id']; ?>" value="<?php if($property['metas']['socialdb_property_data_value_increment']): echo $property['metas']['socialdb_property_data_value_increment']+1; endif; ?>" -->
                         <?php }else{ ?>
@@ -303,7 +262,7 @@ $filesOther= [];
                                      type="date" 
                                       id='multiple_socialdb_property_<?php echo $property['id']; ?>'
                                      value="<?php if($property['metas']['socialdb_property_default_value']): echo $property['metas']['socialdb_property_default_value']; endif; ?>" 
-                                     class="form-control multiple_socialdb_property_<?php echo $property['id']; ?>" 
+                                     class="form-control auto-save multiple_socialdb_property_<?php echo $property['id']; ?>" 
                                      name="socialdb_property_<?php echo $property['id']; ?>" <?php if($property['metas']['socialdb_property_required']=='true'): echo 'required="required"'; endif; ?>>
                         <?php } ?> 
                               <?php echo $view_helper->render_button_cardinality($property,$i) ?>    
@@ -354,7 +313,7 @@ $filesOther= [];
                          }elseif($property['type']=='selectbox') { 
                             $properties_terms_selectbox[] = $property['id']; 
                              ?>
-                             <select onchange="setCategoriesSelect('<?php echo $property['id']; ?>',this)" class="form-control" name="multiple_socialdb_propertyterm_<?php echo $property['id']; ?>" id='multiple_field_property_term_<?php echo $property['id']; ?>' <?php if($property['metas']['socialdb_property_required']=='true'): echo 'required="required"'; endif; ?>>
+                             <select onchange="setCategoriesSelect('<?php echo $property['id']; ?>',this)" class="form-control auto-save" name="multiple_socialdb_propertyterm_<?php echo $property['id']; ?>" id='multiple_field_property_term_<?php echo $property['id']; ?>' <?php if($property['metas']['socialdb_property_required']=='true'): echo 'required="required"'; endif; ?>>
                              </select>
                              <input type="hidden" 
                                     id='socialdb_propertyterm_<?php echo $property['id']; ?>_value'
@@ -370,7 +329,7 @@ $filesOther= [];
                             $properties_terms_multipleselect[] = $property['id']; 
                              ?>
                              <select onchange="setCategoriesSelectMultiple('<?php echo $property['id']; ?>',this)" 
-                                     multiple class="form-control" 
+                                     multiple class="form-control auto-save" 
                                      name="multiple_socialdb_propertyterm_<?php echo $property['id']; ?>" 
                                      id='multiple_field_property_term_<?php echo $property['id']; ?>' <?php if($property['metas']['socialdb_property_required']=='true'): echo 'required="required"'; endif; ?>></select>
                             <?php
@@ -389,8 +348,9 @@ $filesOther= [];
                             <?php
                           }
                          ?> 
-                    </div>              
-                </div>              
+                    </div>             
+                   <div id="append_properties_categories_<?php echo $property['id']; ?>"></div>
+                </div>
              <?php  } ?>
         <?php endif; ?>
             <!-- TAINACAN: a licencas do item -->
@@ -427,13 +387,33 @@ $filesOther= [];
         </div>
         <div class='col-md-9 pull-right' 
              style="background-color: white;border: 3px solid #E8E8E8;margin-left: 15px;">
+            <?php if(!isset($is_beta_file)): ?>
             <h3>
-                <?php _e('Add new item - Insert URL','tainacan') ?>
-                <button type="button" onclick="back_main_list_socialnetwork();"
+                <?php if(isset($edit_multiple)): ?> 
+                    <?php _e('Edit multiple items','tainacan') ?>
+                    <button type="button" onclick="back_main_list();"
+                            class="btn btn-default pull-right"> 
+                                <?php _e('Cancel','tainacan') ?>
+                    </button>
+                <?php else: ?> 
+                    <?php _e('Add new item - Insert URL','tainacan') ?>
+                    <button type="button" onclick="back_main_list_socialnetwork();"
+                            class="btn btn-default pull-right"> 
+                                <?php _e('Cancel','tainacan') ?>
+                    </button>
+                <?php endif; ?> 
+            </h3>
+            <?php else: ?>
+            <h3>
+                <?php _e('Continue editting...  Insert URL','tainacan') ?>
+                <button type="button" onclick="back_main_list_discard();"
                         class="btn btn-default pull-right"> 
                             <?php _e('Cancel','tainacan') ?>
                 </button>
+                <br>
+                <small id="draft-text"></small>
             </h3>
+            <?php endif ?>
             <hr>
             <!----------------------------- BUTTONS -------------------------------------->
            <div style="padding-bottom: 20px;" >
@@ -498,7 +478,7 @@ $filesOther= [];
                                            name='title_<?php echo $file['ID'] ?>' 
                                            value='<?php echo $file['name'] ?>'>
                                     <!-- Hidden para as categorias, tags e attachments  -->
-                                    <input type="hidden" id="source_<?php echo $file['ID'] ?>" name="source_<?php echo $file['ID'] ?>" value=''>
+                                    <input type="hidden" id="source_<?php echo $file['ID'] ?>" name="source_<?php echo $file['ID'] ?>" value='<?php  echo $file['source'] ?>'>
                                     <input type="hidden" name="type_<?php echo $file['ID'] ?>" value='image'>
                                     <input type="hidden" id='parent_<?php echo $file['ID'] ?>' name="parent_<?php echo $file['ID'] ?>" value=''>
                                     <input type="hidden" id='attachments_<?php echo $file['ID'] ?>' name="attachments_<?php echo $file['ID'] ?>" value=''>
@@ -513,7 +493,7 @@ $filesOther= [];
                                              <input type="hidden" 
                                                     name='socialdb_property_<?php echo $value['id'] ?>_<?php echo $file['ID'] ?>' 
                                                     id='socialdb_property_<?php echo $value['id'] ?>_<?php echo $file['ID'] ?>'
-                                                    value='<?php if($value['default_value']&&!empty($value['default_value'])): echo $value['default_value']; endif; ?>'>
+                                                    value='<?php if($file['properties'][$value['id']]&&!empty($file['properties'][$value['id']])): echo implode(',', $file['properties'][$value['id']]); endif; ?>'>
                                     <?php  } 
                                     endif;   
                                     ?>
@@ -524,7 +504,7 @@ $filesOther= [];
                                              <input type="hidden" 
                                                     name='socialdb_property_<?php echo $value ?>_<?php echo $file['ID'] ?>' 
                                                     id='socialdb_property_<?php echo $value ?>_<?php echo $file['ID'] ?>'
-                                                    value=''>
+                                                    value='<?php if($file['properties'][$value['id']]&&!empty($file['properties'][$value['id']])): echo implode(',', $file['properties'][$value['id']]); endif; ?>'>
                                     <?php  } 
                                     endif;   
                                     ?>    
@@ -585,7 +565,7 @@ $filesOther= [];
                                            name='title_<?php echo $file['ID'] ?>' 
                                            value='<?php echo $file['name'] ?>'>
                                     <!-- Hidden para as categorias, tags e attachments  -->
-                                    <input type="hidden" id="source_<?php echo $file['ID'] ?>" name="source_<?php echo $file['ID'] ?>" value=''>
+                                    <input type="hidden" id="source_<?php echo $file['ID'] ?>" name="source_<?php echo $file['ID'] ?>" value='<?php  echo $file['source'] ?>'>
                                     <input type="hidden" name="type_<?php echo $file['ID'] ?>" value='image'>
                                     <input type="hidden" id='parent_<?php echo $file['ID'] ?>' name="parent_<?php echo $file['ID'] ?>" value=''>
                                     <input type="hidden" id='attachments_<?php echo $file['ID'] ?>' name="attachments_<?php echo $file['ID'] ?>" value=''>
@@ -600,7 +580,7 @@ $filesOther= [];
                                              <input type="hidden" 
                                                     name='socialdb_property_<?php echo $value['id'] ?>_<?php echo $file['ID'] ?>' 
                                                     id='socialdb_property_<?php echo $value['id'] ?>_<?php echo $file['ID'] ?>'
-                                                    value='<?php if($value['default_value']&&!empty($value['default_value'])): echo $value['default_value']; endif; ?>'>
+                                                     value='<?php if($file['properties'][$value['id']]&&!empty($file['properties'][$value['id']])): echo implode(',', $file['properties'][$value['id']]); endif; ?>'>
                                     <?php  } 
                                     endif;   
                                     ?>
@@ -611,7 +591,7 @@ $filesOther= [];
                                              <input type="hidden" 
                                                     name='socialdb_property_<?php echo $value ?>_<?php echo $file['ID'] ?>' 
                                                     id='socialdb_property_<?php echo $value ?>_<?php echo $file['ID'] ?>'
-                                                    value=''>
+                                                     value='<?php if($file['properties'][$value['id']]&&!empty($file['properties'][$value['id']])): echo implode(',', $file['properties'][$value['id']]); endif; ?>'>
                                     <?php  } 
                                     endif;   
                                     ?>    
@@ -671,7 +651,7 @@ $filesOther= [];
                                            id='title_<?php echo $file['ID'] ?>' 
                                            name='title_<?php echo $file['ID'] ?>' 
                                            value='<?php echo $file['name'] ?>'>                                   <!-- Hidden para as categorias, tags e attachments  -->
-                                   <input type="hidden" id="source_<?php echo $file['ID'] ?>" name="source_<?php echo $file['ID'] ?>" value=''>
+                                   <input type="hidden" id="source_<?php echo $file['ID'] ?>" name="source_<?php echo $file['ID'] ?>" value='<?php  echo $file['source'] ?>'>
                                    <input type="hidden" name="type_<?php echo $file['ID'] ?>" value='video'>
                                    <input type="hidden" id='parent_<?php echo $file['ID'] ?>' name="parent_<?php echo $file['ID'] ?>" value=''>
                                    <input type="hidden" id='attachments_<?php echo $file['ID'] ?>' name="attachments_<?php echo $file['ID'] ?>" value=''>
@@ -686,7 +666,7 @@ $filesOther= [];
                                             <input type="hidden" 
                                                    name='socialdb_property_<?php echo $value['id'] ?>_<?php echo $file['ID'] ?>' 
                                                    id='socialdb_property_<?php echo $value['id'] ?>_<?php echo $file['ID'] ?>'
-                                                   value='<?php if($value['default_value']&&!empty($value['default_value'])): echo $value['default_value']; endif; ?>'>
+                                                    value='<?php if($file['properties'][$value['id']]&&!empty($file['properties'][$value['id']])): echo implode(',', $file['properties'][$value['id']]); endif; ?>'>
                                    <?php  } 
                                    endif;   
                                    ?>
@@ -697,7 +677,7 @@ $filesOther= [];
                                             <input type="hidden" 
                                                    name='socialdb_property_<?php echo $value ?>_<?php echo $file['ID'] ?>' 
                                                    id='socialdb_property_<?php echo $value ?>_<?php echo $file['ID'] ?>'
-                                                   value=''>
+                                                    value='<?php if($file['properties'][$value['id']]&&!empty($file['properties'][$value['id']])): echo implode(',', $file['properties'][$value['id']]); endif; ?>'>
                                    <?php  } 
                                    endif;   
                                    ?>      
@@ -758,7 +738,7 @@ $filesOther= [];
                                            id='title_<?php echo $file['ID'] ?>' 
                                            name='title_<?php echo $file['ID'] ?>' 
                                            value='<?php echo $file['name'] ?>'>                                    <!-- Hidden para as categorias, tags e attachments  -->
-                                    <input type="hidden" id="source_<?php echo $file['ID'] ?>" name="source_<?php echo $file['ID'] ?>" value=''>
+                                    <input type="hidden" id="source_<?php echo $file['ID'] ?>" name="source_<?php echo $file['ID'] ?>" value='<?php  echo $file['source'] ?>'>
                                     <input type="hidden" name="type_<?php echo $file['ID'] ?>" value='pdf'>
                                     <input type="hidden" id='parent_<?php echo $file['ID'] ?>' name="parent_<?php echo $file['ID'] ?>" value=''>
                                     <input type="hidden" id='attachments_<?php echo $file['ID'] ?>' name="attachments_<?php echo $file['ID'] ?>" value=''>
@@ -773,7 +753,7 @@ $filesOther= [];
                                              <input type="hidden" 
                                                     name='socialdb_property_<?php echo $value['id'] ?>_<?php echo $file['ID'] ?>' 
                                                     id='socialdb_property_<?php echo $value['id'] ?>_<?php echo $file['ID'] ?>'
-                                                    value='<?php if($value['default_value']&&!empty($value['default_value'])): echo $value['default_value']; endif; ?>'>
+                                                    value='<?php if($file['properties'][$value['id']]&&!empty($file['properties'][$value['id']])): echo implode(',', $file['properties'][$value['id']]); endif; ?>'>
                                     <?php  } 
                                     endif;   
                                     ?>
@@ -784,7 +764,7 @@ $filesOther= [];
                                              <input type="hidden" 
                                                     name='socialdb_property_<?php echo $value ?>_<?php echo $file['ID'] ?>' 
                                                     id='socialdb_property_<?php echo $value ?>_<?php echo $file['ID'] ?>'
-                                                    value=''>
+                                                     value='<?php if($file['properties'][$value['id']]&&!empty($file['properties'][$value['id']])): echo implode(',', $file['properties'][$value['id']]); endif; ?>'>
                                     <?php  } 
                                     endif;   
                                     ?>     
@@ -839,7 +819,7 @@ $filesOther= [];
                                            id='title_<?php echo $file['ID'] ?>' 
                                            name='title_<?php echo $file['ID'] ?>' 
                                            value='<?php echo $file['name'] ?>'>                                    <!-- Hidden para as categorias, tags e attachments  -->
-                                     <input type="hidden" id="source_<?php echo $file['ID'] ?>" name="source_<?php echo $file['ID'] ?>" value=''>
+                                     <input type="hidden" id="source_<?php echo $file['ID'] ?>" name="source_<?php echo $file['ID'] ?>" value='<?php  echo $file['source'] ?>'>
                                     <input type="hidden" name="type_<?php echo $file['ID'] ?>" value='audio'>
                                     <input type="hidden" id='parent_<?php echo $file['ID'] ?>' name="parent_<?php echo $file['ID'] ?>" value=''>
                                     <input type="hidden" id='attachments_<?php echo $file['ID'] ?>' name="attachments_<?php echo $file['ID'] ?>" value=''>
@@ -854,7 +834,7 @@ $filesOther= [];
                                              <input type="hidden" 
                                                     name='socialdb_property_<?php echo $value['id'] ?>_<?php echo $file['ID'] ?>' 
                                                     id='socialdb_property_<?php echo $value['id'] ?>_<?php echo $file['ID'] ?>'
-                                                    value='<?php if($value['default_value']&&!empty($value['default_value'])): echo $value['default_value']; endif; ?>'>
+                                                    value='<?php if($file['properties'][$value['id']]&&!empty($file['properties'][$value['id']])): echo implode(',', $file['properties'][$value['id']]); endif; ?>'>
                                     <?php  } 
                                     endif;   
                                     ?>
@@ -865,7 +845,7 @@ $filesOther= [];
                                              <input type="hidden" 
                                                     name='socialdb_property_<?php echo $value ?>_<?php echo $file['ID'] ?>' 
                                                     id='socialdb_property_<?php echo $value ?>_<?php echo $file['ID'] ?>'
-                                                    value=''>
+                                                     value='<?php if($file['properties'][$value['id']]&&!empty($file['properties'][$value['id']])): echo implode(',', $file['properties'][$value['id']]); endif; ?>'>
                                     <?php  } 
                                     endif;   
                                     ?>
@@ -920,7 +900,7 @@ $filesOther= [];
                                            id='title_<?php echo $file['ID'] ?>' 
                                            name='title_<?php echo $file['ID'] ?>' 
                                            value='<?php echo $file['name'] ?>'>                                    <!-- Hidden para as categorias, tags e attachments  -->
-                                    <input type="hidden" id="source_<?php echo $file['ID'] ?>" name="source_<?php echo $file['ID'] ?>" value=''>
+                                    <input type="hidden" id="source_<?php echo $file['ID'] ?>" name="source_<?php echo $file['ID'] ?>" value='<?php  echo $file['source'] ?>'>
                                     <input type="hidden" name="type_<?php echo $file['ID'] ?>" value='other'>
                                     <input type="hidden" id='parent_<?php echo $file['ID'] ?>' name="parent_<?php echo $file['ID'] ?>" value=''>
                                     <input type="hidden" id='attachments_<?php echo $file['ID'] ?>' name="attachments_<?php echo $file['ID'] ?>" value=''>
@@ -935,7 +915,7 @@ $filesOther= [];
                                              <input type="hidden" 
                                                     name='socialdb_property_<?php echo $value['id'] ?>_<?php echo $file['ID'] ?>' 
                                                     id='socialdb_property_<?php echo $value['id'] ?>_<?php echo $file['ID'] ?>'
-                                                    value='<?php if($value['default_value']&&!empty($value['default_value'])): echo $value['default_value']; endif; ?>'>
+                                                     value='<?php if($file['properties'][$value['id']]&&!empty($file['properties'][$value['id']])): echo implode(',', $file['properties'][$value['id']]); endif; ?>'>
                                     <?php  } 
                                     endif;   
                                     ?>
@@ -946,7 +926,7 @@ $filesOther= [];
                                              <input type="hidden" 
                                                     name='socialdb_property_<?php echo $value ?>_<?php echo $file['ID'] ?>' 
                                                     id='socialdb_property_<?php echo $value ?>_<?php echo $file['ID'] ?>'
-                                                    value=''>
+                                                     value='<?php if($file['properties'][$value['id']]&&!empty($file['properties'][$value['id']])): echo implode(',', $file['properties'][$value['id']]); endif; ?>'>
                                     <?php  } 
                                     endif;   
                                     ?>
@@ -978,10 +958,18 @@ $filesOther= [];
                  </div>
              </div>
               <div class="col-md-12" style="padding: 15px;">
+                 <?php if(isset($edit_multiple)): ?> 
+                  <input type="hidden" id="edit_multiple" name="edit_multiple" value="true">
+                 <button type="button" onclick="back_main_list();"
+                        class="btn btn-lg btn-default pull-left"> 
+                            <?php _e('Cancel','tainacan') ?>
+                </button>
+                 <?php else: ?>   
                  <button type="button" onclick="back_main_list_socialnetwork();"
                         class="btn btn-lg btn-default pull-left"> 
                             <?php _e('Cancel','tainacan') ?>
                 </button>
+                 <?php endif; ?>   
                  <button type="submit" 
                           
                          id="submit_button" 
@@ -1013,6 +1001,9 @@ $filesOther= [];
         <input type="hidden" id="property_origin" name="property_origin" value="<?php echo $all_ids; ?>">
         <input type="hidden" id="property_added" name="property_added" value="">
         <input type="hidden" id="selected_categories" name="selected_categories" value="">
+        <?php if(isset($edit_multiple)): ?>
+         <input type="hidden" id="edit_multiple" name="edit_multiple" value="true">
+        <?php endif; ?>
         <div id="append_properties_categories" class="hide"></div>
         </div>
     </form>    
