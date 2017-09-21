@@ -98,11 +98,13 @@ $_header_enabled = get_post_meta($collection_id, 'socialdb_collection_show_heade
     <?php
     // Renders custom header only for new template pages
     if ( is_archive() || is_page_template() || is_page() || is_singular('post') ) {
-        $_menu_ = ['container_class' => 'container', 'container' => false, 'walker' => new wp_bootstrap_navwalker(), 'menu_class' => 'navbar navbar-inverse menu-ibram' ];
+        if( !is_page($stat_page) ):
+            $_menu_ = ['container_class' => 'container', 'container' => false, 'walker' => new wp_bootstrap_navwalker(), 'menu_class' => 'navbar navbar-inverse menu-ibram' ];
     ?>
         <header class="custom-header" style="<?php echo home_header_bg($socialdb_logo)?>">
             <div class="menu-transp-cover"></div> <?php get_template_part("partials/header/main"); ?>
         </header>
-    <?php wp_nav_menu($_menu_);
-
+    <?php
+            wp_nav_menu($_menu_);
+        endif;
     }
