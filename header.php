@@ -69,10 +69,7 @@ $_header_enabled = get_post_meta($collection_id, 'socialdb_collection_show_heade
 
             <div class="navbar-header logo-container">
                 <button type="button" class="navbar-toggle collapsed" id="btn-toggle" data-toggle="collapse" data-target="#to-collapse">
-                    <span class="sr-only"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
+                    <span class="sr-only"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span>
                 </button>
 
                 <?php
@@ -98,13 +95,13 @@ $_header_enabled = get_post_meta($collection_id, 'socialdb_collection_show_heade
     <?php
     // Renders custom header only for new template pages
     if ( is_archive() || is_page_template() || is_page() || is_singular('post') ) {
-        if( !is_page($stat_page) ):
-            $_menu_ = ['container_class' => 'container', 'container' => false, 'walker' => new wp_bootstrap_navwalker(), 'menu_class' => 'navbar navbar-inverse menu-ibram' ];
-    ?>
-        <header class="custom-header" style="<?php echo home_header_bg($socialdb_logo)?>">
-            <div class="menu-transp-cover"></div> <?php get_template_part("partials/header/main"); ?>
-        </header>
-    <?php
-            wp_nav_menu($_menu_);
-        endif;
+        if (!is_page($stat_page)) {
+            $_menu_ = ['container_class' => 'container', 'container' => false, 'walker' => new wp_bootstrap_navwalker(), 'menu_class' => 'navbar navbar-inverse menu-ibram'];
+            if (!is_front_page()) {
+                echo "<header class='custom-header' style='" . home_header_bg($socialdb_logo) . "'>";
+                echo "<div class='menu-transp-cover'></div>" . get_template_part("partials/header/main");
+                echo "</header>";
+                wp_nav_menu($_menu_);
+            }
+        }
     }
