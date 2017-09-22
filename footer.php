@@ -1,5 +1,5 @@
 <div>
-    <?php if( !is_page_template('page-contato.php')): ?>
+    <?php if( ! is_front_page() &&  !is_page_template('page-contato.php')): ?>
         <footer id="footer" role="contentinfo">
             <div class="row">
                 <div class="col-md-5">
