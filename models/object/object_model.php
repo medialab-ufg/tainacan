@@ -981,7 +981,7 @@ class ObjectModel extends Model {
         $mode_view = get_post_meta($args['collection_id'],'socialdb_collection_list_mode',true);
         $tax_query[] = array(
             'taxonomy' => 'socialdb_category_type',
-            'field' => 'id',
+            'field' => 'term_id',
             'terms' => array($this->collection_model->get_category_root_of($args['collection_id'])),
             'operator' => 'IN'
         );
@@ -1004,6 +1004,7 @@ class ObjectModel extends Model {
         //a forma de ordenacao
         $order = $this->set_type_order($args);
         $args = array(
+            'ep_integrate'   => true,
             'posts_per_page' => ($mode_view === 'gallery') ? 8 : 10, // -1 to fetchs all items 50 or 10
             'post_type' => 'socialdb_object',
             'post_status' => array($post_status),
