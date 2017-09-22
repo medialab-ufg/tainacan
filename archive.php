@@ -1,10 +1,23 @@
-<?php get_header(); ?>
+<?php get_header();
+$obj = get_queried_object();
+
+$extra_title = "";
+
+if( is_object($obj) ) {
+    if( isset($obj->term_id) && isset($obj->name) ) {
+        if ($obj->term_id > 1) {
+           $extra_title = " <small> <i> / $obj->name </i> </small>";
+        }
+    }
+}
+
+?>
 
     <div class="col-md-12 tainacan-page-area">
 
         <div class="col-md-8 no-padding center">
             <header class="page-header col-md-12 no-padding">
-                <h1 class="page-title"> <?php _t( 'News', 1); ?> </h1>
+                <h1 class="page-title"> <?php echo _t( 'News') . $extra_title; ?> </h1>
             </header>
 
             <div id="primary" class="tainacan-content-area">

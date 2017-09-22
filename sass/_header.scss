@@ -237,8 +237,8 @@ button#iframebutton {
       background: #404040;
     }
 
-    &.current-menu-item {
-      border-top: 5px solid white !important;
+    &.current-menu-item, &.current-menu-parent {
+      border-top: 5px solid white;
     }
 
     ul {
@@ -248,6 +248,13 @@ button#iframebutton {
       li {
         padding-top: 0 !important;
         padding-left: 0 !important;
+
+        &.current-menu-item {
+          border-top: none !important;
+          a {
+            color: wheat !important;
+          }
+        }
 
         a {
           &:hover {
