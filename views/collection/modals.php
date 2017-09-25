@@ -139,7 +139,7 @@
                     <h4 class="modal-title" id="myModalLabel"><span class="glyphicon glyphicon-trash"></span>&nbsp;<?php echo __('Remove Category', 'tainacan'); ?></h4>
                 </div>
                 <div class="modal-body">
-                    <?php echo __('Confirm the exclusion of ', 'tainacan'); ?><span id="delete_category_single_name"></span>?
+                    <?php echo __('Confirm the exclusion of ', 'tainacan'); ?>&nbsp;<b><span id="delete_category_single_name"></span></b>?
                 </div>
                 <input type="hidden" id="category_single_delete_collection_id" name="socialdb_event_collection_id" value="<?php echo get_the_ID(); ?>">
                 <input type="hidden" id="category_single_delete_time" name="socialdb_event_create_date" value="<?php echo mktime(); ?>">

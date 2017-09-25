@@ -23,10 +23,11 @@ class EventObjectCreateModel extends EventModel {
      */
     public function generate_title($data) {
         $object = get_post($data['socialdb_event_object_item_id']);
+        $collection = get_post($data['socialdb_event_collection_id']);
         if($object->post_status == 'publish'):
-            $title = __('Add object ','tainacan') .' '. $object->post_title;
+            $title = __('Add object ','tainacan') .' '. $object->post_title.' '. __(' in the collection ','tainacan') .' '.' <b><a href="'.  get_the_permalink($collection->ID).'">'.$collection->post_title.'</a></b> ';;
         else:    
-            $title = __('Create the object ','tainacan') .' '. $object->post_title;
+            $title = __('Create the object ','tainacan') .' '. $object->post_title.' '. __(' in the collection ','tainacan') .' '.' <b><a href="'.  get_the_permalink($collection->ID).'">'.$collection->post_title.'</a></b> ';
         endif;
         return $title;
     }

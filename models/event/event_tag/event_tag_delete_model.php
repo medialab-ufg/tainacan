@@ -23,8 +23,8 @@ class EventTagDelete extends EventModel {
      */
     public function generate_title($data) {
         $collection = get_post($data['socialdb_event_collection_id']);
-        $category = get_term_by('id',$data['socialdb_event_term_id'],'socialdb_category_type');
-        $title = __('Delete the tag ','tainacan').'('.$category->name.')'.__(' in the collection ','tainacan').'<b>'.$collection->post_title.'</b>';
+        $category = get_term_by('id',$data['socialdb_event_term_id'],'socialdb_tag_type');
+        $title = __('Delete the tag ','tainacan').'( <b>'.$category->name.'</b> )'.__(' in the collection ','tainacan').' <b><a href="'.  get_the_permalink($collection->ID).'">'.$collection->post_title.'</a></b> ';
         return $title;
     }
 

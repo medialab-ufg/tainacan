@@ -149,7 +149,7 @@
             if (elem.name) {
                 $('#event_date_create').text(elem.date);
                 $('#event_author').text(elem.author);
-                $('#event_description').text(elem.name);
+                $('#event_description').html(elem.name);
                 $('#event_operation').val(elem.operation);
                 $('#event_id').val(elem.id);
             }

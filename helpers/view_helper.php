@@ -549,7 +549,9 @@ class ViewHelper {
     }
 
     public static function backButton() {
-        echo "<button onclick='window.history.back()' class='btn btn-default pull-right'>" . _t("Back") . "</button>";
+        ?>
+        <button onclick='window.location = $("#socialdb_permalink_collection").val()' class='btn btn-default pull-right'><?php echo  _t("Back") ?></button>
+        <?php
     }
     
     /**

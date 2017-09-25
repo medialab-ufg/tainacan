@@ -24,7 +24,8 @@ class EventCommentCreate extends EventModel {
     public function generate_title($data) {
         $object = get_post($data['socialdb_event_comment_create_object_id']);
         $content = $data['socialdb_event_comment_create_content'];
-        $title = __('Create the Comment  ','tainacan').'('.$content.')'.__(' in the object ','tainacan').'<b>'.$object->post_title.'</b>';
+        $collection = get_post($data['socialdb_event_collection_id']);
+        $title = __('Create the Comment  ','tainacan').'('.$content.')'.__(' in the object ','tainacan').'<b><a href="'.  get_the_permalink($object->ID).'">'. $object->post_title.'</a></b> '.__('from collection','tainacan').' '.' <b><a href="'.  get_the_permalink($collection->ID).'">'.$collection->post_title.'</a></b>';
         return $title;
     }
 
