@@ -28,7 +28,11 @@ class EventPropertyObjectEditValue extends EventModel {
             if(is_array($data['socialdb_event_property_object_edit_value_suggested_value'])){
                 $names = [];
                 foreach ($data['socialdb_event_property_object_edit_value_suggested_value'] as $value) {
-                    $names[] = get_post($value)->post_title;
+                    if(isset($value['val']))
+                        $names[] = get_post($value['val'])->post_title;
+                    else
+                        $names[] = get_post($value)->post_title;
+
                 }
                 $title = __('Set the value: ','tainacan').'('.implode(',',$names).')'.__(' of the object property ','tainacan').' '.$property->name.''
                 . __(' in the the object ','tainacan') . $object->post_title;

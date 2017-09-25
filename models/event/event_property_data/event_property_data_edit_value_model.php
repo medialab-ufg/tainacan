@@ -28,17 +28,20 @@ class EventPropertyDataEditValue extends EventModel {
             if(is_array($data['socialdb_event_property_data_edit_value_attribute_value'])){
                 $names = [];
                 foreach ($data['socialdb_event_property_data_edit_value_attribute_value'] as $value) {
-                    $names[] = $value;
+                    if(isset($value['val']))
+                        $names[] = $value['val'];
+                    else
+                        $names[] = $value;
                 }
-                $title = __('Set the value(s): ','tainacan').'('.implode(',',$names).')'.__(' of the data property ','tainacan').' '.$property->name.''
+                $title = __('Set the value(s): ','tainacan').' ( '.implode(',',$names).' ) '.__(' of the data property ','tainacan').' '.$property->name.''
                 . __(' in the the object ','tainacan') . $object->post_title;
             }else{
                $text = $data['socialdb_event_property_data_edit_value_attribute_value'];
-             $title = __('Set the value: ','tainacan').'('.$text.')'.__(' of the data property ','tainacan').'<b>'.$property->name.'</b>'
+             $title = __('Set the value: ','tainacan').' ('.$text.') '.__(' of the data property ','tainacan').'<b>'.$property->name.'</b>'
                 . __(' in the the object ','tainacan') . $object->post_title;
             }
         }else{
-            $title = __('Delete all values of the data property ','tainacan').'<b>'.$property->name.'</b>'
+            $title = __('Delete all values of the data property ','tainacan').' <b>'.$property->name.'</b>'
                 . __(' in the the object ','tainacan') . $object->post_title;
         }
         return $title;

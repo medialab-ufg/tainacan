@@ -34,7 +34,7 @@ if ( $loop->have_posts() ) { ?>
         <span class="glyphicon glyphicon-warning-sign"></span> <?php _t('No objects found!', 1); ?>
     </div>
     <?php elseif(get_option('collection_root_id') === $collection_id):
-        echo '<center><div class="jumbotron"><h2>' . _t('No collection found!') . '</h2></div></center>';
+        echo '<center><div class="jumbotron"><h2>' . __('No collections found!','tainacan') . '</h2></div></center>';
     else: ?>
     <div id="collection_empty" style="display:none">
         <?php
