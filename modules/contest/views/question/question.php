@@ -201,15 +201,15 @@
                                         <div class="score col-md-1 no-padding">
                                             <span  onclick="contest_save_vote_binary_up('<?php echo $ranking; ?>', '<?php echo $child->ID; ?>')" >
                                                 <span class="glyphicon glyphicon-thumbs-up"></span>
-                                                <span id="constest_score_<?php echo $object->ID; ?>_up">
-                                                    <?php echo $view_helper->get_counter_ranking($ranking, $object->ID,'count_up') ?>
+                                                <span id="constest_score_<?php echo $child->ID; ?>_up">
+                                                    <?php echo $view_helper->get_counter_ranking($ranking, $child->ID,'count_up') ?>
                                                 </span>
                                             </span>
                                             &nbsp;&nbsp;
                                             <span  onclick="contest_save_vote_binary_down('<?php echo $ranking; ?>', '<?php echo $child->ID; ?>')">
                                                 <span class="glyphicon glyphicon-thumbs-down"></span>
-                                                <span id="constest_score_<?php echo $object->ID; ?>_down">
-                                                    <?php echo $view_helper->get_counter_ranking($ranking, $object->ID,'count_down') ?>
+                                                <span id="constest_score_<?php echo $child->ID; ?>_down">
+                                                    <?php echo $view_helper->get_counter_ranking($ranking, $child->ID,'count_down') ?>
                                                 </span>
                                             </span>    
                                         </div>
