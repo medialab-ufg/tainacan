@@ -4,8 +4,8 @@ include_once('./../../helpers/object/object_helper.php');
 include_once ('js/list_js.php');
 include_once ('js/geolocation_js.php');
 include_once ('helper/loader.php');
-
 $objHelper->renderCollectionPagination($loop->found_posts, (isset($posts_per_page)) ? $posts_per_page : $loop->post_count, $pagid, $show_string, 'top_pag',$loop);
+
 if ( $loop->have_posts() ) { ?>
 
     <div id="collection-view-mode">
@@ -33,7 +33,9 @@ if ( $loop->have_posts() ) { ?>
     <div id="items_not_found_" class="alert alert-danger" style="margin-top: 20px;text-align: center;">
         <span class="glyphicon glyphicon-warning-sign"></span> <?php _t('No objects found!', 1); ?>
     </div>
-    <?php else: ?>
+    <?php elseif(get_option('collection_root_id') === $collection_id):
+        echo '<center><div class="jumbotron"><h2>' . _t('No collection found!') . '</h2></div></center>';
+    else: ?>
     <div id="collection_empty" style="display:none">
         <?php
         if (get_option('collection_root_id') != $collection_id):

@@ -1027,7 +1027,7 @@ function showListMyCollections(src) {
         elem = jQuery.parseJSON(result);
         $('#loader_objects').hide();
         $('#wp_query_args').val(elem.args);
-
+        $('#list').html(elem.page).show();
         if (elem.empty_collection) {
             $('#collection_empty').show();
             $('#items_not_found').hide();
