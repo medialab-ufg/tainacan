@@ -1,6 +1,7 @@
 <script>
     $(function () {
         $('#single_submit_form_event_edit_property_object').submit(function (e) {
+            show_modal_main();
             $.ajax({
                 url: $('#src').val() + '/controllers/event/event_controller.php',
                 type: 'POST',
@@ -8,9 +9,10 @@
                 processData: false,
                 contentType: false
             }).done(function (result) {
+                hide_modal_main();
                 elem = jQuery.parseJSON(result);
                 back_button_single($('#single_event_edit_property_object_post_id').val());
-                $("#dynatree").dynatree("getTree").reload();
+                //$("#dynatree").dynatree("getTree").reload();
                 list_properties_single($('#single_event_edit_property_object_post_id').val());
                 showAlertGeneral(elem.title, elem.msg, elem.type);
                 //limpando caches

@@ -24,7 +24,7 @@ class EventPropertyObjectDelete extends EventModel {
     public function generate_title($data) {
         $collection = get_post($data['socialdb_event_collection_id']);
         $property = get_term_by('id',$data['socialdb_event_property_object_delete_id'],'socialdb_property_type');
-        $title = __('Delete the object property ','tainacan').'('.$property->name.')'.__(' in the collection ','tainacan').' '.'<b>'.$collection->post_title.'</b>';
+        $title = __('Delete the object property ','tainacan').' ( <i>'.$property->name.'</i> ) '.__(' in the collection ','tainacan').' '.' <b><a href="'.  get_the_permalink($collection->ID).'">'.$collection->post_title.'</a></b> ';;
         return $title;
     }
 

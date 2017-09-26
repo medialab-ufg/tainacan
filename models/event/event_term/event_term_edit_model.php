@@ -25,10 +25,10 @@ class EventTermEdit extends EventModel {
         $collection = get_post($data['socialdb_event_collection_id']);
         $category = get_term_by('id',$data['socialdb_event_term_id'],'socialdb_category_type');
         if(trim($data['socialdb_event_term_suggested_name'])!==trim($data['socialdb_event_term_previous_name'])){
-           $title = __('Edit the category ','tainacan').' '.'('.$category->name.' ) '.__('to the name ','tainacan').' '.'('.$data['socialdb_event_term_suggested_name'].')';
+           $title = __('Edit the category ','tainacan').' '.'(  <i>'.$category->name.'</i> ) '.__('to the name ','tainacan').' '.'( <i>'.$data['socialdb_event_term_suggested_name'].'</i> )';
         }else{
             $parent = get_term_by('id', $data['socialdb_event_term_suggested_parent'], 'socialdb_category_type');
-          $title = __('Edit the category ','tainacan').' '.'('.$category->name.' ) '.__('to the parent ','tainacan').' '.'('.$parent->name.')';
+          $title = __('Edit the category ','tainacan').' '.'( <i>'.$category->name.'</i>  ) '.__('to the parent ','tainacan').' '.' ( <i>'.$parent->name.'</i> )';
         }
        return $title;
     }

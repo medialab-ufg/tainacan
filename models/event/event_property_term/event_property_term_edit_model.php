@@ -24,7 +24,45 @@ class EventPropertyTermEdit extends EventModel {
     public function generate_title($data) {
         $collection = get_post($data['socialdb_event_collection_id']);
         $property_name = $data['socialdb_event_property_term_edit_name'];
-        $title = __('Edit the term property ','tainacan').'('.$property_name.')'.__(' in the collection ','tainacan').'<b>'.$collection->post_title.'</b>';
+        $property = get_term_by('id',$data['socialdb_event_property_term_edit_id'],'socialdb_property_type');
+        //$title = __('Edit the term property ','tainacan').'('.$property_name.')'.__(' in the collection ','tainacan').'<b>'.$collection->post_title.'</b>';
+
+        if(trim($property->name)==trim($property_name)){
+            $text = '';
+            $newcategory = (isset($data['socialdb_event_property_term_edit_new_taxonomy']) && !empty($data['socialdb_event_property_term_edit_new_taxonomy'])) ? $data['socialdb_event_property_term_edit_new_taxonomy'] : $data['socialdb_event_property_term_edit_root'];
+            $category = get_term_meta($data['socialdb_event_property_term_edit_id'],'socialdb_property_term_root',true);
+            $newrequired = $data['socialdb_event_property_term_edit_required'];
+            $required = get_term_meta($data['socialdb_event_property_term_edit_id'],'socialdb_property_required',true);
+            $newcardinality = $data['socialdb_event_property_term_edit_cardinality'];
+            $cardinality = get_term_meta($data['socialdb_event_property_term_edit_id'],'socialdb_property_term_cardinality',true);
+
+            if($newcategory !== $category){
+                $newcategory = get_term_by('id',$newcategory,'socialdb_category_type');
+                $name = ($newcategory) ? $newcategory->name : ($data['socialdb_event_property_term_edit_new_taxonomy']) ? $data['socialdb_event_property_term_edit_new_taxonomy'] : '(Vazio)';
+                $category = get_term_by('id',$category,'socialdb_category_type');
+                $text .=  __('Alter taxonomy from ', 'tainacan').' : <i>'.($category) ? $category->name : '(Vazio)'.'</i> '. __('to ', 'tainacan').'<i>'.$name.'</i><br>';
+            }
+
+            if($newrequired !== $required){
+                $newrequired = ($newrequired === 'true') ? __('True','tainacan') : __('False','tainacan');
+                $required = ($required === 'true') ? __('True','tainacan') : __('False','tainacan');
+                $text .=  __('Alter required field from ', 'tainacan').' : <i>'. $required .'</i> '. __('to ', 'tainacan').' <i>'.$newrequired.'</i><br>';
+            }
+
+            if($newcardinality !== $cardinality){
+                $newcardinality = ($newcardinality === 'n') ? __('Multiple values','tainacan') : __('One value','tainacan');
+                $cardinality = ($cardinality === 'n') ? __('Multiple values','tainacan') : __('One value','tainacan');
+                $text .=  __('Alter cardinality from ', 'tainacan').' : <i>'. $cardinality .'</i> '. __('to ', 'tainacan').' <i>'.$newcardinality.'</i><br>';
+            }
+
+            $title = __('Alter configuration from term property ', 'tainacan').' : <i>'.$property->name.'</i><br>'.$text.
+                __(' in the collection ', 'tainacan') .' '.' <b><a href="'.  get_the_permalink($collection->ID).'">'.$collection->post_title.'</a></b> ';
+        }else{
+            $title = __('Edit the term property ', 'tainacan') .'<br>'.
+                __('From','tainacan').' : <i>'.$property->name.'</i><br>'.
+                __('To','tainacan').' : <i>'.$property_name.'</i><br>'.
+                __(' in the collection ', 'tainacan') .' '.' <b><a href="'.  get_the_permalink($collection->ID).'">'.$collection->post_title.'</a></b> ';
+        }
         return $title;
     }
 

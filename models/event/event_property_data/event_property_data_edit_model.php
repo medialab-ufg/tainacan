@@ -26,7 +26,22 @@ class EventPropertyDataEdit extends EventModel {
         $property_name = $data['socialdb_event_property_data_edit_name'];
         $property = get_term_by('id',$data['socialdb_event_property_data_edit_id'],'socialdb_property_type');
         if(trim($property->name)==trim($property_name)){
-            $title = __('Alter configuration from data property ', 'tainacan').' : <i>'.$property->name.'</i>'.
+            $text = '';
+            $newwidget = $data['socialdb_event_property_data_edit_widget'];
+            $widget = get_term_meta($data['socialdb_event_property_data_edit_id'],'socialdb_property_data_widget',true);
+            $newrequired = $data['socialdb_event_property_data_edit_required'];
+            $required = get_term_meta($data['socialdb_event_property_data_edit_id'],'socialdb_property_required',true);
+
+            if($newwidget !== $widget){
+                $text .=  __('Alter widget field from ', 'tainacan').' : <i>'.$widget.'</i> '. __('to ', 'tainacan').'<i>'.$newwidget.'</i><br>';
+            }
+            if($newrequired !== $required){
+                $newrequired = ($newrequired === 'true') ? __('True') : __('False');
+                $required = ($required === 'true') ? __('True') : __('False');
+                $text .=  __('Alter required field from ', 'tainacan').' : <i>'. $required .'</i> '. __('to ', 'tainacan').' <i>'.$newrequired.'</i><br>';
+            }
+
+            $title = __('Alter configuration from data property ', 'tainacan').' : <i>'.$property->name.'</i><br>'.$text.
                 __(' in the collection ', 'tainacan') .' '.' <b><a href="'.  get_the_permalink($collection->ID).'">'.$collection->post_title.'</a></b> ';
         }else{
             $title = __('Edit the data property ', 'tainacan') .'<br>'.
@@ -34,8 +49,6 @@ class EventPropertyDataEdit extends EventModel {
                 __('To','tainacan').' : <i>'.$property_name.'</i><br>'.
                 __(' in the collection ', 'tainacan') .' '.' <b><a href="'.  get_the_permalink($collection->ID).'">'.$collection->post_title.'</a></b> ';
         }
-
-
         return $title;
     }
 

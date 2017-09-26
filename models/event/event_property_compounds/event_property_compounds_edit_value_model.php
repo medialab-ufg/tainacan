@@ -25,12 +25,12 @@ class EventPropertyCompoundsEditValue extends EventModel {
         $property = get_term_by('id', $data['socialdb_event_property_compounds_edit_value_property_id'], 'socialdb_property_type');
         if($data['socialdb_event_property_compounds_edit_value_attribute_value']!=''){
             $text = $data['socialdb_event_property_data_edit_value_attribute_value'];
-            $title = __('Set the values: ','tainacan').'('.$text.')'.__(' of the data property ','tainacan').'<b>'.$property->name.'</b>'
-                . __(' in the the object ','tainacan') . $object->post_title;
+            $title = __('Set the values: ','tainacan').' ( <i>'.$text.'</i> ) '.__(' of the data property ','tainacan').' <b>'.$property->name.'</b> '
+                . __(' in the the object ','tainacan') . '<b><a href="'.  get_the_permalink($object->ID).'">'. $object->post_title.'</a></b>';
             
         }else{
-            $title = __('Delete all values of the compounds property ','tainacan').'<b>'.$property->name.'</b>'
-                . __(' in the the object ','tainacan') . $object->post_title;
+            $title = __('Delete all values of the compounds property ','tainacan').' <b>'.$property->name.'</b> '
+                . __(' in the the object ','tainacan') . '<b><a href="'.  get_the_permalink($object->ID).'">'. $object->post_title.'</a></b>';
         }
         return $title;
     }

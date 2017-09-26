@@ -24,7 +24,44 @@ class EventPropertyObjectEdit extends EventModel {
     public function generate_title($data) {
         $collection = get_post($data['socialdb_event_collection_id']);
         $property_name = $data['socialdb_event_property_object_edit_name'];
-        $title = __('Edit the object property ','tainacan').'('.$property_name.')'.__(' in the collection ','tainacan').' '.'<b>'.$collection->post_title.'</b>';
+        $property = get_term_by('id',$data['socialdb_event_property_object_edit_id'],'socialdb_property_type');
+
+
+        if(trim($property->name)==trim($property_name)){
+            $text = '';
+            $newcategory = $data['socialdb_event_property_object_category_id'];
+            $category = get_term_meta($data['socialdb_event_property_object_edit_id'],'socialdb_property_object_category_id',true);
+            $newrequired = $data['socialdb_event_property_object_edit_required'];
+            $required = get_term_meta($data['socialdb_event_property_object_edit_id'],'socialdb_property_required',true);
+            $newreverse = $data['socialdb_event_property_object_edit_is_reverse'];
+            $reverse = get_term_meta($data['socialdb_event_property_object_edit_id'],'socialdb_property_object_is_reverse',true);
+
+            if($newcategory !== $category){
+                $newcategory = get_term_by('id',$newcategory,'socialdb_category_type');
+                $category = get_term_by('id',$category,'socialdb_category_type');
+                $text .=  __('Alter relationship from ', 'tainacan').' : <i>'.($category) ? $category->name : '(Vazio)'.'</i> '. __('to ', 'tainacan').'<i>'.($newcategory) ? $newcategory->name : '(Vazio)'.'</i><br>';
+            }
+
+            if($newrequired !== $required){
+                $newrequired = ($newrequired === 'true') ? __('True','tainacan') : __('False','tainacan');
+                $required = ($required === 'true') ? __('True','tainacan') : __('False','tainacan');
+                $text .=  __('Alter required field from ', 'tainacan').' : <i>'. $required .'</i> '. __('to ', 'tainacan').' <i>'.$newrequired.'</i><br>';
+            }
+
+            if($newreverse !== $reverse){
+                $newreverse = ($newreverse === 'true') ? __('True','tainacan') : __('False','tainacan');
+                $reverse = ($reverse === 'true') ? __('True','tainacan') : __('False','tainacan');
+                $text .=  __('Alter reverse field from ', 'tainacan').' : <i>'. $reverse .'</i> '. __('to ', 'tainacan').' <i>'.$newreverse.'</i><br>';
+            }
+
+            $title = __('Alter configuration from object property ', 'tainacan').' : <i>'.$property->name.'</i><br>'.$text.
+                __(' in the collection ', 'tainacan') .' '.' <b><a href="'.  get_the_permalink($collection->ID).'">'.$collection->post_title.'</a></b> ';
+        }else{
+            $title = __('Edit the object property ', 'tainacan') .'<br>'.
+                __('From','tainacan').' : <i>'.$property->name.'</i><br>'.
+                __('To','tainacan').' : <i>'.$property_name.'</i><br>'.
+                __(' in the collection ', 'tainacan') .' '.' <b><a href="'.  get_the_permalink($collection->ID).'">'.$collection->post_title.'</a></b> ';
+        }
         return $title;
     }
 

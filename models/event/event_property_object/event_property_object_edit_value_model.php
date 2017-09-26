@@ -24,27 +24,52 @@ class EventPropertyObjectEditValue extends EventModel {
     public function generate_title($data) {
         $object = get_post($data['socialdb_event_property_object_edit_object_id']);
         $property = get_term_by('id', $data['socialdb_event_property_object_edit_property_id'], 'socialdb_property_type');
-        if($data['socialdb_event_property_object_edit_value_suggested_value']!=''){
-            if(is_array($data['socialdb_event_property_object_edit_value_suggested_value'])){
-                $names = [];
-                foreach ($data['socialdb_event_property_object_edit_value_suggested_value'] as $value) {
-                    if(isset($value['val']))
-                        $names[] = get_post($value['val'])->post_title;
-                    else
-                        $names[] = get_post($value)->post_title;
+        $values_before = get_post_meta($object->ID,'socialdb_property_'.$property->term_id);
 
+        if($data['socialdb_event_property_object_edit_value_suggested_value']!=''){
+            if($values_before && count(array_filter($values_before)) > 0){
+                $new_values = [];
+                foreach ($values_before as $item) {
+                    $new_values[] = get_post($item)->post_title;
                 }
-                $title = __('Set the value: ','tainacan').'('.implode(',',$names).')'.__(' of the object property ','tainacan').' '.$property->name.''
-                . __(' in the the object ','tainacan') . $object->post_title;
-            }else{
-                $text = get_post($data['socialdb_event_property_object_edit_value_suggested_value'])->post_title;
-                 $title = __('Set the value: ','tainacan').'('.$text.')'.__(' of the object property ','tainacan').' '.'<b>'.$property->name.'</b>'
-                . __(' in the the object ','tainacan') . $object->post_title;
+                $valuesBefore = implode(',',array_filter($new_values));
+                if(is_array($data['socialdb_event_property_object_edit_value_suggested_value'])){
+                    $names = [];
+                    foreach ($data['socialdb_event_property_object_edit_value_suggested_value'] as $value) {
+                        if (isset($value['val']))
+                            $names[] = get_post($value['val'])->post_title;
+                        else
+                            $names[] = get_post($value)->post_title;
+
+                    }
+                    $title = __('Alter the actual classification of metadata','tainacan').' <b>'.$property->name.'</b> '.__('from ','tainacan').' ( <i>'.$valuesBefore.'</i> ) '.__(' to ','tainacan').' ( <i>'.implode(',',$names).'</i> ) '
+                        . __(' in the object ','tainacan') .'<b><a href="'.  get_the_permalink($object->ID).'">'. $object->post_title.'</a></b>';
+                }else{
+                    $text = get_post($data['socialdb_event_property_object_edit_value_suggested_value'])->post_title;
+                    $title = __('Alter the actual classification of metadata','tainacan').' <b>'.$property->name.'</b> '.__('from ','tainacan').' ( <i>'.$valuesBefore.'</i> ) '.__(' to ','tainacan').' ( <i>'.$text.'</i> ) '
+                        . __(' in the object ','tainacan') .'<b><a href="'.  get_the_permalink($object->ID).'">'. $object->post_title.'</a></b>';
+                }
+            }else {
+                if (is_array($data['socialdb_event_property_object_edit_value_suggested_value'])) {
+                    $names = [];
+                    foreach ($data['socialdb_event_property_object_edit_value_suggested_value'] as $value) {
+                        if (isset($value['val']))
+                            $names[] = get_post($value['val'])->post_title;
+                        else
+                            $names[] = get_post($value)->post_title;
+
+                    }
+                    $title = __('Set the value: ', 'tainacan') . '( <i>' . implode(',', $names) . '</i> )' . __(' of the object property ', 'tainacan') . '  <b>' . $property->name . '</b> '
+                        . __(' in the the object ', 'tainacan') . $object->post_title;
+                } else {
+                    $text = get_post($data['socialdb_event_property_object_edit_value_suggested_value'])->post_title;
+                    $title = __('Set the value: ', 'tainacan') . '( <i>' . $text . '</i> )' . __(' of the object property ', 'tainacan') . ' ' . '<b>' . $property->name . '</b>'
+                        . __(' in the the object ', 'tainacan') . '<b><a href="'.  get_the_permalink($object->ID).'">'. $object->post_title.'</a></b>';
+                }
             }
-             
         }else{
             $title = __('Delete all values of the object property ','tainacan').'<b>'.$property->name.'</b>'
-                . __(' in the the object ','tainacan') . $object->post_title;
+                . __(' in the the object ','tainacan') . '<b><a href="'.  get_the_permalink($object->ID).'">'. $object->post_title.'</a></b>';
         }
         return $title;
     }

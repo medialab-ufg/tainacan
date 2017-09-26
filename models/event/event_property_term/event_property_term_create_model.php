@@ -24,7 +24,7 @@ class EventPropertyTermCreate extends EventModel {
     public function generate_title($data) {
         $collection = get_post($data['socialdb_event_collection_id']);
         $property_name = $data['socialdb_event_property_term_create_name'];
-        $title = __('Create the term property ','tainacan').'('.$property_name.')'.__(' in the collection ','tainacan').'<b>'.$collection->post_title.'</b>';
+        $title = __('Create the term property ','tainacan').' ( <i>'.$property_name.'</i> ) '.__(' in the collection','tainacan').' '.' <b><a href="'.  get_the_permalink($collection->ID).'">'.$collection->post_title.'</a></b> ';
         return $title;
     }
 
@@ -90,6 +90,8 @@ class EventPropertyTermCreate extends EventModel {
         }
         // chamo a funcao do model de propriedade para fazer a insercao
         if(!$data['property_id']||empty( $data['property_id'])||!is_numeric($data['property_id'])){
+
+            $data['property_tab'] = ($data['property_tab']) ? $data['property_tab'] : 'default';
             $result = json_decode($propertyModel->add_property_term($data));
             if(isset($result->property_id)){
                 do_action('after_event_add_property_term',$result->property_id,$event_id);

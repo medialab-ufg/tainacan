@@ -204,7 +204,7 @@ function show_edit_object_property_form(object_id,property_id){
 function show_confirmation_delete_property_object_event(object_id,property_id,property_name,root_id){
     swal({
         title: '<?php _e('Are you sure','tainacan') ?>',
-        text: '<?php _e('Delete the object property ','tainacan') ?>'+'('+property_name+')',
+        text: '<?php _e('Delete the object property ','tainacan') ?>'+' ('+property_name+')',
         type: "warning",
         showCancelButton: true,
         confirmButtonClass: 'btn-danger',
@@ -228,7 +228,7 @@ function show_confirmation_delete_property_object_event(object_id,property_id,pr
                 hide_modal_main();
                 elem_first = jQuery.parseJSON(result);
                 back_button(object_id);
-                $("#dynatree").dynatree("getTree").reload();
+                //$("#dynatree").dynatree("getTree").reload();
                 list_properties_single(object_id);
                 list_properties_edit_remove_single(object_id);
                 showAlertGeneral(elem_first.title, elem_first.msg, elem_first.type);
@@ -242,7 +242,7 @@ function show_confirmation_delete_property_object_event(object_id,property_id,pr
 function show_confirmation_delete_property_data_event(object_id,property_id,property_name,root_id){
     swal({
         title: '<?php _e('Are you sure','tainacan') ?>',
-        text: '<?php _e('Delete the data property ','tainacan') ?>'+'('+property_name+')',
+        text: '<?php _e('Delete the data property ','tainacan') ?>'+'( '+property_name+')',
         type: "warning",
         showCancelButton: true,
         confirmButtonClass: 'btn-danger',

@@ -24,7 +24,18 @@ class EventPropertyCompoundsEdit extends EventModel {
     public function generate_title($data) {
         $collection = get_post($data['socialdb_event_collection_id']);
         $property_name = $data['socialdb_event_property_compounds_edit_name'];
-        $title = __('Edit the compounds property ','tainacan').'('.$property_name.')'.__(' in the collection ','tainacan').'<b>'.$collection->post_title.'</b>';
+        $property = get_term_by('id',$data['socialdb_event_property_compounds_edit_id'],'socialdb_property_type');
+        //$title = __('Edit the compounds property ','tainacan').'('.$property_name.')'.__(' in the collection ','tainacan').'<b>'.$collection->post_title.'</b>';
+
+        if(trim($property->name)==trim($property_name)){
+            $title = __('Alter configuration from compounds property ', 'tainacan').' : <i>'.$property->name.'</i><br>'.
+                __(' in the collection ', 'tainacan') .' '.' <b><a href="'.  get_the_permalink($collection->ID).'">'.$collection->post_title.'</a></b> ';
+        }else{
+            $title = __('Edit the data property ', 'tainacan') .'<br>'.
+                __('From','tainacan').' : <i>'.$property->name.'</i><br>'.
+                __('To','tainacan').' : <i>'.$property_name.'</i><br>'.
+                __(' in the collection ', 'tainacan') .' '.' <b><a href="'.  get_the_permalink($collection->ID).'">'.$collection->post_title.'</a></b> ';
+        }
         return $title;
     }
 

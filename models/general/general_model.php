@@ -2288,7 +2288,7 @@ class Model {
             $meta = [];
             $meta[$tab][] = $id;
         }
-        update_post_meta($data['collection_id'], 'socialdb_collection_properties_ordenation', serialize($meta));
+        update_post_meta($collection_id, 'socialdb_collection_properties_ordenation', serialize($meta));
         
     }
 

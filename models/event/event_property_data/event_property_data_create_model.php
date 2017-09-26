@@ -34,7 +34,7 @@ class EventPropertyDataCreate extends EventModel {
                 &&$this->get_category_root_of($collection->ID)!=$data['socialdb_event_property_data_create_category_root_id']){
              $title = __('Create the data property ','tainacan').' ('.$property_name.')'.__(' in the category','tainacan').' '.' <b>'.  get_term_by('id', $data['socialdb_event_property_data_create_category_root_id'],'socialdb_category_type')->name.'</b>';
         }else{
-             $title = __('Create the data property ','tainacan').' (<i>'.$property_name.'</i>)'.__(' in the collection','tainacan').' '.' <b><a href="'.  get_the_permalink($collection->ID).'">'.$collection->post_title.'</a></b> ';
+             $title = __('Create the data property ','tainacan').' ( <i>'.$property_name.'</i> )'.__(' in the collection','tainacan').' '.' <b><a href="'.  get_the_permalink($collection->ID).'">'.$collection->post_title.'</a></b> ';
         }
         return $title;
     }
@@ -96,6 +96,7 @@ class EventPropertyDataCreate extends EventModel {
         // se nao estiver apenas relacionando uma categoria com um propriedade ja existente
         if(!$data['property_id']||empty( $data['property_id'])||!is_numeric($data['property_id'])){
             // chamo a funcao do model de propriedade para fazer a insercao
+            $data['property_tab'] = ($data['property_tab']) ? $data['property_tab'] : 'default';
             $result = json_decode($propertyModel->add_property_data($data));
             if(isset($result->property_id)){
                 do_action('after_event_add_property_data',$result->property_id,$event_id);

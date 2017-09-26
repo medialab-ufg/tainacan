@@ -95,13 +95,10 @@
                     </button>
                 </div>
             </div>
-            <a style="cursor: pointer;" onclick="toggle_advanced_configuration('#data-advanced-configuration-term')">
-                <?php _e('Advanced Configuration', 'tainacan') ?> <span class="glyphicon glyphicon-triangle-bottom"></span>
-            </a>
             <!--------- FIM: A categoria raiz do metadado -------------->
-            <div id="data-advanced-configuration-term" style="display: none;">
-                <?php $view_helper->commomFieldsProperties() ?>
-                <div class="create_form-group form-group">
+            <div id="data-advanced-configuration-term">
+                <?php //$view_helper->commomFieldsProperties() ?>
+                <!--div class="create_form-group form-group">
                     <label for="socialdb_property_help"><?php _e('Property term text helper','tainacan'); ?></label>
                     <input type="text" class="form-control" id="socialdb_property_help" name="socialdb_property_help" />
                 </div>
@@ -121,16 +118,16 @@
                            id="socialdb_property_term_cardinality_n"
                            value="n">&nbsp;<?php _e('Multiple values','tainacan') ?>
                 </div>
-                <div class="form-group">
+                <!--div class="form-group">
                     <label for="property_term_required" style="margin-right: 10px;" ><?php _e('Visualization','tainacan'); ?> : </label>
                     &nbsp;<input type="radio" name="socialdb_event_property_visualization" id="socialdb_property_term_visualization_public" checked="checked"  value="public">&nbsp;<?php _e('Public','tainacan') ?>
                     &nbsp;<input type="radio" name="socialdb_event_property_visualization" id="socialdb_property_term_visualization_restrict" value="restrict">&nbsp;<?php _e('Restrict','tainacan') ?>
-                </div>
-                <div class="form-group category-fit-column" style="display: inline-block; width: 59%">
+                </div--
+                <div-- class="form-group category-fit-column" style="display: inline-block; width: 59%">
                     <label style="display: block"><?php _e('Enable add new category','tainacan'); ?></label>
                     &nbsp;<input type="radio" name="socialdb_event_property_habilitate_new_category" id="new_item_true"   value="true">&nbsp;<?php _e('Yes','tainacan') ?>
                     &nbsp;<input type="radio" name="socialdb_event_property_habilitate_new_category" id="new_item_false" checked="checked" value="false">&nbsp;<?php _e('No','tainacan') ?>
-                </div>
+                </div-->
                 <div class="form-group" >
                     <input type="checkbox" name="property_term_required" id="property_term_required_true" value="true">&nbsp;<b><?php _e('Required','tainacan'); ?></b>
                 </div>

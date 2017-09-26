@@ -23,17 +23,17 @@ class EventClassificationDeleteModel extends EventModel {
     public function generate_title($data) {
         if ($data['socialdb_event_classification_type'] == 'category') {
             $category = get_term_by('id', $data['socialdb_event_classification_term_id'], 'socialdb_category_type');
-            $title = __('Delete the category : ','tainacan') . $category->name;
+            $title = __('Delete the category : ','tainacan') . ' <i>'.$category->name.'</i>';
         } elseif ($data['socialdb_event_classification_type'] != 'tag' && $data['socialdb_event_classification_type'] != 'category') {
             $property = get_term_by('id', $data['socialdb_event_classification_type'], 'socialdb_property_type');
             $value = get_post($data['socialdb_event_classification_term_id']);
-            $title = __('Delete the classification : ','tainacan') . $value->post_title . _(' of the object property ') . $property->name;
+            $title = __('Delete the classification : ','tainacan') .' <i>'. $value->post_title.'</i> ' . _(' of the object property ') .' <b>'. $property->name.'</b>';
         } else {
             $category = get_term_by('id', $data['socialdb_event_classification_term_id'], 'socialdb_tag_type');
-            $title = __('Delete the tag : ','tainacan') . $category->name;
+            $title = __('Delete the tag : ','tainacan') .' <i>'. $category->name.'</i>';
         }
         $object = get_post($data['socialdb_event_classification_object_id']);
-        $title.= __(' in the object ','tainacan') . $object->post_title;
+        $title.= __(' in the object ','tainacan') .' '.'<b><a href="'.  get_the_permalink($object->ID).'">'. $object->post_title.'</a></b>';
         return $title;
     }
 

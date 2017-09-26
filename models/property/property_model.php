@@ -136,6 +136,7 @@ class PropertyModel extends Model {
         if (!is_wp_error($new_property)&&isset($new_property['term_id'])) { // se a propriedade foi inserida com sucesso
             instantiate_metas($new_property['term_id'], 'socialdb_property_data', 'socialdb_property_type', true);
             $this->add_property_position_ordenation($data['collection_id'], $new_property['term_id'],$data['property_tab']);
+            $this->update_tab_organization($data['collection_id'],$data['property_tab'], $new_property['term_id']);
             $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_collection_id', $data['collection_id']);
             $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_required', $data['property_data_required']);
              update_term_meta($new_property['term_id'], 'socialdb_property_data_mask', $data['property_data_mask']);
@@ -1215,7 +1216,7 @@ class PropertyModel extends Model {
      * @param int $property_id
      * @autor: Eduardo Humberto 
      */
-    public function update_tab_organization($collection_id,$tab_id,$property_id) {
+    public function update_tab_organization($collection_id,$tab_id = 'default',$property_id = 0) {
         $array = unserialize(get_post_meta($collection_id, 'socialdb_collection_update_tab_organization',true));
         if($array && is_array($array)):
             $array[0][$property_id] = $tab_id;

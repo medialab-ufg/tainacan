@@ -24,25 +24,46 @@ class EventPropertyDataEditValue extends EventModel {
     public function generate_title($data) {
         $object = get_post($data['socialdb_event_property_data_edit_value_object_id']);
         $property = get_term_by('id', $data['socialdb_event_property_data_edit_value_property_id'], 'socialdb_property_type');
+        $values_before = get_post_meta($object->ID,'socialdb_property_'.$property->term_id);
         if($data['socialdb_event_property_data_edit_value_attribute_value']!=''){
-            if(is_array($data['socialdb_event_property_data_edit_value_attribute_value'])){
-                $names = [];
-                foreach ($data['socialdb_event_property_data_edit_value_attribute_value'] as $value) {
-                    if(isset($value['val']))
-                        $names[] = $value['val'];
-                    else
-                        $names[] = $value;
+            if($values_before && count(array_filter($values_before)) > 0){
+                $valuesBefore = implode(',',array_filter($values_before));
+                if(is_array($data['socialdb_event_property_data_edit_value_attribute_value'])){
+                    $names = [];
+                    foreach ($data['socialdb_event_property_data_edit_value_attribute_value'] as $value) {
+                        if(isset($value['val']))
+                            $names[] = $value['val'];
+                        else
+                            $names[] = $value;
+                    }
+                    $title = __('Alter the actual value of metadata ','tainacan').' <b>'.$property->name.'</b> '.__('from ').' ( <i>'.$valuesBefore.'</i> ) '.__(' to ','tainacan').' ( <i>'.implode(',',$names).'</i> ) '
+                        . __(' in the object ','tainacan') .'<b><a href="'.  get_the_permalink($object->ID).'">'. $object->post_title.'</a></b>';
+                }else{
+                    $text = $data['socialdb_event_property_data_edit_value_attribute_value'];
+                    $title = __('Alter the actual value of  metadata','tainacan').' <b>'.$property->name.'</b> '.__('from ').' ( <i>'.$valuesBefore.'</i> ) '.__(' to ','tainacan').' ( <i>'.$text.'</i> ) '
+                        . __(' in the object ','tainacan') .'<b><a href="'.  get_the_permalink($object->ID).'">'. $object->post_title.'</a></b>';
                 }
-                $title = __('Set the value(s): ','tainacan').' ( '.implode(',',$names).' ) '.__(' of the data property ','tainacan').' '.$property->name.''
-                . __(' in the the object ','tainacan') . $object->post_title;
             }else{
-               $text = $data['socialdb_event_property_data_edit_value_attribute_value'];
-             $title = __('Set the value: ','tainacan').' ('.$text.') '.__(' of the data property ','tainacan').'<b>'.$property->name.'</b>'
-                . __(' in the the object ','tainacan') . $object->post_title;
+                if(is_array($data['socialdb_event_property_data_edit_value_attribute_value'])){
+                    $names = [];
+                    foreach ($data['socialdb_event_property_data_edit_value_attribute_value'] as $value) {
+                        if(isset($value['val']))
+                            $names[] = $value['val'];
+                        else
+                            $names[] = $value;
+                    }
+                    $title = __('Set the value(s): ','tainacan').' ( <i>'.implode(',',$names).'</i> ) '.__(' of the data property ','tainacan').' <b>'.$property->name.'</b>'
+                        . __(' in the the object ','tainacan') . '<b><a href="'.  get_the_permalink($object->ID).'">'. $object->post_title.'</a></b>';
+                }else{
+                    $text = $data['socialdb_event_property_data_edit_value_attribute_value'];
+                    $title = __('Set the value: ','tainacan').' ( <i>'.$text.'</i> ) '.__(' of the data property ','tainacan').'<b>'.$property->name.'</b>'
+                        . __(' in the the object ','tainacan') . '<b><a href="'.  get_the_permalink($object->ID).'">'. $object->post_title.'</a></b>';
+                }
             }
+
         }else{
             $title = __('Delete all values of the data property ','tainacan').' <b>'.$property->name.'</b>'
-                . __(' in the the object ','tainacan') . $object->post_title;
+                . __(' in the the object ','tainacan') . '<b><a href="'.  get_the_permalink($object->ID).'">'. $object->post_title.'</a></b>';
         }
         return $title;
     }

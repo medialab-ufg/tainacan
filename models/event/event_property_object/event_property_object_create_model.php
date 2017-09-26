@@ -24,7 +24,18 @@ class EventPropertyObjectCreate extends EventModel {
     public function generate_title($data) {
         $collection = get_post($data['socialdb_event_collection_id']);
         $property_name = $data['socialdb_event_property_object_create_name'];
-        $title = __('Create the object property ','tainacan').'('.$property_name.')'.__(' in the collection ','tainacan').' '.'<b>'.$collection->post_title.'</b>';
+        if(isset($data['socialdb_event_property_object_create_id'])){
+            $property_name = get_term_by('id', $data['socialdb_event_property_object_create_id'],'socialdb_property_type')->name;
+        }
+
+        if(isset($data['socialdb_event_property_object_create_category_root_id'])
+            &&!empty(trim($data['socialdb_event_property_object_create_category_root_id']))
+            &&$this->get_category_root_of($collection->ID)!=$data['socialdb_event_property_object_create_category_root_id']){
+            $title = __('Create the object property ','tainacan').' ('.$property_name.')'.__(' in the category','tainacan').' '.' <b>'.  get_term_by('id', $data['socialdb_event_property_object_create_category_root_id'],'socialdb_category_type')->name.'</b>';
+        }else{
+            $title = __('Create the object property ','tainacan').' ( <i>'.$property_name.'</i> ) '.__(' in the collection','tainacan').' '.' <b><a href="'.  get_the_permalink($collection->ID).'">'.$collection->post_title.'</a></b> ';
+        }
+
         return $title;
     }
 
@@ -69,6 +80,7 @@ class EventPropertyObjectCreate extends EventModel {
         $data['property_object_name'] = get_post_meta($event_id, 'socialdb_event_property_object_create_name',true) ;
         $data['collection_id'] = get_post_meta($event_id, 'socialdb_event_collection_id',true) ;
         $data['property_object_category_id'] = get_post_meta($event_id, 'socialdb_event_property_object_create_category_id',true) ;
+        $data['socialdb_property_object_cardinality'] = get_post_meta($event_id, 'socialdb_event_property_object_create_cardinality',true) ;
         $data['property_object_required'] = get_post_meta($event_id, 'socialdb_event_property_object_create_required',true) ;
         $data['property_object_facet'] = get_post_meta($event_id, 'socialdb_event_property_object_create_is_facet',true) ;
         $data['property_object_is_reverse'] = get_post_meta($event_id, 'socialdb_event_property_object_create_is_reverse',true) ;
@@ -92,6 +104,8 @@ class EventPropertyObjectCreate extends EventModel {
         // se nao estiver apenas relacionando uma categoria com um propriedade ja existente
         if(!$data['property_id']||empty( $data['property_id'])||!is_numeric($data['property_id'])){
             // chamo a funcao do model de propriedade para fazer a insercao
+
+            $data['property_tab'] = ($data['property_tab']) ? $data['property_tab'] : 'default';
             $result = json_decode($propertyModel->add_property_object($data));
             if(isset($result->new_property_id)){
                 do_action('after_event_add_property_object',$result->new_property_id,$event_id);
