@@ -218,6 +218,13 @@ button#iframebutton {
   min-height: 40px !important;
   padding-left: 15px;
 
+
+  .dropdown-menu > .active > a,
+  .dropdown-menu > .active > a:hover,
+  .dropdown-menu > .active > a:focus {
+    background-color: transparent !important;
+  }
+
   .dropdown-submenu {
     position:relative;
     > .dropdown-menu {

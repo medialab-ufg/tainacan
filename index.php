@@ -3,7 +3,7 @@
 <div class="col-md-12 tainacan-page-area">
     <?php if ( is_home() && ! is_front_page() ): ?>
         <header class="page-header">
-            <h3 class="page-title"><?php single_post_title(); ?></h3>
+            <h3 class="page-title"> <?php _t('Latest News',1); ?></h3>
         </header>
     <?php else: ?>
         <header class="page-header col-md-12">
@@ -17,7 +17,7 @@
                 while ( have_posts() ) : the_post();
                     get_template_part( 'partials/content/content' );
                 endwhile;
-                the_posts_pagination( );
+                echo "<div class='col-md-12 text-center'>" . get_the_posts_pagination(['screen_reader_text' => _t('More news')]) . "</div>";
             else:
                 get_template_part( 'partials/content/content', 'none' );
             endif;

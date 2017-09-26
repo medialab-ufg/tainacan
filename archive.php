@@ -2,7 +2,6 @@
 $obj = get_queried_object();
 
 $extra_title = "";
-
 if( is_object($obj) ) {
     if( isset($obj->term_id) && isset($obj->name) ) {
         if ($obj->term_id > 1) {
@@ -10,11 +9,8 @@ if( is_object($obj) ) {
         }
     }
 }
-
 ?>
-
     <div class="col-md-12 tainacan-page-area">
-
         <div class="col-md-8 no-padding center">
             <header class="page-header col-md-12 no-padding">
                 <h1 class="page-title"> <?php echo _t( 'News') . $extra_title; ?> </h1>

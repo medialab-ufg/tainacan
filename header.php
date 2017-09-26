@@ -90,11 +90,12 @@ $_header_enabled = get_post_meta($collection_id, 'socialdb_collection_show_heade
         </div> <!-- /.container-fluid -->
     </nav>
 
-    <?php get_template_part("partials/modals","header"); ?>
-
     <?php
+
+    get_template_part("partials/modals","header");
+
     // Renders custom header only for new template pages
-    if ( is_archive() || is_page_template() || is_page() || is_singular('post') ) {
+    if ( is_archive() || is_page_template() || is_page() || is_singular('post') || is_home() ) {
         if (!is_page($stat_page)) {
             $_menu_ = ['container_class' => 'container', 'container' => false, 'walker' => new wp_bootstrap_navwalker(), 'menu_class' => 'navbar navbar-inverse menu-ibram'];
             if (!is_front_page()) {

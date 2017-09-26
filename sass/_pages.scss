@@ -1,6 +1,6 @@
 $thumb-size: 255px;
 
-body.archive, body.single-post, body.page-template-default {
+body.archive, body.blog, body.single-post, body.page-template-default {
   .tainacan-page-area {
     background: $collections-bg-color;
 
@@ -38,6 +38,10 @@ body.archive, body.single-post, body.page-template-default {
         padding: 40px;
         border: 3px solid $item-border;
         margin-bottom: 20px;
+
+        img {
+          max-width: 100%;
+        }
 
         h2 {
           a {
@@ -78,6 +82,14 @@ body.archive, body.single-post, body.page-template-default {
   } // tainacan-page-area
 } // archive
 
+body.blog {
+  #sidebar {
+    background: white;
+    padding-top: 40px;
+    padding-bottom: 40px;
+    border: 3px solid $item-border;
+  }
+}
 
 body.page-template-template-home, body.page-template-page-contato {
   $home-box-gray: #4D4D4D;
