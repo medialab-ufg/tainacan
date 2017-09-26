@@ -30,18 +30,32 @@ class EventPropertyObjectEdit extends EventModel {
         if(trim($property->name)==trim($property_name)){
             $text = '';
             $newcategory = $data['socialdb_event_property_object_category_id'];
-            $category = get_term_meta($data['socialdb_event_property_object_edit_id'],'socialdb_property_object_category_id',true);
+            $old_categories = get_term_meta($data['socialdb_event_property_object_edit_id'],'socialdb_property_object_category_id');
             $newrequired = $data['socialdb_event_property_object_edit_required'];
             $required = get_term_meta($data['socialdb_event_property_object_edit_id'],'socialdb_property_required',true);
             $newreverse = $data['socialdb_event_property_object_edit_is_reverse'];
             $reverse = get_term_meta($data['socialdb_event_property_object_edit_id'],'socialdb_property_object_is_reverse',true);
 
-            if($newcategory !== $category){
-                $newcategory = get_term_by('id',$newcategory,'socialdb_category_type');
-                $category = get_term_by('id',$category,'socialdb_category_type');
-                $text .=  __('Alter relationship from ', 'tainacan').' : <i>'.($category) ? $category->name : '(Vazio)'.'</i> '. __('to ', 'tainacan').'<i>'.($newcategory) ? $newcategory->name : '(Vazio)'.'</i><br>';
-            }
+            if($newcategory !== $old_categories){
+                $new_categories = explode(',',$newcategory);
+                $new_names = [];
+                foreach ($new_categories as $new_category){
+                    $new_names[] = get_term_by('id',$new_category,'socialdb_category_type')->name;
+                }
 
+                if($old_categories) {
+                    $old_names = [];
+                    foreach ($old_categories as $old_category) {
+                        $old_names[] = get_term_by('id', $old_category, 'socialdb_category_type')->name;
+                    }
+                }
+                $text .= __(" Alter relationship from " , "tainacan");
+                $val = ($old_names) ? htmlentities(implode(',',$old_names)) : '(Vazio)';
+                $text .=  ' : <i>'.$val.'</i> ';
+                $text .= __('to ', 'tainacan');
+                $val = ($new_names) ? htmlentities(implode(',',$new_names)) : '( Vazio )';
+                $text .= '<i>'.$val.'</i><br>';
+            }
             if($newrequired !== $required){
                 $newrequired = ($newrequired === 'true') ? __('True','tainacan') : __('False','tainacan');
                 $required = ($required === 'true') ? __('True','tainacan') : __('False','tainacan');
@@ -53,8 +67,7 @@ class EventPropertyObjectEdit extends EventModel {
                 $reverse = ($reverse === 'true') ? __('True','tainacan') : __('False','tainacan');
                 $text .=  __('Alter reverse field from ', 'tainacan').' : <i>'. $reverse .'</i> '. __('to ', 'tainacan').' <i>'.$newreverse.'</i><br>';
             }
-
-            $title = __('Alter configuration from object property ', 'tainacan').' : <i>'.$property->name.'</i><br>'.$text.
+            $title = __('Alter configuration from object property ', 'tainacan').' : <i>'.$property->name.'</i><br> '.$text.
                 __(' in the collection ', 'tainacan') .' '.' <b><a href="'.  get_the_permalink($collection->ID).'">'.$collection->post_title.'</a></b> ';
         }else{
             $title = __('Edit the object property ', 'tainacan') .'<br>'.

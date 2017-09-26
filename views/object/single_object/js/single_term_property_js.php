@@ -4,6 +4,7 @@ $(function(){
     var collection_id = $("#collection_id").val();
 
     $("#property_term_collection_id").val(collection_id);
+
     showTermsDynatree(src);
 });
 var src = $('#src').val();

@@ -38,9 +38,10 @@ class EventPropertyTermEdit extends EventModel {
 
             if($newcategory !== $category){
                 $newcategory = get_term_by('id',$newcategory,'socialdb_category_type');
-                $name = ($newcategory) ? $newcategory->name : ($data['socialdb_event_property_term_edit_new_taxonomy']) ? $data['socialdb_event_property_term_edit_new_taxonomy'] : '(Vazio)';
+                $name = ($newcategory) ? $newcategory->name : $data['socialdb_event_property_term_edit_new_taxonomy'];
                 $category = get_term_by('id',$category,'socialdb_category_type');
-                $text .=  __('Alter taxonomy from ', 'tainacan').' : <i>'.($category) ? $category->name : '(Vazio)'.'</i> '. __('to ', 'tainacan').'<i>'.$name.'</i><br>';
+                $val = ($category) ? $category->name : '(Vazio)';
+                $text .=  __('Alter taxonomy from ', 'tainacan').' : <i>'.$val.'</i> '. __('to ', 'tainacan').'<i>'.$name.'</i><br>';
             }
 
             if($newrequired !== $required){

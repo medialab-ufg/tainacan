@@ -415,24 +415,24 @@ class ObjectController extends Controller {
                 return $object_model->search_term_by_parent($data['parent'],$data['term']);
             case "get_property_object_value":// retorna os valores para uma propriedade de objeto especificao
                 return $object_model->get_property_object_value($data);
-            case 'show_form_data_property':// mostra o formulario para insercao de propriedade de dados
-                $property_model = new PropertyModel();
-                $data = $property_model->list_data($data);
-                return $this->render(dirname(__FILE__) . '../../../views/object/data_property_form.php', $data);
-            case 'show_form_object_property':// mostra o formulario para insercao de propriedade de objecto
-                $property_model = new PropertyModel();
-                $data = $property_model->list_data($data);
-                return $this->render(dirname(__FILE__) . '../../../views/object/object_property_form.php', $data);
-            case 'show_edit_data_property_form':// mostra o formulario para EDICAO de propriedade de dados
-                $property_model = new PropertyModel();
-                $data['value'] = json_decode($property_model->edit_property($data));
-                $data = $property_model->list_data($data);
-                return $this->render(dirname(__FILE__) . '../../../views/object/edit_data_property_form.php', $data);
-            case 'show_edit_object_property_form':// mostra o formulario para EDICAO de propriedade de OBJETOS
-                $property_model = new PropertyModel();
-                $data['value'] = json_decode($property_model->edit_property($data));
-                $data = $property_model->list_data($data);
-                return $this->render(dirname(__FILE__) . '../../../views/object/edit_object_property_form.php', $data);
+//            case 'show_form_data_property':// mostra o formulario para insercao de propriedade de dados
+//                $property_model = new PropertyModel();
+//                $data = $property_model->list_data($data);
+//                return $this->render(dirname(__FILE__) . '../../../views/object/data_property_form.php', $data);
+//            case 'show_form_object_property':// mostra o formulario para insercao de propriedade de objecto
+//                $property_model = new PropertyModel();
+//                $data = $property_model->list_data($data);
+//                return $this->render(dirname(__FILE__) . '../../../views/object/object_property_form.php', $data);
+//            case 'show_edit_data_property_form':// mostra o formulario para EDICAO de propriedade de dados
+//                $property_model = new PropertyModel();
+//                $data['value'] = json_decode($property_model->edit_property($data));
+//                $data = $property_model->list_data($data);
+//                return $this->render(dirname(__FILE__) . '../../../views/object/edit_data_property_form.php', $data);
+//            case 'show_edit_object_property_form':// mostra o formulario para EDICAO de propriedade de OBJETOS
+//                $property_model = new PropertyModel();
+//                $data['value'] = json_decode($property_model->edit_property($data));
+//                $data = $property_model->list_data($data);
+//                return $this->render(dirname(__FILE__) . '../../../views/object/edit_object_property_form.php', $data);
             case "list_single_object":
                 $user_model = new UserModel();
                 $object_id = $data['object_id'];

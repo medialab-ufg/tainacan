@@ -6,6 +6,10 @@
     require_once(dirname(__FILE__) . "../../../../helpers/view_helper.php");
     $view_helper = new ViewHelper();
 ?>
+
+<hr>
+<h4 id="edit-text-term" ><?php echo __('Alter the metadata: ','tainacan') ?> <span id="name-property-term"></span></h4>
+<h4 id="create-text-term" ><?php echo __('Create term metadata','tainacan') ?></h4>
 <form id="submit_form_property_term" onkeypress="return event.keyCode != 13;" >
     <div >
         <div class="metadata-common-fields">
@@ -44,8 +48,8 @@
                 <div style='height: 242px;margin-left: 15px;' id="terms_dynatree"></div>
 
                 <br>
-                <p><?php _e('Selected term','tainacan') ?></p>
-                <div id="selected_categories_term"></div>
+                <!--p><?php _e('Selected term','tainacan') ?></p-->
+                <div style="display: none;"  id="selected_categories_term"></div>
                 <input type="hidden"
                        id="socialdb_property_term_root"
                        class="form-control" name='socialdb_property_term_root'>
@@ -204,7 +208,7 @@
 
     <br>
     <button type="submit" id="submit_term_form" class="btn btn-primary pull-right action-continue" form="submit_form_property_term" style="margin-left: 5px;">
-        <?php _e("Add", "tainacan")?>
+        <?php _e("Save", "tainacan")?>
     </button>
 
     <button type="button" onclick="back_button('<?php echo $object_id; ?>')" class="btn btn-default pull-right" id="clear_categories">

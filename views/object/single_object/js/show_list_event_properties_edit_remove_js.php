@@ -10,7 +10,7 @@ function show_edit_data_property_form(object_id,property_id){
         $('#single_data_property_form_'+object_id).hide();
         $('#single_object_property_form_'+object_id).hide();
         $('#single_edit_object_property_form_'+object_id).hide();
-        $('#single_edit_data_property_form_'+object_id).show();
+        $('#single_edit_data_property_form_'+object_id).css('padding', 20).show();
         $('.dropdown-toggle').dropdown();
         $('.nav-tabs').tab();
     });
@@ -58,6 +58,12 @@ function show_edit_term_property_form(object_id, property_id)
 
             $("#meta-category #property_term_name").val(elem.name);
             $("#meta-category #socialdb_property_help").val(elem.metas.socialdb_property_help);
+            $('#name-property-term').html(elem.name);
+            $('#edit-text-term').show();
+            $('#create-text-term').hide();
+
+
+
 
             if (elem.metas.socialdb_property_term_cardinality === '1') {
                 $('#meta-category #socialdb_property_term_cardinality_1').prop('checked', true);
@@ -194,7 +200,7 @@ function show_edit_object_property_form(object_id,property_id){
         $('#single_data_property_form_'+object_id).hide();
         $('#single_object_property_form_'+object_id).hide();
         $('#single_edit_data_property_form_'+object_id).hide();
-        $('#single_edit_object_property_form_'+object_id).show();
+        $('#single_edit_object_property_form_'+object_id).css('padding', 20).show();
         $('.dropdown-toggle').dropdown();
         $('.nav-tabs').tab();
     });

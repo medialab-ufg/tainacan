@@ -2,6 +2,7 @@
     $(function () {
         var src = $('#src').val();
          $('#single_submit_form_property_data').submit(function (e) {
+            show_modal_main();
             $.ajax({
                 url: $('#src').val() + '/controllers/event/event_controller.php',
                 type: 'POST',
@@ -9,6 +10,7 @@
                 processData: false,
                 contentType: false
             }).done(function (result) {
+                hide_modal_main();
                 //list_main_ordenation();
                 var elem = jQuery.parseJSON(result);
                 // o id do objeto
@@ -17,7 +19,7 @@
                 list_properties_single(obj_id);
                 showAlertGeneral(elem.title, elem.msg, elem.type);
                 //limpando caches
-                delete_all_cache_collection();
+                //delete_all_cache_collection();
             });
             e.preventDefault();
         });

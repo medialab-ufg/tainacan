@@ -3,20 +3,28 @@ include_once ('../../../../../wp-config.php');
 include_once ('../../../../../wp-load.php');
 include_once ('../../../../../wp-includes/wp-db.php');
 include_once ('js/edit_object_property_form_js.php');
+$rel = (isset($value->metas->socialdb_property_object_category_id) && is_array($value->metas->socialdb_property_object_category_id)) ? implode(',',array_filter($value->metas->socialdb_property_object_category_id)) : $value->metas->socialdb_property_object_category_id;
 ?>
-<h4><?php echo __('Editing the property: ','tainacan').$value->name; ?></h4>
+<hr>
+<h4><?php echo __('Alter the metadata: ','tainacan').$value->name; ?></h4>
 <form  id="single_submit_form_event_edit_property_object">
+
     <input type="hidden" name="property_category_id"  value="<?php echo $category->term_id; ?>">
     <div class="create_form-group">
-        <label for="event_edit_property_object_name"><?php _e('Property object name','tainacan'); ?></label>
+        <label for="event_edit_property_object_name"><?php _e('Name','tainacan'); ?></label>
         <input type="text" class="form-control" id="single_event_edit_property_object_name" name="socialdb_event_property_object_edit_name" value="<?php echo $value->name; ?>" required="required" placeholder="<?php _e('Property Object name','tainacan'); ?>">
     </div>
     <div class="form-group">
          <div class="form-group"> 
-            <label for="event_add_property_object_category_id"><?php _e('Property object relationship','tainacan'); ?></label>
-            <div id="property_category_dynatree" style="height: 300px;overflow-y: scroll;" >
-                                    </div>
-             <input required="required" type="hidden"  id="property_object_category_id"  name="property_object_category_id" value="<?php echo $category->term_id; ?>" >
+            <label for="event_add_property_object_category_id"><?php _e('Relationship','tainacan'); ?></label>
+            <div id="property_category_dynatree_edit" style="height: 300px;overflow-y: scroll;" ></div>
+             <input required="required"
+                    type="hidden"  id="property_object_category_id"
+                    name="socialdb_event_property_object_category_id"
+                    value="" >
+             <input required="required"
+                    type="hidden"  id="helper_object_category_id"
+                    value="<?php echo $rel ?>" >
     </div>
     <!--div class="form-group">
         <label for="event_edit_property_object_required"><?php _e('Property object facet','tainacan'); ?></label>
@@ -24,12 +32,12 @@ include_once ('js/edit_object_property_form_js.php');
         <input type="radio" <?php if($value->metas->socialdb_property_object_is_facet=='false') echo 'checked="checked";' ?> name="socialdb_event_property_object_edit_is_facet" id="single_event_edit_property_object_facet_false"  value="false">&nbsp;<?php _e('No','tainacan'); ?>
     </div-->
     <div class="form-group">
-        <label for="event_edit_property_object_required"><?php _e('Property object required','tainacan'); ?></label>
+        <label for="event_edit_property_object_required"><?php _e('Required','tainacan'); ?>:&nbsp;</label>
         <input type="radio" <?php if($value->metas->socialdb_property_required=='true') echo 'checked="checked";' ?> name="socialdb_event_property_object_edit_required" id="single_event_edit_property_object_required_true" value="true">&nbsp;<?php _e('Yes','tainacan'); ?>
         <input type="radio" <?php if($value->metas->socialdb_property_required=='false') echo 'checked="checked";' ?> name="socialdb_event_property_object_edit_required" id="single_event_edit_property_object_required_false"  value="false">&nbsp;<?php _e('No','tainacan'); ?>
     </div>
     <div class="form-group">
-        <label for="event_edit_property_object_is_reverse"><?php _e('Property object reverse','tainacan'); ?></label>
+        <label for="event_edit_property_object_is_reverse"><?php _e('Reverse','tainacan'); ?>:&nbsp;</label>
         <input type="radio" <?php if($value->metas->socialdb_property_object_is_reverse=='true') echo 'checked="checked";' ?> name="socialdb_event_property_object_edit_is_reverse" id="single_event_edit_property_object_is_reverse_true" value="true">&nbsp;<?php _e('Yes','tainacan'); ?>
         <input type="radio" <?php if($value->metas->socialdb_property_object_is_reverse=='false') echo 'checked="checked";' ?> name="socialdb_event_property_object_edit_is_reverse" id="single_event_edit_property_object_is_reverse_false"  value="false">&nbsp;<?php _e('No','tainacan'); ?>
     </div>
@@ -49,6 +57,7 @@ include_once ('js/edit_object_property_form_js.php');
     <input type="hidden" id="single_event_edit_property_object_id" name="socialdb_event_property_object_edit_id" value="<?php  echo $value->id; ?>"><!-- ID DA PROPRIEDADE -->
     <input type="hidden" id="single_event_edit_property_object_post_id" name="event_edit_property_object_post_id" value="<?php  echo $object_id; ?>"><!-- ID DO OBJETO EM QUESTAO -->
     <input type="hidden" id="operation_event_edit_property_object" name="operation" value="add_event_property_object_edit"><!-- OPERACAO -->
-    <button type="submit" id="submit" class="btn btn-default"><?php _e('Submit','tainacan'); ?></button>
-    <button type="button" onclick="back_button_sinlge('<?php echo $object_id; ?>')" cla ss="btn btn-default" id="clear_categories"><?php _e('Back','tainacan'); ?></button>
+    <button type="submit" id="submit" class="btn btn-primary pull-right" style="margin-left: 5px;"><?php _e('Save','tainacan'); ?></button>
+    <button type="button" onclick="back_button_sinlge('<?php echo $object_id; ?>')" class="btn btn-default pull-right" id="clear_categories"><?php _e('Cancel','tainacan'); ?></button>
+    <br>
 </form>

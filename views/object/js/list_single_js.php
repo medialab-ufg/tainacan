@@ -170,6 +170,8 @@
             data: {collection_id: $('#collection_id').val(), operation: 'show_form_term_property', object_id: object_id}
         }).done(function (result) {
             finish_loading(object_id, result);
+            $('#edit-text-term').hide();
+            $('#create-text-term').show();
         });
     }
 

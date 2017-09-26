@@ -2,6 +2,7 @@
     $(function () {
         var src = $('#src').val();
         $('#single_submit_form_edit_property_data').submit(function (e) {
+            show_modal_main();
             $.ajax({
                 url: $('#src').val() + '/controllers/event/event_controller.php',
                 type: 'POST',
@@ -9,7 +10,7 @@
                 processData: false,
                 contentType: false
             }).done(function (result) {
-                list_main_ordenation();
+                hide_modal_main();
                 elem = jQuery.parseJSON(result);
                 back_button_single($('#single_event_edit_property_data_object_id').val());// o id do objeto
                 list_properties_single($('#single_event_edit_property_data_object_id').val());// o id do objeto
