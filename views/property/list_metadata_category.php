@@ -42,7 +42,7 @@ $array_visibility = ($meta&&$meta!=='') ? $meta : '';
        value='<?php echo ($tabs&&is_array($tabs)) ? json_encode($tabs) :  ''; ?>'/>
 <input type="hidden" name="visibility_collection_properties" id="visibility_collection_properties" value='<?php echo $array_visibility; ?>'/>
 <input type="hidden" name="property_category_id" id="property_category_id" value="<?php echo $category->term_id; ?>"/>
-<div class="categories_menu col-md-12 no-padding"  id="properties_tabs" style="min-height: 600px;">
+<div class="categories_menu col-md-12 no-padding"  id="properties_tabs" style="margin-bottom: 20px;">
 
     <div id="preset-filters" class="preset-filters ui-widget-header no-padding hide">
         <ul id="filters-accordion" class="connectedSortable"></ul>

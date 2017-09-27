@@ -24,7 +24,7 @@ $view_helper = new ViewHelper();
             }
 </style>
 <input type="hidden" name="property_category_id" id="property_category_id" value="<?php echo $category->term_id; ?>"/>
-<div class="categories_menu col-md-12 no-padding"  id="properties_tabs">
+<div class="categories_menu col-md-12 no-padding"  id="properties_tabs" >
 
     <!--div id="preset-filters" class="col-md-4 preset-filters ui-widget-header no-padding">
         <ul id="filters-accordion" class="connectedSortable"></ul>

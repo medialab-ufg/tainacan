@@ -95,7 +95,7 @@ global $config;
                             <textarea id="observation" class="form-control" name="observation"></textarea>
                         </div>
                     <?php } ?>
-                    <button type="button" onclick="list_category_property()" id="show_category_property" style="display: none;" class="btn btn-primary"><?php _e('Category Properties', 'tainacan'); ?></button>
+                    <button type="button" onclick="list_category_property()" id="show_category_property" style="display: none;" class="btn btn-primary"><?php _e('See category properties', 'tainacan'); ?></button>
                     <div class="form-group">
                         <div id="category_property" style="margin-left: -15px;margin-top: 15px;"></div>
                     </div>
