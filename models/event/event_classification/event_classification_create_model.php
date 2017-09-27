@@ -65,6 +65,9 @@ class EventClassificationCreateModel extends EventModel {
 
            if($type == 'category')// se for categoria
            {
+               if(!isset($data['socialdb_event_classification_property_id'])){
+                   $data['socialdb_event_classification_property_id'] = $this->getPropertyCategory($data['socialdb_event_classification_term_id'],$data['socialdb_event_collection_id']);
+               }
               $data = $this->insert_event_category($object_id->ID, $data,$collection_id, $automatically_verified);
            }elseif($type == 'tag')
            {
@@ -126,7 +129,12 @@ class EventClassificationCreateModel extends EventModel {
         
        return $data;
     }
-    
+
+    /**
+     * @param $category
+     * @param $collection_id
+     * @return mixed
+     */
     public function getPropertyCategory($category,$collection_id) {
         foreach ($this->getCollectionTermProperties($collection_id) as $property) {
             if(isset($property['metas']['socialdb_property_term_root'])){

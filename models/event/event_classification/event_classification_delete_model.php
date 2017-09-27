@@ -57,9 +57,9 @@ class EventClassificationDeleteModel extends EventModel {
            $type = get_post_meta($data['event_id'], 'socialdb_event_classification_type',true);// pego o tipo
            if($type=='category'){// se for categoria
                if(!isset($data['socialdb_event_classification_property_id'])){
-                   $this->getPropertyByCategory($data);
+                   $data['socialdb_event_classification_property_id'] = $this->getPropertyByCategory($data);
                }
-              $data = $this->delete_event_category($object_id->ID, $data, $automatically_verified);
+               $data = $this->delete_event_category($object_id->ID, $data, $automatically_verified);
            }elseif($type=='tag'){
               $data = $this->delete_event_tag($object_id->ID, $data, $automatically_verified);
            }else{
@@ -82,16 +82,20 @@ class EventClassificationDeleteModel extends EventModel {
 
     public function getPropertyByCategory($data){
         $term_id = $data['socialdb_event_classification_term_id'];
-        $category_root_id = $this->get_category_of($data['socialdb_event_collection_id']);
+        $category_root_id = $this->get_category_root_of($data['socialdb_event_collection_id']);
         $properties = get_term_meta($category_root_id,'socialdb_category_property_id');
         if($properties && is_array($properties)){
             foreach ($properties as $property) {
                 $term_root = get_term_meta($property,'socialdb_property_term_root',true);
                 if($term_root != ''){
-                    
+                    $ancestors = get_ancestors($term_id,'socialdb_category_type');
+                    if(is_array($ancestors) && in_array($term_root,$ancestors)){
+                        return $property;
+                    }
                 }
             }
         }
+        return false;
     }
       /**
      * function insert_event_category($data)
