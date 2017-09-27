@@ -90,7 +90,7 @@ class EventTermDelete extends EventModel {
             $data['title'] = 'Erro';
         } else {
             $this->update_event_state('invalid', $data['event_id']); // seto a o evento como invalido
-            $data['msg'] = __('This category does not exist anymore','tainacan');
+            $data['msg'] = __("Root category can't be deleted",'tainacan');
             $data['type'] = 'error';
             $data['title'] = 'Erro';
         }

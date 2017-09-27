@@ -61,7 +61,7 @@
                 if (elem.type === 'success') {
                     sweetAlert(elem.title, elem.msg, "success");
                 } else {
-                    sweetAlert($("#error_title").val(), $("#error_msg").val(), "error");
+                    sweetAlert(elem.title, elem.msg, "error");
                     if (elem.message) {
                         $("#message_category").text(elem.message);
                     }
