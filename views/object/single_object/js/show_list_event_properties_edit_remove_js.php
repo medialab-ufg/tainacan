@@ -67,14 +67,24 @@ function show_edit_term_property_form(object_id, property_id)
 
             if (elem.metas.socialdb_property_term_cardinality === '1') {
                 $('#meta-category #socialdb_property_term_cardinality_1').prop('checked', true);
+                $("#meta-category #socialdb_property_term_cardinality_n").prop('checked', false);
+                $('#socialdb_property_term_cardinality_1').trigger('click');
             } else {
                 $("#meta-category #socialdb_property_term_cardinality_n").prop('checked', true);
+                $('#meta-category #socialdb_property_term_cardinality_1').prop('checked', false);
+                $('#socialdb_property_term_cardinality_n').trigger('click');
+            }
+
+            if(elem.metas.socialdb_property_term_widget){
+                $('#socialdb_property_term_widget').val(elem.metas.socialdb_property_term_widget);
             }
 
             if (elem.metas.socialdb_property_required === 'true') {
                 $("#property_term_required_true").prop('checked', true);
+                $("#property_term_required_false").prop('checked', false);
             } else {
                 $("#property_term_required_true").prop('checked', false);
+                $("#property_term_required_false").prop('checked', true);
             }
 
             if (elem.metas.socialdb_property_help) {

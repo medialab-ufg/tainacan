@@ -35,10 +35,13 @@ class EventPropertyTermEdit extends EventModel {
             $required = get_term_meta($data['socialdb_event_property_term_edit_id'],'socialdb_property_required',true);
             $newcardinality = $data['socialdb_event_property_term_edit_cardinality'];
             $cardinality = get_term_meta($data['socialdb_event_property_term_edit_id'],'socialdb_property_term_cardinality',true);
+            $newwidget = $data['socialdb_event_property_term_edit_widget'];
+            $widget = get_term_meta($data['socialdb_event_property_term_edit_id'],'socialdb_property_term_widget',true);
+
 
             if($newcategory !== $category){
                 $newcategory = get_term_by('id',$newcategory,'socialdb_category_type');
-                $name = ($newcategory) ? $newcategory->name : $data['socialdb_event_property_term_edit_new_taxonomy'];
+                $name = ($newcategory) ? $newcategory->name : $data['socialdb_event_property_term_edit_new_category'];
                 $category = get_term_by('id',$category,'socialdb_category_type');
                 $val = ($category) ? $category->name : '(Vazio)';
                 $text .=  __('Alter taxonomy from ', 'tainacan').' : <i>'.$val.'</i> '. __('to ', 'tainacan').'<i>'.$name.'</i><br>';
@@ -54,6 +57,12 @@ class EventPropertyTermEdit extends EventModel {
                 $newcardinality = ($newcardinality === 'n') ? __('Multiple values','tainacan') : __('One value','tainacan');
                 $cardinality = ($cardinality === 'n') ? __('Multiple values','tainacan') : __('One value','tainacan');
                 $text .=  __('Alter cardinality from ', 'tainacan').' : <i>'. $cardinality .'</i> '. __('to ', 'tainacan').' <i>'.$newcardinality.'</i><br>';
+            }
+
+            if($newwidget !== $widget){
+                $newwidget =  __($newwidget,'tainacan');
+                $widget =  __($widget,'tainacan');
+                $text .=  __('Alter widget field from ', 'tainacan').' : <i>'. $widget .'</i> '. __('to ', 'tainacan').' <i>'.$newwidget.'</i><br>';
             }
 
             $title = __('Alter configuration from term property ', 'tainacan').' : <i>'.$property->name.'</i><br>'.$text.

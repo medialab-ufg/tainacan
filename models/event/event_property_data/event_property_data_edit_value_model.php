@@ -138,7 +138,7 @@ class EventPropertyDataEditValue extends EventModel {
             $result = update_post_meta($object_id, 'socialdb_license_id', $value);
         }else if(is_array($value) || is_array(unserialize($value))){
             foreach ($value as $meta) {
-                if($meta['index'] == '0')
+                if($meta['index'] == '0' || $meta['index'] == 'new')
                 {
                     $class = new ObjectSaveValuesModel();
                     $class->saveValue($object_id,

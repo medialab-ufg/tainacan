@@ -11,10 +11,10 @@
 <h4 id="edit-text-term" ><?php echo __('Alter the metadata: ','tainacan') ?> <span id="name-property-term"></span></h4>
 <h4 id="create-text-term" ><?php echo __('Create term metadata','tainacan') ?></h4>
 <form id="submit_form_property_term" onkeypress="return event.keyCode != 13;" >
-    <div >
+    <div id="meta-category" >
         <div class="metadata-common-fields">
             <div class="create_form-group form-group">
-                <label for="property_term_name"><?php _e('Property term name','tainacan'); ?></label>
+                <label for="property_term_name"><?php _e('Name','tainacan'); ?></label>
                 <input type="text"
                        class="form-control"
                        id="property_term_name"
@@ -105,12 +105,12 @@
                 <!--div class="create_form-group form-group">
                     <label for="socialdb_property_help"><?php _e('Property term text helper','tainacan'); ?></label>
                     <input type="text" class="form-control" id="socialdb_property_help" name="socialdb_property_help" />
-                </div>
-                <!--<div class="form-group">
-                    <label for="socialdb_property_term_widget"><?php _e('Property Term Widget','tainacan'); ?></label>
+                </div-->
+                <div class="form-group">
+                    <label for="socialdb_property_term_widget"><?php _e('Widget','tainacan'); ?></label>
                     <select class="form-control" id="socialdb_property_term_widget" name="socialdb_property_term_widget">
                     </select>
-                </div>-->
+                </div>
                 <div class="form-group">
                     <label for="property_term_required" ><?php _e('Elements Quantity','tainacan'); ?> : </label>
                     <input type="radio"
@@ -132,8 +132,13 @@
                     &nbsp;<input type="radio" name="socialdb_event_property_habilitate_new_category" id="new_item_true"   value="true">&nbsp;<?php _e('Yes','tainacan') ?>
                     &nbsp;<input type="radio" name="socialdb_event_property_habilitate_new_category" id="new_item_false" checked="checked" value="false">&nbsp;<?php _e('No','tainacan') ?>
                 </div-->
-                <div class="form-group" >
+                <!--div class="form-group" >
                     <input type="checkbox" name="property_term_required" id="property_term_required_true" value="true">&nbsp;<b><?php _e('Required','tainacan'); ?></b>
+                </div-->
+                <div class="form-group">
+                    <label for="event_edit_property_term_required"><?php _e('Required','tainacan'); ?>:&nbsp;</label>
+                    <input type="radio"  name="property_term_required" id="property_term_required_true" value="true">&nbsp;<?php _e('Yes','tainacan'); ?>
+                    <input type="radio"  name="property_term_required" id="property_term_required_false"  value="false">&nbsp;<?php _e('No','tainacan'); ?>
                 </div>
                 <!--<div class="form-group">
                     <label for="socialdb_event_property_tab"><?php _e('Select the tab','tainacan'); ?></label>
@@ -200,7 +205,7 @@
     <input type="hidden" name="select_menu_style" value="menu_style_116">
 
     <!-- -->
-    <input type="hidden" name="socialdb_property_term_widget" value="tree">
+    <!--input type="hidden" name="socialdb_property_term_widget" value="tree"-->
     <input type="hidden" name="socialdb_event_property_tab" value="default">
     <input type="hidden" name="property_term_filter_widget" value="tree">
     <input type="hidden" name="filter_ordenation" value="alphabetic">

@@ -24,11 +24,13 @@ class EventClassificationCreateModel extends EventModel {
     public function generate_title($data) {
         if ($data['socialdb_event_classification_type'] == 'category') {
             $category = get_term_by('id', $data['socialdb_event_classification_term_id'], 'socialdb_category_type');
-            $title = __('Add the category : ','tainacan') . ' <i>'.$category->name.'</i>';
+            $title = __('Add the category : ','tainacan') . ' <i>'.$category->name.'</i> ';
+            $title .= __('from metadata','tainacan') . ' <b>'.get_term_by('id',$data['socialdb_event_classification_property_id'],'socialdb_property_type')->name.'</b>';
         } elseif ($data['socialdb_event_classification_type'] != 'tag' && $data['socialdb_event_classification_type'] != 'category') {
             $property = get_term_by('id', $data['socialdb_event_classification_type'], 'socialdb_property_type');
             $value = get_post($data['socialdb_event_classification_term_id']);
             $title = __('Add the classification : ','tainacan') .' <i>'. $value->post_title.'</i> ' . _(' of the object property ') .' <b>'. $property->name.'</b>';
+            $title .= __('from metadata','tainacan') . ' <b>'.get_term_by('id',$data['socialdb_event_classification_property_id'],'socialdb_property_type')->name.'</b>';
         } else {
             $tags = explode(',', $data['socialdb_event_classification_term_id']);
             $category = [];
@@ -99,12 +101,14 @@ class EventClassificationCreateModel extends EventModel {
         //print $this->getPropertyCategory( $category->term_id, $collection_id);
         if($category && $object_id)// se a categoria e objeto forem validos
         {
+
             $class->saveValue($object_id,
                         $data['socialdb_event_classification_property_id'],
                         0,
                         'term',
-                        rand(1, 199),
-                        $category->term_id,  rand(1, 199)
+                        0,
+                        $category->term_id,
+                        false
                         );
             /*wp_set_object_terms( $object_id, $category->term_id,'socialdb_category_type',true);
             $this->concatenate_commom_field_value( $object_id, "socialdb_propertyterm_".$this->get_category_property($category->term_id, $collection_id), $category->term_id);*/

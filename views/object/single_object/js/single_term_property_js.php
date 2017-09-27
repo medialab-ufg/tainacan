@@ -5,6 +5,27 @@ $(function(){
 
     $("#property_term_collection_id").val(collection_id);
 
+    var changeable_selects = ['#socialdb_property_term_widget', '#property_term_filter_widget'];
+    // cardinality type 1
+    $('#socialdb_property_term_cardinality_1').click(function (e) {
+        $(changeable_selects).each(function (idx, el) {
+            $(el).html('')
+                .append('<option value="tree"><?php _e('Tree', 'tainacan') ?></option>')
+                //  .append('<option value="menu"><?php _e('Menu', 'tainacan') ?></option>')
+                .append('<option value="radio"><?php _e('Radio', 'tainacan') ?></option>')
+                .append('<option value="selectbox"><?php _e('Selectbox', 'tainacan') ?></option>');
+        });
+    });
+
+    // cardinality type n
+    $('#socialdb_property_term_cardinality_n').click(function (e) {
+        $('#socialdb_property_term_widget').html('')
+            .append('<option value="tree_checkbox"><?php _e('Tree - Checkbox', 'tainacan') ?></option>')
+            .append('<option value="checkbox"><?php _e('Checkbox', 'tainacan') ?></option>');
+    });
+
+    $('#socialdb_property_term_cardinality_1').trigger('click');
+
     showTermsDynatree(src);
 });
 var src = $('#src').val();
