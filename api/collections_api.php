@@ -4,7 +4,7 @@ abstract class CollectionsApi {
 
     public function get_collections($request) {
         $params = $request->get_params();
-        
+        error_reporting(0);
         $CollectionModel = new CollectionModel;
         $wpQueryModel = new WPQueryModel();
         $data = [];
