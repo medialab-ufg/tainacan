@@ -36,6 +36,11 @@ $rel = (isset($value->metas->socialdb_property_object_category_id) && is_array($
         <input type="radio" <?php if($value->metas->socialdb_property_required=='true') echo 'checked="checked";' ?> name="socialdb_event_property_object_edit_required" id="single_event_edit_property_object_required_true" value="true">&nbsp;<?php _e('Yes','tainacan'); ?>
         <input type="radio" <?php if($value->metas->socialdb_property_required=='false') echo 'checked="checked";' ?> name="socialdb_event_property_object_edit_required" id="single_event_edit_property_object_required_false"  value="false">&nbsp;<?php _e('No','tainacan'); ?>
     </div>
+        <div class="form-group" style="display: inline-block;">
+            <label for="property_term_required" style="margin-right: 10px;" ><?php _e('Elements Quantity', 'tainacan'); ?> : </label>
+            &nbsp;<input type="radio"  <?php if($value->metas->socialdb_property_object_cardinality=='1') echo 'checked="checked";' ?> name="socialdb_event_property_object_edit_cardinality" id="socialdb_property_object_cardinality_1" checked="checked"  value="1">&nbsp;<?php _e('Unic value', 'tainacan') ?>
+            &nbsp;<input type="radio"  <?php if($value->metas->socialdb_property_object_cardinality=='n') echo 'checked="checked";' ?> name="socialdb_event_property_object_edit_cardinality" id="socialdb_property_object_cardinality_n" value="n">&nbsp;<?php _e('Multiple values', 'tainacan') ?>
+        </div>
     <div class="form-group">
         <label for="event_edit_property_object_is_reverse"><?php _e('Reverse','tainacan'); ?>:&nbsp;</label>
         <input type="radio" <?php if($value->metas->socialdb_property_object_is_reverse=='true') echo 'checked="checked";' ?> name="socialdb_event_property_object_edit_is_reverse" id="single_event_edit_property_object_is_reverse_true" value="true">&nbsp;<?php _e('Yes','tainacan'); ?>

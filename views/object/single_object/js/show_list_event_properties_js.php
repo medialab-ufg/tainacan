@@ -373,11 +373,11 @@
 
                             checked = 'checked="checked"';
                             $('#value_single_radio_' + radio + '_<?php echo $object_id; ?>').val(children.term_id);
-                            $("#labels_" + radio + "_<?php echo $object_id; ?>").html('');
-                            $("#labels_" + radio + "_<?php echo $object_id; ?>").append('<b><a style="cursor:pointer;" onclick="wpquery_term_filter(' + children.term_id + ',' + radio + ')">'
-                                + children.name
-                                + '</a>' /*+ remove_button*/
-                                + '</b><br>');//inserindo os termos escolhidos
+                            //$("#labels_" + radio + "_<?php echo $object_id; ?>").html('');
+                            //$("#labels_" + radio + "_<?php echo $object_id; ?>").append('<b><a style="cursor:pointer;" onclick="wpquery_term_filter(' + children.term_id + ',' + radio + ')">'
+                            //   + children.name
+                            //   + '</a>' /*+ remove_button*/
+                            //  + '</b><br>');//inserindo os termos escolhidos
                         }
                         //delete_value(children.term_id);
                         $('#field_event_single_property_term_' + radio + '_<?php echo $object_id; ?>').append('<input ' + checked + ' onchange="get_event_single_radio(this,' + radio + ',<?php echo $object_id; ?>)" type="radio" name="socialdb_propertyterm_' + radio + '" value="' + children.term_id + '">&nbsp;' + children.name + '<br>');
@@ -411,13 +411,13 @@
                             }
                             if (categories.indexOf(children.term_id) > -1) {
                                 if(cont === 0) {
-                                    $("#labels_" + checkbox + "_<?php echo $object_id; ?>").html('');
+                                    //$("#labels_" + checkbox + "_<?php echo $object_id; ?>").html('');
                                 }
                                 cont++;
                                 checked = 'checked="checked"';
                                 //$("#labels_" + checkbox + "_<?php echo $object_id; ?>").html('');//zero o html do container que recebera os
                                 // insiro o html do link do valor atribuido
-                                $("#labels_" + checkbox + "_<?php echo $object_id; ?>").append('<b><a style="cursor:pointer;" onclick="wpquery_term_filter(' + children.term_id + ',' + checkbox + ')">' + children.name + '</a></b><br>');//inserindo os termos escolhidos
+                                //$("#labels_" + checkbox + "_<?php echo $object_id; ?>").append('<b><a style="cursor:pointer;" onclick="wpquery_term_filter(' + children.term_id + ',' + checkbox + ')">' + children.name + '</a></b><br>');//inserindo os termos escolhidos
                             }
                             //  if (property.id == selected) {
                             //     $('#property_object_reverse').append('<option selected="selected" value="' + property.id + '">' + property.name + ' - (' + property.type + ')</option>');
@@ -447,8 +447,8 @@
                         //delete_value(children.term_id);
                         if (categories.indexOf(children.term_id) > -1) {
                             checked = 'selected="selected"';
-                            $("#labels_" + selectbox + "_<?php echo $object_id; ?>").html('');
-                            $("#labels_" + selectbox + "_<?php echo $object_id; ?>").append('<b><a style="cursor:pointer;" onclick="wpquery_term_filter(' + children.term_id + ',' + selectbox + ')">' + children.name + '</a></b><br>');//inserindo os termos escolhidos
+                            //$("#labels_" + selectbox + "_<?php echo $object_id; ?>").html('');
+                            //$("#labels_" + selectbox + "_<?php echo $object_id; ?>").append('<b><a style="cursor:pointer;" onclick="wpquery_term_filter(' + children.term_id + ',' + selectbox + ')">' + children.name + '</a></b><br>');//inserindo os termos escolhidos
                             $('#value_single_select_' + selectbox + '_<?php echo $object_id; ?>').val(children.term_id);
                         }
                         $('#field_event_single_property_term_' + selectbox + '_<?php echo $object_id; ?>').append('<option ' + checked + ' value="' + children.term_id + '">' + children.name + '</option>');
@@ -475,7 +475,7 @@
                         //delete_value(children.term_id);
                         if (categories.indexOf(children.term_id) > -1) {
                             checked = 'selected="selected"';
-                            $("#labels_" + multipleSelect + "_<?php echo $object_id; ?>").append('<b><a style="cursor:pointer;" onclick="wpquery_term_filter(' + children.term_id + ',' + multipleSelect + ')">' + children.name + '</a></b><br>');//inserindo os termos escolhidos
+                            //$("#labels_" + multipleSelect + "_<?php echo $object_id; ?>").append('<b><a style="cursor:pointer;" onclick="wpquery_term_filter(' + children.term_id + ',' + multipleSelect + ')">' + children.name + '</a></b><br>');//inserindo os termos escolhidos
                         
                         }
                         $('#field_event_single_property_term_' + multipleSelect + '_<?php echo $object_id; ?>').append('<option onclick="get_event_single_multiple(this,<?php echo $object_id; ?>,' + multipleSelect + ')" ' + checked + ' value="' + children.term_id + '">' + children.name + '</option>');
@@ -500,11 +500,11 @@
                         elem = JSON.parse(result);
                         if(elem.show){
                             if(cont===0) {
-                                $("#labels_" + treecheckbox + "_<?php echo $object_id; ?>").html('');//zero o html do container que recebera os
+                               // $("#labels_" + treecheckbox + "_<?php echo $object_id; ?>").html('');//zero o html do container que recebera os
                             }
                             cont++;
                             // insiro o html do link do valor atribuido
-                            $("#labels_" + treecheckbox + "_<?php echo $object_id; ?>").append('<b><a style="cursor:pointer;" onclick="wpquery_term_filter(' + elem.term.term_id + ',' + treecheckbox + ')">' + elem.term.name + '</a></b><br>');//zero o html do container que recebera os
+                           // $("#labels_" + treecheckbox + "_<?php echo $object_id; ?>").append('<b><a style="cursor:pointer;" onclick="wpquery_term_filter(' + elem.term.term_id + ',' + treecheckbox + ')">' + elem.term.name + '</a></b><br>');//zero o html do container que recebera os
                             // coloco no selectbox o valor selecionado
                             //$("#socialdb_propertyterm_" + treecheckbox + "_<?php echo $object_id; ?>").append('<option selected="selected" value="' + elem.term.term_id + '" >' + elem.term.name + '</option>');
                         }
@@ -582,12 +582,12 @@
                     promise.done(function (result) {
                         elem = JSON.parse(result);
                         if(elem.show){
-                            $("#socialdb_propertyterm_" + tree + "_<?php echo $object_id; ?>").html('');
-                            $("#labels_" + tree + "_<?php echo $object_id; ?>").html('');//zero o html do container que recebera os
+                           // $("#socialdb_propertyterm_" + tree + "_<?php echo $object_id; ?>").html('');
+                           // $("#labels_" + tree + "_<?php echo $object_id; ?>").html('');//zero o html do container que recebera os
                             // insiro o html do link do valor atribuido
 
-                            $("#labels_" + tree + "_<?php echo $object_id; ?>").html('<b><a style="cursor:pointer;" onclick="wpquery_term_filter(' + elem.term.term_id + ',' + tree + ')">'
-                                + elem.term.name + '</a></b>');//zero o html do container que recebera os
+                            //$("#labels_" + tree + "_<?php echo $object_id; ?>").html('<b><a style="cursor:pointer;" onclick="wpquery_term_filter(' + elem.term.term_id + ',' + tree + ')">'
+                           //     + elem.term.name + '</a></b>');//zero o html do container que recebera os
                             // coloco no selectbox o valor selecionado
                            // $("#socialdb_propertyterm_" + tree + "_<?php echo $object_id; ?>").append('<option selected="selected" value="' + elem.term.term_id + '" >' + elem.term.name + '</option>');
                             //coloco o valor atual no hidden para poder remove-lo caso necessario 

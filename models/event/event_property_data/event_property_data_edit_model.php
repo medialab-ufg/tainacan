@@ -31,14 +31,23 @@ class EventPropertyDataEdit extends EventModel {
             $widget = get_term_meta($data['socialdb_event_property_data_edit_id'],'socialdb_property_data_widget',true);
             $newrequired = $data['socialdb_event_property_data_edit_required'];
             $required = get_term_meta($data['socialdb_event_property_data_edit_id'],'socialdb_property_required',true);
+            $newcardinality = $data['socialdb_event_property_data_edit_cardinality'];
+            $cardinality = get_term_meta($data['socialdb_event_property_data_edit_id'],'socialdb_property_data_cardinality',true);
 
             if($newwidget !== $widget){
                 $text .=  __('Alter widget field from ', 'tainacan').' : <i>'.$widget.'</i> '. __('to ', 'tainacan').'<i>'.$newwidget.'</i><br>';
             }
+
             if($newrequired !== $required){
                 $newrequired = ($newrequired === 'true') ? __('True') : __('False');
                 $required = ($required === 'true') ? __('True') : __('False');
                 $text .=  __('Alter required field from ', 'tainacan').' : <i>'. $required .'</i> '. __('to ', 'tainacan').' <i>'.$newrequired.'</i><br>';
+            }
+
+            if($newcardinality !== $cardinality){
+                $newcardinality = ($newcardinality === 'n') ? __('Multiple values','tainacan') : __('One value','tainacan');
+                $cardinality = ($cardinality === 'n') ? __('Multiple values','tainacan') : __('One value','tainacan');
+                $text .=  __('Alter cardinality from ', 'tainacan').' : <i>'. $cardinality .'</i> '. __('to ', 'tainacan').' <i>'.$newcardinality.'</i><br>';
             }
 
             $title = __('Alter configuration from data property ', 'tainacan').' : <i>'.$property->name.'</i><br>'.$text.
@@ -102,6 +111,7 @@ class EventPropertyDataEdit extends EventModel {
         $data['property_data_mask'] = get_post_meta($event_id, 'socialdb_event_property_data_edit_mask', true);
         $data['property_visualization'] = get_post_meta($event_id, 'socialdb_event_property_visualization',true) ;
         $data['property_locked'] = get_post_meta($event_id, 'socialdb_event_property_lock_field',true) ;
+        $data['socialdb_property_data_cardinality'] = get_post_meta($event_id, 'socialdb_event_property_data_edit_cardinality',true) ;
         // chamo a funcao do model de propriedade para fazer a insercao
         $result = json_decode($propertyModel->update_property_data($data));
         // verifying if is everything all right

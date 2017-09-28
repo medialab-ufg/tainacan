@@ -5,6 +5,7 @@ include_once (dirname(__FILE__) . '/../../../../../../wp-load.php');
 include_once (dirname(__FILE__) . '/../../../../../../wp-includes/wp-db.php');
 */
 require_once(dirname(__FILE__) . '../../../event/event_model.php');
+require_once(dirname(__FILE__) . '../../../object/object_save_values.php');
 
 class EventPropertyCompoundsEditValue extends EventModel {
 
@@ -71,6 +72,7 @@ class EventPropertyCompoundsEditValue extends EventModel {
      * Autor: Eduardo Humberto 
      */
     public function update_property_value($event_id,$data,$automatically_verified) {
+        $class = new ObjectSaveValuesModel();
         $collection_id = get_post_meta($event_id,'socialdb_event_collection_id',true);
         $object_id = get_post_meta($event_id, 'socialdb_event_property_compounds_edit_value_object_id',true);
         $property = get_post_meta($event_id, 'socialdb_event_property_compounds_edit_value_property_id',true);
@@ -91,51 +93,45 @@ class EventPropertyCompoundsEditValue extends EventModel {
             //percorro as propriedades que compoe a composta
             foreach ($properties_compounds_id as $key => $property_compounds_id) {
                 $result = true;
-                //busco o tipo da propriedade
                 $type = $this->get_property_type_hierachy($property_compounds_id);
-                if($type =='socialdb_property_data' || $type =='socialdb_property_object'){
-                    //array que sera usado atualizar o indice da propriedade composta
-                    if(empty($ids_metas)||(isset($ids_metas[$key])&&$ids_metas[$key]=='')){
-                        $new_ids_meta[] = $this->sdb_add_post_meta($object_id, "socialdb_property_$property_compounds_id", $values[$key]);
-                        $this->set_common_field_values($object_id, "socialdb_property_$property_compounds_id",$values[$key]);
-                    }else{
-                        $new_ids_meta[] = $ids_metas[$key];
-                        //atualizo o postmeta com o valor alterado
-                        $this->sdb_update_post_meta($ids_metas[$key], $values[$key]);
-                        $this->set_common_field_values($object_id, "socialdb_property_$property_compounds_id",$values[$key]);
-                    }
-                    
+                if($type =='socialdb_property_data'){
+                    $type = 'data';
+                }else if($type =='socialdb_property_object'){
+                    $type = 'object';
                 }else{
-                    //removo o antigo
-                    if(empty($ids_metas))
-                        wp_remove_object_terms( $object_id, get_term_by('id', str_replace('_cat', '', $ids_metas[$key]),'socialdb_category_type')->term_id,'socialdb_category_type');
-                    //adiciono o novo
-                    wp_set_object_terms( (int) $object_id,(int)$values[$key],'socialdb_category_type',true);
-                    $this->set_common_field_values($object_id, "socialdb_propertyterm_$property_compounds_id",$values[$key]);
-                    $new_ids_meta[] = $values[$key].'_cat';
+                    $type = 'term';
                 }
+                $class->saveValue($object_id,
+                    $property,
+                    $property_compounds_id,
+                    $type,
+                    $row,
+                    $values[$key], false
+                );
             }
-            update_post_meta($object_id,'socialdb_property_'.$property.'_'.$row, implode(',', $new_ids_meta));
+            //update_post_meta($object_id,'socialdb_property_'.$property.'_'.$row, implode(',', $new_ids_meta));
         }else if($properties_compound){
-            //busco os ids de estao localizados os metas
-            $ids_metas = explode(',', get_post_meta($object_id,'socialdb_property_'.$property.'_'.$row,true)); 
-            // o id das propriedades participantes
-            $properties_compounds_id = explode(',', $properties_compound);
-            //percorro as propriedades que compoe a composta
-            foreach ($properties_compounds_id as $key => $property_compounds_id) {
-                $result = true;
-                //busco o tipo da propriedade
-                $type = $this->get_property_type_hierachy($property_compounds_id);
-                if($type =='socialdb_property_data' || $type =='socialdb_property_object'){
-                    //atualizo o postmeta com o valor alterado
-                    update_post_meta($object_id, "socialdb_property_$property",'');
-                    $this->set_common_field_values($object_id, "socialdb_property_$property",'');
-                }else{
-                    //$result = wp_remove_object_terms( (int) $object_id, get_term_by('id', str_replace('_cat', '', $ids_metas[$key]),'socialdb_category_type')->term_id,'socialdb_category_type');
-                    $this->set_common_field_values($object_id, "socialdb_propertyterm_$property",'');
-                }
-            }
-            delete_post_meta($object_id,'socialdb_property_'.$property.'_'.$row);
+            $result = true;
+            $class->removeIndexValue($object_id,$property,$row);
+//            //busco os ids de estao localizados os metas
+//            $ids_metas = explode(',', get_post_meta($object_id,'socialdb_property_'.$property.'_'.$row,true));
+//            // o id das propriedades participantes
+//            $properties_compounds_id = explode(',', $properties_compound);
+//            //percorro as propriedades que compoe a composta
+//            foreach ($properties_compounds_id as $key => $property_compounds_id) {
+//                $result = true;
+//                //busco o tipo da propriedade
+//                $type = $this->get_property_type_hierachy($property_compounds_id);
+//                if($type =='socialdb_property_data' || $type =='socialdb_property_object'){
+//                    //atualizo o postmeta com o valor alterado
+//                    update_post_meta($object_id, "socialdb_property_$property",'');
+//                    $this->set_common_field_values($object_id, "socialdb_property_$property",'');
+//                }else{
+//                    //$result = wp_remove_object_terms( (int) $object_id, get_term_by('id', str_replace('_cat', '', $ids_metas[$key]),'socialdb_category_type')->term_id,'socialdb_category_type');
+//                    $this->set_common_field_values($object_id, "socialdb_propertyterm_$property",'');
+//                }
+//            }
+//            delete_post_meta($object_id,'socialdb_property_'.$property.'_'.$row);
         }
         // verifying if is everything all right
         if(!$result){

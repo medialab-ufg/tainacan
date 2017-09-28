@@ -33,6 +33,11 @@ include_once ('js/object_property_form_js.php'); ?>
         <input type="radio" name="socialdb_event_property_object_create_required" id="single_event_add_property_object_required_true" value="true">&nbsp;<?php _e('Yes','tainacan'); ?>
         <input type="radio" name="socialdb_event_property_object_create_required" id="single_event_add_property_object_required_false" checked="checked" value="false">&nbsp;<?php _e('No','tainacan'); ?>
     </div>
+    <div class="form-group" style="display: inline-block;">
+        <label for="property_term_required" style="margin-right: 10px;" ><?php _e('Elements Quantity', 'tainacan'); ?> : </label>
+        &nbsp;<input type="radio" name="socialdb_event_property_object_create_cardinality" id="socialdb_property_object_cardinality_1" checked="checked"  value="1">&nbsp;<?php _e('Unic value', 'tainacan') ?>
+        &nbsp;<input type="radio" name="socialdb_event_property_object_create_cardinality" id="socialdb_property_object_cardinality_n" value="n">&nbsp;<?php _e('Multiple values', 'tainacan') ?>
+    </div>
     <div class="form-group">
         <label for="event_add_property_object_is_reverse"><?php _e('Reverse','tainacan'); ?>:&nbsp;</label>
         <input type="radio" name="socialdb_event_property_object_create_is_reverse" id="single_event_add_property_object_is_reverse_true" value="true">&nbsp;<?php _e('Yes','tainacan'); ?>

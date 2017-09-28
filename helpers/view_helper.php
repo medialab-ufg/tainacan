@@ -232,7 +232,7 @@ class ViewHelper {
                        id="button_property_<?php echo $property['id']; ?>_<?php echo $i; ?>"
                        onclick="show_fields_metadata_cardinality_compounds(<?php echo $property['id'] ?>,<?php echo $i ?>)" 
                        style="margin-top: 5px;<?php echo (is_array($property['metas']['value'])&&($i+1)<count($property['metas']['value']))? 'display:none':'' ?>" 
-                       class="btn btn-primary btn-lg btn-xs btn-block">
+                       class="btn btn-primary btn-lg btn-xs btn-block  btn-new-field">
                     <span class="glyphicon glyphicon-plus"></span><?php _e('Add field', 'tainacan') ?>
                 </button>
             <?php
@@ -731,6 +731,92 @@ class ViewHelper {
         
         if($cont===0){
              echo '<p>' . __('empty field', 'tainacan') . '</p>';
+        }
+    }
+
+    /**
+     *
+     */
+    public function getValuesViewSingleMedia($meta,$property_id,$object_id,$collection_id,$property_type = null) {
+        $cont = 0;
+        if ($meta && $meta != '')
+        {
+            $array = unserialize($meta);
+            foreach ($array as $property) {
+                foreach ($property as $atom) {
+                    $type = $atom['type'];
+                    $values = $atom['values'];
+                    foreach ($values as $value) {
+                        $value = $this->sdb_get_post_meta($value)->meta_value;
+                        if(isset($value) && trim($value) != ''){
+                            $cont++;
+                        }
+
+                        if($type == 'data'){
+                            if($property_type != null && strcmp($property_type, 'textarea') == 0)
+                            {
+                                ?>
+                                    <b>
+                                        <?php echo '<a style="cursor:pointer;" onclick="wpquery_link_filter(' . "'" . preg_replace('/\s+/', ' ', $value) . "'" . ',' . $property_id . ')">
+                                                    <textarea class="form-control" rows="9" disabled="disabled">'.
+                                            $value.
+                                            '</textarea>
+                                                    </a>'; ?>
+                                    </b>
+                                <?php
+                            }
+                            else
+                            {
+                                ?>
+                                <b>
+                                        <?php echo '<a style="cursor:pointer;" onclick="wpquery_link_filter(' . "'" . $value . "'" . ',' . $property_id . ')">' .
+                                            $value
+                                            . '</a>'; ?>
+                                </b>
+                                <?php
+                            }
+
+                        }else if($type == 'object'){
+                            $ob = get_post($value);
+                            if ($ob && $ob->post_status == 'publish') {
+                                // echo '<b><a href="'. get_the_permalink($property['metas']['collection_data'][0]->ID) . '?item=' . $ob->post_name . '" >'. $ob->post_title . '</a></b><br>';
+                                echo '<input type="hidden" name="socialdb_property_'.$property_id.'[]" value="'.$ob->ID.'"><b><a href="'.$ob->guid.'">' . $ob->post_title . '</a></b>';
+                            }
+                        }else{
+                            $ob = get_term_by('id',$value,'socialdb_category_type');
+                            if ($ob) {
+                                ?>
+                                <b>
+                                    <a style="cursor:pointer;" onclick="wpquery_term_filter('<?php echo $ob->term_id ?>','<?php echo $property['id'] ?>')">
+                                        <?php echo $ob->name  ?>
+                                    </a>
+                                </b><br>
+                                <script>
+//                                    setTimeout(function(){
+//                                        append_category_properties('<?php //echo $ob->term_id ?>//',0,'<?php //echo $property_id ?>//');
+//                                    }, 3000);
+                                </script>
+                                <?php
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        if($cont===0){
+            ?>
+            <?php // verifico se o metadado pode ser alterado
+            if (verify_allowed_action($collection_id, 'socialdb_collection_permission_add_classification',$object_id)): ?>
+                    <button type="button" onclick="edit_term_property('<?php echo $property_id; ?>', '<?php echo $object_id; ?>')"
+                            id="single_edit_<?php echo $property_id; ?>_<?php echo $object_id; ?>"
+                            class="btn btn-default single_edit_<?php echo$property_id; ?>_<?php echo $object_id; ?>">
+                        <?php _e('Empty field. Click to edit','tainacan'); ?>
+                    </button>
+            <?php else: ?>
+                    <?php echo '<p>' . __('empty field', 'tainacan') . '</p>'; ?>
+            <?php endif; ?>
+            <?php
         }
     }
     

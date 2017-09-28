@@ -389,22 +389,14 @@ if (isset($property_term)): ?>
                             echo $property['metas']['socialdb_property_help'];
                         } ?>
                     </p>
-                    
-                    <?php // verifico se o metadado pode ser alterado
-                        if (verify_allowed_action($collection_id, 'socialdb_collection_permission_add_classification',$object_id)): ?>
-                        <div id="labels_<?php echo $property['id']; ?>_<?php echo $object_id; ?>">    
-                            <button type="button" onclick="edit_term_property('<?php echo $property['id']; ?>', '<?php echo $object_id; ?>')"
-                                    id="single_edit_<?php echo $property['id']; ?>_<?php echo $object_id; ?>"
-                                    class="btn btn-default single_edit_<?php echo $property['id']; ?>_<?php echo $object_id; ?>">
-                                <?php _e('Empty field. Click to edit','tainacan'); ?>
-                            </button>
-                        </div>    
-                    <?php else: ?>
-                        <div id="labels_<?php echo $property['id']; ?>_<?php echo $object_id; ?>">                        
-                            <?php echo '<p>' . __('empty field', 'tainacan') . '</p>'; ?>
-                        </div>
-                    <?php endif; ?>                    
 
+
+                    <div id="labels_<?php echo $property['id']; ?>_<?php echo $object_id; ?>">
+                    <?php
+                        $meta = get_post_meta($object_id, 'socialdb_property_helper_' . $property['id'], true);
+                        $objectHelper->getValuesViewSingleMedia($meta,$property['id'],$object_id,$collection_id);
+                    ?>
+                    </div>
                     <!-- Edição de metadado -->
                     <div style="display:none;" id="widget_<?php echo $property['id']; ?>_<?php echo $object_id; ?>">
                         <?php

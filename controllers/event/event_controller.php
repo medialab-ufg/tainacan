@@ -34,6 +34,8 @@ require_once(dirname(__FILE__).'../../../models/ranking/ranking_model.php');
 require_once(dirname(__FILE__).'../../../models/object/object_model.php');
 require_once(dirname(__FILE__) . '../../../models/object/object_save_values.php');
 
+
+
  class EventController extends Controller{
      public function operation($operation,$data) {
          switch ($operation) {
@@ -412,7 +414,13 @@ require_once(dirname(__FILE__) . '../../../models/object/object_save_values.php'
 }
 
 $event_controller = new EventController();
+if(!session_id()) {
+    session_start();
+}
+
+if(isset($data['socialdb_event_collection_id'])){
+delete_post_meta($data['socialdb_event_collection_id'],'properties-cached');
+delete_post_meta($data['socialdb_event_collection_id'],'rankings-cached');
+unset($_SESSION['tainacan-categories']);
+}
 echo $event_controller->operation($operation,$data);
-
-
-?>

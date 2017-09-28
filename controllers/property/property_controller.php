@@ -13,6 +13,7 @@ require_once(dirname(__FILE__).'../../../models/event/event_property_compounds/e
 require_once(dirname(__FILE__).'../../../models/event/event_property_compounds/event_property_compounds_edit_model.php');
 require_once(dirname(__FILE__).'../../../models/event/event_property_compounds/event_property_compounds_delete_model.php');
 require_once(dirname(__FILE__).'../../general/general_controller.php');  
+require_once(dirname(__FILE__).'../../../helpers/object/single_properties_widgets_helper.php');
 
  class PropertyController extends Controller{
 	 public function operation($operation,$data){
@@ -352,6 +353,11 @@ require_once(dirname(__FILE__).'../../general/general_controller.php');
                     $properties[] = $array;
                 }
                 return json_encode(['properties'=>$properties,'title'=>['id'=>$title->term_id,'labels' => $title_labels ]]);
+            case 'appendCompoundEvent':
+                $class = new ObjectSingleWidgetsHelper();
+                $class->appendNewContainer( $property_model,$data['object_id'],$data['compound_id'],$data['index']);
+                break;
+
                 
                 
         }
@@ -431,6 +437,7 @@ require_once(dirname(__FILE__).'../../general/general_controller.php');
         $data['socialdb_event_property_data_create_ordenation_column'] = $data['property_data_column_ordenation'];
         $data['socialdb_event_property_data_create_required'] = $data['property_data_required'];
         $data['socialdb_event_property_data_create_category_root_id'] = $data['property_category_id'];
+        $data['socialdb_event_property_data_create_cardinality'] = $data['socialdb_property_data_cardinality'];
         $data['socialdb_event_collection_id'] = $data['collection_id'];
         $data['socialdb_event_user_id'] = get_current_user_id();
         $data['socialdb_event_create_date'] = mktime();
@@ -461,6 +468,7 @@ require_once(dirname(__FILE__).'../../general/general_controller.php');
         $data['socialdb_event_property_data_edit_widget'] = $data['property_data_widget'];
         $data['socialdb_event_property_data_edit_ordenation_column'] = $data['property_data_column_ordenation'];
         $data['socialdb_event_property_data_edit_required'] = $data['property_data_required'];
+        $data['socialdb_event_property_data_edit_cardinality'] = $data['socialdb_property_data_cardinality'];
         $data['socialdb_event_collection_id'] = $data['collection_id'];
         $data['socialdb_event_user_id'] = get_current_user_id();
         $data['socialdb_event_create_date'] = mktime();
@@ -488,6 +496,7 @@ require_once(dirname(__FILE__).'../../general/general_controller.php');
         $data['socialdb_event_property_object_create_required'] = $data['property_object_required'];
         $data['socialdb_event_property_object_create_is_reverse'] = $data['property_object_is_reverse'];
         $data['socialdb_event_property_object_create_category_root_id'] = $data['property_category_id'];
+        $data['socialdb_event_property_object_create_cardinality'] = $data['socialdb_property_object_cardinality'];
         if(isset($data['property_object_reverse'])){
            $data['socialdb_event_property_object_create_reverse'] = $data['property_object_reverse'];   
         }
@@ -518,6 +527,7 @@ require_once(dirname(__FILE__).'../../general/general_controller.php');
         $data['socialdb_event_property_object_category_id'] = $data['property_object_category_id'];
         $data['socialdb_event_property_object_edit_required'] = $data['property_object_required'];
         $data['socialdb_event_property_object_edit_is_reverse'] = $data['property_object_is_reverse'];
+        $data['socialdb_event_property_object_edit_cardinality'] = $data['socialdb_property_object_cardinality'];
         if(isset($data['property_object_reverse'])){
            $data['socialdb_event_property_object_edit_reverse'] = $data['property_object_reverse'];   
         }

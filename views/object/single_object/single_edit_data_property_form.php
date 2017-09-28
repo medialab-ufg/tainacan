@@ -32,6 +32,11 @@ include_once ('js/edit_data_property_form_js.php'); ?>
         <input type="radio" <?php if($value->metas->socialdb_property_required=='true') echo 'checked="checked";' ?> name="socialdb_event_property_data_edit_required" id="single_event_edit_property_data_required_true" value="true">&nbsp;<?php _e('Yes','tainacan'); ?>
         <input type="radio" <?php if($value->metas->socialdb_property_required=='false') echo 'checked="checked";' ?> name="socialdb_event_property_data_edit_required" id="single_event_edit_property_data_required_false"  value="false">&nbsp;<?php _e('No','tainacan'); ?>
     </div>
+    <div class="form-group" style="display: inline-block;">
+        <label for="property_term_required" style="margin-right: 10px;" ><?php _e('Elements Quantity', 'tainacan'); ?> : </label>
+        &nbsp;<input type="radio"  <?php if($value->metas->socialdb_property_data_cardinality=='1') echo 'checked="checked";' ?> name="socialdb_event_property_data_edit_cardinality" id="socialdb_property_data_cardinality_1" checked="checked"  value="1">&nbsp;<?php _e('Unic value', 'tainacan') ?>
+        &nbsp;<input type="radio"  <?php if($value->metas->socialdb_property_data_cardinality=='n') echo 'checked="checked";' ?> name="socialdb_event_property_data_edit_cardinality" id="socialdb_property_data_cardinality_n" value="n">&nbsp;<?php _e('Multiple values', 'tainacan') ?>
+    </div>
     <?php  do_action('form_modify_property_data') ?>
     <input type="hidden" id="single_event_edit_property_data_collection_id" name="socialdb_event_collection_id" value="<?php echo $collection_id; ?>">
     <input type="hidden" id="single_event_edit_property_data_object_id" name="property_data_object_id" value="<?php echo $object_id; ?>">

@@ -35,6 +35,8 @@ class EventPropertyObjectEdit extends EventModel {
             $required = get_term_meta($data['socialdb_event_property_object_edit_id'],'socialdb_property_required',true);
             $newreverse = $data['socialdb_event_property_object_edit_is_reverse'];
             $reverse = get_term_meta($data['socialdb_event_property_object_edit_id'],'socialdb_property_object_is_reverse',true);
+            $newcardinality = $data['socialdb_event_property_object_edit_cardinality'];
+            $cardinality = get_term_meta($data['socialdb_event_property_object_edit_id'],'socialdb_property_object_cardinality',true);
 
             if($newcategory !== $old_categories){
                 $new_categories = explode(',',$newcategory);
@@ -67,6 +69,13 @@ class EventPropertyObjectEdit extends EventModel {
                 $reverse = ($reverse === 'true') ? __('True','tainacan') : __('False','tainacan');
                 $text .=  __('Alter reverse field from ', 'tainacan').' : <i>'. $reverse .'</i> '. __('to ', 'tainacan').' <i>'.$newreverse.'</i><br>';
             }
+
+            if($newcardinality !== $cardinality){
+                $newcardinality = ($newcardinality === 'n') ? __('Multiple values','tainacan') : __('One value','tainacan');
+                $cardinality = ($cardinality === 'n') ? __('Multiple values','tainacan') : __('One value','tainacan');
+                $text .=  __('Alter cardinality from ', 'tainacan').' : <i>'. $cardinality .'</i> '. __('to ', 'tainacan').' <i>'.$newcardinality.'</i><br>';
+            }
+
             $title = __('Alter configuration from object property ', 'tainacan').' : <i>'.$property->name.'</i><br> '.$text.
                 __(' in the collection ', 'tainacan') .' '.' <b><a href="'.  get_the_permalink($collection->ID).'">'.$collection->post_title.'</a></b> ';
         }else{
@@ -133,6 +142,7 @@ class EventPropertyObjectEdit extends EventModel {
            $data['property_object_reverse'] = get_post_meta($event_id, 'socialdb_event_property_object_edit_reverse',true) ;   
         }
         $data['property_category_id'] = get_term_meta($data['property_object_id'], 'socialdb_property_created_category',true) ;
+        $data['socialdb_property_object_cardinality'] = get_post_meta($event_id, 'socialdb_event_property_object_edit_cardinality',true) ;
         // chamo a funcao do model de propriedade para fazer a insercao
         $result = json_decode($propertyModel->update_property_object($data));
         if(isset(get_term_by('id', $data['property_object_id'], 'socialdb_property_type')->term_id)){
