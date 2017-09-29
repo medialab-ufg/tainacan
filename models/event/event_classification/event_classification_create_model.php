@@ -104,7 +104,9 @@ class EventClassificationCreateModel extends EventModel {
         //print $this->getPropertyCategory( $category->term_id, $collection_id);
         if($category && $object_id)// se a categoria e objeto forem validos
         {
-
+            if(!isset($data['socialdb_event_classification_property_id'])){
+                $data['socialdb_event_classification_property_id'] = $this->getPropertyByCategory($data);
+            }
             $class->saveValue($object_id,
                         $data['socialdb_event_classification_property_id'],
                         0,
@@ -135,6 +137,7 @@ class EventClassificationCreateModel extends EventModel {
      * @param $collection_id
      * @return mixed
      */
+    
     public function getPropertyCategory($category,$collection_id) {
         foreach ($this->getCollectionTermProperties($collection_id) as $property) {
             if(isset($property['metas']['socialdb_property_term_root'])){
@@ -144,6 +147,25 @@ class EventClassificationCreateModel extends EventModel {
                 }
             }
         }
+    }
+
+    public function getPropertyByCategory($data){
+        $term_id = get_post_meta($data['event_id'], 'socialdb_event_classification_term_id',true);
+        $collection_id = get_post_meta($data['event_id'], 'socialdb_event_collection_id',true);
+        $category_root_id = $this->get_category_root_of($collection_id);
+        $properties = get_term_meta($category_root_id,'socialdb_category_property_id');
+        if($properties && is_array($properties)){
+            foreach ($properties as $property) {
+                $term_root = get_term_meta($property,'socialdb_property_term_root',true);
+                if($term_root != ''){
+                    $ancestors = get_ancestors($term_id,'socialdb_category_type');
+                    if(is_array($ancestors) && in_array($term_root,$ancestors)){
+                        return $property;
+                    }
+                }
+            }
+        }
+        return false;
     }
       /**
      * function insert_event_tag($object_id,$data,$automatically_verified = false)

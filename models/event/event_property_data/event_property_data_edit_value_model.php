@@ -25,7 +25,36 @@ class EventPropertyDataEditValue extends EventModel {
         $object = get_post($data['socialdb_event_property_data_edit_value_object_id']);
         $property = get_term_by('id', $data['socialdb_event_property_data_edit_value_property_id'], 'socialdb_property_type');
         $values_before = get_post_meta($object->ID,'socialdb_property_'.$property->term_id);
-        if($data['socialdb_event_property_data_edit_value_attribute_value']!=''){
+        if($data['socialdb_event_property_data_edit_value_property_id'] == 'title'){
+            $title = __('Alter the ','tainacan').' <b>'.__('Title','tainacan').'</b> '.__('from ').' ( <i>'.$object->post_title.'</i> ) '.__(' to ','tainacan').' ( <i>'.$data['socialdb_event_property_data_edit_value_attribute_value'].'</i> ) ';
+        }else if($data['socialdb_event_property_data_edit_value_property_id'] == 'description'){
+            $desc = (empty($object->post_content)) ? 'Vazio' : $object->post_content;
+            $title = __('Alter the ','tainacan').' <b>'.__('Description','tainacan').'</b> '.__('from ').' ( <i>'.$desc.'</i> ) '.__(' to ','tainacan').' ( <i>'.$data['socialdb_event_property_data_edit_value_attribute_value'].'</i> ) '
+                . __(' in the object ','tainacan') .'<b><a href="'.  get_the_permalink($object->ID).'">'. $object->post_title.'</a></b>';
+        }else if($data['socialdb_event_property_data_edit_value_property_id'] == 'source'){
+            $source = get_post_meta($object->ID,'socialdb_object_dc_source',true);
+            $source = (empty($source)) ? 'Vazio' : $source;
+            $title = __('Alter the ','tainacan').' <b>'.__('Source','tainacan').'</b> '.__('from ').' ( <i>'.$source.'</i> ) '.__(' to ','tainacan').' ( <i>'.$data['socialdb_event_property_data_edit_value_attribute_value'].'</i> ) '
+                . __(' in the object ','tainacan') .'<b><a href="'.  get_the_permalink($object->ID).'">'. $object->post_title.'</a></b>';
+        }else if($data['socialdb_event_property_data_edit_value_property_id'] == 'type'){
+            $type = get_post_meta($object->ID,'socialdb_object_dc_type',true);
+            $type = (empty($type)) ? 'Vazio' : $type;
+            $title = __('Alter the ','tainacan').' <b>'.__('Type','tainacan').'</b> '.__('from ').' ( <i>'.$type.'</i> ) '.__(' to ','tainacan').' ( <i>'.$data['socialdb_event_property_data_edit_value_attribute_value'].'</i> ) '
+                . __(' in the object ','tainacan') .'<b><a href="'.  get_the_permalink($object->ID).'">'. $object->post_title.'</a></b>';
+        }else if($data['socialdb_event_property_data_edit_value_property_id'] == 'thumbnail'){
+            $thumbnail_old =  $this->replaceDot(get_the_post_thumbnail($object->ID, 'thumbnail'));
+            $url_image = wp_get_attachment_url($data['socialdb_event_property_data_edit_value_attribute_value']);
+            $thumbnail_new = $this->replaceDot('<img width="150" height="150" class="attachment-thumbnail size-thumbnail wp-post-image" src="'.$url_image.'" width="45%"/>');
+            $title = __('Alter the ','tainacan').' <b>'.__('Thumbnail','tainacan').'</b> '.__('from ').
+                $thumbnail_old.__(' to ','tainacan').$thumbnail_new
+                .'<br><br>'. __(' in the object ','tainacan') .'<b><a href="'.  get_the_permalink($object->ID).'">'. $object->post_title.'</a></b>';
+        }else if($data['socialdb_event_property_data_edit_value_property_id'] == 'license'){
+            $license = get_post_meta($object->ID,'socialdb_license_id',true);
+            $license = (empty($license)) ? 'Vazio' : get_post($license)->post_title;
+            $new = (is_numeric($data['socialdb_event_property_data_edit_value_attribute_value'])) ? get_post($data['socialdb_event_property_data_edit_value_attribute_value'])->post_title : 'Vazio';
+            $title = __('Alter the ','tainacan').' <b>'.__('License','tainacan').'</b> '.__('from ').' ( <i>'.$license.'</i> ) '.__(' to ','tainacan').' ( <i>'.$new.'</i> ) '
+               . __(' in the object ','tainacan') .'<b><a href="'.  get_the_permalink($object->ID).'">'. $object->post_title.'</a></b>';
+        }else if($data['socialdb_event_property_data_edit_value_attribute_value']!=''){
             if($values_before && count(array_filter($values_before)) > 0){
                 $valuesBefore = implode(',',array_filter($values_before));
                 if(is_array($data['socialdb_event_property_data_edit_value_attribute_value'])){
@@ -68,6 +97,9 @@ class EventPropertyDataEditValue extends EventModel {
         return $title;
     }
 
+    public function replaceDot($string){
+        return str_replace('.',get_option('socialdb_divider'),$string);
+    }
     /**
      * function verify_event($data)
      * @param string $data  Os dados do evento a ser verificado

@@ -673,18 +673,21 @@
         }).done(function (result) {
             $('#modalImportMain').modal('hide');//mostro o modal de carregamento
             elem = jQuery.parseJSON(result);
-            if(elem.type === 'success')
-                $("#text_title").text(value);
+            if(elem.type === 'success'){
+                //$("#text_title").text(value);
+                showAlertGeneral(elem.title, elem.msg, elem.type);
+                location.reload()
+            }else{
+                showAlertGeneral(elem.title, elem.msg, elem.type);
+            }
 
-            if(type === 'type')
-                cancel_type();
 
-            showAlertGeneral(elem.title, elem.msg, elem.type);
+
             // cancel_title();
             //showSingleObjectByName($('#object_page').val(), $('#src').val());
 
             if(is_thumb) {
-                reload_item_thumb(object_id);
+              //  reload_item_thumb(object_id);
             }
         });
     }

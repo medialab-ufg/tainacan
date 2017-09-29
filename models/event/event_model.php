@@ -146,11 +146,12 @@ abstract class EventModel extends Model {
         $userModel = new UserModel();
         $ranking_model = new RankingModel;
         $event = get_post($data['event_id']);
+        $divider = get_option('socialdb_divider');
         $terms = wp_get_object_terms($event->ID, 'socialdb_event_type');
         $info['state'] = get_post_meta($event->ID, 'socialdb_event_confirmed', true);
         $info['observation'] = get_post_meta($event->ID, 'socialdb_event_observation', true);
         $info['operation'] = get_term_by('id', $terms[0]->term_id, 'socialdb_event_type')->name;
-        $info['name'] = $event->post_title;
+        $info['name'] = str_replace($divider,'.',$event->post_title) ;
         $info['date'] = date("d/m/Y", get_post_meta($event->ID, 'socialdb_event_create_date', true));
         $info['type'] = EventModel::get_type($event);
         $info['id'] = $event->ID;

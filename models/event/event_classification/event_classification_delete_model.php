@@ -81,8 +81,9 @@ class EventClassificationDeleteModel extends EventModel {
     }
 
     public function getPropertyByCategory($data){
-        $term_id = $data['socialdb_event_classification_term_id'];
-        $category_root_id = $this->get_category_root_of($data['socialdb_event_collection_id']);
+        $term_id = get_post_meta($data['event_id'], 'socialdb_event_classification_term_id',true);
+        $collection_id = get_post_meta($data['event_id'], 'socialdb_event_collection_id',true);
+        $category_root_id = $this->get_category_root_of($collection_id);
         $properties = get_term_meta($category_root_id,'socialdb_category_property_id');
         if($properties && is_array($properties)){
             foreach ($properties as $property) {
@@ -202,23 +203,31 @@ class EventClassificationDeleteModel extends EventModel {
      * Autor: Eduardo Humberto 
      */
     public function  delete_event_property($object_id,$data,$automatically_verified = false){
+        $class = new ObjectSaveValuesModel();
        //pego a propriedade de relacionamento
         $property = get_term_by('id',  get_post_meta($data['event_id'], 'socialdb_event_classification_type',true),'socialdb_property_type');
         $relationship_id = get_post(get_post_meta($data['event_id'], 'socialdb_event_classification_term_id',true));
         if($property&&$relationship_id&&$object_id){ // faco a validacao
-            $metas = get_post_meta($object_id, 'socialdb_property_'.$property->term_id);//pego a propriedade
-            if(!$metas||count($metas)==1){// se exisir ou nao exisir so um relacionamento para essa propriedade ele atualiza esse unico registro
-                update_post_meta($object_id, 'socialdb_property_'.$property->term_id, '',$relationship_id->ID);
-            }else{// se nao, exclui somente ele
-                delete_post_meta($object_id, 'socialdb_property_'.$property->term_id, $relationship_id->ID);
+            $ancestors = get_ancestors($property->term_id,'socialdb_property_type');
+            if(in_array(get_term_by('slug','socialdb_property_object')->term_id,$ancestors)) {
+                $type = 'object';
+            } else {
+                $type = 'data';
             }
-            $this->set_common_field_values($object_id, 'socialdb_property_'.$property->term_id, get_post_meta($object_id, 'socialdb_property_'.$property->term_id),'item');
+            $class->removeValue($object_id,$property->term_id,0,$type,0,$relationship_id->ID);
+            //$metas = get_post_meta($object_id, 'socialdb_property_'.$property->term_id);//pego a propriedade
+            //if(!$metas||count($metas)==1){// se exisir ou nao exisir so um relacionamento para essa propriedade ele atualiza esse unico registro
+            //    update_post_meta($object_id, 'socialdb_property_'.$property->term_id, '',$relationship_id->ID);
+            //}else{// se nao, exclui somente ele
+             //   delete_post_meta($object_id, 'socialdb_property_'.$property->term_id, $relationship_id->ID);
+            //}
+            //$this->set_common_field_values($object_id, 'socialdb_property_'.$property->term_id, get_post_meta($object_id, 'socialdb_property_'.$property->term_id),'item');
             $this->set_approval_metas($data['event_id'], $data['socialdb_event_observation'], $automatically_verified);
             $this->update_event_state('confirmed', $data['event_id']);
             $data['msg'] = __('The event was successful','tainacan');
             $data['type'] = 'success';
             $data['title'] = 'Success';
-        }else{ // se caso qualquer um dos itens for invalido
+        }else{  // se caso qualquer um dos itens for invalido
             $data['msg'] = __('Object, Property or relationship invalid','tainacan');
             $data['type'] = 'error';
             $data['title'] = 'Error';

@@ -450,7 +450,7 @@ if("one" === $single_mode) {
                         </div>
                         <div id="text_license">
                             <p>
-                                <?php if (is_object(get_post($item_opts['license'])) && isset(get_post($item_opts['license'])->post_title))
+                                <?php if (isset($item_opts['license']) && is_object(get_post($item_opts['license'])) && isset(get_post($item_opts['license'])->post_title))
                                     echo get_post($item_opts['license'])->post_title;
                                 else
                                     _t('No license registered for this item', 1); ?>
