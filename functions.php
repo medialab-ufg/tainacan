@@ -3473,12 +3473,11 @@ function get_pdf_no_thumb_ids($count) {
 function save_canvas_pdf_thumbnails($canvas_images) {
     $upload_dir = wp_upload_dir();
     $upload_path = str_replace('/', DIRECTORY_SEPARATOR, $upload_dir['path']) . DIRECTORY_SEPARATOR;
-
+    
     foreach($canvas_images as $item)
     {
-
-        $post_id = get_post_ancestors($item->file_id)[0];
-        $canvas_image = $item->base64IMAGE;
+        $post_id = $item['post_id'];
+        $canvas_image = $item['img'];
         $image = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $canvas_image));
 
         $filename = 'pdf_thumb_'.$post_id.'.png';

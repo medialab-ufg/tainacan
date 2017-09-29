@@ -3302,9 +3302,13 @@ function get_pdf_and_gen_thumb(formData, promises, count, resolveBefore = null, 
                         resolveBefore(msg);
                         return;
                     }
+
+                    setTimeout(function () {
+                        window.location = window.location.href;
+                    }, 2000);
                 }
 
-                formDataIDImg = new FormData();
+                var formIDImg = [];
                 let itemsFetcher = itens_id.map(function(info, index) {
                     let post_id = info[0];
                     let pdf_url = info[1];
@@ -3319,8 +3323,9 @@ function get_pdf_and_gen_thumb(formData, promises, count, resolveBefore = null, 
                                     .then(function(canvas) {
                                         let img = canvas.toDataURL("image/png");
 
-                                        formDataIDImg.append(post_id, img);
+                                        formIDImg.push({post_id: post_id, img: img});
                                         resolve("It's done!");
+
                                     });
                             }));
                         });
@@ -3331,9 +3336,7 @@ function get_pdf_and_gen_thumb(formData, promises, count, resolveBefore = null, 
                     $.ajax({
                         url: $("#src").val() + '/controllers/collection/collection_controller.php?operation=pdf_thumbnail',
                         type: 'POST',
-                        data: formDataIDImg,
-                        processData: false,
-                        contentType: false
+                        data: {data: formIDImg}
                     }).done(function (result) {
                         elem = jQuery.parseJSON(result);
                         get_pdf_and_gen_thumb(formData, promises, count, right, elem.msg);
