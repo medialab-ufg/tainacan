@@ -215,12 +215,23 @@ class FormItem extends Model {
             </div>
         <?php
         endif;
+        if(isset($_SESSION['operation-form']) && $_SESSION['operation-form'] === 'edit'):
+            ?>
+            <a  href="<?php echo get_the_permalink($this->collection_id) ?>"
+                    style="margin-bottom: 20px;"
+                    class="btn btn-default btn-lg pull-left"><?php _e('Back','tainacan'); ?>
+            </a>
+            <?php
+        else:
         ?>
         <button type="button"
                 onclick="backMainListOrDiscard(<?php echo $ID ?>);"
                 style="margin-bottom: 20px;"
                 class="btn btn-default btn-lg pull-left"><?php _e('Discard','tainacan'); ?>
         </button>
+        <?php
+            endif;
+        ?>
         <div id="submit_container">
             <button type="button"
                     id="submit-form-item"
