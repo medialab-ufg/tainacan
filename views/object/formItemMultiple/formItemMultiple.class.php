@@ -70,7 +70,7 @@ class FormItemMultiple extends Model {
                 <span id='number_of_items_selected'></span>
                 <?php _e(' item/items ','tainacan') ?>
             </h3>
-            <div class="expand-all-item btn white tainacan-default-tags">
+            <div class="expand-all-item btn white tainacan-default-tags" onclick="openAccordeon('multiple')" data-operation="1">
                 <div class="action-text" 
                      style="display: inline-block">
                          <?php _e('Expand all', 'tainacan') ?></div>
@@ -101,25 +101,25 @@ class FormItemMultiple extends Model {
             <h3>
                 <?php if($this->operation === 'add-social-network-beta'): ?> 
                     <?php echo $this->title ?>
-                    <button type="button" onclick="back_main_list_discard();"
+                    <!--button type="button" onclick="back_main_list_discard();"
                             class="btn btn-default pull-right"> 
                                 <?php _e('Cancel','tainacan') ?>
-                    </button>
+                    </button-->
                 <?php else: ?> 
                     <?php echo $this->title ?>
-                    <button type="button" onclick="back_main_list();"
+                    <!--button type="button" onclick="back_main_list();"
                             class="btn btn-default pull-right"> 
                                 <?php _e('Cancel','tainacan') ?>
-                    </button>
+                    </button-->
                 <?php endif; ?> 
             </h3>
             <?php else: ?>
             <h3>
                 <?php echo $this->title ?>
-                <button type="button" onclick="back_main_list();"
+                <!--button type="button" onclick="back_main_list();"
                         class="btn btn-default pull-right"> 
                             <?php _e('Cancel','tainacan') ?>
-                </button>
+                </button-->
                 <br>
                 <small id="draft-text"></small>
             </h3>
@@ -169,14 +169,14 @@ class FormItemMultiple extends Model {
                  </div>
             </div>
             <div class="col-md-12" style="padding: 15px;">
-                 <?php if(isset($edit_multiple)): ?> 
+                 <?php if($this->operation !== 'add-social-network-beta'): ?>
                   <input type="hidden" id="edit_multiple" name="edit_multiple" value="true">
                  <button type="button" onclick="back_main_list();"
                         class="btn btn-lg btn-default pull-left"> 
                             <?php _e('Cancel','tainacan') ?>
                 </button>
                  <?php else: ?>   
-                 <button type="button" onclick="back_main_list_socialnetwork();"
+                 <button type="button" onclick="back_main_list_discard();"
                         class="btn btn-lg btn-default pull-left"> 
                             <?php _e('Cancel','tainacan') ?>
                 </button>
@@ -525,6 +525,26 @@ class FormItemMultiple extends Model {
 
                 wpquery_clean();
                 showAlertGeneral('<?php _e('Success','tainacan') ?>', '<?php _e('Operation was successfully!','tainacan') ?>', 'success');
+            }
+
+            function openAccordeon(id){
+                let op = $('.expand-all-item').attr('data-operation');
+                console.log(op);
+                if( op == 0)//Retrair
+                {
+                    $('#form_properties_items').find("div.action-text").html('Expandir todos');
+                    $('#form_properties_items h2.accordion-header-active').click();
+                    $('.cloud_label').click();
+                    $('.expand-all-item').attr('data-operation', 1);
+                    $('#form_properties_items').find(".expand-all-link").html('Expandir todos <span class="caret"></span>');
+                }else{
+                    //Expandir
+                    $('#form_properties_items').find("div.action-text").html('Retrair todos');
+                    $('#form_properties_items h2:not(.accordion-header-active)').click();
+                    $('.cloud_label').click();
+                    $('.expand-all-item').attr('data-operation', 0);
+                    $('#form_properties_items').find(".expand-all-link").html('Retrair todos <span class="caret"></span>');
+                }
             }
           </script>
         <?php
