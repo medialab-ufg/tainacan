@@ -23,6 +23,7 @@ class FormItemMultiple extends Model {
         'socialdb_property_fixed_tags',
         'socialdb_property_fixed_type'
     ];
+    public $collectionPropertiesView;
     
     function __construct($collection_id = 0,$title = '',$operation = '') {
         $this->collection_id = $collection_id;
@@ -40,6 +41,34 @@ class FormItemMultiple extends Model {
         $this->title = $title;
         $this->operation = $operation;
         $this->itemId = 'multiple';
+        if ($this->collection_id !== 0):
+            $this->get_labels_fixed_properties($this->collection_id);
+            $meta = get_post_meta($this->collection_id, 'socialdb_collection_fixed_properties_visibility', true);
+            if ($meta && $meta != ''):
+                $this->collectionPropertiesView = explode(',', $meta);
+            else:
+                $this->collectionPropertiesView = [];
+            endif;
+        endif;
+    }
+
+    /**
+     *
+     * @param type $collection_id
+     */
+    public function get_labels_fixed_properties($collection_id) {
+        $labels_collection = ($collection_id != '') ? get_post_meta($collection_id, 'socialdb_collection_fixed_properties_labels', true) : false;
+        foreach ($this->terms_fixed as $slug => $value) {
+            if ($labels_collection):
+                $array = unserialize($labels_collection);
+                if (!isset($this->terms_fixed[$slug]->name))
+                    continue;
+
+                $this->terms_fixed[$slug]->name = (isset($array[$this->terms_fixed[$slug]->term_id])) ? $array[$this->terms_fixed[$slug]->term_id] : $this->terms_fixed[$slug]->name;
+            else:
+                $this->terms_fixed[$slug]->name = $this->terms_fixed[$slug]->name;
+            endif;
+        }
     }
     /**
      * 
