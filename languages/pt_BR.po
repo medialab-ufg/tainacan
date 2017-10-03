@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: socialdb\n"
-"POT-Creation-Date: 2017-10-03 10:09-0300\n"
-"PO-Revision-Date: 2017-10-03 10:10-0300\n"
+"POT-Creation-Date: 2017-10-03 11:07-0300\n"
+"PO-Revision-Date: 2017-10-03 11:08-0300\n"
 "Last-Translator: Rodrigo de Oliveira <webmaster@rodrigodeoliveira.net>\n"
 "Language-Team: \n"
 "Language: pt_BR\n"
@@ -997,9 +997,9 @@ msgstr "Operação realizada com sucesso"
 msgid "Property removed"
 msgstr "Este Metadado já foi removido"
 
-#: controllers/property/property_controller.php:82
-#: controllers/property/property_controller.php:111
-#: controllers/property/property_controller.php:134
+#: controllers/property/property_controller.php:81
+#: controllers/property/property_controller.php:110
+#: controllers/property/property_controller.php:133
 msgid "Operation was successfully"
 msgstr "Operação realizada com sucesso!"
 
@@ -1213,8 +1213,8 @@ msgstr "Responder"
 #: views/property/metadata/form_tag.php:7 views/ranking/list.php:72
 #: views/search/edit.php:113 views/search/edit.php:135
 #: views/search/edit.php:158 views/search/tags.php:60
-#: views/social_network/list.php:39 views/social_network/list.php:68
-#: views/social_network/list.php:121 views/social_network/list.php:146
+#: views/social_network/list.php:39 views/social_network/list.php:69
+#: views/social_network/list.php:123 views/social_network/list.php:148
 #: views/theme_options/property/js/compounds_js.php:211
 #: views/theme_options/property/js/list_metadata_js.php:1888
 #: views/theme_options/property/list.php:64
@@ -1244,8 +1244,8 @@ msgstr "Deletar este comentário?"
 #: views/property/list.php:176 views/property/list.php:261
 #: views/ranking/list.php:73 views/search/edit.php:114
 #: views/search/edit.php:136 views/search/edit.php:159
-#: views/social_network/list.php:40 views/social_network/list.php:69
-#: views/social_network/list.php:122 views/social_network/list.php:147
+#: views/social_network/list.php:40 views/social_network/list.php:70
+#: views/social_network/list.php:124 views/social_network/list.php:149
 #: views/theme_options/property/list.php:65
 #: views/theme_options/property/list.php:114
 #: views/theme_options/property/list.php:173
@@ -4341,8 +4341,8 @@ msgstr "Ferramentas"
 #: views/object/js/list_single_version_js.php:4
 #: views/social_network/js/import_js.php:31
 #: views/social_network/js/import_js.php:36 views/social_network/list.php:41
-#: views/social_network/list.php:70 views/social_network/list.php:123
-#: views/social_network/list.php:148 views/theme_options/import_full.php:10
+#: views/social_network/list.php:71 views/social_network/list.php:125
+#: views/social_network/list.php:150 views/theme_options/import_full.php:10
 #: views/theme_options/import_full.php:141
 #: views/theme_options/import_full.php:159
 #: views/theme_options/updates_page.php:8
@@ -5287,7 +5287,7 @@ msgstr "API ID"
 #: views/collection/modals.php:657 views/collection/modals.php:715
 #: views/license/list.php:41 views/license/list.php:44
 #: views/object/multiple_social_network/create.php:39
-#: views/social_network/list.php:52 views/theme_options/edit.php:29
+#: views/social_network/list.php:53 views/theme_options/edit.php:29
 #: views/theme_options/edit.php:41 views/theme_options/edit.php:54
 #: views/theme_options/edit.php:57 views/theme_options/edit.php:71
 #: views/theme_options/edit.php:74 views/theme_options/edit.php:88
@@ -6754,8 +6754,8 @@ msgstr "Lista de reprodução"
 #: views/import/oaipmh/edit_maping_attributes.php:70
 #: views/object/single_object/js/show_list_event_properties_edit_remove_js.php:30
 #: views/social_network/edit_maping_attributes.php:30
-#: views/social_network/list.php:42 views/social_network/list.php:71
-#: views/social_network/list.php:124 views/social_network/list.php:149
+#: views/social_network/list.php:42 views/social_network/list.php:72
+#: views/social_network/list.php:126 views/social_network/list.php:151
 #: views/theme_options/oaipmh/edit_maping_attributes.php:70
 msgid "Update"
 msgstr "Atualizar"
@@ -6764,11 +6764,11 @@ msgstr "Atualizar"
 msgid "Entry youtube video url"
 msgstr "Digite a url do vídeo do youtube"
 
-#: views/collection/modals.php:567 views/social_network/list.php:51
+#: views/collection/modals.php:567 views/social_network/list.php:52
 msgid "Entry channel youtube identifeir"
 msgstr "Digite o identificador do canal do youtube"
 
-#: views/collection/modals.php:569 views/social_network/list.php:53
+#: views/collection/modals.php:569 views/social_network/list.php:54
 msgid "Entry playlist youtube identifeir"
 msgstr "Digite o identificador do playlist do youtube"
 
@@ -6781,44 +6781,44 @@ msgstr "Digite o identificador do playlist do youtube"
 msgid "Help: "
 msgstr "Ajuda: "
 
-#: views/collection/modals.php:571 views/social_network/list.php:54
+#: views/collection/modals.php:571 views/social_network/list.php:55
 msgid "Type here to get a specific playlist or leave blank to get all"
 msgstr ""
 "Digite aqui para especificar uma lista de reprodução ou deixe em branco para "
 "todos os vídeos"
 
-#: views/collection/modals.php:578 views/social_network/list.php:64
+#: views/collection/modals.php:578 views/social_network/list.php:65
 msgid "Flickr Profiles"
 msgstr "Perfis do Flickr "
 
 #: views/collection/modals.php:581 views/collection/modals.php:628
-#: views/collection/modals.php:647 views/social_network/list.php:67
-#: views/social_network/list.php:120 views/social_network/list.php:145
+#: views/collection/modals.php:647 views/social_network/list.php:68
+#: views/social_network/list.php:122 views/social_network/list.php:147
 msgid "User Name"
 msgstr "Nome do usuário"
 
-#: views/collection/modals.php:590 views/social_network/list.php:79
+#: views/collection/modals.php:590 views/social_network/list.php:81
 msgid "Entry an user name from a flickr profile"
 msgstr "Entre com o nome do usuário de perfil do flickr "
 
-#: views/collection/modals.php:598 views/social_network/list.php:89
+#: views/collection/modals.php:598 views/social_network/list.php:91
 msgid "Facebook Profiles"
 msgstr "Perfis do Facebook"
 
-#: views/collection/modals.php:620 views/social_network/list.php:107
+#: views/collection/modals.php:620 views/social_network/list.php:109
 msgid "Import Facebook Photos"
 msgstr "Importar Fotos do Facebook"
 
-#: views/collection/modals.php:625 views/social_network/list.php:117
+#: views/collection/modals.php:625 views/social_network/list.php:119
 msgid "Instagram Profiles"
 msgstr "Perfis do Instagram"
 
-#: views/collection/modals.php:637 views/social_network/list.php:132
-#: views/social_network/list.php:157
+#: views/collection/modals.php:637 views/social_network/list.php:134
+#: views/social_network/list.php:160
 msgid "Entry an user name from a instagram profile"
 msgstr "Entre com o nome do usuário de perfil do Instagram "
 
-#: views/collection/modals.php:644 views/social_network/list.php:142
+#: views/collection/modals.php:644 views/social_network/list.php:144
 msgid "Vimeo Profiles"
 msgstr "Perfis do Vimeo"
 
@@ -10323,26 +10323,26 @@ msgid "No new image added since the last import."
 msgstr "Nenhum vídeo adicionado desde a última importação"
 
 #: views/social_network/list.php:18
-msgid "Social Networks Conected to the Colection"
-msgstr "Redes sociais conectadas à esta coleção"
+msgid "Mapping Social Networks Metadata to the Colection"
+msgstr "Mapear  metadados de redes sociais para esta coleção"
 
-#: views/social_network/list.php:49
+#: views/social_network/list.php:47
 msgid "Edit Youtube Mapping"
 msgstr "Editar Mapeamento do Youtube"
 
-#: views/social_network/list.php:78
+#: views/social_network/list.php:77
 msgid "Edit Flickr Mapping"
 msgstr "Editar Mapeamento do Flickr "
 
-#: views/social_network/list.php:109
+#: views/social_network/list.php:111
 msgid "Update Facebook Photos"
 msgstr "Atualizar as fotos do Facebook"
 
-#: views/social_network/list.php:111
+#: views/social_network/list.php:113
 msgid "Edit Facebook Mapping"
 msgstr "Editar Mapeamento do Facebook"
 
-#: views/social_network/list.php:131
+#: views/social_network/list.php:133
 msgid "Edit Instagram Mapping"
 msgstr "Editar Mapeamento do Instagram "
 
@@ -10975,6 +10975,9 @@ msgstr "Título do Widget"
 #: views/widgets/widget_teaser.php:47
 msgid "Teaser Text:"
 msgstr "Texto:"
+
+#~ msgid "Social Networks Conected to the Colection"
+#~ msgstr "Redes sociais conectadas à esta coleção"
 
 #~ msgid "Delete the category : "
 #~ msgstr "Deletar a categoria: "
