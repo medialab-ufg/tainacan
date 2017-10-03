@@ -23,6 +23,9 @@ class FormItemContent extends FormItem {
                           <?php $url = wp_get_attachment_url($is_file->ID) ?>
                           <a target="_blank" href="<?php echo $url ?>"><?php echo $url ?></a>
                       <?php else: ?>
+                          <?php if(filter_var($content, FILTER_VALIDATE_URL)): ?>
+                              <a target="_blank" href="<?php echo $content ?>">[<?php _e('View file','tainacan')  ?>]</a><br><br>
+                          <?php  endif; ?>
                           <textarea class="form-control auto-save" id="item_content" name="item_content"
                                     placeholder="<?php _e('Object Content', 'tainacan'); ?>"><?php echo $content; ?></textarea>
                                     <span style="display: none;" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>

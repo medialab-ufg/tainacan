@@ -80,6 +80,11 @@ class FormItem extends Model {
         $class = ($this->mediaHabilitate) ? 'col-md-9 no-padding':'col-md-12 no-padding';
         if($this->isMediaFocus){
             ?>
+            <style>
+                .ui-accordion .ui-accordion-header .ui-accordion-header-icon{
+                    margin-left: -12px;
+                }
+            </style>
             <div class="col-md-12 no-padding">
 
                 <div id="tab-content-metadata" class="col-md-3 tab-content no-padding" style="background: white;">

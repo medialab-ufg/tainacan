@@ -15,7 +15,7 @@ session_start();
         <div-- class="">
             <div id="loader_videos" style="margin-left: 35%;margin-top:3%; display: none;"><img src="<?php echo get_template_directory_uri(), '/libraries/images/ajaxLoader.gif'; ?>" /></div>
             <h3 class="topo">
-                <?php _e("Mapping Social Networks Metadata to the Colection", 'tainacan'); ?>
+                <?php _e("Mapping Social Networks metadata to the Colection", 'tainacan'); ?>
                 <?php ViewHelper::buttonVoltar() ?>
             </h3>
             <hr>

@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: socialdb\n"
-"POT-Creation-Date: 2017-10-03 11:07-0300\n"
-"PO-Revision-Date: 2017-10-03 11:08-0300\n"
+"POT-Creation-Date: 2017-10-03 12:09-0300\n"
+"PO-Revision-Date: 2017-10-03 12:10-0300\n"
 "Last-Translator: Rodrigo de Oliveira <webmaster@rodrigodeoliveira.net>\n"
 "Language-Team: \n"
 "Language: pt_BR\n"
@@ -41,9 +41,9 @@ msgstr "Nenhuma coleção encontrada!"
 #: api/collections_api.php:198 api/collections_api.php:241
 #: api/collections_api.php:479 api/collections_metadata_api.php:243
 #: helpers/view_helper.php:97 models/general/general_model.php:641
-#: views/object/formItem/helper/formItem.class.php:411
-#: views/object/formItem/helper/formItem.class.php:546
-#: views/object/formItemMultiple/formItemMultiple.class.php:355
+#: views/object/formItem/helper/formItem.class.php:416
+#: views/object/formItem/helper/formItem.class.php:551
+#: views/object/formItemMultiple/formItemMultiple.class.php:360
 #: views/property/js/list_category_metadata_js.php:2411
 #: views/property/js/list_metadata_js.php:2617
 msgid "Compounds"
@@ -52,7 +52,7 @@ msgstr "Compostas"
 #: api/collections_metadata_api.php:80
 #: controllers/collection/collection_controller.php:364 functions.php:1922
 #: helpers/object/object_helper.php:23
-#: views/object/formItem/helper/formItem.class.php:158
+#: views/object/formItem/helper/formItem.class.php:163
 #: views/property/list_metadata.php:108 views/property/list_metadata.php:115
 msgid "Default"
 msgstr "Padrão"
@@ -129,8 +129,10 @@ msgstr "Comentar"
 #: views/object/formItemMultiple/formItemMultiple.class.php:135
 #: views/object/formItemMultiple/formItemMultiple.class.php:141
 #: views/object/formItemMultiple/formItemMultiple.class.php:150
-#: views/object/formItemMultiple/formItemMultiple.class.php:205
+#: views/object/formItemMultiple/formItemMultiple.class.php:204
 #: views/object/formItemMultiple/formItemMultiple.class.php:210
+#: views/object/formItemMultiple/formItemMultiple.class.php:215
+#: views/object/formItemMultiple/formItemMultiple.class.php:463
 #: views/object/formItemMultiple/input/object.class.php:166
 #: views/object/multiple_items/create.php:21
 #: views/object/multiple_items/editor_items.php:403
@@ -264,7 +266,7 @@ msgstr "Nos conte porque este conteúdo é abusivo"
 #: views/object/edit_object_properties/js/edit_list_properties_accordion_js.php:162
 #: views/object/edit_object_properties/js/edit_list_properties_accordion_js.php:173
 #: views/object/edit_object_properties/js/edit_list_properties_accordion_js.php:531
-#: views/object/formItem/helper/formItem.class.php:1120
+#: views/object/formItem/helper/formItem.class.php:1125
 #: views/object/formItem/helper/formItemText.class.php:168
 #: views/object/formItem/helper/formItemTitle.class.php:78
 #: views/object/formItem/input/date.class.php:210
@@ -277,6 +279,7 @@ msgstr "Nos conte porque este conteúdo é abusivo"
 #: views/object/formItem/input/text.class.php:110
 #: views/object/formItem/input/text.class.php:137
 #: views/object/formItem/input/textarea.class.php:118
+#: views/object/formItemMultiple/formItemMultiple.class.php:459
 #: views/object/formItemMultiple/helper/formItemTitle.class.php:80
 #: views/object/formItemMultiple/input/date.class.php:113
 #: views/object/formItemMultiple/input/date.class.php:119
@@ -397,8 +400,8 @@ msgstr "Este nome não é permitido!"
 #: views/import/oaipmh/js/maping_attributes_js.php:10
 #: views/import/oaipmh/js/maping_attributes_js.php:54
 #: views/import/oaipmh/js/maping_attributes_js.php:56
-#: views/object/formItemMultiple/formItemMultiple.class.php:428
-#: views/object/formItemMultiple/formItemMultiple.class.php:450
+#: views/object/formItemMultiple/formItemMultiple.class.php:433
+#: views/object/formItemMultiple/formItemMultiple.class.php:497
 #: views/object/formItemMultiple/items/items.class.php:193
 #: views/object/js/create_item_text_js.php:95
 #: views/object/js/create_item_text_js.php:436
@@ -631,7 +634,7 @@ msgstr "Marca do Repositório"
 #: views/import/metatags/js/mapping_attributes_js.php:60
 #: views/import/oaipmh/js/edit_maping_attributes_js.php:99
 #: views/object/formItem/helper/formItemAttachment.class.php:64
-#: views/object/formItemMultiple/formItemMultiple.class.php:556
+#: views/object/formItemMultiple/formItemMultiple.class.php:603
 #: views/object/formItemMultiple/helper/formItemAttachment.class.php:64
 #: views/object/formItemMultiple/items/items.class.php:264
 #: views/object/formItemMultiple/items/items.class.php:464
@@ -1175,7 +1178,7 @@ msgstr "(Painel de edição)"
 #: views/object/create_item_text.php:477 views/object/create_item_text.php:480
 #: views/object/edit.php:240 views/object/edit_item_text.php:822
 #: views/object/edit_item_text.php:838
-#: views/object/formItem/helper/formItem.class.php:240
+#: views/object/formItem/helper/formItem.class.php:245
 #: views/object/single_object/single_data_property_form.php:50
 #: views/object/single_object/single_edit_data_property_form.php:48
 #: views/object/single_object/single_edit_object_property_form.php:65
@@ -1488,7 +1491,7 @@ msgstr "Licença"
 #: views/design/edit.php:120 views/design/edit.php:177
 #: views/object/create_item_text.php:176 views/object/create_item_text.php:337
 #: views/object/edit_item_text.php:304 views/object/edit_item_text.php:521
-#: views/object/formItem/helper/formItem.class.php:680
+#: views/object/formItem/helper/formItem.class.php:685
 #: views/object/formItem/helper/formItemThumbnail.class.php:11
 #: views/object/formItemMultiple/helper/formItemThumbnail.class.php:10
 #: views/object/list_single_object.php:228
@@ -1502,7 +1505,7 @@ msgstr "Miniatura"
 #: views/object/edit_item_text.php:260 views/object/edit_item_text.php:554
 #: views/object/edit_item_text.php:756 views/object/file/list_file.php:12
 #: views/object/file/list_file.php:56
-#: views/object/formItem/helper/formItem.class.php:708
+#: views/object/formItem/helper/formItem.class.php:713
 #: views/object/formItem/helper/formItemAttachment.class.php:11
 #: views/object/formItemMultiple/formItemMultiple.class.php:196
 #: views/object/formItemMultiple/helper/formItemAttachment.class.php:10
@@ -1951,10 +1954,10 @@ msgstr "Data"
 #: views/object/create_item_text.php:75 views/object/create_item_url.php:27
 #: views/object/edit_item_text.php:108
 #: views/object/edit_object_properties/js/edit_list_properties_accordion_js.php:29
-#: views/object/formItem/helper/formItem.class.php:90
-#: views/object/formItem/helper/formItem.class.php:135
-#: views/object/formItem/helper/formItem.class.php:185
-#: views/object/formItem/helper/formItem.class.php:201
+#: views/object/formItem/helper/formItem.class.php:95
+#: views/object/formItem/helper/formItem.class.php:140
+#: views/object/formItem/helper/formItem.class.php:190
+#: views/object/formItem/helper/formItem.class.php:206
 #: views/object/formItemMultiple/formItemMultiple.class.php:105
 #: views/object/js/list_properties_accordion_js.php:38
 #: views/object/js/tabs_item_js.php:56 views/object/js/tabs_item_js.php:185
@@ -2278,6 +2281,7 @@ msgid "More options"
 msgstr "Mais opções"
 
 #: helpers/view_helper.php:204 views/property/metadata_forms.php:148
+#: views/theme_options/property/metadata_forms.php:112
 msgid "For big lists, hide values and display a \"see more\" button"
 msgstr ""
 "Para listas muito grandes, ocultar itens e exibir botão para \"ver mais\""
@@ -2347,7 +2351,7 @@ msgstr "Voltar para a coleção"
 #: views/object/edit_item_text.php:502 views/object/edit_item_text.php:602
 #: views/object/formItem/formItemMedia.php:25
 #: views/object/formItem/formItemMetadata.php:25
-#: views/object/formItem/helper/formItem.class.php:222
+#: views/object/formItem/helper/formItem.class.php:227
 #: views/permission/page.php:51 views/ranking/add.php:52
 #: views/ranking/edit.php:55
 msgid "Back"
@@ -4886,7 +4890,7 @@ msgstr "Membros"
 #: views/object/delete.php:12 views/object/edit.php:262
 #: views/object/edit_item_text.php:509 views/object/edit_item_text.php:512
 #: views/object/edit_item_text.php:835
-#: views/object/formItemMultiple/formItemMultiple.class.php:217
+#: views/object/formItemMultiple/formItemMultiple.class.php:222
 #: views/object/multiple_items/editor_items.php:992
 #: views/object/multiple_social_network/create.php:42
 #: views/object/multiple_social_network/editor_items.php:977
@@ -5910,7 +5914,7 @@ msgstr "Todas as coleções"
 #: views/object/append_properties_categories/js/properties_categories_accordion_js.php:115
 #: views/object/edit_object_properties/js/edit_list_properties_accordion_js.php:162
 #: views/object/edit_object_properties/js/edit_list_properties_accordion_js.php:173
-#: views/object/formItem/helper/formItem.class.php:1120
+#: views/object/formItem/helper/formItem.class.php:1125
 #: views/object/formItem/helper/formItemTitle.class.php:78
 #: views/object/formItem/input/date.class.php:210
 #: views/object/formItem/input/object.class.php:193
@@ -5936,8 +5940,8 @@ msgstr "já está inserido!"
 #: views/advanced_search/js/search_property_object_metadata_js.php:380
 #: views/advanced_search/js/show_insert_object_properties_js.php:321
 #: views/object/edit_object_properties/js/edit_list_properties_accordion_js.php:602
-#: views/object/formItem/helper/formItem.class.php:974
-#: views/object/formItem/helper/formItem.class.php:997
+#: views/object/formItem/helper/formItem.class.php:979
+#: views/object/formItem/helper/formItem.class.php:1002
 #: views/object/formItem/helper/formItemCategory.class.php:77
 #: views/object/formItem/input/object.class.php:629
 #: views/object/formItemMultiple/helper/formItemCategory.class.php:69
@@ -7513,7 +7517,7 @@ msgstr "Local"
 #: views/object/create_item_text.php:439 views/object/create_item_url.php:267
 #: views/object/edit.php:141 views/object/edit_item_text.php:247
 #: views/object/edit_item_text.php:746
-#: views/object/formItem/helper/formItemContent.class.php:27
+#: views/object/formItem/helper/formItemContent.class.php:30
 #: views/object/formItemMultiple/helper/formItemContent.class.php:25
 msgid "Object Content"
 msgstr "Conteúdo do Item"
@@ -7569,7 +7573,7 @@ msgstr "Faça o upload de anexos para seu item"
 #: views/object/create_item_text.php:158 views/object/create_item_text.php:363
 #: views/object/create_item_text.php:456 views/object/edit_item_text.php:285
 #: views/object/edit_item_text.php:567 views/object/edit_item_text.php:766
-#: views/object/formItem/helper/formItem.class.php:718
+#: views/object/formItem/helper/formItem.class.php:723
 #: views/object/formItem/helper/formItemAttachment.class.php:22
 #: views/object/formItemMultiple/helper/formItemAttachment.class.php:21
 #: views/object/formItemMultiple/items/items.class.php:445
@@ -7583,7 +7587,7 @@ msgstr "Arraste seus arquivos"
 #: views/object/create_item_text.php:159 views/object/create_item_text.php:364
 #: views/object/create_item_text.php:457 views/object/edit_item_text.php:286
 #: views/object/edit_item_text.php:568 views/object/edit_item_text.php:767
-#: views/object/formItem/helper/formItem.class.php:719
+#: views/object/formItem/helper/formItem.class.php:724
 #: views/object/formItem/helper/formItemAttachment.class.php:23
 #: views/object/formItemMultiple/helper/formItemAttachment.class.php:22
 #: views/object/formItemMultiple/items/items.class.php:445
@@ -7597,7 +7601,7 @@ msgstr "para upload"
 #: views/object/create_item_text.php:161 views/object/create_item_text.php:366
 #: views/object/create_item_text.php:459 views/object/edit_item_text.php:288
 #: views/object/edit_item_text.php:570 views/object/edit_item_text.php:769
-#: views/object/formItem/helper/formItem.class.php:721
+#: views/object/formItem/helper/formItem.class.php:726
 #: views/object/formItem/helper/formItemAttachment.class.php:25
 #: views/object/formItemMultiple/helper/formItemAttachment.class.php:24
 #: views/object/formItemMultiple/items/items.class.php:445
@@ -7637,7 +7641,7 @@ msgstr "Licenças cadastradas para este item "
 #: views/object/create_item_text.php:470 views/object/edit_item_text.php:83
 #: views/object/edit_item_text.php:504 views/object/edit_item_text.php:596
 #: views/object/edit_item_text.php:830
-#: views/object/formItem/helper/formItem.class.php:230
+#: views/object/formItem/helper/formItem.class.php:235
 msgid "Discard"
 msgstr "Descartar"
 
@@ -7789,18 +7793,18 @@ msgstr "Metadados de termo"
 msgid "No Attachments"
 msgstr "Sem Anexos"
 
-#: views/object/formItem/helper/formItem.class.php:691
+#: views/object/formItem/helper/formItem.class.php:696
 msgid "Remove image"
 msgstr "Remover imagem"
 
-#: views/object/formItem/helper/formItem.class.php:725
+#: views/object/formItem/helper/formItem.class.php:730
 #: views/object/formItemMultiple/formItemMultiple.class.php:163
 #: views/object/multiple_items/editor_items.php:414
 msgid "Upload more files"
 msgstr " Inserir mais arquivos "
 
-#: views/object/formItem/helper/formItem.class.php:903
-#: views/object/formItemMultiple/formItemMultiple.class.php:541
+#: views/object/formItem/helper/formItem.class.php:908
+#: views/object/formItemMultiple/formItemMultiple.class.php:588
 msgid "Saved at "
 msgstr "Salvo em "
 
@@ -7878,6 +7882,10 @@ msgstr "Ocorreu um erro, arquivo já foi removido ou está corrompido!"
 #: views/object/temp/js/edit_multiple_js.php:188
 msgid "File removed!"
 msgstr "Arquivo removido!"
+
+#: views/object/formItem/helper/formItemContent.class.php:27
+msgid "View file"
+msgstr "Ver arquivo"
 
 #: views/object/formItem/helper/formItemLicense.class.php:43
 #: views/object/formItemMultiple/helper/formItemLicense.class.php:42
@@ -8028,30 +8036,38 @@ msgstr "Selecionar anexos "
 msgid "Edit Items"
 msgstr "Editar itens "
 
-#: views/object/formItemMultiple/formItemMultiple.class.php:429
+#: views/object/formItemMultiple/formItemMultiple.class.php:434
 msgid "Save only "
 msgstr "Salvar apenas"
 
-#: views/object/formItemMultiple/formItemMultiple.class.php:429
+#: views/object/formItemMultiple/formItemMultiple.class.php:434
 msgid " selected items ?"
 msgstr " itens selecionados?"
 
-#: views/object/formItemMultiple/formItemMultiple.class.php:451
+#: views/object/formItemMultiple/formItemMultiple.class.php:460
+#: views/object/multiple_items/js/create_js.php:154
+#: views/object/multiple_items/js/create_js.php:208
+#: views/object/multiple_social_network/js/create_js.php:49
+#: views/object/multiple_social_network/js/editor_items_js.php:1441
+msgid "You did not finish your action. Are you sure to leave this page?"
+msgstr "Você não concluiu sua ação. Certeza que deseja sair desta página?"
+
+#: views/object/formItemMultiple/formItemMultiple.class.php:498
 #: views/object/js/multiple_draft_js.php:29
 msgid "Confirm your action"
 msgstr "Confirme sua ação:"
 
-#: views/object/formItemMultiple/formItemMultiple.class.php:457
+#: views/object/formItemMultiple/formItemMultiple.class.php:504
 #: views/object/js/multiple_draft_js.php:35
 msgid "Back and discard"
 msgstr "Voltar e descartar"
 
-#: views/object/formItemMultiple/formItemMultiple.class.php:458
+#: views/object/formItemMultiple/formItemMultiple.class.php:505
 #: views/object/js/multiple_draft_js.php:36
 msgid "Just back"
 msgstr "Apenas retornar"
 
-#: views/object/formItemMultiple/formItemMultiple.class.php:556
+#: views/object/formItemMultiple/formItemMultiple.class.php:603
 msgid "Operation was successfully!"
 msgstr "Operação realizada com sucesso!"
 
@@ -8733,13 +8749,6 @@ msgid ""
 msgstr ""
 "Arquivo muito grande ou carregado, porém não suportado pelo Wordpress, por "
 "favor selecione arquivos válidos! "
-
-#: views/object/multiple_items/js/create_js.php:154
-#: views/object/multiple_items/js/create_js.php:208
-#: views/object/multiple_social_network/js/create_js.php:49
-#: views/object/multiple_social_network/js/editor_items_js.php:1441
-msgid "You did not finish your action. Are you sure to leave this page?"
-msgstr "Você não concluiu sua ação. Certeza que deseja sair desta página?"
 
 #: views/object/multiple_items/js/editor_items_js.php:8
 #: views/object/temp/js/edit_multiple_js.php:8
@@ -9730,7 +9739,6 @@ msgstr "Tipo de filtro"
 
 #: views/property/metadata/form_filter.php:34
 #: views/theme_options/property/metadata/form_filter.php:34
-#: views/theme_options/property/metadata_forms.php:112
 msgid "Habilitate more options"
 msgstr "Habilitar mais opções"
 
@@ -10323,8 +10331,8 @@ msgid "No new image added since the last import."
 msgstr "Nenhum vídeo adicionado desde a última importação"
 
 #: views/social_network/list.php:18
-msgid "Mapping Social Networks Metadata to the Colection"
-msgstr "Mapear  metadados de redes sociais para esta coleção"
+msgid "Mapping Social Networks metadata to the Colection"
+msgstr ""
 
 #: views/social_network/list.php:47
 msgid "Edit Youtube Mapping"
@@ -10975,6 +10983,9 @@ msgstr "Título do Widget"
 #: views/widgets/widget_teaser.php:47
 msgid "Teaser Text:"
 msgstr "Texto:"
+
+#~ msgid "Mapping Social Networks Metadata to the Colection"
+#~ msgstr "Mapear  metadados de redes sociais para esta coleção"
 
 #~ msgid "Social Networks Conected to the Colection"
 #~ msgstr "Redes sociais conectadas à esta coleção"
