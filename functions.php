@@ -2618,6 +2618,7 @@ function socialdb_insert_object_csv($post_title) {
  */
 function get_item_thumbnail_default($object_id) {
     $type = get_post_meta($object_id, 'socialdb_object_dc_type', true);
+    $type = ($type == 'other') ? 'pdf'  :  $type;
     $icon = ( in_array($type, ['audio', 'video', 'pdf', 'text']) ) ? $type : "image";
     if (get_post($object_id)->post_type == 'socialdb_collection') {
         if (has_filter('alter_thumbnail_collections')) {

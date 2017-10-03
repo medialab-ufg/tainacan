@@ -251,6 +251,7 @@ class ObjectFileModel extends Model {
                             $last_position = count($result['office']) - 1;
                             
                             $result['office'][$last_position]['ext'] = $ext;
+                            $result['others'][] = $obj;
                         }
                         else{
                             update_post_meta($item_id, 'socialdb_object_dc_type', 'other');  

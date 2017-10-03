@@ -1,7 +1,7 @@
 <?php
 
 class ItemsClass extends FormItemMultiple{
-     public function listItems($items) { 
+     public function listItems($items) {
         ?>
         <?php 
         foreach ($this->setTypes() as $type => $title):
