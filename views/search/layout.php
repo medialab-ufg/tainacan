@@ -232,7 +232,10 @@ $view_helper = new ViewHelper();
             <input type="hidden" id="operation" name="operation" value="update_ordenation">
             
             <button type="submit" style="margin-top:15px;margin-bottom: 15px;"id="submit_ordenation_form" class="btn btn-success pull-right"><?php _e('Save','tainacan') ?></button>
-            <button type="button" style="margin-top:15px;margin-right: 5px;margin-bottom: 15px;" onclick="history.back()" class="btn btn-default pull-right"><?php _e('Back to collection','tainacan') ?></button>
+            <!--button type="button" style="margin-top:15px;margin-right: 5px;margin-bottom: 15px;" onclick="history.back()" class="btn btn-default pull-right"><?php _e('Back to collection','tainacan') ?></button-->
+            <div style="margin: 15px;padding-right: 50px;">
+            <?php ViewHelper::backButton() ?>
+            </div>
         </form>
     </div>
 

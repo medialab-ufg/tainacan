@@ -15,7 +15,7 @@ $_showH = ("disabled" === $_en_header) ? false : true ;
     <div class="col-md-12 tainacan-config-container">
         <h3>
             <?php _e('Collection Configuration', 'tainacan'); ?>
-            <?php ViewHelper::buttonVoltar() ?>
+            <?php ViewHelper::backButton() ?>
         </h3>
         <hr>
 
