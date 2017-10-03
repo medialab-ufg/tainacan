@@ -558,7 +558,7 @@
             data: {collection_id: collection_id, property_id: property_id, operation: 'add_property_ordenation'}
         }).done(function (result) {
             elem = jQuery.parseJSON(result);
-            showAlertGeneral(elem.title, elem.msg, elem.type);
+            //showAlertGeneral(elem.title, elem.msg, elem.type);
         });
     }
 
@@ -2135,12 +2135,13 @@
     }
 
     function getRequestFeedback(status, error_msg) {
+        $('.action-messages').show();
         if (status === 'success' || status === 'true' || status === true) {
             $("#alert_error_properties").hide();
-            $("#alert_success_properties").show();
+            $("#alert_success_properties").css('margin','10px').show();
         } else {
             $("#alert_success_properties").hide();
-            $("#alert_error_properties").show();
+            $("#alert_error_properties").css('margin','10px').show();
 
             if (error_msg != null) {
                 $("#default_message_error").hide();
