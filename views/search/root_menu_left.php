@@ -36,8 +36,9 @@ $not_showed = false;
         </div>
     </div-->
     <?php
+    return;
 // TAINACAN: widgets do menu esquerdo
-    foreach ($facets as $facet):
+     foreach ($facets as $facet):
         if ($facet['widget'] == 'tree' && !$not_showed): $not_showed = true
             ?>
             <?php do_action('before_tree') ?>  

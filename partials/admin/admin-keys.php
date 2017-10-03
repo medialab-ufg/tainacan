@@ -3,7 +3,8 @@ include_once ( dirname(__FILE__) . '/../../helpers/view_helper.php');
 include_once ( dirname(__FILE__) . '/../../views/theme_options/js/edit_js.php');
 
 $SocialDB_Api = get_option('socialdb_theme_options');
-extract($SocialDB_Api);
+if($SocialDB_Api && is_array($SocialDB_Api))
+    extract($SocialDB_Api);
 ?>
 
 <div class="col-md-12">

@@ -201,7 +201,7 @@ class ViewHelper {
             </div>
             <div class="form-group" style="margin-top: 15px;margin-bottom: 15px;">
                 <label for="property_term_required" style="margin-right: 10px;" ><?php _e('More options','tainacan'); ?> : </label>
-                <input type="checkbox" name="habilitate_more_options" id="habilitate_more_options" value="true">&nbsp;<?php _e('Habilitate more options','tainacan') ?>
+                <input type="checkbox" name="habilitate_more_options" id="habilitate_more_options" value="true">&nbsp;<?php _e('For big lists, hide values and display a "see more" button','tainacan') ?>
             </div>
         </div>
     <?php
@@ -550,7 +550,7 @@ class ViewHelper {
 
     public static function backButton() {
         ?>
-        <button onclick='window.location = $("#socialdb_permalink_collection").val()' class='btn btn-default pull-right'><?php echo  _t("Back") ?></button>
+        <button onclick='window.location = (  $("#socialdb_permalink_collection").length> 0 ) ? $("#socialdb_permalink_collection").val() : $("#site_url").val() ' class='btn btn-default pull-right'><?php echo  _t("Back") ?></button>
         <?php
     }
     
