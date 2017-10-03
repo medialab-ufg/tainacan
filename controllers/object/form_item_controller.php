@@ -311,7 +311,11 @@ class FormItemController extends Controller {
                         wp_set_object_terms($item, array((int) $category_root_id), 'socialdb_category_type',true);
                     }
 
-                    $data['there_are_pdfFiles'] = get_documents_text($data['items']);
+                    try{
+                        $data['there_are_pdfFiles'] = get_documents_text($data['items']);
+                    }catch (Exception $e){
+                        $data['error'] = (string) $e;
+                    }
                 }
 
                 return json_encode($data);  

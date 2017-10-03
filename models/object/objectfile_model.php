@@ -380,6 +380,7 @@ class ObjectFileModel extends Model {
                      $result['pdf'][] = $obj;   
                 }elseif($type=='other'||$type=='others'){
                      $result['other'][] = $obj;   
+                     $result['others'][] = $obj;
                 }elseif($type=='audio'){
                      $result['audio'][] = $obj;   
                 }else{

@@ -184,7 +184,7 @@ class ObjectController extends Controller {
                 if ($data['items'] && empty(!$data['items'])) {
                     //return $this->render(dirname(__FILE__) . '../../../views/object/multiple_social_network/editor_items.php', $data);
                     include_once dirname(__FILE__) . '../../../views/object/formItemMultiple/formItemMultiple.class.php';
-                    $class = new FormItemMultiple($data['collection_id'],__('Continue editting...  Insert URL', 'tainacan'),'add-social-network-beta');
+                    $class = new FormItemMultiple($data['collection_id'],__('Continue editting...', 'tainacan'),'add-social-network-beta');
                     $class->start($data['items'], $data['properties']);
                 } else {
                     return 0;
