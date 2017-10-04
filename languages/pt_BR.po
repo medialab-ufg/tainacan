@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: socialdb\n"
 "POT-Creation-Date: 2017-10-03 12:09-0300\n"
-"PO-Revision-Date: 2017-10-04 13:18-0300\n"
+"PO-Revision-Date: 2017-10-04 14:50-0300\n"
 "Last-Translator: Rodrigo de Oliveira <webmaster@rodrigodeoliveira.net>\n"
 "Language-Team: \n"
 "Language: pt_BR\n"
@@ -1037,7 +1037,7 @@ msgstr "Seu usuário e/ou senha estão incorretos."
 
 #: footer.php:38
 msgid " is proudly powered by"
-msgstr "é orgulhosamente mantido por"
+msgstr " é orgulhosamente mantido por"
 
 #: footer.php:39
 msgid "and"
