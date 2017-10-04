@@ -39,7 +39,13 @@ function set_fields_modal_categories(elem){
            $('#current_phase_text').show();
            $("#current_phase_string").val(elem.socialdb_category_current_phase);
        }
+    }else{
+        $("#current_phase_year").val('');
+        $("#current_phase_month").val('');
+        $("#current_phase_string").val('');
     }
+
+
     if(elem.socialdb_category_intermediate_phase){
         if($.isNumeric( elem.socialdb_category_intermediate_phase )){
             var months = parseInt(elem.socialdb_category_intermediate_phase.trim());
@@ -48,7 +54,13 @@ function set_fields_modal_categories(elem){
        }else{
            $("#intermediate_phase_string").val(elem.socialdb_category_current_phase);
        }
+    }else{
+        $("#intermediate_phase_year").val('');
+        $("#intermediate_phase_month").val('');
+        $("#intermediate_phase_string").val('');
     }
+
+
     if(elem.socialdb_category_destination){
         $('input:radio[name="socialdb_event_term_destination"]').filter('[value="'+elem.socialdb_category_destination+'"]').attr('checked', true);
     }
