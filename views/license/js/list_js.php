@@ -51,8 +51,8 @@
                                     "</tr>");
 
                         });
+
                         listCustomLicenses();
-                        $("#list_licenses_content").show();
                     }
                 } // caso o controller retorne false
             }
@@ -87,7 +87,9 @@
                                         "</tr>");
                             });
                         }
-                        $('#radio' + jsonObject.pattern[0]).attr("checked", "checked");
+
+                        $("#list_licenses_content").show();
+                        $('#formEnabledLicenses #radio' + jsonObject.pattern[0]).attr("checked", "checked");
                         $.each(jsonObject.enabled, function (id, object) {
                             $('#checkbox' + object).attr("checked", "checked");
                         });

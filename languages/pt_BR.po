@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: socialdb\n"
 "POT-Creation-Date: 2017-10-03 12:09-0300\n"
-"PO-Revision-Date: 2017-10-03 12:10-0300\n"
+"PO-Revision-Date: 2017-10-04 13:18-0300\n"
 "Last-Translator: Rodrigo de Oliveira <webmaster@rodrigodeoliveira.net>\n"
 "Language-Team: \n"
 "Language: pt_BR\n"
@@ -3680,7 +3680,7 @@ msgstr "Alteração de padrão com sucesso"
 
 #: models/license/license_model.php:72
 msgid "Change enabled license successfully"
-msgstr "Alteração de licença ativa feita com sucesso!"
+msgstr "Ativação da licença feita com sucesso!"
 
 #: models/license/license_model.php:180
 #: models/theme_options/theme_options_model.php:131

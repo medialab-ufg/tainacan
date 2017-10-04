@@ -5,7 +5,8 @@ class FormItemLicense extends FormItem {
     public function widget($property, $item_id) {
        $this->isRequired = get_post_meta($this->collection_id, 'socialdb_collection_property_'.$property['id'].'_required', true);
        $license_selected = get_post_meta($item_id, 'socialdb_license_id', true);
-       $licenses = $this->getLicenses($item_id,$this->collection_id)
+       $licenses = $this->getLicenses($item_id,$this->collection_id);
+        $license_pattern = get_post_meta($this->collection_id, 'socialdb_collection_license_pattern', true);
         ?>
         <!-- TAINACAN: a licencas do item -->
         <div class="form-group">
@@ -34,6 +35,8 @@ class FormItemLicense extends FormItem {
                                             if($license['id'] == $license_selected){
                                                 $has_checked = true;
                                                 echo "checked='checked'";
+                                            }else if($license['id'] == $license_pattern){
+                                                echo "checked='checked'";
                                             }
                                             ?>
                                             ><?php echo $license['nome']; ?></label>
@@ -53,7 +56,7 @@ class FormItemLicense extends FormItem {
                <?php endif; ?>
              </div>
              <?php if($has_cc){ ?>
-                 <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modalHelpCC"><?php _e("Help Choosing",'tainacan'); ?></button><br><br>
+                 <!--button type="button" class="btn btn-success" data-toggle="modal" data-target="#modalHelpCC"><?php _e("Help Choosing",'tainacan'); ?></button><br><br-->
              <?php } ?>
 
              <!-- modal ajuda a escolher CC -->
@@ -191,7 +194,7 @@ class FormItemLicense extends FormItem {
               });
 
 
-                  $('#object_license').change(function(){
+                  $('input[name="object_license"]').change(function(){
                         <?php if($this->isRequired === 'true'):  ?>
                             validateFieldsMetadataText($(this).val(),'<?php echo $property['id'] ?>','0','0')
                         <?php endif; ?>
