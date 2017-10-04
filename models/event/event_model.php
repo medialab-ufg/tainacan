@@ -117,6 +117,9 @@ abstract class EventModel extends Model {
         $_sum = 0;
         $_root_id = get_option('collection_root_id');
         foreach($collectionModel->get_collection_by_user(get_current_user_id()) as $col) {
+            if($col->post_status != 'publish' || empty($col->post_name))
+                continue;
+
             $d['collection_id'] = $col->ID;
             $info['colecao'] = $col->post_title;
             if($col->ID == $_root_id) {

@@ -33,6 +33,14 @@ var Hook = {
     }
 };
 
+//sobreescrevendo alert
+var old = alert;
+
+alert = function() {
+    console.log(new Error().stack);
+    //old.apply(window, arguments);
+};
+
 $(window).load(function () {
     (function(d, s, id) {
         var js, fjs = d.getElementsByTagName(s)[0];
@@ -92,6 +100,7 @@ $(window).load(function () {
             showHeaderCollection(src);
             //get_categories_properties_ordenation();
             notification_events_repository();
+            get_user_notifications_general();
             list_templates("#collections-menu ul.templates");
 
             if ($('#category_page').val() !== '') {
@@ -2529,6 +2538,37 @@ function notification_events_repository() {
         // $('.notification_events_repository').html(result);
         $('#notification_events_repository').html(result);
         /* $('.dropdown-toggle').dropdown(); $('.nav-tabs').tab(); */
+    });
+}
+
+function get_user_notifications_general() {
+    $.ajax({
+        type: "POST",
+        url: $('#src').val() + "/controllers/event/event_controller.php",
+        data: { collection_id: $('#collection_id').val(), operation: 'user_notification' }
+    }).done(function(r) {
+        var _ev_ = $.parseJSON(r);
+        if(_ev_ && _ev_.total_evts > 0) {
+            var _item_html = "";
+            $(_ev_.evts).each(function(id, el) {
+                var events_path = 'eventos';
+                var extra_class = '';
+                if(el.is_root && el.is_root == true) {
+                    var URL = $("#site_url").val() + '/adm/events';
+                    extra_class = 'trigger-events';
+                } else {
+                    var URL = $("#site_url").val() + '/' + el.path + '/admin/'+ events_path +'/';
+                }
+
+                var content = "<span class='evt_col'> " + el.colecao + "</span> <span class='evts_cnt'>" + el.counting + "</span>";
+                _item_html += "<li class='col-md-12 no-padding'> <a  style='padding: 3px' class='evt_container evt-"+ id + ' ' + extra_class + "' href='" + URL + "'> ";
+                _item_html += content;
+                _item_html += "</a></li>";
+            });
+            $(_item_html).appendTo('li.root-notifications ul');
+            $('li.root-notifications').removeClass('hide');
+            $('li.root-notifications .notification_events_repository').text(_ev_.total_evts);
+        }
     });
 }
 
