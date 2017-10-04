@@ -1,0 +1,7 @@
+{
+"version": 3,
+"mappings": "AAAA,mCAAoC;EACnC,KAAK,EAAE,KAAK;EACZ,UAAU,EAAE,IAAI;EAChB,MAAM,EAAE,cAAc;EACtB,OAAO,EAAE,IAAI",
+"sources": ["../sass/_collections-list.scss"],
+"names": [],
+"file": "tainacan-blocks.css"
+}
