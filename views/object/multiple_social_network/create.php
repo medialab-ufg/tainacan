@@ -19,7 +19,8 @@ include_once ('js/extract_metadata_js.php');
                 <li><?php _e('Sites', 'tainacan'); ?></li>
                 <li><?php _e('Video from Youtube or Vimeo', 'tainacan'); ?></li>
                 <li><?php _e('Multiple videos from a Youtube Channel or Vimeo Channel', 'tainacan'); ?></li>
-                <li><?php _e('Images from Flickr, Facebook or Instagram', 'tainacan'); ?></li>
+                <li><?php _e('Images from Flickr', 'tainacan'); ?></li>
+                <!--li><?php _e('Images from Flickr, Facebook or Instagram', 'tainacan'); ?></li-->
         </ul>   
     </div> 
     <div class="col-md-9" style=" background: white;border: 3px solid #E8E8E8;margin-left: 15px;">
