@@ -44,11 +44,11 @@ class EventPropertyObjectEditValue extends EventModel {
 
                     }
                     $title = __('Alter the actual classification of metadata','tainacan').' <b>'.$property->name.'</b> '.__('from ','tainacan').' ( <i>'.$valuesBefore.'</i> ) '.__(' to ','tainacan').' ( <i>'.implode(',',$names).'</i> ) '
-                        . __(' in the object ','tainacan') .'<b><a href="'.  get_the_permalink($object->ID).'">'. $object->post_title.'</a></b>';
+                        . __(' in the object ','tainacan') .'<b><a target="_blank" href="'.  get_the_permalink($object->ID).'">'. $object->post_title.'</a></b>';
                 }else{
                     $text = get_post($data['socialdb_event_property_object_edit_value_suggested_value'])->post_title;
                     $title = __('Alter the actual classification of metadata','tainacan').' <b>'.$property->name.'</b> '.__('from ','tainacan').' ( <i>'.$valuesBefore.'</i> ) '.__(' to ','tainacan').' ( <i>'.$text.'</i> ) '
-                        . __(' in the object ','tainacan') .'<b><a href="'.  get_the_permalink($object->ID).'">'. $object->post_title.'</a></b>';
+                        . __(' in the object ','tainacan') .'<b><a target="_blank" href="'.  get_the_permalink($object->ID).'">'. $object->post_title.'</a></b>';
                 }
             }else {
                 if (is_array($data['socialdb_event_property_object_edit_value_suggested_value'])) {
@@ -65,12 +65,12 @@ class EventPropertyObjectEditValue extends EventModel {
                 } else {
                     $text = get_post($data['socialdb_event_property_object_edit_value_suggested_value'])->post_title;
                     $title = __('Set the value: ', 'tainacan') . '( <i>' . $text . '</i> )' . __(' of the object property ', 'tainacan') . ' ' . '<b>' . $property->name . '</b>'
-                        . __(' in the the object ', 'tainacan') . '<b><a href="'.  get_the_permalink($object->ID).'">'. $object->post_title.'</a></b>';
+                        . __(' in the the object ', 'tainacan') . '<b><a target="_blank" href="'.  get_the_permalink($object->ID).'">'. $object->post_title.'</a></b>';
                 }
             }
         }else{
             $title = __('Delete all values of the object property ','tainacan').'<b>'.$property->name.'</b>'
-                . __(' in the the object ','tainacan') . '<b><a href="'.  get_the_permalink($object->ID).'">'. $object->post_title.'</a></b>';
+                . __(' in the the object ','tainacan') . '<b><a target="_blank" href="'.  get_the_permalink($object->ID).'">'. $object->post_title.'</a></b>';
         }
         return $title;
     }

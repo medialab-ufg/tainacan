@@ -25,7 +25,7 @@ class EventCommentDelete extends EventModel {
         $comment = get_comment($data['socialdb_event_comment_delete_id'] );
         $object = get_post($comment->comment_post_ID);
         $collection = get_post($data['socialdb_event_collection_id']);
-        $title = __('Delete the Comment ','tainacan').'( <i>'.$comment->comment_content .'</i> ) '.__('in the item','tainacan').' <b><a href="'.  get_the_permalink($object->ID).'">'. $object->post_title.'</a></b> '.__('from collection','tainacan').' '.' <b><a href="'.  get_the_permalink($collection->ID).'">'.$collection->post_title.'</a></b>' ;
+        $title = __('Delete the Comment ','tainacan').'( <i>'.$comment->comment_content .'</i> ) '.__('in the item','tainacan').' <b><a target="_blank" href="'.  get_the_permalink($object->ID).'">'. $object->post_title.'</a></b> '.__('from collection','tainacan').' '.' <b><a href="'.  get_the_permalink($collection->ID).'">'.$collection->post_title.'</a></b>' ;
         return $title;
     }
 

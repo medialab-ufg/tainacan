@@ -24,7 +24,7 @@ class EventTermCreate extends EventModel {
     public function generate_title($data) {
         $collection = get_post($data['socialdb_event_collection_id']);
         $category_name = $data['socialdb_event_term_suggested_name'];
-        $title = __('Create the category ','tainacan').' '.'( <i>'.$category_name.'</i> )'.' '.__(' in the collection ','tainacan').' '.' <b><a href="'.  get_the_permalink($collection->ID).'">'.$collection->post_title.'</a></b> ';
+        $title = __('Create the category ','tainacan').' '.'( <i>'.$category_name.'</i> )'.' '.__(' in the collection ','tainacan').' '.' <b><a target="_blank" href="'.  get_the_permalink($collection->ID).'">'.$collection->post_title.'</a></b> ';
         return $title;
     }
 

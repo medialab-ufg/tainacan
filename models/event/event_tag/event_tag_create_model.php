@@ -24,7 +24,7 @@ class EventTagCreate extends EventModel {
     public function generate_title($data) {
         $collection = get_post($data['socialdb_event_collection_id']);
         $tag_name = $data['socialdb_event_tag_suggested_name'];
-        $title = __('Create the tag ','tainacan').'( <b>'.$tag_name.'</b> )'.__(' in the collection ','tainacan').' <b><a href="'.  get_the_permalink($collection->ID).'">'.$collection->post_title.'</a></b> ';
+        $title = __('Create the tag ','tainacan').'( <b>'.$tag_name.'</b> )'.__(' in the collection ','tainacan').' <b><a target="_blank" href="'.  get_the_permalink($collection->ID).'">'.$collection->post_title.'</a></b> ';
         return $title;
     }
 

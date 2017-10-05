@@ -44,19 +44,19 @@ class EventPropertyTermEdit extends EventModel {
                 $name = ($newcategory) ? $newcategory->name : $data['socialdb_event_property_term_edit_new_category'];
                 $category = get_term_by('id',$category,'socialdb_category_type');
                 $val = ($category) ? $category->name : '(Vazio)';
-                $text .=  __('Alter taxonomy from ', 'tainacan').' : <i>'.$val.'</i> '. __('to ', 'tainacan').'<i>'.$name.'</i><br>';
+                $text .=  __('Alter taxonomy from ', 'tainacan').' : <i>'.$val.'</i> '. __('to ', 'tainacan').'<i>'.$name.'</i>&nbsp;&nbsp;<br>';
             }
 
             if($newrequired !== $required){
                 $newrequired = ($newrequired === 'true') ? __('True','tainacan') : __('False','tainacan');
                 $required = ($required === 'true') ? __('True','tainacan') : __('False','tainacan');
-                $text .=  __('Alter required field from ', 'tainacan').' : <i>'. $required .'</i> '. __('to ', 'tainacan').' <i>'.$newrequired.'</i><br>';
+                $text .=  __('Alter required field from ', 'tainacan').' : <i>'. $required .'</i> '. __('to ', 'tainacan').' <i>'.$newrequired.'</i>&nbsp;&nbsp;<br>';
             }
 
             if($newcardinality !== $cardinality){
                 $newcardinality = ($newcardinality === 'n') ? __('Multiple values','tainacan') : __('One value','tainacan');
                 $cardinality = ($cardinality === 'n') ? __('Multiple values','tainacan') : __('One value','tainacan');
-                $text .=  __('Alter cardinality from ', 'tainacan').' : <i>'. $cardinality .'</i> '. __('to ', 'tainacan').' <i>'.$newcardinality.'</i><br>';
+                $text .=  __('Alter cardinality from ', 'tainacan').' : <i>'. $cardinality .'</i> '. __('to ', 'tainacan').' <i>'.$newcardinality.'</i>&nbsp;&nbsp;<br>';
             }
 
             if($newwidget !== $widget){
@@ -65,13 +65,13 @@ class EventPropertyTermEdit extends EventModel {
                 $text .=  __('Alter widget field from ', 'tainacan').' : <i>'. $widget .'</i> '. __('to ', 'tainacan').' <i>'.$newwidget.'</i><br>';
             }
 
-            $title = __('Alter configuration from term property ', 'tainacan').' : <i>'.$property->name.'</i><br>'.$text.
-                __(' in the collection ', 'tainacan') .' '.' <b><a href="'.  get_the_permalink($collection->ID).'">'.$collection->post_title.'</a></b> ';
+            $title = __('Alter configuration from term property ', 'tainacan').' : <i>'.$property->name.'</i>&nbsp;&nbsp;<br>'.$text.
+                __(' in the collection ', 'tainacan') .' '.' <b><a target="_blank" href="'.  get_the_permalink($collection->ID).'">'.$collection->post_title.'</a></b> ';
         }else{
             $title = __('Edit the term property ', 'tainacan') .'<br>'.
                 __('From','tainacan').' : <i>'.$property->name.'</i><br>'.
                 __('To','tainacan').' : <i>'.$property_name.'</i><br>'.
-                __(' in the collection ', 'tainacan') .' '.' <b><a href="'.  get_the_permalink($collection->ID).'">'.$collection->post_title.'</a></b> ';
+                __(' in the collection ', 'tainacan') .' '.' <b><a target="_blank" href="'.  get_the_permalink($collection->ID).'">'.$collection->post_title.'</a></b> ';
         }
         return $title;
     }

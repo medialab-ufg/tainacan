@@ -61,28 +61,28 @@ class EventPropertyObjectEdit extends EventModel {
             if($newrequired !== $required){
                 $newrequired = ($newrequired === 'true') ? __('True','tainacan') : __('False','tainacan');
                 $required = ($required === 'true') ? __('True','tainacan') : __('False','tainacan');
-                $text .=  __('Alter required field from ', 'tainacan').' : <i>'. $required .'</i> '. __('to ', 'tainacan').' <i>'.$newrequired.'</i><br>';
+                $text .=  __('Alter required field from ', 'tainacan').' : <i>'. $required .'</i> '. __('to ', 'tainacan').' <i>'.$newrequired.'</i>&nbsp;&nbsp;<br>';
             }
 
             if($newreverse !== $reverse){
                 $newreverse = ($newreverse === 'true') ? __('True','tainacan') : __('False','tainacan');
                 $reverse = ($reverse === 'true') ? __('True','tainacan') : __('False','tainacan');
-                $text .=  __('Alter reverse field from ', 'tainacan').' : <i>'. $reverse .'</i> '. __('to ', 'tainacan').' <i>'.$newreverse.'</i><br>';
+                $text .=  __('Alter reverse field from ', 'tainacan').' : <i>'. $reverse .'</i> '. __('to ', 'tainacan').' <i>'.$newreverse.'</i>&nbsp;&nbsp;<br>';
             }
 
             if($newcardinality !== $cardinality){
                 $newcardinality = ($newcardinality === 'n') ? __('Multiple values','tainacan') : __('One value','tainacan');
                 $cardinality = ($cardinality === 'n') ? __('Multiple values','tainacan') : __('One value','tainacan');
-                $text .=  __('Alter cardinality from ', 'tainacan').' : <i>'. $cardinality .'</i> '. __('to ', 'tainacan').' <i>'.$newcardinality.'</i><br>';
+                $text .=  __('Alter cardinality from ', 'tainacan').' : <i>'. $cardinality .'</i> '. __('to ', 'tainacan').' <i>'.$newcardinality.'</i>&nbsp;&nbsp;<br>';
             }
 
-            $title = __('Alter configuration from object property ', 'tainacan').' : <i>'.$property->name.'</i><br> '.$text.
-                __(' in the collection ', 'tainacan') .' '.' <b><a href="'.  get_the_permalink($collection->ID).'">'.$collection->post_title.'</a></b> ';
+            $title = __('Alter configuration from object property ', 'tainacan').' : <i>'.$property->name.'</i>&nbsp;&nbsp;<br> '.$text.
+                __(' in the collection ', 'tainacan') .' '.' <b><a target="_blank" href="'.  get_the_permalink($collection->ID).'">'.$collection->post_title.'</a></b> ';
         }else{
             $title = __('Edit the object property ', 'tainacan') .'<br>'.
                 __('From','tainacan').' : <i>'.$property->name.'</i><br>'.
                 __('To','tainacan').' : <i>'.$property_name.'</i><br>'.
-                __(' in the collection ', 'tainacan') .' '.' <b><a href="'.  get_the_permalink($collection->ID).'">'.$collection->post_title.'</a></b> ';
+                __(' in the collection ', 'tainacan') .' '.' <b><a target="_blank" href="'.  get_the_permalink($collection->ID).'">'.$collection->post_title.'</a></b> ';
         }
         return $title;
     }

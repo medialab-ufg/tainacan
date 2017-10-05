@@ -25,9 +25,9 @@ class EventObjectCreateModel extends EventModel {
         $object = get_post($data['socialdb_event_object_item_id']);
         $collection = get_post($data['socialdb_event_collection_id']);
         if($object->post_status == 'publish'):
-            $title = __('Add object ','tainacan') .' '. $object->post_title.' '. __(' in the collection ','tainacan') .' '.' <b><a href="'.  get_the_permalink($collection->ID).'">'.$collection->post_title.'</a></b> ';;
+            $title = __('Add object ','tainacan') .' '. $object->post_title.' '. __(' in the collection ','tainacan') .' '.' <b><a target="_blank" href="'.  get_the_permalink($collection->ID).'">'.$collection->post_title.'</a></b> ';;
         else:    
-            $title = __('Create the object ','tainacan') .' '. $object->post_title.' '. __(' in the collection ','tainacan') .' '.' <b><a href="'.  get_the_permalink($collection->ID).'">'.$collection->post_title.'</a></b> ';
+            $title = __('Create the object ','tainacan') .' '. $object->post_title.' '. __(' in the collection ','tainacan') .' '.' <b><a target="_blank" href="'.  get_the_permalink($collection->ID).'">'.$collection->post_title.'</a></b> ';
         endif;
         return $title;
     }

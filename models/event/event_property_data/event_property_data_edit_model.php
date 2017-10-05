@@ -35,28 +35,28 @@ class EventPropertyDataEdit extends EventModel {
             $cardinality = get_term_meta($data['socialdb_event_property_data_edit_id'],'socialdb_property_data_cardinality',true);
 
             if($newwidget !== $widget){
-                $text .=  __('Alter widget field from ', 'tainacan').' : <i>'.$widget.'</i> '. __('to ', 'tainacan').'<i>'.$newwidget.'</i><br>';
+                $text .=  __('Alter widget field from ', 'tainacan').' : <i>'.$widget.'</i> '. __('to ', 'tainacan').'<i>'.$newwidget.'</i>&nbsp;&nbsp;<br>';
             }
 
             if($newrequired !== $required){
                 $newrequired = ($newrequired === 'true') ? __('True') : __('False');
                 $required = ($required === 'true') ? __('True') : __('False');
-                $text .=  __('Alter required field from ', 'tainacan').' : <i>'. $required .'</i> '. __('to ', 'tainacan').' <i>'.$newrequired.'</i><br>';
+                $text .=  __('Alter required field from ', 'tainacan').' : <i>'. $required .'</i> '. __('to ', 'tainacan').' <i>'.$newrequired.'</i>&nbsp;&nbsp;<br>';
             }
 
             if($newcardinality !== $cardinality){
                 $newcardinality = ($newcardinality === 'n') ? __('Multiple values','tainacan') : __('One value','tainacan');
                 $cardinality = ($cardinality === 'n') ? __('Multiple values','tainacan') : __('One value','tainacan');
-                $text .=  __('Alter cardinality from ', 'tainacan').' : <i>'. $cardinality .'</i> '. __('to ', 'tainacan').' <i>'.$newcardinality.'</i><br>';
+                $text .=  __('Alter cardinality from ', 'tainacan').' : <i>'. $cardinality .'</i> '. __('to ', 'tainacan').' <i>'.$newcardinality.'</i>&nbsp;&nbsp;<br>';
             }
 
-            $title = __('Alter configuration from data property ', 'tainacan').' : <i>'.$property->name.'</i><br>'.$text.
-                __(' in the collection ', 'tainacan') .' '.' <b><a href="'.  get_the_permalink($collection->ID).'">'.$collection->post_title.'</a></b> ';
+            $title = __('Alter configuration from data property ', 'tainacan').' : <i>'.$property->name.'</i>&nbsp;&nbsp;<br>;'.$text.
+                __(' in the collection ', 'tainacan') .' '.' <b><a target="_blank" href="'.  get_the_permalink($collection->ID).'">'.$collection->post_title.'</a></b> ';
         }else{
             $title = __('Edit the data property ', 'tainacan') .'<br>'.
                 __('From','tainacan').' : <i>'.$property->name.'</i><br>'.
                 __('To','tainacan').' : <i>'.$property_name.'</i><br>'.
-                __(' in the collection ', 'tainacan') .' '.' <b><a href="'.  get_the_permalink($collection->ID).'">'.$collection->post_title.'</a></b> ';
+                __(' in the collection ', 'tainacan') .' '.' <b><a target="_blank" href="'.  get_the_permalink($collection->ID).'">'.$collection->post_title.'</a></b> ';
         }
         return $title;
     }

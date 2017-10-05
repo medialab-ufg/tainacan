@@ -103,7 +103,6 @@ $ids = [];
                          do_action('modificate_single_item_properties_object',$property);
                 endif;
                 ?>
-                <a target="_blank" class="btn btn-primary btn-xs" href="<?php echo get_permalink($property['metas']['collection_data'][0]->ID); ?>"><?php _e('Add new', 'tainacan'); ?><?php echo ' ' . $property['metas']['collection_data'][0]->post_title; ?></a><br><br>
                 <?php
                     if(has_action('modificate_label_insert_item_properties')):
                         do_action('modificate_label_insert_item_properties', $property);

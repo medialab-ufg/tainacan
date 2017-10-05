@@ -2,19 +2,24 @@
     $(function () {
         $('#single_submit_form_property_object').submit(function (e) {
             show_modal_main();
-            $.ajax({
-                url: $('#src').val() + '/controllers/event/event_controller.php',
-                type: 'POST',
-                data: new FormData(this),
-                processData: false,
-                contentType: false
-            }).done(function (result) {
+            if($('#property_object_category_id').val()===''){
                 hide_modal_main();
-                elem = jQuery.parseJSON(result);
-                back_button_single($('#single_event_add_property_object_id').val());
-                list_properties_single($('#single_event_add_property_object_id').val());
-                showAlertGeneral(elem.title, elem.msg, elem.type);
-            });
+                showAlertGeneral('<?php _e('Attention!','') ?>','<?php _e('Object metadata requires a category to search items!','') ?>', 'info');
+            }else {
+                $.ajax({
+                    url: $('#src').val() + '/controllers/event/event_controller.php',
+                    type: 'POST',
+                    data: new FormData(this),
+                    processData: false,
+                    contentType: false
+                }).done(function (result) {
+                    hide_modal_main();
+                    elem = jQuery.parseJSON(result);
+                    back_button_single($('#single_event_add_property_object_id').val());
+                    list_properties_single($('#single_event_add_property_object_id').val());
+                    showAlertGeneral(elem.title, elem.msg, elem.type);
+                });
+            }
             e.preventDefault();
         });
         if ($('#single_event_add_property_object_is_reverse_value').val() == 'true') {

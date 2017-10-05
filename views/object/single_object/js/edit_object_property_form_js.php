@@ -2,22 +2,27 @@
     $(function () {
         $('#single_submit_form_event_edit_property_object').submit(function (e) {
             show_modal_main();
-            $.ajax({
-                url: $('#src').val() + '/controllers/event/event_controller.php',
-                type: 'POST',
-                data: new FormData(this),
-                processData: false,
-                contentType: false
-            }).done(function (result) {
+            if($('#property_object_category_id').val()===''){
                 hide_modal_main();
-                elem = jQuery.parseJSON(result);
-                back_button_single($('#single_event_edit_property_object_post_id').val());
-                //$("#dynatree").dynatree("getTree").reload();
-                list_properties_single($('#single_event_edit_property_object_post_id').val());
-                showAlertGeneral(elem.title, elem.msg, elem.type);
-                //limpando caches
-                delete_all_cache_collection();
-            });
+                showAlertGeneral('<?php _e('Attention!','') ?>','<?php _e('Object metadata requires a category to search items!','') ?>', 'info');
+            }else {
+                $.ajax({
+                    url: $('#src').val() + '/controllers/event/event_controller.php',
+                    type: 'POST',
+                    data: new FormData(this),
+                    processData: false,
+                    contentType: false
+                }).done(function (result) {
+                    hide_modal_main();
+                    elem = jQuery.parseJSON(result);
+                    back_button_single($('#single_event_edit_property_object_post_id').val());
+                    //$("#dynatree").dynatree("getTree").reload();
+                    list_properties_single($('#single_event_edit_property_object_post_id').val());
+                    showAlertGeneral(elem.title, elem.msg, elem.type);
+                    //limpando caches
+                    delete_all_cache_collection();
+                });
+            }
             e.preventDefault();
         });
         if($('#single_event_edit_property_object_is_reverse_value').val()=='true'){
@@ -40,7 +45,7 @@
         });
         showPropertyCategoryDynatreeEdit($('#src').val());
     });
-<?php // lista as propriedades da categoria que foi selecionada  ?>
+     // lista as propriedades da categoria que foi selecionada
     function single_list_reverses_edit_event(selected) {
         $.ajax({
             url: $('#src').val() + '/controllers/property/property_controller.php',

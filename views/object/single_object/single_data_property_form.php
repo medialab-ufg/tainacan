@@ -11,7 +11,8 @@ include_once ('js/data_property_form_js.php'); ?>
     <input type="hidden" name="property_category_id"  value="<?php echo $category->term_id; ?>">
     <div class="create_form-group">
         <label for="event_add_property_data_name"><?php _e('Name','tainacan'); ?></label>
-        <input type="text" class="form-control" id="single_event_add_property_data_name" name="socialdb_event_property_data_create_name" required="required" placeholder="<?php _e('Property Data name'); ?>">
+        <input type="text" class="form-control" id="single_event_add_property_data_name" name="socialdb_event_property_data_create_name" required="required"
+               placeholder="<?php _e('Name','tainacan'); ?>">
     </div>
     <div class="form-group">
         <label for="event_add_property_data_widget"><?php _e('Widget','tainacan'); ?></label>

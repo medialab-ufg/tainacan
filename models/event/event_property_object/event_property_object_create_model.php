@@ -33,7 +33,7 @@ class EventPropertyObjectCreate extends EventModel {
             &&$this->get_category_root_of($collection->ID)!=$data['socialdb_event_property_object_create_category_root_id']){
             $title = __('Create the object property ','tainacan').' ('.$property_name.')'.__(' in the category','tainacan').' '.' <b>'.  get_term_by('id', $data['socialdb_event_property_object_create_category_root_id'],'socialdb_category_type')->name.'</b>';
         }else{
-            $title = __('Create the object property ','tainacan').' ( <i>'.$property_name.'</i> ) '.__(' in the collection','tainacan').' '.' <b><a href="'.  get_the_permalink($collection->ID).'">'.$collection->post_title.'</a></b> ';
+            $title = __('Create the object property ','tainacan').' ( <i>'.$property_name.'</i> ) '.__(' in the collection','tainacan').' '.' <b><a target="_blank" href="'.  get_the_permalink($collection->ID).'">'.$collection->post_title.'</a></b> ';
         }
 
         return $title;

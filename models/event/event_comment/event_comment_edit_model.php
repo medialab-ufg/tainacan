@@ -29,7 +29,7 @@ class EventCommentEdit extends EventModel {
         $title = __('Alter the Comment ','tainacan').'<br>'.
             __('From','tainacan').' : <i>'.$comment->comment_content.'</i><br>'.
             __('To','tainacan').' : <i>'.$content.'</i><br>'.
-            __('in the item','tainacan').' <b><a href="'.  get_the_permalink($object->ID).'">'. $object->post_title.'</a></b> '.__('from collection','tainacan').' '.' <b><a href="'.  get_the_permalink($collection->ID).'">'.$collection->post_title.'</a></b>' ;
+            __('in the item','tainacan').' <b><a href="'.  get_the_permalink($object->ID).'">'. $object->post_title.'</a></b> '.__('from collection','tainacan').' '.' <b><a target="_blank" href="'.  get_the_permalink($collection->ID).'">'.$collection->post_title.'</a></b>' ;
         return $title;
     }
 

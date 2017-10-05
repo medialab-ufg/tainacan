@@ -36,6 +36,9 @@ class OfficeDocumentToPlainText{
     private function readDOCX(){
         $content = '';
 
+        if(!function_exists('zip_open')){
+            return false;
+        }
         $zip = zip_open($this->filename);
 
         if (!$zip || is_numeric($zip)) return false;

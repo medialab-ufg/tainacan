@@ -45,6 +45,7 @@
     endif;
 endforeach;
 
+if(function_exists('get_home_collection_types')):
 foreach (get_home_collection_types() as $type => $title):
     ?>
         <div class="featured type-container col-md-12 col-sm-12 <?= $type ?>" style="display: none;">
@@ -53,5 +54,7 @@ foreach (get_home_collection_types() as $type => $title):
                 <div class="col-md-12 col-sm-12 blocos carousel-home-ajax"></div> <?php /*** Items are appended here ***/ ?>
             </div>
         </div>
-<?php endforeach; ?>
+<?php endforeach;
+endif;
+?>
 </div>
