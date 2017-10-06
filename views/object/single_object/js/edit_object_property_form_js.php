@@ -3,7 +3,7 @@
         $('#single_submit_form_event_edit_property_object').submit(function (e) {
             if($('#property_object_category_id').val()===''){
                 hide_modal_main();
-                showAlertGeneral('<?php _e('Attention!','') ?>','<?php _e('Object metadata requires a category to search items!','') ?>', 'info');
+                showAlertGeneral('<?php _e('Attention!','') ?>','<?php _e('Object metadata requires a category to search items!','tainacan') ?>', 'info');
             }else {
 
                 show_modal_main();
