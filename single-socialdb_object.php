@@ -342,8 +342,7 @@ if("one" === $single_mode) {
                                    href="https://twitter.com/intent/tweet?url=<?php echo get_the_permalink($collection_id) . '?item=' . $post->post_name; ?>&amp;text=<?php echo htmlentities($post->post_title); ?>&amp;via=socialdb">
                                     <img src="<?php echo get_template_directory_uri() . '/libraries/images/icons/icon-twitter.png'; ?>"/>
                                 </a>
-                                <a class="gplus" target="_blank"
-                                   href="https://plus.google.com/share?url=<?php echo get_the_permalink($collection_id) . '?item=' . $post->post_name; ?>">
+                                <a class="gplus" target="_blank" href="https://plus.google.com/share?url=<?php echo the_permalink(); ?>">
                                     <img src="<?php echo get_template_directory_uri() . '/libraries/images/icons/icon-googleplus.png'; ?>"/>
                                 </a>
 
