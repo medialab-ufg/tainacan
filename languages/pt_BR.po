@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: socialdb\n"
-"POT-Creation-Date: 2017-10-05 10:48-0300\n"
-"PO-Revision-Date: 2017-10-05 10:49-0300\n"
+"POT-Creation-Date: 2017-10-05 11:57-0300\n"
+"PO-Revision-Date: 2017-10-05 12:58-0300\n"
 "Last-Translator: Rodrigo de Oliveira <webmaster@rodrigodeoliveira.net>\n"
 "Language-Team: \n"
 "Language: pt_BR\n"
@@ -151,7 +151,7 @@ msgstr "Comentar"
 #: views/object/single_object/single_edit_data_property_form.php:49
 #: views/object/single_object/single_edit_object_property_form.php:66
 #: views/object/single_object/single_object_property_form.php:63
-#: views/object/single_object/single_term_property_form.php:220
+#: views/object/single_object/single_term_property_form.php:229
 #: views/object/temp/edit_multiple.php:370
 #: views/object/temp/edit_multiple.php:850 views/property/js/tabs_js.php:175
 #: views/property/metadata/form_compounds.php:81
@@ -319,8 +319,8 @@ msgstr "Nos conte porque este conteúdo é abusivo"
 #: views/object/multiple_social_network/js/create_js.php:48
 #: views/object/multiple_social_network/js/editor_items_js.php:1440
 #: views/object/multiple_social_network/js/editor_items_js.php:1515
-#: views/object/single_object/js/edit_object_property_form_js.php:7
-#: views/object/single_object/js/object_property_form_js.php:7
+#: views/object/single_object/js/edit_object_property_form_js.php:6
+#: views/object/single_object/js/object_property_form_js.php:6
 #: views/object/single_object/js/show_list_event_properties_js.php:56
 #: views/object/single_object/js/show_list_event_properties_js.php:122
 #: views/object/single_object/js/show_list_event_properties_js.php:203
@@ -328,6 +328,8 @@ msgstr "Nos conte porque este conteúdo é abusivo"
 #: views/object/single_object/js/single_properties_compounds_js.php:893
 #: views/object/single_object/js/single_properties_compounds_js.php:931
 #: views/object/single_object/js/single_properties_compounds_js.php:940
+#: views/object/single_object/js/single_term_property_js.php:422
+#: views/object/single_object/js/single_term_property_js.php:427
 #: views/object/temp/js/edit_multiple_js.php:1444
 #: views/property/js/list_category_metadata_js.php:158
 #: views/property/js/list_category_metadata_js.php:2450
@@ -1181,7 +1183,7 @@ msgstr "(Painel de edição)"
 #: views/object/single_object/single_edit_data_property_form.php:48
 #: views/object/single_object/single_edit_object_property_form.php:65
 #: views/object/single_object/single_object_property_form.php:59
-#: views/object/single_object/single_term_property_form.php:216
+#: views/object/single_object/single_term_property_form.php:225
 #: views/property/metadata/form_compounds.php:107
 #: views/property/metadata/form_voting.php:86 views/ranking/list.php:99
 #: views/search/edit.php:102 views/search/edit.php:315
@@ -1828,7 +1830,6 @@ msgid "No objects added in this collection"
 msgstr "Nenhum item foi adicionado a esta coleção"
 
 #: helpers/category/category_helper.php:64
-#: views/object/single_object/single_term_property_form.php:92
 #: views/property/metadata/form_term.php:97
 #: views/theme_options/property/metadata/form_term.php:97
 msgid "Click here to create a sub-category"
@@ -3307,7 +3308,7 @@ msgstr "Alterar campo obrigatório de"
 #: views/object/single_object/single_edit_data_property_form.php:38
 #: views/object/single_object/single_edit_object_property_form.php:42
 #: views/object/single_object/single_object_property_form.php:39
-#: views/object/single_object/single_term_property_form.php:123
+#: views/object/single_object/single_term_property_form.php:132
 #: views/property/metadata/form_compounds.php:48
 #: views/property/metadata/form_object.php:48
 #: views/property/metadata/form_term.php:131
@@ -3574,7 +3575,7 @@ msgstr "Metadado de termo "
 #: views/object/multiple_social_network/editor_items.php:422
 #: views/object/single_object/js/single_properties_compounds_js.php:347
 #: views/object/single_object/js/single_properties_compounds_js.php:386
-#: views/object/single_object/single_term_property_form.php:172
+#: views/object/single_object/single_term_property_form.php:181
 #: views/object/temp/edit_multiple.php:382
 #: views/property/metadata/form_term.php:175
 #: views/theme_options/property/metadata/form_term.php:176
@@ -4421,9 +4422,7 @@ msgstr "Adicionar categorias selecionadas como facetas"
 #: partials/admin/admin-categories.php:21 views/category/list.php:47
 #: views/category/list.php:48 views/collection/modals.php:21
 #: views/collection/modals.php:22 views/collection/modals.php:72
-#: views/collection/modals.php:73
-#: views/object/single_object/single_term_property_form.php:69
-#: views/property/metadata/form_term.php:72
+#: views/collection/modals.php:73 views/property/metadata/form_term.php:72
 #: views/theme_options/property/metadata/form_term.php:72
 msgid "Category name"
 msgstr "Nome da categoria"
@@ -4466,7 +4465,7 @@ msgstr "Privado"
 
 #: partials/admin/admin-categories.php:37 views/category/list.php:64
 #: views/collection/edit.php:160
-#: views/object/single_object/single_term_property_form.php:127
+#: views/object/single_object/single_term_property_form.php:136
 #: views/property/metadata/form_compounds.php:52
 #: views/property/metadata/form_object.php:78
 #: views/property/metadata/form_term.php:135
@@ -4639,8 +4638,8 @@ msgstr "Caso essa seja uma categoria pai então seus filhos se tornarão pais."
 #: views/object/single_object/single_object_property_form.php:29
 #: views/object/single_object/single_object_property_form.php:34
 #: views/object/single_object/single_object_property_form.php:44
-#: views/object/single_object/single_term_property_form.php:133
-#: views/object/single_object/single_term_property_form.php:141
+#: views/object/single_object/single_term_property_form.php:142
+#: views/object/single_object/single_term_property_form.php:150
 #: views/property/list.php:158 views/property/list.php:227
 #: views/property/list.php:232 views/property/list.php:237
 #: views/property/list.php:311 views/property/metadata/form_object.php:43
@@ -4681,8 +4680,8 @@ msgstr "Não"
 #: views/object/single_object/single_object_property_form.php:28
 #: views/object/single_object/single_object_property_form.php:33
 #: views/object/single_object/single_object_property_form.php:43
-#: views/object/single_object/single_term_property_form.php:132
-#: views/object/single_object/single_term_property_form.php:140
+#: views/object/single_object/single_term_property_form.php:141
+#: views/object/single_object/single_term_property_form.php:149
 #: views/property/list.php:157 views/property/list.php:226
 #: views/property/list.php:231 views/property/list.php:236
 #: views/property/list.php:310 views/property/metadata/form_object.php:42
@@ -6117,7 +6116,7 @@ msgid "Categories saved successfully!"
 msgstr "Categorias salvas com sucesso!"
 
 #: views/category/js/taxonomy_zone_js.php:106
-#: views/object/single_object/js/single_term_property_js.php:35
+#: views/object/single_object/js/single_term_property_js.php:36
 #: views/property/js/list_category_metadata_js.php:2536
 #: views/property/js/list_metadata_js.php:2820
 #: views/theme_options/property/js/list_metadata_js.php:2518
@@ -6191,7 +6190,7 @@ msgid "Type the category name"
 msgstr "Digite o nome da categoria"
 
 #: views/category/taxonomy_zone.php:30
-#: views/object/single_object/single_term_property_form.php:98
+#: views/object/single_object/single_term_property_form.php:92
 #: views/property/metadata/form_term.php:103
 #: views/theme_options/property/metadata/form_term.php:103
 msgid "Add sub-category"
@@ -8008,8 +8007,8 @@ msgstr "Todos "
 #: views/object/formItemMultiple/formItemMultiple.class.php:172
 #: views/object/multiple_items/editor_items.php:422
 #: views/object/multiple_social_network/editor_items.php:426
-#: views/object/single_object/js/edit_object_property_form_js.php:153
-#: views/object/single_object/js/object_property_form_js.php:131
+#: views/object/single_object/js/edit_object_property_form_js.php:154
+#: views/object/single_object/js/object_property_form_js.php:132
 #: views/object/temp/edit_multiple.php:386
 #: views/property/js/list_category_metadata_js.php:894
 #: views/property/js/list_category_metadata_js.php:2263
@@ -8966,13 +8965,13 @@ msgstr "( Metadado de hierarquia)"
 msgid "No properties added!"
 msgstr "Sem metadados adicionados!"
 
-#: views/object/single_object/js/edit_object_property_form_js.php:7
-#: views/object/single_object/js/object_property_form_js.php:7
+#: views/object/single_object/js/edit_object_property_form_js.php:6
+#: views/object/single_object/js/object_property_form_js.php:6
 msgid "Object metadata requires a category to search items!"
 msgstr "Metadado de objeto exige ao menos uma categoria para buscar os itens!"
 
-#: views/object/single_object/js/edit_object_property_form_js.php:66
-#: views/object/single_object/js/object_property_form_js.php:64
+#: views/object/single_object/js/edit_object_property_form_js.php:67
+#: views/object/single_object/js/object_property_form_js.php:65
 #: views/property/js/list_js.php:269
 #: views/theme_options/property/js/list_js.php:204
 msgid "No properties added"
@@ -9028,6 +9027,14 @@ msgstr "Árvore com checkbox"
 msgid "Checkbox"
 msgstr "Checkbox"
 
+#: views/object/single_object/js/single_term_property_js.php:422
+msgid "Taxonomy name is required!"
+msgstr "O nome da taxonomia é obrigatório!"
+
+#: views/object/single_object/js/single_term_property_js.php:427
+msgid "Category metadata requires a vinculate category!"
+msgstr "Este metadado exige uma categoria vinculada!"
+
 #: views/object/single_object/ranking/js/list_ranking_js.php:48
 #: views/object/single_object/ranking/js/list_ranking_js.php:74
 #: views/object/single_object/ranking/js/list_ranking_js.php:101
@@ -9041,7 +9048,7 @@ msgstr "Criar metadado de dado"
 
 #: views/object/single_object/single_data_property_form.php:18
 #: views/object/single_object/single_edit_data_property_form.php:16
-#: views/object/single_object/single_term_property_form.php:110
+#: views/object/single_object/single_term_property_form.php:119
 #: views/property/metadata/form_voting.php:37 views/search/edit.php:256
 #: views/theme_options/property/metadata/form_voting.php:33
 msgid "Widget"
@@ -9056,8 +9063,8 @@ msgstr "Metadado de dado como coluna de ordenação"
 #: views/object/single_object/single_edit_data_property_form.php:31
 #: views/object/single_object/single_edit_object_property_form.php:35
 #: views/object/single_object/single_object_property_form.php:32
-#: views/object/single_object/single_term_property_form.php:136
-#: views/object/single_object/single_term_property_form.php:139
+#: views/object/single_object/single_term_property_form.php:145
+#: views/object/single_object/single_term_property_form.php:148
 #: views/property/metadata/form_term.php:144
 #: views/property/metadata/form_user.php:88
 #: views/property/metadata_forms.php:93
@@ -9071,7 +9078,7 @@ msgstr "Obrigatório"
 #: views/object/single_object/single_edit_data_property_form.php:36
 #: views/object/single_object/single_edit_object_property_form.php:40
 #: views/object/single_object/single_object_property_form.php:37
-#: views/object/single_object/single_term_property_form.php:115
+#: views/object/single_object/single_term_property_form.php:124
 #: views/property/metadata/form_compounds.php:40
 #: views/property/metadata/form_term.php:123
 #: views/property/metadata/form_user.php:78
@@ -9084,7 +9091,7 @@ msgstr "Quantidade de elementos"
 #: views/object/single_object/single_edit_data_property_form.php:37
 #: views/object/single_object/single_edit_object_property_form.php:41
 #: views/object/single_object/single_object_property_form.php:38
-#: views/object/single_object/single_term_property_form.php:119
+#: views/object/single_object/single_term_property_form.php:128
 #: views/property/metadata/form_compounds.php:44
 #: views/property/metadata/form_object.php:47
 #: views/property/metadata/form_term.php:127
@@ -9203,14 +9210,34 @@ msgstr "Termo selecionado"
 msgid "Create new"
 msgstr "Criar nova"
 
-#: views/object/single_object/single_term_property_form.php:106
+#: views/object/single_object/single_term_property_form.php:69
+msgid "Taxonomy name, this field is required!"
+msgstr "Nome da taxonomia, este campo é obrigatório!"
+
+#: views/object/single_object/single_term_property_form.php:97
+msgid "Helper"
+msgstr "Ajuda"
+
+#: views/object/single_object/single_term_property_form.php:98
+msgid ""
+"The button Add sub-category creates the fields for new categories in the "
+"taxonomy,\n"
+"                                 the buttons on the right allow moves the "
+"category in the heirarchy created  ( first click in the category) "
+msgstr ""
+"O botão adicionar sub-categoria cria os campos  para novas categorias na "
+"taxonomia,\n"
+" os botões à direita permite mover as categorias na hierarquia criada, "
+"( clique na categoria para edição )"
+
+#: views/object/single_object/single_term_property_form.php:115
 #: views/property/list.php:322 views/property/metadata/form_term.php:114
 #: views/theme_options/property/list.php:227
 #: views/theme_options/property/metadata/form_term.php:114
 msgid "Property term text helper"
 msgstr "Texto de ajuda de metadado de termo"
 
-#: views/object/single_object/single_term_property_form.php:126
+#: views/object/single_object/single_term_property_form.php:135
 #: views/property/metadata/form_compounds.php:51
 #: views/property/metadata/form_object.php:77
 #: views/property/metadata/form_term.php:134
@@ -9222,7 +9249,7 @@ msgstr "Texto de ajuda de metadado de termo"
 msgid "Visualization"
 msgstr "Visualização"
 
-#: views/object/single_object/single_term_property_form.php:128
+#: views/object/single_object/single_term_property_form.php:137
 #: views/property/metadata/form_compounds.php:53
 #: views/property/metadata/form_object.php:79
 #: views/property/metadata/form_term.php:136
@@ -9232,11 +9259,11 @@ msgstr "Visualização"
 msgid "Restrict"
 msgstr "Restrita"
 
-#: views/object/single_object/single_term_property_form.php:131
+#: views/object/single_object/single_term_property_form.php:140
 msgid "Enable add new category"
 msgstr "Habilitar adicionar nova categoria"
 
-#: views/object/single_object/single_term_property_form.php:144
+#: views/object/single_object/single_term_property_form.php:153
 #: views/property/metadata/form_compounds.php:35
 #: views/property/metadata/form_object.php:82
 #: views/property/metadata/form_term.php:147
@@ -9248,7 +9275,7 @@ msgstr "Habilitar adicionar nova categoria"
 msgid "Select the tab"
 msgstr "Selecione a aba"
 
-#: views/object/single_object/single_term_property_form.php:149
+#: views/object/single_object/single_term_property_form.php:158
 #: views/property/list.php:147 views/property/metadata/form_object.php:87
 #: views/property/metadata/form_term.php:152
 #: views/property/metadata/form_user.php:47
@@ -9260,13 +9287,13 @@ msgstr "Selecione a aba"
 msgid "Property data default value"
 msgstr "Valor padrão"
 
-#: views/object/single_object/single_term_property_form.php:155
+#: views/object/single_object/single_term_property_form.php:164
 #: views/property/metadata/form_term.php:158
 #: views/theme_options/property/metadata/form_term.php:158
 msgid "Type the name of the category"
 msgstr "Digite o nome da categoria"
 
-#: views/object/single_object/single_term_property_form.php:163
+#: views/object/single_object/single_term_property_form.php:172
 #: views/property/metadata/form_filter.php:14
 #: views/property/metadata/form_object.php:99
 #: views/property/metadata/form_tag.php:14
@@ -9283,19 +9310,19 @@ msgstr "Digite o nome da categoria"
 msgid "Use as a filter"
 msgstr "Usar como filtro"
 
-#: views/object/single_object/single_term_property_form.php:169
+#: views/object/single_object/single_term_property_form.php:178
 #: views/property/metadata/form_term.php:172
 #: views/theme_options/property/metadata/form_term.php:173
 msgid "Property Widget"
 msgstr "Widget do metadado"
 
-#: views/object/single_object/single_term_property_form.php:181
+#: views/object/single_object/single_term_property_form.php:190
 #: views/property/metadata/form_term.php:184 views/search/edit.php:303
 #: views/theme_options/property/metadata/form_term.php:186
 msgid "Select the style for your facet"
 msgstr "Selecionar o estilo de sua faceta"
 
-#: views/object/single_object/single_term_property_form.php:191
+#: views/object/single_object/single_term_property_form.php:200
 #: views/property/metadata/form_compounds.php:24
 #: views/property/metadata/form_object.php:112
 #: views/property/metadata/form_term.php:194
@@ -9306,7 +9333,7 @@ msgstr "Selecionar o estilo de sua faceta"
 msgid "Ordenation"
 msgstr "Ordenação"
 
-#: views/object/single_object/single_term_property_form.php:192
+#: views/object/single_object/single_term_property_form.php:201
 #: views/property/metadata/form_object.php:113
 #: views/property/metadata/form_term.php:195
 #: views/property/metadata/form_user.php:145
@@ -9315,7 +9342,7 @@ msgstr "Ordenação"
 msgid "Alphabetic"
 msgstr "Alfabética"
 
-#: views/object/single_object/single_term_property_form.php:193
+#: views/object/single_object/single_term_property_form.php:202
 #: views/property/metadata/form_object.php:114
 #: views/property/metadata/form_term.php:196
 #: views/property/metadata/form_user.php:146

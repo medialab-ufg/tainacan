@@ -265,7 +265,11 @@ class FormItem extends Model {
         //olhando na ordenacao
         if ($propertiesOrdenation && is_array($propertiesOrdenation)) {
             foreach ($propertiesOrdenation as $tab => $ordenation) {
-                $arrayIds[$tab] = array_unique(explode(',', $ordenation));
+                if(is_array($ordenation)){
+                    $arrayIds[$tab] = array_unique( $ordenation);
+                }else{
+                    $arrayIds[$tab] = array_unique(explode(',', $ordenation));
+                }
             }
         }
         //olhando no mapeamento

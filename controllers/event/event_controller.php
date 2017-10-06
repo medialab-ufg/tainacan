@@ -16,6 +16,9 @@ require_once(dirname(__FILE__).'../../../models/event/event_property_data/event_
 require_once(dirname(__FILE__).'../../../models/event/event_property_data/event_property_data_edit_model.php');
 require_once(dirname(__FILE__).'../../../models/event/event_property_data/event_property_data_delete_model.php');
 require_once(dirname(__FILE__).'../../../models/event/event_property_data/event_property_data_edit_value_model.php');
+require_once(dirname(__FILE__).'../../../models/event/event_property_term/event_property_term_create_model.php');
+require_once(dirname(__FILE__).'../../../models/event/event_property_term/event_property_term_edit_model.php');
+require_once(dirname(__FILE__).'../../../models/event/event_property_term/event_property_term_delete_model.php');
 require_once(dirname(__FILE__).'../../../models/event/event_property_compounds/event_property_compounds_edit_value_model.php');
 require_once(dirname(__FILE__).'../../../models/event/event_term/event_term_create_model.php');
 require_once(dirname(__FILE__).'../../../models/event/event_term/event_term_edit_model.php');
@@ -257,9 +260,48 @@ require_once(dirname(__FILE__) . '../../../models/object/object_save_values.php'
               $data['socialdb_event_property_compounds_edit_value_attribute_value'] = '';
           }
           return $event_property_compounds_edit_value_model->create_event($data);
-      case 'socialdb_event_property_data_edit_value';
+      case 'socialdb_event_property_compounds_edit_value';
           $event_property_compounds_edit_value_model = new EventPropertyCompoundsEditValue();
           return $event_property_compounds_edit_value_model->verify_event($data);
+
+      //metadado de termo
+
+     case 'add_event_property_term_create':
+         $event_property_term_create_model = new EventPropertyTermCreate();
+         /*
+          * filtro que trabalha com os dados do formulario de adicao de propriedade de dados
+          * para os eventos
+          */
+         if(has_filter('modificate_values_event_property_term_add')):
+             $data = apply_filters( 'modificate_values_event_property_term_add', $data);
+         endif;
+         return $event_property_term_create_model->create_event($data);
+     case 'socialdb_event_property_term_create';
+         $event_term_delete_model = new EventPropertyTermCreate();
+         return $event_term_delete_model->verify_event($data);
+     //edit property data
+     case 'add_event_property_term_edit':
+         $event_property_term_edit_model = new EventPropertyTermEdit();
+         /*
+         * filtro que trabalha com os dados do formulario de alteracao de propriedade de dados
+         * para os eventos
+         */
+         if(has_filter('modificate_values_event_property_term_update')):
+             $data = apply_filters( 'modificate_values_event_property_term_update', $data);
+         endif;
+         return $event_property_term_edit_model->create_event($data);
+     case 'socialdb_event_property_term_edit';
+         $event_property_term_edit_model = new EventPropertyTermEdit();
+         return $event_property_term_edit_model->verify_event($data);
+     //delete property data
+     case 'add_event_property_term_delete':
+         $event_property_term_delete_model = new EventPropertyTermDelete();
+         return $event_property_term_delete_model->create_event($data);
+     case 'socialdb_event_property_term_delete';
+         $event_property_term_delete_model = new EventPropertyTermDelete();
+         return $event_property_term_delete_model->verify_event($data);
+
+
 
       //create category
       case 'add_event_term_create':

@@ -27,6 +27,7 @@ $(function(){
     $('#socialdb_property_term_cardinality_1').trigger('click');
 
     showTermsDynatree(src);
+    $('[data-toggle="popover"]').popover()
 });
 var src = $('#src').val();
 var selected_element;
@@ -416,6 +417,18 @@ $('#socialdb_property_vinculate_category_exist').click(function (e) {
 $('#submit_form_property_term').submit(function (e) {
     e.preventDefault();
     $('.modal').modal('hide');
+    if( $('#socialdb_property_vinculate_category_create').is(':checked') && $('#property_term_new_category').val() === ''){
+        hide_modal_main();
+        showAlertGeneral('<?php _e('Attention!','tainacan') ?>','<?php _e('Taxonomy name is required!','tainacan'); ?>','info');
+        return false;
+    }else{
+        if($('#socialdb_property_vinculate_category_exist').is(':checked') && $('#socialdb_property_term_root').val()===''){
+            hide_modal_main();
+            showAlertGeneral('<?php _e('Attention!','tainacan') ?>','<?php _e('Category metadata requires a vinculate category!','tainacan') ?>', 'info');
+            return false;
+        }
+    }
+
     $('#modalImportMain').modal('show');
     $.ajax({
         url: src + '/controllers/property/property_controller.php',

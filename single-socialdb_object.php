@@ -239,7 +239,7 @@ if("one" === $single_mode) {
                                         <input type="text" class="form-control" id="source_field"
                                                value="<?php echo $item_opts['source']; ?>"
                                                name="source_field"
-                                               placeholder="<?php _e('Type the source and click save!') ?>">
+                                               placeholder="<?php _e('Type the source and click save!','tainacan') ?>">
                                     </div>
                                 </div>
                             </div>
@@ -490,7 +490,7 @@ if("one" === $single_mode) {
                             </center>
                             <div id="single_classifications_<?php echo $post->ID ?>">
                             </div>
-                            <div id="event_tag" style="display:none;">
+                            <div id="event_tag" style="display:none;margin-top: 15px;">
                                 <input type="text" style="width:50%;" class="form-control col-md-6" id="event_tag_field"
                                        placeholder="<?php _e('Type the tag name', 'tainacan') ?>">
                             </div>

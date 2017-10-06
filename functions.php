@@ -822,6 +822,23 @@ function socialdb_validate_settings($input) {
     return $newinput;
 }
 
+function add_custom_caps() {
+    // gets the subscriber role
+    $role = get_role( 'subscriber' );
+
+    // This only works, because it accesses the class instance.
+    // would allow the subscriber to edit others' posts for current theme only
+    $role->add_cap( 'read' );;
+    $role->add_cap( 'read_private_post' );
+    $role->add_cap( 'edit_posts' );
+    $role->add_cap( 'edit_others_posts' );
+    $role->add_cap( 'edit_published_posts' );
+    $role->add_cap( 'publish_posts' );
+    $role->add_cap( 'delete_others_posts' );
+    $role->add_cap( 'delete_private_posts' );
+    $role->add_cap( 'delete_published_posts' );
+}
+
 //*****************************************************************************/
 //**************************************** POST STATUS ************************/
 
@@ -3684,6 +3701,7 @@ if (isset($_GET['activated']) && is_admin()) {
     create_anonimous_user();
     create_standart_licenses();
     update_option('socialdb_divider', 'MVOh71Y482');
+    add_custom_caps();
 }
 
 if (!defined("MANUAL_TAINACAN_URL")) {

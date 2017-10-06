@@ -97,9 +97,7 @@ class EventPropertyDataEditValue extends EventModel {
         return $title;
     }
 
-    public function replaceDot($string){
-        return str_replace('.',get_option('socialdb_divider'),$string);
-    }
+
     /**
      * function verify_event($data)
      * @param string $data  Os dados do evento a ser verificado

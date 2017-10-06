@@ -241,6 +241,16 @@ class FormItemMultiple extends Model {
             }
         }
     }
+
+     public function sortArrayChildren($children) {
+        if(count($children) > 0){
+            var_dump(usort($children, function($a, $b)
+            {
+                return strcmp($a->name, $b->name);
+            }));
+        }
+        return $children;
+    }
     
     /**
      *
@@ -572,12 +582,19 @@ class FormItemMultiple extends Model {
                     }
                 }).done(function (result) {
                     var result = JSON.parse(result);
+                    if(result.type === 'info'){
+                        showAlertGeneral(result.title,result.msg,result.type);
+                         hide_modal_main();
+                        $('#form').hide();
+                        $("#tainacan-breadcrumbs").hide();
+                        $('#configuration').hide();
+                        $('#main_part').show();
+                        $('#display_view_main_page').show();
 
-                    if(result.there_are_pdfFiles)
-                    {
+                        wpquery_clean();
+                    }else if(result.there_are_pdfFiles){
                         generate_pdfThumb();
-                    }else
-                    {
+                    }else{
                         finish_process();
                     }
                 });

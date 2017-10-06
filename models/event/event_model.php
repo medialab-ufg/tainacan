@@ -357,6 +357,10 @@ abstract class EventModel extends Model {
      */
     abstract public function verify_event($data, $automatically_verified = false);
 
+
+    public function replaceDot($string){
+        return str_replace('.',get_option('socialdb_divider'),$string);
+    }
     /**
      * function insert_term($data)
      * @param string $name  O nome do evento
@@ -370,7 +374,7 @@ abstract class EventModel extends Model {
 //$name = remove_accent($name);
 // $name = cut_string($name, 190);
         $post = array(
-            'post_title' => $name,
+            'post_title' => $this->replaceDot($name),
             'post_status' => 'publish',
             'post_type' => 'socialdb_event'
         );
@@ -445,7 +449,7 @@ abstract class EventModel extends Model {
                 } elseif ($this->parent->name == 'socialdb_event_object_create')
                 {
                     $object = get_post($data['socialdb_event_object_item_id']);
-                    $url = '<a target="_blanck" href="' . get_the_permalink($data['socialdb_event_collection_id']) . '?item=' . $object->post_name . '">' . __('See item (Open a new Tab)') . '</a>';
+                    $url = '<a target="_blanck" href="' . get_the_permalink( $object->ID) . '">' . __('See item (Open a new Tab)','tainacan') . '</a>';
                     update_post_meta($event_created['ID'], 'socialdb_event_observation', $url);
                 }
 
@@ -524,9 +528,12 @@ abstract class EventModel extends Model {
                 return true;
             }
         }
-
         //demais acoes para colecoes
         if ($permission == 'approval') {
+            if($user_id===0 || $user_id==='0'){
+                return false;
+            }
+
             if (CollectionModel::is_moderator($collection_id, $user_id) || current_user_can('manage_options')) {
                 return true;
             } else {

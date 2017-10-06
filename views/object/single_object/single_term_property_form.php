@@ -66,7 +66,7 @@
                            class="form-control"
                            id="property_term_new_category"
                            name="socialdb_property_term_new_category"
-                           placeholder="<?php _e('Category name','tainacan'); ?>">
+                           placeholder="<?php _e('Taxonomy name, this field is required!','tainacan'); ?>">
                     <div style="margin-top: 15px;padding: 15px;border: 1px solid #ccc;border-radius: 4px;min-height: 65px;" onclick="verify_has_li()">
                         <button type="button"
                                 class="btn btn-default pull-right"
@@ -88,15 +88,24 @@
                                 onclick="down_category_taxonomy()">
                             <span class="glyphicon glyphicon-arrow-down"></span>
                         </button>
-                        <div id="taxonomy_create_zone" >
-                            <span style="opacity: 0.5;"><?php _e('Click here to create a sub-category','tainacan') ?></span>
+                        <button type="button" onclick="add_field_category()" class="btn btn-primary">
+                            <span class="glyphicon glyphicon-plus"></span><?php _e('Add sub-category','tainacan') ?>
+                        </button>
+                        <button type="button"
+                                class="btn btn-danger"
+                                data-toggle="popover"
+                                title="<?php _e('Helper','tainacan') ?>"
+                                data-content="<?php _e('The button Add sub-category creates the fields for new categories in the taxonomy,
+                                 the buttons on the right allow moves the category in the heirarchy created  ( first click in the category) ','tainacan') ?>">
+                                <span class="glyphicon glyphicon-question-sign"></span>
+                        </button>
+                        <div id="taxonomy_create_zone" style="min-height: 150px;margin-top: 5px;" >
+                            <span style="opacity: 0.5;"><?php //_e('Click here to create a sub-category','tainacan') ?></span>
                         </div>
                         <input type="hidden" value="" id="socialdb_property_term_new_taxonomy" name="socialdb_property_term_new_taxonomy">
                     </div>
                     <br>
-                    <button type="button" onclick="add_field_category()" class="btn btn-primary btn-xs">
-                        <span class="glyphicon glyphicon-plus"></span><?php _e('Add sub-category','tainacan') ?>
-                    </button>
+
                 </div>
             </div>
             <!--------- FIM: A categoria raiz do metadado -------------->

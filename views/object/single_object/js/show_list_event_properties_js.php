@@ -85,7 +85,22 @@
         });
     }
 
+    function guid() {
+        function s4() {
+            return Math.floor((1 + Math.random()) * 0x10000)
+                .toString(16)
+                .substring(1);
+        }
+        return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+            s4() + '-' + s4() + s4() + s4();
+    }
+
+    function removeNewField(id){
+        $('#'+id).remove();
+    }
+
     function showNewField(property_id,object_id,type){
+        var id = guid();
         var value = '';
         var block = false;
         var html = '<input id="single_property_value_'+property_id+'_'+object_id+'" '+
@@ -100,13 +115,20 @@
             '                           style=" margin: 7px 0px 7px 0px;" ' +
             '                           class="form-control" ' +
             '                           data-index="new"></textarea>';
+
+        var style = '';
         if(type == 'date'){
             value =  html_date;
         }else if(type == 'textarea'){
             value =  textarea;
+            style = 'style="height: 54px"';
         }else{
             value =  html;
         }
+
+        value = '<div class="input-group" id="'+id+'">'+value+'<span class="input-group-btn">' +
+            '        <button '+style+' onclick="removeNewField(\''+id+'\')" class="btn btn-default" type="button" ><span class="glyphicon glyphicon-remove"></span></button>' +
+            '      </span></div>'
 
         $("textarea[id ^= 'single_property_value_" + property_id + "_" + object_id + "']").each(function(){
             if($(this).val().trim()===''){

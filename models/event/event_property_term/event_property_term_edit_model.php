@@ -44,7 +44,7 @@ class EventPropertyTermEdit extends EventModel {
                 $name = ($newcategory) ? $newcategory->name : $data['socialdb_event_property_term_edit_new_category'];
                 $category = get_term_by('id',$category,'socialdb_category_type');
                 $val = ($category) ? $category->name : '(Vazio)';
-                $text .=  __('Alter taxonomy from ', 'tainacan').' : <i>'.$val.'</i> '. __('to ', 'tainacan').'<i>'.$name.'</i>&nbsp;&nbsp;<br>';
+                $text .=  __('Alter taxonomy from ', 'tainacan').' : <i>'.$val.'</i> '. __('to ', 'tainacan').'<i>'.$name.' </i>&nbsp;&nbsp;<br>';
             }
 
             if($newrequired !== $required){
@@ -68,9 +68,9 @@ class EventPropertyTermEdit extends EventModel {
             $title = __('Alter configuration from term property ', 'tainacan').' : <i>'.$property->name.'</i>&nbsp;&nbsp;<br>'.$text.
                 __(' in the collection ', 'tainacan') .' '.' <b><a target="_blank" href="'.  get_the_permalink($collection->ID).'">'.$collection->post_title.'</a></b> ';
         }else{
-            $title = __('Edit the term property ', 'tainacan') .'<br>'.
-                __('From','tainacan').' : <i>'.$property->name.'</i><br>'.
-                __('To','tainacan').' : <i>'.$property_name.'</i><br>'.
+            $title = __('Edit the term property ', 'tainacan') .'<br>'.' '.
+                __('From','tainacan').' : <i>'.$property->name.'</i><br>'.' '.
+                __('To','tainacan').' : <i>'.$property_name.'</i><br>'.' '.
                 __(' in the collection ', 'tainacan') .' '.' <b><a target="_blank" href="'.  get_the_permalink($collection->ID).'">'.$collection->post_title.'</a></b> ';
         }
         return $title;

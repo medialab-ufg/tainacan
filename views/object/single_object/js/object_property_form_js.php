@@ -1,11 +1,12 @@
 <script>
     $(function () {
         $('#single_submit_form_property_object').submit(function (e) {
-            show_modal_main();
             if($('#property_object_category_id').val()===''){
                 hide_modal_main();
                 showAlertGeneral('<?php _e('Attention!','') ?>','<?php _e('Object metadata requires a category to search items!','') ?>', 'info');
             }else {
+
+                show_modal_main();
                 $.ajax({
                     url: $('#src').val() + '/controllers/event/event_controller.php',
                     type: 'POST',

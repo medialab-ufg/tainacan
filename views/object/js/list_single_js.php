@@ -679,6 +679,12 @@
                 location.reload()
             }else{
                 showAlertGeneral(elem.title, elem.msg, elem.type);
+                cancel_source();
+                cancel_description();
+                cancel_license();
+                cancel_tag();
+                cancel_title();
+                cancel_type();
             }
 
 

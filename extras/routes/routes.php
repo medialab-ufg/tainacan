@@ -174,7 +174,7 @@ $collection_route = get_post(get_option('collection_root_id'));
                 if(previousRoute === window.location.pathname){
                     $.router.go($('#route_blog').val()+$('#slug_collection').val());
                 }else{
-                    showSingleObjectByName(data.item, $('#src').val())
+                    //showSingleObjectByName(data.item, $('#src').val())
                 }
 
             }

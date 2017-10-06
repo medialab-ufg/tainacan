@@ -79,9 +79,9 @@ class EventPropertyObjectEdit extends EventModel {
             $title = __('Alter configuration from object property ', 'tainacan').' : <i>'.$property->name.'</i>&nbsp;&nbsp;<br> '.$text.
                 __(' in the collection ', 'tainacan') .' '.' <b><a target="_blank" href="'.  get_the_permalink($collection->ID).'">'.$collection->post_title.'</a></b> ';
         }else{
-            $title = __('Edit the object property ', 'tainacan') .'<br>'.
-                __('From','tainacan').' : <i>'.$property->name.'</i><br>'.
-                __('To','tainacan').' : <i>'.$property_name.'</i><br>'.
+            $title = __('Edit the object property ', 'tainacan') .'<br>'.' '.
+                __('From','tainacan').' : <i>'.$property->name.'</i><br>'.' '.
+                __('To','tainacan').' : <i>'.$property_name.'</i><br>'.' '.
                 __(' in the collection ', 'tainacan') .' '.' <b><a target="_blank" href="'.  get_the_permalink($collection->ID).'">'.$collection->post_title.'</a></b> ';
         }
         return $title;
