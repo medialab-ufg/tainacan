@@ -630,17 +630,17 @@ if("one" === $single_mode) {
                         <div class="row">
                             <div class="col-md-6">
                                 <?php _t('Post it on: ', 1); ?><br>
+
+                                <a target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=<?php echo the_permalink(); ?>">
+                                    <?php echo ViewHelper::render_icon('facebook-square', 'png', 'Facebook'); ?>
+                                </a>
+
                                 <a target="_blank" rel="noopener"
                                    href="https://twitter.com/intent/tweet?url=<?php echo get_the_permalink($collection_id) . '?item=' . $post->post_name; ?>&amp;text=<?php echo htmlentities(get_the_title()); ?>&amp;via=socialdb">
                                     <?php echo ViewHelper::render_icon('twitter-square', 'png', 'Twitter'); ?>
                                 </a>
 
-                                <a target="_blank" rel="noopener" href="http://www.facebook.com/sharer/sharer.php?s=100&amp;p[url]=<?php echo get_the_permalink($collection_id) . '?item=' . $post->post_name; ?>&amp;p[images][0]=<?php echo wp_get_attachment_url(get_post_thumbnail_id($post->ID)); ?>&amp;p[title]=<?php echo htmlentities($post->post_title); ?>&amp;p[summary]=<?php echo strip_tags($post->post_content); ?>">
-                                    <?php echo ViewHelper::render_icon('facebook-square', 'png', 'Facebook'); ?>
-                                </a>
-
-                                <a target="_blank" rel="noopener"
-                                   href="https://plus.google.com/share?url=<?php echo get_the_permalink($collection_id) . '?item=' . $post->post_name; ?>">
+                                <a target="_blank" rel="noopener" href="https://plus.google.com/share?url=<?php echo the_permalink(); ?>">
                                     <?php echo ViewHelper::render_icon('googleplus-square', 'png', 'Google Plus'); ?>
                                 </a>
 
