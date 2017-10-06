@@ -1,5 +1,13 @@
 #single_item_tainacan {
-  @include context-item-menu-style(2px, 0 15px 10px 20px);
+  @include context-item-menu-style(2px, 0 5px 10px 20px);
+
+  // Overrides Bootstrap's default NavBar style
+  .nav .open > a,
+  .nav .open > a:hover,
+  .nav .open > a:focus {
+    background-color: transparent !important;
+    border: none !important;
+  }
 
   #modalSlideShow {
 
@@ -151,6 +159,10 @@
     .new-item-actions {
       margin-top:15px;
       margin-right: 5px;
+
+      .navbar-right {
+        margin-right: -5px !important;
+      }
   }
 
   .tainacan-header-info {
