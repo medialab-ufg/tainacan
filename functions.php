@@ -16,7 +16,6 @@ foreach ($tainacan_widgets as $wg)
 
 show_admin_bar(false);
 add_theme_support( 'post-thumbnails' );
-include_once('gutenberg/gutenberg-blocks.php');
 
 /*
   AUTO LOAD DE CLASSES
