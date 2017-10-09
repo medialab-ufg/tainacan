@@ -1,8 +1,10 @@
-<script>
+<script type="text/javascript">
     $(function () {
-        change_breadcrumbs_title('<?php _e('Welcome Email Configuration','tainacan') ?>');
         var src = $('#src').val();
-        showCKEditor();
+        $(function() {
+            showCKEditor();
+            CKEDITOR.replace( 'devolution_email_alert' );
+        });
 
         $('#submit_form_edit_welcome_email').submit(function (e) {
             $("#welcome_email_content").val(CKEDITOR.instances.editor.getData());
@@ -22,7 +24,6 @@
         
         
         //Tainacan Biblioteca
-        CKEDITOR.replace( 'devolution_email_alert' );
         $('#devolution_email').submit(function (e) {
             $("#devolution_email_alert_content").val(CKEDITOR.instances.devolution_email_alert.getData());
             e.preventDefault();

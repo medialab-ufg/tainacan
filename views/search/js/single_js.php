@@ -4,6 +4,7 @@
     $(function () {
         set_containers_class($('#collection_id').val());
         show_collection_properties_root($('#collection_id').val());
+
         // *************** Iframe Popover Collection ****************
         $('[data-toggle="popover"]').popover();
         $('[data-toggle="tooltip"]').tooltip();
@@ -36,7 +37,6 @@
                 show_filters($('#collection_id').val(), elem.args);
                 if (elem.empty_collection) {
                     $('#collection_empty').show();
-                    $('#items_not_found').hide();
                 }
             });
         }else{
@@ -63,8 +63,6 @@
                     {
                         search_items_query = elem.args_item;
                     }
-
-                    $("#items_not_found").hide();
 
                     if(elem.has_collection && elem.has_item)
                     {
@@ -191,28 +189,51 @@
     // atualiza o container com as propriedades da colecao que foi selecionada no selectbox
     function show_collection_properties_root(collection_id) {
         //mostro o loader para carregar os metadados
-        if($('#collection_id').val()===$('#collection_root_id').val() && $('#search-advanced-text').val() != ''){
+        if($('#collection_id').val() === $('#collection_root_id').val() && $('#search-advanced-text').val() != ''){
             show_modal_main();
-        }
-        //ajax properties
-        $.ajax({
-            url: $('#src').val() + '/controllers/advanced_search/advanced_search_controller.php',
-            type: 'POST',
-            data: {operation: 'show_object_properties_auto_load', collection_id: collection_id}
-        }).done(function (result) {
-            $('#propertiesRootAdvancedSearch').html(result);
-            //$('#propertiesRootAdvancedSearch').show();
-            revalidate_adv_autocomplete(collection_id);
-            //se estiver buscando algo nos campos de busca externos e que esteja na home de colecoes
-            if($('#collection_id').val()===$('#collection_root_id').val() && $('#search-advanced-text').val() != ''){
-                if($('#search-advanced-text').val()!=='@')
-                    $('#advanced_search_title').val($('#search-advanced-text').val());
+            setTimeout(function(){
+                //ajax properties
+                $.ajax({
+                    url: $('#src').val() + '/controllers/advanced_search/advanced_search_controller.php',
+                    type: 'POST',
+                    data: {operation: 'show_object_properties_auto_load', collection_id: collection_id}
+                }).done(function (result) {
+                    $('#propertiesRootAdvancedSearch').html(result);
+                    //$('#propertiesRootAdvancedSearch').show();
+                    revalidate_adv_autocomplete(collection_id);
+                    //se estiver buscando algo nos campos de busca externos e que esteja na home de colecoes
+                    if($('#collection_id').val()===$('#collection_root_id').val() && $('#search-advanced-text').val() != ''){
+                        if($('#search-advanced-text').val()!=='@')
+                            $('#advanced_search_title').val($('#search-advanced-text').val());
 
-                slideFormAdvancedDown();
-                $('#advanced_search_collection_form').trigger('submit');
-                $('#search-advanced-text').val('');
-            }
-        });
+                        slideFormAdvancedDown();
+                        $('#advanced_search_collection_form').trigger('submit');
+                        $('#search-advanced-text').val('');
+                    }
+                });
+            }, 1000);
+        }else{
+            //ajax properties
+            $.ajax({
+                url: $('#src').val() + '/controllers/advanced_search/advanced_search_controller.php',
+                type: 'POST',
+                data: {operation: 'show_object_properties_auto_load', collection_id: collection_id}
+            }).done(function (result) {
+                $('#propertiesRootAdvancedSearch').html(result);
+                //$('#propertiesRootAdvancedSearch').show();
+                revalidate_adv_autocomplete(collection_id);
+                //se estiver buscando algo nos campos de busca externos e que esteja na home de colecoes
+                if($('#collection_id').val()===$('#collection_root_id').val() && $('#search-advanced-text').val() != ''){
+                    if($('#search-advanced-text').val()!=='@')
+                        $('#advanced_search_title').val($('#search-advanced-text').val());
+
+                    slideFormAdvancedDown();
+                    $('#advanced_search_collection_form').trigger('submit');
+                    $('#search-advanced-text').val('');
+                }
+            });
+        }
+
     }
 
     function revalidate_adv_autocomplete(collection_id) {
@@ -236,51 +257,6 @@
 
     }
 
-    /**************************** Comentarios **************************************************/
-    function list_comments_general() {
-        if ($('#socialdb_event_comment_term_id').val() == 'collection') {
-            list_comments_term('comments_term', 'collection');
-        } else if ($('#socialdb_event_comment_term_id').val() == '') {
-            list_comments($('#single_object_id').val());
-        } else {
-            list_comments_term('comments_term', $('#socialdb_event_comment_term_id').val());
-        }
-    }
-
-
-    function submit_comment(object_id) {
-        let comment_content = $('#comment').val().trim();
-        comment_content = remove_script_tags(comment_content);
-
-        if (comment_content === '') {
-            showAlertGeneral('<?php _e('Attention!', 'tainacan') ?>', '<?php _e('Fill your comment', 'tainacan') ?>', 'info');
-        } else {
-            show_modal_main();
-            $.ajax({
-                type: "POST",
-                url: $('#src').val() + "/controllers/event/event_controller.php",
-                data: {
-                    operation: 'add_event_comment_create',
-                    socialdb_event_create_date: '<?php echo mktime() ?>',
-                    socialdb_event_user_id: $('#current_user_id').val(),
-                    socialdb_event_comment_create_object_id: object_id,
-                    socialdb_event_comment_create_content: comment_content,
-                    socialdb_event_comment_author_name: $('#author').val(),
-                    socialdb_event_comment_author_email: $('#email').val(),
-                    socialdb_event_comment_author_website: $('#url').val(),
-                    socialdb_event_comment_term_id: $('#socialdb_event_comment_term_id').val(),
-                    socialdb_event_comment_parent: 0,
-                    socialdb_event_collection_id: $('#collection_id').val()}
-            }).done(function (result) {
-                hide_modal_main();
-                elem_first = jQuery.parseJSON(result);
-                showAlertGeneral(elem_first.title, elem_first.msg, elem_first.type);
-                list_comments_general();
-                $("#comment_item"+object_id).modal('hide');
-            });
-        }
-    }
-
     function remove_script_tags(text)
     {
         //Opening tags
@@ -294,46 +270,6 @@
         return div.innerHTML;
     }
 
-    // submissao da resposta a um comentario
-    function submit_comment_reply(object_id) {
-        if ($('#comment_msg_reply').val().trim() === '') {
-            showAlertGeneral('<?php _e('Attention!', 'tainacan') ?>', '<?php _e('Fill your comment', 'tainacan') ?>', 'info');
-        } else {
-            $.ajax({
-                type: "POST",
-                url: $('#src').val() + "/controllers/event/event_controller.php",
-                data: {
-                    operation: 'add_event_comment_create',
-                    socialdb_event_create_date: '<?php echo mktime() ?>',
-                    socialdb_event_user_id: $('#current_user_id').val(),
-                    socialdb_event_comment_create_object_id: object_id,
-                    socialdb_event_comment_create_content: $('#comment_msg_reply').val(),
-                    socialdb_event_comment_author_name: $('#author_reply').val(),
-                    socialdb_event_comment_author_email: $('#email_reply').val(),
-                    socialdb_event_comment_author_website: $('#url_reply').val(),
-                    socialdb_event_comment_term_id: $('#edit_socialdb_event_comment_term_id').val(),
-                    socialdb_event_comment_parent: $('#comment_id').val(),
-                    socialdb_event_collection_id: $('#collection_id').val()
-                }
-            }).done(function (result) {
-
-                list_comments_general();
-                $('.dropdown-toggle').dropdown();
-                $('.nav-tabs').tab();
-                $('#modalReplyComment').modal("hide");
-                elem_first = jQuery.parseJSON(result);
-                showAlertGeneral(elem_first.title, elem_first.msg, elem_first.type);
-                $('html, body').animate({
-                    scrollTop: $("#comments").offset().top
-                }, 2000);
-            });
-        }
-    }
-    // mostra modal de resposta
-    function showModalReply(comment_parent_id) {
-        $('#comment_id').val(comment_parent_id);
-        $('#modalReplyComment').modal("show");
-    }
     // mostrar modal de reportar abuso
     function showModalReportAbuseComment(comment_parent_id) {
         $.ajax({
@@ -350,59 +286,7 @@
             $('#showModalReportAbuseComment').modal("show");
         });
     }
-    // mostrar edicao
-    function showEditComment(comment_id) {
-        show_modal_main();
-        $.ajax({
-            type: "POST",
-            url: $('#src').val() + "/controllers/comment/comment_controller.php",
-            data: {
-                operation: 'get_comment_json',
-                comment_id: comment_id
-            }
-        }).done(function (result) {
-            hide_modal_main();
-            var comment = jQuery.parseJSON(result);
-            $('#comment_text_' + comment_id).hide("slow");
-            $('#edit_field_value_' + comment_id).val(comment.comment.comment_content);
-            $('#comment_edit_field_' + comment_id).show("slow");
-        });
-    }
-    // cancelar edicao
-    function cancelEditComment(comment_id) {
-        $('#comment_edit_field_' + comment_id).hide("slow");
-        $('#comment_text_' + comment_id).show("slow");
-    }
-    // disparado quando eh dono ou admin   
-    function showAlertDeleteComment(comment_id, title, text, time) {
-        swal({
-            title: title,
-            text: text,
-            type: "warning",
-            showCancelButton: true,
-            confirmButtonClass: 'btn-danger',
-            closeOnConfirm: true,
-            closeOnCancel: true
-        },
-        function (isConfirm) {
-            if (isConfirm) {
-                show_modal_main();
-                $.ajax({
-                    type: "POST",
-                    url: $('#src').val() + "/controllers/event/event_controller.php",
-                    data: {operation: 'add_event_comment_delete', socialdb_event_create_date: time,
-                        socialdb_event_user_id: $('#current_user_id').val(), socialdb_event_comment_delete_id: comment_id,
-                        socialdb_event_comment_delete_object_id: $("#single_object_id").val(),
-                        socialdb_event_collection_id: $('#collection_id').val()}
-                }).done(function (result) {
-                    hide_modal_main();
-                    list_comments_general();
-                    elem_first = jQuery.parseJSON(result);
-                    showAlertGeneral(elem_first.title, elem_first.msg, elem_first.type);
-                });
-            }
-        });
-    }
+
     // formulario de reportar abuso para demais usuarios
     function submit_report_abuse() {
         show_modal_main();
@@ -415,7 +299,7 @@
                 url: $('#src').val() + "/controllers/event/event_controller.php",
                 data: {
                     operation: 'add_event_comment_delete',
-                    socialdb_event_create_date: '<?php echo mktime() ?>',
+                    socialdb_event_create_date: '<?php echo time() ?>',
                     socialdb_event_observation: $('#comment_msg_report').val(),
                     socialdb_event_user_id: $('#current_user_id').val(),
                     socialdb_event_comment_delete_id: $('#comment_id_report').val(),
@@ -428,33 +312,6 @@
             });
         }
     }
-    // submissao do formulario de edicao
-    function submitEditComment(comment_id) {
-        if ($('#edit_field_value_' + comment_id).val().trim() === '') {
-            showAlertGeneral('<?php _e('Attention!', 'tainacan') ?>', '<?php _e('Fill your comment', 'tainacan') ?>', 'info');
-        } else {
-            show_modal_main();
-            $.ajax({
-                type: "POST",
-                url: $('#src').val() + "/controllers/event/event_controller.php",
-                data: {operation: 'add_event_comment_edit', socialdb_event_create_date: '<?php echo mktime() ?>',
-                    socialdb_event_user_id: $('#current_user_id').val(), socialdb_event_comment_edit_id: comment_id,
-                    socialdb_event_comment_edit_object_id: $("#single_object_id").val(),
-                    socialdb_event_comment_edit_content: $('#edit_field_value_' + comment_id).val(),
-                    socialdb_event_collection_id: $('#collection_id').val()}
-            }).done(function (result) {
-                list_comments_general();
-                hide_modal_main();
-                $('.dropdown-toggle').dropdown();
-                $('.nav-tabs').tab();
-                elem_first = jQuery.parseJSON(result);
-                showAlertGeneral(elem_first.title, elem_first.msg, elem_first.type);
-                $('html, body').animate({
-                    scrollTop: $("#comments").offset().top
-                }, 2000);
-            });
-        }
-    }
 
     /******************************************************************************/
 
@@ -462,8 +319,9 @@
         //$('[data-toggle="popover"]').popover();
         //var myPopover = $('#iframebutton').data('popover');
         //$('#iframebutton').popover('hide');
-        if ($('#iframebutton_dropdown').length>0) {
-            $('#iframebutton_dropdown').html('<form style="margin:5px;">Search URL:&nbsp<input type="text" style="width:165px;" value="' + content + '" /><br><br>Iframe:&nbsp<input type="text" style="width:200px;" value="<iframe style=\'width:100%\' height=\'1000\' src=\'' + content + '\' frameborder=\'0\'></iframe>" /></form>'); 
+        if ($('#iframebutton_dropdown').length>0)
+        {
+            $('#iframebutton_dropdown').html('<form style="margin:5px;">Search URL:&nbsp<input type="text" style="width:165px;" value="' + content + '" /><br><br>Iframe:&nbsp<input type="text" style="width:200px;" value="<iframe style=\'width:100%\' height=\'1000\' src=\'' + content + '\' frameborder=\'0\'></iframe>" /></form>');
         }
     }
 
@@ -603,6 +461,7 @@
         } else {
             menu = 'myMenuSingle';
         }
+
         $(span).contextMenu({menu: menu, trigger: 'hover'}, function (action, el, pos) {
             // The event was bound to the <span> tag, but the node object
             // is stored in the parent <li> tag
@@ -881,7 +740,7 @@
             $('#list').show();
             if (elem.empty_collection) {
                 $('#collection_empty').show();
-                $('#items_not_found').hide();
+
             }
             setMenuContainerHeight();
         });
@@ -913,7 +772,6 @@
             $('#list').show();
             if (elem.empty_collection) {
                 $('#collection_empty').show();
-                $('#items_not_found').hide();
             }
             var curr_viewMode = $("#collection_single_ordenation").attr('data-viewMode');
             if (curr_viewMode) {
@@ -1293,6 +1151,7 @@
             }
 
             setMenuContainerHeight();
+            $('.col-items-per-page').val(elem.items_per_page);
         });
     }
     /**
@@ -2036,24 +1895,12 @@
     }
 
     function verify_import_type() {
-        var url = $('#item_url_import_all').val().trim();
-        if (url != undefined && url != '') {
-            var youtube_url = validateYouTubeUrl();
-            if (youtube_url) {
-                // É uma URL de um vídeo do youtube.
-                $("#btn_import_fb").css('display', 'none');
-                $("#btn_import_allrest").css('display', 'block');
-                $("#facebook_import_icon").addClass("grayscale");
-                $("#flickr_import_icon").addClass("grayscale");
-                $("#youtube_import_icon").removeClass("grayscale");
-                $("#vimeo_import_icon").addClass("grayscale");
-                $("#instagram_import_icon").addClass("grayscale");
-                $("#files_import_icon").addClass("grayscale");
-                $("#sites_import_icon").addClass("grayscale");
-            } else {
-                var youtube_channel_url = validateYouTubeChannelUrl();
-                if (youtube_channel_url) {
-                    // É uma URL de um canal do youtube.
+        setTimeout(function(){
+            var url = $('#item_url_import_all').val().trim();
+            if (url != undefined && url != '') {
+                var youtube_url = validateYouTubeUrl();
+                if (youtube_url) {
+                    // É uma URL de um vídeo do youtube.
                     $("#btn_import_fb").css('display', 'none');
                     $("#btn_import_allrest").css('display', 'block');
                     $("#facebook_import_icon").addClass("grayscale");
@@ -2063,11 +1910,10 @@
                     $("#instagram_import_icon").addClass("grayscale");
                     $("#files_import_icon").addClass("grayscale");
                     $("#sites_import_icon").addClass("grayscale");
-                }
-                else {
-                    var youtube_playlist_url = validateYouTubePlaylistUrl();
-                    if (youtube_playlist_url) {
-                        // É uma URL de uma playlist do youtube.
+                } else {
+                    var youtube_channel_url = validateYouTubeChannelUrl();
+                    if (youtube_channel_url) {
+                        // É uma URL de um canal do youtube.
                         $("#btn_import_fb").css('display', 'none');
                         $("#btn_import_allrest").css('display', 'block');
                         $("#facebook_import_icon").addClass("grayscale");
@@ -2079,73 +1925,75 @@
                         $("#sites_import_icon").addClass("grayscale");
                     }
                     else {
-                        var instagram_url = validateInstagramUrl();
-                        if (instagram_url) {
-                            // É uma URL do instagram.
+                        var youtube_playlist_url = validateYouTubePlaylistUrl();
+                        if (youtube_playlist_url) {
+                            // É uma URL de uma playlist do youtube.
                             $("#btn_import_fb").css('display', 'none');
                             $("#btn_import_allrest").css('display', 'block');
                             $("#facebook_import_icon").addClass("grayscale");
                             $("#flickr_import_icon").addClass("grayscale");
-                            $("#youtube_import_icon").addClass("grayscale");
+                            $("#youtube_import_icon").removeClass("grayscale");
                             $("#vimeo_import_icon").addClass("grayscale");
-                            $("#instagram_import_icon").removeClass("grayscale");
+                            $("#instagram_import_icon").addClass("grayscale");
                             $("#files_import_icon").addClass("grayscale");
                             $("#sites_import_icon").addClass("grayscale");
-                        } else {
-                            var vimeo_url = validateVimeoUrl();
-                            if (vimeo_url) {
-                                // É uma URL do vimeo.
+                        }
+                        else {
+                            var instagram_url = validateInstagramUrl();
+                            if (instagram_url) {
+                                // É uma URL do instagram.
                                 $("#btn_import_fb").css('display', 'none');
                                 $("#btn_import_allrest").css('display', 'block');
                                 $("#facebook_import_icon").addClass("grayscale");
                                 $("#flickr_import_icon").addClass("grayscale");
                                 $("#youtube_import_icon").addClass("grayscale");
-                                $("#vimeo_import_icon").removeClass("grayscale");
-                                $("#instagram_import_icon").addClass("grayscale");
+                                $("#vimeo_import_icon").addClass("grayscale");
+                                $("#instagram_import_icon").removeClass("grayscale");
                                 $("#files_import_icon").addClass("grayscale");
                                 $("#sites_import_icon").addClass("grayscale");
-                            }
-                            else {
-                                var flickr_url = validateFlickrUrl();
-                                if (flickr_url) {
-                                    // É uma URL do Flickr.
+                            } else {
+                                var vimeo_url = validateVimeoUrl();
+                                if (vimeo_url) {
+                                    // É uma URL do vimeo.
                                     $("#btn_import_fb").css('display', 'none');
                                     $("#btn_import_allrest").css('display', 'block');
                                     $("#facebook_import_icon").addClass("grayscale");
-                                    $("#flickr_import_icon").removeClass("grayscale");
+                                    $("#flickr_import_icon").addClass("grayscale");
                                     $("#youtube_import_icon").addClass("grayscale");
-                                    $("#vimeo_import_icon").addClass("grayscale");
+                                    $("#vimeo_import_icon").removeClass("grayscale");
                                     $("#instagram_import_icon").addClass("grayscale");
                                     $("#files_import_icon").addClass("grayscale");
                                     $("#sites_import_icon").addClass("grayscale");
                                 }
                                 else {
-                                    var facebook_url = validateFacebookUrl();
-                                    if (facebook_url) {
-                                        $("#btn_import_fb").css('display', 'block');
-                                        $("#btn_import_allrest").css('display', 'none');
-                                        $("#facebook_import_icon").removeClass("grayscale");
-                                        $("#flickr_import_icon").addClass("grayscale");
+                                    var flickr_url = validateFlickrUrl();
+                                    if (flickr_url) {
+                                        // É uma URL do Flickr.
+                                        $("#btn_import_fb").css('display', 'none');
+                                        $("#btn_import_allrest").css('display', 'block');
+                                        $("#facebook_import_icon").addClass("grayscale");
+                                        $("#flickr_import_icon").removeClass("grayscale");
                                         $("#youtube_import_icon").addClass("grayscale");
                                         $("#vimeo_import_icon").addClass("grayscale");
                                         $("#instagram_import_icon").addClass("grayscale");
                                         $("#files_import_icon").addClass("grayscale");
                                         $("#sites_import_icon").addClass("grayscale");
-                                    } else {
-                                        var any_file_url = validateAnyFile();
-                                        if (any_file_url) {
-                                            $("#btn_import_fb").css('display', 'none');
-                                            $("#btn_import_allrest").css('display', 'block');
-                                            $("#facebook_import_icon").addClass("grayscale");
+                                    }
+                                    else {
+                                        var facebook_url = validateFacebookUrl();
+                                        if (facebook_url) {
+                                            $("#btn_import_fb").css('display', 'block');
+                                            $("#btn_import_allrest").css('display', 'none');
+                                            $("#facebook_import_icon").removeClass("grayscale");
                                             $("#flickr_import_icon").addClass("grayscale");
                                             $("#youtube_import_icon").addClass("grayscale");
                                             $("#vimeo_import_icon").addClass("grayscale");
                                             $("#instagram_import_icon").addClass("grayscale");
-                                            $("#files_import_icon").removeClass("grayscale");
+                                            $("#files_import_icon").addClass("grayscale");
                                             $("#sites_import_icon").addClass("grayscale");
                                         } else {
-                                            var any_url = validateAnyUrl();
-                                            if (any_url) {
+                                            var any_file_url = validateAnyFile();
+                                            if (any_file_url) {
                                                 $("#btn_import_fb").css('display', 'none');
                                                 $("#btn_import_allrest").css('display', 'block');
                                                 $("#facebook_import_icon").addClass("grayscale");
@@ -2153,18 +2001,31 @@
                                                 $("#youtube_import_icon").addClass("grayscale");
                                                 $("#vimeo_import_icon").addClass("grayscale");
                                                 $("#instagram_import_icon").addClass("grayscale");
-                                                $("#files_import_icon").addClass("grayscale");
-                                                $("#sites_import_icon").removeClass("grayscale");
-                                            } else {
-                                                $("#btn_import_fb").css('display', 'none');
-                                                $("#btn_import_allrest").css('display', 'block');
-                                                $("#facebook_import_icon").addClass("grayscale");
-                                                $("#flickr_import_icon").addClass("grayscale");
-                                                $("#youtube_import_icon").addClass("grayscale");
-                                                $("#vimeo_import_icon").addClass("grayscale");
-                                                $("#instagram_import_icon").addClass("grayscale");
-                                                $("#files_import_icon").addClass("grayscale");
+                                                $("#files_import_icon").removeClass("grayscale");
                                                 $("#sites_import_icon").addClass("grayscale");
+                                            } else {
+                                                var any_url = validateAnyUrl();
+                                                if (any_url) {
+                                                    $("#btn_import_fb").css('display', 'none');
+                                                    $("#btn_import_allrest").css('display', 'block');
+                                                    $("#facebook_import_icon").addClass("grayscale");
+                                                    $("#flickr_import_icon").addClass("grayscale");
+                                                    $("#youtube_import_icon").addClass("grayscale");
+                                                    $("#vimeo_import_icon").addClass("grayscale");
+                                                    $("#instagram_import_icon").addClass("grayscale");
+                                                    $("#files_import_icon").addClass("grayscale");
+                                                    $("#sites_import_icon").removeClass("grayscale");
+                                                } else {
+                                                    $("#btn_import_fb").css('display', 'none');
+                                                    $("#btn_import_allrest").css('display', 'block');
+                                                    $("#facebook_import_icon").addClass("grayscale");
+                                                    $("#flickr_import_icon").addClass("grayscale");
+                                                    $("#youtube_import_icon").addClass("grayscale");
+                                                    $("#vimeo_import_icon").addClass("grayscale");
+                                                    $("#instagram_import_icon").addClass("grayscale");
+                                                    $("#files_import_icon").addClass("grayscale");
+                                                    $("#sites_import_icon").addClass("grayscale");
+                                                }
                                             }
                                         }
                                     }
@@ -2173,18 +2034,18 @@
                         }
                     }
                 }
+            } else {
+                $("#btn_import_fb").css('display', 'none');
+                $("#btn_import_allrest").css('display', 'block');
+                $("#facebook_import_icon").addClass("grayscale");
+                $("#flickr_import_icon").addClass("grayscale");
+                $("#youtube_import_icon").addClass("grayscale");
+                $("#vimeo_import_icon").addClass("grayscale");
+                $("#instagram_import_icon").addClass("grayscale");
+                $("#files_import_icon").addClass("grayscale");
+                $("#sites_import_icon").addClass("grayscale");
             }
-        } else {
-            $("#btn_import_fb").css('display', 'none');
-            $("#btn_import_allrest").css('display', 'block');
-            $("#facebook_import_icon").addClass("grayscale");
-            $("#flickr_import_icon").addClass("grayscale");
-            $("#youtube_import_icon").addClass("grayscale");
-            $("#vimeo_import_icon").addClass("grayscale");
-            $("#instagram_import_icon").addClass("grayscale");
-            $("#files_import_icon").addClass("grayscale");
-            $("#sites_import_icon").addClass("grayscale");
-        }
+        }, 1);
     }
 
     function import_youtube_video_url() {

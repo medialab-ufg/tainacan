@@ -24,7 +24,7 @@ class EventTermDelete extends EventModel {
     public function generate_title($data) {
         $collection = get_post($data['socialdb_event_collection_id']);
         $category = get_term_by('id', $data['socialdb_event_term_id'], 'socialdb_category_type');
-        $title = __('Delete the category ','tainacan') . '(' . $category->name . ')' . __(' in the collection ','tainacan') .' '.'<b><a href="'.  get_the_permalink($collection->ID).'">'.$collection->post_title.'</a></b>';
+        $title = __('Delete the category ','tainacan') . '( <i>'.$category->name.'</i> )' . __(' in the collection ','tainacan') .' '.' <b><a target="_blank" href="'.  get_the_permalink($collection->ID).'">'.$collection->post_title.'</a></b> ';
         return $title;
     }
 
@@ -90,7 +90,7 @@ class EventTermDelete extends EventModel {
             $data['title'] = 'Erro';
         } else {
             $this->update_event_state('invalid', $data['event_id']); // seto a o evento como invalido
-            $data['msg'] = __('This category does not exist anymore','tainacan');
+            $data['msg'] = __("Root category can't be deleted",'tainacan');
             $data['type'] = 'error';
             $data['title'] = 'Erro';
         }

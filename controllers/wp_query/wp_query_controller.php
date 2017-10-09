@@ -274,7 +274,8 @@ class WPQueryController extends Controller {
                 }
                 $collection_model = new CollectionModel;
                 $args = $wpquery_model->page_filter($data);
-                $data['pagid'] = $data['value'];
+                $data['pagid'] =$args['pagid'];
+                $data['posts_per_page'] = $args['posts_per_page'];
                 $data['col_id'] = $args['collection_id'];
                 $paramters = $wpquery_model->do_filter($args);
                 $data['loop'] =  new WP_Query($paramters);
@@ -291,7 +292,8 @@ class WPQueryController extends Controller {
                 }
 
                 $return['args'] = serialize($args);
-
+                $return['items_per_page'] = $args['posts_per_page'];
+                $return['pagid'] = $args['pagid'];
                 return json_encode($return);
             case "wpquery_author":
                 $return = array();

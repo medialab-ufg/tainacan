@@ -1,8 +1,10 @@
 <?php
-    if(!isset($collection_post)){
-        $collection_post = get_post();
-        $current_collection_id = $collection_post->ID;
-    } 
+$border_color = "";
+if(!isset($collection_post)){
+    $collection_post = get_post();
+    $current_collection_id = $collection_post->ID;
+    $border_color = get_post_meta($current_collection_id, "socialdb_collection_board_link_color", true);
+}
 ?>
 <ul class="nav navbar-bar navbar-right">
     <li class="dropdown collec_menu_opnr">
@@ -19,7 +21,11 @@
         </a>
 
         <ul class="dropdown-menu pull-right dropdown-show" role="menu">
-            <li><a style="cursor: pointer;" onclick="showCollectionConfiguration('<?php echo get_template_directory_uri() ?>');updateStateCollection('configuration');" ><span class="glyphicon glyphicon-wrench"></span>&nbsp;<?php _t('Configuration', 1); ?></a></li>
+            <li>
+                <a id="collection_config" style="cursor: pointer;" onclick="showCollectionConfiguration('<?php echo get_template_directory_uri() ?>');updateStateCollection('configuration');" >
+                    <span class="glyphicon glyphicon-wrench"></span>&nbsp;<?php _t('Configuration', 1); ?>
+                </a>
+            </li>
             <li <?php do_action('menu_collection_property_and_filters_configuration') ?>>
                 <a style="cursor: pointer;" onclick="showPropertiesAndFilters('<?php echo get_template_directory_uri() ?>');updateStateCollection('metadata');" >
                     <span class="glyphicon glyphicon-list-alt"></span> &nbsp; <?php _e('Metadata and Filters', 'tainacan'); ?>
@@ -72,24 +78,27 @@
                 <li class="divider tainacan-museum-clear"></li>
 
                 <li class="tainacan-museum-clear" style="cursor: pointer;">
-                    <a onclick="delete_collection_redirect('<?php _e('Delete Collection', 'tainacan') ?>', '<?php echo __('Are you sure to remove the collection: ', 'tainacan') . $collection_post->post_title ?>', '<?php echo $collection_post->ID ?>', '<?= mktime() ?>', '<?php echo get_option('collection_root_id') ?>')" href="javascript:void(0)"><span class="glyphicon glyphicon-trash"></span>&nbsp;<?php _e('Delete', 'tainacan'); ?></a>
+                    <a id="delete_current_collection"
+                       onclick="delete_collection_redirect('<?php _e('Delete Collection', 'tainacan') ?>', '<?php echo __('Are you sure to remove the collection: ', 'tainacan') . $collection_post->post_title ?>', '<?php echo $collection_post->ID ?>', '<?= time() ?>', '<?php echo get_option('collection_root_id') ?>')" href="javascript:void(0)"><span class="glyphicon glyphicon-trash"></span>&nbsp;<?php _e('Delete', 'tainacan'); ?></a>
                 </li>
                 <li class="tainacan-museum-clear" style="cursor: pointer;">
-                    <a onclick="clean_collection('<?php _e('Clean Collection', 'tainacan') ?>', '<?php echo __('Are you sure to remove all items', 'tainacan') ?>', '<?php echo $collection_post->ID ?>')" style="cursor: pointer;"><span class="glyphicon glyphicon-unchecked"></span>&nbsp;<?php _e('Clean Collection', 'tainacan'); ?></a>
+                    <a onclick="clean_collection('<?php _e('Clean Collection', 'tainacan') ?>', '<?php echo __('Are you sure to remove all items', 'tainacan') ?>', '<?php echo $collection_post->ID ?>')" style="cursor: pointer;">
+                        <span class="glyphicon glyphicon-unchecked"></span>&nbsp;
+                        <?php _e('Clean Collection', 'tainacan'); ?>
+                    </a>
                 </li>
 
                 <li class="divider"></li>
 
                 <li>
-                    <a class="events-link" onclick="showEvents('<?php echo get_template_directory_uri() ?>');updateStateCollection('events');" style="cursor:pointer;color:<?php echo $collection_metas['socialdb_collection_board_link_color']; ?>" >
-                        <span class="glyphicon glyphicon-flash"></span> <?php _e('Events', 'tainacan'); ?> &nbsp;
+                    <a onclick="showEvents('<?php echo get_template_directory_uri() ?>');updateStateCollection('events');" style="cursor:pointer;color:<?php echo $border_color; ?>" >
+                        <span class="glyphicon glyphicon-flash"></span> <?php _e('Events', 'tainacan'); ?> <span class="notification_events"></span>
                     </a>
-                    <span class="notification_events"></span>
                 </li>
 
                 <?php if (!verify_collection_moderators($current_collection_id, get_current_user_id()) && !current_user_can('manage_options')): ?>
                     <li>
-                        <a onclick="show_report_abuse_collection('<?php echo $current_collection_id; ?>');" style="color:<?php echo $collection_metas['socialdb_collection_board_link_color']; ?>" href="javascript:void(0)">
+                        <a onclick="show_report_abuse_collection('<?php echo $current_collection_id; ?>');" style="color:<?php echo $border_color; ?>" href="javascript:void(0)">
                             <span class="glyphicon glyphicon-warning-sign"></span> <?php _e('Report Abuse', 'tainacan'); ?>
                         </a>
                     </li>
@@ -113,7 +122,7 @@
 
         <ul class="dropdown-menu dropdown-show" role="menu">
             <li>
-                <a onclick="showEvents('<?php echo get_template_directory_uri() ?>');" style="color:<?php echo $collection_metas['socialdb_collection_board_link_color']; ?>" href="javascript:void(0)">
+                <a onclick="showEvents('<?php echo get_template_directory_uri() ?>');" style="color:<?php echo $border_color; ?>" href="javascript:void(0)">
                     <span class="glyphicon glyphicon-flash"></span> <?php _e('Events', 'tainacan'); ?>&nbsp;<span id="notification_events" style="background-color:red;color:white;font-size:13px;"></span>
                 </a>
             </li>
@@ -149,7 +158,7 @@ if( is_user_logged_in() && $not_admin): ?>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo __('Close', 'tainacan'); ?></button>
-                        <button onclick="report_abuse_collection('<?php _e('Delete Collection', 'tainacan') ?>', '<?php _e('Are you sure to remove the collection: ', 'tainacan') . $collection_post->post_title ?>', '<?php echo $current_collection_id ?>', '<?php echo mktime() ?>', '<?php echo get_option('collection_root_id') ?>')" type="button" class="btn btn-primary"><?php echo __('Delete', 'tainacan'); ?></button>
+                        <button onclick="report_abuse_collection('<?php _e('Delete Collection', 'tainacan') ?>', '<?php _e('Are you sure to remove the collection: ', 'tainacan') . $collection_post->post_title ?>', '<?php echo $current_collection_id ?>', '<?php echo time() ?>', '<?php echo get_option('collection_root_id') ?>')" type="button" class="btn btn-primary"><?php echo __('Delete', 'tainacan'); ?></button>
                     </div>
                 </form>
             </div>

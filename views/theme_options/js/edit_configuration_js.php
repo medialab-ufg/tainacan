@@ -1,5 +1,6 @@
 <script>
     $(function () {
+        $('body').addClass('repository-config-page');
         var src = $('#src').val();
         change_breadcrumbs_title('<?php _e('Repository Configuration','tainacan') ?>');
         showCKEditor();
@@ -9,19 +10,18 @@
             $("#repository_content").val(CKEDITOR.instances.editor.getData());
             e.preventDefault();
             $.ajax({
-                url: $("#src").val() + '/controllers/theme_options/theme_options_controller.php',
+                url: src + '/controllers/theme_options/theme_options_controller.php',
                 type: 'POST',
                 data: new FormData(this),
                 processData: false,
                 contentType: false
             }).done(function (result) {
-                elem = jQuery.parseJSON(result);
-                if(elem.reload&&elem.reload===true){
-                    window.location = '<?php echo site_url(); ?>'
+                var elem = jQuery.parseJSON(result);
+                if( elem.type && elem.type === "success" ) {
+                    showAlertGeneral(elem.title, elem.msg, elem.type);
+                    var redir_url = $("#site_url").val();
+                    window.location = redir_url;
                 }
-                showAlertGeneral(elem.title, elem.msg, elem.type);
-                showRepositoryConfiguration(src);
-                get_collections_template(src);
             });
         });
         var cropOpts = {
@@ -104,43 +104,6 @@
                 });
             }
         });
-    }
-    
-     function clear_collection_template(e) {
-     var id = $(e).attr('id');
-           swal({
-                title: '<?php _e('Attention!','tainacan') ?>',
-                text: '<?php _e('Removing the template','tainacan') ?>'+' '+$('#'+id+' option:selected').text()+'?',
-                type: "info",
-                showCancelButton: true,
-                confirmButtonClass: 'btn-info',
-                closeOnConfirm: true,
-                closeOnCancel: true
-            },
-            function (isConfirm) {
-                if (isConfirm) {
-                   $('#modalImportMain').modal('show');//mostro o modal de carregamento
-                    $.ajax({
-                        type: "POST",
-                        url: $('#src').val() + "/controllers/collection/collection_controller.php",
-                        data: {
-                            operation: 'delete_collection_template',
-                            collection_id:  $('#'+id+' option:selected').val()
-                           }
-                    }).done(function (result) {
-                        $('#modalImportMain').modal('hide');//escondo o modal de carregamento
-                        elem_first = jQuery.parseJSON(result);
-                        if(elem_first.result){
-                            //var temp = $("#chosen-selected2 [value='" + ui.item.value + "']").val();
-                            get_collections_template($('#src').val());  
-                            list_templates();
-                        }
-                    });
-                }else{
-                    list_templates();
-                }
-            });       
-    
     }
     
     function init_dynatree_collection_template(){

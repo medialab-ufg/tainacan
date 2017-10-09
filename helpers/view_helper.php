@@ -59,23 +59,24 @@ class ViewHelper {
     public function renderRepositoryLogo($_logo_id, $fallback_title) {
         $extraClass = "";
         $home = home_url();
+        $logo = _t("Logo");
         if(isset($_logo_id)) {
             $former_logo = get_the_post_thumbnail($_logo_id, 'thumbnail');
             if($former_logo) {
                 $extraClass = "repository-logo";
-                $_img_url = wp_get_attachment_url( get_post_thumbnail_id($_logo_id) );
-                $ret = "<img class='tainacan-repo-logo' src='$_img_url' />";
+                $logo_src = wp_get_attachment_url( get_post_thumbnail_id($_logo_id) );
             } else {
                 $logo_obj = get_post($_logo_id);
                 if(is_object($logo_obj) && $logo_obj->post_type === "attachment") {
-                    $crop_logo = $logo_obj->guid;
-                    $ret = "<img class='tainacan-repo-logo' src='$crop_logo' />";
+                    $logo_src = $logo_obj->guid;
                 } else {
                     $extraClass = "logo-tainacan";
-                    $default_logo = get_template_directory_uri() . '/libraries/images/Tainacan_pb.svg';
-                    $ret = "<img class='tainacan-repo-logo' src='$default_logo' />";
+                    $logo_src = get_template_directory_uri() . '/libraries/images/Tainacan_pb.svg';
                 }
             }
+
+            $ret = "<img class='tainacan-repo-logo' alt='$logo' title='$logo' src='$logo_src'/>";
+
         } else {
             $ret = empty($fallback_title) ? _t("Tainacan") : $fallback_title;
         }
@@ -198,6 +199,10 @@ class ViewHelper {
                 };
                 ?>
             </div>
+            <div class="form-group" style="margin-top: 15px;margin-bottom: 15px;">
+                <label for="property_term_required" style="margin-right: 10px;" ><?php _e('More options','tainacan'); ?> : </label>
+                <input type="checkbox" name="habilitate_more_options" id="habilitate_more_options" value="true">&nbsp;<?php _e('For big lists, hide values and display a "see more" button','tainacan') ?>
+            </div>
         </div>
     <?php
     }
@@ -227,7 +232,7 @@ class ViewHelper {
                        id="button_property_<?php echo $property['id']; ?>_<?php echo $i; ?>"
                        onclick="show_fields_metadata_cardinality_compounds(<?php echo $property['id'] ?>,<?php echo $i ?>)" 
                        style="margin-top: 5px;<?php echo (is_array($property['metas']['value'])&&($i+1)<count($property['metas']['value']))? 'display:none':'' ?>" 
-                       class="btn btn-primary btn-lg btn-xs btn-block">
+                       class="btn btn-primary btn-lg btn-xs btn-block  btn-new-field">
                     <span class="glyphicon glyphicon-plus"></span><?php _e('Add field', 'tainacan') ?>
                 </button>
             <?php
@@ -360,6 +365,11 @@ class ViewHelper {
             <button type="submit" id="conclude_config" class="btn btn-default btn-lg pull-right">
                 <?php _e('Conclude', 'tainacan'); ?>
             </button>
+
+            <button type="button" id="delete_collection" class="btn btn-danger pull-right"
+                    onclick="$('#delete_current_collection').click()">
+                <?php _e('Delete', 'tainacan'); ?>
+            </button>
         </div>
 
     <?php }
@@ -368,7 +378,8 @@ class ViewHelper {
         $onclick = 'backToMainPage();';
         $onclick = "backRoute($('#slug_collection').val());";
         echo "<h3 class='topo'> $title ";
-        self::buttonVoltar((__("Events", 'tainacan') == $title) ? $has_link : false);
+        // self::buttonVoltar((__("Events", 'tainacan') == $title) ? $has_link : false);
+        self::backButton();
         echo  "</h3><hr>";
     }
 
@@ -535,6 +546,12 @@ class ViewHelper {
             <button onclick="backRoute($('#slug_collection').val());" id="btn_back_collection" class="btn btn-default pull-right"><?php _e('Back to collection','tainacan') ?></button>
             <?php
         }
+    }
+
+    public static function backButton() {
+        ?>
+        <button onclick='window.location = (  $("#socialdb_permalink_collection").length> 0 ) ? $("#socialdb_permalink_collection").val() : $("#site_url").val() ' class='btn btn-default pull-right'><?php echo  _t("Back") ?></button>
+        <?php
     }
     
     /**
@@ -714,6 +731,92 @@ class ViewHelper {
         
         if($cont===0){
              echo '<p>' . __('empty field', 'tainacan') . '</p>';
+        }
+    }
+
+    /**
+     *
+     */
+    public function getValuesViewSingleMedia($meta,$property_id,$object_id,$collection_id,$property_type = null) {
+        $cont = 0;
+        if ($meta && $meta != '')
+        {
+            $array = unserialize($meta);
+            foreach ($array as $property) {
+                foreach ($property as $atom) {
+                    $type = $atom['type'];
+                    $values = $atom['values'];
+                    foreach ($values as $value) {
+                        $value = $this->sdb_get_post_meta($value)->meta_value;
+                        if(isset($value) && trim($value) != ''){
+                            $cont++;
+                        }
+
+                        if($type == 'data'){
+                            if($property_type != null && strcmp($property_type, 'textarea') == 0)
+                            {
+                                ?>
+                                    <b>
+                                        <?php echo '<a style="cursor:pointer;" onclick="wpquery_link_filter(' . "'" . preg_replace('/\s+/', ' ', $value) . "'" . ',' . $property_id . ')">
+                                                    <textarea class="form-control" rows="9" disabled="disabled">'.
+                                            $value.
+                                            '</textarea>
+                                                    </a>'; ?>
+                                    </b>
+                                <?php
+                            }
+                            else
+                            {
+                                ?>
+                                <b>
+                                        <?php echo '<a style="cursor:pointer;" onclick="wpquery_link_filter(' . "'" . $value . "'" . ',' . $property_id . ')">' .
+                                            $value
+                                            . '</a>'; ?>
+                                </b>
+                                <?php
+                            }
+
+                        }else if($type == 'object'){
+                            $ob = get_post($value);
+                            if ($ob && $ob->post_status == 'publish') {
+                                // echo '<b><a href="'. get_the_permalink($property['metas']['collection_data'][0]->ID) . '?item=' . $ob->post_name . '" >'. $ob->post_title . '</a></b><br>';
+                                echo '<input type="hidden" name="socialdb_property_'.$property_id.'[]" value="'.$ob->ID.'"><b><a href="'.$ob->guid.'">' . $ob->post_title . '</a></b>';
+                            }
+                        }else{
+                            $ob = get_term_by('id',$value,'socialdb_category_type');
+                            if ($ob) {
+                                ?>
+                                <b>
+                                    <a style="cursor:pointer;" onclick="wpquery_term_filter('<?php echo $ob->term_id ?>','<?php echo $property['id'] ?>')">
+                                        <?php echo $ob->name  ?>
+                                    </a>
+                                </b><br>
+                                <script>
+//                                    setTimeout(function(){
+//                                        append_category_properties('<?php //echo $ob->term_id ?>//',0,'<?php //echo $property_id ?>//');
+//                                    }, 3000);
+                                </script>
+                                <?php
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        if($cont===0){
+            ?>
+            <?php // verifico se o metadado pode ser alterado
+            if (verify_allowed_action($collection_id, 'socialdb_collection_permission_add_classification',$object_id)): ?>
+                    <button type="button" onclick="edit_term_property('<?php echo $property_id; ?>', '<?php echo $object_id; ?>')"
+                            id="single_edit_<?php echo $property_id; ?>_<?php echo $object_id; ?>"
+                            class="btn btn-default single_edit_<?php echo$property_id; ?>_<?php echo $object_id; ?>">
+                        <?php _e('Empty field. Click to edit','tainacan'); ?>
+                    </button>
+            <?php else: ?>
+                    <?php echo '<p>' . __('empty field', 'tainacan') . '</p>'; ?>
+            <?php endif; ?>
+            <?php
         }
     }
     

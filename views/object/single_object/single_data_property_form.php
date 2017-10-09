@@ -4,15 +4,18 @@ include_once ('../../../../../wp-load.php');
 include_once ('../../../../../wp-includes/wp-db.php');
 include_once ('js/data_property_form_js.php'); ?>
 
-<form  id="single_submit_form_property_data">
+<hr>
+<h4 id="create-text-term" ><?php echo __('Create metadata (text, textarea, date, numeric)','tainacan') ?></h4>
+<form id="single_submit_form_property_data">
     <input type="hidden" name="object_id"  value="<?php echo $category->term_id; ?>">
     <input type="hidden" name="property_category_id"  value="<?php echo $category->term_id; ?>">
     <div class="create_form-group">
-        <label for="event_add_property_data_name"><?php _e('Property data name','tainacan'); ?></label>
-        <input type="text" class="form-control" id="single_event_add_property_data_name" name="socialdb_event_property_data_create_name" required="required" placeholder="<?php _e('Property Data name'); ?>">
+        <label for="event_add_property_data_name"><?php _e('Name','tainacan'); ?></label>
+        <input type="text" class="form-control" id="single_event_add_property_data_name" name="socialdb_event_property_data_create_name" required="required"
+               placeholder="<?php _e('Name','tainacan'); ?>">
     </div>
     <div class="form-group">
-        <label for="event_add_property_data_widget"><?php _e('Property data widget','tainacan'); ?></label>
+        <label for="event_add_property_data_widget"><?php _e('Widget','tainacan'); ?></label>
         <select class="form-control" id="single_event_add_property_data_widget" name="socialdb_event_property_data_create_widget">
            <?php do_action('form_help_property_data_insert_types') ?>
         <option <?php do_action('form_help_property_data_type_text') ?> value="text"><?php _e('Text','tainacan'); ?></option>
@@ -28,16 +31,27 @@ include_once ('js/data_property_form_js.php'); ?>
         <input type="radio" name="socialdb_event_property_data_create_ordenation_column" id="single_event_add_property_data_column_ordenation_false" checked="checked" value="false">&nbsp;<?php _e('No','tainacan'); ?>
     </div-->
     <div class="form-group">
-        <label for="event_add_property_data_required"><?php _e('Property data required','tainacan'); ?></label>
+        <label for="event_add_property_data_required"><?php _e('Required','tainacan'); ?>:&nbsp;</label>
         <input type="radio" name="socialdb_event_property_data_create_required" id="single_event_add_property_data_required_true" value="true">&nbsp;<?php _e('Yes','tainacan'); ?>
         <input type="radio" name="socialdb_event_property_data_create_required" id="single_event_add_property_data_required_false" checked="checked" value="false">&nbsp;<?php _e('No','tainacan'); ?>
+    </div>
+    <div class="form-group" style="display: inline-block;">
+        <label for="property_term_required" style="margin-right: 10px;" ><?php _e('Elements Quantity', 'tainacan'); ?> : </label>
+        &nbsp;<input type="radio" name="socialdb_event_property_data_create_cardinality" id="socialdb_property_data_cardinality_1" checked="checked"  value="1">&nbsp;<?php _e('Unic value', 'tainacan') ?>
+        &nbsp;<input type="radio" name="socialdb_event_property_data_create_cardinality" id="socialdb_property_data_cardinality_n" value="n">&nbsp;<?php _e('Multiple values', 'tainacan') ?>
     </div>
     <?php  do_action('form_modify_property_data') ?>
     <input type="hidden" id="single_event_add_property_data_collection_id" name="socialdb_event_collection_id" value="<?php echo $collection_id; ?>">
     <input type="hidden" id="single_event_add_property_data_object_id" name="property_data_object_id" value="<?php echo $object_id; ?>">
-    <input type="hidden" id="single_event_add_property_data_create_time" name="socialdb_event_create_date" value="<?php echo mktime(); ?>">
+    <input type="hidden" id="single_event_add_property_data_create_time" name="socialdb_event_create_date" value="<?php echo time(); ?>">
     <input type="hidden" id="single_event_add_property_data_user_id" name="socialdb_event_user_id" value="<?php echo get_current_user_id(); ?>">
     <input type="hidden" id="operation_property_data" name="operation" value="add_event_property_data_create">
-    <button type="submit" id="submit_property_data" class="btn btn-default"><?php _e('Submit','tainacan'); ?></button>
-    <button type="button" onclick="back_button('<?php echo $object_id; ?>')" class="btn btn-default" id="clear_categories"><?php _e('Clear','tainacan'); ?></button>
+
+    <button type="submit" id="submit_property_data" class="btn btn-primary pull-right" style="margin-left: 5px;">
+        <?php _e('Save','tainacan'); ?>
+    </button>
+    <button type="button" onclick="back_button('<?php echo $object_id; ?>')" class="btn btn-default pull-right" id="clear_categories">
+        <?php _e('Cancel','tainacan'); ?>
+    </button>
+    <br>
 </form>

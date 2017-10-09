@@ -203,20 +203,22 @@ class FormItemController extends Controller {
 
                 $category_root_id = $object_model->get_category_root_of($data['collection_id']);
                 
-                if(strcmp($item->post_title, 'Temporary_post') == 0)
-                {
+                if(strcmp($item->post_title, 'Temporary_post') == 0) {
                     $post = array(
                         'post_title' => time(),
                         'ID' => $data['item_id'],
                         'post_parent' => $data['collection_id']
                     );
-                }else
-                {
+                } else {
                     $post = array(
                         'ID' => $data['item_id'],
                         'post_parent' => $data['collection_id']
                     );
                 }
+
+                if($post['post_parent'] === 0)
+                    unset($post['post_parent']);
+
 
                 $data['ID'] = wp_update_post($post);
                 //Tainacan IBRAM
@@ -235,7 +237,7 @@ class FormItemController extends Controller {
                     $data['type'] = 'success';
                     $data['title'] = __('Success', 'tainacan');
                     return json_encode($data);
-                else:    
+                else:
                     return $object_model->insert_object_event($data['ID'], $data);
                 endif;
             //Buscando valores 
@@ -301,18 +303,25 @@ class FormItemController extends Controller {
                     foreach ($data['items'] as $item) {
                         $post = array(
                         'ID' => $item,
-                        'post_parent' => $data['collection_id'],
-                        'post_status' => 'publish');
-                        $data['ID'][] = wp_update_post($post);
+                        'post_parent' => $data['collection_id']);
+                        $id = wp_update_post($post);
+                        $data['ID'][] =$id;
+
+                        $json =  json_decode($object_model->insert_object_event($id, $data));
+
                         $category_root_id = $class->get_category_root_of($data['collection_id']);
                         //categoria raiz da colecao
                         wp_set_object_terms($item, array((int) $category_root_id), 'socialdb_category_type',true);
                     }
 
-                    $data['there_are_pdfFiles'] = get_documents_text($data['items']);
+                    try{
+                        $json->there_are_pdfFiles = get_documents_text($data['items']);
+                    }catch (Exception $e){
+                        $json->error = (string) $e;
+                    }
                 }
 
-                return json_encode($data);  
+                return json_encode($json);
             case 'unpublish_item':
                 $post = array(
                         'ID' => $data['id'],

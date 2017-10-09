@@ -83,25 +83,25 @@ $thumb_url = $collection_thumb ? wp_get_attachment_url($collection_thumb) : get_
                     <div class="col-md-6 pull-right sharings-container no-padding">
                         <!-- compartilhamentos -->
                         <!-- ******************** TAINACAN: compartilhar colecao (titutlo,imagem e descricao) no FACEBOOK ******************** -->
-                        <a class="share-link" target="_blank"
-                           href="http://www.facebook.com/sharer/sharer.php?s=100&amp;p[url]=<?php echo get_the_permalink($collection_post->ID); ?>&amp;p[images][0]=<?php echo wp_get_attachment_url(get_post_thumbnail_id($collection_post->ID)); ?>&amp;p[title]=<?php echo htmlentities($collection_post->post_title); ?>&amp;p[summary]=<?php echo strip_tags($collection_post->post_content); ?>">
+                        <a class="share-link" target="_blank" rel="noopener"
+                           href="http://www.facebook.com/sharer.php?u=<?php echo the_permalink($collection_post->ID); ?>">
                             <div class="fab"><span data-icon="&#xe021;"></span></div>
                         </a>
 
                         <!-- ******************** TAINACAN: compartilhar colecao (titulo,imagem) no GOOGLE PLUS ******************** -->
-                        <a target="_blank" class="share-link"
+                        <a target="_blank" class="share-link" rel="noopener"
                            href="https://plus.google.com/share?url=<?php echo get_the_permalink($collection_post->ID); ?>">
                             <div class="fab"><span data-icon="&#xe01b;"></span></div>
                         </a>
 
                         <!-- ************************ TAINACAN: compartilhar colecao  no TWITTER ******************** -->
-                        <a target="_blank" class="share-link"
+                        <a target="_blank" class="share-link" rel="noopener"
                            href="https://twitter.com/intent/tweet?url=<?php echo get_the_permalink($collection_post->ID); ?>&amp;text=<?php echo htmlentities($collection_post->post_title); ?>&amp;via=socialdb">
                             <div class="fab"><span data-icon="&#xe005;"></span></div>
                         </a>
                         <!-- ******************** TAINACAN: RSS da colecao com seus metadados ******************** -->
                         <?php if (get_option('collection_root_id') != $collection_post->ID): ?>
-                            <a target="_blank" class="share-link"
+                            <a target="_blank" class="share-link" rel="noopener"
                                href="<?php echo site_url() . '/feed_collection/' . $collection_post->post_name ?>">
                                 <div class="fab"><span data-icon="&#xe00c;"></span></div>
                             </a>
@@ -119,7 +119,7 @@ $thumb_url = $collection_thumb ? wp_get_attachment_url($collection_thumb) : get_
                             </div>
                         </button-->
                         <script>
-                            set_popover_content($("#socialdb_permalink_collection").val() + '?' + elem.url + '&is_filter=1');
+                            set_popover_content($("#socialdb_permalink_collection").val());
                         </script>
 
                         <!--button style="float:right;margin-left:5px;" id="iframebutton" type="button" class="btn btn-default btn-sm" data-container="body" data-toggle="popover" data-placement="left" data-title="URL Iframe" data-content="">
@@ -221,11 +221,11 @@ $thumb_url = $collection_thumb ? wp_get_attachment_url($collection_thumb) : get_
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">
-                              <?php echo __('Close', 'tainacan'); ?>
+                              <?php _t('Close', 1); ?>
                             </button>
                             <button
-                                onclick="report_abuse_collection('<?php _e('Delete Collection', 'tainacan') ?>', '<?php _e('Are you sure to remove the collection: ', 'tainacan') . $collection_post->post_title ?>', '<?php echo $collection_post->ID ?>', '<?php echo mktime() ?>', '<?php echo get_option('collection_root_id') ?>')"
-                                type="button" class="btn btn-primary"><?php echo __('Delete', 'tainacan'); ?></button>
+                                onclick="report_abuse_collection('<?php _e('Delete Collection', 'tainacan') ?>', '<?php _e('Are you sure to remove the collection: ', 'tainacan') . $collection_post->post_title ?>', '<?php echo $collection_post->ID ?>', '<?php echo time() ?>', '<?php echo get_option('collection_root_id') ?>')"
+                                type="button" class="btn btn-primary"><?php _t('Delete', 1); ?></button>
                         </div>
                     </form>
                 </div>

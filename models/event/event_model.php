@@ -117,6 +117,9 @@ abstract class EventModel extends Model {
         $_sum = 0;
         $_root_id = get_option('collection_root_id');
         foreach($collectionModel->get_collection_by_user(get_current_user_id()) as $col) {
+            if($col->post_status != 'publish' || empty($col->post_name))
+                continue;
+
             $d['collection_id'] = $col->ID;
             $info['colecao'] = $col->post_title;
             if($col->ID == $_root_id) {
@@ -146,11 +149,12 @@ abstract class EventModel extends Model {
         $userModel = new UserModel();
         $ranking_model = new RankingModel;
         $event = get_post($data['event_id']);
+        $divider = get_option('socialdb_divider');
         $terms = wp_get_object_terms($event->ID, 'socialdb_event_type');
         $info['state'] = get_post_meta($event->ID, 'socialdb_event_confirmed', true);
         $info['observation'] = get_post_meta($event->ID, 'socialdb_event_observation', true);
         $info['operation'] = get_term_by('id', $terms[0]->term_id, 'socialdb_event_type')->name;
-        $info['name'] = $event->post_title;
+        $info['name'] = str_replace($divider,'.',$event->post_title) ;
         $info['date'] = date("d/m/Y", get_post_meta($event->ID, 'socialdb_event_create_date', true));
         $info['type'] = EventModel::get_type($event);
         $info['id'] = $event->ID;
@@ -353,6 +357,10 @@ abstract class EventModel extends Model {
      */
     abstract public function verify_event($data, $automatically_verified = false);
 
+
+    public function replaceDot($string){
+        return str_replace('.',get_option('socialdb_divider'),$string);
+    }
     /**
      * function insert_term($data)
      * @param string $name  O nome do evento
@@ -366,7 +374,7 @@ abstract class EventModel extends Model {
 //$name = remove_accent($name);
 // $name = cut_string($name, 190);
         $post = array(
-            'post_title' => $name,
+            'post_title' => $this->replaceDot($name),
             'post_status' => 'publish',
             'post_type' => 'socialdb_event'
         );
@@ -441,7 +449,7 @@ abstract class EventModel extends Model {
                 } elseif ($this->parent->name == 'socialdb_event_object_create')
                 {
                     $object = get_post($data['socialdb_event_object_item_id']);
-                    $url = '<a target="_blanck" href="' . get_the_permalink($data['socialdb_event_collection_id']) . '?item=' . $object->post_name . '">' . __('See item (Open a new Tab)') . '</a>';
+                    $url = '<a target="_blanck" href="' . get_the_permalink( $object->ID) . '">' . __('See item (Open a new Tab)','tainacan') . '</a>';
                     update_post_meta($event_created['ID'], 'socialdb_event_observation', $url);
                 }
 
@@ -520,9 +528,12 @@ abstract class EventModel extends Model {
                 return true;
             }
         }
-
         //demais acoes para colecoes
         if ($permission == 'approval') {
+            if($user_id===0 || $user_id==='0'){
+                return false;
+            }
+
             if (CollectionModel::is_moderator($collection_id, $user_id) || current_user_can('manage_options')) {
                 return true;
             } else {
@@ -680,9 +691,9 @@ abstract class EventModel extends Model {
             if ($meta_event['socialdb_event_confirmed'][0] == 'confirmed')
                 $body.='<b>' . __("The event ", 'tainacan') . ': (' . $title . ')	' . __(" was confirmed ", 'tainacan') . '';
             else {
-                $body.='<b>' . __("The event ", 'tainacan') . ' (' . $title . ') ' . __("was not confirmed ", 'tainacan') . '</br>';
+                $body.='<b>' . __("The event ", 'tainacan') . ' (' . $title . ') ' . __("was not confirmed ", 'tainacan') . '<br/>';
                 if (isset($meta_event['socialdb_event_observation'][0]))
-                    $body.='<br><b>' . __("Obervations by collection's moderators ", 'tainacan') . ': ' . $meta_event['socialdb_event_observation'][0] . '</br>';
+                    $body.='<br><b>' . __("Obervations by collection's moderators ", 'tainacan') . ': ' . $meta_event['socialdb_event_observation'][0] . '<br/>';
             }
 
             $body.=

@@ -516,6 +516,7 @@ class WPQueryModel extends Model {
             $orderby = $this->set_order_by($recover_data);
             $order = $this->set_type_order($recover_data);
             $args = array(
+                'ep_integrate'   => true,
                 'post_type' => 'socialdb_collection',
                 'paged' => (int)$page,
                 'posts_per_page' => (isset($recover_data['posts_per_page']))?$recover_data['posts_per_page']:50,
@@ -576,6 +577,7 @@ class WPQueryModel extends Model {
 
             //all_data_inside
             $args = array(
+                'ep_integrate'   => true,
                 'post_type'      => $post_type,
                 'paged'          => (int) $page,
                 'posts_per_page' => (isset($recover_data['posts_per_page']))?$recover_data['posts_per_page']:50,
@@ -808,7 +810,7 @@ class WPQueryModel extends Model {
         if($recover_data['category_root_id']!='all_items'&&isset($recover_data['collection_id'])&&$recover_data['collection_id']!=get_option('collection_root_id')){
             $tax_query[] = array(
                 'taxonomy' => 'socialdb_category_type',
-                'field' => 'id',
+                'field' => 'term_id',
                 'terms' => $recover_data['category_root_id'],
                 'operator' => 'IN'
             );
@@ -818,7 +820,7 @@ class WPQueryModel extends Model {
             if(!empty($private_collections)){
                     $tax_query[] = array(
                     'taxonomy' => 'socialdb_category_type',
-                    'field' => 'id',
+                    'field' => 'term_id',
                     'terms' => $private_collections,
                     'operator' => 'NOT IN'
                 );
@@ -837,7 +839,7 @@ class WPQueryModel extends Model {
             foreach ($recover_data['facets'] as $facet => $category_by_facet) {
                 $tax_query[] = array(
                     'taxonomy' => 'socialdb_category_type',
-                    'field' => 'id',
+                    'field' => 'term_id',
                     'terms' => $category_by_facet,
                     'operator' => (isset($recover_data['facets_operation'][$facet]))? $recover_data['facets_operation'][$facet]: 'IN'
                 );
@@ -846,7 +848,7 @@ class WPQueryModel extends Model {
         if (isset($recover_data['tags'])) {
             $tax_query[] = array(
                 'taxonomy' => 'socialdb_tag_type',
-                'field' => 'id',
+                'field' => 'term_id',
                 'terms' => $recover_data['tags'],
                 'operator' => 'IN'
             );
@@ -1216,13 +1218,13 @@ class WPQueryModel extends Model {
              }
              $query_synonyms[] = array(
                 'taxonomy' => 'socialdb_category_type',
-                'field' => 'id',
+                'field' => 'term_id',
                 'terms' => $array,
                 'operator' => 'IN'
             );
             $query_synonyms[] = array(
                    'taxonomy' => 'socialdb_tag_type',
-                   'field' => 'id',
+                   'field' => 'term_id',
                    'terms' => $array,
                    'operator' => 'IN'
                );
@@ -1639,7 +1641,7 @@ class WPQueryModel extends Model {
             $args['tax_query'] = ['relation' => 'AND'];
             $args['tax_query'][] = [
                 'taxonomy' => 'socialdb_category_type',
-                'field' => 'id',
+                'field' => 'term_id',
                 'terms' => $root_category_id,
                 'operator' => 'IN'
             ];

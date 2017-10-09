@@ -1,6 +1,5 @@
 <?php
 $property_data_types = $view_helper->get_property_data_types();
-
 foreach( $view_helper->get_metadata_types() as $type => $label):
     if ( ! in_array($type, $view_helper->get_special_metadata()) ): ?>
         <div class="modal fade" id="meta-<?php echo $type ?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel-<?php echo $type ?>">
@@ -108,6 +107,10 @@ foreach( $view_helper->get_metadata_types() as $type => $label):
                                             };
                                             ?>
                                         </div>
+                                        <div class="form-group" style="margin-top: 15px;margin-bottom: 15px;">
+                                            <label style="margin-right: 10px;" ><?php _e('More options','tainacan'); ?> : </label>
+                                            <input type="checkbox" name="habilitate_more_options" id="habilitate_more_options" value="true">&nbsp;<?php _e('For big lists, hide values and display a "see more" button','tainacan') ?>
+                                        </div>
                                     </div>
 
 
@@ -121,7 +124,6 @@ foreach( $view_helper->get_metadata_types() as $type => $label):
                                 <input type="hidden" name="property_data_widget" value="<?php echo $type ?>" class="property_data_widget">
                                 <input type="hidden" name="orientation" value="left-column">
                             </div>
-
 
                             <input type="hidden" name="property_category_id" value="<?php echo $category->term_id; ?>">
                             <input type="hidden" name="property_metadata_type" value="<?php echo $type ?>" id="property_metadata_type">
@@ -145,7 +147,7 @@ foreach( $view_helper->get_metadata_types() as $type => $label):
 endforeach;
 
 foreach( ['object', 'term', 'voting', 'filter', 'tag','compounds'] as $metadata ) {
-    include_once "metadata/form_$metadata.php";
+    include_once (dirname(__FILE__) ."/metadata/form_$metadata.php");
 }
 ?>
 

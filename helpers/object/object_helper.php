@@ -58,9 +58,14 @@ class ObjectHelper extends ViewHelper {
         endif;
     }
 
-    public function renderCollectionPagination($_total_items_, $items_per_page, $page_id, $proper_str, $extra_class) {
-        if( $_total_items_> 10 ) {
-            $_num_pages_ = ceil($_total_items_ / 10);
+    public function renderCollectionPagination($_total_items_, $items_per_page, $page_id, $proper_str, $extra_class,$loop = false) {
+        if( $_total_items_> $items_per_page ) {
+            if($loop && $page_id == $loop->max_num_pages){
+                $_num_pages_ = $loop->max_num_pages;
+            }else{
+                $_num_pages_ = ceil($_total_items_ / $items_per_page);
+            }
+            $limit = (!isset($page_id) ||$page_id=='1') ? $items_per_page : (($page_id - 1)  * $items_per_page) + $items_per_page
             ?>
             <!-- TAINACAN: div com a paginacao da listagem -->
             <div class="col-md-12 center_pagination <?php echo $extra_class; ?>">
@@ -76,8 +81,8 @@ class ObjectHelper extends ViewHelper {
                 </div>
 
                 <div class="col-md-4 center">
-                    <?php echo $proper_str; ?> <span class="base-page-init"> 1 </span> -
-                    <span class='per-page'> <?php echo $items_per_page ?> </span>
+                    <?php echo $proper_str; ?> <span class="base-page-init"> <?php echo (!isset($page_id) ||$page_id=='1') ? 1 : ( ($page_id - 1) * $items_per_page)  + 1 ; ?>  </span> -
+                    <span class='per-page'> <?php echo ($limit > $_total_items_) ? $_total_items_ : $limit ;?> </span>
                     <?php _t(' of ', 1); ?> <span class="col-total-items"> <?php echo $_total_items_; ?> </span>
                 </div>
 
@@ -210,4 +215,5 @@ class ObjectHelper extends ViewHelper {
             endforeach;
         }
     }
+
 }

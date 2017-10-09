@@ -47,6 +47,7 @@
         myPopoverObject.options.html = true;
         //<iframe width="560" height="315" src="https://www.youtube.com/embed/CGyEd0aKWZE" frameborder="0" allowfullscreen></iframe>
         myPopoverObject.options.content = $('#socialdb_permalink_object').val();
+
         // form thumbnail
         $('#formThumbnail').submit(function (e) {
             e.preventDefault();

@@ -24,7 +24,66 @@ class EventPropertyObjectEdit extends EventModel {
     public function generate_title($data) {
         $collection = get_post($data['socialdb_event_collection_id']);
         $property_name = $data['socialdb_event_property_object_edit_name'];
-        $title = __('Edit the object property ','tainacan').'('.$property_name.')'.__(' in the collection ','tainacan').' '.'<b>'.$collection->post_title.'</b>';
+        $property = get_term_by('id',$data['socialdb_event_property_object_edit_id'],'socialdb_property_type');
+
+
+        if(trim($property->name)==trim($property_name)){
+            $text = '';
+            $newcategory = $data['socialdb_event_property_object_category_id'];
+            $old_categories = get_term_meta($data['socialdb_event_property_object_edit_id'],'socialdb_property_object_category_id');
+            $newrequired = $data['socialdb_event_property_object_edit_required'];
+            $required = get_term_meta($data['socialdb_event_property_object_edit_id'],'socialdb_property_required',true);
+            $newreverse = $data['socialdb_event_property_object_edit_is_reverse'];
+            $reverse = get_term_meta($data['socialdb_event_property_object_edit_id'],'socialdb_property_object_is_reverse',true);
+            $newcardinality = $data['socialdb_event_property_object_edit_cardinality'];
+            $cardinality = get_term_meta($data['socialdb_event_property_object_edit_id'],'socialdb_property_object_cardinality',true);
+
+            if($newcategory !== $old_categories){
+                $new_categories = explode(',',$newcategory);
+                $new_names = [];
+                foreach ($new_categories as $new_category){
+                    $new_names[] = get_term_by('id',$new_category,'socialdb_category_type')->name;
+                }
+
+                if($old_categories) {
+                    $old_names = [];
+                    foreach ($old_categories as $old_category) {
+                        $old_names[] = get_term_by('id', $old_category, 'socialdb_category_type')->name;
+                    }
+                }
+                $text .= __(" Alter relationship from " , "tainacan");
+                $val = ($old_names) ? htmlentities(implode(',',$old_names)) : '(Vazio)';
+                $text .=  ' : <i>'.$val.'</i> ';
+                $text .= __('to ', 'tainacan');
+                $val = ($new_names) ? htmlentities(implode(',',$new_names)) : '( Vazio )';
+                $text .= '<i>'.$val.'</i><br>';
+            }
+            if($newrequired !== $required){
+                $newrequired = ($newrequired === 'true') ? __('True','tainacan') : __('False','tainacan');
+                $required = ($required === 'true') ? __('True','tainacan') : __('False','tainacan');
+                $text .=  __('Alter required field from ', 'tainacan').' : <i>'. $required .'</i> '. __('to ', 'tainacan').' <i>'.$newrequired.'</i>&nbsp;&nbsp;<br>';
+            }
+
+            if($newreverse !== $reverse){
+                $newreverse = ($newreverse === 'true') ? __('True','tainacan') : __('False','tainacan');
+                $reverse = ($reverse === 'true') ? __('True','tainacan') : __('False','tainacan');
+                $text .=  __('Alter reverse field from ', 'tainacan').' : <i>'. $reverse .'</i> '. __('to ', 'tainacan').' <i>'.$newreverse.'</i>&nbsp;&nbsp;<br>';
+            }
+
+            if($newcardinality !== $cardinality){
+                $newcardinality = ($newcardinality === 'n') ? __('Multiple values','tainacan') : __('One value','tainacan');
+                $cardinality = ($cardinality === 'n') ? __('Multiple values','tainacan') : __('One value','tainacan');
+                $text .=  __('Alter cardinality from ', 'tainacan').' : <i>'. $cardinality .'</i> '. __('to ', 'tainacan').' <i>'.$newcardinality.'</i>&nbsp;&nbsp;<br>';
+            }
+
+            $title = __('Alter configuration from object property ', 'tainacan').' : <i>'.$property->name.'</i>&nbsp;&nbsp;<br> '.$text.
+                __(' in the collection ', 'tainacan') .' '.' <b><a target="_blank" href="'.  get_the_permalink($collection->ID).'">'.$collection->post_title.'</a></b> ';
+        }else{
+            $title = __('Edit the object property ', 'tainacan') .'<br>'.' '.
+                __('From','tainacan').' : <i>'.$property->name.'</i><br>'.' '.
+                __('To','tainacan').' : <i>'.$property_name.'</i><br>'.' '.
+                __(' in the collection ', 'tainacan') .' '.' <b><a target="_blank" href="'.  get_the_permalink($collection->ID).'">'.$collection->post_title.'</a></b> ';
+        }
         return $title;
     }
 
@@ -83,6 +142,7 @@ class EventPropertyObjectEdit extends EventModel {
            $data['property_object_reverse'] = get_post_meta($event_id, 'socialdb_event_property_object_edit_reverse',true) ;   
         }
         $data['property_category_id'] = get_term_meta($data['property_object_id'], 'socialdb_property_created_category',true) ;
+        $data['socialdb_property_object_cardinality'] = get_post_meta($event_id, 'socialdb_event_property_object_edit_cardinality',true) ;
         // chamo a funcao do model de propriedade para fazer a insercao
         $result = json_decode($propertyModel->update_property_object($data));
         if(isset(get_term_by('id', $data['property_object_id'], 'socialdb_property_type')->term_id)){

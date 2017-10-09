@@ -1,11 +1,23 @@
 <?php
 include_once("js/actions_js.php");
 
-if( is_null($curr_id) && is_null($itemURL) ) {
-    $is_single_page = true;
-    $curr_id = $object->ID;
-    $itemURL = get_the_permalink($collection_id) . '?item=' . $object->post_name;
-}
+if(!isset($collection_id))
+    $collection_id = $post->post_parent;
+
+if(!isset($curr_id))
+    $curr_id = get_the_ID();
+
+if(!isset($is_single_page))
+    $is_single_page = is_single();
+
+if(!isset($itemURL))
+    $itemURL = get_the_permalink($curr_id);
+
+if(!isset($collection_metas))
+    $collection_metas = get_post_meta($collection_id, 'socialdb_collection_download_control', true);
+
+if(!isset($is_moderator))
+    $is_moderator = CollectionModel::is_moderator($collection_id, get_current_user_id());
 
 $rdfURL = $itemURL . '.rdf';
 $checkout = [ "out" => "do_checkout('". $curr_id ."')",
@@ -13,9 +25,9 @@ $checkout = [ "out" => "do_checkout('". $curr_id ."')",
     "discard" => "discard_checkout('". $curr_id ."')" ];
 
 $itemDelete = [
-    'id' => $curr_id, 
+    'id' => $curr_id,
     'title' =>  _t('Delete Object'),
-    'time' => mktime(),
+    'time' => time(),
     'text' => _t('Are you sure to remove the object: ') . get_the_title() ];
 
 if($is_single_page) {
@@ -44,7 +56,7 @@ $is_current_user_the_author = get_post($curr_id)->post_author == get_current_use
 <ul class="nav navbar-bar navbar-right item-menu-container"  <?php if(has_action('hide_actions_item')) do_action('hide_actions_item') ?> >
     <li class="dropdown open_item_actions" id="action-<?php echo $curr_id; ?>">
         <a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-            <?php echo ViewHelper::render_icon("config", "png", _t('Item options')); ?>
+            <span class="dashicons dashicons-admin-generic main-color"></span>
         </a>
         <ul class="dropdown-menu pull-right dropdown-show new-item-menu" role="menu" id="item-menu-options">
             <?php if(!$is_single_page): ?>
@@ -54,9 +66,9 @@ $is_current_user_the_author = get_post($curr_id)->post_author == get_current_use
 
             if($is_single_page) {
                 if ($collection_metas == 'allowed' || ($collection_metas == 'moderate' && is_user_logged_in()) || ($collection_metas == 'controlled' && ($is_moderator || $object->post_author == get_current_user_id()))) {
-                    $thumb_id = get_post_thumbnail_id($object->ID, 'full');
+                    $thumb_id = get_post_thumbnail_id($curr_id, 'full');
                     if ($metas['socialdb_object_dc_type'][0] == 'image') {
-                        $url_image = wp_get_attachment_url(get_post_thumbnail_id($object->ID, 'full'));
+                        $url_image = wp_get_attachment_url(get_post_thumbnail_id($curr_id, 'full'));
                          ?>
                         <li>
                             <a href="<?php echo $url_image; ?>" download="<?php echo $object->post_title; ?>.jpg" onclick="downloadItem('<?php echo $thumb_id; ?>');">
@@ -93,8 +105,11 @@ $is_current_user_the_author = get_post($curr_id)->post_author == get_current_use
                     <?php if( has_filter('show_edit_default') && apply_filters('show_edit_default', $collection_id) ) { ?>
                         <a onclick="edit_object('<?php echo $curr_id; ?>')"> <?php _t('Edit item',1); ?> </a>
                     <?php } else { ?>
-                        <?php if(hasHelper($curr_id)): ?>
-                        <a href="<?php echo get_the_permalink($collection_id).get_post($curr_id)->post_name.'/editar'; ?>">   
+                        <?php if(hasHelper($curr_id)):
+                            // $edit_link =  get_the_permalink($collection_id).get_post($curr_id)->post_name.'/editar';
+                            $edit_link =  site_url() . '/item/' . get_post($curr_id)->post_name.'/editar';
+                            ?>
+                        <a href="<?php echo $edit_link; ?>">
                             <?php _t('Edit item',1); ?>
                         </a>
                         <?php else: ?>
@@ -136,7 +151,7 @@ $is_current_user_the_author = get_post($curr_id)->post_author == get_current_use
 
             <?php if($is_single_page): ?>
                 <li class="tainacan-museum-clear"> <a class="ac-item-graph" onclick="showGraph('<?php echo $rdfURL; ?>')"> <?php _t('See graph',1); ?> </a> </li>
-            <?php endif; 
+            <?php endif;
 
             if(!$is_single_page): ?>
                 <li class="collec-only tainacan-museum-clear">
@@ -145,7 +160,7 @@ $is_current_user_the_author = get_post($curr_id)->post_author == get_current_use
             <?php
             endif;
 
-            if( has_filter('tainacan_show_reason_modal') && ! apply_filters("tainacan_show_restore_options", $collection_id) 
+            if( has_filter('tainacan_show_reason_modal') && ! apply_filters("tainacan_show_restore_options", $collection_id)
                 && ($is_repo_admin || $is_current_user_the_author) ) {
             ?>
                 <li>

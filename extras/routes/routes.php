@@ -131,19 +131,23 @@ $collection_route = get_post(get_option('collection_root_id'));
     ?>">
 <script type="text/javascript">
     var previousRoute;
-    /********** cadastro de rotas ********/
-     //pagina central da colecao
-    $.router.add( $('#route_blog').val()+':collection', function(data) {
-        if(data.collection == '<?php echo __('advanced-search','tainacan') ?>'){
-            showAdvancedSearch($('#src').val());
-        }else{
-            backToMainPage(null, true);
-        }
-    });
-    //pagina do item
-    $.router.add( $('#route_blog').val()+':collection/:item', function(data) {
-        if(data.collection == 'admin'){
-            <?php if (current_user_can('manage_options')): ?>
+
+    $(function(){
+         execute_route();
+
+        /********** cadastro de rotas ********/
+        //pagina central da colecao
+        $.router.add( $('#route_blog').val()+':collection', function(data) {
+            if(data.collection == '<?php echo __('advanced-search','tainacan') ?>'){
+                showAdvancedSearch($('#src').val());
+            }else{
+                backToMainPage(null, true);
+            }
+        });
+        //pagina do item
+        $.router.add( $('#route_blog').val()+':collection/:item', function(data) {
+            if(data.collection == 'admin'){
+                <?php if (current_user_can('manage_options')): ?>
                 if(data.item=='<?php echo __('metadata','tainacan') ?>'){
                     showPropertiesRepository($('#src').val());
                 }else if(data.item=='<?php echo __('configuration','tainacan') ?>'){
@@ -153,7 +157,7 @@ $collection_route = get_post(get_option('collection_root_id'));
                 }else if(data.item=='<?php echo __('categories','tainacan') ?>'){
                     showCategoriesConfiguration($('#src').val());
                 }else if(data.item=='<?php echo __('social','tainacan') ?>'){
-                     showAPIConfiguration($('#src').val());
+                    showAPIConfiguration($('#src').val());
                 }else if(data.item=='<?php echo __('licenses','tainacan') ?>'){
                     showLicensesRepository($('#src').val());
                 }else if(data.item=='<?php echo __('import','tainacan') ?>'){
@@ -165,22 +169,22 @@ $collection_route = get_post(get_option('collection_root_id'));
                 }else if(data.item=='<?php echo __('events','tainacan') ?>'){
                     showEventsRepository($('#src').val());
                 }
-            <?php endif; ?>
-        }else{
-            if(previousRoute === window.location.pathname){
-                $.router.go($('#route_blog').val()+$('#slug_collection').val());
+                <?php endif; ?>
             }else{
-                showSingleObjectByName(data.item, $('#src').val())
+                if(previousRoute === window.location.pathname){
+                    $.router.go($('#route_blog').val()+$('#slug_collection').val());
+                }else{
+                    //showSingleObjectByName(data.item, $('#src').val())
+                }
+
             }
 
-        }
+        });
 
-    });
-
-     //pagina do item
-    $.router.add( $('#route_blog').val()+':collection/:item/:operation', function(data) {
-        <?php if ((verify_collection_moderators(get_the_ID(), get_current_user_id()) || current_user_can('manage_options')) && get_post_type(get_the_ID()) == 'socialdb_collection'): ?>
-        if(data.item == 'admin'){
+        //pagina do item
+        $.router.add( $('#route_blog').val()+':collection/:item/:operation', function(data) {
+            <?php if ((verify_collection_moderators(get_the_ID(), get_current_user_id()) || current_user_can('manage_options')) && get_post_type(get_the_ID()) == 'socialdb_collection'): ?>
+            if(data.item == 'admin'){
                 if(data.operation=='<?php echo __('metadata','tainacan') ?>'){
                     showPropertiesAndFilters($('#src').val());
                 }else if(data.operation=='<?php echo __('configuration','tainacan') ?>'){
@@ -202,12 +206,9 @@ $collection_route = get_post(get_option('collection_root_id'));
                 }else if(data.operation=='<?php echo __('events','tainacan') ?>'){
                     showEvents($('#src').val());
                 }
-        }
-        <?php endif; ?>
-    });
-
-    $(function(){
-         execute_route();
+            }
+            <?php endif; ?>
+        });
     });
     /**************************************************************************/
 

@@ -6,6 +6,7 @@ if($collection_id == get_option('collection_root_id')){
 }else{
     $url = get_the_permalink($collection_id);
 }
+$divider = get_option('socialdb_divider');
 ?>
 <div id="events_title" class="col-md-12">
     <div class="col-md-12 config_default_style" id="events_settings">
@@ -82,10 +83,11 @@ if($collection_id == get_option('collection_root_id')){
                                             </td>
                                             <td>
                                                 <?php if ((current_user_can('manage_options') || verify_collection_moderators($collection_id, get_current_user_id()))): ?>
-                                                    <a style="cursor:pointer;" onclick="show_verify_event_not_confirmed('<?= $event['id'] ?>', '<?= $collection_id ?>')"><span class="glyphicon glyphicon-eye-open"></span>&nbsp;<?php echo $event['name']; ?></a>
+                                                    <a style="cursor:pointer;" onclick="show_verify_event_not_confirmed('<?= $event['id'] ?>', '<?= $collection_id ?>')"><span class="glyphicon glyphicon-eye-open"></span>&nbsp;<?php echo str_replace($divider,'.',$event['name']) ; ?></a>
                                                 <?php else: ?>
-                                                    <a style="cursor:pointer;" onclick="show_unconfirmed_users_events('<?= $event['id'] ?>', '<?= $collection_id ?>')"><span class="glyphicon glyphicon-eye-open"></span>&nbsp;<?php echo $event['name']; ?></a>
+                                                    <a style="cursor:pointer;" onclick="show_unconfirmed_users_events('<?= $event['id'] ?>', '<?= $collection_id ?>')"><span class="glyphicon glyphicon-eye-open"></span>&nbsp;<?php echo  str_replace($divider,'.',$event['name']) ; ?></a>
                                                 <?php endif; ?>
+
                                             </td>
                                             <?php if ($moderation_type == 'moderador' || !isset($moderation_type) || empty($moderation_type)) { ?>
                                                 <td>
@@ -174,7 +176,7 @@ if($collection_id == get_option('collection_root_id')){
                                                 <?php echo $event['type']; ?>
                                             </td>
                                             <td>
-                                                <?php echo $event['name']; ?>
+                                                <?php echo  str_replace($divider,'.',$event['name']) ; ?>
                                             </td>
                                             <?php if ($moderation_type == 'moderador' || !isset($moderation_type) || empty($moderation_type)) { ?>
                                                 <td>

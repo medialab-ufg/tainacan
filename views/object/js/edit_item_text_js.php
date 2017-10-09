@@ -155,7 +155,8 @@
 
             e.preventDefault();
         });
-         <?php if(!isset($is_view_mode)): ?>
+        <?php if(!isset($is_view_mode)): ?>
+        Dropzone.autoDiscover = false;
         var myDropzone = new Dropzone("div#dropzone_edit", {
             accept: function(file, done) {
                     if (file.type === ".exe") {

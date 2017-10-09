@@ -21,7 +21,7 @@ if ( current_user_can('manage_options') ):
         });
     </script>
 
-    <div id="stats-cover">
+    <div id="stats-cover" style="<?php echo home_header_bg($socialdb_logo)?>">
         <h1> <?php echo $repository_title; ?> </h1>
         <h3> <?php echo $repo_desc; ?> </h3>
 
@@ -79,8 +79,6 @@ if ( current_user_can('manage_options') ):
 
     <input type="hidden" class="stat_path" value="<?php echo get_template_directory_uri() ?>">
     <input type="hidden" id="src" value="<?php echo get_template_directory_uri() ?>">
-
-    </header> <!-- DO NOT ERASE -->
     
     <div id='container-fluid-configuration' class="container-fluid" style="background-color: #f1f2f2">
         <div id="configuration" class="col-md-12 no-padding" style="margin-top: 0;"></div>

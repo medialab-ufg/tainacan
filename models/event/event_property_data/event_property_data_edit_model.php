@@ -24,7 +24,40 @@ class EventPropertyDataEdit extends EventModel {
     public function generate_title($data) {
         $collection = get_post($data['socialdb_event_collection_id']);
         $property_name = $data['socialdb_event_property_data_edit_name'];
-        $title = __('Edit the data property ', 'tainacan') . '(' . $property_name . ')' . __(' in the collection ', 'tainacan') .' '. '<b>' . $collection->post_title . '</b>';
+        $property = get_term_by('id',$data['socialdb_event_property_data_edit_id'],'socialdb_property_type');
+        if(trim($property->name)==trim($property_name)){
+            $text = '';
+            $newwidget = $data['socialdb_event_property_data_edit_widget'];
+            $widget = get_term_meta($data['socialdb_event_property_data_edit_id'],'socialdb_property_data_widget',true);
+            $newrequired = $data['socialdb_event_property_data_edit_required'];
+            $required = get_term_meta($data['socialdb_event_property_data_edit_id'],'socialdb_property_required',true);
+            $newcardinality = $data['socialdb_event_property_data_edit_cardinality'];
+            $cardinality = get_term_meta($data['socialdb_event_property_data_edit_id'],'socialdb_property_data_cardinality',true);
+
+            if($newwidget !== $widget){
+                $text .=  __('Alter widget field from ', 'tainacan').' : <i>'.$widget.'</i> '. __('to ', 'tainacan').' <i>'.$newwidget.'</i>&nbsp;&nbsp;<br>';
+            }
+
+            if($newrequired !== $required){
+                $newrequired = ($newrequired === 'true') ? __('True') : __('False');
+                $required = ($required === 'true') ? __('True') : __('False');
+                $text .=  __('Alter required field from ', 'tainacan').' : <i>'. $required .'</i> '. __('to ', 'tainacan').' <i>'.$newrequired.'</i>&nbsp;&nbsp;<br>';
+            }
+
+            if($newcardinality !== $cardinality){
+                $newcardinality = ($newcardinality === 'n') ? __('Multiple values','tainacan') : __('One value','tainacan');
+                $cardinality = ($cardinality === 'n') ? __('Multiple values','tainacan') : __('One value','tainacan');
+                $text .=  __('Alter cardinality from ', 'tainacan').' : <i>'. $cardinality .'</i> '. __('to ', 'tainacan').' <i>'.$newcardinality.'</i>&nbsp;&nbsp;<br>';
+            }
+
+            $title = __('Alter configuration from data property ', 'tainacan').' : <i>'.$property->name.'</i>&nbsp;&nbsp;<br>'.$text.
+                __(' in the collection ', 'tainacan') .' '.' <b><a target="_blank" href="'.  get_the_permalink($collection->ID).'">'.$collection->post_title.'</a></b> ';
+        }else{
+            $title = __('Edit the data property ', 'tainacan') .'<br>'.' '.
+                __('From','tainacan').' : <i>'.$property->name.'</i><br>'.' '.
+                __('To','tainacan').' : <i>'.$property_name.'</i><br>'.' '.
+                __(' in the collection ', 'tainacan') .' '.' <b><a target="_blank" href="'.  get_the_permalink($collection->ID).'">'.$collection->post_title.'</a></b> ';
+        }
         return $title;
     }
 
@@ -78,10 +111,12 @@ class EventPropertyDataEdit extends EventModel {
         $data['property_data_mask'] = get_post_meta($event_id, 'socialdb_event_property_data_edit_mask', true);
         $data['property_visualization'] = get_post_meta($event_id, 'socialdb_event_property_visualization',true) ;
         $data['property_locked'] = get_post_meta($event_id, 'socialdb_event_property_lock_field',true) ;
+        $data['socialdb_property_data_cardinality'] = get_post_meta($event_id, 'socialdb_event_property_data_edit_cardinality',true) ;
         // chamo a funcao do model de propriedade para fazer a insercao
         $result = json_decode($propertyModel->update_property_data($data));
         // verifying if is everything all right
-        if (get_term_by('id', $data['property_data_id'], 'socialdb_property_type') && $result->success != 'false') {
+        $term = get_term_by('id', $data['property_data_id'],'socialdb_property_type');
+        if ($term && $result->success != 'false') {
             if(isset(get_term_by('id', $data['property_data_id'], 'socialdb_property_type')->term_id)){
                 do_action('after_event_update_property_data',get_term_by('id', $data['property_data_id'], 'socialdb_property_type')->term_id,$event_id);
             }
@@ -90,7 +125,11 @@ class EventPropertyDataEdit extends EventModel {
             $data['msg'] = __('The event was successful', 'tainacan');
             $data['type'] = 'success';
             $data['title'] = __('Success', 'tainacan');
-        } else {
+        } else if($term && in_array($term->slug,$this->fixed_slugs)){
+            $data['msg'] = __('Filter updated successful', 'tainacan');
+            $data['type'] = 'success';
+            $data['title'] = __('Success', 'tainacan');
+        }else {
             $this->update_event_state('invalid', $data['event_id']); // seto a o evento como invalido
             if(isset($result->msg)):
              $data['msg'] = $result->msg;

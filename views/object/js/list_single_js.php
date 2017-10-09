@@ -1,51 +1,23 @@
 <script>
     $(function () {
-        $("#main_part_collection").hide();
-        var is_item_home = $("#configuration .item-breadcrumbs").siblings().first().is("#single_object_id");
-        if( is_item_home ) {
-            $("#configuration").css('margin-top', 50);
-        }
-
-        change_breadcrumbs_title('<?php _e('Import', 'tainacan') ?>');
-
         $('img').bind('contextmenu', function (e) {
             return false;
         });
+        var item_id = $('#single_object_id').val();
+        $('body').css('background-color', '#f1f2f2');
 
-        var is_col_header_visible = $(".collection_header").is(":visible");
-        if (!is_col_header_visible) {
-            //$('.header-navbar').css("margin-bottom", 0);
-            $('body').css('background-color', '#f2f2f2');
-        }
-
-        //botao voltar do browser
-        if (window.history && window.history.pushState) {
-            previousRoute = window.location.pathname;
-            window.history.pushState('forward', null, $('#route_blog').val()+$('#slug_collection').val()+'/'+$('#single_name').val());
-            //
-        }
-        var stateObj = {foo: "bar"};
         $('#form').html('');
-//        $('#object_page').val($('#single_name').val());
-//        history.replaceState(stateObj, "page 2", $('#socialdb_permalink_object').val());
 
-        if( ! $('body').hasClass('page-template-page-statistics') ) {
-            //verifyPublishedItem($('#single_object_id').val());
-            list_files_single($('#single_object_id').val());
-            list_ranking_single($('#single_object_id').val());
-            list_properties_single($('#single_object_id').val());
-            list_properties_edit_remove_single($('#single_object_id').val());
-            list_comments($('#single_object_id').val());
+        if(!$('body').hasClass('page-template-page-statistics')) {
+            list_files_single(item_id);
+            list_ranking_single(item_id);
+            list_properties_single(item_id);
+            list_properties_edit_remove_single(item_id);
+            list_comments(item_id);
             $('[data-toggle="popoverObject"]').popover();
         }
 
 
-        var myPopoverObject = $('#iframebuttonObject').data('popover');
-        $('#iframebuttonObject').popover('hide');
-        myPopoverObject.options.html = true;
-        //<iframe width="560" height="315" src="https://www.youtube.com/embed/CGyEd0aKWZE" frameborder="0" allowfullscreen></iframe>
-        myPopoverObject.options.content = $('#socialdb_permalink_object').val();
-        // form thumbnail
         $('#formThumbnail').submit(function (e) {
             e.preventDefault();
             $('#single_modal_thumbnail').modal('hide');
@@ -60,22 +32,34 @@
             }).success(function (result) {
                 elem = jQuery.parseJSON(result);
                 if (elem.attachment_id) {
-                    insert_fixed_metadata($('#single_object_id').val(), 'thumbnail', elem.attachment_id);
+                    var item_id = $('#single_object_id').val();
+                    insert_fixed_metadata(item_id, 'thumbnail', elem.attachment_id, true);
                 } else {
                     $('#modalImportMain').modal('hide');//mostro o modal de carregamento
                 }
             });
         });
+
         //carrego as licensas ativas
         $.ajax({
             url: $('#src').val() + '/controllers/object/object_controller.php',
             type: 'POST',
-            data: {operation: 'show_collection_licenses', object_id: $('#single_object_id').val(), collection_id: $("#collection_id").val()}
+            data: {operation: 'show_collection_licenses', object_id: item_id, collection_id: $("#collection_id").val()}
         }).done(function (result) {
             $('#event_license').html(result);
         });
     });
 
+    function reload_item_thumb(col_id) {
+        if(col_id) {
+            $.ajax({
+                url: $('#src').val() + '/controllers/object/object_controller.php',
+                type: 'POST', data: { operation: 'default_img', curr_id: col_id }
+            }).done(function(r) {
+                $("#thumb-wrapper").html(r);
+            });
+        }
+    }
 
     /*
      * Increments item's collection view count
@@ -111,7 +95,6 @@
     }
 //END
 //BEGIN:as proximas funcoes sao para mostrar os eventos
-// list_properties(id): funcao que mostra a primeira listagem de propriedades
     function list_properties_single(id) {
         $.ajax({
             type: "POST",
@@ -143,38 +126,66 @@
         });
     }
 
-// mostra o formulario para criacao de propriedade de dados
+    function back_button(object_id) {
+        $('#data_property_form_' + object_id).hide();
+        $('#object_property_form_' + object_id).hide();
+        $('#edit_data_property_form_' + object_id).hide();
+        $('#edit_object_property_form_' + object_id).hide();
+        $('#list_all_properties_' + object_id).show();
+    }
+
+    function close_graph_item_page() {
+        $("#graph_container").hide();
+        $('.item-main-data').show();
+        $('.item-attachments').show();
+    }
+
+    // mostra o formulario para criacao de propriedade de dados
     function show_form_data_property_single(object_id) {
         $.ajax({
             type: "POST",
             url: $('#src').val() + "/controllers/object/objectsingle_controller.php",
             data: {collection_id: $('#collection_id').val(), operation: 'show_form_data_property', object_id: object_id}
         }).done(function (result) {
-            $('#single_list_all_properties_' + object_id).hide();
-            $('#single_object_property_form_' + object_id).hide();
-            $('#single_edit_data_property_form_' + object_id).hide();
-            $('#single_edit_object_property_form_' + object_id).hide();
-            $('#single_data_property_form_' + object_id).html(result).css('padding', 20).show();
-            $('.dropdown-toggle').dropdown();
+            finish_loading(object_id, result);
         });
     }
-// mostra o formulario para criacao de propriedade de objeto
+    // mostra o formulario para criacao de propriedade de objeto
     function show_form_object_property_single(object_id) {
         $.ajax({
             type: "POST",
             url: $('#src').val() + "/controllers/object/objectsingle_controller.php",
             data: {collection_id: $('#collection_id').val(), operation: 'show_form_object_property', object_id: object_id}
         }).done(function (result) {
-            $('#single_list_all_properties_' + object_id).hide();
-            $('#single_data_property_form_' + object_id).hide();
-            $('#single_edit_data_property_form_' + object_id).hide();
-            $('#single_edit_object_property_form_' + object_id).hide();
-            $('#single_object_property_form_' + object_id).html(result).css('padding', 20).show();
-            $('.dropdown-toggle').dropdown();
+            finish_loading(object_id, result);
             $('.nav-tabs').tab();
         });
     }
-// funcao acionando no bolta voltar que mostra a listagem principal
+
+    function show_form_term_property_single(object_id)
+    {
+        return $.ajax({
+            type: "POST",
+            url: $('#src').val() + "/controllers/object/objectsingle_controller.php",
+            data: {collection_id: $('#collection_id').val(), operation: 'show_form_term_property', object_id: object_id}
+        }).done(function (result) {
+            finish_loading(object_id, result);
+            $('#edit-text-term').hide();
+            $('#create-text-term').show();
+        });
+    }
+
+    function finish_loading(object_id, result)
+    {
+        $('#single_list_all_properties_' + object_id).hide();
+        $('#single_data_property_form_' + object_id).hide();
+        $('#single_edit_data_property_form_' + object_id).hide();
+        $('#single_edit_object_property_form_' + object_id).hide();
+        $('#single_object_property_form_' + object_id).html(result).css('padding', 20).show();
+        $('.dropdown-toggle').dropdown();
+    }
+
+    // funcao acionando no bolta voltar que mostra a listagem principal
     function back_button_single(object_id) {
         $('#single_data_property_form_' + object_id).hide();
         $('#single_object_property_form_' + object_id).hide();
@@ -333,7 +344,6 @@
         });
     }
 
-
     function single_remove_event_tag_classication(title, text, tag_id, object_id, time) {
         swal({
             title: title,
@@ -407,6 +417,7 @@
         backToMainPage();
         edit_object_item(object_id);
     }
+
 // editando objeto
     function edit_object_item(object_id) {
         var stateObj = {foo: "bar"};
@@ -431,19 +442,38 @@
             }
         });
     }
+
 //################  FUNCOES PARA OS COMENTARIOS ################################# 
 //listando os comentarios
-    function list_comments(object_id) {
-        $.ajax({
-            type: "POST",
-            url: $('#src').val() + "/controllers/object/object_controller.php",
-            data: {collection_id: $('#collection_id').val(), operation: 'list_comments', object_id: object_id}
-        }).done(function (result) {
-            verifyPublishedItem(object_id);
-            $("#comments_object").html(result);
-            $('.dropdown-toggle').dropdown();
-            $('.nav-tabs').tab();
-        });
+
+
+    function submit_comment(object_id) {
+        if ($('#comment').val().trim() === '') {
+            showAlertGeneral('<?php _e('Attention!', 'tainacan') ?>', '<?php _e('Fill your comment', 'tainacan') ?>', 'info');
+        } else {
+            show_modal_main();
+            $.ajax({
+                type: "POST", url: $('#src').val() + "/controllers/event/event_controller.php",
+                data: {
+                    operation: 'add_event_comment_create',
+                    socialdb_event_create_date: '<?php echo time() ?>',
+                    socialdb_event_user_id: $('#current_user_id').val(),
+                    socialdb_event_comment_create_object_id: object_id,
+                    socialdb_event_comment_create_content: $('#comment').val(),
+                    socialdb_event_comment_author_name: $('#author').val(),
+                    socialdb_event_comment_author_email: $('#email').val(),
+                    socialdb_event_comment_author_website: $('#url').val(),
+                    socialdb_event_comment_term_id: $('#socialdb_event_comment_term_id').val(),
+                    socialdb_event_comment_parent: 0,
+                    socialdb_event_collection_id: $('#collection_id').val()}
+            }).done(function (result) {
+                hide_modal_main();
+                elem_first = jQuery.parseJSON(result);
+                showAlertGeneral(elem_first.title, elem_first.msg, elem_first.type);
+                list_comments_general();
+                $("#comment_item"+object_id).modal('hide');
+            });
+        }
     }
 
     /******************************* Metadados Fixos *******************************/
@@ -459,6 +489,7 @@
     function save_license(object_id) {
         insert_fixed_metadata(object_id, 'license', $('input[name="object_license"]:checked').val());
     }
+
     function edit_license() {
         $('#edit_license').hide();
         $('#text_license').hide();
@@ -580,7 +611,7 @@
             type: 'POST',
             data: {
                 operation: 'add_event_tag_create',
-                socialdb_event_create_date: '<?php echo mktime() ?>',
+                socialdb_event_create_date: '<?php echo time() ?>',
                 socialdb_event_user_id: $('#current_user_id').val(),
                 socialdb_event_tag_suggested_name: $('#event_tag_field').val(),
                 socialdb_event_collection_id: $('#collection_id').val()
@@ -610,7 +641,7 @@
             url: $('#src').val() + "/controllers/event/event_controller.php",
             data: {
                 operation: 'add_event_classification_create',
-                socialdb_event_create_date: '<?php echo mktime(); ?>',
+                socialdb_event_create_date: '<?php echo time(); ?>',
                 socialdb_event_user_id: $('#current_user_id').val(),
                 socialdb_event_classification_object_id: object_id,
                 socialdb_event_classification_term_id: value_id.join(','),
@@ -626,7 +657,7 @@
     }
 
     //altera a classificacao do metadado e carrega novamente a tela do item
-    function insert_fixed_metadata(object_id, type, value) {
+    function insert_fixed_metadata(object_id, type, value, is_thumb) {
         $('#modalImportMain').modal('show');//mostro o modal de carregamento
         $.ajax({
             type: "POST",
@@ -634,7 +665,7 @@
             data: {
                 socialdb_event_collection_id: $('#collection_id').val(),
                 operation: 'add_event_property_data_edit_value',
-                socialdb_event_create_date: '<?php echo mktime(); ?>',
+                socialdb_event_create_date: '<?php echo time(); ?>',
                 socialdb_event_user_id: $('#current_user_id').val(),
                 socialdb_event_property_data_edit_value_object_id: object_id,
                 socialdb_event_property_data_edit_value_property_id: type,
@@ -642,15 +673,30 @@
         }).done(function (result) {
             $('#modalImportMain').modal('hide');//mostro o modal de carregamento
             elem = jQuery.parseJSON(result);
-            if(elem.type === 'success')
-                $("#text_title").text(value);
+            if(elem.type === 'success'){
+                //$("#text_title").text(value);
+                showAlertGeneral(elem.title, elem.msg, elem.type);
+                location.reload()
+            }else{
+                showAlertGeneral(elem.title, elem.msg, elem.type);
+                cancel_source();
+                cancel_description();
+                cancel_license();
+                cancel_tag();
+                cancel_title();
+                cancel_type();
+            }
 
-            cancel_title();
-            showAlertGeneral(elem.title, elem.msg, elem.type);
+
+
+            // cancel_title();
             //showSingleObjectByName($('#object_page').val(), $('#src').val());
+
+            if(is_thumb) {
+              //  reload_item_thumb(object_id);
+            }
         });
     }
-
 
      function single_do_checkout(id){
         $.ajax({
@@ -697,7 +743,7 @@
                 type: 'POST',
                 data: {operation: 'check-in', collection_id: $('#collection_id').val(), object_id: id,motive:inputValue}
             }).done(function (result) {
-                 wpquery_filter();
+                 // wpquery_filter();
                  hide_modal_main();
                 showAlertGeneral('<?php _e('Success!','tainacan') ?>','<?php _e('Checkin done!') ?>','success');
                 $("#form").html('');

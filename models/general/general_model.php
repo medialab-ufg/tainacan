@@ -664,6 +664,14 @@ class Model {
                     $data['search_widget'] = get_post_meta($collection_id, 'socialdb_collection_facet_' . $property_id . '_widget')[0];
                     $data['color_facet'] = get_post_meta($collection_id, 'socialdb_collection_facet_' . $property_id . '_color')[0];
                     $data['ordenation_facet'] = get_post_meta($collection_id, 'socialdb_collection_facet_' . $property_id . '_ordenation')[0];
+                    $data['more_options'] = get_post_meta($collection_id, 'socialdb_collection_facet_' . $property_id . '_more_options',true);
+                    if(is_null($data['search_widget']) && isset($metas['socialdb_property_term_root'])){
+                        $data['search_widget'] = get_post_meta($collection_id, 'socialdb_collection_facet_' . $metas['socialdb_property_term_root'] . '_widget',true);
+                        $data['color_facet'] = get_post_meta($collection_id, 'socialdb_collection_facet_' . $metas['socialdb_property_term_root'] . '_color',true);
+                        $data['ordenation_facet'] = get_post_meta($collection_id, 'socialdb_collection_facet_' . $metas['socialdb_property_term_root'] . '_ordenation',true);
+                        $data['more_options'] = get_post_meta($collection_id, 'socialdb_collection_facet_' . $metas['socialdb_property_term_root'] . '_more_options',true);
+                    }
+                    $data['more_options'] = (is_null($data['more_options'])) ? '' : $data['more_options'];
                 }
             }
         endif;
@@ -758,7 +766,6 @@ class Model {
                     WHERE pm.meta_key LIKE 'socialdb_collection_object_type' and pm.meta_value like '$category_root_id'
             ";
         $result = $wpdb->get_results($query);
-
 
         if ($result && is_array($result) && count($result) > 0) {
             return $result;
@@ -2281,7 +2288,7 @@ class Model {
             $meta = [];
             $meta[$tab][] = $id;
         }
-        update_post_meta($data['collection_id'], 'socialdb_collection_properties_ordenation', serialize($meta));
+        update_post_meta($collection_id, 'socialdb_collection_properties_ordenation', serialize($meta));
         
     }
 

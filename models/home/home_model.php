@@ -1,11 +1,5 @@
 <?php
-/**
- * Author: Eduardo Humberto
- */
-//include_once ('../../../../../wp-config.php');
-//include_once ('../../../../../wp-includes/wp-db.php');
 include_once(dirname(__FILE__).'/../../helpers/view_helper.php');
-include_once ('../../../../../wp-load.php');
 require_once(dirname(__FILE__) . '../../general/general_model.php');
 
 class HomeModel extends Model {
@@ -23,20 +17,6 @@ class HomeModel extends Model {
 
     public function get_recent() {
         return get_posts( [ 'post_type' => 'socialdb_collection', 'posts_per_page' => 20 ] );
-    }
-    
-    public function aasort(&$array, $key) {
-        $sorter = array();
-        $ret = array();
-        reset($array);
-        foreach ($array as $ii => $va) {
-            $sorter[$ii] = $va[$key];
-        }
-        asort($sorter);
-        foreach ($sorter as $ii => $va) {
-            $ret[$ii] = $array[$ii];
-        }
-        $array = $ret;
     }
 
     /**

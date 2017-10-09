@@ -1,5 +1,6 @@
 <script>
     var dynatree_object_index = [];
+
     $(function () {
         // # - autocomplete para as propriedades de dados
         var properties_autocomplete = compounds_get_val($("#properties_autocomplete").val());
@@ -149,7 +150,57 @@
         }
         //$('.chosen-selected2 option').prop('selected', 'selected');
     }
+
+    function appendNewContainer(object_id,compound_id){
+        var index = localStorage.getItem("index_"+compound_id);
+        var properties_id = $('#compounds_'+compound_id).val().split(',');
+        var value = '';
+        var final_value = false;
+        var cont = parseInt(index);
+        while(cont >= 0) {
+
+            for (var i = 0; i < properties_id.length; i++) {
+
+                console.log($('[name="socialdb_property_' + compound_id + '_' + properties_id[i] + '_' + cont + '[]"]'));
+                if ($('[name="socialdb_property_' + compound_id + '_' + properties_id[i] + '_' + cont + '[]"]').length == 0) {
+                    continue;
+                }
+                value = $('[name="socialdb_property_' + compound_id + '_' + properties_id[i] + '_' + cont + '[]"]').val();
+                if (value === '') {
+                    final_value = true;
+                }
+            }
+            cont--;
+        }
+        if(!final_value){
+            var xhr = $.ajax({
+                url: $('#src').val() + '/controllers/property/property_controller.php',
+                type: 'POST',
+                data: {collection_id: $("#collection_id").val(), operation: 'appendCompoundEvent', index: index,compound_id:compound_id,object_id:object_id}
+            });
+            xhr.done(function (result) {
+                $('#new-fields-compound-'+compound_id).append(result);
+                localStorage.setItem("index_"+compound_id, parseInt(index)+1);
+            });
+        }else{
+            showAlertGeneral('<?php _e('Attention!','tainacan') ?>', '<?php _e('Fill all fields!','tainacan') ?>', 'info');
+        }
+    }
     //************************* properties terms ******************************************//
+    function initializeTerms(property_id,index){
+        var radios = compounds_get_val($("#append_properties_terms_radio_"+property_id+"_"+index).val());
+        var selectboxes = compounds_get_val($("#append_properties_terms_selectbox_"+property_id+"_"+index).val());
+        var trees = compounds_get_val($("#append_properties_terms_tree_"+property_id+"_"+index).val());
+        var checkboxes = compounds_get_val($("#append_properties_terms_checkbox_"+property_id+"_"+index).val());
+        var multipleSelects = compounds_get_val($("#append_properties_terms_multipleselect_"+property_id+"_"+index).val());
+        var treecheckboxes = compounds_get_val($("#append_properties_terms_treecheckbox_"+property_id+"_"+index).val());
+        appendCompoundRadios(radios,property_id,index,'radio');
+        appendCompoundRadios(checkboxes,property_id,index,'checkbox');
+        appendSelectBox(selectboxes,property_id,index);
+        appendMultipleDynatree(treecheckboxes,property_id,index);
+        appendSimpleDynatree(trees,property_id,index);
+    }
+
     function compounds_list_properties_term_insert_objects() {
         var radio_cats = ($('#event_single_properties_terms_radio').length>0) ? $("#event_single_properties_terms_radio").val() : $("#multiple_properties_terms_radio").val();
         var check_cats = ($('#event_single_properties_terms_checkbox').length>0) ? $("#event_single_properties_terms_checkbox").val() : $("#multiple_properties_terms_checkbox").val();
@@ -217,6 +268,25 @@
             });
         }
     }
+
+    function appendCompoundRadios(radios,compound_id,i,type){
+        if (radios) {
+            $.each(radios, function (idx, radio) {
+                    var xhr = $.ajax({
+                        url: $('#src').val() + '/controllers/property/property_controller.php',
+                        type: 'POST',
+                        data: {collection_id: $("#collection_id").val(), operation: 'get_children_property_terms', property_id: radio}
+                    });
+                    xhr.done(function (result) {
+                            elem = jQuery.parseJSON(result);
+                            $('#field_property_term_'+compound_id+'_' + radio + '_' + i).html('');
+                            $.each(elem.children, function (idx, children) {
+                                $('#field_property_term_'+compound_id+'_' + radio + '_' + i).append('<input type="'+type+'" name="socialdb_property_'+compound_id+'_'+ radio +'_'+ i +'[]" value="' + children.term_id + '">&nbsp;' + children.name + '<br>');
+                            });
+                    });
+            });
+        }
+    }
     // checkboxes
     function compounds_list_checkboxes(checkboxes,categories,compound_id) {
         if (checkboxes) {
@@ -257,6 +327,7 @@
             });
         }
     }
+
     // selectboxes
     function compounds_list_selectboxes(selectboxes,categories,compound_id) {
         if (selectboxes) {
@@ -294,11 +365,34 @@
                             });
                         }    
                     });
-                }    
+                }
             });
         }
     }
-     // multiple
+
+    //novos campos
+    function appendSelectBox(selectboxes,compound_id,i){
+        if (selectboxes) {
+            $.each(selectboxes, function (idx, selectbox) {
+                var cardinality = $('#cardinality_compound_'+compound_id+'_'+selectbox).val();
+                var xhr = $.ajax({
+                    url: $('#src').val() + '/controllers/property/property_controller.php',
+                    type: 'POST',
+                    data: {collection_id: $("#collection_id").val(), operation: 'get_children_property_terms', property_id: selectbox}
+                })
+                xhr.done(function (result) {
+                        elem = jQuery.parseJSON(result);
+                        $('#field_property_term_'+compound_id+'_' + selectbox + '_' + i).html('');
+                        $('#field_property_term_'+compound_id+'_' + selectbox + '_' + i).append('<option value=""><?php _e('Select','tainacan') ?>...</option>');
+                        $.each(elem.children, function (idx, children) {
+                            $('#field_property_term_'+compound_id+'_' + selectbox + '_' + i).append('<option value="' + children.term_id + '">' + children.name + '</option>');
+                        });
+                });
+            });
+        }
+    }
+
+    // multiple
     function compounds_list_multipleselectboxes(multipleSelects,categories,compound_id) {
         if (multipleSelects) {
             $.each(multipleSelects, function (idx, multipleSelect) {
@@ -341,9 +435,61 @@
             });
         }
     }
+
+    // novos campos
+    function  appendMultipleDynatree(treecheckboxes,compound_id,i){
+        if (treecheckboxes) {
+            $.each(treecheckboxes, function (idx, treecheckbox) {
+                $("#field_property_term_"+compound_id+"_"+ treecheckbox  + '_' + i ).dynatree({
+                    selectionVisible: true, // Make sure, selected nodes are visible (expanded).
+                    checkbox: true,
+                    initAjax: {
+                        url: $('#src').val() + '/controllers/category/category_controller.php',
+                        data: {
+                            collection_id: $("#collection_id").val(),
+                            property_id: treecheckbox,
+                            order: 'name',
+                            operation: 'initDynatreeDynamic'
+                        }
+                        , addActiveKey: true
+                    },
+                    onLazyRead: function (node) {
+                        node.appendAjax({
+                            url: $('#src').val() + '/controllers/collection/collection_controller.php',
+                            data: {
+                                collection: $("#collection_id").val(),
+                                key: node.data.key,
+                                classCss: node.data.addClass,
+                                order: 'name',
+                                //operation: 'findDynatreeChild'
+                                operation: 'expand_dynatree'
+                            }
+                        });
+                    },
+                    onSelect: function (flag, node) {
+                        var cont = 0;
+                        //var i = dynatree_object_index[this.$tree[0].id];
+                        var i =  this.$tree[0].id.split('_')[5];
+                        var selKeys = $.map(node.tree.getSelectedNodes(), function (node) {
+                            return node;
+                        });
+                        var categories = $.map(node.tree.getSelectedNodes(), function (node) {
+                            return node.data.key;
+                        });
+                        $("#socialdb_propertyterm_"+compound_id+"_" + treecheckbox + '_' + i).html('');
+                        $.each(selKeys, function (index, key) {
+                            cont++;
+                            $("#socialdb_propertyterm_"+compound_id+"_" + treecheckbox + '_' + i).append('<input type="hidden" name="socialdb_property_'+compound_id+'_'+treecheckbox+'_' + i + '[]" value="' + key.data.key + '" >');
+                        });
+                    }
+                });
+            });
+        }
+    }
+
     // treecheckboxes
     function compounds_list_treecheckboxes(treecheckboxes,categories,compound_id) {
-        if (treecheckboxes) {;
+        if (treecheckboxes) {
             $.each(treecheckboxes, function (idx, treecheckbox) {
                  if($('#cardinality_compound_'+compound_id+'_'+treecheckbox).length>0){
                     var cardinality = $('#cardinality_compound_'+compound_id+'_'+treecheckbox).val();
@@ -428,6 +574,65 @@
             });
         }
     }
+
+    // novos campos
+    function appendSimpleDynatree(trees,compound_id,i){
+        if (trees) {
+            $.each(trees, function (idx, tree) {
+                $("#dynatree_property_term_"+compound_id+"_" + tree + '_' + i).dynatree({
+                    checkbox: true,
+                    // Override class name for checkbox icon:
+                    classNames: {checkbox: "dynatree-radio"},
+                    selectMode: 1,
+                    selectionVisible: true, // Make sure, selected nodes are visible (expanded).
+                    checkbox: true,
+                    initAjax: {
+                        url: $('#src').val() + '/controllers/category/category_controller.php',
+                        data: {
+                            collection_id: $("#collection_id").val(),
+                            property_id: tree,
+                            // hide_checkbox: 'true',
+                            order: 'name',
+                            operation: 'initDynatreeDynamic'
+                        }
+                        , addActiveKey: true
+                    },
+                    onLazyRead: function (node) {
+                        node.appendAjax({
+                            url: $('#src').val() + '/controllers/collection/collection_controller.php',
+                            data: {
+                                collection: $("#collection_id").val(),
+                                key: node.data.key,
+                                //hide_checkbox: 'true',
+                                classCss: node.data.addClass,
+                                order: 'name',
+                                //operation: 'findDynatreeChild'
+                                operation: 'expand_dynatree'
+                            }
+                        });
+                    },
+                    onSelect: function (flag, node) {
+                        var i =  this.$tree[0].id.split('_')[5];
+                        //var i = dynatree_object_index[this.$tree[0].id];
+                        if ($("#field_property_term_"+compound_id+"_" + tree + '_' + i).val() === node.data.key) {
+                            //  append_category_properties(0,node.data.key);
+                            $('[name="socialdb_property_'+compound_id+'_'+tree+'_'+i+'[]"]').val("");
+                            $("#field_property_term_"+compound_id+"_" + tree + '_' + i).val("");
+                            $('#core_validation_'+compound_id+'_' + tree + '_' + i).val('false');
+                            // set_field_valid_compounds(tree,'core_validation_'+compound_id+'_' + tree + '_' + i,compound_id);
+                        } else {
+                            $('[name="socialdb_property_'+compound_id+'_'+tree+'_'+i+'[]"]').val(node.data.key);
+                            // append_category_properties(node.data.key,$("#field_property_term_"+compound_id+"_" + tree).val());
+                            $("#field_property_term_"+compound_id+"_" + tree + '_' + i).val(node.data.key);
+                            $('#core_validation_'+compound_id+'_'+ tree + '_' + i).val('true');
+                            // set_field_valid_compounds(tree,'core_validation_'+compound_id+'_' + tree + '_' + i,compound_id);
+                        }
+                    }
+                });
+            });
+        }
+    }
+
     // tree
     function compounds_list_tree(trees,categories,compound_id) {
         if (trees) {
@@ -478,7 +683,7 @@
                                         node.select();
                                     }
 //                                    });
-                                    bindContextMenuSingle(span,'field_property_term_' + tree + '_');
+                                    // bindContextMenuSingle(span,'field_property_term_' + tree + '_');
                                 },
                                 onSelect: function (flag, node) {
                                     var i =  this.$tree[0].id.split('_')[5];
@@ -503,6 +708,7 @@
             });
         }
     }
+
     // get value of the property
     function compounds_get_val(value) {
         if (!value||value === '' ) {
@@ -679,6 +885,7 @@
         $(".compounds_buttons_" + property_id).show();
         $(".compounds_fields_text_" + property_id).hide();
         $(".compounds_fields_value_" + property_id).show();
+        $(".btn-new-field-" + property_id).show();
     }
     
     function cancel_compounds_property(property_id, object_id) {
@@ -698,6 +905,7 @@
                 $(".compounds_buttons_" + property_id).hide();
                 $(".compounds_fields_text_" + property_id).show();
                 $(".compounds_fields_value_" + property_id).hide();
+                $(".btn-new-field-" + property_id).hide();
             } else {
                 edit_compounds_property(property_id, object_id);
             }
@@ -760,19 +968,22 @@
                     socialdb_event_property_compounds_edit_value_row:row,
                     socialdb_event_property_compounds_edit_value_property_id: property_id,
                     socialdb_event_property_compounds_edit_value_attribute_value: value}
-            }).done(function (result) {
-                hide_modal_main();
-                verifyPublishedItem(object_id);
-                elem = jQuery.parseJSON(result);
-                if(!elem){
-                    return false;
-                }
+        }).done(function (result) {
+            hide_modal_main();
+            verifyPublishedItem(object_id);
+            elem = jQuery.parseJSON(result);
+            if(!elem)
+                return false;
+
+            var dynatrees = $("#dynatree").length;
+            if(dynatrees > 0)
                 $("#dynatree").dynatree("getTree").reload();
-                list_properties_single(object_id);
-                showAlertGeneral(elem.title, elem.msg, elem.type);
-                //limpando caches
-                delete_all_cache_collection();
-            });
+
+            list_properties_single(object_id);
+            showAlertGeneral(elem.title, elem.msg, elem.type);
+            //limpando caches
+            delete_all_cache_collection();
+        });
     }
 
 </script>

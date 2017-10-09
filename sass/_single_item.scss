@@ -1,5 +1,13 @@
 #single_item_tainacan {
-  @include context-item-menu-style(2px, 0 15px 10px 20px);
+  @include context-item-menu-style(2px, 0 5px 10px 20px);
+
+  // Overrides Bootstrap's default NavBar style
+  .nav .open > a,
+  .nav .open > a:hover,
+  .nav .open > a:focus {
+    background-color: transparent !important;
+    border: none !important;
+  }
 
   #modalSlideShow {
 
@@ -146,256 +154,270 @@
   .item-main-data {
     border-left: none;
     padding-left: 0;
+    padding-right: 0;
 
-    .tainacan-header-info {
-      @include single_item_container_style();
-      margin-bottom: 20px;
-      padding-top: 1.2%;
-      padding-left: 8px;
-    }
-
-    .tainacan-fixed-metas {
-      @include single_item_container_style();
-      padding-top: 0;
-      padding-right: 0;
-      padding-left: 0;
-
-    } // .item-fixed-metas
-
-    .item-metadata {
-      @include single_item_container_style();
-      margin-top: 20px;
-      margin-bottom: 20px;
-      padding-left: 0;
-      padding-top: 0;
-
-      .edit-field-btn {
-        float: right;
-        button {
-            border: none;
-        }
-        span {
-            color: $brand-light-blue;
-        }
-      }
-      .item-description {
-        border: none;
-        border-bottom: 3px solid $item-border;
-        padding: 10px 10px 20px 20px;
-        text-align: justify;
-      }
-
-    } // .item-metadata
-
-    .item-comments {
-      @include single_item_container_style();
-      padding-left: 0;
-
-      #resources_collection_dropdown {
-        li {
-          width: 30%;
-          text-align: center;
-          display: inline-block;
-        }
-      }
-
-      ul.commentlist {
-        padding-left: 0;
-        // float: left;
-
-        & > li {
-          border-bottom: 3px solid $item-border;
-          float: left;
-          width: 100%;
-          margin-top: 20px;
-
-          &:first-child {
-            margin-top: 0;
-          }
-          &:last-child {
-            border-bottom: none;
-          }
-        }
-
-        ul.children {
-          li {
-            // margin-left: 37px;
-          }
-        }
-
-        ul#resources_collection_dropdown {
-          li {
-            margin: 0 !important;
-          }
-        }
-
-      } // ul.commentlist
-
-      textarea.leave-comment {
-        width: 80%;
-        margin-left: 15px;
-        display: inline-block;
-        height:65px;
-      }
-
-      .comment-box-container {
-        margin-bottom: 20px;
-
-        .reply {
-          & > div {
-            display: inline-block;
-            float: left;
-          }
-          .right {
-            margin-top: -15px;
-            text-align: right;
-          }
-        } // .reply
-      }
-
-      #respond {
-        margin-bottom: 20px;
-        // padding-left: 5px;
-        border-bottom: 2px solid $item-border;
-      }
-    } // item-comments
-
-    #text_title {
-      display: inline-block;
-      font-weight: 800;
-      margin: 5px 10px 0 0;
-    }
-
-    ul.item-funcs {
-      padding:0;
+    .new-item-actions {
+      margin-top:15px;
       margin-right: 5px;
-      text-align: right;
 
+      .navbar-right {
+        margin-right: -5px !important;
+      }
+  }
+
+  .tainacan-header-info {
+    @include single_item_container_style();
+    margin-bottom: 20px;
+    padding-top: 1.2%;
+    padding-left: 8px;
+  }
+
+  .tainacan-fixed-metas {
+    @include single_item_container_style();
+    padding-top: 0;
+    padding-right: 0;
+    padding-left: 0;
+
+  } // .item-fixed-metas
+
+  .item-metadata {
+    @include single_item_container_style();
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding-left: 0;
+    padding-top: 0;
+
+    .edit-field-btn {
+      float: right;
+      button {
+          border: none;
+      }
+      span {
+          color: $brand-light-blue;
+      }
+    }
+    .item-description {
+      border: none;
+      border-bottom: 3px solid $item-border;
+      padding: 10px 10px 20px 20px;
+      text-align: justify;
+    }
+
+  } // .item-metadata
+
+  .item-comments {
+    @include single_item_container_style();
+    padding-left: 0;
+
+    #resources_collection_dropdown {
       li {
-        display: inline;
+        width: 30%;
+        text-align: center;
+        display: inline-block;
       }
-    } // .item-funcs
-
-    .box-item-paddings {
-      @include single_item_box_style();
-    } // box-item-paddings
-
-    .box-item-right {
-      // width: 110%;
-      padding-left: 30px;
     }
 
-    .item-fixed-data {
-      // margin-left: -15px;
+    ul.commentlist {
+      padding-left: 0;
+      // float: left;
 
-      .left-container {
-        padding-right: 0;
-        border-right: 3px solid $item-border;
-      }
-      .right-container {
-        padding-left: 0;
-        padding-right: 0;
+      & > li {
+        border-bottom: 3px solid $item-border;
+        float: left;
+        width: 100%;
+        margin-top: 20px;
 
-        .item-ranking {
-          min-height: 106px;
+        &:first-child {
+          margin-top: 0;
         }
+        &:last-child {
+          border-bottom: none;
+        }
+      }
 
-        .item-share {
-          border-bottom: 0 !important;
+      ul.children {
+        li {
+          // margin-left: 37px;
+        }
+      }
 
-          a.fb, a.twitter, a.gplus, a.data-share {
-            img {
-              width: 5%;
-              margin-right: 15px;
-            }
+      ul#resources_collection_dropdown {
+        li {
+          margin: 0 !important;
+        }
+      }
+
+    } // ul.commentlist
+
+    textarea.leave-comment {
+      width: 80%;
+      margin-left: 15px;
+      display: inline-block;
+      height:65px;
+    }
+
+    .comment-box-container {
+      margin-bottom: 20px;
+
+      .reply {
+        & > div {
+          display: inline-block;
+          float: left;
+        }
+        .right {
+          margin-top: -15px;
+          text-align: right;
+        }
+      } // .reply
+    }
+
+    #respond {
+      margin-bottom: 20px;
+      // padding-left: 5px;
+      border-bottom: 2px solid $item-border;
+    }
+  } // item-comments
+
+  #text_title {
+    display: inline-block;
+    font-weight: 800;
+    margin: 5px 10px 0 0;
+  }
+
+  ul.item-funcs {
+    padding:0;
+    margin-right: 5px;
+    text-align: right;
+
+    li {
+      display: inline;
+    }
+  } // .item-funcs
+
+  .box-item-paddings {
+    @include single_item_box_style();
+  } // box-item-paddings
+
+  .box-item-right {
+    // width: 110%;
+    padding-left: 30px;
+  }
+
+  .item-fixed-data {
+    // margin-left: -15px;
+
+    .left-container {
+      padding-right: 0;
+      border-right: 3px solid $item-border;
+    }
+    .right-container {
+      padding-left: 0;
+      padding-right: 0;
+
+      .item-ranking {
+        min-height: 106px;
+      }
+
+      .item-share {
+        border-bottom: 0 !important;
+
+        a.fb, a.twitter, a.gplus, a.data-share {
+          img {
+            width: 5%;
+            margin-right: 15px;
           }
-        } // .item-share
-      }
-      .item-source {
-
-      }
+        }
+      } // .item-share
     }
+    .item-source {
 
-  } // .item-main-data
-
-  .box-item-paddings.item-tags {
-    border: none;
-    border-top: none !important;
-    padding-left: 20px;
-  }
-
-  .item-attachments {
-    margin-right: -30px;
-    border: 3px solid $item-border;
-    background: white;
-    border-radius: 2px;
-    width: 26.5%;
-    float: right;
-    padding-top: 0.7%;
-    border-bottom: none;
-    border-right: none;
-
-  } // .item-attachments
-
-  .single-content-divider {
-    float: left;
-    height: 30px;
-    margin-left: -30px;
-    background: $collections-bg-color;
-    width: 105.8%;
-    border-top: 3px solid $item-border;
-    border-bottom: 3px solid $item-border;
-  }
-
-  ul.item-menu-container {
-    li.collec-only {
-      display: none;
     }
   }
+
+} // .item-main-data
+
+.box-item-paddings.item-tags {
+  border: none;
+  border-top: none !important;
+  padding-left: 20px;
+}
+
+.item-attachments {
+  margin-right: -30px;
+  border: 3px solid $item-border;
+  background: white;
+  border-radius: 2px;
+  width: 26.5%;
+  float: right;
+  padding-top: 0.7%;
+  border-bottom: none;
+  border-right: none;
+
+} // .item-attachments
+
+.single-content-divider {
+  float: left;
+  height: 30px;
+  margin-left: -30px;
+  background: $collections-bg-color;
+  width: 105.8%;
+  border-top: 3px solid $item-border;
+  border-bottom: 3px solid $item-border;
+}
+
+ul.item-menu-container {
+  li.collec-only {
+    display: none;
+  }
+}
 
 } // #single_item_tainacan
 
 .item-breadcrumbs {
+/* R
   margin-top: 10px;
   padding-top: 0;
-  background: $collections-bg-color !important;
-  color: $brand-medium-blue !important;
-  font-weight: bolder;
+*/
+padding-top: 20px;
+margin-top: 0;
+color: $brand-medium-blue !important;
+font-weight: bolder;
+background: $collections-bg-color !important;
 
-  .content-back {
-    color: $brand-medium-blue;
-    margin: -4px 10px 5px 0;
-  }
+.content-back {
+  color: $brand-medium-blue;
+  margin: -4px 10px 5px 0;
+}
 
-  button {
-    font-size: 11px;
-  }
+button {
+  font-size: 11px;
+}
 
-  li {
-    a {
-      color: $brand-medium-blue !important;
-    }
-  }
-} // .item-breadcrumbs
-
-.single-socialdb_collection {
-  .popover-content {
-    font-size: 12px !important;
+li {
+  a {
     color: $brand-medium-blue !important;
   }
 }
+} // .item-breadcrumbs
+
+.single-socialdb_collection {
+.popover-content {
+  font-size: 12px !important;
+  color: $brand-medium-blue !important;
+}
+}
 
 .menu-hover-container {
-  display: inline;
-  padding-bottom: 30px;
+display: inline;
+padding-bottom: 30px;
 
-  &:hover > .submenu-hover-open {
-    display: block;
-  }
+&:hover > .submenu-hover-open {
+  display: block;
+}
 
-  .submenu-hover-open {
-    left: 170px;
-    top: 190px;
-  }
+.submenu-hover-open {
+  left: 170px;
+  top: 190px;
+}
 
 }

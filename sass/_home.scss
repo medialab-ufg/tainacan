@@ -86,20 +86,23 @@ body.home {
           }
         }
       }
-
-      /*
-      &:nth-child(2) {
-        margin: 0 20px 0 20px;
-      }
-      &:nth-child(3) {
-        margin-right: 20px;
-      }
-      */
-
-
     }
   }
-}
+
+  .custom-header {
+    .menu-transp-cover {
+      height: 50px;
+      background: -moz-linear-gradient(top,  rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.2) 100%); /* FF3.6+ */
+      background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(0,0,0,0.65)), color-stop(100%,rgba(0,0,0,0.2))); /* Chrome,Safari4+ */
+      background: -webkit-linear-gradient(top,  rgba(0,0,0,0.65) 0%,rgba(0,0,0,0.2) 100%); /* Chrome10+,Safari5.1+ */
+      background: -o-linear-gradient(top,  rgba(0,0,0,0.65) 0%,rgba(0,0,0,0.2) 100%); /* Opera 11.10+ */
+      background: -ms-linear-gradient(top,  rgba(0,0,0,0.65) 0%,rgba(0,0,0,0.2) 100%); /* IE10+ */
+      background: linear-gradient(to bottom,  rgba(0,0,0,0.65) 0%,rgba(0,0,0,0.2) 100%); /* W3C */
+      filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a6000000', endColorstr='#33000000',GradientType=0 ); /* IE6-9 */
+    }
+  }
+
+} // body.home
 
 #loader_collections {
   padding-top: 50px;
@@ -153,26 +156,13 @@ body.home {
 
   .container-fluid {
     a.logo-tainacan {
-      margin: 0 !important;
-      margin-top: -10px !important;
+      //margin: 0 !important;
+      margin-top: -5px !important;
     }
   }
 
   #searchBoxIndex {
     margin-top: 30px;
-  }
-
-  #display_view_main_page {
-    padding: 30px 25px 0 23px !important;
-
-    .featured {
-      padding: 0;
-    }
-
-    .type-container {
-      padding-left: 13px;
-      padding-right: 0;
-    }
   }
 
   .carousel-home, .carousel-home-ajax {
@@ -263,8 +253,16 @@ body.home {
 
 #display_view_main_page {
   background: black;
+  padding: 30px 25px 0 23px !important;
+  margin-top: 20px;
+
+  .type-container {
+    padding-left: 13px;
+    padding-right: 0;
+  }
 
   .featured {
+    padding: 0;
     &:first-child {
       @include set-home-title-color($populars);
     }
@@ -293,7 +291,6 @@ body.home {
     @include set-home-title-color($texts);
   }
 
-
   .home-title {
     text-align: center;
     padding: 4px 3px;
@@ -305,4 +302,4 @@ body.home {
     padding-left: 8px;
     margin: 0 0 20px 0;
   }
-}
+} // home main container

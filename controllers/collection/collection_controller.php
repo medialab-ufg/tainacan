@@ -30,7 +30,6 @@ class CollectionController extends Controller {
             case "create":
                 return $collection_model->create();
             case 'simple_add':
-                
                 $data['collection_name'] = trim($data['collection_name']);
                 $data['collection_object'] = trim($data['collection_object']);
 
@@ -426,8 +425,9 @@ class CollectionController extends Controller {
                 return json_encode(get_pdf_no_thumb_ids($_POST['count']));
                 break;
             case 'pdf_thumbnail':
-                $data = json_decode(stripslashes($_POST['data']));
-                return json_encode(save_canvas_pdf_thumbnails($data));
+                //$data = json_decode(stripslashes($_POST));
+                //print_r($_POST);
+                return json_encode(save_canvas_pdf_thumbnails($_POST['data']));
                 break;
         }
     }

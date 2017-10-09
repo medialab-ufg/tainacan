@@ -52,7 +52,17 @@
                     showHeaderCollection(src);
                     show_most_participatory_authors(src);
                     $('#redirect_to_caegories').show();
-                    showAlertGeneral('<?php _e('Success', 'tainacan') ?>', '<?php _e('Configuration saved successfully!', 'tainacan') ?>', 'success');
+                    //showAlertGeneral('<?php _e('Success', 'tainacan') ?>', '<?php _e('Configuration saved successfully!', 'tainacan') ?>', 'success');
+
+                    swal({
+                        title: '<?php _e('Success', 'tainacan') ?>',
+                        text: '<?php _e('Configuration saved successfully!', 'tainacan') ?>',
+                        type: 'success',
+                        timer: 1500,
+                        showCancelButton: false,
+                        showConfirmButton: false
+                    });
+
                     if (elem.save_and_next && elem.save_and_next == 'true') {
                         showTaxonomyZone('<?php echo get_template_directory_uri() ?>');
                         change_breadcrumbs_title('<?php _e('Categories', 'tainacan') ?>');

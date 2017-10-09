@@ -24,7 +24,7 @@ class EventPropertyCompoundsCreate extends EventModel {
     public function generate_title($data) {
         $collection = get_post($data['socialdb_event_collection_id']);
         $property_name = $data['socialdb_event_property_compounds_create_name'];
-        $title = __('Create the compounds property ','tainacan').'('.$property_name.')'.__(' in the collection ','tainacan').'<b>'.$collection->post_title.'</b>';
+        $title = __('Create the compounds property ','tainacan').' ( <i>'.$property_name.'</i> )'.__(' in the collection','tainacan').' '.' <b><a href="'.  get_the_permalink($collection->ID).'">'.$collection->post_title.'</a></b> ';
         return $title;
     }
 

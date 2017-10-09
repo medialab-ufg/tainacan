@@ -21,7 +21,7 @@
                         // verifico se eh oferecido a possibilidade de remocao da categoria
                         if(verify_allowed_action($collection_id,'socialdb_collection_permission_delete_classification',$object_id)): ?>
                         <a onclick="remove_event_category_classication('<?= __('Remove classification','tainacan') ?>','<?= __('Are you sure to remove the classification: ','tainacan'), $category['term']->name; ?>','<?= $category['term']->term_id ?>','<?php echo $object_id; ?>','<?php echo mktime(); ?>')"
-                           href="#object_<?php echo $object_id; ?>"><span class="glyphicon glyphicon-remove-circle"></span>
+                           href="javascript:void(0)"><span class="glyphicon glyphicon-remove-circle"></span>
                         </a>
                         <?php endif; ?>
                     </span>

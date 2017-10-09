@@ -16,6 +16,9 @@ require_once(dirname(__FILE__).'../../../models/event/event_property_data/event_
 require_once(dirname(__FILE__).'../../../models/event/event_property_data/event_property_data_edit_model.php');
 require_once(dirname(__FILE__).'../../../models/event/event_property_data/event_property_data_delete_model.php');
 require_once(dirname(__FILE__).'../../../models/event/event_property_data/event_property_data_edit_value_model.php');
+require_once(dirname(__FILE__).'../../../models/event/event_property_term/event_property_term_create_model.php');
+require_once(dirname(__FILE__).'../../../models/event/event_property_term/event_property_term_edit_model.php');
+require_once(dirname(__FILE__).'../../../models/event/event_property_term/event_property_term_delete_model.php');
 require_once(dirname(__FILE__).'../../../models/event/event_property_compounds/event_property_compounds_edit_value_model.php');
 require_once(dirname(__FILE__).'../../../models/event/event_term/event_term_create_model.php');
 require_once(dirname(__FILE__).'../../../models/event/event_term/event_term_edit_model.php');
@@ -34,8 +37,10 @@ require_once(dirname(__FILE__).'../../../models/ranking/ranking_model.php');
 require_once(dirname(__FILE__).'../../../models/object/object_model.php');
 require_once(dirname(__FILE__) . '../../../models/object/object_save_values.php');
 
+
+
  class EventController extends Controller{
-	 public function operation($operation,$data) {
+     public function operation($operation,$data) {
          switch ($operation) {
              case "list":
                  $data = EventModel::list_events($data);
@@ -46,19 +51,21 @@ require_once(dirname(__FILE__) . '../../../models/object/object_save_values.php'
                      $not_observed_events = '&nbsp;'.count($data['events_not_observed']).'&nbsp;';
                  }
                  return $not_observed_events;
-      case 'notification_events_repository':
-        $data['collection_id'] = get_option('collection_root_id');
-        $data = EventModel::list_events($data);
-        if(isset($data['events_not_observed'])){
-          $not_observed_events = '&nbsp;'.count($data['events_not_observed']).'&nbsp;';
-        }
-        return $not_observed_events;
-      case 'get_event_info':
-        return  EventModel::get_event($data);
-      case 'list_events_repository':
-        $data = EventModel::list_events($data);
-        return $this->render(dirname(__FILE__).'../../../views/event/list.php', $data);
-            case 'user_notification':
+             case 'notification_events_repository':
+                 $data['collection_id'] = get_option('collection_root_id');
+                 $data = EventModel::list_events($data);
+                 if(isset($data['events_not_observed'])){
+                     $not_observed_events = '&nbsp;'.count($data['events_not_observed']).'&nbsp;';
+                 }
+                 return $not_observed_events;
+             case 'get_event_info':
+                 return  EventModel::get_event($data);
+             case 'list_events_repository':
+                 $data = EventModel::list_events($data);
+                 if( isset($data['only_data']) && $data['only_data'])
+                     return $data;
+                 return $this->render(dirname(__FILE__).'../../../views/event/list.php', $data);
+             case 'user_notification':
                 return json_encode( EventModel::get_user_notifications() );
       // APROVACAO DE EVENTOS DEMOCRATICOS
       case 'process_events_selected':
@@ -253,9 +260,48 @@ require_once(dirname(__FILE__) . '../../../models/object/object_save_values.php'
               $data['socialdb_event_property_compounds_edit_value_attribute_value'] = '';
           }
           return $event_property_compounds_edit_value_model->create_event($data);
-      case 'socialdb_event_property_data_edit_value';
+      case 'socialdb_event_property_compounds_edit_value';
           $event_property_compounds_edit_value_model = new EventPropertyCompoundsEditValue();
           return $event_property_compounds_edit_value_model->verify_event($data);
+
+      //metadado de termo
+
+     case 'add_event_property_term_create':
+         $event_property_term_create_model = new EventPropertyTermCreate();
+         /*
+          * filtro que trabalha com os dados do formulario de adicao de propriedade de dados
+          * para os eventos
+          */
+         if(has_filter('modificate_values_event_property_term_add')):
+             $data = apply_filters( 'modificate_values_event_property_term_add', $data);
+         endif;
+         return $event_property_term_create_model->create_event($data);
+     case 'socialdb_event_property_term_create';
+         $event_term_delete_model = new EventPropertyTermCreate();
+         return $event_term_delete_model->verify_event($data);
+     //edit property data
+     case 'add_event_property_term_edit':
+         $event_property_term_edit_model = new EventPropertyTermEdit();
+         /*
+         * filtro que trabalha com os dados do formulario de alteracao de propriedade de dados
+         * para os eventos
+         */
+         if(has_filter('modificate_values_event_property_term_update')):
+             $data = apply_filters( 'modificate_values_event_property_term_update', $data);
+         endif;
+         return $event_property_term_edit_model->create_event($data);
+     case 'socialdb_event_property_term_edit';
+         $event_property_term_edit_model = new EventPropertyTermEdit();
+         return $event_property_term_edit_model->verify_event($data);
+     //delete property data
+     case 'add_event_property_term_delete':
+         $event_property_term_delete_model = new EventPropertyTermDelete();
+         return $event_property_term_delete_model->create_event($data);
+     case 'socialdb_event_property_term_delete';
+         $event_property_term_delete_model = new EventPropertyTermDelete();
+         return $event_property_term_delete_model->verify_event($data);
+
+
 
       //create category
       case 'add_event_term_create':
@@ -410,7 +456,13 @@ require_once(dirname(__FILE__) . '../../../models/object/object_save_values.php'
 }
 
 $event_controller = new EventController();
+if(!session_id()) {
+    session_start();
+}
+
+if(isset($data['socialdb_event_collection_id'])){
+delete_post_meta($data['socialdb_event_collection_id'],'properties-cached');
+delete_post_meta($data['socialdb_event_collection_id'],'rankings-cached');
+unset($_SESSION['tainacan-categories']);
+}
 echo $event_controller->operation($operation,$data);
-
-
-?>

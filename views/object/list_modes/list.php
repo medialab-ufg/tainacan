@@ -8,8 +8,7 @@
     <div>
         <div class="col-md-1 item-thumb">
             <?php if(empty($trash_list)): ?>
-                <a href="<?php echo get_collection_item_href($collection_id, $curr_id, $viewHelper); ?>"
-                   onclick="<?php get_item_click_event($collection_id, $curr_id) ?>">
+                <a href="<?php echo $itemURL; ?>">
                     <?php echo get_item_thumb_image($curr_id); ?>
                 </a>
             <?php elseif ($trash_list): echo get_item_thumb_image($curr_id); endif; ?>
@@ -18,8 +17,7 @@
         <div class="col-md-4 no-padding">
             <h4 class="item-display-title">
                 <?php if(empty($trash_list)): ?>
-                    <a href="<?php echo get_collection_item_href($collection_id, $curr_id, $viewHelper); ?>"
-                       onclick="<?php get_item_click_event($collection_id, $curr_id) ?>">
+                    <a href="<?php echo $itemURL; ?>">
                         <?php the_title(); ?>
                     </a>
                 <?php elseif ($trash_list): the_title(); endif; ?>

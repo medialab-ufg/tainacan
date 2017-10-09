@@ -36,7 +36,7 @@ class LogHelper extends ViewHelper {
     }
 
     private function getChartImg($fileName) {
-        return get_stylesheet_directory_uri() . '/libraries/images/chart/' . $fileName . '.png';
+        return get_template_directory_uri() . '/libraries/images/chart/' . $fileName . '.png';
     }
 
     public function renderPDFHeader() {

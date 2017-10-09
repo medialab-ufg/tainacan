@@ -4,6 +4,7 @@ include_once ('../../../../../wp-config.php');
 include_once ('../../../../../wp-load.php');
 include_once ('../../../../../wp-includes/wp-db.php');
 require_once(dirname(__FILE__) . '../../general/general_model.php');
+require_once(dirname(__FILE__) . '../../object/object_save_values.php');
 
 class FlickrModel extends Model {
 
@@ -295,6 +296,7 @@ class FlickrModel extends Model {
 
     public function insertImageItem($data, $object_model, $status = 'publish') {
         $collection_id = $data['collectionId'];
+        $class = new ObjectSaveValuesModel();
         $mapping_id = $this->get_post_by_title('socialdb_channel_flickr', $data['collectionId'], 'flickr');
 
         $getCurrentIds = unserialize(get_post_meta($mapping_id, 'socialdb_channel_flickr_inserted_ids', true));
@@ -344,11 +346,27 @@ class FlickrModel extends Model {
                             $trans = array("termproperty_" => "");
                             $property_id = strtr($form[$identifier], $trans);
                             $parent = get_term_meta($property_id, 'socialdb_property_term_root', true);
-                            $this->insert_hierarchy($metadata, $object_id, $collection_id, $parent);
+                            $term_id = $this->insert_hierarchy($metadata, $object_id, $collection_id, $parent);
+                            $class->saveValue($object_id,
+                                $property_id,
+                                0,
+                                'term',
+                                0,
+                                $term_id,
+                                false
+                            );
                         elseif (strpos($form[$identifier], "dataproperty_") !== false):
                             $trans = array("dataproperty_" => "");
                             $id = strtr($form[$identifier], $trans);
-                            add_post_meta($object_id, 'socialdb_property_' . $id . '', $metadata);
+                            //add_post_meta($object_id, 'socialdb_property_' . $id . '', $metadata);
+                            $class->saveValue($object_id,
+                                $id,
+                                0,
+                                'data',
+                                0,
+                                $metadata,
+                                false
+                            );
                         endif;
                     }
                 }
@@ -399,7 +417,8 @@ class FlickrModel extends Model {
             $array = $this->insert_category($category, $collection_id, $parent);
             $parent = $array['term_id'];
         }
-        socialdb_add_tax_terms($object_id, array($array['term_id']), 'socialdb_category_type');
+        //socialdb_add_tax_terms($object_id, array($array['term_id']), 'socialdb_category_type');
+        return $array['term_id'];
     }
 
     public function insert_tag($name, $object_id, $collection_id) {

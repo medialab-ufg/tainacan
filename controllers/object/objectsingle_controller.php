@@ -58,6 +58,10 @@ class ObjectSingleController extends Controller {
                 $property_model = new PropertyModel();
                 $data = $property_model->list_data($data);
                 return $this->render(dirname(__FILE__) . '../../../views/object/single_object/single_object_property_form.php', $data);
+            case 'show_form_term_property':
+                $property_model = new PropertyModel();
+                $data = $property_model->list_data($data);
+                return $this->render(dirname(__FILE__) . '../../../views/object/single_object/single_term_property_form.php', $data);
             case 'show_edit_data_property_form':// mostra o formulario para EDICAO de propriedade de dados
                 $property_model = new PropertyModel();
                 $data['value'] = json_decode($property_model->edit_property($data));

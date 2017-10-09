@@ -4,7 +4,7 @@ abstract class CollectionsApi {
 
     public function get_collections($request) {
         $params = $request->get_params();
-        
+        error_reporting(0);
         $CollectionModel = new CollectionModel;
         $wpQueryModel = new WPQueryModel();
         $data = [];
@@ -131,6 +131,12 @@ abstract class CollectionsApi {
         //thumbnail do item
         if(has_post_thumbnail($item_id)){
             $item->thumbnail = get_the_post_thumbnail_url($item_id);
+            if(!$item->thumbnail){
+                $id = get_post_meta($item_id,'_thumbnail_id',true);
+                if($id){
+                    $item->thumbnail = get_post($id)->guid;
+                }
+            }
         }
         
         //se for para mostrar anexos

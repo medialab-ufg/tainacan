@@ -81,14 +81,18 @@ if (jQuery)
                                 }
 
                                 (e.pageX) ? x = e.pageX : x = e.clientX + d.scrollLeft;
-                                (e.pageY) ? y = e.pageY : y = e.clientY + d.scrollTop;
-
                                 y = e.clientY;
+                                $(menu).css("position", 'fixed');
+                                if(!y)
+                                {
+                                    y = e.pageY;
+                                    $(menu).css("position", 'absolute');
+                                }
+
 
                                 // Show the menu
                                 $(document).unbind('click');
                                 $(menu).css({top: y, left: x }).fadeIn(o.inSpeed);
-
                                 // Hover events
                                     $(menu).find('A').mouseover( function() {
                                     $(menu).find('LI.hover').removeClass('hover');

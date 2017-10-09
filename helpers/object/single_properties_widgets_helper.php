@@ -2,8 +2,123 @@
 /*
  * Object Controller's view helper 
  * */
+include_once dirname(__FILE__).'/../view_helper.php';
 class ObjectSingleWidgetsHelper extends ViewHelper {
-    
+
+    public function appendNewContainer(PropertyModel $modelProperty,$object_id,$compound_id,$index){
+        $properties_terms_radio = [];
+        $properties_terms_tree = [];
+        $properties_terms_selectbox = [];
+        $properties_terms_checkbox = [];
+        $properties_terms_multipleselect = [];
+        $properties_terms_treecheckbox = [];
+        //referencias
+                $references = [
+                    'properties_terms_radio' => &$properties_terms_radio,
+                    'properties_terms_checkbox' => &$properties_terms_checkbox,
+                    'properties_terms_tree' => &$properties_terms_tree,
+                    'properties_terms_selectbox' => &$properties_terms_selectbox,
+                    'properties_terms_multipleselect' => &$properties_terms_multipleselect,
+                    'properties_terms_treecheckbox' => &$properties_terms_treecheckbox
+                ];
+        $references['compound_id'] = $compound_id;
+        $property = $modelProperty->get_all_property($compound_id,true);
+        $i = $index;
+        $properties_compounded = explode(',',$property['metas']['socialdb_property_compounds_properties_id']);
+        ?>
+        <div id="container_field_<?php echo $property['id']; ?>_<?php echo $i; ?>"
+             class="col-md-12 no-padding"
+             style="border-style: solid;border-width: 1px;border-color: #ccc; padding: 10px;margin-bottom: 5px;">
+            <div class="col-md-1 no-padding">
+                <div style="display: none;" class="pull-right compounds_buttons_<?php echo $property['id']; ?> ">
+                    <button type="button"
+                            style="margin-bottom: 5px;"
+                            title="Limpar campos"
+                            onclick="clear_compounds(<?php echo $object_id ?>,<?php echo $property['id'] ?>,<?php echo $i ?>)"
+                            class="btn btn-default btn-xs">
+                        <span class="glyphicon glyphicon-erase"></span>
+                    </button>
+                    <button type="button"
+                            onclick="save_compounds(<?php echo $object_id ?>,<?php echo $property['id'] ?>,<?php echo $i ?>)"
+                            class="btn btn-default btn-xs">
+                        <span class="glyphicon glyphicon-floppy-disk"></span>
+                    </button>
+                </div>
+            </div>
+            <div class="col-md-11">
+                <?php foreach ($properties_compounded as $property_compounded):
+                    if(!is_numeric($property_compounded)){
+                        continue;
+                    }
+                    $property_compounded = $modelProperty->get_all_property($property_compounded,true);
+                    $coumpounds_id[] = $property_compounded['id'];
+                    $value = $this->get_value($object_id, $property['id'], $property_compounded['id'], $i, $position);
+                    ?>
+                    <input  type="hidden"
+                            id='core_validation_<?php echo $property['id'] ?>_<?php echo $property_compounded['id']; ?>_<?php echo $i ?>'
+                            class='core_validation_compounds_<?php echo $property['id']; ?>'
+                            value='<?php echo (!$value) ? 'false' : 'true' ; ?>'>
+                    <div style="padding-bottom: 15px;border: none;background: white !important; " class="col-md-12">
+                        <p style="color: black;"><?php echo $property_compounded['name']; ?></p>
+                        <input type="hidden"
+                               name="cardinality_compound_<?php echo $property['id']; ?>_<?php echo $property_compounded['id']; ?>"
+                               id="cardinality_compound_<?php echo $property['id']; ?>_<?php echo $property_compounded['id']; ?>"
+                               value="<?php //echo $cardinality; ?>">
+
+                        <?php
+                        $val = (is_bool($value)) ? false : $value;
+                        if(isset($property_compounded['metas']['socialdb_property_data_widget'])):
+                            ?>
+                            <div class="compounds_fields_text_<?php echo $property['id']; ?>">
+                                <?php echo ($val) ? '<b><a style="cursor:pointer;" onclick="wpquery_link_filter(' . "'" . $val . "'" . ',' . $property['id'] . ')"  >'.$val.'</a></b>' : '<button type="button" onclick="edit_compounds_property('. $property['id'] .', '.$object_id.')" class="btn btn-default btn-xs">'.__('Empty field!','tainacan').'</button>' ?>
+                            </div>
+                            <div style="display: none;" class="compounds_fields_value_<?php echo $property['id']; ?>">
+                                <?php
+                                $this->widget_property_data($property_compounded, $i,$references,$val);
+                                ?>
+                            </div>
+                            <?php
+                        elseif(isset($property_compounded['metas']['socialdb_property_object_category_id'])):
+                            ?>
+                            <div class="compounds_fields_text_<?php echo $property['id']; ?>">
+                                <?php echo ($val) ? '<b><a style="cursor:pointer;" onclick="wpquery_term_filter(' . "'" . $val . "'" . ',' . $property['id'] . ')" >'.get_post($val)->post_title.'</a></b>' : '<button type="button" onclick="edit_compounds_property('. $property['id'] .', '.$object_id.')" class="btn btn-default btn-xs">'.__('Empty field!','tainacan').'</button>' ?>
+                            </div>
+                            <div style="display: none;" class="compounds_fields_value_<?php echo $property['id']; ?>">
+                                <?php
+
+                                $this->widget_property_object($property_compounded, $i,$references,$val);
+                                ?>
+                            </div>
+                            <?php
+                        elseif(isset($property_compounded['metas']['socialdb_property_term_widget'])):
+                            ?>
+                            <div class="compounds_fields_text_<?php echo $property['id']; ?>">
+                                <?php echo ($val) ? '<b><a style="cursor:pointer;" onclick="wpquery_term_filter(' . "'" . $val . "'" . ',' . $property['id'] . ')" >'.get_term_by('id',$val,'socialdb_category_type')->name.'</a></b>' : '<button onclick="edit_compounds_property('. $property['id'] .', '.$object_id.')" type="button" class="btn btn-default btn-xs">'.__('Empty field!','tainacan').'</button>' ?>
+                            </div>
+                            <div style="display: none;" class="compounds_fields_value_<?php echo $property['id']; ?>">
+                                <?php
+                                $this->widget_property_term($property_compounded, $i,$references,$val);
+                                ?>
+                            </div>
+                            <?php
+                        endif;
+                        ?>
+                    </div>
+                    <?php $position++ ?>
+                <?php endforeach; ?>
+            </div>
+        </div>
+        <input type="hidden" name="properties_terms_radio" id='append_properties_terms_radio_<?php echo $property['id']; ?>_<?php echo $i; ?>' value="<?php echo implode(',', array_unique($properties_terms_radio)); ?>">
+        <input type="hidden" name="properties_terms_tree" id='append_properties_terms_tree_<?php echo $property['id']; ?>_<?php echo $i; ?>' value="<?php echo implode(',', array_unique($properties_terms_tree)); ?>">
+        <input type="hidden" name="properties_terms_selectbox" id='append_properties_terms_selectbox_<?php echo $property['id']; ?>_<?php echo $i; ?>' value="<?php echo implode(',', array_unique($properties_terms_selectbox)); ?>">
+        <input type="hidden" name="properties_terms_checkbox" id='append_properties_terms_checkbox_<?php echo $property['id']; ?>_<?php echo $i; ?>' value="<?php echo implode(',', array_unique($properties_terms_checkbox)); ?>">
+        <input type="hidden" name="properties_terms_multipleselect" id='append_properties_terms_multipleselect_<?php echo $property['id']; ?>_<?php echo $i; ?>' value="<?php echo implode(',', array_unique($properties_terms_multipleselect)); ?>">
+        <input type="hidden" name="properties_terms_treecheckbox" id='append_properties_terms_treecheckbox_<?php echo $property['id']; ?>_<?php echo $i; ?>' value="<?php echo implode(',', array_unique($properties_terms_treecheckbox)); ?>">
+        <script>
+            initializeTerms('<?php echo $property['id']; ?>','<?php echo $i; ?>');
+        </script>
+        <?php
+    }
     /**
      * 
      * @param array $properties_compounds
@@ -15,11 +130,21 @@ class ObjectSingleWidgetsHelper extends ViewHelper {
         ?>
         <?php
         if (isset($properties_compounds)):
-            foreach ($properties_compounds as $property) { 
-               if(!$this->is_public_property($property))
+            foreach ($properties_compounds as $property) {
+               $limit =  1;
+               $key = 1;
+
+                if(!$this->is_public_property($property))
                     continue;
-               $result['ids'][] = $property['id']; 
-               $references['compound_id'] = $property['id']; 
+                $result['ids'][] = $property['id'];
+                $references['compound_id'] = $property['id'];
+                $meta = get_post_meta($object_id, 'socialdb_property_helper_' . $property['id'], true);
+                if ($meta && $meta != '') {
+                    $array = unserialize($meta);
+                    $limit =  count($array);
+                    end($array);         // move the internal pointer to the end of the array
+                    $key = key($array)+1;
+                }
                ?>
                 <div class="col-md-6 property-compounds no-padding">
                      <div class="box-item-paddings">
@@ -63,21 +188,23 @@ class ObjectSingleWidgetsHelper extends ViewHelper {
                         <?php $properties_compounded = array_values(array_filter($property['metas']['socialdb_property_compounds_properties_id'])); ?>
                         <?php 
                         $class = 'col-md-'. (12/count($properties_compounded)); ?>
+
                         <div class="form-group"> 
                              <input  type="hidden" 
                                     id='main_compound_id' 
                                     value='<?php echo $references['compound_id'] ?>'>
-                            <?php for($i = 0; $i<$cardinality;$i++): 
-                                 $is_show_container =  $this->is_set_container($object_id,$property,$property_compounded,$i);
+
+                            <?php for($i = 0; $i<$limit;$i++):
                                 $position = 0;
                                 ?>
                                 <div id="container_field_<?php echo $property['id']; ?>_<?php echo $i; ?>" 
                                      class="col-md-12 no-padding"
-                                     style="border-style: solid;border-width: 1px;border-color: #ccc; padding: 10px;<?php echo ($is_show_container) ? 'display:block': 'display:none'; ?>">
+                                     style="border-style: solid;border-width: 1px;border-color: #ccc; padding: 10px;margin-bottom: 5px;">
                                     <div class="col-md-1 no-padding">
                                         <div style="display: none;" class="pull-right compounds_buttons_<?php echo $property['id']; ?> ">    
                                             <button type="button" 
                                                     title="Limpar campos"
+                                                    style="margin-bottom: 5px;"
                                                     onclick="clear_compounds(<?php echo $object_id ?>,<?php echo $property['id'] ?>,<?php echo $i ?>)" 
                                                     class="btn btn-default btn-xs">
                                                 <span class="glyphicon glyphicon-erase"></span>
@@ -95,7 +222,7 @@ class ObjectSingleWidgetsHelper extends ViewHelper {
                                             continue;
                                         }
                                         $coumpounds_id[] = $property_compounded['id']; 
-                                        $value = $this->get_value($object_id, $property['id'], $property_compounded['id'], $i, $position);
+                                        $value = $this->get_value_helper($object_id, $property['id'], $property_compounded['id'], $i, $position);
                                         ?>
                                         <input  type="hidden" 
                                                 id='core_validation_<?php echo $references['compound_id'] ?>_<?php echo $property_compounded['id']; ?>_<?php echo $i ?>' 
@@ -148,10 +275,23 @@ class ObjectSingleWidgetsHelper extends ViewHelper {
                                         </div>
                                     <?php $position++ ?>
                                     <?php endforeach; ?>
-                                    </div>   
-                                    <?php echo ($is_show_container==1) ? ''  : $this->render_button_cardinality($property,$i) ?>     
-                                </div>  
+                                    </div>
+                                </div>
                             <?php endfor; ?>
+
+                            <?php if($property['metas']['socialdb_property_compounds_cardinality'] && $property['metas']['socialdb_property_compounds_cardinality'] == 'n'): ?>
+                                <script>
+                                    localStorage.setItem("index_<?php echo $property['id']; ?>", "<?php echo $key; ?>");
+                                </script>
+                                <div id="new-fields-compound-<?php echo $property['id']; ?>"></div>
+                                <button type="button"
+                                        onclick="appendNewContainer('<?php echo $object_id; ?>','<?php echo $property['id']; ?>')"
+                                        style="margin-top: 5px;display: none;"
+                                        class="btn btn-primary btn-lg btn-xs btn-block  btn-new-field-<?php echo $property['id']; ?>">
+                                    <span class="glyphicon glyphicon-plus"></span><?php _e('Add field', 'tainacan') ?>
+                                </button>
+                            <?php  endif; ?>
+
                             <input type="hidden" 
                                    name="compounds_<?php echo $property['id']; ?>" 
                                    id="compounds_<?php echo $property['id']; ?>"
@@ -278,15 +418,11 @@ class ObjectSingleWidgetsHelper extends ViewHelper {
                     if (!empty($property['metas']['objects'])) { ?>     
                         <?php foreach ($property['metas']['objects'] as $object) { ?>
                             <?php if ($value && $object->ID==$value): // verifico se ele esta na lista de objetos da colecao   ?>    
-                                 <option selected='selected' value="<?php echo $object->ID ?>"><?php echo $object->post_title ?></span>
+                                 <option selected='selected' value="<?php echo $object->ID ?>"><?php echo $object->post_title ?></option>
                         <?php endif; ?>
                     <?php } ?> 
                 <?php 
-                    }else { 
-                ?>   
-                    <option value=""><?php _e('No objects added in this collection', 'tainacan'); ?></option>
-                <?php 
-                    } 
+                    }
                 ?>       
         </select>    
         <?php
@@ -404,6 +540,31 @@ class ObjectSingleWidgetsHelper extends ViewHelper {
                 return true;
             }
         }
+    }
+
+    /**
+     *
+     * @param type $item_id
+     * @param type $compound_id
+     * @param type $property
+     * @param type $i
+     * @return string/boolean
+     */
+    public function get_value_helper($item_id,$compound_id,$property,$i,$position) {
+        $meta = unserialize(get_post_meta($item_id, 'socialdb_property_helper_' . $compound_id, true));
+        $indexed_properties = [];
+        if($meta && !empty($meta) && is_array($meta) && isset($meta[$i][$property])){
+            $values = $meta[$i][$property]['values'];
+            foreach ($values as $value) {
+                $meta_value = $this->sdb_get_post_meta($value);
+                if(isset($meta_value->meta_value))
+                {
+                    $indexed_properties[] = $meta_value->meta_value;
+                }
+            }
+            return implode(',',$indexed_properties);
+        }
+        return false;
     }
     /**
      * 

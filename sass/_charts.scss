@@ -340,16 +340,13 @@
 // Ul that changes current chart
 ul.statChartType {
   min-width: 15% !important;
-  // right: 72px !important;
-  // li {
-  //   a {
-  //     padding: 3px 12px !important;
-  //   }
-  // }
 } // .statChartType
 
 #stats-cover {
-  height: 130px;
+  height: 150px;
+  background: black;
+  padding-top: 20px;
+
   h1,h3 {
     color: white;
     text-shadow: -2px 1px 4px #27272d;
@@ -358,7 +355,7 @@ ul.statChartType {
 
   h1 {
     font-size: 400%;
-    margin-bottom: 0;
+    margin: 0;
   }
   h3 {
     font-size: 150%;

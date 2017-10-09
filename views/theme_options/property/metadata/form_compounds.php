@@ -57,7 +57,7 @@
                     <input type="hidden" id="compound_id" name="compound_id" value="">
                     <input type="hidden" id="compounds_collection_id" name="collection_id" value="<?php echo get_option('collection_root_id'); ?>">
                     <input type="hidden" id="operation_property_compounds" name="operation" value="add_property_compounds">
-                    <input type="hidden" name="property_category_id" id="property_category_id" value="<?php echo $category->term_id; ?>"><br>
+                    <input type="hidden" name="property_category_id" id="property_category_id" value="<?php echo $category->term_id ; ?>"><br>
                 </form>
 
             </div>

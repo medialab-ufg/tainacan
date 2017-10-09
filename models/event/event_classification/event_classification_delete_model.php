@@ -5,6 +5,7 @@ include_once ('../../../../../wp-load.php');
 include_once ('../../../../../wp-includes/wp-db.php');
 */
 require_once(dirname(__FILE__) . '../../../event/event_model.php');
+require_once(dirname(__FILE__) . '../../../object/object_save_values.php');
 
 class EventClassificationDeleteModel extends EventModel {
 
@@ -23,17 +24,19 @@ class EventClassificationDeleteModel extends EventModel {
     public function generate_title($data) {
         if ($data['socialdb_event_classification_type'] == 'category') {
             $category = get_term_by('id', $data['socialdb_event_classification_term_id'], 'socialdb_category_type');
-            $title = __('Delete the category : ','tainacan') . $category->name;
+            $title = __('Remove the category : ','tainacan') . ' <i>'.$category->name.'</i> ';
+            $title .= __('from metadata','tainacan') . ' <b>'.get_term_by('id',$data['socialdb_event_classification_property_id'],'socialdb_property_type')->name.'</b>';
+
         } elseif ($data['socialdb_event_classification_type'] != 'tag' && $data['socialdb_event_classification_type'] != 'category') {
             $property = get_term_by('id', $data['socialdb_event_classification_type'], 'socialdb_property_type');
             $value = get_post($data['socialdb_event_classification_term_id']);
-            $title = __('Delete the classification : ','tainacan') . $value->post_title . _(' of the object property ') . $property->name;
+            $title = __('Remove the classification : ','tainacan') .' <i>'. $value->post_title.'</i> ' . _(' of the object property ') .' <b>'. $property->name.'</b>';
         } else {
             $category = get_term_by('id', $data['socialdb_event_classification_term_id'], 'socialdb_tag_type');
-            $title = __('Delete the tag : ','tainacan') . $category->name;
+            $title = __('Remove the tag : ','tainacan') .' <i>'. $category->name.'</i>';
         }
         $object = get_post($data['socialdb_event_classification_object_id']);
-        $title.= __(' in the object ','tainacan') . $object->post_title;
+        $title.= __(' in the object ','tainacan') .' '.'<b><a target="_blank" href="'.  get_the_permalink($object->ID).'">'. $object->post_title.'</a></b>';
         return $title;
     }
 
@@ -53,7 +56,10 @@ class EventClassificationDeleteModel extends EventModel {
            $object_id = get_post(get_post_meta($data['event_id'], 'socialdb_event_classification_object_id',true)); // pego o objeto
            $type = get_post_meta($data['event_id'], 'socialdb_event_classification_type',true);// pego o tipo
            if($type=='category'){// se for categoria
-              $data = $this->delete_event_category($object_id->ID, $data, $automatically_verified);
+               if(!isset($data['socialdb_event_classification_property_id'])){
+                   $data['socialdb_event_classification_property_id'] = $this->getPropertyByCategory($data);
+               }
+               $data = $this->delete_event_category($object_id->ID, $data, $automatically_verified);
            }elseif($type=='tag'){
               $data = $this->delete_event_tag($object_id->ID, $data, $automatically_verified);
            }else{
@@ -73,6 +79,25 @@ class EventClassificationDeleteModel extends EventModel {
        $this->notificate_user_email( $collection_id,  get_current_user_id(), $data['event_id']);
        return json_encode($data);
     }
+
+    public function getPropertyByCategory($data){
+        $term_id = get_post_meta($data['event_id'], 'socialdb_event_classification_term_id',true);
+        $collection_id = get_post_meta($data['event_id'], 'socialdb_event_collection_id',true);
+        $category_root_id = $this->get_category_root_of($collection_id);
+        $properties = get_term_meta($category_root_id,'socialdb_category_property_id');
+        if($properties && is_array($properties)){
+            foreach ($properties as $property) {
+                $term_root = get_term_meta($property,'socialdb_property_term_root',true);
+                if($term_root != ''){
+                    $ancestors = get_ancestors($term_id,'socialdb_category_type');
+                    if(is_array($ancestors) && in_array($term_root,$ancestors)){
+                        return $property;
+                    }
+                }
+            }
+        }
+        return false;
+    }
       /**
      * function insert_event_category($data)
       * @param string $object_id  O id do objeto
@@ -83,26 +108,19 @@ class EventClassificationDeleteModel extends EventModel {
      * Autor: Eduardo Humberto 
      */
     public function delete_event_category($object_id,$data,$automatically_verified = false){
+        $class = new ObjectSaveValuesModel();
         //pego a categoria
         $category = get_term_by('id',  get_post_meta($data['event_id'], 'socialdb_event_classification_term_id',true),'socialdb_category_type');
         $collection_id = get_post_meta($data['event_id'], 'socialdb_event_collection_id',true);
         $category_root_id = $this->get_category_root_of($collection_id);
 
         if($category&&$object_id&&($category->term_id!=$category_root_id)){// se a categoria ou objeto forem validos
-            $result = wp_remove_object_terms( $object_id, $category->term_id,'socialdb_category_type');
-            /************commom values*******************/
-            //deleto o valor
-             $property_id = $this->get_category_property($category->term_id, $collection_id);
-             $this->delete_commom_field_value($object_id, "socialdb_propertyterm_$property_id", $category->term_id);
-            //atualizo o array
-            $categories = wp_get_object_terms($object_id, 'socialdb_category_type');
-            if(is_array($categories)){
-                foreach ($categories as $category):
-                    $category_id = $category->term_id;
-                    $property_id = $this->get_category_property($category_id, $collection_id);
-                    $this->concatenate_commom_field_value($object_id, "socialdb_propertyterm_$property_id",$category_id);
-                endforeach;
-            }
+            $result = $class->removeValue($object_id,
+                $data['socialdb_event_classification_property_id'],
+                0,
+                'term',
+                0,
+                $category->term_id);
             // end commom values
             if($result){
                 $this->set_approval_metas($data['event_id'], $data['socialdb_event_observation'], $automatically_verified);
@@ -185,23 +203,31 @@ class EventClassificationDeleteModel extends EventModel {
      * Autor: Eduardo Humberto 
      */
     public function  delete_event_property($object_id,$data,$automatically_verified = false){
+        $class = new ObjectSaveValuesModel();
        //pego a propriedade de relacionamento
         $property = get_term_by('id',  get_post_meta($data['event_id'], 'socialdb_event_classification_type',true),'socialdb_property_type');
         $relationship_id = get_post(get_post_meta($data['event_id'], 'socialdb_event_classification_term_id',true));
         if($property&&$relationship_id&&$object_id){ // faco a validacao
-            $metas = get_post_meta($object_id, 'socialdb_property_'.$property->term_id);//pego a propriedade
-            if(!$metas||count($metas)==1){// se exisir ou nao exisir so um relacionamento para essa propriedade ele atualiza esse unico registro
-                update_post_meta($object_id, 'socialdb_property_'.$property->term_id, '',$relationship_id->ID);
-            }else{// se nao, exclui somente ele
-                delete_post_meta($object_id, 'socialdb_property_'.$property->term_id, $relationship_id->ID);
+            $ancestors = get_ancestors($property->term_id,'socialdb_property_type');
+            if(in_array(get_term_by('slug','socialdb_property_object')->term_id,$ancestors)) {
+                $type = 'object';
+            } else {
+                $type = 'data';
             }
-            $this->set_common_field_values($object_id, 'socialdb_property_'.$property->term_id, get_post_meta($object_id, 'socialdb_property_'.$property->term_id),'item');
+            $class->removeValue($object_id,$property->term_id,0,$type,0,$relationship_id->ID);
+            //$metas = get_post_meta($object_id, 'socialdb_property_'.$property->term_id);//pego a propriedade
+            //if(!$metas||count($metas)==1){// se exisir ou nao exisir so um relacionamento para essa propriedade ele atualiza esse unico registro
+            //    update_post_meta($object_id, 'socialdb_property_'.$property->term_id, '',$relationship_id->ID);
+            //}else{// se nao, exclui somente ele
+             //   delete_post_meta($object_id, 'socialdb_property_'.$property->term_id, $relationship_id->ID);
+            //}
+            //$this->set_common_field_values($object_id, 'socialdb_property_'.$property->term_id, get_post_meta($object_id, 'socialdb_property_'.$property->term_id),'item');
             $this->set_approval_metas($data['event_id'], $data['socialdb_event_observation'], $automatically_verified);
             $this->update_event_state('confirmed', $data['event_id']);
             $data['msg'] = __('The event was successful','tainacan');
             $data['type'] = 'success';
             $data['title'] = 'Success';
-        }else{ // se caso qualquer um dos itens for invalido
+        }else{  // se caso qualquer um dos itens for invalido
             $data['msg'] = __('Object, Property or relationship invalid','tainacan');
             $data['type'] = 'error';
             $data['title'] = 'Error';

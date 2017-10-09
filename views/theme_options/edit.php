@@ -26,7 +26,7 @@ include_once('js/edit_js.php');
                     <form name="formYoutubeApi" id="formYoutubeApi" method="post">
                         <input type="hidden" id="operation_Youtube" name="operation" value="update_options" />
                         <label for="socialdb_youtube_api_id"><?php _e('API ID', 'tainacan'); ?></label>
-                        <input type="text"  name="socialdb_youtube_api_id" id="socialdb_youtube_api_id" placeholder="<?php _e("Type here", 'tainacan'); ?>" class="form-control" value="<?php echo $socialdb_youtube_api_id; ?>"/></br>
+                        <input type="text"  name="socialdb_youtube_api_id" id="socialdb_youtube_api_id" placeholder="<?php _e("Type here", 'tainacan'); ?>" class="form-control" value="<?php echo $socialdb_youtube_api_id; ?>"/><br/>
                         <?php echo ViewHelper::render_default_submit_button(); ?>
                     </form>
                 </div>
@@ -38,7 +38,7 @@ include_once('js/edit_js.php');
                     <form name="formFlickrApi" id="formFlickrApi" method="post">
                         <input type="hidden" id="operation_Flickr" name="operation" value="update_options" />
                         <label for="socialdb_flickr_api_id"><?php _e('API ID', 'tainacan'); ?></label>
-                        <input type="text"  name="socialdb_flickr_api_id" id="socialdb_flickr_api_id" placeholder="<?php _e("Type here", 'tainacan'); ?>" class="form-control" value="<?php echo $socialdb_flickr_api_id; ?>"/></br>
+                        <input type="text"  name="socialdb_flickr_api_id" id="socialdb_flickr_api_id" placeholder="<?php _e("Type here", 'tainacan'); ?>" class="form-control" value="<?php echo $socialdb_flickr_api_id; ?>"/><br/>
                         <?php echo ViewHelper::render_default_submit_button(); ?>
                     </form>
                 </div>
@@ -51,10 +51,10 @@ include_once('js/edit_js.php');
                     <form name="formFacebookApi" id="formFacebookApi" method="post">
                         <input type="hidden" id="operation_Facebook" name="operation" value="update_options" />
                         <label for="socialdb_fb_api_id"><?php _e('API ID', 'tainacan'); ?></label>
-                        <input type="text"  name="socialdb_fb_api_id" id="socialdb_fb_api_id" placeholder="<?php _e("Type here", 'tainacan'); ?>" class="form-control" value="<?php echo $socialdb_fb_api_id; ?>"/></br>
+                        <input type="text"  name="socialdb_fb_api_id" id="socialdb_fb_api_id" placeholder="<?php _e("Type here", 'tainacan'); ?>" class="form-control" value="<?php echo $socialdb_fb_api_id; ?>"/><br/>
 
                         <label for="socialdb_fb_api_secret"><?php _e('API Secret', 'tainacan'); ?></label>
-                        <input type="text"  name="socialdb_fb_api_secret" id="socialdb_fb_api_secret" placeholder="<?php _e("Type here", 'tainacan'); ?>" class="form-control" value="<?php echo $socialdb_fb_api_secret; ?>"/></br>
+                        <input type="text"  name="socialdb_fb_api_secret" id="socialdb_fb_api_secret" placeholder="<?php _e("Type here", 'tainacan'); ?>" class="form-control" value="<?php echo $socialdb_fb_api_secret; ?>"/><br/>
 
                         <?php echo ViewHelper::render_default_submit_button(); ?>
                     </form>
@@ -68,10 +68,10 @@ include_once('js/edit_js.php');
                     <form name="formInstagramApi" id="formInstagramApi" method="post">
                         <input type="hidden" id="operation_Instagram" name="operation" value="update_options" />
                         <label for="socialdb_instagram_api_id"><?php _e('API ID', 'tainacan'); ?></label>
-                        <input type="text"  name="socialdb_instagram_api_id" id="socialdb_instagram_api_id" placeholder="<?php _e("Type here", 'tainacan'); ?>" class="form-control" value="<?php echo $socialdb_instagram_api_id; ?>"/></br>
+                        <input type="text"  name="socialdb_instagram_api_id" id="socialdb_instagram_api_id" placeholder="<?php _e("Type here", 'tainacan'); ?>" class="form-control" value="<?php echo $socialdb_instagram_api_id; ?>"/><br/>
 
                         <label for="socialdb_instagram_api_secret"><?php _e('API Secret', 'tainacan'); ?></label>
-                        <input type="text"  name="socialdb_instagram_api_secret" id="socialdb_instagram_api_secret" placeholder="<?php _e("Type here", 'tainacan'); ?>" class="form-control" value="<?php echo $socialdb_instagram_api_secret; ?>"/></br>
+                        <input type="text"  name="socialdb_instagram_api_secret" id="socialdb_instagram_api_secret" placeholder="<?php _e("Type here", 'tainacan'); ?>" class="form-control" value="<?php echo $socialdb_instagram_api_secret; ?>"/><br/>
 
                         <?php echo ViewHelper::render_default_submit_button(); ?>
                     </form>
@@ -85,10 +85,10 @@ include_once('js/edit_js.php');
                     <form name="formVimeoApi" id="formVimeoApi" method="post">
                         <input type="hidden" id="operation_Vimeo" name="operation" value="update_options" />
                         <label for="socialdb_vimeo_client_id"><?php _e('API Client ID', 'tainacan'); ?></label>
-                        <input type="text"  name="socialdb_vimeo_client_id" id="socialdb_vimeo_client_id" placeholder="<?php _e("Type here", 'tainacan'); ?>" class="form-control" value="<?php echo $socialdb_vimeo_client_id; ?>"/></br>
+                        <input type="text"  name="socialdb_vimeo_client_id" id="socialdb_vimeo_client_id" placeholder="<?php _e("Type here", 'tainacan'); ?>" class="form-control" value="<?php echo $socialdb_vimeo_client_id; ?>"/><br/>
 
                         <label for="socialdb_vimeo_api_secret"><?php _e('API Client Secrets', 'tainacan'); ?></label>
-                        <input type="text"  name="socialdb_vimeo_api_secret" id="socialdb_vimeo_api_secret" placeholder="<?php _e("Type here", 'tainacan'); ?>" class="form-control" value="<?php echo $socialdb_vimeo_api_secret; ?>"/></br>
+                        <input type="text"  name="socialdb_vimeo_api_secret" id="socialdb_vimeo_api_secret" placeholder="<?php _e("Type here", 'tainacan'); ?>" class="form-control" value="<?php echo $socialdb_vimeo_api_secret; ?>"/><br/>
 
                         <?php echo ViewHelper::render_default_submit_button(); ?>
                     </form>
@@ -101,7 +101,7 @@ include_once('js/edit_js.php');
                     <form name="formEmbedApi" id="formEmbedApi" method="post">
                         <input type="hidden" id="operation_Embed" name="operation" value="update_options" />
                         <label for="socialdb_embed_api_id"><?php _e('Embed Ly API ID', 'tainacan'); ?></label>
-                        <input type="text"  name="socialdb_embed_api_id" id="socialdb_embed_api_id"  placeholder="<?php _e("Type the Embed Ly API ID", 'tainacan'); ?>" class="form-control" value="<?php echo $socialdb_embed_api_id; ?>"/></br>
+                        <input type="text"  name="socialdb_embed_api_id" id="socialdb_embed_api_id"  placeholder="<?php _e("Type the Embed Ly API ID", 'tainacan'); ?>" class="form-control" value="<?php echo $socialdb_embed_api_id; ?>"/><br/>
                         <?php echo ViewHelper::render_default_submit_button(); ?>
                     </form>
                 </div>
@@ -120,10 +120,10 @@ include_once('js/edit_js.php');
                         <input type="text"  name="socialdb_google_secret_key" id="socialdb_google_secret_key"  placeholder="<?php _e("Type here"); ?>" class="form-control" value="<?php echo $socialdb_google_secret_key; ?>"/><br>
 
                         <label for="socialdb_google_redirect_uri"><?php _e('Redirect URI', 'tainacan'); ?></label>
-                        <input type="text"  name="socialdb_google_redirect_uri" id="socialdb_google_redirect_uri" placeholder="<?php _e("Type here"); ?>" class="form-control" value="<?php echo site_url() . "/wp-content/themes/theme_socialdb/controllers/user/user_controller.php?operation=return_login_gplus"; ?>" disabled="disabled"/></br>
+                        <input type="text"  name="socialdb_google_redirect_uri" id="socialdb_google_redirect_uri" placeholder="<?php _e("Type here"); ?>" class="form-control" value="<?php echo site_url() . "/wp-content/themes/theme_socialdb/controllers/user/user_controller.php?operation=return_login_gplus"; ?>" disabled="disabled"/><br/>
 
                         <label for="socialdb_google_api_key"><?php _e('API Key', 'tainacan'); ?></label>
-                        <input type="text"  name="socialdb_google_api_key" id="socialdb_google_api_key"  placeholder="<?php _e("Type here", 'tainacan'); ?>" class="form-control" value="<?php echo $socialdb_google_api_key; ?>"/></br>
+                        <input type="text"  name="socialdb_google_api_key" id="socialdb_google_api_key"  placeholder="<?php _e("Type here", 'tainacan'); ?>" class="form-control" value="<?php echo $socialdb_google_api_key; ?>"/><br/>
                         
                         <?php echo ViewHelper::render_default_submit_button(); ?>
                     </form>
@@ -137,10 +137,10 @@ include_once('js/edit_js.php');
                     <form name="formEuropeanaApi" id="formEuropeanaApi" method="post">
                         <input type="hidden" id="operation_Europeana" name="operation" value="update_options" />
                         <label for="socialdb_eur_api_key"><?php _e('API KEY', 'tainacan'); ?></label>
-                        <input type="text"  name="socialdb_eur_api_key" id="socialdb_eur_api_key" placeholder="<?php _e("Type here", 'tainacan'); ?>" class="form-control" value="<?php echo $socialdb_eur_api_key; ?>"/></br>
+                        <input type="text"  name="socialdb_eur_api_key" id="socialdb_eur_api_key" placeholder="<?php _e("Type here", 'tainacan'); ?>" class="form-control" value="<?php echo $socialdb_eur_api_key; ?>"/><br/>
 
                         <label for="socialdb_eur_private_key"><?php _e('Private Key', 'tainacan'); ?></label>
-                        <input type="text"  name="socialdb_eur_private_key" id="socialdb_eur_private_key" placeholder="<?php _e("Type here", 'tainacan'); ?>" class="form-control" value="<?php echo $socialdb_eur_private_key; ?>"/></br>
+                        <input type="text"  name="socialdb_eur_private_key" id="socialdb_eur_private_key" placeholder="<?php _e("Type here", 'tainacan'); ?>" class="form-control" value="<?php echo $socialdb_eur_private_key; ?>"/><br/>
 
                         <?php echo ViewHelper::render_default_submit_button(); ?>
                     </form>

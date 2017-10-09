@@ -1,29 +1,25 @@
 <?php
-// Report all PHP errors
 /** Acoes iniciais ** */
 //define('ALTERNATE_WP_CRON', true);
-// wp_register_script('jquery.min', get_template_directory_uri() . '/libraries/js/jquery.min.js', array('jquery'), '1.7');
-// wp_enqueue_script('jquery.min');
 add_action('init', 'wpdbfix');
 add_action('init', 'register_post_types');
 add_action('init', 'register_taxonomies');
-//load_theme_textdomain("tainacan", dirname(__FILE__) . "/languages");
 include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 include_once( dirname(__FILE__) . "/config/config.php" );
 require_once (dirname(__FILE__) . '/libraries/php/PDFParser/vendor/autoload.php');
 require_once (dirname(__FILE__) . '/libraries/php/OfficeToPlainText/OfficeDocumentToPlainText.php');
 require_once('wp_bootstrap_navwalker.php');
 include_once("models/log/log_model.php");
-include_once('views/widgets/widget_contact.php');
-include_once('views/widgets/widget_social_media.php');
-include_once('views/widgets/widget_site_map.php');
+$tainacan_widgets = ["contact", "social_media", "site_map", "teaser", "news", "collections", "spot"];
+foreach ($tainacan_widgets as $wg)
+    include_once("views/widgets/widget_$wg.php");
 
 show_admin_bar(false);
+add_theme_support( 'post-thumbnails' );
 
 /*
   AUTO LOAD DE CLASSES
  */
-
 function AutoLoad() {
     spl_autoload_register("MyAutoLoad");
 }
@@ -36,12 +32,11 @@ function MyAutoLoad($Class) {
         $ArrClass = $Matches[0];
         $Folder = strtolower(end($ArrClass));
         $File = strtolower(implode('_', $ArrClass));
-
         $iDir = null;
 
         if ($Folder == 'api'):
             if (!$iDir && file_exists(__DIR__ . '/' . $Folder . '/' . $File . '.php') && !is_dir(__DIR__ . '/' . $Folder . '/' . $File . '.php')):
-                include_once (__DIR__ . '/' . $Folder . '/' . $File . '.php');
+                include_once (__DIR__ . '/' . $Folder . '/' .    $File . '.php');
                 $iDir = true;
             endif;
         else:
@@ -151,14 +146,14 @@ function activate_widgets() {
     $contact_content = get_option('widget_contact');
 
     $site_map_content[$counter] = array(
-        'title' => __('Mapa do site'), 'handbook' => '',
+        'title' => _t('Site map'), 'handbook' => '',
         'option1_title' => '', 'option1_url' => '', 'option1_new_page' => '',
         'option2_title' => '', 'option2_url' => '', 'option2_new_page' => '',
         'option3_title' => '', 'option3_url' => '', 'option3_new_page' => '',
         'option4_title' => '', 'option4_url' => '', 'option4_new_page' => '',
     );
     $social_media_content[$counter] = array(
-        'title' => __('Redes sociais'), 'facebook_url' => '',
+        'title' => _t('Social Media'), 'facebook_url' => '',
         'youtube_url' => '', 'twitter_url' => '',
         'googleplus_url' => '', 'github_url' => ''
     );
@@ -279,7 +274,6 @@ function prepareRepoStatSQL($_TABLE_NAME_, $_CHARSET_COLLATE_) {
 /*
  * Quick touchup to wpdb
  */
-
 function wpdbfix() {
     global $wpdb;
     if (!isset($wpdb->termmeta)) {
@@ -382,9 +376,6 @@ $conditional_scripts = array(
     'html5shiv-printshiv' => '//cdn.jsdelivr.net/html5shiv/3.7.2/html5shiv-printshiv.js',
     'respond' => '//cdn.jsdelivr.net/respond/1.4.2/respond.min.js'
 );
-foreach ($conditional_scripts as $handle => $src) {
-    wp_enqueue_script($handle, $src, array(), '', false);
-}
 add_filter('script_loader_tag', function( $tag, $handle ) use ( $conditional_scripts ) {
     if (array_key_exists($handle, $conditional_scripts)) {
         $tag = "<!--[if lt IE 9]>$tag<![endif]-->";
@@ -450,6 +441,9 @@ function socialdb_catch_uri() {
     } else if (strpos($actual_link, '.rdf') !== false) {
         require_once 'controllers/export/rdf_controller.php';
         exit();
+    } else if ( get_query_var('add') || get_query_var('edit') ) {
+        require_once dirname(__FILE__) . '/partials/item/add.php';
+        exit();
     }
 }
 
@@ -485,65 +479,57 @@ function custom_rewrite_tag() {
     add_rewrite_tag('%categories%', '([^&]+)');
     add_rewrite_tag('%edit-item%', '([^&]+)');
     add_rewrite_tag('%add-item%', '([^&]+)');
+    add_rewrite_tag('%add%', '([^&]+)');
+    add_rewrite_tag('%edit%', '([^&]+)');
 }
 
 add_action('init', 'custom_rewrite_tag', 10, 0);
 
 function custom_rewrite_basic() {
     $collection = get_post(get_option('collection_root_id'));
-
+    $collection_base = ( get_option('collection_base_url_id') ) ? get_option('collection_base_url_id') : 'colecao';
 
     add_rewrite_rule('^feed_collection/([^/]*)', 'index.php?collection_name=$matches[1]', 'top');
     add_rewrite_rule('^oai', 'index.php?oaipmh=true', 'top');
     add_rewrite_rule('^' . __('advanced-search', 'tainacan'), 'index.php?collection=' . $collection->post_name . '&advancedSearch=true', 'top');
-    //paginas de admin da colecao
-    add_rewrite_rule('^([^/]*)/admin/' . __('metadata', 'tainacan'), 'index.php?collection=$matches[1]&metadata=true', 'top');
-    add_rewrite_rule('^([^/]*)/admin/' . __('layout', 'tainacan'), 'index.php?collection=$matches[1]&layout=true', 'top');
-    add_rewrite_rule('^([^/]*)/admin/' . __('events', 'tainacan'), 'index.php?collection=$matches[1]&events=true', 'top');
-    add_rewrite_rule('^([^/]*)/admin/' . __('configuration', 'tainacan'), 'index.php?collection=$matches[1]&configuration=true', 'top');
-    add_rewrite_rule('^([^/]*)/admin/' . __('tags', 'tainacan'), 'index.php?collection=$matches[1]&tags=true', 'top');
-    add_rewrite_rule('^([^/]*)/admin/' . __('social', 'tainacan'), 'index.php?collection=$matches[1]&social=true', 'top');
-    add_rewrite_rule('^([^/]*)/admin/' . __('licenses', 'tainacan'), 'index.php?collection=$matches[1]&licenses=true', 'top');
-    add_rewrite_rule('^([^/]*)/admin/' . __('import', 'tainacan'), 'index.php?collection=$matches[1]&import=true', 'top');
-    add_rewrite_rule('^([^/]*)/admin/' . __('export', 'tainacan'), 'index.php?collection=$matches[1]&export=true', 'top');
-    add_rewrite_rule('^([^/]*)/admin/' . __('statistics', 'tainacan'), 'index.php?collection=$matches[1]&statistics=true', 'top');
 
-    //paginas do repositorio
-    add_rewrite_rule('^admin/' . __('metadata', 'tainacan'), 'index.php?collection=' . $collection->post_name . '&metadata=true', 'top');
-    add_rewrite_rule('^admin/' . __('events', 'tainacan'), 'index.php?collection=' . $collection->post_name . '&events=true', 'top');
-    add_rewrite_rule('^admin/' . __('configuration', 'tainacan'), 'index.php?collection=' . $collection->post_name . '&configuration=true', 'top');
-    add_rewrite_rule('^admin/' . __('social', 'tainacan'), 'index.php?collection=' . $collection->post_name . '&social=true', 'top');
-    add_rewrite_rule('^admin/' . __('tools', 'tainacan'), 'index.php?collection=' . $collection->post_name . '&tools=true', 'top');
-    add_rewrite_rule('^admin/' . __('licenses', 'tainacan'), 'index.php?collection=' . $collection->post_name . '&licenses=true', 'top');
-    add_rewrite_rule('^admin/' . __('welcome-email', 'tainacan'), 'index.php?collection=' . $collection->post_name . '&email=true', 'top');
-    add_rewrite_rule('^admin/' . __('import', 'tainacan'), 'index.php?collection=' . $collection->post_name . '&import=true', 'top');
-    add_rewrite_rule('^admin/' . __('export', 'tainacan'), 'index.php?collection=' . $collection->post_name . '&export=true', 'top');
-    add_rewrite_rule('^admin/' . __('statistics', 'tainacan'), 'index.php?collection=' . $collection->post_name . '&statistics=true', 'top');
-    add_rewrite_rule('^admin/' . __('categories', 'tainacan'), 'index.php?collection=' . $collection->post_name . '&categories=true', 'top');
+    // Paginas de admin da colecao
+    add_rewrite_rule('^([^/]*)/admin/'. __('metadata', 'tainacan'), 'index.php?collection=$matches[1]&metadata=true', 'top');
+    add_rewrite_rule('^([^/]*)/admin/'. __('layout', 'tainacan'), 'index.php?collection=$matches[1]&layout=true', 'top');
+    add_rewrite_rule('^([^/]*)/admin/'. __('events', 'tainacan'), 'index.php?collection=$matches[1]&events=true', 'top');
+    add_rewrite_rule('^([^/]*)/admin/'. __('configuration', 'tainacan'), 'index.php?collection=$matches[1]&configuration=true', 'top');
+    add_rewrite_rule('^([^/]*)/admin/'. __('tags', 'tainacan'), 'index.php?collection=$matches[1]&tags=true', 'top');
+    add_rewrite_rule('^([^/]*)/admin/'. __('social', 'tainacan'), 'index.php?collection=$matches[1]&social=true', 'top');
+    add_rewrite_rule('^([^/]*)/admin/'. __('licenses', 'tainacan'), 'index.php?collection=$matches[1]&licenses=true', 'top');
+    add_rewrite_rule('^([^/]*)/admin/'. __('import', 'tainacan'), 'index.php?collection=$matches[1]&import=true', 'top');
+    add_rewrite_rule('^([^/]*)/admin/'. __('export', 'tainacan'), 'index.php?collection=$matches[1]&export=true', 'top');
+    add_rewrite_rule('^([^/]*)/admin/'. __('statistics', 'tainacan'), 'index.php?collection=$matches[1]&statistics=true', 'top');
+
+    /*  Páginas do Repositorio
+        add_rewrite_rule('^admin/'.__('metadata','tainacan'), 'index.php?collection='.$collection->post_name.'&metadata=true', 'top');
+        add_rewrite_rule('^admin/'.__('events','tainacan'), 'index.php?collection='.$collection->post_name.'&events=true', 'top');
+        add_rewrite_rule('^admin/'.__('configuration','tainacan'), 'index.php?collection='.$collection->post_name.'&configuration=true', 'top');
+        add_rewrite_rule('^admin/'.__('social','tainacan'), 'index.php?collection='.$collection->post_name.'&social=true', 'top');
+        add_rewrite_rule('^admin/'.__('tools','tainacan'), 'index.php?collection='.$collection->post_name.'&tools=true', 'top');
+        add_rewrite_rule('^admin/'.__('licenses','tainacan'), 'index.php?collection='.$collection->post_name.'&licenses=true', 'top');
+        add_rewrite_rule('^admin/'.__('welcome-email','tainacan'), 'index.php?collection='.$collection->post_name.'&email=true', 'top');
+        add_rewrite_rule('^admin/'.__('import','tainacan'), 'index.php?collection='.$collection->post_name.'&import=true', 'top');
+        add_rewrite_rule('^admin/'.__('export','tainacan'), 'index.php?collection='.$collection->post_name.'&export=true', 'top');
+        add_rewrite_rule('^admin/'.__('statistics','tainacan'), 'index.php?collection='.$collection->post_name.'&statistics=true', 'top');
+        add_rewrite_rule('^admin/'.__('categories','tainacan'), 'index.php?collection='.$collection->post_name.'&categories=true', 'top');
+    */
+
     //login
     add_rewrite_rule('^log-in', 'index.php?log-in=true', 'top');
-    add_rewrite_rule('^' . __('signin', 'tainacan'), 'index.php?log-in=true', 'top');
-    add_rewrite_rule('^' . __('signin', 'tainacan'), 'index.php?log-in=true', 'top');
+    add_rewrite_rule('^'.__('signin','tainacan'), 'index.php?log-in=true', 'top');
 
-    add_rewrite_rule('^([^/]*)/([^/]*)/editar', 'index.php?collection=$matches[1]&item=$matches[2]&edit-item=true', 'top');
-    add_rewrite_rule('^([^/]*)/criar-item', 'index.php?collection=$matches[1]&add-item=true', 'top');
-    add_rewrite_rule('^([^/]*)/([^/]*)', 'index.php?collection=$matches[1]&item=$matches[2]', 'top');
-    //flush_rewrite_rules();
+    /* add_rewrite_rule('^([^/]*)/([^/]*)/editar', 'index.php?collection=$matches[1]&item=$matches[2]&edit-item=true', 'top');
+    add_rewrite_rule('^colecao/([^/]*)/criar-item', 'index.php?collection=$matches[1]&add-item=true', 'top'); flush_rewrite_rules(); */
+
+    add_rewrite_rule("^$collection_base/([^/]*)/add", 'index.php?collection=$matches[1]&add=true', 'top');
+    add_rewrite_rule('^item/([^/]*)/edit', 'index.php?object=$matches[1]&edit=true', 'top');
 }
-
 add_action('init', 'custom_rewrite_basic', 10, 0);
-
-/**
- * Mostra a barra de admin padrão do wordpress apenas para usuarios com permissao de administrador
- * * */
-if (!current_user_can('manage_options')) {
-    show_admin_bar(false);
-}
-
-
-if (current_user_can('manage_options')) {
-    
-}
 
 /**
  * Função responsavel por permitir zip
@@ -642,17 +628,13 @@ function tainacan_comments($comment, $args, $depth) {
                         $can_delete = verify_allowed_action($global_collection_id, 'socialdb_collection_permission_delete_comment');
                         $can_edit = verify_allowed_action($global_collection_id, 'socialdb_collection_permission_edit_comment');
 
-                        if (!$collection_moderator && !$comment_autor )
-                        {
-                            ?>
+                        if (!$collection_moderator && !$comment_autor ) { ?>
                             <div class="col-md-1 no-padding comment-item">
                                 <a onclick="showModalReportAbuseComment('<?php comment_ID(); ?>');"><span class="glyphicon glyphicon-bullhorn"></span>&nbsp;<?php _e("Report Abuse", 'tainacan'); ?></a>
                             </div>
                             <?php
-                        }else
-                        {
-                            if($can_edit || $collection_moderator)
-                            {
+                        } else {
+                            if($can_edit || $collection_moderator) {
                                 ?>
                                 <div class="col-md-1 no-padding comment-item">
                                     <a onclick="showEditComment('<?php comment_ID(); ?>');"><span class="glyphicon glyphicon-pencil"></span>&nbsp;<?php _e("Edit", 'tainacan'); ?></a>&nbsp;
@@ -660,9 +642,7 @@ function tainacan_comments($comment, $args, $depth) {
                                 <?php
                             }
 
-                            if($can_delete || $collection_moderator)
-                            {
-                                ?>
+                            if($can_delete || $collection_moderator) { ?>
                                 <div class="col-md-1 no-padding comment-item">
                                     <a onclick="showAlertDeleteComment('<?php comment_ID(); ?>', '<?php _e('Attention!') ?>', '<?php _e('Delete this comment?', 'tainacan') ?>', '<?php echo mktime(); ?>');">
                                         <span class="glyphicon glyphicon-remove"></span>&nbsp;<?php _e("Delete", 'tainacan'); ?>
@@ -671,7 +651,6 @@ function tainacan_comments($comment, $args, $depth) {
                                 <?php
                             }
                         }
-
                     ?>
 
                     </div>
@@ -843,6 +822,23 @@ function socialdb_validate_settings($input) {
     return $newinput;
 }
 
+function add_custom_caps() {
+    // gets the subscriber role
+    $role = get_role( 'subscriber' );
+
+    // This only works, because it accesses the class instance.
+    // would allow the subscriber to edit others' posts for current theme only
+    $role->add_cap( 'read' );;
+    $role->add_cap( 'read_private_post' );
+    $role->add_cap( 'edit_posts' );
+    $role->add_cap( 'edit_others_posts' );
+    $role->add_cap( 'edit_published_posts' );
+    $role->add_cap( 'publish_posts' );
+    $role->add_cap( 'delete_others_posts' );
+    $role->add_cap( 'delete_private_posts' );
+    $role->add_cap( 'delete_published_posts' );
+}
+
 //*****************************************************************************/
 //**************************************** POST STATUS ************************/
 
@@ -913,11 +909,15 @@ add_action('init', 'create_folder_tainacan_upload');
 
 function register_post_types() {
     /* Detalhes do post type collection */
+    $set_base_uri = 'colecao';
+    if( get_option('collection_base_url_id') )
+        $set_base_uri = get_option('collection_base_url_id');
+
     $collection_args = array(
         'public' => true,
         'query_var' => 'collection',
         'rewrite' => array(
-            'slug' => 'collection',
+            'slug' => $set_base_uri,
             'with_front' => false),
         'supports' => array(
             'title',
@@ -962,7 +962,7 @@ function register_post_types() {
         'public' => true,
         'query_var' => 'object',
         'rewrite' => array(
-            'slug' => 'object',
+            'slug' => 'item',
             'with_front' => false),
         'supports' => array(
             'title',
@@ -1169,68 +1169,6 @@ function create_metas($term_id, $meta_key, $meta_value, $previous_value) {
         }
     }
     return $result;
-}
-
-/**
- * function init_nav()
- * Funcao para iniciar a navegação do JIT
- * Autor: Eduardo Humberto
- */
-function init_nav($data) {
-    switch ($data) {
-        case "regular":
-            wp_register_script('ExecuteDefault', get_template_directory_uri() . '/libraries/js/jit/executeDefault.js');
-            wp_enqueue_script('ExecuteDefault');
-            break;
-        case "hypertree":
-            wp_register_script('HypertreeJs', get_template_directory_uri() . '/libraries/js/jit/Hypertree.js');
-            wp_enqueue_script('HypertreeJs');
-
-            wp_register_style('HypertreeCss', get_template_directory_uri() . '/libraries/css/jit/Hypertree.css');
-            wp_enqueue_style('HypertreeCss');
-
-
-            wp_register_script('ExecuteHypertree', get_template_directory_uri() . '/libraries/js/jit/executeHypertree.js');
-            wp_enqueue_script('ExecuteHypertree');
-            break;
-        case "spacetree":
-            wp_register_script('SpacetreeJs', get_template_directory_uri() . '/libraries/js/jit/Spacetree.js');
-            wp_enqueue_script('SpacetreeJs');
-
-            wp_register_style('SpacetreeCss', get_template_directory_uri() . '/libraries/css/jit/Spacetree.css');
-            wp_enqueue_style('SpacetreeCss');
-
-
-            wp_register_script('ExecuteSpacetree', get_template_directory_uri() . '/libraries/js/jit/executeSpacetree.js');
-            wp_enqueue_script('ExecuteSpacetree');
-            break;
-        case "treemap":
-            wp_register_script('TreemapJs', get_template_directory_uri() . '/libraries/js/jit/Treemap.js');
-            wp_enqueue_script('TreemapJs');
-
-            wp_register_style('TreemapCss', get_template_directory_uri() . '/libraries/css/jit/Treemap.css');
-            wp_enqueue_style('TreemapCss');
-
-
-            wp_register_script('ExecuteTreemap', get_template_directory_uri() . '/libraries/js/jit/executeTreemap.js');
-            wp_enqueue_script('ExecuteTreemap');
-            break;
-        case "rgraph":
-            wp_register_script('RgraphJs', get_template_directory_uri() . '/libraries/js/jit/Rgraph.js');
-            wp_enqueue_script('RgraphJs');
-
-            wp_register_style('RgraphCss', get_template_directory_uri() . '/libraries/css/jit/Rgraph.css');
-            wp_enqueue_style('RgraphCss');
-
-
-            wp_register_script('ExecuteRgraph', get_template_directory_uri() . '/libraries/js/jit/executeRgraph.js');
-            wp_enqueue_script('ExecuteRgraph');
-            break;
-        default:
-            wp_register_script('ExecuteDefault', get_template_directory_uri() . '/libraries/js/jit/executeDefault.js');
-            wp_enqueue_script('ExecuteDefault');
-            break;
-    }
 }
 
 /**
@@ -1847,7 +1785,6 @@ if (!function_exists("theme_styles")) {
                 'slick' => '/libraries/css/slick/slick.css',
                 'slick-theme' => '/libraries/css/slick/slick-theme.css',
                 'socialdbcss' => '/libraries/css/socialdb.css',
-                'prettyphotocss' => '/libraries/js/prettyphoto/css/prettyPhoto.css',
                 'jqcloudcss' => '/libraries/css/jqcloud/jqcloud.css',
                 'toastr' => '/libraries/js/toastr/toastr.css',
                 'croppic' => '/libraries/css/croppic/croppic.css',
@@ -1855,7 +1792,9 @@ if (!function_exists("theme_styles")) {
                 'footer' => '/libraries/css/footer.css'
             ];
             $column = get_post_meta(get_the_ID(), 'socialdb_collection_submission_visualization', true);
-            if ($column && $column == 'one') {
+            $_is_edit_page = (get_query_var('edit') &&  get_query_var('edit') === 'true');
+
+            if ($column && $column == 'one' || $_is_edit_page || is_singular('socialdb_object')) {
                 $registered_css['item-page'] = '/libraries/css/item-page.css';
             } else {
                 if (wp_style_is('item-page')) {
@@ -1898,97 +1837,90 @@ if (!function_exists("theme_js")) {
         wp_register_script('jquery_min', get_template_directory_uri() . '/libraries/js/jquery.min.js', array('jquery'), '1.7.88');
         /* jquery UI */
         wp_register_script('jqueryUi', get_template_directory_uri() . '/libraries/js/jquery_ui/jquery-ui.min.js', array('jquery'), '1.2');
-        wp_register_script('bootstrap.min', get_template_directory_uri() . '/libraries/js/bootstrap.min.js', array('jquery'), '1.11');
-        /* JIT JS */
-        wp_register_script('JitJs', get_template_directory_uri() . '/libraries/js/jit/jit.js');
-        /* JIT Excanvas JS */
-        wp_register_script('JitExcanvasJs', get_template_directory_uri() . '/libraries/js/jit/extras/excanvas.js');
+        wp_register_script('bootstrap.min', get_template_directory_uri() . '/libraries/js/bootstrap.min.js', array('jquery'), '1.11', true);
 
         wp_register_script('tainacan', get_template_directory_uri() . '/libraries/js/tainacan.js', array('jquery'), '1.11');
         /* Dynatree JS */
-        wp_register_script('DynatreeJs', get_template_directory_uri() . '/libraries/js/dynatree/jquery.dynatree.full.js');
+        wp_register_script('DynatreeJs', get_template_directory_uri() . '/libraries/js/dynatree/jquery.dynatree.full.js', false, false, true);
         /* Ckeditor JS */
-        wp_register_script('ckeditorjs', get_template_directory_uri() . '/libraries/js/ckeditor/ckeditor.js');
+        wp_register_script('ckeditorjs', get_template_directory_uri() . '/libraries/js/ckeditor/ckeditor.js', false, false, true);
         /* Context Menu (Dynatree) JS */
-        wp_register_script('contextMenu', get_template_directory_uri() . '/libraries/js/contextMenu/jquery.contextMenu-custom.js');
+        wp_register_script('contextMenu', get_template_directory_uri() . '/libraries/js/contextMenu/jquery.contextMenu-custom.js', false, false, true);
         /* ColorPicker Bootstrap JS */
-        wp_register_script('ColorPicker', get_template_directory_uri() . '/libraries/js/colorpicker/js/bootstrap-colorpicker.js');
+        wp_register_script('ColorPicker', get_template_directory_uri() . '/libraries/js/colorpicker/js/bootstrap-colorpicker.js', false, false, true);
         /* SweetAlert Bootstrap JS */
-        wp_register_script('SweetAlert', get_template_directory_uri() . '/libraries/js/SweetAlert/sweet-alert.js');
-        wp_register_script('SweetAlertJS', get_template_directory_uri() . '/libraries/js/SweetAlert/functionsAlert.js');
+        wp_register_script('SweetAlert', get_template_directory_uri() . '/libraries/js/SweetAlert/sweet-alert.js', false, false,true);
+        wp_register_script('SweetAlertJS', get_template_directory_uri() . '/libraries/js/SweetAlert/functionsAlert.js', false, false,true);
 
         /* js-xls */
-        wp_register_script('js-xls', get_template_directory_uri() . '/libraries/js/js-xlsx/xls.core.min.js');
+        wp_register_script('js-xls', get_template_directory_uri() . '/libraries/js/js-xlsx/xls.core.min.js', false, false, true);
 
         /* FileSaver */
-        wp_register_script('FileSaver', get_template_directory_uri() . '/libraries/js/FileSaver/FileSaver.min.js', array('jquery', 'bootstrap.min'));
+        wp_register_script('FileSaver', get_template_directory_uri() . '/libraries/js/FileSaver/FileSaver.min.js', array('jquery', 'bootstrap.min'), false, true);
 
         /* jsPDF */
-        wp_register_script("jsPDF", get_template_directory_uri() . '/libraries/js/jspdf/jspdf.min.js', array('jquery'));
+        wp_register_script("jsPDF", get_template_directory_uri() . '/libraries/js/jspdf/jspdf.min.js', array('jquery'), false, true);
         /* jsPDF Auto Table */
-        wp_register_script("jsPDF_auto_table", get_template_directory_uri() . '/libraries/js/jspdf/jspdf.plugin.autotable.js', array('jquery'));
+        wp_register_script("jsPDF_auto_table", get_template_directory_uri() . '/libraries/js/jspdf/jspdf.plugin.autotable.js', array('jquery'), false, true);
 
         /* tableExport */
-        wp_register_script('tableExport', get_template_directory_uri() . '/libraries/js/tableExport/tableExport.min.js', array('FileSaver', 'js-xls'));
+        wp_register_script('tableExport', get_template_directory_uri() . '/libraries/js/tableExport/tableExport.min.js', array('FileSaver', 'js-xls'), false, true);
 
         /* Data Table */
-        wp_register_script('jquerydataTablesmin', get_template_directory_uri() . '/libraries/js/bootstrap_data_table/jquery.dataTables.min.js');
-        wp_register_script('data_table', get_template_directory_uri() . '/libraries/js/bootstrap_data_table/data_table.js');
+        wp_register_script('jquerydataTables', get_template_directory_uri() . '/libraries/js/bootstrap_data_table/jquery.dataTables.min.js', false, false, true);
+        wp_register_script('data_table', get_template_directory_uri() . '/libraries/js/bootstrap_data_table/data_table.js', false, false,true);
         /* Raty */
-        wp_register_script('raty', get_template_directory_uri() . '/libraries/js/raty/jquery.raty.js');
+        wp_register_script('raty', get_template_directory_uri() . '/libraries/js/raty/jquery.raty.js', false, false, true);
         /* Pagination */
-        wp_register_script('jqpagination', get_template_directory_uri() . '/libraries/js/pagination/jquery.jqpagination.js');
-        /* locdropzone */
+        wp_register_script('jqpagination', get_template_directory_uri() . '/libraries/js/pagination/jquery.jqpagination.js', false, false, true);
+        /* dropzone */
         wp_register_script('dropzone', get_template_directory_uri() . '/libraries/js/dropzone/dropzone.js');
         /* dropzone */
-        wp_register_script('bootstrap-combobox', get_template_directory_uri() . '/libraries/js/combobox/bootstrap-combobox.js');
+        wp_register_script('bootstrap-combobox', get_template_directory_uri() . '/libraries/js/combobox/bootstrap-combobox.js', false, false, true);
         /* Facebook */
-        wp_register_script('FacebookJS', 'https://connect.facebook.net/en_US/all.js');
+        wp_register_script('FacebookJS', 'https://connect.facebook.net/en_US/all.js', false, false, true);
         /* Row Sorter */
-        wp_register_script('row-sorter', get_template_directory_uri() . '/libraries/js/row_sorter/jquery.rowsorter.js');
+        wp_register_script('row-sorter', get_template_directory_uri() . '/libraries/js/row_sorter/jquery.rowsorter.js', false, false, true);
         /* Masked Input */
-        wp_register_script('maskedInput', get_template_directory_uri() . '/libraries/js/maskedinput/jquery.mask.min.js');
-        /* Lightbox */
-        //wp_register_script('lightbox', get_template_directory_uri() . '/libraries/js/lightbox/js/lightbox.min.js');
-        /* PrettyPhoto */
-        wp_register_script('prettyphoto', get_template_directory_uri() . '/libraries/js/prettyphoto/js/jquery.prettyPhoto.js');
-        /* Toastr - notificacoes na tela */
+        wp_register_script('maskedInput', get_template_directory_uri() . '/libraries/js/maskedinput/jquery.mask.min.js', false, false, true);
+
         /* jqcloud */
-        wp_register_script('jqcloud', get_template_directory_uri() . '/libraries/js/jqcloud/jqcloud.js');
+        wp_register_script('jqcloud', get_template_directory_uri() . '/libraries/js/jqcloud/jqcloud.js', false, false, true);
         /* Toastr - notificacoes na tela */
-        wp_register_script('toastrjs', get_template_directory_uri() . '/libraries/js/toastr/toastr.min.js');
-        /* PrettyPhoto */
-        wp_register_script('montage', get_template_directory_uri() . '/libraries/js/montage/jquery.montage.min.js');
+        wp_register_script('toastrjs', get_template_directory_uri() . '/libraries/js/toastr/toastr.min.js', false, false, true);
+
         /* Select2 */
-        wp_register_script("select2", get_template_directory_uri() . '/libraries/js/select2/select2.js', array('jquery'));
+        wp_register_script("select2", get_template_directory_uri() . '/libraries/js/select2/select2.js', array('jquery'), false, true);
         /* Slick - Caroulsel Gallery */
-        wp_register_script("slick", get_template_directory_uri() . '/libraries/js/slick/slick.min.js', array('jquery'));
+        wp_register_script("slick", get_template_directory_uri() . '/libraries/js/slick/slick.min.js', array('jquery'), false, true);
         /* Time Picker */
-        wp_register_script("timepicker", get_template_directory_uri() . '/libraries/js/timepicker/timepicker.js', array('jquery'));
+        wp_register_script("timepicker", get_template_directory_uri() .'/libraries/js/timepicker/timepicker.js', array('jquery'), false, true);
+
         /* Croppic */
-        wp_register_script("croppic", get_template_directory_uri() . '/libraries/js/croppic/croppic.js', array('jquery'));
+        wp_register_script("croppic", get_template_directory_uri() . '/libraries/js/croppic/croppic.js', array('jquery'), false, true);
 
         /* Google Charts Loader */
-        wp_register_script("gloader", get_template_directory_uri() . '/libraries/js/gchart/gloader.js');
-        /* Google Charts Loader */
-        wp_register_script("routes", get_template_directory_uri() . '/libraries/js/router/jquery.routes.js');
+        wp_register_script("gloader", get_template_directory_uri() . '/libraries/js/gchart/gloader.js', false, false, true);
+
+        wp_register_script("routes", get_template_directory_uri() . '/libraries/js/router/jquery.routes.js', false, false, true);
+
+        wp_register_script("html5shiv", '//cdn.jsdelivr.net/html5shiv/3.7.2/html5shiv.js', false, false, true);
+        wp_register_script("html5shiv-printshiv", '//cdn.jsdelivr.net/html5shiv/3.7.2/html5shiv-printshiv.js', false, false, true);
+        wp_register_script("respond", '//cdn.jsdelivr.net/respond/1.4.2/respond.min.js', false, false, true);
 
         /* PDF Thumbnail */
-        wp_register_script("pdf_thumbnail", get_template_directory_uri() . '/libraries/js/pdfThumb/pdfJS/build/pdf.js');
-        wp_register_script("pdf_thumbnail_worker", get_template_directory_uri() . '/libraries/js/pdfThumb/pdfJS/build/pdf.worker.js');
+        wp_register_script("pdf_thumbnail", get_template_directory_uri() . '/libraries/js/pdfThumb/pdfJS/build/pdf.js', false, false, true);
+        wp_register_script("pdf_thumbnail_worker", get_template_directory_uri() . '/libraries/js/pdfThumb/pdfJS/build/pdf.worker.js', false, false, true);
 
-        $js_files = ['jquery_min', 'jqueryUi', 'bootstrap.min', 'JitJs', 'JitExcanvasJs', 'tainacan', 'DynatreeJs', 'ckeditorjs',
-            'contextMenu', 'ColorPicker', 'SweetAlert', 'SweetAlertJS', 'js-xls', 'FileSaver', 'jsPDF', 'jsPDF_auto_table', 'tableExport', 'jquerydataTablesmin', 'data_table', 'raty',
-            'jqpagination', 'dropzone', 'croppic', 'bootstrap-combobox', 'FacebookJS', 'row-sorter', 'maskedInput',
-            'montage', 'prettyphoto', 'select2', 'slick', 'timepicker', 'jqcloud', 'toastrjs', 'gloader', 'routes', 'pdf_thumbnail', 'pdf_thumbnail_worker'];
+        $js_files = ['jquery_min', 'jqueryUi', 'bootstrap.min', 'tainacan', 'DynatreeJs', 'ckeditorjs', 'contextMenu',
+            'ColorPicker', 'SweetAlert', 'SweetAlertJS','js-xls', 'FileSaver', 'jsPDF', 'jsPDF_auto_table', 'tableExport',
+            'jquerydataTables', 'data_table', 'raty', 'jqpagination', 'dropzone', 'croppic', 'bootstrap-combobox',
+            'FacebookJS', 'row-sorter', 'maskedInput', 'select2', 'slick','timepicker', 'jqcloud', 'toastrjs',
+            'gloader','routes', 'html5shiv', 'html5shiv-printshiv', 'respond', 'pdf_thumbnail', 'pdf_thumbnail_worker'];
 
         foreach ($js_files as $js_file):
             wp_enqueue_script($js_file);
         endforeach;
-
-        if (isset($_GET["nav"])) {
-            init_nav($_GET["nav"]);
-        }
     }
 
     add_action('wp_enqueue_scripts', 'theme_js');
@@ -2703,6 +2635,7 @@ function socialdb_insert_object_csv($post_title) {
  */
 function get_item_thumbnail_default($object_id) {
     $type = get_post_meta($object_id, 'socialdb_object_dc_type', true);
+    $type = ($type == 'other') ? 'pdf'  :  $type;
     $icon = ( in_array($type, ['audio', 'video', 'pdf', 'text']) ) ? $type : "image";
     if (get_post($object_id)->post_type == 'socialdb_collection') {
         if (has_filter('alter_thumbnail_collections')) {
@@ -3213,7 +3146,7 @@ function format_item_text_source($source) {
         return '--';
     else:
         if (filter_var($source, FILTER_VALIDATE_URL) != false) {
-            return '<a class="btn btn-default" href="' . $source . '" target="_blank">' . __('Visit original page', 'tainacan') . '</a>';
+            return '<a class="btn btn-default" href="' . $source . '" target="_blank" rel="noopener">' . __('Visit original page', 'tainacan') . '</a>';
         } else {
             return $source;
         }
@@ -3241,9 +3174,7 @@ function home_header_bg($bg_id) {
     } else {
         $image_url = ( $cover_id ) ? wp_get_attachment_url($cover_id) : get_template_directory_uri() . '/libraries/images/bg-home' . rand(1, 5) . '.jpg';
     }
-
-
-    return '<header style="background-image: url(' . $image_url . ')">';
+    return 'background-image: url(' . $image_url . ');';
 }
 
 function repository_bg() {
@@ -3260,14 +3191,10 @@ function set_config_return_button($is_home) {
 }
 
 function repository_page_title() {
-    //if (wp_title('&raquo;', false)) {
-    //  return wp_title('&raquo;');
-    //} else {
-    if (get_option('blogname')) {
+    if(get_option('blogname'))
         return get_option('blogname');
-    } else {
-        return __('Tainacan', 'tainacan');
-    }
+    else
+       return _t('Tainacan');
 }
 
 function get_collection_item_href($collection_id, $item_id = 0, $viewHelper = null) {
@@ -3302,7 +3229,7 @@ function get_item_thumb_image($item_id, $size = "thumbnail") {
             $_img_id = (int) $_post_img_id[0];
             $_img_url = get_post($_img_id)->guid;
 
-            return '<img src="' . $_img_url . '" alt="" class="img-responsive" style="max-width: 100%" />';
+            return '<img src="' . $_img_url . '" alt="" class="img-responsive img-thumbnail" style="max-width: 100%" />';
         } else {
             return '<img src="' . get_item_thumbnail_default($item_id) . '" class="img-responsive" style="max-width: 100%">';
         }
@@ -3564,12 +3491,11 @@ function get_pdf_no_thumb_ids($count) {
 function save_canvas_pdf_thumbnails($canvas_images) {
     $upload_dir = wp_upload_dir();
     $upload_path = str_replace('/', DIRECTORY_SEPARATOR, $upload_dir['path']) . DIRECTORY_SEPARATOR;
-
+    
     foreach($canvas_images as $item)
     {
-
-        $post_id = get_post_ancestors($item->file_id)[0];
-        $canvas_image = $item->base64IMAGE;
+        $post_id = $item['post_id'];
+        $canvas_image = $item['img'];
         $image = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $canvas_image));
 
         $filename = 'pdf_thumb_'.$post_id.'.png';
@@ -3713,6 +3639,42 @@ function get_documents_text($ids)
     //Retorna se há arquivos pdf
     return $there_are_pdfFiles;
 }
+
+function getPageParam($param, $returnTrue = false) {
+    $positive_return = "";
+    if($returnTrue) {
+        $positive_return = true;
+    } else {
+        if(isset($_GET[$param])) {
+            $positive_return = trim($_GET[$param]);
+            if($param === "recovery_password") {
+                $positive_return = (int) base64_decode($positive_return);
+            }
+        }
+    }
+
+    return isset($_GET[$param]) ? $positive_return : '';
+}
+
+function socialMediaResponse($smIDs, $smName) {
+    if(!is_null($smIDs) && $smName === "facebook" || "instagram" === $smName) {
+        if (isset($smIDs)) {
+            if ($smIDs != ($smName .'_error')) {
+                return $smIDs;
+            } else {
+                return $smName . '_error';
+            }
+            unset($smIDs);
+        } else {
+            return 'false';
+        }
+    }
+}
+
+function getAdmin($page) {
+    echo site_url() . "/adm/$page";
+}
+
 ################# INSTANCIA OS MODULOS SE ESTIVEREM ATIVADOS#################
 instantiate_modules();
 ################################################################################
@@ -3739,6 +3701,7 @@ if (isset($_GET['activated']) && is_admin()) {
     create_anonimous_user();
     create_standart_licenses();
     update_option('socialdb_divider', 'MVOh71Y482');
+    add_custom_caps();
 }
 
 if (!defined("MANUAL_TAINACAN_URL")) {
@@ -3749,9 +3712,110 @@ if (!defined("MANUAL_TAINACAN_URL")) {
     }
 }
 
-/* * *********** API ******************* */
-//include_once 'extras/json-rest-api/plugin.php';
+/************* API ********************/
+// include_once 'extras/json-rest-api/plugin.php';
+/************* Remove o post type das colecoes ********************/
+// include_once 'extras/remove-slug-post/remove-slug-custom-post-type.php';
+
+function load_repository_configs() {
+    $request = $_SERVER['REQUEST_URI'];
+    $_site_url = parse_url(site_url());
+    $check = str_replace( $_site_url["path"], "", $request );
+
+    if (strpos($check, "/adm/") === 0 && preg_match('/\badm{1}\b/', $request) == 1) {
+        locate_template( "configs.php" , true, false );
+        die();
+    }
+}
+
+add_action('wp', 'load_repository_configs');
 include_once 'api/tainacan_api.php';
 $Api = new TainacanApi();
-/* * *********** Remove o post type das colecoes ******************* */
-include_once 'extras/remove-slug-post/remove-slug-custom-post-type.php';
+
+function tainacan_collection_uri() {
+    $_section_title = _t('Register the Collection\'s base name');
+    add_settings_section('collection_uri_section', $_section_title, 'tainacan_collection_base_uri', 'permalink' );
+    add_settings_field('collection_base_url_id', 'Base: ', 'collection_base_cb', 'permalink', 'collection_uri_section', [_t('Enter Collection base URL')]);
+}
+add_action('admin_init', 'tainacan_collection_uri');
+
+function collection_base_cb($args) {
+    $html = '<input type="text" id="collection_base_url_id" name="collection_base_url_id" value="'.get_option('collection_base_url_id') .'"/>';
+    $html .= '<label for="collection_base_url_id"> '  . $args[0] . '</label>';
+
+    echo $html;
+}
+
+function tainacan_collection_base_uri() {
+    echo 'Set above tainacan\'s collection base name';
+}
+
+function save_base_permalink_settings(){
+    if( isset($_POST['permalink_structure']) && isset( $_POST['collection_base_url_id'] ) ){
+        $base_uri = wp_unslash( $_POST['collection_base_url_id'] );
+        update_option( 'collection_base_url_id',  $base_uri );
+    }
+}
+add_action( 'admin_init', 'save_base_permalink_settings' );
+
+function tainacan_home_widgets() {
+    register_sidebar(array(
+        'name' => _t('Home Page Sections'),
+        'id' => 'part-1',
+        'description' => _t('Select widgets to show at Home Page, and order them as you wish'),
+        'before_widget' => '<section id="%1$s" class="widget %2$s">',
+        'after_widget' => '</section>',
+        'before_title' => '<h5 class="widget-title">',
+        'after_title' => '</h5>',
+    ));
+}
+add_action('widgets_init', 'tainacan_home_widgets');
+
+function tainacan_contact_widgets() {
+    register_sidebar([
+        'name' => _t('Contact Page Sections'),
+        'id' => 'contact-widgets',
+        'description' => _t('Select widgets to show at Contact Page, and order them as you wish'),
+        'before_widget' => '<section id="%1$s" class="contact-widget widget %2$s">',
+        'after_widget' => '</section>',
+        'before_title' => '<h5 class="widget-title">',
+        'after_title' => '</h5>',
+    ]);
+}
+add_action('widgets_init', 'tainacan_contact_widgets');
+/*
+Função para uso nos meta para os meios sociais.
+*/
+function facebook_meta() {
+    global $post;
+
+    if(is_single()) {
+        $content = wp_trim_words($post->post_content, 150, '[...]');
+        if($excerpt = $content) {
+            $excerpt = strip_tags($content);
+            $excerpt = str_replace("", "'", $excerpt);
+        } else {
+            $excerpt = get_bloginfo('description');
+        }
+
+        ?>
+        <meta property="og:type" content="article"/>
+        <meta property="og:title" content="<?php echo the_title(); ?>"/>
+        <meta property="og:site_name" content="<?php echo get_bloginfo(); ?>"/>
+        <meta property="og:description" content="<?php echo $excerpt; ?>"/>
+        <meta property="og:url" content="<?php echo the_permalink(); ?>"/>
+        <meta property="og:image" content="<?php echo wp_get_attachment_image_src(get_post_thumbnail_id(get_the_ID()), 'large')[0]; ?>"/>
+        <?php
+    } else {
+        return;
+    }
+}
+
+add_action('wp_head', 'facebook_meta', 5);
+
+function tainacan_contact_form($type, $message) {
+    global $response;
+
+    if($type == "success") $response = "<div class='success'>{$message}</div>";
+    else $response = "<div class='error'>{$message}</div>";
+}

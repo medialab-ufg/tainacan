@@ -89,18 +89,21 @@ ul.repository-settings, .admin-configs {
 //     margin-top: 0; // remove the gap so it doesn't close
 // }
 
-.header-navbar {
-  // padding: 5px 0 5px 0;
-  // height: 50px;
-  // position: fixed;
-  margin-bottom: 0px;
+
+.home .header-navbar {
+  position: absolute;
+  top: 0;
   width: 100%;
   z-index: 99;
-  top: 0;
+}
+
+.header-navbar {
+  // padding: 5px 0 5px 0;
+  margin-bottom: 0 !important;
 
   a.logo-tainacan {
     padding: 0;
-    margin: -10px 2% 0 0 !important;
+    margin: -7px 2% 0 0 !important;
   }
 
   .input-group-btn {
@@ -215,6 +218,13 @@ button#iframebutton {
   min-height: 40px !important;
   padding-left: 15px;
 
+
+  .dropdown-menu > .active > a,
+  .dropdown-menu > .active > a:hover,
+  .dropdown-menu > .active > a:focus {
+    background-color: transparent !important;
+  }
+
   .dropdown-submenu {
     position:relative;
     > .dropdown-menu {
@@ -234,6 +244,10 @@ button#iframebutton {
       background: #404040;
     }
 
+    &.current-menu-item, &.current-menu-parent {
+      border-top: 5px solid white;
+    }
+
     ul {
       background: $dark-gray;
       margin-top: -3px;
@@ -241,6 +255,13 @@ button#iframebutton {
       li {
         padding-top: 0 !important;
         padding-left: 0 !important;
+
+        &.current-menu-item {
+          border-top: none !important;
+          a {
+            color: wheat !important;
+          }
+        }
 
         a {
           &:hover {
@@ -405,6 +426,12 @@ a:hover{text-decoration:underline}
 #tainacan-menu {
   border-radius: 4px;
   background-color: white !important;
+
+  li {
+    a {
+      cursor: pointer;
+    }
+  }
 }
 
 .login-inner-container {

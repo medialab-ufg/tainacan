@@ -30,14 +30,14 @@ include_once('js/edit_js.php');
                     <input type="hidden" name="editLicenseId" id="editLicenseId" value="" />
 
                     <label for="add_license_name"><?php _e('License Title','tainacan'); ?></label>
-                    <input type="text"  name="add_license_name" id="add_license_name" style="width: 33.333%" placeholder="<?php _e('Type here','tainacan'); ?>" class="form-control" required/></br>
+                    <input type="text"  name="add_license_name" id="add_license_name" style="width: 33.333%" placeholder="<?php _e('Type here','tainacan'); ?>" class="form-control" required/><br/>
 
                     <label for="add_license_url"><?php _e('License URL','tainacan'); ?></label>
-                    <input type="text" name="add_license_url" id="add_license_url" style="width: 33.333%"  class="form-control" placeholder="<?php _e('Type here','tainacan'); ?>"></br>
+                    <input type="text" name="add_license_url" id="add_license_url" style="width: 33.333%"  class="form-control" placeholder="<?php _e('Type here','tainacan'); ?>"><br/>
 
                     <label for="add_license_description"><?php _e('License Description','tainacan'); ?></label>
                     <textarea rows="10" name="add_license_description" id="add_license_description"
-                              placeholder="<?php _e('Describe briefly','tainacan'); ?>" class="form-control"></textarea></br>
+                              placeholder="<?php _e('Describe briefly','tainacan'); ?>" class="form-control"></textarea><br/>
                     <br>
 
                     <input type="submit" id="addLicenseBtn" name="addLicenseBtn" class="btn btn-primary pull-right" value="<?php _e('Save','tainacan'); ?>"  />

@@ -80,10 +80,15 @@ class FormItem extends Model {
         $class = ($this->mediaHabilitate) ? 'col-md-9 no-padding':'col-md-12 no-padding';
         if($this->isMediaFocus){
             ?>
+            <style>
+                .ui-accordion .ui-accordion-header .ui-accordion-header-icon{
+                    margin-left: -12px;
+                }
+            </style>
             <div class="col-md-12 no-padding">
 
                 <div id="tab-content-metadata" class="col-md-3 tab-content no-padding" style="background: white;">
-                   <div id="tab-default"  class="tab-pane fade in active" style="background: white;margin-bottom: 15px;">
+                   <div id="tab-default"  class="tab-pane fade in active" style="background: white;margin-bottom: 15px; margin-top: 10px;">
                        <!-- data-operation 1 Means expand -->
                        <div class="expand-all-div"  onclick="openAccordeon('default')" data-operation="1">
                            <a class="expand-all-link" href="javascript:void(0)">
@@ -105,6 +110,7 @@ class FormItem extends Model {
                 </div>
                 <div class="col-md-9">
                     <?php
+
                      foreach ($this->metadatas['default'] as $property) {
                         if (in_array($property['slug'], $this->fixed_slugs)) {
                             if ($property['slug'] == 'socialdb_property_fixed_title') {
@@ -214,12 +220,23 @@ class FormItem extends Model {
             </div>
         <?php
         endif;
+        if(isset($_SESSION['operation-form']) && $_SESSION['operation-form'] === 'edit'):
+            ?>
+            <a  href="<?php echo get_the_permalink($this->collection_id) ?>"
+                    style="margin-bottom: 20px;"
+                    class="btn btn-default btn-lg pull-left"><?php _e('Back','tainacan'); ?>
+            </a>
+            <?php
+        else:
         ?>
         <button type="button"
                 onclick="backMainListOrDiscard(<?php echo $ID ?>);"
                 style="margin-bottom: 20px;"
                 class="btn btn-default btn-lg pull-left"><?php _e('Discard','tainacan'); ?>
         </button>
+        <?php
+            endif;
+        ?>
         <div id="submit_container">
             <button type="button"
                     id="submit-form-item"
@@ -248,7 +265,11 @@ class FormItem extends Model {
         //olhando na ordenacao
         if ($propertiesOrdenation && is_array($propertiesOrdenation)) {
             foreach ($propertiesOrdenation as $tab => $ordenation) {
-                $arrayIds[$tab] = array_unique(explode(',', $ordenation));
+                if(is_array($ordenation)){
+                    $arrayIds[$tab] = array_unique( $ordenation);
+                }else{
+                    $arrayIds[$tab] = array_unique(explode(',', $ordenation));
+                }
             }
         }
         //olhando no mapeamento
@@ -696,11 +717,9 @@ class FormItem extends Model {
                    <?php echo ($view_helper->terms_fixed['attachments']) ? $view_helper->terms_fixed['attachments']->name :  _e('Attachments','tainacan') ?>
                </h4>
                 <hr>
-                 <div >
+                 <div>
                      <center>
-                     <div id="dropzone_new"
-                         class="dropzone"
-                         style="margin-bottom: 15px;min-height: 150px;padding-top: 0px;">
+                     <div id="dropzone_form" class="dropzone" style="margin-bottom: 15px;min-height: 150px;padding-top: 0px;">
                                 <div class="dz-message" data-dz-message>
                                     <span style="text-align: center;vertical-align: middle;">
                                         <h3>
@@ -712,7 +731,7 @@ class FormItem extends Model {
                                     </span>
                                 </div>
                      </div>
-                         <button style="margin-bottom: 30px;" type="button" onclick="$('#dropzone_new').trigger('click')" class="btn btn-primary"><?php _e('Upload more files','tainacan') ?></button>
+                         <button style="margin-bottom: 30px;" type="button" onclick="$('#dropzone_form').trigger('click')" class="btn btn-primary"><?php _e('Upload more files','tainacan') ?></button>
                      </center>
                      <?php
                         $attachamentClass->initScriptsAttachmentContainer($view_helper->terms_fixed['attachments']->term_id, $this->itemId);
@@ -738,11 +757,15 @@ class FormItem extends Model {
     public function initScripts() {
         ?>
         <script>
-            $('input ,select').focus(function(){
+            $('input[type="text"], input[type="numeric"], input[type="date"], input[type="radio"] , select').focus(function(event){
+                console.log(event);
                 showChangesUpdate();
             });
 
-            $('.tabs').tab();
+            $(function() {
+                $('.tabs').tab();
+            });
+
             $(".multiple-items-accordion").accordion({
                 active: false,
                 collapsible: true,
@@ -799,7 +822,6 @@ class FormItem extends Model {
                     $('#tab-'+id).find(".expand-all-link").html('Retrair todos <span class="caret"></span>');
                 }
             }
-
 
             /* Verificando se o item pode ser publicado ou atualizado */
             $('#submit-form-item').click(function(){
@@ -944,24 +966,21 @@ class FormItem extends Model {
                     data: {
                         operation: 'updateItem',
                         item_id:'<?php echo $this->itemId ?>',
-                        collection_id:$('#collection_id').val()}
+                        collection_id: $('#collection_id').val()}
                 }).done(function (result) {
                     hide_modal_main();
                     var json = JSON.parse(result);
-                    if(json.ok)
-                    {
+                    if(json.ok) {
                         showAlertGeneral(json.title,json.msg,json.type);
-                        routerGo($('#slug_collection').val());
-                        showList($('#src').val());
-                    }else showAlertGeneral(json.title,json.msg,json.type);
+                        window.location = '<?php echo get_the_permalink($this->collection_id) ?>';
+                    } else {
+                        showAlertGeneral(json.title,json.msg,json.type);
+                    }
                 });
             }
 
-            /**
-             */
             function appendCategoryMetadata(categories, item_id, seletor) {
-                $(seletor)
-                     .html('<center><img width="100" heigth="100" src="<?php echo get_template_directory_uri() . '/libraries/images/catalogo_loader_725.gif' ?>"><?php _e('Loading metadata for this field','tainacan') ?></center>');
+                $(seletor).html('<center><img width="100" heigth="100" src="<?php echo get_template_directory_uri() . '/libraries/images/catalogo_loader_725.gif' ?>"><?php _e('Loading metadata for this field','tainacan') ?></center>');
                 $.ajax({
                     url: $('#src').val() + '/controllers/object/object_controller.php',
                     type: 'POST',
@@ -970,23 +989,17 @@ class FormItem extends Model {
                         operationForm:'<?php echo ($_SESSION && $_SESSION['operation-form']) ? $_SESSION['operation-form'] : 'add' ?>',
                         properties_to_avoid: '<?php echo implode(',', $this->allPropertiesIds) ?>', categories: categories,object_id:item_id ,item_id:item_id,collection_id:$('#collection_id').val()}
                 }).done(function (result) {
-                    if(result !== ''){
-                        $(seletor).css('border','1px solid #ccc');
-                        $(seletor).css('padding','5px;');
-                        $(seletor).css('margin-top','10px');
-                        $(seletor).css('height','auto');
-                        $(seletor).css('float','left');
-                        $(seletor).css('width','100%');
-                        $(seletor).css('padding-bottom','15px');
-                        $(seletor).html(result);
-                    }else{
+                    if(result !== '') {
+                        $(seletor).css({ border: '1px solid #ccc', padding: '5px', height: 'auto', float: 'left',
+                            width: '100%', margin: '10px 0 0 0', paddingBottom: '15px' }).html(result);
+                    } else {
                         $(seletor).html('');
                     }
                 });
             }
 
             Hook.register('appendCategoryMetadata',function(args){
-              var categories = args[0]
+              var categories = args[0];
               var item_id = args[1];
               var seletor = args[2];
               $(seletor)
@@ -1000,14 +1013,8 @@ class FormItem extends Model {
                       properties_to_avoid: '<?php echo implode(',', $this->allPropertiesIds) ?>', categories: categories,object_id:item_id ,item_id:item_id,collection_id:$('#collection_id').val()}
               }).done(function (result) {
                   if(result !== ''){
-                      $(seletor).css('border','1px solid #ccc');
-                      $(seletor).css('padding','5px;');
-                      $(seletor).css('margin-top','10px');
-                      $(seletor).css('height','auto');
-                      $(seletor).css('float','left');
-                      $(seletor).css('width','100%');
-                      $(seletor).css('padding-bottom','15px');
-                      $(seletor).html(result);
+                      $(seletor).css({ border: '1px solid #ccc', padding: '5px', height: 'auto', float: 'left',
+                          width: '100%', margin: '10px 0 0 0', paddingBottom: '15px' }).html(result);
                   }else{
                       $(seletor).css('border','none');
                       $(seletor).html('');
@@ -1017,27 +1024,28 @@ class FormItem extends Model {
 
             /**
             *
-
              * @param {type} val
              * @param {type} compound_id
              * @param {type} property_id
              * @param {type} index_id
              * @returns {undefined}             */
             function validateFieldsMetadataText(val,compound_id,property_id,index_id){
-                if(val == ''){
-                    $('#validation-'+compound_id+'-'+property_id+'-'+index_id).removeClass('has-success has-feedback');
-                    $('#validation-'+compound_id+'-'+property_id+'-'+index_id).addClass('has-error has-feedback');
+                if(val == '') {
+                    $('#validation-'+compound_id+'-'+property_id+'-'+index_id)
+                        .removeClass('has-success has-feedback')
+                        .addClass('has-error has-feedback')
+                        .val('false');
                     $('#validation-'+compound_id+'-'+property_id+'-'+index_id+' .glyphicon-remove').show();
                     $('#validation-'+compound_id+'-'+property_id+'-'+index_id+' .glyphicon-ok').hide();
                     $('#validation-'+compound_id+'-'+property_id+'-'+index_id+' .validate-class').val('false');
-                    $('#validation-'+compound_id+'-'+property_id+'-'+index_id).val('false');
-                }else{
-                    $('#validation-'+compound_id+'-'+property_id+'-'+index_id).removeClass('has-error has-feedback');
-                    $('#validation-'+compound_id+'-'+property_id+'-'+index_id).addClass('has-success has-feedback');
+                } else {
+                    $('#validation-'+compound_id+'-'+property_id+'-'+index_id)
+                        .removeClass('has-error has-feedback')
+                        .addClass('has-success has-feedback')
+                        .val('true');
                     $('#validation-'+compound_id+'-'+property_id+'-'+index_id+' .glyphicon-remove').hide();
                     $('#validation-'+compound_id+'-'+property_id+'-'+index_id+' .glyphicon-ok').show();
                     $('#validation-'+compound_id+'-'+property_id+'-'+index_id+' .validate-class').val('true');
-                    $('#validation-'+compound_id+'-'+property_id+'-'+index_id).val('true');
                     setTimeout(function(){
                         if( $('#validation-'+compound_id+'-'+property_id+'-'+index_id+' .form-control').val()!=''){
                             $('#validation-'+compound_id+'-'+property_id+'-'+index_id).removeClass('has-success has-feedback');
@@ -1057,19 +1065,15 @@ class FormItem extends Model {
               var property_id = args[2];
               var index_id = args[3];
               if(val == ''){
-                  $('#validation-'+compound_id+'-'+property_id+'-'+index_id).removeClass('has-success has-feedback');
-                  $('#validation-'+compound_id+'-'+property_id+'-'+index_id).addClass('has-error has-feedback');
+                  $('#validation-'+compound_id+'-'+property_id+'-'+index_id).removeClass('has-success has-feedback').addClass('has-error has-feedback').val('false');
                   $('#validation-'+compound_id+'-'+property_id+'-'+index_id+' .glyphicon-remove').show();
                   $('#validation-'+compound_id+'-'+property_id+'-'+index_id+' .glyphicon-ok').hide();
                   $('#validation-'+compound_id+'-'+property_id+'-'+index_id+' .validate-class').val('false');
-                  $('#validation-'+compound_id+'-'+property_id+'-'+index_id).val('false');
               }else{
-                  $('#validation-'+compound_id+'-'+property_id+'-'+index_id).removeClass('has-error has-feedback');
-                  $('#validation-'+compound_id+'-'+property_id+'-'+index_id).addClass('has-success has-feedback');
+                  $('#validation-'+compound_id+'-'+property_id+'-'+index_id).removeClass('has-error has-feedback').addClass('has-success has-feedback').val('true');
                   $('#validation-'+compound_id+'-'+property_id+'-'+index_id+' .glyphicon-remove').hide();
                   $('#validation-'+compound_id+'-'+property_id+'-'+index_id+' .glyphicon-ok').show();
                   $('#validation-'+compound_id+'-'+property_id+'-'+index_id+' .validate-class').val('true');
-                  $('#validation-'+compound_id+'-'+property_id+'-'+index_id).val('true');
                   setTimeout(function(){
                       if( $('#validation-'+compound_id+'-'+property_id+'-'+index_id+' .form-control').val()!=''){
                           $('#validation-'+compound_id+'-'+property_id+'-'+index_id).removeClass('has-success has-feedback');

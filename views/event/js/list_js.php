@@ -149,9 +149,18 @@
             if (elem.name) {
                 $('#event_date_create').text(elem.date);
                 $('#event_author').text(elem.author);
-                $('#event_description').text(elem.name);
+                $('#event_description').html(elem.name);
                 $('#event_operation').val(elem.operation);
                 $('#event_id').val(elem.id);
+
+                if(elem.state && elem.state === 'confirmed'){
+                    $('#event_confirmed_true').prop('checked',true);
+                    $('#event_confirmed_false').prop('checked',false);
+                }else{
+                    $('#event_confirmed_false').prop('checked',true);
+                    $('#event_confirmed_true').prop('checked',false);
+                }
+
             }
             $('.dropdown-toggle').dropdown();
             $('#modal_verify_event_not_confirmed').modal('show');

@@ -13,7 +13,7 @@
                 send_data.collection_id = _col_id;
                 show_duplicate_item(item_id);
                 var current_item = $.trim($("#object_" + item_id + " .item-display-title").text());
-                var dup_text = '<?php _t("Duplicate ", 1); ?>' + current_item + '<?php _t(" at another collection",1)?>';
+                var dup_text = '<?php _t("Duplicate "); ?>' + current_item + '<?php _t(" at another collection")?>';
                 $("#modal_duplicate_object" + item_id + " .modal-title").text( dup_text );
                 $("#modal_duplicate_object" + item_id + " br").remove();
                 $("#modal_duplicate_object" + item_id + " input[type=radio]").hide().get(1).click();
@@ -35,13 +35,13 @@
         $('.ac-create-version').on('click', function() {
             var item_id = $(this).parents().find('.open_item_actions').first().attr('id').replace('action-', '');
             var current_item = $.trim($("#object_" + item_id + " .item-display-title").text());
-            var modal_text = '<?php _t("Create new version of ", 1); ?>' + current_item;
+            var modal_text = '<?php _t("Create new version of "); ?>' + current_item;
 
             $('#modal_duplicate_object' + item_id).modal('show').find('br').remove();
             $("#modal_duplicate_object" + item_id + " .modal-title").text( modal_text );
             $("#modal_duplicate_object" + item_id + " input[type=radio]").hide().get(2).click();
             $("#modal_duplicate_object" + item_id + " label").hide();
-            $("#modal_duplicate_object" + item_id + " label.version").show().text('<?php _t("Versioning",1); ?>');
+            $("#modal_duplicate_object" + item_id + " label.version").show().text('< ?php _t("Versioning",1); ?>');
         });
 
         $('a.ac-item-versions').on('click', function() {
@@ -178,7 +178,7 @@
                     if(itm.attach) {
                         var base_top = 10; // var attch_marg_left = 20;
                         for (att in itm.attach) {
-                            /*  var attach_img = new Image(); attach_img.src = itm.attach[att].url; pressPDF.addImage(attach_img, "JPEG", 80 + attch_marg_left, 300, 80,80); attch_marg_left += 100; */
+                            //  var attach_img = new Image(); attach_img.src = itm.attach[att].url; pressPDF.addImage(attach_img, "JPEG", 80 + attch_marg_left, 300, 80,80); attch_marg_left += 100;
                             base_top += 30;
                             pressPDF.textWithLink( itm.attach[att].title , baseX*2, base_count + base_top, { url: itm.attach[att].url, target: '_blank' });
                         }
@@ -305,7 +305,7 @@
         var new_owner_name =  $("#modal_change_owner_" + item_id + " input[name='new_owner']").val();
         swal({
             title: '<?php _t("Change item owner",1); ?>',
-            text:  '<?php _t("Change ownership of ",1); ?>' + label + ' <?php _t("for",1); ?> ' + new_owner_name + '?',
+            text:  '<?php _t("Change ownership of "); ?>' + label + ' <?php _t("for"); ?> ' + new_owner_name + '?',
             type: 'warning',
             showCancelButton: true,
             closeOnConfirm: true,
@@ -328,7 +328,7 @@
             data: {operation: 'check-out', collection_id: $('#collection_id').val(), object_id: id}
         }).done(function (result) {
             wpquery_filter();
-            showAlertGeneral('<?php _e('Success!','tainacan') ?>','<?php _e('Checkout enabled!') ?>','success');
+            showAlertGeneral('<?php _e('Success!','tainacan') ?>','<?php _t('Checkout enabled!') ?>','success');
         });
     }
 
@@ -338,7 +338,7 @@
             type: 'POST',
             data: {operation: 'check-out', collection_id: $('#collection_id').val(), object_id: id,value:''}
         }).done(function (result) {
-            showAlertGeneral('<?php _e('Success!','tainacan') ?>','<?php _e('Checkout disabled!') ?>','success');
+            showAlertGeneral('<?php _e('Success!','tainacan') ?>','<?php _t('Checkout disabled!') ?>','success');
             wpquery_filter();
         });
     }
@@ -346,18 +346,18 @@
     function do_checkin(id){
         $('.dropdown-menu .dropdown-hover-show').trigger('mouseout');
         swal({
-            title: "<?php _e('Checkin') ?>",
-                text: "<?php _e('Checkin motive:') ?>",
+                title: "<?php _t('Checkin') ?>",
+                text: "<?php _t('Checkin motive:') ?>",
                 type: "input",
                 showCancelButton: true,
                 closeOnConfirm: true,
-                inputPlaceholder: "<?php _e('Type check in motive') ?>"
+                inputPlaceholder: "<?php _t('Type check in motive') ?>"
             },
             function(inputValue){
                 if (inputValue === false) return false;
 
                 if (inputValue === "") {
-                    swal.showInputError("<?php _e('You need to write something!') ?>");
+                    swal.showInputError("<?php _t('You need to write something!') ?>");
                     return false
                 }
                 show_modal_main();
@@ -368,7 +368,7 @@
                 }).done(function (result) {
                     wpquery_filter();
                     hide_modal_main();
-                    showAlertGeneral('<?php _e('Success!','tainacan') ?>','<?php _e('Checkin done!') ?>','success');
+                    showAlertGeneral('<?php _t('Success!') ?>','<?php _t('Checkin done!') ?>','success');
                     $("#form").html('');
                     $('#main_part').hide();
                     $('#display_view_main_page').hide();

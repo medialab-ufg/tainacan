@@ -1,7 +1,7 @@
 <script>
     $(function () {
         listTableAIP();
-        change_breadcrumbs_title('<?php _e('Import', 'tainacan') ?>');
+//        change_breadcrumbs_title('<?php //_e('Import', 'tainacan') ?>//');
 
         $('#validate_url_container').show('slow');
 
@@ -26,7 +26,6 @@
     var edit_icon = get_icon("edit.png");
     var delete_icon = get_icon("delete_collection_redirect.png");
 
-
     $('#formCsv').submit(function (e) {
         show_modal_main();
         $.ajax({
@@ -43,18 +42,6 @@
             } else {
                 showAlertGeneral('<?php _e('Attention', 'tainacan') ?>', '<?php _e('All objects imported succesfully!', 'tainacan') ?>', 'success');
             }
-            /*try {
-             elem = jQuery.parseJSON(result);
-             if (elem.error) {
-             showAlertGeneral('<?php _e('Error!', 'tainacan'); ?>', elem.msg, 'error');
-             }
-             }
-             catch (e)
-             {
-             $('#importForm_csv').show();
-             $('#validate_url_csv_container').hide();
-             $('#maping_container_csv').html(result);
-             }*/
         });
         e.preventDefault();
 
@@ -540,8 +527,6 @@
             s++;
         }, 1000);
     }
-
-
 
 
     function update_progressbar(imported, total) {

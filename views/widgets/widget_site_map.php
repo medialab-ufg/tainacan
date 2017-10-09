@@ -77,7 +77,7 @@ class site_map extends WP_Widget {
                 echo '</div>
                         <div style="padding-left: 0px;" class="col-md-6">
                             <li><a class="" onclick="redirectAdvancedSearch(false)" href="javascript:void(0)">'. __('Coleções e busca').'</a></li>
-                            <li><a target="_blank" href="'. $handbook .'">'. __('Manual') .'</a></li>
+                            <li><a target="_blank" href="'. $handbook .'" rel="noopener">'. __('Manual') .'</a></li>
                         ';
             if ($option3_title && $option3_url){
                 if($option3_new_page) {
@@ -108,23 +108,23 @@ class site_map extends WP_Widget {
 
     // Widget Backend
     public function form( $instance ) {
-        $title = empty($instance['title']) ? __('Mapa do site', 'wpb_widget_domain'): $instance['title'];
-        $handbook = empty($instance['handbook']) ? __('https://github.com/l3pufg/tainacan/blob/dev/extras/manual/manual_usuario_tainacan_v1.pdf?raw=true', 'wpb_widget_domain') : $instance['handbook'];
-        $option1_title = empty($instance['option1_title']) ? __('', 'wpb_widget_domain') : $instance['option1_title'];
-        $option1_url = empty($instance['option1_url']) ? __('', 'wpb_widget_domain') : $instance['option1_url'];
-        $option1_new_page = empty($instance['option1_new_page']) ? __('Open in new page.', 'wpb_widget_domain') : $instance['option1_new_page'];
+        $title = empty($instance['title']) ? __('Mapa do site', 'tainacan'): $instance['title'];
+        $handbook = empty($instance['handbook']) ? __('https://github.com/l3pufg/tainacan/blob/dev/extras/manual/manual_usuario_tainacan_v1.pdf?raw=true', 'tainacan') : $instance['handbook'];
+        $option1_title = empty($instance['option1_title']) ? __('', 'tainacan') : $instance['option1_title'];
+        $option1_url = empty($instance['option1_url']) ? __('', 'tainacan') : $instance['option1_url'];
+        $option1_new_page = empty($instance['option1_new_page']) ? __('Open in new page.', 'tainacan') : $instance['option1_new_page'];
 
-        $option2_title = empty($instance['option2_title']) ? __('', 'wpb_widget_domain') : $instance['option2_title'];
-        $option2_url = empty($instance['option2_url']) ? __('', 'wpb_widget_domain') : $instance['option2_url'];
-        $option2_new_page = empty($instance['option2_new_page']) ? __('Open in new page.', 'wpb_widget_domain') : $instance['option2_new_page'];
+        $option2_title = empty($instance['option2_title']) ? __('', 'tainacan') : $instance['option2_title'];
+        $option2_url = empty($instance['option2_url']) ? __('', 'tainacan') : $instance['option2_url'];
+        $option2_new_page = empty($instance['option2_new_page']) ? __('Open in new page.', 'tainacan') : $instance['option2_new_page'];
 
-        $option3_title = empty($instance['option3_title']) ? __('', 'wpb_widget_domain') : $instance['option3_title'];
-        $option3_url = empty($instance['option3_url']) ? __('', 'wpb_widget_domain') : $instance['option3_url'];
-        $option3_new_page = empty($instance['option3_new_page']) ? __('Open in new page.', 'wpb_widget_domain') : $instance['option3_new_page'];
+        $option3_title = empty($instance['option3_title']) ? __('', 'tainacan') : $instance['option3_title'];
+        $option3_url = empty($instance['option3_url']) ? __('', 'tainacan') : $instance['option3_url'];
+        $option3_new_page = empty($instance['option3_new_page']) ? __('Open in new page.', 'tainacan') : $instance['option3_new_page'];
 
-        $option4_title = empty($instance['option4_title']) ? __('', 'wpb_widget_domain') : $instance['option4_title'];
-        $option4_url = empty($instance['option4_url']) ? __('', 'wpb_widget_domain') : $instance['option4_url'];
-        $option4_new_page = empty($instance['option4_new_page']) ? __('Open in new page.', 'wpb_widget_domain') : $instance['option4_new_page'];
+        $option4_title = empty($instance['option4_title']) ? __('', 'tainacan') : $instance['option4_title'];
+        $option4_url = empty($instance['option4_url']) ? __('', 'tainacan') : $instance['option4_url'];
+        $option4_new_page = empty($instance['option4_new_page']) ? __('Open in new page.', 'tainacan') : $instance['option4_new_page'];
 
         // Widget admin form
         ?>

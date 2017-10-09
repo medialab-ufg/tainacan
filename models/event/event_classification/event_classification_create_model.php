@@ -24,21 +24,23 @@ class EventClassificationCreateModel extends EventModel {
     public function generate_title($data) {
         if ($data['socialdb_event_classification_type'] == 'category') {
             $category = get_term_by('id', $data['socialdb_event_classification_term_id'], 'socialdb_category_type');
-            $title = __('Add the category : ','tainacan') . $category->name;
+            $title = __('Add the category : ','tainacan') . ' <i>'.$category->name.'</i> ';
+            $title .= __('from metadata','tainacan') . ' <b>'.get_term_by('id',$data['socialdb_event_classification_property_id'],'socialdb_property_type')->name.'</b>';
         } elseif ($data['socialdb_event_classification_type'] != 'tag' && $data['socialdb_event_classification_type'] != 'category') {
             $property = get_term_by('id', $data['socialdb_event_classification_type'], 'socialdb_property_type');
             $value = get_post($data['socialdb_event_classification_term_id']);
-            $title = __('Add the classification : ','tainacan') . $value->post_title . _(' of the object property ') .' '. $property->name;
+            $title = __('Add the classification : ','tainacan') .' <i>'. $value->post_title.'</i> ' . _(' of the object property ') .' <b>'. $property->name.'</b>';
+            $title .= __('from metadata','tainacan') . ' <b>'.get_term_by('id',$data['socialdb_event_classification_property_id'],'socialdb_property_type')->name.'</b>';
         } else {
             $tags = explode(',', $data['socialdb_event_classification_term_id']);
             $category = [];
             foreach ($tags as $tag) {
                   $category[] = get_term_by('id', $tag, 'socialdb_tag_type')->name;
             }
-            $title = __('Add the tag : ','tainacan') .' '. implode(',', $category);
+            $title = __('Add the tag : ','tainacan') .' <i>'. implode(',', $category).'</i>';
         }
         $object = get_post($data['socialdb_event_classification_object_id']);
-        $title.= __(' in the object ','tainacan') .' '.$object->post_title;
+        $title.= __(' in the object ','tainacan') .' '.'<b><a target="_blank" href="'.  get_the_permalink($object->ID).'">'. $object->post_title.'</a></b>';
         return $title;
     }
 
@@ -63,6 +65,9 @@ class EventClassificationCreateModel extends EventModel {
 
            if($type == 'category')// se for categoria
            {
+               if(!isset($data['socialdb_event_classification_property_id'])){
+                   $data['socialdb_event_classification_property_id'] = $this->getPropertyCategory($data['socialdb_event_classification_term_id'],$data['socialdb_event_collection_id']);
+               }
               $data = $this->insert_event_category($object_id->ID, $data,$collection_id, $automatically_verified);
            }elseif($type == 'tag')
            {
@@ -99,12 +104,16 @@ class EventClassificationCreateModel extends EventModel {
         //print $this->getPropertyCategory( $category->term_id, $collection_id);
         if($category && $object_id)// se a categoria e objeto forem validos
         {
+            if(!isset($data['socialdb_event_classification_property_id'])){
+                $data['socialdb_event_classification_property_id'] = $this->getPropertyByCategory($data);
+            }
             $class->saveValue($object_id,
                         $data['socialdb_event_classification_property_id'],
                         0,
                         'term',
-                        rand(1, 199),
-                        $category->term_id,  rand(1, 199)
+                        0,
+                        $category->term_id,
+                        false
                         );
             /*wp_set_object_terms( $object_id, $category->term_id,'socialdb_category_type',true);
             $this->concatenate_commom_field_value( $object_id, "socialdb_propertyterm_".$this->get_category_property($category->term_id, $collection_id), $category->term_id);*/
@@ -122,6 +131,12 @@ class EventClassificationCreateModel extends EventModel {
         
        return $data;
     }
+
+    /**
+     * @param $category
+     * @param $collection_id
+     * @return mixed
+     */
     
     public function getPropertyCategory($category,$collection_id) {
         foreach ($this->getCollectionTermProperties($collection_id) as $property) {
@@ -132,6 +147,25 @@ class EventClassificationCreateModel extends EventModel {
                 }
             }
         }
+    }
+
+    public function getPropertyByCategory($data){
+        $term_id = get_post_meta($data['event_id'], 'socialdb_event_classification_term_id',true);
+        $collection_id = get_post_meta($data['event_id'], 'socialdb_event_collection_id',true);
+        $category_root_id = $this->get_category_root_of($collection_id);
+        $properties = get_term_meta($category_root_id,'socialdb_category_property_id');
+        if($properties && is_array($properties)){
+            foreach ($properties as $property) {
+                $term_root = get_term_meta($property,'socialdb_property_term_root',true);
+                if($term_root != ''){
+                    $ancestors = get_ancestors($term_id,'socialdb_category_type');
+                    if(is_array($ancestors) && in_array($term_root,$ancestors)){
+                        return $property;
+                    }
+                }
+            }
+        }
+        return false;
     }
       /**
      * function insert_event_tag($object_id,$data,$automatically_verified = false)
@@ -180,7 +214,7 @@ class EventClassificationCreateModel extends EventModel {
             $property = get_term_by('id',  get_post_meta($data['event_id'], 'socialdb_event_classification_type',true),'socialdb_category_type');
             $relationship_id = get_term_by('id',get_post_meta($data['event_id'], 'socialdb_event_classification_term_id',true),'socialdb_category_type')->term_id;
         } else {
-            $type = $this->get_property_type_hierachy($property_id);
+            $type = $this->get_property_type_hierachy($property->term_id);
             if($type=='socialdb_property_data'):
                 $relationship_id = $this->sdb_get_post_meta(get_post_meta($data['event_id'], 'socialdb_event_classification_term_id',true))->meta_value;     
             else:
@@ -189,11 +223,12 @@ class EventClassificationCreateModel extends EventModel {
         }       
                   
        if($property&&$relationship_id&&$object_id) { // faco a validacao
+            $ancestors = get_ancestors($property->term_id,'socialdb_property_type');
             $metas = get_post_meta($object_id, 'socialdb_property_'.$property->term_id);
             if($metas&&$metas[0]!=''&&is_array($metas)){
                 if(!in_array($relationship_id, $metas)):
                     $class = new ObjectSaveValuesModel();
-                    if(get_post($relationship_id)) {
+                    if(in_array(get_term_by('slug','socialdb_property_object')->term_id,$ancestors)) {
                        $type = 'object'; 
                     } else {
                         $type = 'data'; 
@@ -202,7 +237,7 @@ class EventClassificationCreateModel extends EventModel {
                         $property->term_id,
                         0,
                         $type,
-                        rand(1, 199),
+                        0,
                         $relationship_id, false
                         );  
                 else:
@@ -213,8 +248,21 @@ class EventClassificationCreateModel extends EventModel {
                     return $data;
                 endif;
             }else{
-                update_post_meta($object_id, 'socialdb_property_'.$property->term_id, $relationship_id);
-                $this->concatenate_commom_field_value_object($object_id, "socialdb_property_" . $property->term_id, $relationship_id);
+                $class = new ObjectSaveValuesModel();
+                if(in_array(get_term_by('slug','socialdb_property_object')->term_id,$ancestors)) {
+                    $type = 'object';
+                } else {
+                    $type = 'data';
+                }
+                $class->saveValue($object_id,
+                    $property->term_id,
+                    0,
+                    $type,
+                    0,
+                    $relationship_id, false
+                );
+                //update_post_meta($object_id, 'socialdb_property_'.$property->term_id, $relationship_id);
+                //$this->concatenate_commom_field_value_object($object_id, "socialdb_property_" . $property->term_id, $relationship_id);
             }
             $this->set_approval_metas($data['event_id'], $data['socialdb_event_observation'], $automatically_verified);
             $this->update_event_state('confirmed', $data['event_id']);

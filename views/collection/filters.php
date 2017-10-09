@@ -4,15 +4,15 @@
     
     //author
     if (isset($author) && $author != '') { ?>
-         <a onclick="remove_search_author()" href="#"> <span class="glyphicon glyphicon-remove white"></span> </a>
+         <a onclick="remove_search_author()" href="javascript:void(0)"> <span class="glyphicon glyphicon-remove white"></span> </a>
         <?php
         echo $author;
     }
     //keyword
     if (isset($keyword) && !is_array($keyword) && $keyword != '') { ?>
-         <a onclick="remove_search_word()" href="#"> <span class="glyphicon glyphicon-remove white"></span> </a>
+         <a onclick="remove_search_word()" href="javascript:void(0)"> <span class="glyphicon glyphicon-remove white"></span> </a>
         <?php
-        echo $keyword;
+        echo  str_replace("\\'",'',$keyword);
     }else if(isset($keyword) && is_array($keyword)){
         foreach($keyword as $key): ?>
             <a onclick="remove_search_word('<?php echo $key ?>')" href="#"> <span class="glyphicon glyphicon-remove white"></span> </a>

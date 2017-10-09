@@ -29,15 +29,15 @@ unset($_SESSION['tainacan-categories']);
         <div class="btn-group">
             <button
                 style="margin: 20px 0px 0px 20px;width: 250px;"
-                class="btn btn-primary btn-block btn-lg dropdown-toggle" 
-                data-toggle="dropdown" 
+                class="btn btn-primary btn-block btn-lg dropdown-toggle"
+                data-toggle="dropdown"
                 aria-expanded="false" aria-haspopup="true" >
-                <span style="color:white;"><?php _e('Add Filter', 'tainacan'); ?> <span style="color:white;" class="caret"></span></span> 
+                <span style="color:white;"><?php _e('Add Filter', 'tainacan'); ?> <span style="color:white;" class="caret"></span></span>
             </button>
             <ul style="margin-left: 20px;" class="dropdown-menu" id="dropdown-filters">
                 <li>
                     <!--a  data-toggle="modal" data-target="#meta-<?php echo $type ?>"-->
-                    <a onclick="add_colaboration_ranking()"  > 
+                    <a onclick="add_colaboration_ranking()"  >
                          <?php _e('Colaboration Ranking','tainacan'); ?>
                     </a>
                 </li>
@@ -47,7 +47,7 @@ unset($_SESSION['tainacan-categories']);
     </div>
 
     <div class="col-md-9 ui-widget-content metadata-actions" style="padding-right: 0;">
-        
+
         <div class="col-md-12 no-padding action-messages">
             <div id="alert_success_properties" class="alert alert-success" style="display: none; margin-top: 20px;">
                 <button type="button" class="close" onclick="hide_alert();"><span aria-hidden="true">&times;</span></button>
@@ -64,14 +64,14 @@ unset($_SESSION['tainacan-categories']);
 
         <div class="add-property-btn btn-group col-md-12">
             <button class="btn btn-primary btn-lg dropdown-toggle" data-toggle="dropdown" aria-expanded="false" aria-haspopup="true" onclick="resetAllForms()">
-                <span style="color:white;"><?php _e('Add Property', 'tainacan'); ?> <span style="color:white;" class="caret"></span></span> 
+                <span style="color:white;"><?php _e('Add Property', 'tainacan'); ?> <span style="color:white;" class="caret"></span></span>
             </button>
 
             <ul class="dropdown-menu add-property-dropdown">
                 <?php foreach( $view_helper->get_metadata_types() as $type => $label):  ?>
                     <li>
                        <!--a  data-toggle="modal" data-target="#meta-<?php echo $type ?>"-->
-                       <a onclick="$('#meta-<?php echo $type ?>').modal('show');clear_form('<?php echo $type ?>');$('#meta-<?php echo $type ?> input[type=text]').first().focus()" > 
+                       <a onclick="$('#meta-<?php echo $type ?>').modal('show');clear_form('<?php echo $type ?>');$('#meta-<?php echo $type ?> input[type=text]').first().focus()" >
                            <?php
                            if($type == 'user')
                            {
@@ -82,7 +82,7 @@ unset($_SESSION['tainacan-categories']);
                            ?>
                            <img
                                <?php if($type=='metadata_compound'): echo 'height="15" width="15"'; endif;?>
-                               src="<?php $view_helper->get_metadata_icon($type); ?>" 
+                               src="<?php $view_helper->get_metadata_icon($type); ?>"
                                alt="<?php echo $type ?>" title="<?php echo $type ?>">
 
                            <?php }?>
@@ -91,7 +91,7 @@ unset($_SESSION['tainacan-categories']);
                     </li>
                 <?php endforeach; ?>
             </ul>
-            <div class="col-md-2 right back-to-collection" style="padding: 0 2% 0 0;"> 
+            <div class="col-md-2 right back-to-collection" style="padding: 0 2% 0 0;">
                 <a class="btn btn-default pull-right white" href="<?php echo get_the_permalink($collection_id) ?>">
                 <!--button onclick="backRoute($('#slug_collection').val());" id="btn_back_collection" class="btn btn-default pull-right white"-->
                     <?php _e('Back to collection','tainacan') ?>
@@ -106,12 +106,12 @@ unset($_SESSION['tainacan-categories']);
                 <li  role="presentation" class="active my_tab" data-id="default" >
                     <a id="click-tab-default" href="#tab_default" aria-controls="tab_default" role="tab" data-toggle="tab">
                         <span ondblclick="alter_tab_title('default')" id="default-tab-title"><?php echo (!$default_tab) ? _e('Default', 'tainacan') : $default_tab ?></span>
-                        <input id="default-tab-title-input" 
+                        <input id="default-tab-title-input"
                                class="style-input"
                                onblur="on_blur_input_title('default')"
                                onkeyup="on_key_input_title('default',event)"
-                               style="display: none;" 
-                               type="text" 
+                               style="display: none;"
+                               type="text"
                                value="<?php echo (!$default_tab) ? _e('Default', 'tainacan') : $default_tab ?>">
                     </a>
                 </li>
@@ -120,8 +120,8 @@ unset($_SESSION['tainacan-categories']);
                         <span class="glyphicon glyphicon-plus"></span>
                     </a>
                 </li>
-         </ul>  
-        </div>    
+         </ul>
+        </div>
         <div id="tab-content-metadata" class="tab-content" style="background: white">
             <div id="tab_default" class="ui-widget ui-helper-clearfix col-md-12 tab-pane fade in active" style="background: white">
                 <ul id="metadata-container-default" class="gallery ui-helper-reset ui-helper-clearfix connectedSortable metadata-container">
@@ -147,9 +147,11 @@ unset($_SESSION['tainacan-categories']);
                 </div>
             </div>
         </div>
-        <button id="next_property_wizard" onclick="showLayout($('#src').val());" class="btn btn-success pull-right btn-lg" style="display:none;margin-top: 15px;margin-right: 15px;">
+        <button id="next_property_wizard"
+                onclick="showLayout($('#src').val(), true, '<?php _e('Success', 'tainacan') ?>', '<?php _e('Filters and metadata were saved successfully!', 'tainacan') ?>',);"
+                class="btn btn-success pull-right btn-lg" style="display:none;margin-top: 15px;margin-right: 15px;">
             <?php _e('Save & Next', 'tainacan'); ?>
-        </button>  
+        </button>
         <?php include_once "metadata_forms.php"; ?>
 
         <input type="hidden" id="collection_list_ranking_id" name="collection_id" value="">

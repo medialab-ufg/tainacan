@@ -1,7 +1,4 @@
 <?php
-include_once (dirname(__FILE__) . '/../../../../../wp-config.php');
-include_once (dirname(__FILE__) . '/../../../../../wp-load.php');
-include_once (dirname(__FILE__) . '/../../../../../wp-includes/wp-db.php');
 include_once (dirname(__FILE__) . '../../../models/collection/collection_model.php');
 include_once (dirname(__FILE__) . '../../../models/category/category_model.php');
 include_once (dirname(__FILE__) . '../../../models/event/event_object/event_object_create_model.php');
@@ -254,6 +251,7 @@ class ObjectFileModel extends Model {
                             $last_position = count($result['office']) - 1;
                             
                             $result['office'][$last_position]['ext'] = $ext;
+                            $result['others'][] = $obj;
                         }
                         else{
                             update_post_meta($item_id, 'socialdb_object_dc_type', 'other');  
@@ -382,6 +380,7 @@ class ObjectFileModel extends Model {
                      $result['pdf'][] = $obj;   
                 }elseif($type=='other'||$type=='others'){
                      $result['other'][] = $obj;   
+                     $result['others'][] = $obj;
                 }elseif($type=='audio'){
                      $result['audio'][] = $obj;   
                 }else{

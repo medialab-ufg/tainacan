@@ -19,6 +19,7 @@
                     currentCategory = "";
             $.each(items, function (index, item) {
                 var li;
+
                 if (item.category != currentCategory) {
                     ul.append("<li class='ui-autocomplete-category'><b>" + item.category + "</b></li>");
                     currentCategory = item.category;
@@ -121,23 +122,25 @@
             data: { collection_id: $('#collection_id').val(), operation: 'user_notification' }
         }).done(function(r) {
             var _ev_ = $.parseJSON(r);
+            $('#collectionEvents ul').html('');
             if(_ev_ && _ev_.total_evts > 0) {
                 var _item_html = "";
                 $(_ev_.evts).each(function(id, el) {
                     var events_path = '<?php _e("events", "tainacan")?>';
                     var extra_class = '';
                     if(el.is_root && el.is_root == true) {
-                        var URL = $("#site_url").val() + '/admin/'+ events_path;
+                        var URL = $("#site_url").val() + '/adm/'+ events_path;
                         extra_class = 'trigger-events';
                     } else {
                         var URL = $("#site_url").val() + '/' + el.path + '/admin/'+ events_path +'/';
                     }
 
                     var content = "<span class='evt_col'> " + el.colecao + "</span> <span class='evts_cnt'>" + el.counting + "</span>";
-                    _item_html += "<li class='col-md-12 no-padding'> <a class='evt_container evt-"+ id + ' ' + extra_class + "' href='" + URL + "'> ";
+                    _item_html += "<li class='col-md-12 no-padding'> <a  style='padding: 3px' class='evt_container evt-"+ id + ' ' + extra_class + "' href='" + URL + "'> ";
                     _item_html += content;
                     _item_html += "</a></li>";                                    
                 });
+                $('li.root-notifications ul').html('');
                 $(_item_html).appendTo('li.root-notifications ul');
                 $('li.root-notifications').removeClass('hide');
                 $('li.root-notifications .notification_events_repository').text(_ev_.total_evts);

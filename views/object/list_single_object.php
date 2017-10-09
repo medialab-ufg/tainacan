@@ -255,14 +255,14 @@ $view_helper = new ObjectHelper($collection_id);
                     </div>
                     <div class="item-share box-item-paddings box-item-right">
                         <h4 class="title-pipe single-title"> <?php _e('Sharing', 'tainacan'); ?></h4>
-                        <div class="content-redesocial-NO" style="width: 100%">
-                            <a class="fb" target="_blank" href="http://www.facebook.com/sharer/sharer.php?s=100&amp;p[url]=<?php echo get_the_permalink($collection_id) . '?item=' . $object->post_name; ?>&amp;p[images][0]=<?php echo wp_get_attachment_url(get_post_thumbnail_id($object->ID)); ?>&amp;p[title]=<?php echo htmlentities($object->post_title); ?>&amp;p[summary]=<?php echo strip_tags($object->post_content); ?>">
+                        <div class="content-redesocial-NO" style="width: 100%" >
+                            <a class="fb" rel="noopener" target="_blank" href="http://www.facebook.com/sharer/sharer.php?s=100&amp;p[url]=<?php echo get_the_permalink($collection_id) . '?item=' . $object->post_name; ?>&amp;p[images][0]=<?php echo wp_get_attachment_url(get_post_thumbnail_id($object->ID)); ?>&amp;p[title]=<?php echo htmlentities($object->post_title); ?>&amp;p[summary]=<?php echo strip_tags($object->post_content); ?>">
                                 <img src="<?php echo get_template_directory_uri() . '/libraries/images/icons/icon-facebook.png'; ?>" />
                             </a>
-                            <a class="twitter" target="_blank" href="https://twitter.com/intent/tweet?url=<?php echo get_the_permalink($collection_id) . '?item=' . $object->post_name; ?>&amp;text=<?php echo htmlentities($object->post_title); ?>&amp;via=socialdb">
+                            <a class="twitter" rel="noopener" target="_blank" href="https://twitter.com/intent/tweet?url=<?php echo get_the_permalink($collection_id) . '?item=' . $object->post_name; ?>&amp;text=<?php echo htmlentities($object->post_title); ?>&amp;via=socialdb">
                                 <img src="<?php echo get_template_directory_uri() . '/libraries/images/icons/icon-twitter.png'; ?>" />
                             </a>
-                            <a class="gplus" target="_blank" href="https://plus.google.com/share?url=<?php echo get_the_permalink($collection_id) . '?item=' . $object->post_name; ?>">
+                            <a class="gplus" rel="noopener" target="_blank" href="https://plus.google.com/share?url=<?php echo get_the_permalink($collection_id) . '?item=' . $object->post_name; ?>">
                                 <img src="<?php echo get_template_directory_uri() . '/libraries/images/icons/icon-googleplus.png'; ?>" />
                             </a>
 
@@ -270,9 +270,9 @@ $view_helper = new ObjectHelper($collection_id);
 
                                 <a href="javascript:void(0)" class="data-share dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" >
                                     <!-- <div style="font-size:1em; cursor:pointer; color: black; display: inline-block;" data-icon="&#xe00b;"></div> -->
-                                    <img src="<?php echo get_template_directory_uri() . '/libraries/images/icons/icon-share.png'; ?>" />
+                                    <img src="<?php echo get_template_directory_uri() . '/libraries/images/icons/icon-share.png'; ?>" alt="<?php _t("Share",1); ?>" />
                                 </a>
-                                <ul style=" z-index: 9999;" class="dropdown-menu submenu-hover-open" role="menu">
+                                <ul style="z-index: 9999;" class="dropdown-menu submenu-hover-open" role="menu">
                                     <li>
                                         <a target="_blank" href="<?php echo get_the_permalink($collection_id) . '?item=' . $object->post_name; ?>.rdf"  ><span class="glyphicon glyphicon-upload"></span> <?php _e('RDF', 'tainacan'); ?>&nbsp;
                                         </a>
@@ -284,7 +284,7 @@ $view_helper = new ObjectHelper($collection_id);
                                         </li>
                                     <?php endif; ?>
                                     <li>
-                                        <a onclick="showGraph('<?php echo get_the_permalink($collection_id) . '?item=' . $object->post_name; ?>.rdf')"  style="cursor: pointer;"   >
+                                        <a onclick="showGraph('<?php echo get_the_permalink($collection_id) . '?item=' . $object->post_name; ?>.rdf')">
                                             <span class="glyphicon glyphicon-upload"></span> <?php _e('Graph', 'tainacan'); ?>&nbsp;
                                         </a>
                                     </li>

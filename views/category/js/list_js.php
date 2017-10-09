@@ -32,9 +32,8 @@
             e.preventDefault();
         });
 
-<?php
-// SUBMISSAO DO FORMULARIO
-?>
+
+        // SUBMISSAO DO FORMULARIO
         $('#submit_form_category').submit(function (e) {
 
             e.preventDefault();
@@ -42,7 +41,8 @@
             verify_category_privacity(formData);// esta funcao chama a que insere o formulario de fato
             $('#category_property').html('');
         });// end submit
-<?php // Submissao do form de exclusao da categoria   ?>
+
+        // Submissao do form de exclusao da categoria
         $('#submit_delete_category').submit(function (e) {
             e.preventDefault();
             $('#modalExcluirCategoriaUnique').modal('hide');
@@ -59,9 +59,9 @@
                 $("#categories_dynatree").dynatree("getTree").reload();
                 elem = jQuery.parseJSON(result);
                 if (elem.type === 'success') {
-                    sweetAlert($("#success_title").val(), $("#success_msg").val(), "success");
+                    sweetAlert(elem.title, elem.msg, "success");
                 } else {
-                    sweetAlert($("#error_title").val(), $("#error_msg").val(), "error");
+                    sweetAlert(elem.title, elem.msg, "error");
                     if (elem.message) {
                         $("#message_category").text(elem.message);
                     }
@@ -71,7 +71,7 @@
             e.preventDefault();
         });
 
-<?php // Autocomplete dos usuarios moderadores de categoria   ?>
+        // Autocomplete dos usuarios moderadores de categoria
         $(".chosen-selected").keyup(function (event) {
             $("#chosen-selected-user").autocomplete({
                 source: src + '/controllers/user/user_controller.php?operation=list_user',
@@ -286,7 +286,8 @@
             submit_form(formData);
         }
     }
-<?php //category properties    ?>
+
+    //category properties
     function list_category_property() {
         $.ajax({
             url: $('#src').val() + '/controllers/property/property_controller.php',
@@ -569,6 +570,61 @@
     function handleChange(input) {
         if (input.value <= 0)
             input.value = '';
+    }
+
+    /**
+     * funcao que concatena um array em um input, separado por virgulas
+     * @param {int} o ID do item que sera inserido no array
+     * @param {string} O id do input que esta sendo concatenado
+     * @returns {void}     */
+    function concatenate_in_array(key, seletor) {
+        let ids = [];
+        let result;
+        if ($(seletor).val() !== '')
+        {
+            ids = $(seletor).val().split(',');
+            let index = ids.indexOf(key);
+            if (index >= 0) {
+                ids.splice(index, 1);
+                result = false;
+            } else {
+                ids.push(key);
+                result = true;
+            }
+            $(seletor).val(ids.join(','));
+        } else {
+            ids.push(key);
+            $(seletor).val(ids.join(','));
+            result = true;
+        }
+
+        return result;
+    }
+
+    function add_label_box(id, name, seletor) {
+        $(seletor).append('<span id="label-box-' + id + '" class="label label-primary">'
+            + name + ' <a style="color:white;cursor:pointer;" onclick="remove_label_box(' + id + ')">x</a></span>&nbsp;');
+    }
+
+    function remove_label_box(id, dynatree) {
+        let cont = 0;
+        if (!dynatree)
+            dynatree = "#property_category_dynatree";
+        $(dynatree).dynatree("getRoot").visit(function (node) {
+            if (node.data.key == id) {
+                cont++;
+                node.select(false);
+            }
+        });
+        if (cont === 0) {
+            let ids = $('#property_object_category_id').val().split(',');
+            let index = ids.indexOf(id.toString());
+            if (index >= 0) {
+                ids.splice(index, 1);
+                $('#property_object_category_id').val(ids.join(','));
+            }
+        }
+        $('#label-box-' + id).remove();
     }
 
     function edit_dynatree(node)

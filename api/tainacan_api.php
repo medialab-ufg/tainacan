@@ -25,6 +25,7 @@ class TainacanApi extends WP_REST_Controller {
      * Register the routes for the objects of the controller.
      */
     public function register_routes() {
+	    error_reporting(0);
         $version = self::$version;
         $namespace = self::$namespace_tainacan . self::$version;
         $base = 'route';

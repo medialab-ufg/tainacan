@@ -1,8 +1,10 @@
 
 // Type = success, warning, info or error
 function showAlertGeneral(title, msg, type) {
-    swal(title, msg, type);
-    $('.nav-tabs').tab();
+    if(title && msg) {
+        swal(title, msg, type);
+        $('.nav-tabs').tab();
+    }
 }
 
 //Alert Privacity
@@ -228,8 +230,19 @@ function delete_collection_redirect(title, text, collection_id, time, collection
                 $('#modalImportMain').modal('hide');//escondo o modal de carregamento
                 elem_first = jQuery.parseJSON(result);
                 showList($('#src').val());
-                showAlertGeneral(elem_first.title, elem_first.msg, elem_first.type);
-                window.location = elem_first.url;
+                swal({
+                    title: elem_first.title,
+                    text: elem_first.msg,
+                    type: elem_first.type,
+                    timer: 2000,
+                    showCancelButton: false,
+                    showConfirmButton: false
+                });
+
+                setTimeout(function(){
+                    window.location = elem_first.url;
+                }, 2001);
+
             });
         }
     });

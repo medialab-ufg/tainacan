@@ -10,6 +10,10 @@ body {
   //background: $collections-bg-color;
 }
 
+#collection_post {
+  margin-top: 0;
+}
+
 #configuration {
 
   .config-temp-box {
@@ -88,8 +92,8 @@ body.error404 {
     bottom: 0;
     width: 100%;
     margin-top: -10px;
-
   }
+
   .page-not-found {
     margin: 0 auto;
     text-align: center;
@@ -100,6 +104,12 @@ body.error404 {
         color: white;
       }
     }
+  }
+
+  section.logo-footer {
+    position: fixed;
+    width: 100%;
+    bottom: 0;
   }
 }
 /*
@@ -665,4 +675,103 @@ a.validate-ok {
   .crop-wrapper {
     margin-top: 10px;
   }
+}
+
+#newCollection {
+  #createCollection {
+    .modal-body {
+      padding: 0 15px 0 15px;
+    }
+  }
+}
+
+#modalImportMain {
+  .modal-content {
+    text-align: center;
+  }
+}
+
+#container-fluid-configuration {
+  background-color: #f1f2f2
+}
+
+.tainacan-page-area {
+  background: white;
+}
+
+.single-post-wrapper {
+  border-radius: 0;
+  padding: 10px;
+  margin-bottom: 20px;
+   p {
+     color: black;
+   }
+}
+
+.tainacan-content-area {
+  .tainacan-article-wrapper {
+    margin-bottom: 10px;
+
+    .post-thumbnail {
+      float: left;
+      margin-right: 15px;
+    }
+
+    .post-thumbnail, .entry-header {
+      display: inline-block;
+    }
+    .entry-header h3 {
+      margin-top: 0;
+    }
+  }
+}
+
+section.admin-configs {
+  padding-top: 20px;
+  padding-botom: 20px;
+  background: $collections-bg-color;
+  width: 100%;
+  float: left;
+  ul.dynatree-container {
+    border: 1px solid $collections-bg-color;
+  }
+}
+
+.navbar-default .navbar-nav > .open > a,
+.navbar-default .navbar-nav > .open > a:hover,
+.navbar-default .navbar-nav > .open > a:focus {
+  color: white !important;
+  background-color: #232323 !important;
+}
+
+#properties_tabs ul.metadata-container li{
+  border: 1px solid #e3e3e3 !important;
+}
+.gallery li {
+  padding: 0.4em;
+  margin: 0;
+}
+.list-compounded{
+  margin-left: 15px;
+  margin-top: 15px;
+}
+.list-compounded li{
+  cursor: pointer;
+}
+
+#loader_metadados_page {
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  font-stretch: normal;
+  font-size: 11px;
+  line-height: normal;
+  font-family: Arial;
+}
+
+.graph-iframe {
+  border:3px solid #E8E8E8;
+  background:white;
+  overflow-x:hidden;
+  overflow-y:scroll;
 }

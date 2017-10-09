@@ -285,18 +285,33 @@ class CategoryModel extends Model {
             foreach ($children as $child) {
                 $children_of_child = $this->getChildren($child->term_id);
                 if (count($children_of_child) > 0 || (!empty($children_of_child) && $children_of_child)) {// se tiver descendentes
-                    $dynatree[] = array('title' => $child->name, 'hideCheckbox' => $hide_checkbox, 'key' => $child->term_id, 'isLazy' => true, 'addClass' => $classCss);
+                    $dynatree[] = array('title' => $child->name,'select'=>$this->isSelected($child->term_id,$data,'categories'), 'hideCheckbox' => $hide_checkbox, 'key' => $child->term_id, 'isLazy' => true, 'addClass' => $classCss);
                 } else {// se nao tiver filhos
-                    $dynatree[] = array('title' => $child->name, 'hideCheckbox' => $hide_checkbox, 'key' => $child->term_id, 'addClass' => $classCss);
+                    $dynatree[] = array('title' => $child->name, 'select'=>$this->isSelected($child->term_id,$data,'categories'), 'hideCheckbox' => $hide_checkbox, 'key' => $child->term_id, 'addClass' => $classCss);
                 }
                 $counter++;
-                if ($counter == 9) {
+                if ($counter == 25) {
                     $dynatree[] = array('title' => __('See more', 'tainacan'), 'hideCheckbox' => true, 'key' => $all_data['metas']['socialdb_property_term_root'] . '_moreoptions', 'isLazy' => true, 'addClass' => 'more');
                     break;
                 }
             }
         }
         return json_encode($dynatree);
+    }
+
+    /**
+     * @param $category_id
+     * @param $array
+     * @param bool $field
+     */
+    public function isSelected($category_id,$array,$field = false){
+        if($field && isset($array[$field])){
+            $search = (is_array($array[$field])) ? $array[$field] : explode(',',$array[$field]);
+            if(in_array($category_id,$search)){
+                return true;
+            }
+        }
+        return false;
     }
 
     /* function initDynatree() */

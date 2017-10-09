@@ -23,8 +23,13 @@ class EventTagEdit extends EventModel {
      */
     public function generate_title($data) {
         $collection = get_post($data['socialdb_event_collection_id']);
-        $category = get_term_by('id',$data['socialdb_tag_term_id'],'socialdb_category_type');
-        $title = __('Edit the tag ','tainacan').'('.$category->name.')'.__(' in the collection ','tainacan').'<b>'.$collection->post_title.'</b>';
+        $new_name = $data['socialdb_event_tag_suggested_name'];
+        $category = get_term_by('id',$data['socialdb_event_tag_id'],'socialdb_tag_type');
+        $title = __('Edit the tag ','tainacan').'<br>'.
+            __('From','tainacan').' : <i>'.$category->name.'</i><br>'.
+            __('To','tainacan').' : <i>'.$new_name.'</i><br>'.
+            __(' in the collection ','tainacan').'<b>'.$collection->post_title.'</b>';
+
         return $title;
     }
 

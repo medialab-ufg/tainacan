@@ -1,6 +1,6 @@
 <?php
-    /**
-     * GIT DEPLOYMENT SCRIPT
+    /** 
+     * GIT DEPLOYMENT SCRIPT 
      *
      * Used for automatically deploying websites via GitHub
      * a
@@ -12,6 +12,7 @@
         'whoami',
         'git pull',
         'git status',
+        'git stash',
         'git submodule sync',
         'git submodule update',
         'git submodule status',

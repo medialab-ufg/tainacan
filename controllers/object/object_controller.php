@@ -23,8 +23,9 @@ class ObjectController extends Controller {
                 //classe que executa toda a logica
                 include_once dirname(__FILE__) . '../../../views/object/formItem/helper/formItem.class.php';
                 //sessao
+
                 if(!session_id()) {
-                        session_start();
+                    session_start();
                 }
                 //verificacoes para edicao ou criacao deitem
                 if(isset($data['item_id'])){
@@ -183,7 +184,7 @@ class ObjectController extends Controller {
                 if ($data['items'] && empty(!$data['items'])) {
                     //return $this->render(dirname(__FILE__) . '../../../views/object/multiple_social_network/editor_items.php', $data);
                     include_once dirname(__FILE__) . '../../../views/object/formItemMultiple/formItemMultiple.class.php';
-                    $class = new FormItemMultiple($data['collection_id'],__('Continue editting...  Insert URL', 'tainacan'),'add-social-network-beta');
+                    $class = new FormItemMultiple($data['collection_id'],__('Continue editting...', 'tainacan'),'add-social-network-beta');
                     $class->start($data['items'], $data['properties']);
                 } else {
                     return 0;
@@ -248,10 +249,12 @@ class ObjectController extends Controller {
                 $collection_id = $data['collection_id'];
                 $recover_wpquery = $object_model->get_args($data);
                 $args = $object_model->list_all($data);
+                $recover_wpquery['posts_per_page'] = $args['posts_per_page'];
+                $start = microtime(true);
                 $data['loop'] = new WP_Query($args);
+                $return['wpquerytime'] = microtime(true) - $start;
                 $data['collection_data'] = $collection_model->get_collection_data($collection_id);
                 $data["show_string"] = is_root_category($collection_id) ? __('Showing collections:', 'tainacan') : __('Showing Items:', 'tainacan');
-
                 // View mode's vars
                 $data["geo_coordinates"]["lat"] = get_post_meta($collection_id, "socialdb_collection_latitude_meta", true);
                 $data["geo_coordinates"]["long"] = get_post_meta($collection_id, "socialdb_collection_longitude_meta", true);
@@ -270,9 +273,10 @@ class ObjectController extends Controller {
                 }
                 $data['listed_by'] = $object_model->get_ordered_name($data['collection_id'], $data['ordenation_id'], $data['order_by']);
                 $data['is_moderator'] = CollectionModel::is_moderator($data['collection_id'], get_current_user_id());
-                $return['page'] = $this->render(dirname(__FILE__) . '../../../views/object/list.php', $data);
+                $return['page'] = $this->render(dirname(__FILE__) . '../../../views/object/list.php', $data ) ;
                 $return['args'] = serialize($recover_wpquery);
                 $return['preset_order'] = $recover_wpquery['order'];
+                $return['items_per_page'] = $args['posts_per_page'];
 
                 if (empty($object_model->get_collection_posts($data['collection_id']))) {
                     $return['empty_collection'] = true;
@@ -411,24 +415,24 @@ class ObjectController extends Controller {
                 return $object_model->search_term_by_parent($data['parent'],$data['term']);
             case "get_property_object_value":// retorna os valores para uma propriedade de objeto especificao
                 return $object_model->get_property_object_value($data);
-            case 'show_form_data_property':// mostra o formulario para insercao de propriedade de dados
-                $property_model = new PropertyModel();
-                $data = $property_model->list_data($data);
-                return $this->render(dirname(__FILE__) . '../../../views/object/data_property_form.php', $data);
-            case 'show_form_object_property':// mostra o formulario para insercao de propriedade de objecto
-                $property_model = new PropertyModel();
-                $data = $property_model->list_data($data);
-                return $this->render(dirname(__FILE__) . '../../../views/object/object_property_form.php', $data);
-            case 'show_edit_data_property_form':// mostra o formulario para EDICAO de propriedade de dados
-                $property_model = new PropertyModel();
-                $data['value'] = json_decode($property_model->edit_property($data));
-                $data = $property_model->list_data($data);
-                return $this->render(dirname(__FILE__) . '../../../views/object/edit_data_property_form.php', $data);
-            case 'show_edit_object_property_form':// mostra o formulario para EDICAO de propriedade de OBJETOS
-                $property_model = new PropertyModel();
-                $data['value'] = json_decode($property_model->edit_property($data));
-                $data = $property_model->list_data($data);
-                return $this->render(dirname(__FILE__) . '../../../views/object/edit_object_property_form.php', $data);
+//            case 'show_form_data_property':// mostra o formulario para insercao de propriedade de dados
+//                $property_model = new PropertyModel();
+//                $data = $property_model->list_data($data);
+//                return $this->render(dirname(__FILE__) . '../../../views/object/data_property_form.php', $data);
+//            case 'show_form_object_property':// mostra o formulario para insercao de propriedade de objecto
+//                $property_model = new PropertyModel();
+//                $data = $property_model->list_data($data);
+//                return $this->render(dirname(__FILE__) . '../../../views/object/object_property_form.php', $data);
+//            case 'show_edit_data_property_form':// mostra o formulario para EDICAO de propriedade de dados
+//                $property_model = new PropertyModel();
+//                $data['value'] = json_decode($property_model->edit_property($data));
+//                $data = $property_model->list_data($data);
+//                return $this->render(dirname(__FILE__) . '../../../views/object/edit_data_property_form.php', $data);
+//            case 'show_edit_object_property_form':// mostra o formulario para EDICAO de propriedade de OBJETOS
+//                $property_model = new PropertyModel();
+//                $data['value'] = json_decode($property_model->edit_property($data));
+//                $data = $property_model->list_data($data);
+//                return $this->render(dirname(__FILE__) . '../../../views/object/edit_object_property_form.php', $data);
             case "list_single_object":
                 $user_model = new UserModel();
                 $object_id = $data['object_id'];
@@ -1201,6 +1205,31 @@ class ObjectController extends Controller {
         }
     }
 
+    public function get_collection_by_item($object_id) {
+        $categories = wp_get_object_terms($object_id, 'socialdb_category_type');
+        foreach ($categories as $category) {
+            $result = $this->get_collection_by_category_root($category->term_id);
+            if (!empty($result)) {
+                return $result;
+            }
+        }
+    }
+
+    public function get_collection_by_category_root($category_root_id) {
+        global $wpdb;
+        $wp_posts = $wpdb->prefix . "posts";
+        $wp_postmeta = $wpdb->prefix . "postmeta";
+        $query = "SELECT p.* FROM $wp_posts p INNER JOIN $wp_postmeta pm ON p.ID = pm.post_id    
+                  WHERE pm.meta_key LIKE 'socialdb_collection_object_type' and pm.meta_value like '$category_root_id'";
+        $result = $wpdb->get_results($query);
+
+        if ($result && is_array($result) && count($result) > 0) {
+            return $result;
+        } else {
+            return array();
+        }
+    }
+
 }
 
 /*
@@ -1219,4 +1248,3 @@ if($_POST['operation_priority']){
 
 $object_controller = new ObjectController();
 echo $object_controller->operation($operation, $data);
-?>

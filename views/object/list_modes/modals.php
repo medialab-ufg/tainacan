@@ -1,7 +1,7 @@
 <?php
 $curr_id = get_the_ID();
 $curr_title = get_the_title();
-$curr_time = mktime();
+$curr_time = time();
 $root_id = get_option('collection_root_id');
 /*
  * TAINACAN: modal para compartilhar o item
@@ -19,9 +19,13 @@ $root_id = get_option('collection_root_id');
                     <div class="row">
                         <div class="col-md-6">
                             <?php echo __('Post it on: ', 'tainacan'); ?><br>
+
                             <a target="_blank" href="https://twitter.com/intent/tweet?url=<?php echo get_the_permalink($collection_id) . '?item=' . get_post(get_the_ID())->post_name; ?>&amp;text=<?php echo htmlentities(get_the_title()); ?>&amp;via=socialdb"><?php echo ViewHelper::render_icon('twitter-square', 'png', 'Twitter'); ?></a>&nbsp;
-                            <a onclick="redirect_facebook('<?php echo get_the_ID() ?>');" href="#"><?php echo ViewHelper::render_icon('facebook-square', 'png', 'Facebook'); ?></a>&nbsp;
-                            <a target="_blank" href="https://plus.google.com/share?url=<?php echo get_the_permalink($collection_id) . '?item=' . get_post(get_the_ID())->post_name; ?>"><?php echo ViewHelper::render_icon('googleplus-square', 'png', 'Google Plus'); ?></a>
+                            <a href="http://www.facebook.com/sharer.php?u=<?php echo the_permalink(get_the_ID()); ?>" target="_blank">
+                                <?php echo ViewHelper::render_icon('facebook-square', 'png', 'Facebook'); ?>
+                            </a>&nbsp;
+                            <a target="_blank" href="https://plus.google.com/share?url=<?php echo the_permalink(get_the_ID()); ?>">
+                                <?php echo ViewHelper::render_icon('googleplus-square', 'png', 'Google Plus'); ?></a>
                             <br><br>
                             <?php echo __('Link: ', 'tainacan'); ?>
                             <input type="text" id="link_object_share<?php echo get_the_ID() ?>" class="form-control" value="<?php echo get_the_permalink($collection_id) . '?item=' . get_post(get_the_ID())->post_name; ?>" />

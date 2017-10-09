@@ -65,6 +65,6 @@ $('.carousel-home-ajax').slick( getSlickSettings() );
   });
   
   function showModalCreateCollection() {
-        $('#myModal').modal('show');
+        $('#newCollection').modal('show');
     }
 </script>

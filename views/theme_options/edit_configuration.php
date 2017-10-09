@@ -114,7 +114,7 @@ if(is_object($cover) && $cover->post_type === "attachment") {
             <div class="form-group" style="margin-bottom: 50px;" >
                 <h5 style="font-weight: bolder"> <?php _e('Show admin email in reset password mensage','tainacan'); ?> </h5>
                 <div class="col-md-12 no-padding">
-                    <input <?php echo (get_option('tainacan_show_support_email') === 'true')? 'checked="checked"':'' ?> onclick="troggle_disable_input('tainacan_reset_password_support_email');"
+                    <input <?php echo (get_option('tainacan_show_support_email') === 'true')? 'checked="checked"':'' ?> onclick="toggle_disable_input('tainacan_reset_password_support_email');"
                             type="checkbox" name="tainacan_show_support_email" value="true">&nbsp;<?php _t('Show admin email',1) ?> <br>
                     <input id="tainacan_reset_password_support_email" <?php echo (get_option('tainacan_show_support_email') === 'true')? '':'disabled="disabled"' ?>
                             <?php echo !empty(get_option("tainacan_reset_password_support_email")) ? 'value="'.get_option("tainacan_reset_password_support_email").'"' : ''; ?>

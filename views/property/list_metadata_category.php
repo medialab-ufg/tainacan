@@ -11,7 +11,7 @@ $array_visibility = ($meta&&$meta!=='') ? $meta : '';
 ?>
 <style>
     .ui-widget-content {
-         border: none; 
+         border: none;
         color: #222222;
     }
     .title-pipe .glyphicon-arrow-left{
@@ -38,13 +38,11 @@ $array_visibility = ($meta&&$meta!=='') ? $meta : '';
             }
 </style>
 <?php $view_helper->render_header_config_steps('metadata') ?>
-<input type="hidden" 
-       name="tabs_properties" 
-       id="tabs_properties" 
+<input type="hidden" name="tabs_properties" id="tabs_properties"
        value='<?php echo ($tabs&&is_array($tabs)) ? json_encode($tabs) :  ''; ?>'/>
 <input type="hidden" name="visibility_collection_properties" id="visibility_collection_properties" value='<?php echo $array_visibility; ?>'/>
 <input type="hidden" name="property_category_id" id="property_category_id" value="<?php echo $category->term_id; ?>"/>
-<div class="categories_menu col-md-12 no-padding"  id="properties_tabs" style="min-height: 600px;">
+<div class="categories_menu col-md-12 no-padding"  id="properties_tabs" style="margin-bottom: 20px;">
 
     <div id="preset-filters" class="preset-filters ui-widget-header no-padding hide">
         <ul id="filters-accordion" class="connectedSortable"></ul>
@@ -65,10 +63,10 @@ $array_visibility = ($meta&&$meta!=='') ? $meta : '';
                 <span id="message_category"></span>
             </div>
         </div>
-        
+
         <div class="add-property-btn btn-group col-md-12">
             <button class="btn btn-primary btn dropdown-toggle" data-toggle="dropdown" aria-expanded="false" aria-haspopup="true" onclick="resetAllForms()">
-                <span style="color:white;"><?php _e('Add Property', 'tainacan'); ?> <span style="color:white;" class="caret"></span></span> 
+                <span style="color:white;"><?php _e('Add Property', 'tainacan'); ?> <span style="color:white;" class="caret"></span></span>
             </button>
 
             <?php /*
@@ -81,10 +79,10 @@ $array_visibility = ($meta&&$meta!=='') ? $meta : '';
                 <?php foreach( $view_helper->get_metadata_types() as $type => $label):  ?>
                     <li>
                        <!--a  data-toggle="modal" data-target="#meta-<?php echo $type ?>"-->
-                       <a onclick="$('#meta-<?php echo $type ?>').modal('show');clear_form('<?php echo $type ?>');" > 
-                            <img 
+                       <a onclick="$('#meta-<?php echo $type ?>').modal('show');clear_form('<?php echo $type ?>');" >
+                            <img
                                 <?php if($type=='metadata_compound'): echo 'height="15" width="15"'; endif;?>
-                                src="<?php $view_helper->get_metadata_icon($type); ?>" 
+                                src="<?php $view_helper->get_metadata_icon($type); ?>"
                                 alt="<?php echo $type ?>" title="<?php echo $type ?>">
                             <?php echo $label ?>
                         </a>
@@ -128,4 +126,4 @@ $array_visibility = ($meta&&$meta!=='') ? $meta : '';
         <input type="hidden" id="collection_list_ranking_id" name="collection_id" value="">
     </div>
 
-</div> 
+</div>

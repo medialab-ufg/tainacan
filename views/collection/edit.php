@@ -15,7 +15,7 @@ $_showH = ("disabled" === $_en_header) ? false : true ;
     <div class="col-md-12 tainacan-config-container">
         <h3>
             <?php _e('Collection Configuration', 'tainacan'); ?>
-            <?php ViewHelper::buttonVoltar() ?>
+            <?php ViewHelper::backButton() ?>
         </h3>
         <hr>
 
@@ -77,6 +77,9 @@ $_showH = ("disabled" === $_en_header) ? false : true ;
                         (<?php _t('Minimum width recommended: 1920px',1) ?>)">
                                 <span class="glyphicon glyphicon-question-sign"></span>
                             </a>
+
+                            <p><?php _e("Image aspect ratio", "tainacan"); ?>  <strong>8:1.2</strong></p>
+
                             <div id="collection_cover_image"></div>
                             <input type="hidden" id="collection_cover_img_id" name="collection_cover_img_id" value=""/>
                         </div>
@@ -934,7 +937,7 @@ $_showH = ("disabled" === $_en_header) ? false : true ;
                     </div>
                     <!-- Property Terms -->
                     <!--Temporariamente desativada -->
-                    <!--<div class="col-md-12">
+                    <div class="col-md-12">
                         <div class="form-group row">
                             <div class="col-md-6"><?php _e('Property Term', 'tainacan'); ?></div>
                             <div class="col-md-2">
@@ -1010,15 +1013,16 @@ $_showH = ("disabled" === $_en_header) ? false : true ;
                                 </select>
                             </div>
                         </div>
-                    </div>-->
-                    <div class="col-md-12">
+                    </div>
+
+                    <!--<div class="col-md-12">
                         <div class="form-group row">
                             <div class="col-md-6" id="entity"><strong><?php _e('Entity', 'tainacan'); ?></strong></div>
                             <div class="col-md-2"><strong><?php _e('Create', 'tainacan'); ?></strong></div>
                             <div class="col-md-2"><strong><?php _e('Edit', 'tainacan'); ?></strong></div>
                             <div class="col-md-2"><strong><?php _e('Delete', 'tainacan'); ?></strong></div>
                         </div>
-                    </div>
+                    </div>-->
                 </div>
 
                 <!--div class="form-group">
@@ -1466,15 +1470,19 @@ $_showH = ("disabled" === $_en_header) ? false : true ;
             </fieldset>
         </div-->
             </div>
+
+            <hr class="tainacanRow">
+
             <input type="hidden" id="verify_collection_name" name="verify_collection_name" value="allow">
             <input type="hidden" id="redirect_to_caegories" name="redirect_to_caegories" value="false">
             <input type="hidden" id="collection_id" name="collection_id" value="<?php echo $collection_post->ID; ?>">
             <input type="hidden" id="operation" name="operation" value="update">
             <input type="hidden" id="save_and_next" name="save_and_next" value="false">
-            
+
+
             <button type="button" class="btn btn-default pull-left btn-lg" onclick="backToMainPage()"><?php _e('Back to collection', 'tainacan'); ?></button>
-            
-            <button type="submit" id="button_save_and_next" class="btn btn-success pull-right btn-lg"> <?php _e('Continue', 'tainacan'); ?> </button>
+
+            <button type="submit" id="button_save_and_next" class="btn btn-success pull-right btn-lg"> <?php _e('Save', 'tainacan'); ?> </button>
         </form>
     </div>
 </div>

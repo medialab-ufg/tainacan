@@ -23,6 +23,7 @@ class FormItemMultiple extends Model {
         'socialdb_property_fixed_tags',
         'socialdb_property_fixed_type'
     ];
+    public $collectionPropertiesView;
     
     function __construct($collection_id = 0,$title = '',$operation = '') {
         $this->collection_id = $collection_id;
@@ -40,6 +41,34 @@ class FormItemMultiple extends Model {
         $this->title = $title;
         $this->operation = $operation;
         $this->itemId = 'multiple';
+        if ($this->collection_id !== 0):
+            $this->get_labels_fixed_properties($this->collection_id);
+            $meta = get_post_meta($this->collection_id, 'socialdb_collection_fixed_properties_visibility', true);
+            if ($meta && $meta != ''):
+                $this->collectionPropertiesView = explode(',', $meta);
+            else:
+                $this->collectionPropertiesView = [];
+            endif;
+        endif;
+    }
+
+    /**
+     *
+     * @param type $collection_id
+     */
+    public function get_labels_fixed_properties($collection_id) {
+        $labels_collection = ($collection_id != '') ? get_post_meta($collection_id, 'socialdb_collection_fixed_properties_labels', true) : false;
+        foreach ($this->terms_fixed as $slug => $value) {
+            if ($labels_collection):
+                $array = unserialize($labels_collection);
+                if (!isset($this->terms_fixed[$slug]->name))
+                    continue;
+
+                $this->terms_fixed[$slug]->name = (isset($array[$this->terms_fixed[$slug]->term_id])) ? $array[$this->terms_fixed[$slug]->term_id] : $this->terms_fixed[$slug]->name;
+            else:
+                $this->terms_fixed[$slug]->name = $this->terms_fixed[$slug]->name;
+            endif;
+        }
     }
     /**
      * 
@@ -70,7 +99,7 @@ class FormItemMultiple extends Model {
                 <span id='number_of_items_selected'></span>
                 <?php _e(' item/items ','tainacan') ?>
             </h3>
-            <div class="expand-all-item btn white tainacan-default-tags">
+            <div class="expand-all-item btn white tainacan-default-tags" onclick="openAccordeon('multiple')" data-operation="1">
                 <div class="action-text" 
                      style="display: inline-block">
                          <?php _e('Expand all', 'tainacan') ?></div>
@@ -101,25 +130,25 @@ class FormItemMultiple extends Model {
             <h3>
                 <?php if($this->operation === 'add-social-network-beta'): ?> 
                     <?php echo $this->title ?>
-                    <button type="button" onclick="back_main_list_discard();"
+                    <!--button type="button" onclick="back_main_list_discard();"
                             class="btn btn-default pull-right"> 
                                 <?php _e('Cancel','tainacan') ?>
-                    </button>
+                    </button-->
                 <?php else: ?> 
                     <?php echo $this->title ?>
-                    <button type="button" onclick="back_main_list();"
+                    <!--button type="button" onclick="back_main_list();"
                             class="btn btn-default pull-right"> 
                                 <?php _e('Cancel','tainacan') ?>
-                    </button>
+                    </button-->
                 <?php endif; ?> 
             </h3>
             <?php else: ?>
             <h3>
                 <?php echo $this->title ?>
-                <button type="button" onclick="back_main_list();"
+                <!--button type="button" onclick="back_main_list();"
                         class="btn btn-default pull-right"> 
                             <?php _e('Cancel','tainacan') ?>
-                </button>
+                </button-->
                 <br>
                 <small id="draft-text"></small>
             </h3>
@@ -169,14 +198,19 @@ class FormItemMultiple extends Model {
                  </div>
             </div>
             <div class="col-md-12" style="padding: 15px;">
-                 <?php if(isset($edit_multiple)): ?> 
+                  <?php if($this->operation === 'add-social-network'): ?>
+                 <button type="button" onclick="back_main_list_socialnetwork();"
+                        class="btn btn-lg btn-default pull-left">
+                            <?php _e('Cancel','tainacan') ?>
+                 </button>
+                 <?php elseif($this->operation !== 'add-social-network-beta'): ?>
                   <input type="hidden" id="edit_multiple" name="edit_multiple" value="true">
-                 <button type="button" onclick="back_main_list();"
+                  <button type="button" onclick="back_main_list();"
                         class="btn btn-lg btn-default pull-left"> 
                             <?php _e('Cancel','tainacan') ?>
-                </button>
+                 </button>
                  <?php else: ?>   
-                 <button type="button" onclick="back_main_list_socialnetwork();"
+                 <button type="button" onclick="back_main_list_discard();"
                         class="btn btn-lg btn-default pull-left"> 
                             <?php _e('Cancel','tainacan') ?>
                 </button>
@@ -206,6 +240,16 @@ class FormItemMultiple extends Model {
                 }
             }
         }
+    }
+
+     public function sortArrayChildren($children) {
+        if(count($children) > 0){
+            var_dump(usort($children, function($a, $b)
+            {
+                return strcmp($a->name, $b->name);
+            }));
+        }
+        return $children;
     }
     
     /**
@@ -407,13 +451,55 @@ class FormItemMultiple extends Model {
                     function (isConfirm) {
                         if(isConfirm){
                             publishItems(has_selected);
-                        }else{
-                            //publishItems(allIds);
-                        }
+                        }/*else{
+                            publishItems(allIds);
+                        }*/
                     });
                 }else{
                     publishItems(allIds);
                 }
+            }
+
+            function back_main_list_socialnetwork() {
+                var allIds = [];
+                $.each($("input:checkbox[name='selected_items']"), function () {
+                    allIds.push($(this).val());
+                });
+                swal({
+                    title: '<?php _e('Attention!','tainacan') ?>',
+                    text: '<?php _e('You did not finish your action. Are you sure to leave this page?','tainacan') ?>',
+                    type: "error",
+                    showCancelButton: true,
+                    cancelButtonText: '<?php _e('Cancel','tainacan') ?>',
+                    confirmButtonClass: 'btn-success',
+                    closeOnConfirm: true,
+                    closeOnCancel: true
+                },
+                function (isConfirm) {
+                    if (isConfirm) {
+                        $('#modalImportSocialnetworkClean').modal('show');
+                        $('#form').hide();
+                        $("#tainacan-breadcrumbs").hide();
+                        $('#configuration').hide();
+                        $('#main_part').show();
+                        $('#display_view_main_page').show();
+                        $("#container_three_columns").removeClass('white-background');
+                        $('#menu_object').show();
+                        $.ajax({
+                            type: "POST",
+                            url: $('#src').val() + "/controllers/object/object_controller.php",
+                            data: {
+                                operation: 'remove_ids_socialnetwork',
+                                items_id: allIds.join(','),
+                                collection_id: $('#collection_id').val()}
+                        }).done(function (result) {
+                            elem_first = jQuery.parseJSON(result);
+                            $('#modalImportSocialnetworkClean').modal('hide');
+                            finish_process();
+                        });
+                    }
+                });
+
             }
             
             function back_main_list_discard() {
@@ -496,12 +582,19 @@ class FormItemMultiple extends Model {
                     }
                 }).done(function (result) {
                     var result = JSON.parse(result);
+                    if(result.type === 'info'){
+                        showAlertGeneral(result.title,result.msg,result.type);
+                         hide_modal_main();
+                        $('#form').hide();
+                        $("#tainacan-breadcrumbs").hide();
+                        $('#configuration').hide();
+                        $('#main_part').show();
+                        $('#display_view_main_page').show();
 
-                    if(result.there_are_pdfFiles)
-                    {
+                        wpquery_clean();
+                    }else if(result.there_are_pdfFiles){
                         generate_pdfThumb();
-                    }else
-                    {
+                    }else{
                         finish_process();
                     }
                 });
@@ -525,6 +618,26 @@ class FormItemMultiple extends Model {
 
                 wpquery_clean();
                 showAlertGeneral('<?php _e('Success','tainacan') ?>', '<?php _e('Operation was successfully!','tainacan') ?>', 'success');
+            }
+
+            function openAccordeon(id){
+                let op = $('.expand-all-item').attr('data-operation');
+                console.log(op);
+                if( op == 0)//Retrair
+                {
+                    $('#form_properties_items').find("div.action-text").html('Expandir todos');
+                    $('#form_properties_items h2.accordion-header-active').click();
+                    $('.cloud_label').click();
+                    $('.expand-all-item').attr('data-operation', 1);
+                    $('#form_properties_items').find(".expand-all-link").html('Expandir todos <span class="caret"></span>');
+                }else{
+                    //Expandir
+                    $('#form_properties_items').find("div.action-text").html('Retrair todos');
+                    $('#form_properties_items h2:not(.accordion-header-active)').click();
+                    $('.cloud_label').click();
+                    $('.expand-all-item').attr('data-operation', 0);
+                    $('#form_properties_items').find(".expand-all-link").html('Retrair todos <span class="caret"></span>');
+                }
             }
           </script>
         <?php

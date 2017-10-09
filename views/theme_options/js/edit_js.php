@@ -1,12 +1,9 @@
 <script>
-
-    $(function () {
-        change_breadcrumbs_title('<?php _e('API Keys Configuration','tainacan') ?>');
-    })
+    $(function(){
 
     $('#formYoutubeApi').submit(function (e) {
         var verify =  $( this ).serializeArray();
-        if(verify[1].value.trim() === ''){
+        if(verify[1].value.trim() === '') {
             showAlertGeneral('<?php _e('Attention','tainacan') ?>', '<?php _e('Please set a valid API KEY','tainacan') ?>', 'info');
             return false;
         }
@@ -164,4 +161,6 @@
 
     });
 
+
+    });
 </script>

@@ -12,12 +12,24 @@ require_once(dirname(__FILE__) . '../../collection/visualization_model.php');
 class VisualizationModel extends CollectionModel {
 
     public $dynatree_number_items;
+    public $collection_id;
 
     public function __construct(){
         if(has_filter('alter_dynatree_number_of_items')){
             $this->dynatree_number_items = apply_filters('alter_dynatree_number_of_items', '');
         }else{
-            $this->dynatree_number_items = 9;
+            $this->dynatree_number_items = 25;
+        }
+    }
+
+
+    public function getDynatreeNumberItems($facet_id,$collection_id){
+        $more_options = get_post_meta($collection_id, 'socialdb_collection_facet_' . $facet_id . '_more_options',true);
+        $more_options = (is_null($more_options)) ? '' : $more_options;
+        if(isset($more_options) && $more_options =='false'){
+            return INF;
+        }else{
+            return $this->dynatree_number_items;
         }
     }
 
@@ -138,10 +150,11 @@ class VisualizationModel extends CollectionModel {
     /* inite the div dynatree in the template index */
     /* Author: Eduardo */
 
-    public function initDynatreeOld($data) {
+  /*  public function initDynatreeOld($data) {
         $propertyModel = new PropertyModel;
         // $facets_id = CollectionModel::get_facets($data['collection_id']);
         $facets_id = array_filter(array_unique(get_post_meta($data['collection_id'], 'socialdb_collection_facets')));
+        $this->collection_id = $data['collection_id'];
         foreach ($facets_id as &$facet_id) {
             $facet = get_term_by('id', $facet_id, 'socialdb_category_type');
             $classCss = get_post_meta($data['collection_id'], 'socialdb_collection_facet_' . $facet_id . '_color', true);
@@ -209,7 +222,7 @@ class VisualizationModel extends CollectionModel {
         }
 
         return json_encode($dynatree);
-    }
+    } */
 
     /* function initDynatree() */
     /* receive ((array) data) */
@@ -218,10 +231,22 @@ class VisualizationModel extends CollectionModel {
 
     public function initDynatree($data) {
         $propertyModel = new PropertyModel;
+        $search_model = new SearchModel();
+        $facets = array();
+        $arrFacets =  $search_model->get_saved_facets(get_option('collection_root_id'), true, $data['collection_id']);
+        if($arrFacets && is_array($arrFacets)){
+            foreach ($arrFacets as $arrFacet) {
+                $facets[] = $arrFacet['id'];
+                update_post_meta($data['collection_id'], 'socialdb_collection_facet_' . $arrFacet['id'] . '_color', 'color_property2');
+                update_post_meta($data['collection_id'], 'socialdb_collection_facet_' . $arrFacet['id'] . '_widget', $arrFacet['widget']);
+                update_post_meta($data['collection_id'], 'socialdb_collection_facet_' . $arrFacet['id'] . '_more_options', $arrFacet['more_options']);
+            }
+        }
+
+        $this->collection_id = $data['collection_id'];
         $labels_collection = ($data['collection_id']!='') ? get_post_meta($data['collection_id'], 'socialdb_collection_fixed_properties_labels', true) : false;
         // $facets_id = CollectionModel::get_facets($data['collection_id']);
         $facets_id = array_filter(array_unique(get_post_meta($data['collection_id'], 'socialdb_collection_facets')));
-        $facets = array();
         if(is_array($facets_id)){
             foreach ($facets_id as  $facet_id) {
                 $index = get_post_meta($data['collection_id'], 'socialdb_collection_facet_' . $facet_id . '_priority', true);
@@ -247,9 +272,11 @@ class VisualizationModel extends CollectionModel {
             if($skip)
                 continue;
             $ordenation = $this->get_ordenation_facet($data['collection_id'],$facet_id);
-            if($facet){
+            if($facet && $facet->taxonomy == 'socialdb_category_type'){
                 $classCss = get_post_meta($data['collection_id'], 'socialdb_collection_facet_' . $facet_id . '_color', true);
-                if ($facet && get_post_meta($data['collection_id'], 'socialdb_collection_facet_' . $facet_id . '_widget', true) == 'tree') {
+                $widget = get_post_meta($data['collection_id'], 'socialdb_collection_facet_' . $facet_id . '_widget', true);
+                //$widget = ($widget !== '' ) ? $widget : (isset($repositoryFacets[$facet_id])) ? $repositoryFacets[$facet_id]['widget'] : '' ;
+                if ($facet && $widget == 'tree') {
                     $hide_checkbox = (!has_filter('show_checkbox_facet'))? true : apply_filters('show_checkbox_facet','');
                     if($hide_checkbox){
                         $key = $facet->term_id . '_facet_category';
@@ -276,6 +303,7 @@ class VisualizationModel extends CollectionModel {
             }elseif(get_term_by('id', $facet_id, 'socialdb_property_type')){
                 $facet = get_term_by('id', $facet_id, 'socialdb_property_type');
                 $widget = get_post_meta($data['collection_id'], 'socialdb_collection_facet_'.$facet_id.'_widget', true);
+                //$widget = ($widget !== '' ) ? $widget : (isset($repositoryFacets[$facet_id])) ? $repositoryFacets[$facet_id]['widget'] : $widget ;
                 $type = $propertyModel->get_property_type($facet_id); // pego o tipo da propriedade;
                 //METADADOS FIXOS
                 if ('socialdb_property_fixed_type'==$facet->slug) {
@@ -287,6 +315,7 @@ class VisualizationModel extends CollectionModel {
                     $dynatree[] = array('title' =>$facet->name, 'key' => 'socialdb_object_dc_type_facet', 'isLazy' => true, 'data' => $url, 'expand' => true, 'hideCheckbox' => true, 'addClass' => $classCss);
                     $property['metas']['socialdb_property_object_category_id'] = $this->get_category_root_of($data['collection_id']);
                     $property['id']= 'title';
+                    $property['term_id'] = $facet->term_id;
                     $dynatree[end(array_keys($dynatree))] = $this->getPropertyRelDynatree($property, $dynatree[end(array_keys($dynatree))], $classCss);
                 }
                 // para o formato
@@ -368,6 +397,7 @@ class VisualizationModel extends CollectionModel {
      */
     public function initDynatreeSynonyms($data,$hide_checkbox = false) {
         $property_model = new PropertyModel;
+        $this->collection_id = $data['collection_id'];
         $categories = [];$dynatree = [];
         $list_object_terms = json_decode( $property_model->list_property_terms($data));
         if($list_object_terms->property_terms&&  is_array($list_object_terms->property_terms)){
@@ -489,7 +519,8 @@ class VisualizationModel extends CollectionModel {
                 //$dynatree['children'][] = array('title' => $child->post_title.' ('.$this->count_metadata_by_value('socialdb_property_'.$properties['id'], $child->ID).')', 'key' => $child->ID . "_" . $properties['id'], 'addClass' => $classCss);
                 $dynatree['children'][] = array('title' => $child->post_title . '', 'key' => $child->ID . "_" . $properties['id'], 'addClass' => $classCss);
                 $counter++;
-                if ($counter > 29) {
+                $id = ( $properties['term_id']) ? $properties['term_id'] : $properties['id'];
+                if ($counter > $this->getDynatreeNumberItems($id,$this->collection_id)) {
                     $dynatree['children'][] = array('title' => __('See more', 'tainacan'), 'hideCheckbox' => true, 'key' => $properties['metas']['socialdb_property_object_category_id'] . '_moreoptionsproperty' . $properties['id'], 'isLazy' => true, 'addClass' => 'more');
                     break;
                 }
@@ -512,7 +543,7 @@ class VisualizationModel extends CollectionModel {
                 //$dynatree['children'][] = array('title' => $meta_value . ' (' . $this->count_metadata_by_value('socialdb_property_' . $properties['id'], $meta_value) . ')', 'key' => $meta_id . "_" . $properties['id'] . '_datatext', 'addClass' => $classCss);
                 $dynatree['children'][] = array('title' => $meta_value , 'key' => $meta_id . "_" . $properties['id'] . '_datatext', 'addClass' => $classCss);
                 $counter++;
-                if ($counter > $this->dynatree_number_items) {
+                if ($counter > $this->getDynatreeNumberItems($properties['id'],$this->collection_id)) {
                     $dynatree['children'][] = array('title' => __('See more', 'tainacan'), 'hideCheckbox' => true, 'key' => $properties['id'] . '_moreoptionsdataproperty' . $properties['id'], 'isLazy' => true, 'addClass' => 'more');
                     break;
                 }
@@ -535,7 +566,7 @@ class VisualizationModel extends CollectionModel {
                 $dynatree['children'][] = array('title' => $tag->name, 'key' => $tag->term_id . "_tag", 'addClass' => $classCss);
                 //$dynatree['children'][] = array('title' => $tag->name.' ('. $this->count_items_related($tag->term_id).')', 'key' => $tag->term_id . "_tag", 'addClass' => $classCss);
                 $counter++;
-                if ($counter > $this->dynatree_number_items) {
+                if ($counter > $this->getDynatreeNumberItems('tag',$this->collection_id)) {
                     $dynatree['children'][] = array('title' => __('See more', 'tainacan'), 'hideCheckbox' => true, 'key' => '_moreoptionstag', 'isLazy' => true, 'addClass' => 'more');
                     break;
                 }
@@ -665,7 +696,7 @@ class VisualizationModel extends CollectionModel {
                     //$dynatree['children'][] = array('title' => $child->name.' ('. $this->count_items_related($child->term_id).')', 'key' => $child->term_id, 'addClass' => $classCss);
                 }
                 $counter++;
-                if ($counter == $this->dynatree_number_items) {
+                if ($counter ==  $this->getDynatreeNumberItems($facet_id,$this->collection_id)) {
                     $dynatree['children'][] = array('title' => __('See more', 'tainacan'), 'hideCheckbox' => true, 'key' => $facet_id . '_moreoptions', 'isLazy' => true, 'addClass' => 'more');
                     break;
                 }
@@ -744,7 +775,7 @@ class VisualizationModel extends CollectionModel {
                     $dynatree['children'][] = array('hideCheckbox' => $hide_checkbox, 'title' => $child->name, 'key' => $child->term_id, 'addClass' => $classCss);
                 }
                 $counter++;
-                if ($counter == 9) {
+                if ($counter == $this->getDynatreeNumberItems($facet_id,$this->collection_id)) {
                     $dynatree['children'][] = array('title' => __('See more', 'tainacan'), 'hideCheckbox' => true, 'key' => $facet_id . '_moreoptions', 'isLazy' => true, 'addClass' => 'more');
                     break;
                 }
@@ -881,14 +912,15 @@ class VisualizationModel extends CollectionModel {
         }
         $id = str_replace('_moreoptions', '', $key);
         $classCss = get_post_meta($collection_id, 'socialdb_collection_facet_' . $id . '_color', true);
-        if (isset($data['order'])) {
+        $ordenation = get_post_meta($collection_id, 'socialdb_collection_facet_' . $id . '_ordenation', true);
+        if (isset($data['order']) || ($ordenation && $ordenation == 'alphabetic')) {
             $children = $this->getChildren($id, 't.name ASC');
         } else {
             $children = $this->getChildren($id);
         }
         if (count($children) > 0 && count($children) < 50) {
             foreach ($children as $child) {
-                if ($counter >= 9) {
+                if ($counter >= $this->getDynatreeNumberItems($id,$collection_id)) {
                     $children_of_child = $this->getChildren($child->term_id);
                     if (count($children_of_child) > 0 || (!empty($children_of_child) && $children_of_child)) {
                         $dynatree[] = array('title' => $child->name, 'hideCheckbox' => $hide_checkbox, 'key' => $child->term_id, 'isLazy' => true, 'addClass' => $classCss);
@@ -921,7 +953,7 @@ class VisualizationModel extends CollectionModel {
 
         if (count($get_tags) > 0 && count($get_tags) < 50) {
             foreach ($get_tags as $tag) {
-                if ($counter > 9) {
+                if ($counter > $this->getDynatreeNumberItems('tag',$collection_id)) {
                     $dynatree[] = array('title' => $tag->name, 'key' => $tag->term_id . "_tag", 'addClass' => 'tag_img');
                 }
                 $counter++;
@@ -947,8 +979,8 @@ class VisualizationModel extends CollectionModel {
         $class = get_post_meta($collection_id, 'socialdb_collection_facet_' . $array[1] . '_color', true);
         if (count($objects) > 0 && count($objects) < 50) {
             foreach ($objects as $object) {
-                if ($counter > 19) {
-                    $dynatree[] = array('title' => $object->post_title, 'key' => $object->ID . "_" . $array[1], 'addClass' => ($class)?($class):'default');
+                if ($counter > $this->getDynatreeNumberItems($array[1],$collection_id)) {
+                    $dynatree[] = array('title' => $object->post_title, 'key' => $object->ID . "_" . $array[1], 'addClass' => ($class)?($class):'color_property2');
                 }
                 $counter++;
             }
@@ -973,7 +1005,7 @@ class VisualizationModel extends CollectionModel {
         $class = get_post_meta($collection_id, 'socialdb_collection_facet_' . $array[1] . '_color', true);
         if (count($metas) > 0 && count($metas) < 50) {
             foreach ($metas as $meta_id => $meta_value) {
-                if ($counter > 9) {
+                if ($counter >  $this->getDynatreeNumberItems($array[1],$collection_id)) {
                     $dynatree[] = array('title' => $meta_value, 'key' => $meta_id . "_" . $array[1] . '_datatext', 'addClass' => $class);
                 }
                 $counter++;
@@ -1004,9 +1036,16 @@ class VisualizationModel extends CollectionModel {
         $children = $this->get_term_children_by_first_letter($array[0], $array[1]);
         $facet_id = $category_model->get_category_facet_parent($array[0], $collection_id);
         $classCss = $category_model->get_facet_class($facet_id, $collection_id);
+        $cont = 0;
         if (count($children) > 0) {
             foreach ($children as $child) {
+                $cont++;
+                if( strtolower($array[1]) == 'a' ){
+                    if($cont <= ($this->getDynatreeNumberItems($facet_id,$array[0]) + 1))
+                        continue;
+                }
                 $children_of_child = $this->getChildren($child->term_id);
+
                 if (count($children_of_child) > 0 || (!empty($children_of_child) && $children_of_child)) {
                     $dynatree[] = array('title' => $child->name, 'hideCheckbox' => $hide_checkbox, 'key' => $child->term_id, 'isLazy' => true, 'addClass' => $classCss);
                     //$dynatree[] = array('title' => $child->name.' ('. $this->count_items_related($child->term_id).')','hideCheckbox' => $hide_checkbox, 'key' => $child->term_id, 'isLazy' => true, 'addClass' => $classCss);
@@ -1014,6 +1053,7 @@ class VisualizationModel extends CollectionModel {
                     $dynatree[] = array('title' => $child->name, 'hideCheckbox' => $hide_checkbox, 'key' => $child->term_id, 'addClass' => $classCss);
                     //$dynatree[] = array('title' => $child->name.' ('. $this->count_items_related($child->term_id).')','hideCheckbox' => $hide_checkbox, 'key' => $child->term_id, 'addClass' => $classCss);
                 }
+                $cont++;
             }
         }
         return $dynatree;
@@ -1053,9 +1093,15 @@ class VisualizationModel extends CollectionModel {
         $data = unserialize(str_replace('\\', '', $array[1]));
         $objects = $this->get_object_by_first_letter($data['category_root_id'], $data['letter']);
         $class = get_post_meta($array[0], 'socialdb_collection_facet_' . $data['property_id'] . '_color', true);
+        $cont = 0;
         if (count($objects) > 0) {
             foreach ($objects as $object) {
-                $dynatree[] = array('title' => $object->post_title, 'key' => $object->ID . "_" . $data['property_id'], 'addClass' => ($class)?$class:'default');
+                $cont++;
+                if( strtolower($data['letter']) == 'a' ){
+                    if($cont <= ($this->getDynatreeNumberItems($data['property_id'],$array[0]) + 1))
+                        continue;
+                }
+                $dynatree[] = array('title' => $object->post_title, 'key' => $object->ID . "_" . $data['property_id'], 'addClass' => ($class)?$class:'color_property2');
             }
         }
         return $dynatree;
@@ -1075,8 +1121,14 @@ class VisualizationModel extends CollectionModel {
         $data = unserialize(str_replace('\\', '', $array[1]));
         $metas = $this->get_metas_by_first_letter($data['property_id'], $data['letter']);
         $class = get_post_meta($array[0], 'socialdb_collection_facet_' . $data['property_id'] . '_color', true);
+        $cont = 0;
         if (count($metas) > 0) {
             foreach ($metas as $meta_id => $meta_value) {
+                $cont++;
+                if( strtolower($data['letter']) == 'a' ){
+                    if($cont <= ($this->getDynatreeNumberItems($data['property_id'],$array[0]) + 1))
+                        continue;
+                }
                 $dynatree[] = array('title' => $meta_value, 'key' => $meta_id . "_" . $data['property_id'] . '_datatext', 'addClass' => $class);
             }
         }
@@ -1284,7 +1336,13 @@ class VisualizationModel extends CollectionModel {
     public function get_object_by_first_letter($category_root_id, $letter) {
         $results = array();
         $objects = $this->get_category_root_posts($category_root_id);
+        $cont = 0;
         foreach ($objects as $object) {
+            $cont++;
+            if($cont<= ($this->getDynatreeNumberItems('skip',$category_root_id)+1) ){
+                continue;
+            }
+
             if ($letter !== '*' && (substr($object->post_title, 0, 1) === strtoupper($letter) || substr($object->post_title, 0, 1) === strtolower($letter))) {
                 $results[] = $object;
             }// $dynatree[end(array_keys($dynatree))] = isLazyAlpha($term_id, $valor, $dynatree[end(array_keys($dynatree))]);

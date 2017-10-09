@@ -1,12 +1,4 @@
 <?php
-$_current_collection = $_SERVER['HTTP_REFERER'];
-$_last_char = $_current_collection[strlen($_current_collection) - 1];
-
-if ($_last_char != "/") {
-    $_current_collection .= '/';
-}
-
-$itemURL = $_current_collection . basename(get_permalink());
 $latitude = get_post_meta($curr_id, "socialdb_property_" . $geo_coordinates["lat"]);
 $longitude = get_post_meta($curr_id, "socialdb_property_" . $geo_coordinates["long"]);
 $location = get_post_meta($curr_id, "socialdb_property_" . $geo_loc);
@@ -15,7 +7,7 @@ $item_title = wp_trim_words(get_the_title(), 13);
 $_trim_desc = $_object_description;
 ?>
 
-<li class="col-md-6 cards-view-container top-div" id="object_<?php echo $curr_id ?>" data-order="<?php echo $countLine; ?>"
+<div class="col-md-6 cards-view-container top-div no-padding" id="object_<?php echo $curr_id ?>" data-order="<?php echo $countLine; ?>"
     <?php if ($collection_list_mode != "cards"): ?> style="display: none;" <?php endif ?> >
 
     <input type="hidden" id="add_classification_allowed_<?php echo $curr_id ?>" name="add_classification_allowed" value="<?php echo (string) verify_allowed_action($collection_id, 'socialdb_collection_permission_add_classification', $curr_id); ?>" />
@@ -35,8 +27,7 @@ $_trim_desc = $_object_description;
 
                 <div class="colFoto no-padding img-thumbnail">
                     <?php if(empty($trash_list)): ?>
-                        <a href="<?php echo get_collection_item_href($collection_id, $curr_id, $viewHelper); ?>"
-                           onclick="<?php get_item_click_event($collection_id, $curr_id) ?>">
+                        <a href="<?php echo $itemURL; ?>">
                             <?php echo get_item_thumb_image($curr_id); ?>
                         </a>
                     <?php elseif ($trash_list): echo get_item_thumb_image($curr_id); endif; ?>
@@ -47,8 +38,8 @@ $_trim_desc = $_object_description;
 
                         <h4 class="item-display-title">
                             <?php if(empty($trash_list)): ?>
-                                <a href="<?php echo get_collection_item_href($collection_id, $curr_id, $viewHelper); ?>"
-                                   onclick="<?php get_item_click_event($collection_id, $curr_id) ?>">
+                                <?php /* <a href="<?php echo get_collection_item_href($collection_id, $curr_id, $viewHelper); ?>" onclick="<?php get_item_click_event($collection_id, $curr_id) ?>">  */ ?>
+                                <a href="<?php echo $itemURL; ?>">
                                     <?php echo $item_title; ?>
                                 </a>
                             <?php elseif ($trash_list): echo $item_title; endif; ?>
@@ -72,7 +63,7 @@ $_trim_desc = $_object_description;
                             <button id="show_rankings_<?php echo $curr_id ?>" class="cards-ranking"> </button>
 
                             <div class="editing-item">
-                                <!-- TAINACAN: container(AJAX) que mostra o html com os rankings do objeto-->
+                                <!-- TAINACAN: container(AJAX) que mostra o html co m os rankings do objeto-->
                                 <div id="rankings_<?php echo $curr_id ?>" class="rankings-container"></div>
 
                                 <ul class="item-funcs col-md-5 right">
@@ -128,4 +119,4 @@ $_trim_desc = $_object_description;
             </div>
         </div>
     </div>
-</li>
+</div>
