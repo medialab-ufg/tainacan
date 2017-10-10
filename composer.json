@@ -1,0 +1,7 @@
+{
+    "name": "tainacan/tainacan",
+    "description": "Digital repository manager",
+    "require": {
+        "php": "^5.2.4"
+    }
+}
