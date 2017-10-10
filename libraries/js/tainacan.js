@@ -449,9 +449,11 @@ $(window).load(function () {
             $("#dynatree").dynatree("getTree").reload();
             //reinit_synonyms_tree();
             //se estiver em um dynatree especifico
+            /*
             if ($('#category_single_edit_dynatree_id').val() !== '') {
                 $("#" + $('#category_single_edit_dynatree_id').val()).dynatree("getTree").reload();
             }
+            */
             //cabecalho da colecao
             showHeaderCollection($('#src').val());
             wpquery_clean();
@@ -500,9 +502,11 @@ $(window).load(function () {
             elem = jQuery.parseJSON(result);
             $("#dynatree").dynatree("getTree").reload();
             //se estiver em um dynatree especifico
+            /*
             if ($('#category_single_delete_dynatree_id').val() !== '') {
                 $("#" + $('#category_single_delete_dynatree_id').val()).dynatree("getTree").reload();
             }
+            */
             //cabecalho da colecao
             showHeaderCollection($('#src').val());
             wpquery_clean();
