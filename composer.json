@@ -1,7 +1,8 @@
 {
     "name": "tainacan/tainacan",
+    "type": "wordpress-theme",
     "description": "Digital repository manager",
     "require": {
-        "php": "^5.2.4"
+        "php": ">=5.2.4"
     }
 }
