@@ -2276,7 +2276,7 @@ class Model {
         $meta = unserialize(get_post_meta($collection_id, 'socialdb_collection_properties_ordenation', true));
         if (is_array($meta)) {
             if(isset($meta[$tab])){
-                $meta[$tab] = explode(',', $meta[$tab]);
+                $meta[$tab] = (is_array($meta[$tab])) ? $meta[$tab] : explode(',', $meta[$tab]);
                 $meta[$tab][] = $id;
                 $meta[$tab] = implode(',', $meta[$tab]) ;
             }else{
