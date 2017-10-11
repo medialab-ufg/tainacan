@@ -840,6 +840,77 @@ function add_custom_caps() {
 }
 
 //*****************************************************************************/
+//*************** ELASTIC PRESS INTEGRATION  ************************/
+
+function elasticpress_remove_fields( $post_args, $post_id ) {
+    $model = new Model();
+    $allow = ['socialdb_object'];
+    if ( in_array( $post_args['post_type'], $allow ) ) {
+
+        //remove o array de busca geral
+        if(isset($post_args['post_meta']['socialdb_object_commom_values'])){
+            unset($post_args['post_meta']['socialdb_object_commom_values']);
+            unset($post_args['post_meta']['socialdb_object_commom_index']);
+        }
+
+        //pego o valor atual dos metas do item
+        $metas = $post_args['post_meta'];
+        //iterando sobre os metas existen
+        foreach ($metas as $meta_key => $values) {
+            $isHelper = strpos($meta_key,'socialdb_property_helper_');
+            $isCat = strpos($meta_key,'_cat');
+            $isNormal = strpos($meta_key,'socialdb_property_');
+            if($isHelper === false && $isNormal !== false){
+               $id = str_replace('socialdb_property_','',$meta_key);
+               if($isCat !== false){
+                   $id = str_replace('_cat','',$id);
+               }
+               $term = get_term_by('id',$id,'socialdb_property_type');
+               if($term){
+                   $term->name = str_replace(' ','_', $term->name);
+                   $parent = get_term_by('id',$term->parent,'socialdb_property_type');
+                   $post_args['post_meta'][$term->name] = [];
+                   foreach ($values as $value) {
+                       if(!isset($value))
+                           continue;
+                       if($parent && $parent->name == 'socialdb_property_data'){
+                           $post_args['post_meta'][$term->name][] = $value;
+                       }else if($parent && $parent->name == 'socialdb_property_object' && is_numeric($value)){
+                           $post_args['post_meta'][$term->name][] = get_post($value)->post_title;
+                       }else if($parent && $parent->name == 'socialdb_property_term' && is_numeric($value)){
+                           $post_args['post_meta'][$term->name][] = get_term_by('id',$value,'socialdb_category_type');
+                       }
+                   }
+               }
+            }
+        }
+    }
+    return $post_args;
+}
+add_filter('ep_post_sync_args', 'elasticpress_remove_fields', 10, 2);
+
+//reindexo itens afetrados pela autalizacao de seu metadado
+function reIndex_after_update_property($term_id, $taxonomy){
+    if (function_exists('ep_sync_post')) {
+        global $wpdb;
+        $wp_posts = $wpdb->prefix . "posts";
+        $wp_postmeta = $wpdb->prefix . "postmeta";
+        $query = "
+                    SELECT p.* FROM $wp_posts p
+                    INNER JOIN $wp_postmeta pm ON p.ID = pm.post_id    
+                    WHERE pm.meta_key LIKE 'socialdb_property_$term_id'
+            ";
+        $result = $wpdb->get_results($query);
+        if ($result && is_array($result) && count($result) > 0) {
+            foreach ($result as $item) {
+                ep_sync_post($item->ID);
+            }
+
+        }
+    }
+}
+add_action( 'edited_socialdb_property_type', 'reIndex_after_update_property', 10, 2 );
+//*****************************************************************************/
 //**************************************** POST STATUS ************************/
 
 /**
