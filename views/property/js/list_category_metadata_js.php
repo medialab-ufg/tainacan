@@ -906,7 +906,7 @@
     }
     /**
        funcao quer altera a visibilidade os metadados fixos de uma colecao 
-     * @param {type} e
+     * @param {type}
      * @returns {undefined}     */
     function change_visibility(property_id) {
         if ($('#visibility_'+property_id).attr('vis')==='hide') {

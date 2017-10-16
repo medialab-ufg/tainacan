@@ -556,10 +556,10 @@
             type: "POST",
             url: $('#src').val() + "/controllers/search/search_controller.php",
             data: {collection_id: collection_id, property_id: property_id, operation: 'add_property_ordenation'}
-        }).done(function (result) {
+        })/*.done(function (result) {
             elem = jQuery.parseJSON(result);
             //showAlertGeneral(elem.title, elem.msg, elem.type);
-        });
+        })*/;
     }
 
     function edit_metadata(id) {
@@ -818,6 +818,7 @@
 
                         //if (fixed_meta && fixed_meta == 'true' && (blog_email === '1')) {
                             class_var = 'fixed-property';
+                            let visibility_properties = $('#visibility_collection_properties').val().split(',');
                             if (visibility_properties.length === 0 || (visibility_properties.indexOf(current_id.toString()) < 0)) {
                                 button = '<a vis="show" id="visibility_' + current_id + '" onclick="change_visibility(' + current_id + ')" style="cursor:pointer;"><span class="glyphicon glyphicon-eye-open"></span></a>';
                             } else {
@@ -1012,20 +1013,31 @@
     }
 
     /**
-     funcao quer altera a visibilidade os metadados fixos de uma colecao 
-     * @param {type} e
+     funcao quer altera a visibilidade dos metadados fixos de uma colecao
+     * @param {type}
      * @returns {undefined}     */
     function change_visibility(property_id) {
+        let visibility = $('#visibility_collection_properties').val();
+
         if ($('#visibility_' + property_id).attr('vis') === 'hide') {
             $('#visibility_' + property_id).html('<span class="glyphicon glyphicon-eye-open"></span>');
             $('#visibility_' + property_id).attr('vis', 'show');
+
+            visibility = visibility.replace(","+property_id, '');
+            $('#visibility_collection_properties').val(visibility);
+
             $('#meta-item-' + property_id + ' .title-pipe').fadeTo("fast", 1);
         } else {
             //$('#meta-item-'+property_id+' .title-pipe').css('opacity','0.5');
             $('#meta-item-' + property_id + ' .title-pipe').fadeTo("fast", 0.33);
             $('#visibility_' + property_id).html('<span class="glyphicon glyphicon-eye-close"></span>');
+
+            visibility += ","+property_id;
+            $('#visibility_collection_properties').val(visibility);
+
             $('#visibility_' + property_id).attr('vis', 'hide');
         }
+
         $.ajax({
             url: $('#src').val() + '/controllers/collection/collection_controller.php',
             type: 'POST',
@@ -1033,9 +1045,10 @@
                 collection_id: $("#collection_id").val(),
                 operation: 'alter_visibility',
                 property_id: property_id}
-        }).done(function (result) {
+        })/*.done(function (result) {
             elem = jQuery.parseJSON(result);
-        });
+
+        })*/;
     }
 
     /**
