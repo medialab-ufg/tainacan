@@ -644,7 +644,7 @@ function tainacan_comments($comment, $args, $depth) {
 
                             if($can_delete || $collection_moderator) { ?>
                                 <div class="col-md-1 no-padding comment-item">
-                                    <a onclick="showAlertDeleteComment('<?php comment_ID(); ?>', '<?php _e('Attention!') ?>', '<?php _e('Delete this comment?', 'tainacan') ?>', '<?php echo mktime(); ?>');">
+                                    <a onclick="showAlertDeleteComment('<?php comment_ID(); ?>', '<?php _e('Attention!') ?>', '<?php _e('Delete this comment?', 'tainacan') ?>', '<?php echo time(); ?>');">
                                         <span class="glyphicon glyphicon-remove"></span>&nbsp;<?php _e("Delete", 'tainacan'); ?>
                                     </a>
                                 </div>
@@ -2277,7 +2277,7 @@ function create_root_collection_category($collection_id, $category_name) {
     global $config;
     $parent_category_id = get_register_id('socialdb_category', 'socialdb_category_type');
     /* Criando a categoria raiz e adicionando seus metas */
-    $category_root_id = create_register($category_name, 'socialdb_category_type', array('parent' => $parent_category_id, 'slug' => sanitize_title(remove_accent($category_name)) . "_" . mktime()));
+    $category_root_id = create_register($category_name, 'socialdb_category_type', array('parent' => $parent_category_id, 'slug' => sanitize_title(remove_accent($category_name)) . "_" . time()));
     instantiate_metas($category_root_id['term_id'], 'socialdb_category', 'socialdb_category_type', true);
     insert_meta_default_values($category_root_id['term_id']);
     /* Pego o termo e verifico se ele ja esta como classificacao da colecao */
