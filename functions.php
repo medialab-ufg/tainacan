@@ -867,7 +867,6 @@ function elasticpress_improve_fields( $post_args, $post_id ) {
 
         //pego o valor atual dos metas do item
         $metas = $post_args['post_meta'];
-
         //iterando sobre os metas existen
         foreach ($metas as $meta_key => $values) {
 
@@ -897,9 +896,11 @@ function elasticpress_improve_fields( $post_args, $post_id ) {
                        }else if($parent && $parent->name == 'socialdb_property_object' && is_numeric($value)){
                            $post_args['post_meta'][$term->name][] = get_post($value)->post_title;
                        }else if($parent && $parent->name == 'socialdb_property_term' && is_numeric($value)){
-                           $post_args['post_meta'][$term->name][] = get_term_by('id',$value,'socialdb_category_type');
+                           $post_args['post_meta'][$term->name][] = get_term_by('id',$value,'socialdb_category_type')->name;
                        }
                    }
+
+                   $post_args['post_meta'][$term->name] = array_values( array_filter($post_args['post_meta'][$term->name]));
                }
             }
         }
@@ -913,6 +914,7 @@ function elasticpress_improve_fields( $post_args, $post_id ) {
         $properties = get_term_meta($category_root_id,'socialdb_category_property_id');
         $properties = array_merge($root_properties,$properties);
 
+        unset($post_args['post_meta']['properties-cached']);
         if($properties){
             $ids = [];
             foreach ($properties as $property_id) {
