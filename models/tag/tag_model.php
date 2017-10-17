@@ -3,8 +3,8 @@
 //use CollectionModel;
 
 include_once (dirname(__FILE__) . '/../../../../../wp-config.php');
-include_once (dirname(__FILE__) . '/../../../../../wp-load.php');
-include_once (dirname(__FILE__) . '/../../../../../wp-includes/wp-db.php');
+include_once (ABSPATH . '/wp-load.php');
+include_once (ABSPATH . '/wp-includes/wp-db.php');
 require_once(dirname(__FILE__).'../../general/general_model.php');  
 include_once (dirname(__FILE__).'../../collection/collection_model.php'); 
 include_once (dirname(__FILE__).'../../property/property_model.php'); 
