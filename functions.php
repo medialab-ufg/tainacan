@@ -3761,7 +3761,7 @@ function get_documents_text($ids)
     }
 
     //Recupera texto dos arquivos PDF
-    foreach($PDFidPostAttachmentURL as $post_id => $info)
+    /*foreach($PDFidPostAttachmentURL as $post_id => $info)
     {
         if(!array_key_exists('socialdb_pdf_text', $info['post_meta']))
         {
@@ -3772,7 +3772,7 @@ function get_documents_text($ids)
 
             }
         }
-    }
+    }*/
 
     foreach($OFFICEidPostAttachmentURL as $post_id => $info)
     {
