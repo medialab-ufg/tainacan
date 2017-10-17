@@ -1,7 +1,7 @@
 <?php
 include_once (dirname(__FILE__) . '/../../../../../wp-config.php');
-include_once (dirname(__FILE__) . '/../../../../../wp-load.php');
-include_once (dirname(__FILE__) . '/../../../../../wp-includes/wp-db.php');
+include_once (ABSPATH . '/wp-load.php');
+include_once (ABSPATH . '/wp-includes/wp-db.php');
 
  class Controller {
     public function render($file, $variables = array()) {
