@@ -3251,7 +3251,7 @@ function generate_pdfThumb()
                 });
             });
         };
-    }
+    }else finish_process();
 }
 
 function delete_pdf_db(ids, db, tbname) {
@@ -3378,7 +3378,7 @@ function get_pdf_and_gen_thumb(formData, promises, count, resolveBefore = null, 
 
                 Promise.all(itemsFetcher).then(function(){
                     $.ajax({
-                        url: $("#src").val() + '/controllers/collection/collection_controller.php?operation=pdf_thumbnail',
+                        url: $("#src").val() + '/controllers/collection/collection_controller.php?operation=pdf_thumbnail&reindex=true',
                         type: 'POST',
                         data: {data: formIDImg}
                     }).done(function (result) {
