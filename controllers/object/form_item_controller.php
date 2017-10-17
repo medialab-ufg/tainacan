@@ -315,7 +315,8 @@ class FormItemController extends Controller {
                     }
 
                     try{
-                        $json->there_are_pdfFiles = get_documents_text($data['items']);
+                        //$json->there_are_pdfFiles = get_documents_text($data['items']);
+	                    $json->there_are_pdfFiles = false;
                     }catch (Exception $e){
                         $json->error = (string) $e;
                     }
