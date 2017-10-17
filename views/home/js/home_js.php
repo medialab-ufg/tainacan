@@ -35,7 +35,7 @@ $('.carousel-home-ajax').slick( getSlickSettings() );
 
   $(item_types).each( function(idx, type) {
       $.ajax({
-          url: '<?php echo get_template_directory_uri() ?>' + '/controllers/home/home_controller.php',
+          url: $("#src").val() + '/controllers/home/home_controller.php',
           type: 'POST',
           data: { operation: 'load_item_type', item_type: type },
           complete: ajax_carousel,
