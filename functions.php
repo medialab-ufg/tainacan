@@ -3764,7 +3764,7 @@ function get_documents_text($ids)
     {
         if(!array_key_exists('socialdb_pdf_text', $info['post_meta']))
         {
-            get_add_pdf_text($post_id, $info['attachment_id']);
+            //get_add_pdf_text($post_id, $info['attachment_id']);
         }
     }
 
