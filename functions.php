@@ -3760,11 +3760,17 @@ function get_documents_text($ids)
         }
     }
 
+    //Recupera texto dos arquivos PDF
     foreach($PDFidPostAttachmentURL as $post_id => $info)
     {
         if(!array_key_exists('socialdb_pdf_text', $info['post_meta']))
         {
-            get_add_pdf_text($post_id, $info['attachment_id']);
+            try {
+	            get_add_pdf_text( $post_id, $info['attachment_id'] );
+            }catch (Exception $e)
+            {
+
+            }
         }
     }
 
