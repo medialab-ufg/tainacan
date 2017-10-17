@@ -3741,7 +3741,7 @@ function get_documents_text($ids)
     );
 
     $there_are_pdfFiles = false;
-    /*foreach($posts as $post)
+    foreach($posts as $post)
     {
         $post_meta = get_post_meta($post->ID);
         $attachment_id = $post_meta['socialdb_object_content'][0];
@@ -3760,7 +3760,7 @@ function get_documents_text($ids)
         }
     }
 
-    foreach($PDFidPostAttachmentURL as $post_id => $info)
+    /*foreach($PDFidPostAttachmentURL as $post_id => $info)
     {
         if(!array_key_exists('socialdb_pdf_text', $info['post_meta']))
         {
