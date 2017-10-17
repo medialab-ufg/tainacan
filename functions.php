@@ -3766,7 +3766,7 @@ function get_documents_text($ids)
         {
             get_add_pdf_text($post_id, $info['attachment_id']);
         }
-    }
+    }*/
 
     foreach($OFFICEidPostAttachmentURL as $post_id => $info)
     {
@@ -3774,7 +3774,7 @@ function get_documents_text($ids)
         {
             get_add_office_document_text($post_id, $info['attachment_id']);
         }
-    }*/
+    }
 
     //Retorna se há arquivos pdf
     return $there_are_pdfFiles;
