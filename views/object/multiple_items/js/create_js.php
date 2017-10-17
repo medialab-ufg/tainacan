@@ -65,7 +65,6 @@
 
                 this.on("complete", function(file){
                     //Cria miniatura para arquivos PDF
-                    console.log("fora");
                     if(file.type == 'application/pdf')
                     {
                         window.indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
