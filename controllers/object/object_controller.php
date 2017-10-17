@@ -66,6 +66,7 @@ class ObjectController extends Controller {
                 }else{
                    $data['properties'] = unserialize($cache);
                 }
+
                 //renderizo
                 return $this->render(dirname(__FILE__) . '../../../views/object/formItem/formItem.php', $data);
             // propriedades de categoria

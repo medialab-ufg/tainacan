@@ -466,6 +466,7 @@
             // The event was bound to the <span> tag, but the node object
             // is stored in the parent <li> tag
             var node = $.ui.dynatree.getNode(el);
+
             switch (action) {
                 case "see":
                     var src = $('#src').val();

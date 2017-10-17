@@ -22,13 +22,13 @@ global $config;
 
         <div id="alert_success_categories" class="alert alert-success" style="display: none;">
             <button type="button" class="close" onclick="hide_alert();"><span aria-hidden="true">&times;</span></button>
-            <?php _e('Operation was successful.', 'tainacan') ?>
+            <?php _e('Operation was successful', 'tainacan') ?>
         </div>
 
         <div id="alert_error_categories" class="alert alert-danger" style="display: none;">
             <button type="button" class="close" onclick="hide_alert();"><span aria-hidden="true">&times;</span></button>
             <span id="default_message_error">
-                <?php _e('Error! Operation was unsuccessful.', 'tainacan') ?>
+                <?php _e('Error! Operation was unsuccessful', 'tainacan') ?>
             </span>&nbsp;
             <span id="message_category"></span>
         </div>    

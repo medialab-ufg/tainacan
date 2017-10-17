@@ -47,6 +47,7 @@ class FormItemCategory extends FormItem{
                 <?php $this->validateIcon('alert-compound-'.$property['id'],__('Required field','tainacan')) ?>
                 <?php endif ?>
             </h2>
+
             <div>
                 <?php if($property['type'] == 'selectbox'): ?>
                     <?php $this->selectboxClass->generate($property,['id'=>0], $item_id, 0) ?>
@@ -61,6 +62,17 @@ class FormItemCategory extends FormItem{
                 <?php endif; ?>
                 <div class="category-properties" style="float:left;width: 100%;padding-bottom:15px;" id="appendCategoryMetadata_<?php echo $property['id']; ?>_0_0">
                 </div>
+                <?php
+
+                /*if($property['metas']['socialdb_property_habilitate_new_category'])
+                {
+                    ?>
+                    <button type="button" class="btn btn-primary btn-xs pull-right" onclick="add_new_category(<?php $property['id']; ?>);">
+                        <?php _e("Add new category", "tainacan"); ?>
+                    </button>
+                    <?php
+                }*/
+                ?>
             </div>
         </div>
         <?php 
@@ -70,7 +82,7 @@ class FormItemCategory extends FormItem{
         <script>
         var ids = '<?php echo implode(',', $this->getValues($this->value[0][0])) ?>';
         Hook.register('appendCategoryMetadataHere',function(args){
-             var categories = args[0]
+             var categories = args[0];
              var item_id = args[1];
              var seletor = args[2];
              $(seletor)
@@ -94,6 +106,11 @@ class FormItemCategory extends FormItem{
              });
            });
         Hook.call('appendCategoryMetadataHere',[ids, <?php echo $item_id ?>, '#appendCategoryMetadata_<?php echo $property['id']; ?>_0_0']);
+
+        /*function add_new_category(father_id)
+        {
+            
+        }*/
        </script>
         <?php 
         endif; ?>
