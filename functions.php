@@ -3741,7 +3741,7 @@ function get_documents_text($ids)
     );
 
     $there_are_pdfFiles = false;
-    foreach($posts as $post)
+    /*foreach($posts as $post)
     {
         $post_meta = get_post_meta($post->ID);
         $attachment_id = $post_meta['socialdb_object_content'][0];
@@ -3774,7 +3774,7 @@ function get_documents_text($ids)
         {
             get_add_office_document_text($post_id, $info['attachment_id']);
         }
-    }
+    }*/
 
     //Retorna se há arquivos pdf
     return $there_are_pdfFiles;
