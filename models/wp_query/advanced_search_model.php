@@ -1,8 +1,8 @@
 <?php
 
 include_once ('../../../../../wp-config.php');
-include_once ('../../../../../wp-load.php');
-include_once ('../../../../../wp-includes/wp-db.php');
+include_once (ABSPATH . '/wp-load.php');
+include_once (ABSPATH . '/wp-includes/wp-db.php');
 include_once (dirname(__FILE__) . '../../../models/collection/collection_model.php');
 include_once (dirname(__FILE__) . '../../../models/license/license_model.php');
 include_once (dirname(__FILE__) . '../../../models/property/property_model.php');
