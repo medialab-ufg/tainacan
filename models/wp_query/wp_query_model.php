@@ -516,7 +516,7 @@ class WPQueryModel extends Model {
             $orderby = $this->set_order_by($recover_data);
             $order = $this->set_type_order($recover_data);
             $args = array(
-                'ep_integrate'   => true,
+                //'ep_integrate'   => true,
                 'post_type' => 'socialdb_collection',
                 'paged' => (int)$page,
                 'posts_per_page' => (isset($recover_data['posts_per_page']))?$recover_data['posts_per_page']:50,
@@ -577,7 +577,7 @@ class WPQueryModel extends Model {
 
             //all_data_inside
             $args = array(
-                'ep_integrate'   => true,
+                //'ep_integrate'   => true,
                 'post_type'      => $post_type,
                 'paged'          => (int) $page,
                 'posts_per_page' => (isset($recover_data['posts_per_page']))?$recover_data['posts_per_page']:50,
