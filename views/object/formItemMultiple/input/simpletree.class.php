@@ -101,7 +101,7 @@ class SimpleTreeClass extends FormItemMultiple {
                                     operation: 'saveValue',
                                     type: 'term',
                                     value: node.data.key,
-                                    item_id: '<?php echo $item_id ?>',
+                                    item_id: $('#item-multiple-selected').val().trim(),
                                     compound_id: '<?php echo $compound_id ?>',
                                     property_children_id: '<?php echo $property_id ?>',
                                     index: <?php echo $index_id ?>,

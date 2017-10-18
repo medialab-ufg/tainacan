@@ -433,6 +433,7 @@ class FormItemMultiple extends Model {
                 $.each($("input:checkbox[name='selected_items']"), function () {
                     allIds.push($(this).val());
                 });
+
                 <?php if($this->operation == 'add-files'): ?>
                 $.each($("input:checkbox[name='selected_items']:checked"), function () {
                     has_selected.push($(this).val());
@@ -441,7 +442,7 @@ class FormItemMultiple extends Model {
                 if(has_selected.length > 0){
                     swal({
                         title: '<?php _e('Attention', 'tainacan') ?>',
-                        text: '<?php _e('Save only ', 'tainacan') ?>' + has_selected.length + ' <?php _e(' selected items ?', 'tainacan') ?>',
+                        text: '<?php _e('Save only ', 'tainacan') ?> ' + has_selected.length + ' <?php _e(' selected items ?', 'tainacan') ?>',
                         type: "info",
                         showCancelButton: true,
                         confirmButtonClass: 'btn-primary',
