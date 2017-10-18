@@ -2182,6 +2182,10 @@ function showProfileScreen(src) {
         $('#loader_collections').hide();
         $('#collection_post').hide();
         $('#configuration').html(result);
+
+        let adm = document.getElementById('categories_title');
+        $(adm).removeClass("config_default_style");
+        $(adm).html(result);
     });
 }
 

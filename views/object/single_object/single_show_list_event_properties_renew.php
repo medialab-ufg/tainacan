@@ -132,8 +132,16 @@ endif;
 
 if (isset($property_data)):
     $counter = 0;
+
+    $meta = get_post_meta($collection_id, 'socialdb_collection_fixed_properties_visibility', true);
+	if ($meta && $meta != ''):
+		$collectionPropertiesView = explode(',', $meta);
+	else:
+		$collectionPropertiesView = [];
+	endif;
+
     foreach ($property_data as $property) {
-        if(!$objectHelper->is_public_property($property))
+        if(!$objectHelper->is_public_property($property) || in_array($property['id'], $collectionPropertiesView))
             continue;
             
         $object_id = $property['metas']['object_id']; ?>
@@ -170,7 +178,7 @@ if (isset($property_data)):
 
             <!--- Mostra o valor do metadado----->
             <div id="value_<?php echo $property['id']; ?>_<?php echo $object_id; ?>">
-            <?php if($property['metas']['value']&&!empty($property['metas']['value'])&&  is_array($property['metas']['value'])): ?>
+            <?php if($property['metas']['value'] && !empty($property['metas']['value']) &&  is_array($property['metas']['value'])): ?>
                 <?php foreach ($property['metas']['value'] as $value){
                     if($property['type'] == 'user')
                     {
@@ -178,6 +186,8 @@ if (isset($property_data)):
                         $value = $user->data->display_name;
                     }
                     ?>
+
+
                     <p>
                         <?php
                         $is_url = filter_var($value, FILTER_VALIDATE_URL);

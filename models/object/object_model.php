@@ -1004,7 +1004,7 @@ class ObjectModel extends Model {
         //a forma de ordenacao
         $order = $this->set_type_order($args);
         $args = array(
-            'ep_integrate'   => true,
+            //'ep_integrate'   => true,
             'posts_per_page' => ($mode_view === 'gallery') ? 8 : ($mode_view === 'table') ? -1 : 10, // -1 to fetchs all items 50 or 10
             'post_type' => 'socialdb_object',
             'post_status' => array($post_status),
