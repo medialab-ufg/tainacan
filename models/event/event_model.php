@@ -473,8 +473,10 @@ abstract class EventModel extends Model {
         if (!empty($data['ranking_name'])) {
             $new_ranking = wp_insert_term($data['ranking_name'], 'socialdb_property_type', array('parent' => $type->term_id,
                 'slug' => $this->generate_slug($data['ranking_name'], $data['collection_id'])));
-            $ranking_id = $new_ranking['term_id'];
-            $data['rankind_id'] = $ranking_id;
+            if($new_ranking && !is_wp_error($new_ranking)) {
+                $ranking_id = $new_ranking['term_id'];
+                $data['rankind_id'] = $ranking_id;
+            }
         }
 
         if (!is_wp_error($new_ranking) && $ranking_id) {

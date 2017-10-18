@@ -644,7 +644,7 @@ function tainacan_comments($comment, $args, $depth) {
 
                             if($can_delete || $collection_moderator) { ?>
                                 <div class="col-md-1 no-padding comment-item">
-                                    <a onclick="showAlertDeleteComment('<?php comment_ID(); ?>', '<?php _e('Attention!') ?>', '<?php _e('Delete this comment?', 'tainacan') ?>', '<?php echo mktime(); ?>');">
+                                    <a onclick="showAlertDeleteComment('<?php comment_ID(); ?>', '<?php _e('Attention!') ?>', '<?php _e('Delete this comment?', 'tainacan') ?>', '<?php echo time(); ?>');">
                                         <span class="glyphicon glyphicon-remove"></span>&nbsp;<?php _e("Delete", 'tainacan'); ?>
                                     </a>
                                 </div>
@@ -2279,7 +2279,7 @@ function create_root_collection_category($collection_id, $category_name) {
     global $config;
     $parent_category_id = get_register_id('socialdb_category', 'socialdb_category_type');
     /* Criando a categoria raiz e adicionando seus metas */
-    $category_root_id = create_register($category_name, 'socialdb_category_type', array('parent' => $parent_category_id, 'slug' => sanitize_title(remove_accent($category_name)) . "_" . mktime()));
+    $category_root_id = create_register($category_name, 'socialdb_category_type', array('parent' => $parent_category_id, 'slug' => sanitize_title(remove_accent($category_name)) . "_" . time()));
     instantiate_metas($category_root_id['term_id'], 'socialdb_category', 'socialdb_category_type', true);
     insert_meta_default_values($category_root_id['term_id']);
     /* Pego o termo e verifico se ele ja esta como classificacao da colecao */
@@ -3620,14 +3620,22 @@ function get_pdf_no_thumb_ids($count) {
     return $PDFidAttachment;
 }
 
-function save_canvas_pdf_thumbnails($canvas_images) {
+function save_canvas_pdf_thumbnails($canvas_images, $reindex = false) {
     $upload_dir = wp_upload_dir();
     $upload_path = str_replace('/', DIRECTORY_SEPARATOR, $upload_dir['path']) . DIRECTORY_SEPARATOR;
     
     foreach($canvas_images as $item)
     {
-        $post_id = $item['post_id'];
-        $canvas_image = $item['img'];
+        if(!$reindex)
+        {
+	        $post_id = get_post_ancestors($item->file_id)[0];
+	        $canvas_image = $item->base64IMAGE;
+        }else
+        {
+	        $post_id = $item['post_id'];
+	        $canvas_image = $item['img'];
+        }
+
         $image = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $canvas_image));
 
         $filename = 'pdf_thumb_'.$post_id.'.png';
@@ -3756,7 +3764,7 @@ function get_documents_text($ids)
     {
         if(!array_key_exists('socialdb_pdf_text', $info['post_meta']))
         {
-            get_add_pdf_text($post_id, $info['attachment_id']);
+            //get_add_pdf_text($post_id, $info['attachment_id']);
         }
     }
 

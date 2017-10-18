@@ -96,7 +96,7 @@ if (!empty($app['app_id']) && !empty($app['app_secret'])) {
                 ?>
             </div>
 
-            <a href="#" class="more-options-register"> <?php _e('More options', 'tainacan'); ?> </a>
+            <!--a href="#" class="more-options-register"> <?php _e('More options', 'tainacan'); ?> </a>
             <br> <br>
 
             <div class="expanded-register" style="display: none">
@@ -119,7 +119,7 @@ if (!empty($app['app_id']) && !empty($app['app_secret'])) {
                     <label for="prof_resume"> <?php _e('Professional Resume', 'tainacan'); ?> </label>
                     <input type="text" name="prof_resume" class="form-control prof_resume">
                 </div>
-            </div>
+            </div-->
 
             <div class="modal-footer">
                 <button type="submit" class="btn btn-primary" onclick="check_register_fields(); return false;"><?php _e('Register', 'tainacan'); ?></button>
