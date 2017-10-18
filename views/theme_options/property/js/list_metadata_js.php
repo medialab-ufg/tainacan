@@ -1568,11 +1568,6 @@
         });
     }
 
-    $(function(){
-        get_menu_property('terms');
-    });
-
-
     function edit_term(id) {
         $.ajax({
             url: $('#src').val() + '/controllers/property/property_controller.php',

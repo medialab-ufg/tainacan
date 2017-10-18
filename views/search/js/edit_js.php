@@ -588,7 +588,6 @@
             });
         });
     }
-    get_menu_property('terms');
 
     function showOrientationStyles() {
         var orientation_class = $("#search_data_orientation option:selected").attr('class');

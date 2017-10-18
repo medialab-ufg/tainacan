@@ -1567,8 +1567,6 @@
         });
     }
 
-    get_menu_property('terms');
-
     function edit_term(id) {
         list_tabs();
         $.ajax({
