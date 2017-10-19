@@ -102,19 +102,16 @@ class ObjectSaveValuesModel extends Model {
      *
      *
      * */
-    public function saveValue($item_id, $compound_id, $property_children_id, $type, $index, $value, $indexCompound)
-    {
+    public function saveValue($item_id, $compound_id, $property_children_id, $type, $index, $value, $indexCompound){
         /*
          * $compound_id: ID da propriedade
          */
         $meta = get_post_meta($item_id, 'socialdb_property_helper_'.$compound_id, true);
-        if($meta)
-        {
+        if($meta){
             $array = unserialize($meta);
             // verifico se o metadato pai ja esta inserido , verifico se o indice tb ja esta inserido,
             // e se o metadado filho tb ja esta inserido naquele indice
-            if(is_array($array) && isset($array[$index]) && isset($array[$index][$property_children_id]))
-            {
+            if(is_array($array) && isset($array[$index]) && isset($array[$index][$property_children_id])){
                 // o tipo deste valor data,object ou term
                 $type = $array[$index][$property_children_id]['type'];
                 // array de valores (necessario se existir a necessidade de compostas com valores multivalorados)
@@ -122,19 +119,15 @@ class ObjectSaveValuesModel extends Model {
                 //busco o valor do postmeta bruto para ser atualizado
                 $meta_value = (is_numeric($indexCompound) && isset($values[(int)$indexCompound])) ? $this->sdb_get_post_meta($values[(int)$indexCompound]) : false;
                 //caso esse postmeta exista
-                if($meta_value)
-                {
+                if($meta_value){
                     $this->updateValue($item_id, $meta_value, $compound_id, $property_children_id, $index, $value);
                 }
                 //caso nao exista esse, postmeta ele sera criado e salvo no helper
-                else
-                {
+                else{
                     $meta_id = $this->createValue($item_id, $type, $compound_id, $property_children_id, $index, $value);
                     $array[$index][$property_children_id]['values'][] = $meta_id;
                 }
-            }
-            else
-            {
+            }else{
                 $meta_id = $this->createValue($item_id, $type, $compound_id, $property_children_id, $index, $value);
                 $new_children = [
                     'type' => $type, // data, term, object
@@ -142,8 +135,7 @@ class ObjectSaveValuesModel extends Model {
                 ];
                 $array[$index][$property_children_id]= $new_children;
             }
-        }else
-        {
+        }else{
 
             //print "No meta $property_children_id";
             $array = [];
@@ -156,7 +148,6 @@ class ObjectSaveValuesModel extends Model {
         }
 
         update_post_meta($item_id, 'socialdb_property_helper_'.$compound_id, serialize($array));
-
         return json_encode(['date'=> date('d/m/y'),'hour'=> date('H:i:s')]);
     }
     
@@ -186,6 +177,11 @@ class ObjectSaveValuesModel extends Model {
             }
         }else{
             $meta_id = $this->sdb_add_post_meta($item_id, 'socialdb_property_'.$property_children_id, $value);
+            if($this->is_Date($value)){
+                $array = $this->is_Date($value);
+                $vinculate = $this->sdb_add_post_meta($item_id, 'socialdb_property_'.$property_children_id.'_date', $array[2].'-'.$array[0].'-'.$array[1]);
+                $this->sdb_add_post_meta($item_id, '_'.$meta_id, $vinculate);
+            }
             $this->set_common_field_values($item_id, "socialdb_property_$property_children_id", $value);
             if($is_compound){
                 //neste caso sera o meta_id
@@ -193,6 +189,22 @@ class ObjectSaveValuesModel extends Model {
             }
         }
         return $meta_id;
+    }
+
+    /**
+     * @param $str
+     * @return bool
+     */
+    public function is_Date($str){
+        $str = str_replace('/', '-', $str);
+        $stamp = strtotime($str);
+        if (is_numeric($stamp)){
+            $month = date( 'm', $stamp );
+            $day   = date( 'd', $stamp );
+            $year  = date( 'Y', $stamp );
+            return [$month, $day, $year];
+        }
+        return false;
     }
 
 
@@ -236,6 +248,16 @@ class ObjectSaveValuesModel extends Model {
             }
         }else if(strpos($meta_value->meta_key, 'socialdb_property_')!==false){
             $this->sdb_update_post_meta($meta_value->meta_id, $value);
+            if($this->is_Date($value)){
+                $array = $this->is_Date($value);
+                $vinculate = get_post_meta($item_id,'_'.$meta_value->meta_id,true);
+                if($vinculate)
+                    $this->sdb_update_post_meta($vinculate, $array[2].'-'.$array[0].'-'.$array[1]);
+                else{
+                    $vinculate = $this->sdb_add_post_meta($item_id, 'socialdb_property_'.$property_children_id.'_date', $array[2].'-'.$array[0].'-'.$array[1]);
+                    $this->sdb_add_post_meta($item_id, '_'.$meta_value->meta_id, $vinculate);
+                }
+            }
             $this->set_common_field_values($item_id, "socialdb_property_$property_children_id", $value);
             if($is_compound){
                 $this->updateCompoundMeta($item_id, $compound_id, $property_children_id, $index, $meta_value->meta_id);
