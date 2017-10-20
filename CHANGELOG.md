@@ -15,6 +15,8 @@ e este projeto adere para [Semantic Versioning](http://semver.org/spec/v2.0.0.ht
 - API: correção do retorno de thumbnail
 - Correção da seleção de licenças
 - Correção do relacionamento de categorias com item
+- Atualização de redirecionamentos e urls
+- Melhoria no envio de itens ao sistema, ao enviar seus ids e thumbnails.
 
 ### Removido
 - Remoção de opções não utilziadas na tela de registro de usuário
