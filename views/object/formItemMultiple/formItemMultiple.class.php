@@ -91,6 +91,7 @@ class FormItemMultiple extends Model {
      */
     public function loadMetadataContainer($properties_raw) {
         $this->structureProperties($properties_raw);
+        $this->collection_id = $properties_raw['collection_id'];
         ?>
         <input type="hidden" id="item-multiple-selected">
         <div id='form_properties_items' class="col-md-3 menu_left_files menu-left-size">
@@ -317,8 +318,21 @@ class FormItemMultiple extends Model {
      * @param type $properties1
      */
     public function listPropertiesbyTab($tab_id) {
+
         if (is_array($this->metadatas[$tab_id])) {
-            foreach ($this->metadatas[$tab_id] as $property) {
+            $meta = get_post_meta($this->collection_id, 'socialdb_collection_fixed_properties_visibility', true);
+            if ($meta && $meta != ''):
+         		$collectionPropertiesView = explode(',', $meta);
+         	else:
+         		$collectionPropertiesView = [];
+         	endif;
+            foreach ($this->metadatas[$tab_id] as $property)
+            {
+                if(in_array($property['id'], $collectionPropertiesView))
+                {
+                    continue;
+                }
+
                 $this->allPropertiesIds[] = $property['id'];
                 if(has_filter('property_is_visible')){
                     if(!apply_filters('property_is_visible', $property,$this->collection_id)){
@@ -430,9 +444,16 @@ class FormItemMultiple extends Model {
             function saveItems(){
                 var has_selected = [];
                 var allIds = [];
+                var titles = [];
                 $.each($("input:checkbox[name='selected_items']"), function () {
                     allIds.push($(this).val());
                 });
+
+                allIds.forEach(function(id){
+                    let title = $("#title_"+id).val();
+                    titles.push({id: id, title: title});
+                });
+
                 <?php if($this->operation == 'add-files'): ?>
                 $.each($("input:checkbox[name='selected_items']:checked"), function () {
                     has_selected.push($(this).val());
@@ -441,7 +462,7 @@ class FormItemMultiple extends Model {
                 if(has_selected.length > 0){
                     swal({
                         title: '<?php _e('Attention', 'tainacan') ?>',
-                        text: '<?php _e('Save only ', 'tainacan') ?>' + has_selected.length + ' <?php _e(' selected items ?', 'tainacan') ?>',
+                        text: '<?php _e('Save only ', 'tainacan') ?> ' + has_selected.length + ' <?php _e(' selected items ?', 'tainacan') ?>',
                         type: "info",
                         showCancelButton: true,
                         confirmButtonClass: 'btn-primary',
@@ -451,12 +472,10 @@ class FormItemMultiple extends Model {
                     function (isConfirm) {
                         if(isConfirm){
                             publishItems(has_selected);
-                        }/*else{
-                            publishItems(allIds);
-                        }*/
+                        }
                     });
                 }else{
-                    publishItems(allIds);
+                    publishItems(allIds, titles);
                 }
             }
 
@@ -570,14 +589,15 @@ class FormItemMultiple extends Model {
                 wpquery_clean();
             }
             
-            function publishItems(ids){
+            function publishItems(ids, titles = null){
                 show_modal_main();
                 $.ajax({
                     url: $('#src').val() + '/controllers/object/form_item_controller.php',
                     type: 'POST',
                     data: {
                         operation: 'publishItems', 
-                        items: ids, 
+                        items: ids,
+                        titles: titles,
                         collection_id: $("#collection_id").val()
                     }
                 }).done(function (result) {

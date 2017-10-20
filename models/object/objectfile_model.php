@@ -35,7 +35,7 @@ class ObjectFileModel extends Model {
             $arquivos = get_post_meta($post->ID, '_file_id');
             if ($attachments) {
                 foreach ($attachments as $attachment) {
-                    if (is_array($arquivos)&&in_array($attachment->ID, $arquivos)) {
+                    if (is_array($arquivos) && in_array($attachment->ID, $arquivos)) {
                         $object_content = get_post_meta($data['object_id'],'socialdb_object_content',true);
                         if($object_content!=$attachment->ID){
                             $metas = wp_get_attachment_metadata($attachment->ID);
@@ -67,10 +67,10 @@ class ObjectFileModel extends Model {
         if ($_FILES) {
             foreach ($_FILES as $file => $array) {
                 if (!empty($_FILES[$file]["name"])) {
-                    //$_FILES[$file]["name"] = $this->remove_accent_file($_FILES[$file]["name"]);
-                    $_FILES[$file]["name"] = remove_accents($_FILES[$file]["name"]);
-                     $newupload = $this->insert_attachment($file, $data['object_id']);
-                     echo json_encode($newupload);
+	                $_FILES[$file]["name"] = remove_accents($_FILES[$file]["name"]);
+	                $newupload = $this->insert_attachment($file, $data['object_id']);
+
+	                echo json_encode($newupload);
                 }
             }
         }

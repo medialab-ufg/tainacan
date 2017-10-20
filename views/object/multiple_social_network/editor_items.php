@@ -275,7 +275,7 @@ $filesOther= [];
         //lista as propriedades de dados
          if((isset($properties['property_term']))): ?>
             <!--h4><?php _e('Term properties','tainacan'); ?></h4-->
-            <?php foreach ( $properties['property_term'] as $property ) { 
+            <?php foreach ( $properties['property_term'] as $property ) {
                 $all_properties[] = $property['id'];
                 $term_properties_id[] = $property['id'];  
             ?>

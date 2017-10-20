@@ -134,7 +134,7 @@ class WPQueryController extends Controller {
                 $date_range = $paramters["meta_query"][0]["value"];
 
                 $result_objects = $wpquery_model->getRangeItems($param_type, $date_range, $meta_id);
-                $data['loop'] =  new WP_Query($result_objects);
+                $data['loop'] =  new WP_Query($paramters);
 
                 $data['collection_data'] = $collection_model->get_collection_data($args['collection_id']);
                 $data['listed_by'] = $wpquery_model->get_ordered_name($args['collection_id'], $args['ordenation_id'], $args['order_by']);

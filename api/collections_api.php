@@ -137,6 +137,8 @@ abstract class CollectionsApi {
                     $item->thumbnail = get_post($id)->guid;
                 }
             }
+        }else{
+            $item->thumbnail = get_template_directory_uri() . "/libraries/images/colecao_thumb.svg";
         }
         
         //se for para mostrar anexos

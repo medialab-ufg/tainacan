@@ -282,7 +282,7 @@ $references = [
         <?php endif; 
         //lista as propriedades de dados
          if((isset($properties['property_term']))): ?>
-            <?php foreach ( $properties['property_term'] as $property ) { 
+            <?php foreach ( $properties['property_term'] as $property ) {
 //                if(!isset($property['has_children'])||empty($property['has_children'])){
 //                    continue;
 //                }
