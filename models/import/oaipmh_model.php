@@ -557,13 +557,16 @@ class OAIPMHModel extends Model {
     public function get_mapping_oaipmh_dc($mapping_id) {
          $data = [];
          $mappings = unserialize(get_post_meta($mapping_id,'socialdb_channel_oaipmhdc_mapping',true));
-         foreach ($mappings as $mapping) {
-             if(isset($mapping['attribute_value'])){
-                 $index = $mapping['tag'].'_'.$mapping['attribute_value'];
-             }else{
-                 $index = $mapping['tag'];
-             }
-             $data[$index] = $mapping['socialdb_entity'];
+         if(is_array($mappings))
+         {
+	         foreach ($mappings as $mapping) {
+		         if(isset($mapping['attribute_value'])){
+			         $index = $mapping['tag'].'_'.$mapping['attribute_value'];
+		         }else{
+			         $index = $mapping['tag'];
+		         }
+		         $data[$index] = $mapping['socialdb_entity'];
+	         }
          }
          $data['import_object'] = get_post_meta($mapping_id, 'socialdb_channel_oaipmhdc_import_object', true);
          return $data;

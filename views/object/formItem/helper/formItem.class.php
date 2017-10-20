@@ -409,7 +409,9 @@ class FormItem extends Model {
                     $data = ['text', 'textarea', 'date', 'number', 'numeric', 'auto-increment', 'user'];
                     $term = ['selectbox', 'radio', 'checkbox', 'tree', 'tree_checkbox', 'multipleselect'];
                     $object = (isset($property['metas']['socialdb_property_object_category_id']) && !empty($property['metas']['socialdb_property_object_category_id'])) ? true : false;
-                    if (in_array($property['type'], $data) && !$object) {
+                     if($property['slug'] === 'status_repository_property'){
+                        do_action('alter_widget_form_item',$this->itemId,$property,$this->getValuePropertyHelper($this->itemId,$property['id']));
+                     }else if (in_array($property['type'], $data) && !$object) {
                         $class = new FormItemText();
                         $class->value = $this->getValuePropertyHelper($this->itemId,$property['id']);
                         $class->widget($property, $this->itemId);
@@ -561,6 +563,8 @@ class FormItem extends Model {
                         $class = new FormItemCompound($this->collection_id, $this->getValuePropertyHelper($this->itemId,$property['id']));
                         //$class->value = $this->getValuePropertyHelper($this->itemId,$property['id']);
                         $class->widget($property, $this->itemId);
+                    }else{
+                        do_action('alter_widget_form_item',$property);
                     }
                 }
             }

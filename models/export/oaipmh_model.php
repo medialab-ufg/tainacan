@@ -439,6 +439,7 @@ class OAIPMHModel extends Model {
         $channels = get_post_meta($collection_id, 'socialdb_collection_channel');
         if (is_array($channels)) {
             $json = [];
+
             foreach ($channels as $ch) {
                 $ch = get_post($ch);
                 if(isset($ch->ID)){
@@ -446,7 +447,7 @@ class OAIPMHModel extends Model {
                     if (!empty($ch) && !is_wp_error($oai_pmhdc) && isset($oai_pmhdc[0]->name) && $oai_pmhdc[0]->name == 'socialdb_channel_oaipmhdc') {
                         return true;
                     }
-                }    
+                }
             }
             return false;
         } else {

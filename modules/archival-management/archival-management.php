@@ -114,6 +114,90 @@ function archival_add_new_metas_event_edit_category($event_edit_term) {
 }
 /******************************************************************************/
 /**
+ *
+ */
+add_action('alter_widget_form_item','archival_alter_widget_form_item',10,3);
+function archival_alter_widget_form_item($item_id,$property,$value){
+    $result = ArchivalGetValues($value);
+    ?>
+    <div id="meta-item-<?php echo $property['id']; ?>" class="form-group" >
+        <h2>
+            <?php echo $property['name']; ?>
+        </h2>
+        <div>
+            <input
+            type="radio"
+            onchange="validate_status(<?php echo $property['id']; ?>)"
+            <?php
+            if ($result && $result[0] == 'current'): echo 'checked="checked"';
+            endif;
+            ?>
+            name="socialdb_property_<?php echo $property['id']; ?>" value="current"><?php _e('Current', 'tainacan') ?><br>
+            <input
+            onchange="validate_status(<?php echo $property['id']; ?>)"
+            type="radio" <?php
+            if ($result &&$result[0] == 'intermediate'): echo 'checked="checked"';
+            endif;
+            ?>  name="socialdb_property_<?php echo $property['id']; ?>" value="intermediate"><?php _e('Intermediate', 'tainacan') ?><br>
+            <input
+            onchange="validate_status(<?php echo $property['id']; ?>)"
+            type="radio" <?php
+            if ($result && $result[0] == 'permanently'): echo 'checked="checked"';
+            endif;
+            ?> name="socialdb_property_<?php echo $property['id']; ?>" value="permanently"><?php _e('Permanently', 'tainacan') ?>
+        </div>
+    </div>
+    <script>
+        $('input[name="socialdb_property_<?php echo $property['id']; ?>"]').change(function(){
+            $.ajax({
+                url: $('#src').val() + '/controllers/object/form_item_controller.php',
+                type: 'POST',
+                data: {
+                    operation: 'saveValue',
+                    type:'data',
+                    value: $(this).val(),
+                    item_id:'<?php echo $item_id ?>',
+                    compound_id:'<?php echo $property['id'] ?>',
+                    property_children_id: 0,
+                    index: 0,
+                    indexCoumpound: 0
+                }
+            });
+        });
+    </script>
+    <?php
+}
+
+function ArchivalGetValues($array){
+    $ids = [];
+    $array = $array[0][0];
+    if(is_array($array)){
+        $values = $array['values'];
+        foreach ($values as $key => $value) {
+            $meta = archival_get_post_meta($value);
+            if(isset($meta->meta_value))
+                $ids[] = $meta->meta_value;
+        }
+    }
+    return $ids;
+}
+
+function archival_get_post_meta($meta_id) {
+    global $wpdb;
+    $query = "SELECT * FROM $wpdb->postmeta WHERE meta_id = $meta_id";
+    $result = $wpdb->get_results($query);
+    if ($result && is_array($result)) {
+        return $result[0];
+    } elseif ($result && isset($result->ID)) {
+        return $result;
+    } else {
+        return false;
+    }
+}
+
+
+
+/**
  * Adicionando os campos no modal de EDICAO de categoria 
  * @uses single.php 
  */

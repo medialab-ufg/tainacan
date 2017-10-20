@@ -510,8 +510,7 @@ class WPQueryModel extends Model {
         $post_status_unset  = ( !isset($recover_data['post_status']) || empty($recover_data['post_status']) );
 
         // Se estiver buscando
-        if( $is_root_collection && $post_type_unset && $post_status_unset)
-        {
+        if( $is_root_collection && $post_type_unset && $post_status_unset){
             $page = $this->set_page($recover_data);
             $orderby = $this->set_order_by($recover_data);
             $order = $this->set_type_order($recover_data);
@@ -532,9 +531,7 @@ class WPQueryModel extends Model {
                 $args['order'] = 'ASC';
             }
             return $args;
-        }
-        else
-        {
+        }else{
             $page = $this->set_page($recover_data);
             $orderby = $this->set_order_by($recover_data);
             $array_defaults = ['socialdb_object_from','socialdb_object_dc_type','socialdb_object_dc_source','title','socialdb_license_id','comment_count'];
@@ -1088,9 +1085,9 @@ class WPQueryModel extends Model {
             //$meta_query = array('relation' => 'AND');
             foreach ($recover_data['properties_data_fromto_date'] as $property_id => $value) {
                 $meta_query[] = array(
-                    'key' => 'socialdb_property_' . $property_id,
+                    'key' => 'socialdb_property_' . $property_id.'_date',
                     'value' => $value,
-                    'type' => 'date',
+                    'type' => 'DATE',
                     'compare' => 'BETWEEN'
                 );
             }

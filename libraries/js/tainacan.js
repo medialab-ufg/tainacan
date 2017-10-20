@@ -2182,6 +2182,8 @@ function showProfileScreen(src) {
         $('#loader_collections').hide();
         $('#collection_post').hide();
         $('#configuration').html(result);
+
+        $("section.admin-configs").html(result);
     });
 }
 
