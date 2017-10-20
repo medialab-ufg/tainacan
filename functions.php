@@ -2064,7 +2064,7 @@ if (!function_exists("theme_js")) {
 add_action('wp_enqueue_scripts', 'load_dashicons_front_end');
 
 function load_dashicons_front_end() {
-    wp_enqueue_style('dashicons');
+    wp_enqueue_style('dashicons', ABSPATH . 'wp-includes/css/');
 }
 
 function colpick_scripts() {
