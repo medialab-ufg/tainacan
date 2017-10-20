@@ -853,11 +853,12 @@ function elasticpress_improve_fields( $post_args, $post_id ) {
         }
 
         //getCollection
-        if($post_args['post_parent'] && is_numeric($post_args['post_parent'])){
+        if(is_numeric($post_args['post_parent']) && $post_args['post_parent'] !== 0){
             $post_args['collection'] = get_post($post_args['post_parent']);
         }else if($post_args['post_parent'] === 0 && isset($post_args['terms']['socialdb_category_type'])){
             foreach ($post_args['terms']['socialdb_category_type'] as $term) {
-                $collection = getCollectionByTermRoot($term->term_id);
+                $id = (isset($term->term_id)) ? $term->term_id : $term['term_id'];
+                $collection = getCollectionByTermRoot($id);
                 if($collection){
                     $post_args['collection'] = $collection;
                     break;
@@ -944,6 +945,8 @@ function getCollectionByTermRoot($term_id){
     $result = $wpdb->get_results($query);
     if ($result && is_array($result) && count($result) > 0) {
         return $result[0];
+    }else if($result){
+        return $result;
     }
     return false;
 }
