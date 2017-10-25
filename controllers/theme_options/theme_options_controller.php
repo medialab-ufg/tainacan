@@ -39,6 +39,17 @@ class ThemeOptionsController extends Controller {
                 return $theme_options_model->update_welcome_email($data);
             case "update_devolution_email_alert_content":
                 return $theme_options_model->update_devolution_email_alert($data);
+	        case "removeThumbnail":
+		        $socialdb_logo = get_option('socialdb_logo');
+		        delete_post_thumbnail($socialdb_logo);
+		        wp_delete_post($socialdb_logo, true);
+	        	break;
+	        case "removeCover":
+		        $cover_id = get_option('socialdb_repository_cover_id');
+		        wp_delete_attachment($cover_id);
+		        delete_option('socialdb_repository_cover_id');
+		        wp_delete_post($cover_id, true);
+	        	break;
             case "edit_licenses":
                 $data = $theme_options_model->get_theme_general_options_data();
                 Log::addLog(['event_type' => 'admin', 'event' => 'licenses']);

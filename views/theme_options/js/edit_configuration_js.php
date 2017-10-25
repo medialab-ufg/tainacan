@@ -149,4 +149,101 @@
             list_templates();
         });
     }
+
+    $(document).on("click", "#removeThumbnail", function(){
+
+        swal({
+                title: "<?php _e('Are you sure?', 'tainacan')?>",
+                text: "<?php _e('Do you really want to remove thumbnail?', 'tainacan')?>",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+                showCancelButton: true,
+                confirmButtonText: '<?php _e("Yes", "tainacan"); ?>',
+                cancelButtonText: '<?php _e("No", "tainacan"); ?>'
+            },
+            function (willDelete) {
+                if (willDelete) {
+                    let button = $(this);
+                    $(button).attr("disabled", "disabled");
+                    $("#remove").hide();
+                    $("#removing").show();
+
+                    $("#modalImportMain").modal('show');
+
+                    $.ajax({
+                        url: $(src).val() + '/controllers/theme_options/theme_options_controller.php',
+                        type: 'POST',
+                        data: {operation: 'removeThumbnail', post_id: $("#collection_id").val()}
+                    }).done(function(){
+                        $("#thumbImg").hide();
+                        $("#removeThumbnail").hide();
+                        $("#imageEditor").show();
+                        $("#showEditThumbnail").hide();
+                        $("#modalImportMain").modal('hide');
+
+                        swal(
+                            '<?php _e('Removed', 'tainacan'); ?>',
+                            "<?php _e('Thumbnail was removed', 'tainacan'); ?>",
+                            'success'
+                        );
+                    });
+
+
+                }
+            }
+        );
+    });
+
+    $(document).on("click", "#removeCover", function(){
+
+        swal({
+                title: "<?php _e('Are you sure?', 'tainacan')?>",
+                text: "<?php _e('Do you really want to remove cover?', 'tainacan')?>",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+                showCancelButton: true,
+                confirmButtonText: '<?php _e("Yes", "tainacan"); ?>',
+                cancelButtonText: '<?php _e("No", "tainacan"); ?>'
+            },
+            function (willDelete) {
+                if (willDelete) {
+                    let button = $(this);
+                    $(button).attr("disabled", "disabled");
+                    $("#removeCover").hide();
+                    $("#removingCover").show();
+                    $("#removeTextCover").text($(button).attr('data-loading-text')+"...");
+                    $("#modalImportMain").modal('show');
+
+                    $.ajax({
+                        url: $(src).val() + '/controllers/theme_options/theme_options_controller.php',
+                        type: 'POST',
+                        data: {operation: 'removeCover', post_id: $("#collection_id").val()}
+                    }).done(function(){
+                        $("#coverImg").hide();
+                        $("#removeCover").hide();
+                        $("#showEditCover").hide();
+                        show_edit_cover();
+                        $("#modalImportMain").modal('hide');
+                        swal(
+                            '<?php _e('Removed', 'tainacan'); ?>',
+                            "<?php _e('Cover was removed', 'tainacan'); ?>",
+                            'success'
+                        );
+                    });
+
+
+                }
+            }
+        );
+    });
+
+    function show_edit_cover() {
+        $("#edit_cover_container").show();
+    }
+
+    function show_edit_thumbnail() {
+        $("#imageEditor").show();
+    }
 </script>

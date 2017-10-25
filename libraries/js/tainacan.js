@@ -3720,7 +3720,6 @@ function list_comments_general(item_id) {
     }
 }
 
-
 function submit_comment(object_id) {
     var comment_content = $('#comment').val().trim();
     comment_content = remove_script_tags(comment_content);

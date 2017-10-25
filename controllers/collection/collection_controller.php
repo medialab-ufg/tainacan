@@ -96,6 +96,15 @@ class CollectionController extends Controller {
                 $data['update'] = $collection_model->update($data);
                 $data['is_moderator'] = CollectionModel::is_moderator($data['collection_id'], get_current_user_id());
                 return json_encode($data);
+                break;
+	        case "removeThumbnail":
+		        delete_post_thumbnail($data['post_id']);
+		        break;
+	        case "removeCover":
+		        $cover_id = get_post_meta($data['post_id'], 'socialdb_collection_cover_id', true);
+		        wp_delete_attachment($cover_id);
+		        delete_post_meta($data['post_id'], 'socialdb_collection_cover_id');
+	        	break;
             case "delete":
                 return $collection_model->delete($data);
             case "list":

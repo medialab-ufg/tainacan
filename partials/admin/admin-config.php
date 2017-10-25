@@ -35,17 +35,30 @@ if(is_object($cover) && $cover->post_type === "attachment") {
             </div>
 
             <div id="thumb-idea-form">
-                <?php if(isset($logo)): ?>
+                <?php
+                    $style = "display: block;";
+                    if(isset($logo)):
+	                    $style = 'display: none;';
+                ?>
                     <label for="repository_logo"> <?php echo $logo_str; ?> </label>
-                    <img src="<?php echo $logo; ?>" alt="<?php echo $logo_str; ?>" title="<?php echo $logo_str;?>" class="img-thumbnail">
-
-                    <div class="remove-repository-logo">
-                        <input type="checkbox" id="remove_thumbnail" name="remove_thumbnail" value="true">
-                        <label for="remove_thumbnail"> <?php _e('Remove Thumbnail','tainacan');?> </label>
+                    <div id="thumbImg">
+                        <img src="<?php echo $logo; ?>" alt="<?php echo $logo_str; ?>" title="<?php echo $logo_str;?>" class="img-thumbnail">
                     </div>
+
+                    <button type="button" id="removeThumbnail" class="btn btn-danger"
+                            data-loading-text="<?php _e("Removing", "tainacan"); ?>">
+
+                        <span id="removing" class="glyphicon glyphicon-refresh" aria-hidden="true" style="display: none;"></span>
+                        <span id="remove" class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                        <span id="removeText">
+                            <?php _e("Remove thumbnail", "tainacan"); ?>
+                        </span>
+                    </button>
+
+                    <a id='showEditThumbnail'href="javascript:void(0)" onclick="show_edit_thumbnail()" class="btn btn-default"> <?php _e('Edit thumbnail', 'tainacan'); ?>  </a>
                 <?php endif; ?>
-                <div>
-                    <label for="logo"> <?php echo (isset($logo)) ? $logo_edit : $logo_str; ?> </label>
+                <div style="<?php echo $style;?> margin-top: 10px;" id="imageEditor">
+                    <!--<label for="logo"> <?php /*echo (isset($logo)) ? $logo_edit : $logo_str; */?> </label>-->
                     <div id="logo_crop" class="common-crop"></div>
                 </div>
             </div>
@@ -54,18 +67,34 @@ if(is_object($cover) && $cover->post_type === "attachment") {
 
             <!------------------- Capa do repositorio ----------------------------->
             <div id="cover-idea-form">
-                <?php if($cover_id): ?>
+                <?php
+                    $style = "display: block;";
+                    if($cover_id):
+	                    $style = 'display: none;';
+                ?>
                     <label for="repository_cover"> <?php echo $cover_str; ?> </label>
-                    <img src="<?php echo $cover_img; ?>" alt="<?php echo $cover_str; ?>" title="<?php echo $cover_str; ?>" class="img-thumbnail"/>
-
-                    <div class="remove-repository-cover">
-                        <input type="checkbox" id="remove_cover" name="remove_cover" value="true">
-                        <label for="remove_cover"> <?php _t('Remove Cover',1);?> </label>
+                    <div id="coverImg" style="margin-top: 10px; margin-bottom: 10px;">
+                        <img src="<?php echo $cover_img; ?>" alt="<?php echo $cover_str; ?>" title="<?php echo $cover_str; ?>" class="img-thumbnail"/>
                     </div>
+
+                    <button type="button" id="removeCover" class="btn btn-danger"
+                            data-loading-text="<?php _e("Removing", "tainacan"); ?>">
+
+                        <span id="removingCover" class="glyphicon glyphicon-refresh" aria-hidden="true" style="display: none;"></span>
+                        <span id="removeCover" class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                        <span id="removeTextCover">
+                                        <?php _e("Remove cover", "tainacan"); ?>
+                                    </span>
+
+                    </button>
+
+                    <a id='showEditCover'href="javascript:void(0)" onclick="show_edit_cover()" class="btn btn-default"> <?php _e('Edit Cover', 'tainacan'); ?>  </a>
                 <?php endif; ?>
 
-                <label for="repository_cover"> <?php echo (isset($cover_img)) ? $cover_edit : $cover_str; ?> </label>
-                <div id="cover_crop" class="common-crop"></div>
+                <div id="edit_cover_container" style="<?php echo $style; ?> margin-top: 10px;">
+                    <!--<label for="repository_cover"> <?php /*echo (isset($cover_img)) ? $cover_edit : $cover_str; */?> </label>-->
+                    <div id="cover_crop" class="common-crop"></div>
+                </div>
             </div>
 
             <hr style="border-color: #e3e3e3">
