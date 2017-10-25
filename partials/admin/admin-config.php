@@ -54,7 +54,7 @@ if(is_object($cover) && $cover->post_type === "attachment") {
                             <?php _e("Remove thumbnail", "tainacan"); ?>
                         </span>
                     </button>
-
+                        <!---->
                     <a id='showEditThumbnail'href="javascript:void(0)" onclick="show_edit_thumbnail()" class="btn btn-default"> <?php _e('Edit thumbnail', 'tainacan'); ?>  </a>
                 <?php endif; ?>
                 <div style="<?php echo $style;?> margin-top: 10px;" id="imageEditor">
