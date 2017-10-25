@@ -173,10 +173,12 @@
                         <input type="file" accept=".zip" name="file_zip">
                     </div>
                     <div id="div_in_server_zip" style="display:none;">
+                        <p><?php _e('Insert the path <b>only</b> in this server','tainacan') ?></p>
                         <input type="text" name="file_path" placeholder="<?php echo __('Insert file path in this server', 'tainacan'); ?>" class="form-control">
                     </div>
                     <br><br>
                     <div>
+                        <p><?php _e('Insert categories that represents the folder hierarchy in this file','tainacan') ?></p>
                         <input type="checkbox" onclick="changeMetadataZipDiv()" id="zip_folder_hierarchy" name="zip_folder_hierarchy" value="1">&nbsp;<?php echo __('Import Folder Hierarchy', 'tainacan'); ?>
                     </div>
                     <div id="metadata_zip_div" style="display:none;">
@@ -194,7 +196,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo __('Close', 'tainacan'); ?></button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo __('Cancel', 'tainacan'); ?></button>
                     <button type="submit" class="btn btn-primary"><?php echo __('Import', 'tainacan'); ?></button>
                 </div>
             </form>

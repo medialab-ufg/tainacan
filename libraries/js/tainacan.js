@@ -339,6 +339,7 @@ $(window).load(function () {
     $('#submit_files_item_zip').submit(function (e) {
         $('.nav-tabs').tab();
         $('.dropdown-toggle').dropdown();
+        show_modal_main();
         $.ajax({
             url: $('#src').val() + '/controllers/object/object_multiple_controller.php',
             type: 'POST',
@@ -346,6 +347,7 @@ $(window).load(function () {
             processData: false,
             contentType: false
         }).success(function (result) {
+            hide_modal_main();
             $('#sendFileItemZip').val('');
             $('.nav-tabs').tab();
             $('.dropdown-toggle').dropdown();
