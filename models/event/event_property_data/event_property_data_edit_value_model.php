@@ -61,7 +61,7 @@ class EventPropertyDataEditValue extends EventModel {
                     $names = [];
                     foreach ($data['socialdb_event_property_data_edit_value_attribute_value'] as $value) {
                         if(isset($value['val']))
-                            $names[] = $value['val'];
+                            $names[] = (is_array($value['val'])) ? implode(',',$value['val']) :  $value['val'];
                         else
                             $names[] = $value;
                     }
@@ -77,7 +77,7 @@ class EventPropertyDataEditValue extends EventModel {
                     $names = [];
                     foreach ($data['socialdb_event_property_data_edit_value_attribute_value'] as $value) {
                         if(isset($value['val']))
-                            $names[] = $value['val'];
+                            $names[] = (is_array($value['val'])) ? implode(',',$value['val']) :  $value['val'];
                         else
                             $names[] = $value;
                     }
@@ -85,6 +85,7 @@ class EventPropertyDataEditValue extends EventModel {
                         . __(' in the the object ','tainacan') . '<b><a target="_blank" href="'.  get_the_permalink($object->ID).'">'. $object->post_title.'</a></b>';
                 }else{
                     $text = $data['socialdb_event_property_data_edit_value_attribute_value'];
+                    $text = (is_array($text)) ? implode(',',$text) :  $text;
                     $title = __('Set the value: ','tainacan').' ( <i>'.$text.'</i> ) '.__(' of the data property ','tainacan').'<b>'.$property->name.'</b>'
                         . __(' in the the object ','tainacan') . '<b><a target="_blank" href="'.  get_the_permalink($object->ID).'">'. $object->post_title.'</a></b>';
                 }

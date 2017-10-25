@@ -197,6 +197,7 @@ abstract class EventModel extends Model {
                 ORDER BY pm.meta_id DESC
         ";
         $result = $wpdb->get_results($query);
+
         if ($result && is_array($result) && count($result) > 0) {
             return $result;
         } else {
@@ -498,8 +499,7 @@ abstract class EventModel extends Model {
      * 
      * @author Eduardo Humberto 
      */
-    public function is_automatically_verify_event($collection_id, $action, $user_id, $event_id = 0)
-    {
+    public function is_automatically_verify_event($collection_id, $action, $user_id, $event_id = 0){
         if (has_filter('tainacan_alter_permission_actions')) {
             return apply_filters('tainacan_alter_permission_actions',$action, $collection_id, $event_id);
         }

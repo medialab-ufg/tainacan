@@ -91,6 +91,7 @@ class FormItemMultiple extends Model {
      */
     public function loadMetadataContainer($properties_raw) {
         $this->structureProperties($properties_raw);
+        $this->collection_id = $properties_raw['collection_id'];
         ?>
         <input type="hidden" id="item-multiple-selected">
         <div id='form_properties_items' class="col-md-3 menu_left_files menu-left-size">
@@ -317,8 +318,21 @@ class FormItemMultiple extends Model {
      * @param type $properties1
      */
     public function listPropertiesbyTab($tab_id) {
+
         if (is_array($this->metadatas[$tab_id])) {
-            foreach ($this->metadatas[$tab_id] as $property) {
+            $meta = get_post_meta($this->collection_id, 'socialdb_collection_fixed_properties_visibility', true);
+            if ($meta && $meta != ''):
+         		$collectionPropertiesView = explode(',', $meta);
+         	else:
+         		$collectionPropertiesView = [];
+         	endif;
+            foreach ($this->metadatas[$tab_id] as $property)
+            {
+                if(in_array($property['id'], $collectionPropertiesView))
+                {
+                    continue;
+                }
+
                 $this->allPropertiesIds[] = $property['id'];
                 if(has_filter('property_is_visible')){
                     if(!apply_filters('property_is_visible', $property,$this->collection_id)){

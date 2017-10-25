@@ -36,7 +36,7 @@
         cropOpts.onAfterImgCrop = function() {
             var repo_config = this.id;
             var croppd_imgs = $("img.croppedImg").length;
-            var img = $("img.croppedImg").get( (croppd_imgs-1) ) ;
+            var img = $("img.croppedImg").get( (croppd_imgs - 1) ) ;
             var img_url = $(img).attr("src");
             var data = { operation: 'set_repository_img', collection_id: $("#collection_id").val(),
                 img_url: img_url, img_title: getCroppedFileName(img_url), type: repo_config };

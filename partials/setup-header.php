@@ -1,4 +1,6 @@
 <?php
+include_once(dirname(__FILE__).'/../helpers/view_helper.php');
+$viewHelper = new ViewHelper();
 $options = get_option('socialdb_theme_options');
 $collection_default = get_option('disable_empty_collection');
 $_special_configs = [
@@ -34,6 +36,9 @@ $root_id = get_option('collection_root_id');
 
 <?php
 if(is_single()) {
+    if($post->post_parent === 0){
+        $post->post_parent = $viewHelper->helper_get_collection_by_object($post->ID)[0]->ID;
+    }
     $parent = get_post($post->post_parent);
     ?>
     <input type="hidden" id="alert_attention" value="<?php _t('Attention', 1); ?>" />
