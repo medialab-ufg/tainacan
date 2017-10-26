@@ -5,6 +5,9 @@ include_once (dirname(__FILE__) . '/../input/radio.class.php');
 include_once (dirname(__FILE__) . '/../input/checkbox.class.php');
 include_once (dirname(__FILE__) . '/../input/multipletree.class.php');
 
+//Modal
+//include_once (dirname(__FILE__) . '/../../../collection/modals.php');
+
 class FormItemCategory extends FormItem{
     public $selectboxClass;
     public $simpleTreeClass;
@@ -61,16 +64,122 @@ class FormItemCategory extends FormItem{
                 <?php endif; ?>
                 <div class="category-properties" style="float:left;width: 100%;padding-bottom:15px;" id="appendCategoryMetadata_<?php echo $property['id']; ?>_0_0">
                 </div>
+
+	            <?php
+                if($property['metas']['socialdb_property_habilitate_new_category'])
+                {
+                    ?>
+                    <button type="button" class="btn btn-primary btn-xs pull-right" onclick="add_new_category(<?php echo $property['metas']['socialdb_property_term_root']; ?>, '<?php echo $property['name']?>');">
+                        <?php _e("Add new category", "tainacan"); ?>
+                    </button>
+                <?php
+                }
+	            ?>
             </div>
         </div>
-        <?php 
+
+        <!-- TAINACAN: modal padrao bootstrap para adicao de categorias    -->
+        <div class="modal fade" id="modalAddCategoria" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form  id="submit_adicionar_category_single">
+                        <input type="hidden" id="category_single_add_id" name="category_single_add_id" value="">
+                        <input type="hidden" id="operation_event_create_category" name="operation" value="add_event_term_create">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"></span></button>
+                            <h4 class="modal-title" id="myModalLabel"><span class="glyphicon glyphicon-plus"></span>
+							    <?php _e('Add Category', 'tainacan'); ?>
+							    <?php do_action('add_option_in_add_category'); ?>
+                            </h4>
+                        </div>
+                        <div id="form_add_category">
+                            <div class="modal-body">
+
+                                <div class="create_form-group">
+                                    <label for="category_single_name"><?php _e('Category name', 'tainacan'); ?></label>
+                                    <input type="text" class="form-control" id="category_single_name" name="socialdb_event_term_suggested_name" required="required" placeholder="<?php _e('Category name', 'tainacan'); ?>">
+                                </div>
+                                <div class="form-group">
+                                    <label for="category_single_parent_name"><?php _e('Category parent', 'tainacan'); ?></label>
+                                    <input disabled="disabled" type="text" class="form-control" id="category_single_parent_name" placeholder="<?php _e('Right click on the tree and select the category as parent', 'tainacan'); ?>" name="category_single_parent_name">
+                                    <input type="hidden"  id="category_single_parent_id"  name="socialdb_event_term_parent" value="0" >
+                                </div>
+                                <div class="form-group">
+                                    <label for="category_add_description"><?php _e('Category description', 'tainacan'); ?>&nbsp;<span style="font-size: 10px;">(<?php _e('Optional', 'tainacan'); ?>)</span></label>
+                                    <textarea class="form-control" id="category_add_description" name="socialdb_event_term_description"
+                                              placeholder="<?php _e('Describe your category', 'tainacan'); ?>"></textarea>
+                                </div>
+                                <input type="hidden" id="category_single_add_collection_id" name="socialdb_event_collection_id" value="<?php echo get_the_ID(); ?>">
+                                <input type="hidden" id="category_single_add_create_time" name="socialdb_event_create_date" value="<?php echo mktime(); ?>">
+                                <input type="hidden" id="category_single_add_user_id" name="socialdb_event_user_id" value="<?php echo get_current_user_id(); ?>">
+                                <input type="hidden" id="category_single_add_dynatree_id" name="dynatree_id" value="">
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal"><?php _t('Close', 1); ?></button>
+                                <button type="button" class="btn btn-primary" onclick="send();"><?php _t('Save', 1); ?></button>
+                            </div>
+                        </div>
+                        <div id="another_option_category" style="display: none;">
+						    <?php
+                            do_action('show_option_in_add_category'); ?>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            function add_new_category(fathers_id, fathers_name)
+            {
+                $('#modalAddCategoria').modal('show');
+                $("#category_single_parent_name").val(fathers_name);
+                $("#category_single_parent_id").val(fathers_id);
+            }
+
+            function send (){
+                $('#modalAddCategoria').modal('hide');
+                $('#modalImportMain').modal('show');//mostro o modal de carregamento
+
+                let form_data = new FormData();
+
+                form_data.append("socialdb_event_term_suggested_name", $("#category_single_name").val());
+                form_data.append("socialdb_event_term_description", $("#category_add_description").val());
+
+                form_data.append("category_single_add_id", $("#category_single_add_id").val());
+                form_data.append("socialdb_event_term_parent", $("#category_single_parent_id").val());
+                form_data.append("category_single_parent_name", $("#category_single_parent_name").val());
+                form_data.append("operation", "add_event_term_create");
+                form_data.append("socialdb_event_collection_id", $("#collection_id").val());
+
+                form_data.append("category_single_add_create_time", $("#category_single_add_create_time").val());
+                form_data.append("socialdb_event_user_id", $("#category_single_add_user_id").val());
+                form_data.append("category_single_add_dynatree_id", $("#category_single_add_dynatree_id").val());
+
+                $.ajax({
+                    url: $('#src').val() + '/controllers/event/event_controller.php',
+                    type: 'POST',
+                    data: form_data,
+                    processData: false,
+                    contentType: false
+                }).done(function (result) {
+                    $('#modalImportMain').modal('hide');//escondo o modal de carregamento
+                    elem = jQuery.parseJSON(result);
+                    showAlertGeneral(elem.title, elem.msg, elem.type);
+                    wpquery_clean();
+
+                    window.location = window.location.href;
+                });
+            }
+        </script>
+        <?php
+
         //CASO EXISTA VALORES DE CATEGORIAS,BUSCO SEUS METADADOS
         if($this->value && is_array($this->getValues($this->value[0][0])) && !empty($this->getValues($this->value[0][0]))): 
         ?>
         <script>
         var ids = '<?php echo implode(',', $this->getValues($this->value[0][0])) ?>';
         Hook.register('appendCategoryMetadataHere',function(args){
-             var categories = args[0]
+             var categories = args[0];
              var item_id = args[1];
              var seletor = args[2];
              $(seletor)

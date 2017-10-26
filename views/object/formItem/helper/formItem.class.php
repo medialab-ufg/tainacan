@@ -762,7 +762,6 @@ class FormItem extends Model {
         ?>
         <script>
             $('input[type="text"], input[type="numeric"], input[type="date"], input[type="radio"] , select').focus(function(event){
-                console.log(event);
                 showChangesUpdate();
             });
 
@@ -899,7 +898,7 @@ class FormItem extends Model {
              * @returns {undefined}
              */
             function getPropertyTab(id){
-                var tab = ''
+                var tab = '';
                 if($('#tabs_item').length){
                     $('#tabs_item li').each(function(){
                         var key = $(this).attr('key');

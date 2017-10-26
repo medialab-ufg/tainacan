@@ -31,8 +31,9 @@ class CategoryModel extends Model {
      * 
      * Autor: Eduardo Humberto 
      */
-    public function add($data) {
+    public function  add($data) {
         $is_new = $this->verify_category($data);
+
         if (!$is_new) {
             if ($data['category_parent_id'] == '0' ||
                     $data['category_parent_id'] == 'public_categories' || 

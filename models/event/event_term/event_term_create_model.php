@@ -39,7 +39,7 @@ class EventTermCreate extends EventModel {
     public function verify_event($data,$automatically_verified = false) {
        $actual_state = get_post_meta($data['event_id'], 'socialdb_event_confirmed',true);
        if($actual_state!='confirmed'&&$automatically_verified||(isset($data['socialdb_event_confirmed'])&&$data['socialdb_event_confirmed']=='true')){// se o evento foi confirmado automaticamente ou pelos moderadores
-           $data = $this->add_category($data['event_id'],$data,$automatically_verified);    
+	       $data = $this->add_category($data['event_id'],$data,$automatically_verified);
        }elseif($actual_state!='confirmed'){
            $this->set_approval_metas($data['event_id'], $data['socialdb_event_observation'], $automatically_verified);
            $this->update_event_state('not_confirmed', $data['event_id']);
@@ -73,10 +73,12 @@ class EventTermCreate extends EventModel {
         $data['category_parent_id'] = get_post_meta($event_id, 'socialdb_event_term_parent',true) ;
        // chamo a funcao do model de categoria para fazer a insercao e/ou vincular como faceta
         $result = json_decode($categoryModel->add($data));
+
         if($data['category_parent_id']=='socialdb_category' || $data['category_parent_id']=='socialdb_taxonomy'){
             $categoryModel->add_facet($result->term_id, $data['collection_id']);
         }
-        // verifying if is everything all right
+
+        // verifying if everything is right
         if ($result->success=='true') {
             $this->set_approval_metas($data['event_id'], $data['socialdb_event_observation'], $automatically_verified);
             $this->update_event_state('confirmed', $data['event_id']);
@@ -89,6 +91,7 @@ class EventTermCreate extends EventModel {
             $data['type'] = 'error';
             $data['title'] = 'Erro';
         }
+
         //$this->notificate_user_email($data['collection_id'],  get_current_user_id(), $event_id);
         return $data;
     }
