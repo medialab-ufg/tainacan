@@ -375,7 +375,13 @@
             <input type="hidden" id="properties_id_avoid" name="properties_id" value="<?php echo $all_ids; ?>">
         <?php endif; ?>
 <?php endif; ?>
-    </div>        
+    </div>
+<div class="col-md-12 no-padding">
+    <a style="margin-top:5px;cursor:pointer;" class="pull-right" onclick="slideFormAdvancedDown()">
+        <?php _e('Advanced Search', 'tainacan'); ?>
+        <span class="glyphicon glyphicon-triangle-top" style="font-size: 14px;"></span>
+    </a>
+</div>
 <div class="col-md-12 no-padding" style="margin-top: 15px;">
                 <button type="button" onclick="reboot_form()" class="btn btn-lg btn-default pull-left"><?php _e('Clear search', 'tainacan') ?></button>
                 <button type="submit" onclick="clear_general_field()" class="btn btn-lg btn-success pull-right"><?php _e('Find', 'tainacan') ?></button>
