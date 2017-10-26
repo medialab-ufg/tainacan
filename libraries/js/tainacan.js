@@ -366,6 +366,7 @@ $(window).load(function () {
                 showAlertGeneral('Erro', message, 'error');
             }
         }).error(function (error) {
+            hide_modal_main();
             showAlertGeneral('Erro', 'Houve um erro na importação deste arquivo', 'error');
         });
         e.preventDefault();
