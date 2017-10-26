@@ -339,6 +339,7 @@ $(window).load(function () {
     $('#submit_files_item_zip').submit(function (e) {
         $('.nav-tabs').tab();
         $('.dropdown-toggle').dropdown();
+        $('.modal').modal('hide');
         show_modal_main();
         $.ajax({
             url: $('#src').val() + '/controllers/object/object_multiple_controller.php',
@@ -353,6 +354,7 @@ $(window).load(function () {
             $('.dropdown-toggle').dropdown();
             elem = jQuery.parseJSON(result);
             if (elem) {
+                showAlertGeneral('Sucesso', 'Todos arquivos foram importados', 'success');
                 window.location = elem.url;
             } else {
                 $('#modalImportMain').modal('hide');

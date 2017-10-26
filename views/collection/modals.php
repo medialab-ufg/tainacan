@@ -173,8 +173,8 @@
                         <input type="file" accept=".zip" name="file_zip">
                     </div>
                     <div id="div_in_server_zip" style="display:none;">
-                        <p><?php _e('Insert the path <b>only</b> in this server','tainacan') ?></p>
-                        <input type="text" name="file_path" placeholder="<?php echo __('Insert file path in this server', 'tainacan'); ?>" class="form-control">
+                        <p><?php _e('Insert the path <b>only</b> in this server, URL not worrks!','tainacan') ?></p>
+                        <input type="text" name="file_path" placeholder="Ex. /path/to/file.zip" class="form-control">
                     </div>
                     <br><br>
                     <div>
