@@ -12,7 +12,19 @@ if($post->post_parent === 0) {
 $collection_id = $parent->ID;
 $single_mode = get_post_meta($collection_id, 'socialdb_collection_item_visualization', true);
 
-if("one" === $single_mode) {
+if (has_action('alter_page_item')) {
+    $object_id = $post->ID;
+    $data['collection_id'] = $collection_id;
+    $data['object'] = $post;
+    $data['metas'] = get_post_meta($object_id);
+    $data['collection_metas'] = get_post_meta($col_id, 'socialdb_collection_download_control', true);
+    $data['collection_metas'] = ($data['collection_metas'] ? $data['collection_metas'] : 'allowed');
+    $data['has_watermark'] = get_post_meta($col_id, 'socialdb_collection_add_watermark', true);
+    get_header();
+    echo apply_filters('alter_page_item', $data);
+    get_footer();
+    exit();
+}else if("one" === $single_mode) {
     include_once(dirname(__FILE__) .  '/controllers/object/object_controller.php');
     $obj = new ObjectController();
     $item_data = ['collection_id' => $collection_id, 'object_id' => $post->ID];

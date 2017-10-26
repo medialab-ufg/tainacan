@@ -1,14 +1,14 @@
 <script>
     $(function () {
         //url
-        var stateObj = {foo: "bar"};
-        history.replaceState(stateObj, "page 2", $('#socialdb_permalink_object').val());
-        //botao voltar do browser
-        if (window.history && window.history.pushState) {
-            previousRoute = window.location.pathname;
-            window.history.pushState('forward', null, $('#route_blog').val()+$('#slug_collection').val()+'/'+$('#single_name').val());
-            //
-        }
+//        var stateObj = {foo: "bar"};
+//        history.replaceState(stateObj, "page 2", $('#socialdb_permalink_object').val());
+//        //botao voltar do browser
+//        if (window.history && window.history.pushState) {
+//            previousRoute = window.location.pathname;
+//            window.history.pushState('forward', null, $('#route_blog').val()+$('#slug_collection').val()+'/'+$('#single_name').val());
+//            //
+//        }
         //submissao de formulario positivo
         $('.form_positive_argument').submit(function (e) {
             hide_all_modals();
