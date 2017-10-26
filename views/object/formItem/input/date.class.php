@@ -158,7 +158,7 @@ class DateClass extends FormItem {
             <script>
                 $('#date-field-<?php echo $compound['id'] ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>').trigger('blur');
             </script>
-        <?php endif;         
+        <?php endif;
         }
 
     public function initScriptsDate($property_id, $item_id, $compound_id, $index_id) { ?>

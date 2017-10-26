@@ -84,77 +84,83 @@ class DateClass extends FormItemMultiple {
             init_metadata_date("#date-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>");
 
             $('#date-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>').blur(function () {
-                let field_value = $(this).val().split("/");
-                let day = field_value[0], month = field_value[1], year = field_value[2];
-                if(day_exist_multiple(day, month, year))
+                if($(this).val() != '')
                 {
-                    <?php if($this->isRequired):  ?>
+                    let field_value = $(this).val().split("/");
+                    let day = field_value[0], month = field_value[1], year = field_value[2];
+                    if(day_exist_multiple(day, month, year))
+                    {
+		                <?php if($this->isRequired):  ?>
                         validateFieldsMetadataText($(this).val().trim(),'<?php echo $compound_id ?>','<?php echo $property_id ?>','<?php echo $index_id ?>')
-                    <?php endif; ?>
-                    $.ajax({
-                        url: $('#src').val() + '/controllers/object/form_item_controller.php',
-                        type: 'POST',
-                        data: {
-                            operation: 'saveValue',
-                            type: 'data',
-                            value: $(this).val().trim(),
-                            item_id: $('#item-multiple-selected').val().trim(),
-                            compound_id: '<?php echo $compound_id ?>',
-                            property_children_id: '<?php echo $property_id ?>',
-                            index: <?php echo $index_id ?>,
-                            indexCoumpound: 0,
-                            isKey: <?php echo ($this->isKey) ? 'true':'false' ?>
-                        }
-                    }).done(function (result) {
-                        <?php if($this->isKey): ?>
-                         var json =JSON.parse(result);
-                         if(json.value){
-                            $('#date-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>').val('');
+		                <?php endif; ?>
+                        $.ajax({
+                            url: $('#src').val() + '/controllers/object/form_item_controller.php',
+                            type: 'POST',
+                            data: {
+                                operation: 'saveValue',
+                                type: 'data',
+                                value: $(this).val().trim(),
+                                item_id: $('#item-multiple-selected').val().trim(),
+                                compound_id: '<?php echo $compound_id ?>',
+                                property_children_id: '<?php echo $property_id ?>',
+                                index: <?php echo $index_id ?>,
+                                indexCoumpound: 0,
+                                isKey: <?php echo ($this->isKey) ? 'true':'false' ?>
+                            }
+                        }).done(function (result) {
+			                <?php if($this->isKey): ?>
+                            var json =JSON.parse(result);
+                            if(json.value){
+                                $('#date-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>').val('');
                                 toastr.error(json.value+' <?php _e(' is already inserted!', 'tainacan') ?>', '<?php _e('Attention!', 'tainacan') ?>', {positionClass: 'toast-bottom-right'});
-                         }
-                        <?php endif; ?>
-                    });
-                }else{
-                    $('#date-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>').val('');
-                    toastr.error('<?php _e('Invalid date!', 'tainacan') ?>', '<?php _e('Attention!', 'tainacan') ?>', {positionClass: 'toast-bottom-right'});
+                            }
+			                <?php endif; ?>
+                        });
+                    }else{
+                        $('#date-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>').val('');
+                        toastr.error('<?php _e('Invalid date!', 'tainacan') ?>', '<?php _e('Attention!', 'tainacan') ?>', {positionClass: 'toast-bottom-right'});
+                    }
                 }
             });
             
             $('#date-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>').change(function () {
                 let field_value = $(this).val().split("/");
                 let day = field_value[0], month = field_value[1], year = field_value[2];
-                if(day_exist_multiple(day, month, year))
+                if($(this).val() != '')
                 {
-                    <?php if($this->isRequired):  ?>
+                    if(day_exist_multiple(day, month, year))
+                    {
+		                <?php if($this->isRequired):  ?>
                         validateFieldsMetadataText($(this).val(),'<?php echo $compound_id ?>','<?php echo $property_id ?>','<?php echo $index_id ?>')
-                    <?php endif; ?>
-                    $.ajax({
-                        url: $('#src').val() + '/controllers/object/form_item_controller.php',
-                        type: 'POST',
-                        data: {
-                            operation: 'saveValue',
-                            type: 'data',
-                            value: $(this).val(),
-                            item_id: '<?php echo $item_id ?>',
-                            compound_id: '<?php echo $compound_id ?>',
-                            property_children_id: '<?php echo $property_id ?>',
-                            index: <?php echo $index_id ?>,
-                            indexCoumpound: 0,
-                            isKey: <?php echo ($this->isKey) ? 'true':'false' ?>
-                        }
-                    }).done(function (result) {
-                        <?php if($this->isKey): ?>
-                         var json =JSON.parse(result);
-                         if(json.value){
-                            $('#date-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>').val('');
+		                <?php endif; ?>
+                        $.ajax({
+                            url: $('#src').val() + '/controllers/object/form_item_controller.php',
+                            type: 'POST',
+                            data: {
+                                operation: 'saveValue',
+                                type: 'data',
+                                value: $(this).val(),
+                                item_id: '<?php echo $item_id ?>',
+                                compound_id: '<?php echo $compound_id ?>',
+                                property_children_id: '<?php echo $property_id ?>',
+                                index: <?php echo $index_id ?>,
+                                indexCoumpound: 0,
+                                isKey: <?php echo ($this->isKey) ? 'true':'false' ?>
+                            }
+                        }).done(function (result) {
+			                <?php if($this->isKey): ?>
+                            var json =JSON.parse(result);
+                            if(json.value){
+                                $('#date-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>').val('');
                                 toastr.error(json.value+' <?php _e(' is already inserted!', 'tainacan') ?>', '<?php _e('Attention!', 'tainacan') ?>', {positionClass: 'toast-bottom-right'});
-                         }
-                        <?php endif; ?>
-                    });
-                }else{
-                    $('#date-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>').val('');
-                    toastr.error('<?php _e('Invalid date!', 'tainacan') ?>', '<?php _e('Attention!', 'tainacan') ?>', {positionClass: 'toast-bottom-right'});
-                }    
+                            }
+			                <?php endif; ?>
+                        });
+                    }else{
+                        $('#date-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>').val('');
+                        toastr.error('<?php _e('Invalid date!', 'tainacan') ?>', '<?php _e('Attention!', 'tainacan') ?>', {positionClass: 'toast-bottom-right'});
+                    }
+                }
             });
 
             function init_metadata_date(seletor) {
