@@ -36,7 +36,7 @@ global $config;
 </div>
 <div class="categories_menu">
     <div class="col-md-4">
-        <div id="categories_dynatree" style='height: 400px;overflow: scroll;' >
+        <div id="categories_dynatree" style='height: 400px;overflow: scroll;'>
         </div>
         <!--center><button onclick="add_facets()" class="btn btn-primary"><?php _e('Add selected categories as facets', 'tainacan'); ?></button></center-->
 

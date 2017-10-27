@@ -69,13 +69,22 @@ class EventTermDelete extends EventModel {
         // coloco os dados necessarios para criacao da propriedade
         $data['collection_id'] = get_post_meta($event_id, 'socialdb_event_collection_id', true);
         $data['category_delete_id'] = get_post_meta($event_id, 'socialdb_event_term_id', true);
-        // chamo a funcao do model de propriedade para fazer a exclusao
-        $verify = get_term_by('id', $data['category_delete_id'], 'socialdb_category_type');
-        $return_delete = json_decode($categoryModel->delete($data));
-        if ($categoryModel->is_facet($data['category_delete_id'], $data['collection_id'])) {
-            $categoryModel->delete_facet($data['category_delete_id'], $data['collection_id']);
+
+
+        $categories_to_delete = explode(",", $data['category_delete_id']);
+
+        foreach($categories_to_delete as $category_id)
+        {
+	        $data['category_delete_id'] = $category_id;
+	        // chamo a funcao do model de propriedade para fazer a exclusao
+	        $verify = get_term_by('id', $category_id, 'socialdb_category_type');
+	        $return_delete = json_decode($categoryModel->delete($data));
+	        if ($categoryModel->is_facet($category_id, $data['collection_id'])) {
+		        $categoryModel->delete_facet($category_id, $data['collection_id']);
+	        }
+	        //// se o usuario removeu uma categoria de faceta para embaixo de outra categoria
         }
-        //// se o usuario removeu uma categoria de faceta para embaixo de outra categoria
+
         // verifying if is everything all right
         if ($verify && $return_delete->success == 'true') {
             $this->set_approval_metas($data['event_id'], $data['socialdb_event_observation'], $automatically_verified);
