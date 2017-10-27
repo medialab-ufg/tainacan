@@ -169,8 +169,7 @@ class EventPropertyDataEditValue extends EventModel {
             $result = update_post_meta($object_id, 'socialdb_license_id', $value);
         }else if(is_array($value) || is_array(unserialize($value))){
             foreach ($value as $meta) {
-                if($meta['index'] == '0' || $meta['index'] == 'new')
-                {
+                if($meta['index'] == '0' || $meta['index'] == 'new'){
                     $class = new ObjectSaveValuesModel();
                     $class->saveValue($object_id,
                         $property,
@@ -180,10 +179,27 @@ class EventPropertyDataEditValue extends EventModel {
                         $meta['val'],
                         false
                     );
-                }else
-                {
+                }else{
+
+                    // caso for od tipo data ele salva um meta auxiliar
+                    if($this->is_Date($meta['val']) || get_post_meta($object_id, 'socialdb_property_'.$property.'_date')){
+                        $array = $this->is_Date($meta['val']);
+                        $vinculate = get_post_meta($object_id,'_'.$meta['index'],true);
+                        if($vinculate)
+                            if(isset($array[2]))
+                                $this->sdb_update_post_meta($vinculate, $array[2].'-'.$array[0].'-'.$array[1]);
+                            else
+                                $this->sdb_update_post_meta($vinculate, '');
+                        else{
+                            $vinculate = $this->sdb_add_post_meta($object_id, 'socialdb_property_'.$property.'_date', $array[2].'-'.$array[0].'-'.$array[1]);
+                            $this->sdb_add_post_meta($object_id, '_'.$meta['index'], $vinculate);
+                        }
+                    }
+
+                    // o real valor
                     $this->sdb_update_post_meta($meta['index'], $meta['val']);
                     $this->set_common_field_values($object_id, "socialdb_property_$property",$meta['val']);
+
                 }
             }
 
@@ -220,6 +236,22 @@ class EventPropertyDataEditValue extends EventModel {
             $data['title'] = 'Erro';
         }
         return $data;
+    }
+
+    /**
+     * @param $str
+     * @return bool
+     */
+    public function is_Date($str){
+        $str = str_replace('/', '-', $str);
+        $stamp = strtotime($str);
+        if (is_numeric($stamp)){
+            $month = date( 'm', $stamp );
+            $day   = date( 'd', $stamp );
+            $year  = date( 'Y', $stamp );
+            return [$month, $day, $year];
+        }
+        return false;
     }
 
 }
