@@ -298,16 +298,17 @@ class FormItemController extends Controller {
             case 'publishItems':
                 delete_user_meta(get_current_user_id(), 'socialdb_collection_' . $data['collection_id'] . '_betafile');
                 $class = new ObjectSaveValuesModel();
-                if(!empty($data['titles']))
-                {
+                if(!empty($data['titles'])){
                 	foreach($data['titles'] as $item)
 	                {
 	                	$id_title[$item['id']] = $item['title'];
 	                }
-                }else $id_title = [];
+                }else
+                    $id_title = [];
 
-                if(is_array($data['items']))
-                {
+                $skip_event = (current_user_can('manage_option') || verify_collection_moderators($data['collection_id'], get_current_user_id())) ? true : false;
+
+                if(is_array($data['items'])){
                     foreach ($data['items'] as $item) {
                         $post = array(
                         'ID' => $item,
@@ -315,14 +316,15 @@ class FormItemController extends Controller {
                         $id = wp_update_post($post);
                         $data['ID'][] =$id;
 
-                        $json =  json_decode($object_model->insert_object_event($id, $data));
+                        if(!$skip_event)
+                            $json =  json_decode($object_model->insert_object_event($id, $data));
+                        else
+                            $json = json_decode(json_encode(['there_are_pdfFiles' => false]));
+
                         $category_root_id = $class->get_category_root_of($data['collection_id']);
 
-                        if(!empty($id_title))
-						{
-							require_once( dirname( __FILE__ ) . '../../../models/general/general_model.php' );
-							$model = new Model();
-							$model->set_common_field_values( $item, "title", $id_title[ $item ] );
+                        if(!empty($id_title)){
+                            $object_model->set_common_field_values( $item, "title", $id_title[ $item ] );
 						}
 
                         //categoria raiz da colecao
