@@ -69,7 +69,7 @@ class LicenseModel {
         update_post_meta($data['collection_id'], 'socialdb_collection_license_enabled', $enabledLicenses);
 
         $result['title'] = __('Success', 'tainacan');
-        $result['msg'] = __('Change enabled license successfully', 'tainacan');
+        $result['msg'] = __('Change successfully saved', 'tainacan');
         $result['type'] = 'success';
 
         return $result;
