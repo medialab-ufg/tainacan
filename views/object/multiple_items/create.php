@@ -58,6 +58,7 @@ include_once ('js/create_js.php');
         </div>
     </div>
 </div>
+<a href="#top" class="glyphicon glyphicon-chevron-up" onclick="animateToTop();"></a>
 <!-- TAINACAN: MAPEAMENTO DOS ITEMS -->
 <div style="margin-bottom: 50px;" id='editor_items'>
     <!-- MOSTRA O EDITOR DOS ITENS AO FINAL DO UPLOAD -->

@@ -719,3 +719,18 @@ table.sorting-table tbody tr:not(.sorting-row) td {opacity: 0.2;}
 button#delete_collection {
     margin: 13px 8px 0 0;
 }
+
+a[href="#top"]{
+    padding:10px;
+    position:fixed;
+    top: 85%;
+    right:40px;
+    display:none;
+    font-size: 30px;
+    border: solid white 2px;
+    background-color: white;
+    border-radius: 5px;
+}
+a[href="#top"]:hover{
+    text-decoration:none;
+}

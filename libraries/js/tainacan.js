@@ -626,6 +626,14 @@ $(window).load(function () {
             $("#myMenu,#myMenuSingle").hide();
         }
     }, true);
+
+    $(window).scroll(function(){
+        if ($(this).scrollTop() > 200) {
+            $('a[href="#top"]').fadeIn();
+        } else {
+            $('a[href="#top"]').fadeOut();
+        }
+    });
 }); // On load Tainacan' main page
 
 $(document).ready(function () {
@@ -673,6 +681,12 @@ $(document).ready(function () {
     );
 
 });
+
+function animateToTop()
+{
+    $('html, body').animate({scrollTop : 0},800);
+    return false;
+}
 
 /**
  * funcao que gera o arquivo csv
