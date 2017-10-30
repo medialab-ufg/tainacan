@@ -84,12 +84,10 @@ class DateClass extends FormItemMultiple {
             init_metadata_date("#date-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>");
 
             $('#date-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>').blur(function () {
-                if($(this).val() != '')
-                {
+                if($(this).val() != ''){
                     let field_value = $(this).val().split("/");
                     let day = field_value[0], month = field_value[1], year = field_value[2];
-                    if(day_exist_multiple(day, month, year))
-                    {
+                    if(day_exist_multiple(day, month, year)){
 		                <?php if($this->isRequired):  ?>
                         validateFieldsMetadataText($(this).val().trim(),'<?php echo $compound_id ?>','<?php echo $property_id ?>','<?php echo $index_id ?>')
 		                <?php endif; ?>
@@ -126,10 +124,8 @@ class DateClass extends FormItemMultiple {
             $('#date-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>').change(function () {
                 let field_value = $(this).val().split("/");
                 let day = field_value[0], month = field_value[1], year = field_value[2];
-                if($(this).val() != '')
-                {
-                    if(day_exist_multiple(day, month, year))
-                    {
+                if($(this).val() != ''){
+                    if(day_exist_multiple(day, month, year)){
 		                <?php if($this->isRequired):  ?>
                         validateFieldsMetadataText($(this).val(),'<?php echo $compound_id ?>','<?php echo $property_id ?>','<?php echo $index_id ?>')
 		                <?php endif; ?>
@@ -140,7 +136,7 @@ class DateClass extends FormItemMultiple {
                                 operation: 'saveValue',
                                 type: 'data',
                                 value: $(this).val(),
-                                item_id: '<?php echo $item_id ?>',
+                                item_id: $('#item-multiple-selected').val().trim(),
                                 compound_id: '<?php echo $compound_id ?>',
                                 property_children_id: '<?php echo $property_id ?>',
                                 index: <?php echo $index_id ?>,
@@ -210,30 +206,27 @@ class DateClass extends FormItemMultiple {
                 $('#date-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>').attr("placeholder", "<?php _e('Alter ', 'tainacan') ?>" + args.length + " <?php _e(' items', 'tainacan') ?>");
             });
             
-            function day_exist_multiple(day, month_number, year)
-            {
+            function day_exist_multiple(day, month_number, year){
                 month_number--;
                 let days_in_month = [/*January*/31,/*Fabruary*/ 28,/*March*/ 31,/*April*/ 30,/*May*/ 31,/*June*/ 30, /*July*/31,
                                    /*August*/31, /*September*/30, /*October*/31,/*November*/ 30, /*December*/ 31];
-                if(is_leap_multiple(year))
-                {
+                if(is_leap_multiple(year)){
                     /*February*/
                     days_in_month[1] = 29;
                 }
 
-                if(day > days_in_month[month_number] || day < 1 || month_number > 11 || month_number < 0)
-                {
+                if(day > days_in_month[month_number] || day < 1 || month_number > 11 || month_number < 0){
                     return false;
                 }
                 else return true;
             }
 
-            function is_leap_multiple(year)
-            {
-                if(year % 400 === 0 || (year % 4 === 0 && year % 100 !== 0))//Is a leap year
-                {
+            function is_leap_multiple(year){
+                if(year % 400 === 0 || (year % 4 === 0 && year % 100 !== 0)){
                     return true;
-                }else return false;
+                }else{
+                    return false;
+                }
             }
         </script> 
         <?php
