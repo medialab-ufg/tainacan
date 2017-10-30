@@ -573,12 +573,16 @@
         icons: false
     });
 
-    if(!isMobile())
-    {
-        $('#accordion .ui-accordion-content').show();
-    }
+      var macosPlatforms = ['Macintosh', 'MacIntel', 'MacPPC', 'Mac68K'];
+      var userAgent = window.navigator.userAgent
+      if(!isMobile()){
+          $('#accordion .ui-accordion-content').show();
+      }else if(macosPlatforms.indexOf(platform)  >= 0 ){
+          $('#accordion .ui-accordion-content').show();
+      }
 
-    $('.expand-all').toggle(function() {
+
+      $('.expand-all').toggle(function() {
         setMenuContainerHeight();
 
         $(this).find("div.action-text").text( '<?php _e('Expand all', 'tainacan') ?>' );
