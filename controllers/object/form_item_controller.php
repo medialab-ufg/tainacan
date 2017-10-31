@@ -310,16 +310,22 @@ class FormItemController extends Controller {
 
                 if(is_array($data['items'])){
                     foreach ($data['items'] as $item) {
-                        $post = array(
-                        'ID' => $item,
-                        'post_parent' => $data['collection_id']);
-                        $id = wp_update_post($post);
-                        $data['ID'][] =$id;
-
-                        if(!$skip_event)
-                            $json =  json_decode($object_model->insert_object_event($id, $data));
-                        else
+                        if(!$skip_event) {
+                            $post = array(
+                                'ID' => $item,
+                                'post_parent' => $data['collection_id']);
+                            $id = wp_update_post($post);
+                            $data['ID'][] = $id;
+                            $json = json_decode($object_model->insert_object_event($id, $data));
+                        }else {
+                            $post = array(
+                                'ID' => $item,
+                                'post_status' => 'publish',
+                                'post_parent' => $data['collection_id']);
+                            $id = wp_update_post($post);
+                            $data['ID'][] = $id;
                             $json = json_decode(json_encode(['there_are_pdfFiles' => false]));
+                        }
 
                         $category_root_id = $class->get_category_root_of($data['collection_id']);
 
