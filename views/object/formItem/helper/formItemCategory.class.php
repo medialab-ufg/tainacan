@@ -165,7 +165,6 @@ class FormItemCategory extends FormItem{
                     $('#modalImportMain').modal('hide');//escondo o modal de carregamento
                     elem = jQuery.parseJSON(result);
                     showAlertGeneral(elem.title, elem.msg, elem.type);
-                    wpquery_clean();
 
                     window.location = window.location.href;
                 });

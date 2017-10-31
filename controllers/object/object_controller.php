@@ -157,6 +157,14 @@ class ObjectController extends Controller {
                 $data['items'] = $objectfile_model->create_item_by_files($data);
                 $class->start($data['items'], $data['properties']);
                 break;
+
+		    case "update_edit_multiple_item":
+			    include_once dirname(__FILE__) . '../../../views/object/formItemMultiple/formItemMultiple.class.php';
+			    $class = new FormItemMultiple($data['collection_id'],__('Add new item - Send local file', 'tainacan'));
+			    $data['properties'] = $object_model->show_object_properties($data);
+			    $class->initScripts();
+			    $class->loadMetadataContainer($data['properties']);
+		    	break;
             //END: EDITOR DE ITEMS MULTIPLOS
             //# EDITOR DE ITENS PARA REDES SOCIAIS
             case "showAddItemURL":
