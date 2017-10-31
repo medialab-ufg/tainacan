@@ -28,7 +28,7 @@
                 promisse.done(function (result) {
                     $('.modal').modal('hide');
                     hide_modal_main();
-                    showItemObject($('#item_id').val(), $('#src').val());
+                    location.reload();
                     showAlertGeneral('<?php _e('Success', 'tainacan') ?>', '<?php _e('Operation was successfully!', 'tainacan') ?>', 'success');
                     //if (elem.redirect)
                     //window.location = elem.redirect;
@@ -56,7 +56,8 @@
                 promisse.done(function (result) {
                     $('.modal').modal('hide');
                     hide_modal_main();
-                    showItemObject($('#item_id').val(), $('#src').val());
+                    //showItemObject($('#item_id').val(), $('#src').val());
+                    location.reload();
                     showAlertGeneral('<?php _e('Success', 'tainacan') ?>', '<?php _e('Operation was successfully!', 'tainacan') ?>', 'success');
                     //if (elem.redirect)
                     //window.location = elem.redirect;
@@ -82,7 +83,8 @@
                 //show messages
                 $('.modal').modal('hide');
                 hide_modal_main();
-                showItemObject($('#item_id').val(), $('#src').val());
+                //showItemObject($('#item_id').val(), $('#src').val());
+                location.reload();
                 showAlertGeneral('<?php _e('Success', 'tainacan') ?>', '<?php _e('Operation was successfully!', 'tainacan') ?>', 'success');
                 //if (elem.redirect)
                 //window.location = elem.redirect;
@@ -132,7 +134,8 @@
                 promisse.done(function (result) {
                     $('.modal').modal('hide');
                     hide_modal_main();
-                    showItemObject($('#item_id').val(), $('#src').val());
+                    //showItemObject($('#item_id').val(), $('#src').val());
+                    location.reload();
                     showAlertGeneral('<?php _e('Success', 'tainacan') ?>', '<?php _e('Operation was successfully!', 'tainacan') ?>', 'success');
                     //if (elem.redirect)
                     //window.location = elem.redirect;
@@ -351,7 +354,8 @@
         }).done(function (result) {
             $('#modalImportMain').modal('hide');//escondo o modal de carregamento
             elem_first = jQuery.parseJSON(result);
-            showItemObject($('#item_id').val(), $('#src').val());
+            //showItemObject($('#item_id').val(), $('#src').val());
+            location.reload();
             showAlertGeneral(elem_first.title, elem_first.msg, elem_first.type);
         });
     }
