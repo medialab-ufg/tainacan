@@ -2183,8 +2183,9 @@
                     collection_id: $("#collection_id").val(),
                     description: description,
                     thumbnail_url: img,
-                    type: 'text',
+                    type: 'other',
                     url: url,
+                    content: url,
                     title: title}
             }).done(function (result) {
                 var json = JSON.parse(result);
