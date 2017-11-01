@@ -10,3 +10,4 @@ cache
 /libraries/php/PDFParser/vendor/tecnickcom/tcpdf/LICENSE.TXT
 /libraries/php/PDFParser/vendor/tecnickcom/tcpdf/CHANGELOG.TXT
 /libraries/php/PDFParser/vendor/tecnickcom/tcpdf/examples/
+models/export/package
