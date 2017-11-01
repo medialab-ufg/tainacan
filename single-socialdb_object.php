@@ -132,6 +132,12 @@ if (has_action('alter_page_item')) {
                             if ($metas['socialdb_object_dc_type'][0] == 'text') {
                                 echo $metas['socialdb_object_content'][0];
                             } else {
+                                if(isset($metas['socialdb_object_content'][0]) && strpos($metas['socialdb_object_content'][0],'<p>')!==false){
+                                    $string = explode('<p>',$metas['socialdb_object_content'][0])[1];
+                                    $metas['socialdb_object_content'][0] = str_replace('</p>','',$string);
+                                    update_post_meta( $post->ID, 'socialdb_object_content', str_replace('</p>','',$string));
+
+                                }
                                 if ($item_opts['from'] == 'internal' && wp_get_attachment_url($metas['socialdb_object_content'][0])) {
                                     $url = wp_get_attachment_url($metas['socialdb_object_content'][0]);
                                     switch ($metas['socialdb_object_dc_type'][0]) {
