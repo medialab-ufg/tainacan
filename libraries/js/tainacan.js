@@ -1369,7 +1369,7 @@ function reinit_synonyms_tree() {
 }
 
 function reinit_tag_tree() {
-    $("#dynatree_tags").dynatree("getTree").reload();
+   // $("#dynatree_tags").dynatree("getTree").reload();
 }
 
 function showHeaderCollection(src) {

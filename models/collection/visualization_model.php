@@ -331,7 +331,7 @@ class VisualizationModel extends CollectionModel {
                     $dynatree[end(array_keys($dynatree))] = $this->getSourceDynatree($data['collection_id'], $dynatree[end(array_keys($dynatree))], $classCss);
                 }
                 //tags
-                elseif ('socialdb_property_fixed_tags'==$facet->slug && $type=='tree') {
+                elseif ('socialdb_property_fixed_tags'==$facet->slug && ( $widget=='tree')) {
                     //tags
                     if($labels_collection){
                         $array = unserialize($labels_collection);
