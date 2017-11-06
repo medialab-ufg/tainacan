@@ -409,7 +409,9 @@ class ObjectModel extends Model {
         } else {
             if ($data['content']) {
                 update_post_meta($object_id, 'socialdb_object_dc_source', $data['content']);
-                if ($data['type'] == 'image') {
+                if (isset($data['thumbnail_url']) && $data['thumbnail_url'] && $data['thumbnail_url'] !== '') {
+                    $this->add_thumbnail_url($data['thumbnail_url'], $object_id);
+                }else if ($data['type'] == 'image') {
                     $this->add_thumbnail_url($data['content'], $object_id);
                 }
                 update_post_meta($object_id, 'socialdb_object_content', $data['content']);

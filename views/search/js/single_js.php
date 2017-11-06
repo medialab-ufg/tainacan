@@ -1654,7 +1654,8 @@
                                     import_flickr(flickr_url);
                                 }
                                 else {
-                                    var facebook_url = validateFacebookUrl();
+                                    //var facebook_url = validateFacebookUrl();
+                                    var facebook_url = false;
                                     if (facebook_url) {
                                         // É uma URL do Facebook. Executar a importação dos itens do usuário.
                                     }
@@ -1939,7 +1940,7 @@
                             $("#sites_import_icon").addClass("grayscale");
                         }
                         else {
-                            var instagram_url = validateInstagramUrl();
+                            var instagram_url = false;
                             if (instagram_url) {
                                 // É uma URL do instagram.
                                 $("#btn_import_fb").css('display', 'none');
@@ -1980,7 +1981,7 @@
                                         $("#sites_import_icon").addClass("grayscale");
                                     }
                                     else {
-                                        var facebook_url = validateFacebookUrl();
+                                        var facebook_url = false;
                                         if (facebook_url) {
                                             $("#btn_import_fb").css('display', 'block');
                                             $("#btn_import_allrest").css('display', 'none');
@@ -2124,8 +2125,10 @@
                         collection_id: $("#collection_id").val(),
                         description: description,
                         thumbnail_url: img,
-                        type: 'text',
+                       // type: 'text',
+                        type: 'other',
                         url: url,
+                        content: url,
                         title: title}
                 }).done(function (result) {
                     var json = JSON.parse(result);

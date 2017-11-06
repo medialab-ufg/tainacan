@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: socialdb\n"
-"POT-Creation-Date: 2017-11-06 13:18-0200\n"
-"PO-Revision-Date: 2017-11-06 13:19-0200\n"
+"POT-Creation-Date: 2017-11-06 14:45-0200\n"
+"PO-Revision-Date: 2017-11-06 14:45-0200\n"
 "Last-Translator: Rodrigo de Oliveira <webmaster@rodrigodeoliveira.net>\n"
 "Language-Team: \n"
 "Language: pt_BR\n"
@@ -709,9 +709,9 @@ msgstr "Marca do Repositório"
 #: views/property/js/list_metadata_js.php:2692
 #: views/property/list_metadata.php:151 views/search/js/single_js.php:1441
 #: views/search/js/single_js.php:1478 views/search/js/single_js.php:1516
-#: views/search/js/single_js.php:1572 views/search/js/single_js.php:2259
-#: views/search/js/single_js.php:2299 views/search/js/single_js.php:2356
-#: views/search/js/single_js.php:2395 views/social_network/js/delete_js.php:34
+#: views/search/js/single_js.php:1572 views/search/js/single_js.php:2260
+#: views/search/js/single_js.php:2300 views/search/js/single_js.php:2357
+#: views/search/js/single_js.php:2396 views/social_network/js/delete_js.php:34
 #: views/social_network/js/delete_js.php:81
 #: views/social_network/js/delete_js.php:129
 #: views/social_network/js/delete_js.php:176
@@ -778,14 +778,14 @@ msgstr "Por favor, preencha o delimitador corretamente!"
 #: views/search/js/single_js.php:1482 views/search/js/single_js.php:1492
 #: views/search/js/single_js.php:1520 views/search/js/single_js.php:1528
 #: views/search/js/single_js.php:1547 views/search/js/single_js.php:1576
-#: views/search/js/single_js.php:1584 views/search/js/single_js.php:1708
-#: views/search/js/single_js.php:2072 views/search/js/single_js.php:2078
-#: views/search/js/single_js.php:2137 views/search/js/single_js.php:2197
-#: views/search/js/single_js.php:2234 views/search/js/single_js.php:2264
-#: views/search/js/single_js.php:2274 views/search/js/single_js.php:2304
-#: views/search/js/single_js.php:2314 views/search/js/single_js.php:2333
-#: views/search/js/single_js.php:2361 views/search/js/single_js.php:2370
-#: views/search/js/single_js.php:2400 views/search/js/single_js.php:2409
+#: views/search/js/single_js.php:1584 views/search/js/single_js.php:1709
+#: views/search/js/single_js.php:2073 views/search/js/single_js.php:2079
+#: views/search/js/single_js.php:2138 views/search/js/single_js.php:2198
+#: views/search/js/single_js.php:2235 views/search/js/single_js.php:2265
+#: views/search/js/single_js.php:2275 views/search/js/single_js.php:2305
+#: views/search/js/single_js.php:2315 views/search/js/single_js.php:2334
+#: views/search/js/single_js.php:2362 views/search/js/single_js.php:2371
+#: views/search/js/single_js.php:2401 views/search/js/single_js.php:2410
 #: views/search/js/tags_js.php:28 views/social_network/js/delete_js.php:38
 #: views/social_network/js/delete_js.php:85
 #: views/social_network/js/delete_js.php:133
@@ -1851,7 +1851,7 @@ msgstr "Clique aqui para criar uma subcategoria"
 #: views/object/formItemMultiple/helper/formItemType.class.php:21
 #: views/object/list_single_object.php:219
 #: views/object/list_single_object_version.php:278
-#: views/object/multiple_items/create.php:12 views/search/js/single_js.php:2214
+#: views/object/multiple_items/create.php:12 views/search/js/single_js.php:2215
 msgid "PDF"
 msgstr "PDF"
 
@@ -2518,7 +2518,7 @@ msgstr "Você não tem permissão para acessar esta coleção!"
 #: views/object/formItemMultiple/helper/formItemType.class.php:24
 #: views/object/list_single_object.php:213
 #: views/object/list_single_object_version.php:272
-#: views/search/js/single_js.php:2206
+#: views/search/js/single_js.php:2207
 msgid "Image"
 msgstr "Imagem"
 
@@ -2533,7 +2533,7 @@ msgstr "Imagem"
 #: views/object/formItemMultiple/helper/formItemType.class.php:23
 #: views/object/list_single_object.php:217
 #: views/object/list_single_object_version.php:276
-#: views/search/js/single_js.php:2208
+#: views/search/js/single_js.php:2209
 msgid "Video"
 msgstr "Vídeo"
 
@@ -2548,7 +2548,7 @@ msgstr "Vídeo"
 #: views/object/formItemMultiple/helper/formItemType.class.php:22
 #: views/object/list_single_object.php:215
 #: views/object/list_single_object_version.php:274
-#: views/search/js/single_js.php:2210
+#: views/search/js/single_js.php:2211
 msgid "Audio"
 msgstr "Áudio"
 
@@ -2563,7 +2563,7 @@ msgstr "Áudio"
 #: views/object/formItemMultiple/helper/formItemType.class.php:25
 #: views/object/list_single_object.php:221
 #: views/object/list_single_object_version.php:280
-#: views/search/js/single_js.php:2212
+#: views/search/js/single_js.php:2213
 msgid "Other"
 msgstr "Outro"
 
@@ -3634,6 +3634,10 @@ msgstr "Múltiplo"
 #: models/general/general_model.php:636
 msgid "No relations"
 msgstr "Nenhuma relação"
+
+#: models/general/general_model.php:2697
+msgid "Empty title"
+msgstr "Título vazio"
 
 #: models/home/home_model.php:7
 msgid "Featured Collections"
@@ -7970,7 +7974,7 @@ msgstr "Arquivo removido!"
 msgid "Add new category"
 msgstr "Adicionar nova categoria"
 
-#: views/object/formItem/helper/formItemContent.class.php:13
+#: views/object/formItem/helper/formItemContent.class.php:16
 msgid "Insert here the content or the item url"
 msgstr "Insira aqui o conteúdo ou a url do item"
 
@@ -10217,34 +10221,34 @@ msgstr "Vídeos importados com sucesso"
 msgid "Invalid URL or Video already inserted."
 msgstr "URL Inválida ou vídeo já inserido."
 
-#: views/search/js/single_js.php:1452 views/search/js/single_js.php:2078
+#: views/search/js/single_js.php:1452 views/search/js/single_js.php:2079
 msgid "Necessary to inform Youtube video url"
 msgstr "Necessário informar a url do vídeo do Youtube"
 
 #: views/search/js/single_js.php:1478 views/search/js/single_js.php:1516
-#: views/search/js/single_js.php:1572 views/search/js/single_js.php:2259
-#: views/search/js/single_js.php:2299 views/search/js/single_js.php:2356
-#: views/search/js/single_js.php:2395
+#: views/search/js/single_js.php:1572 views/search/js/single_js.php:2260
+#: views/search/js/single_js.php:2300 views/search/js/single_js.php:2357
+#: views/search/js/single_js.php:2396
 msgid "OK"
 msgstr "OK"
 
-#: views/search/js/single_js.php:1482 views/search/js/single_js.php:2072
-#: views/search/js/single_js.php:2137 views/search/js/single_js.php:2197
-#: views/search/js/single_js.php:2234 views/search/js/single_js.php:2264
-#: views/search/js/single_js.php:2304
+#: views/search/js/single_js.php:1482 views/search/js/single_js.php:2073
+#: views/search/js/single_js.php:2138 views/search/js/single_js.php:2198
+#: views/search/js/single_js.php:2235 views/search/js/single_js.php:2265
+#: views/search/js/single_js.php:2305
 msgid "Invalid Channel/Playlist or no videos to be imported"
 msgstr "Canal/Lista de Execução inválid@ ou nenhum vídeo a ser importado "
 
-#: views/search/js/single_js.php:1492 views/search/js/single_js.php:2274
-#: views/search/js/single_js.php:2314 views/social_network/js/insert_js.php:44
+#: views/search/js/single_js.php:1492 views/search/js/single_js.php:2275
+#: views/search/js/single_js.php:2315 views/social_network/js/insert_js.php:44
 msgid "Necessary to inform Youtube channel identifier"
 msgstr "Necessário informar o identificador do canal do Youtube"
 
-#: views/search/js/single_js.php:1520 views/search/js/single_js.php:2361
+#: views/search/js/single_js.php:1520 views/search/js/single_js.php:2362
 msgid "Invalid Flickr identifier or no items to be imported"
 msgstr "Identificador do Flickr inválido ou nenhum item a ser importado "
 
-#: views/search/js/single_js.php:1528 views/search/js/single_js.php:2370
+#: views/search/js/single_js.php:1528 views/search/js/single_js.php:2371
 msgid "Necessary to inform Flickr identifier"
 msgstr "Necessário informar o identificador do canal do Flickr "
 
@@ -10252,27 +10256,27 @@ msgstr "Necessário informar o identificador do canal do Flickr "
 msgid "Necessary to inform Instagram identifier"
 msgstr "Necessário informar o identificador do canal do identifier"
 
-#: views/search/js/single_js.php:1576 views/search/js/single_js.php:2400
+#: views/search/js/single_js.php:1576 views/search/js/single_js.php:2401
 msgid "Invalid Vimeo identifier or no items to be imported"
 msgstr "Identificador Vimeo inválido ou nenhum item a ser i"
 
-#: views/search/js/single_js.php:1584 views/search/js/single_js.php:2409
+#: views/search/js/single_js.php:1584 views/search/js/single_js.php:2410
 msgid "Necessary to inform Vimeo identifier"
 msgstr "Necessário Informar o identificador do Vimeo"
 
-#: views/search/js/single_js.php:1695
+#: views/search/js/single_js.php:1696
 msgid "Alert"
 msgstr "Alerta "
 
-#: views/search/js/single_js.php:1695
+#: views/search/js/single_js.php:1696
 msgid "Please, insert a valid URL"
 msgstr "Por favor, digite uma URL válida"
 
-#: views/search/js/single_js.php:1708
+#: views/search/js/single_js.php:1709
 msgid "Necessary to inform something"
 msgstr "Necessário informar algo "
 
-#: views/search/js/single_js.php:2333
+#: views/search/js/single_js.php:2334
 msgid "Necessary to inform Instagram URL with user identifier"
 msgstr "Necessário informar a URL do Instagram com identificador do usuário"
 
