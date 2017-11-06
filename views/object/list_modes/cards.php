@@ -59,7 +59,7 @@ $_trim_desc = $_object_description;
                                 </div>
                             </div>
                         </div>
-                        <?php if (get_option('collection_root_id') != $collection_id): ?>
+                        <?php //if (get_option('collection_root_id') != $collection_id): ?>
                             <button id="show_rankings_<?php echo $curr_id ?>" class="cards-ranking"> </button>
 
                             <div class="editing-item">
@@ -96,7 +96,7 @@ $_trim_desc = $_object_description;
 
                             </div> <!--.editing-item -->
 
-                        <?php endif; ?>
+                        <?php //endif; ?>
 
                         <!-- TAINACAN: container(AJAX) que mostra o html com as classificacoes do objeto -->
                         <div id="classifications_<?php echo $curr_id ?>" class="class-meta-box"></div>
