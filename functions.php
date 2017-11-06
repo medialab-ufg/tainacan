@@ -3369,7 +3369,7 @@ function get_item_thumb_image($item_id, $size = "thumbnail") {
             return '<img src="' . get_item_thumbnail_default($item_id) . '" class="img-responsive" style="max-width: 100%; display: table-cell;">';
         }
     } else {
-        $html_image = wp_get_attachment_image(get_post_thumbnail_id($item_id), $size, false, array('class' => 'img-responsive, imaginaryClass'));
+        $html_image = wp_get_attachment_image(get_post_thumbnail_id($item_id), $size, false, array('class' => 'img-responsive'));
 
         $image = wp_get_attachment_image_src(get_post_thumbnail_id($item_id), "thumbnail", false);
 
