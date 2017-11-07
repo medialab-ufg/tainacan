@@ -3380,7 +3380,7 @@ function get_item_thumb_image($item_id, $size = "thumbnail") {
 
             $html_image = $DOM->asXML();
         }
-	    //return "<h1>laksjflas</h1>";
+
         return $html_image;
     }
 }
@@ -3688,18 +3688,19 @@ function save_canvas_pdf_thumbnails($canvas_images, $reindex = false) {
 }
 
 function get_add_pdf_text($post_id, $item_id) {
-    $url_file = wp_get_attachment_url($item_id);
-    try {
-        $parser = new \Smalot\PdfParser\Parser();
-        $pdf = $parser->parseFile($url_file);
-        $pdf_text = $pdf->getText();
-        error_reporting(1);
-        $model = new Model();
-        $model->set_common_field_values($post_id, "socialdb_property_$item_id", $pdf_text);
-        update_post_meta($post_id, "socialdb_pdf_text", true);
-    } catch (Exception $e) {
-        //Can't read PDF file, just move on.
-    }
+	error_reporting(1);
+	$url_file = wp_get_attachment_url($item_id);
+	try {
+		$parser = new \Smalot\PdfParser\Parser();
+		$pdf = $parser->parseFile($url_file);
+		$pdf_text = $pdf->getText();
+	} catch (Exception $e) {
+		//Can't read PDF file, just move on.
+	}
+
+	$model = new Model();
+	$model->set_common_field_values($post_id, "socialdb_property_$item_id", $pdf_text);
+	update_post_meta($post_id, "socialdb_pdf_text", true);
 }
 
 function get_add_office_document_text($post_id, $item_id) {
@@ -3767,7 +3768,7 @@ function get_documents_text($ids)
     {
         if(!array_key_exists('socialdb_pdf_text', $info['post_meta']))
         {
-            //get_add_pdf_text($post_id, $info['attachment_id']);
+            get_add_pdf_text($post_id, $info['attachment_id']);
         }
     }
 
