@@ -7,6 +7,14 @@ include_once ('js/list_file_js.php');
 <!-- TAINACAN: mostra os os arquivos de um objeto, o icone do arquivo 
    é gerado automaticamente pelo wordpress, apenas o título que colocamos manualmente
 -->
+
+<?php
+// Hook para exibir posts relacionados ao item (acima dos anexos)
+if (has_action('header_sidebar_item')) {
+    do_action( 'header_sidebar_item', $object_id );
+}
+?>
+
 <div> 
     <h3 id="text_title">
         <?php _e('Attachments', 'tainacan'); ?>
@@ -46,6 +54,13 @@ include_once ('js/list_file_js.php');
         </div>
     <?php endif; ?>
 </div>
+
+<?php
+// Hook pronto para adicionar novas informações à sidebar do item (abaixo dos anexos)
+if (has_action('footer_sidebar_item')) {
+    do_action( 'footer_sidebar_item', $object_id );
+}
+?>
 
 <!-- TAINACAN: modal padrao bootstrap aberto via javascript pelo seu id, slideshow anexos -->
 <div class="modal fade" id="modalSlideShow" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
