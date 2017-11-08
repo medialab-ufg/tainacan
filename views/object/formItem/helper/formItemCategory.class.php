@@ -66,7 +66,7 @@ class FormItemCategory extends FormItem{
                 </div>
 
 	            <?php
-                if($property['metas']['socialdb_property_habilitate_new_category'])
+                if(strcmp($property['metas']['socialdb_property_habilitate_new_category'],'true') === 0)
                 {
                     ?>
                         <button type="button" class="btn btn-primary btn-xs pull-right" onclick="add_new_category(<?php echo $property['metas']['socialdb_property_term_root']; ?>, '<?php echo $property['name']?>');">

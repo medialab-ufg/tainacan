@@ -3364,9 +3364,9 @@ function get_item_thumb_image($item_id, $size = "thumbnail") {
             $_img_id = (int) $_post_img_id[0];
             $_img_url = get_post($_img_id)->guid;
 
-            return '<img src="' . $_img_url . '" alt="" class="img-responsive img-thumbnail" style="max-width: 100%" />';
+            return '<img src="' . $_img_url . '" alt="" class="img-responsive img-thumbnail height100" style="max-width: 100%" />';
         } else {
-            return '<img src="' . get_item_thumbnail_default($item_id) . '" class="img-responsive" style="max-width: 100%; display: table-cell;">';
+            return '<img src="' . get_item_thumbnail_default($item_id) . '" class="img-responsive height100" style="max-width: 100%;">';
         }
     } else {
         $html_image = wp_get_attachment_image(get_post_thumbnail_id($item_id), $size, false, array('class' => 'img-responsive'));
