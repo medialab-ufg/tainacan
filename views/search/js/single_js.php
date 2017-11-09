@@ -1612,13 +1612,15 @@
 
     function importAll_verify() {
         var inputImportAll = $('#item_url_import_all').val().trim();
-
+        console.log(inputImportAll);
         if (inputImportAll) {
             var youtube_url = validateYouTubeUrl();
+            console.log(youtube_url);
             if (youtube_url) {
                 // É uma URL de um vídeo do youtube. Executar a importação do vídeo.
                 import_youtube_video_url();
-            } else {
+            }
+            else {
                 var youtube_channel_url = validateYouTubeChannelUrl();
                 if (youtube_channel_url) {
                     // É uma URL de um canal do youtube. Executar a importação dos vídeos de canal.

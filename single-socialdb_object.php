@@ -193,11 +193,17 @@ if (has_action('alter_page_item')) {
                                             }
                                             break;
                                         case 'video':
-                                            if (strpos($metas['socialdb_object_content'][0], 'youtube') !== false) {
+	                                        $short_url = strpos($metas['socialdb_object_content'][0], 'youtu.be') !== false;
+                                            if (strpos($metas['socialdb_object_content'][0], 'youtube') !== false || $short_url) {
                                                 $step1 = explode('v=', $metas['socialdb_object_content'][0]);
                                                 $step2 = explode('&', $step1[1]);
-                                                $video_id = $step2[0];
-                                                $content = "<div style='height:600px; display: flex !important;'  ><iframe  class='embed-responsive-item' src='https://www.youtube.com/embed/" . $video_id . "?html5=1' allowfullscreen frameborder='0'></iframe></div>";
+
+                                                if($short_url)
+                                                {
+                                                    $video_id = end(explode('/', $metas['socialdb_object_content'][0]));
+                                                }else $video_id = $step2[0];
+
+                                                $content = "<div style='height:600px; display: flex !important;'  ><iframe  class='embed-responsive-item'  src='https://www.youtube.com/embed/" . $video_id . "?html5=1' allowfullscreen frameborder='0'></iframe></div>";
                                             } elseif (strpos($metas['socialdb_object_content'][0], 'vimeo') !== false) {
                                                 $step1 = explode('/', rtrim($metas['socialdb_object_content'][0], '/'));
                                                 $video_id = end($step1);
