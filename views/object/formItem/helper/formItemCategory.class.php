@@ -93,15 +93,24 @@ class FormItemCategory extends FormItem{
                                                 <label for="category_single_name"><?php _e('Category name', 'tainacan'); ?></label>
                                                 <input type="text" class="form-control" id="category_single_name" name="socialdb_event_term_suggested_name" required="required" placeholder="<?php _e('Category name', 'tainacan'); ?>">
                                             </div>
+
                                             <div class="form-group">
-                                                <label for="category_single_parent_name"><?php _e('Category parent', 'tainacan'); ?></label>
+                                                <label for="category_single_parent_name"><?php _e('Selected parent', 'tainacan'); ?></label>
                                                 <input disabled="disabled" type="text" class="form-control" id="category_single_parent_name" placeholder="<?php _e('Right click on the tree and select the category as parent', 'tainacan'); ?>" name="category_single_parent_name">
                                                 <input type="hidden"  id="category_single_parent_id"  name="socialdb_event_term_parent" value="0" >
                                             </div>
 
-                                            <div>
-								                <?php $this->simpleTreeClass->generate($property,['id'=>0], $item_id, 0, true) ?>
+                                            <input type="radio" id="rootCategorySelected" name="rootSelector" value="realRoot" checked> <?php _e("Root category", "tainacan");?>:
+                                            <label id="realRootName"></label>
+                                            <input type="hidden" id="realRootID" value="">
+                                            <br>
+                                            <input type="radio" id="childCategorySelected" name="rootSelector" value="child"> <?php _e("Child category", "tainacan");?>
+
+                                            <br>
+                                            <div id="childrenSelect" style="display: none;">
+		                                        <?php $this->simpleTreeClass->generate($property,['id'=>0], $item_id, 0, true) ?>
                                             </div>
+
                                             <br>
 
                                             <div class="form-group">
@@ -138,7 +147,10 @@ class FormItemCategory extends FormItem{
             {
                 $('#modalAddCategoria_'+fathers_id).modal('show');
                 $("#category_single_parent_name").val(fathers_name);
+                $("#realRootName").text(fathers_name);
+
                 $("#category_single_parent_id").val(fathers_id);
+                $("#realRootID").val(fathers_id);
             }
 
             function send (fathers_id){
@@ -174,6 +186,16 @@ class FormItemCategory extends FormItem{
                     window.location = window.location.href;
                 });
             }
+
+            $("#childCategorySelected").click(function(){
+                $("#childrenSelect").show();
+            });
+
+            $("#rootCategorySelected").click(function(){
+                $("#childrenSelect").hide();
+                $("#category_single_parent_name").val($("#realRootName").text());
+                $("#category_single_parent_id").val($("#realRootID").val());
+            });
         </script>
         <?php
 
