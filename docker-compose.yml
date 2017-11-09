@@ -6,11 +6,8 @@ services:
     volumes:
       - db_data:/var/lib/mysql
     restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: wordpress
-      MYSQL_USER: wordpress
-      MYSQL_PASSWORD: wordpress
+    env_file:
+      - docker-database.env
 
   wordpress:
     depends_on:
@@ -19,10 +16,8 @@ services:
     ports:
       - "8000:80"
     restart: always
-    environment:
-      WORDPRESS_DB_HOST: database:3306
-      WORDPRESS_DB_USER: wordpress
-      WORDPRESS_DB_PASSWORD: wordpress
+    env_file:
+      - docker-wordpress.env
     volumes:
       - .:/var/www/html/wp-content/themes/tainacan
 
