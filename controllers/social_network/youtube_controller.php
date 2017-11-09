@@ -42,8 +42,13 @@ class YoutubeController extends Controller {
                     endif;
                 }
 
+	            if(strpos($data['video_url'], 'youtu.be') !== false)
+	            {
+		            $data['video_url'] = 'https://www.youtube.com/watch?v='.end(explode('/', $data['video_url']));
+	            }
+
                 $urlVideoYoutube = explode('/', $data['video_url']);
-                $videoID = explode('=', $urlVideoYoutube[3]);
+	            $videoID = explode('=', $urlVideoYoutube[3]);
 
                 if ($videoID[1] && $config) {
                     $youtube = new youtubeModel($videoID[1], $config, false, true);
