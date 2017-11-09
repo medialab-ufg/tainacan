@@ -13,11 +13,9 @@ class YoutubeController extends Controller {
                 // recupera a chave da api cadastrada
                 $title = '';
                 $config = get_option('socialdb_theme_options');
-                print_r($config);
                 if(!$config['socialdb_youtube_api_id']|| trim($config['socialdb_youtube_api_id'])=='' || trim($config['socialdb_youtube_api_id'])=='0'){
                     $object_model = new ObjectModel();
                     $extracted = $object_model->extract_metatags($data['video_url']);
-                    //print_r($extracted);
                     if($extracted && is_array($extracted)){
                         foreach ($extracted as $array) {
                             if($array['name_field']=='title'){
@@ -45,7 +43,6 @@ class YoutubeController extends Controller {
                 }
 
                 $urlVideoYoutube = explode('/', $data['video_url']);
-	            print_r($urlVideoYoutube);
                 $videoID = explode('=', $urlVideoYoutube[3]);
 
                 if ($videoID[1] && $config) {
