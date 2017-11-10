@@ -5,9 +5,6 @@ include_once (dirname(__FILE__) . '/../input/radio.class.php');
 include_once (dirname(__FILE__) . '/../input/checkbox.class.php');
 include_once (dirname(__FILE__) . '/../input/multipletree.class.php');
 
-//Modal
-//include_once (dirname(__FILE__) . '/../../../collection/modals.php');
-
 class FormItemCategory extends FormItem{
     public $selectboxClass;
     public $simpleTreeClass;
@@ -51,10 +48,17 @@ class FormItemCategory extends FormItem{
                 <?php endif ?>
             </h2>
             <div>
-                <?php if($property['type'] == 'selectbox'): ?>
+                <?php
+                if(empty($property['has_children']))
+                {
+	                echo '<div class="alert alert-info">'.__('This category has no children', 'tainacan').'</div>';
+                }else
+                if($property['type'] == 'selectbox'): ?>
                     <?php $this->selectboxClass->generate($property,['id'=>0], $item_id, 0) ?>
                 <?php elseif($property['type'] == 'tree'): ?>
-                    <?php $this->simpleTreeClass->generate($property,['id'=>0], $item_id, 0) ?>
+                    <?php
+                        $this->simpleTreeClass->generate($property,['id'=>0], $item_id, 0);
+                    ?>
                 <?php elseif($property['type'] == 'radio'): ?>
                     <?php $this->radioClass->generate($property,['id'=>0], $item_id, 0) ?>
                 <?php elseif($property['type'] == 'checkbox' || $property['type'] == 'multipleselect'): ?>

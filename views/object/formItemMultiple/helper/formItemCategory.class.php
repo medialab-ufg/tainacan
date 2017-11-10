@@ -40,7 +40,12 @@ class FormItemCategory extends FormItemMultiple{
                 <?php endif ?>
             </h2>
             <div>
-                <?php if($property['type'] == 'selectbox'): ?>
+                <?php
+                if(empty($property['has_children']))
+                {
+	                echo '<div class="alert alert-info">'.__('This category has no children', 'tainacan').'</div>';
+                }else
+                    if($property['type'] == 'selectbox'): ?>
                     <?php $this->selectboxClass->generate($property,['id'=>0], $item_id, 0) ?>
                 <?php elseif($property['type'] == 'tree'): ?>
                     <?php
