@@ -104,3 +104,7 @@ $col_controller = $_src_ . "/controllers/collection/collection_controller.php";
         </div>
     </div>
 </div>
+
+<?php
+    do_action("tainacan_global_modals");
+?>

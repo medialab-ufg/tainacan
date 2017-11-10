@@ -54,7 +54,18 @@ foreach ($view_helper->get_metadata_types() as $type => $label):
                                     </div>
                                     <div class="create_form-group">
                                         <label for="socialdb_property_help"><?php _e('Text helper', 'tainacan'); ?></label>
-                                        <input type="text" class="form-control" id="socialdb_property_data_help" name="socialdb_property_data_help" />
+
+                                        <?php
+                                            if(has_action('help_text_change_input_type'))
+                                            {
+                                                do_action('help_text_change_input_type');
+                                            }else
+                                            {
+                                                ?>
+                                                <input type="text" class="form-control" id="socialdb_property_data_help" name="socialdb_property_data_help" />
+                                                <?php
+                                            }
+                                        ?>
                                     </div>
                                     <br>
                                     <hr>
