@@ -9,8 +9,10 @@ e este projeto adere para [Semantic Versioning](http://semver.org/spec/v2.0.0.ht
 ## [0.6] - 
 ### Adicionado
 - 
-
 ### Modificado
+- Definição de licença na submissão do item, mas não sua apresentação na visualização do item
+- Metadado de texto longo não permite inserir múltiplos valores
+- API: erro de retorno de thumbnail
 - Melhoria na interface "Minhas Categorias"
 - API: correção do retorno de thumbnail
 - Correção da seleção de licenças
@@ -18,8 +20,12 @@ e este projeto adere para [Semantic Versioning](http://semver.org/spec/v2.0.0.ht
 - Atualização de redirecionamentos e urls
 - Melhoria no envio de itens ao sistema, ao enviar seus ids e thumbnails.
 
+### Obsoleto
+
 ### Removido
 - Remoção de opções não utilziadas na tela de registro de usuário
+
+### Corrigido
 
 ## [0.5] - 2017-10-09
 
