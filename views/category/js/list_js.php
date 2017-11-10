@@ -461,7 +461,7 @@
                                 categoriesNames += ", " + node.data.title;
                             }
 
-                            $("#modalBodyText").html('<?php _e("Would you really like to remove these categories?")?>'+ '<br>' + categoriesNames);
+                            $("#modalBodyText").html('<?php _e("Would you really like to remove these categories?", 'tainacan')?>'+ '<br>' + categoriesNames);
                         });
                     }else
                     {
