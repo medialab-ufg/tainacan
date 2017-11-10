@@ -10,22 +10,21 @@ e este projeto adere para [Semantic Versioning](http://semver.org/spec/v2.0.0.ht
 ### Adicionado
 - 
 ### Modificado
-- Definição de licença na submissão do item, mas não sua apresentação na visualização do item
-- Metadado de texto longo não permite inserir múltiplos valores
-- API: erro de retorno de thumbnail
 - Melhoria na interface "Minhas Categorias"
-- API: correção do retorno de thumbnail
-- Correção da seleção de licenças
-- Correção do relacionamento de categorias com item
 - Atualização de redirecionamentos e urls
 - Melhoria no envio de itens ao sistema, ao enviar seus ids e thumbnails.
 
-### Obsoleto
+### Corrigido
+- API: erro de retorno de thumbnail
+- Metadado de texto longo não permite inserir múltiplos valores
+- Definição de licença na submissão do item, mas não sua apresentação na visualização do item
+- Correção da seleção de licenças
+- Correção do relacionamento de categorias com item
 
 ### Removido
 - Remoção de opções não utilziadas na tela de registro de usuário
 
-### Corrigido
+### Obsoleto
 
 ## [0.5] - 2017-10-09
 
