@@ -291,6 +291,7 @@ class ObjectClass extends FormItem {
                             type: 'object',
                             <?php if ($propert_id !== 0 && !$isMultiple) echo 'indexCoumpound:0,' ?>
                             value: id,
+                            collection_id: $("#collection_id").val(),
                             item_id: '<?php echo $item_id ?>',
                             compound_id: '<?php echo $compound_id ?>',
                             property_children_id: '<?php echo $propert_id ?>',
@@ -305,6 +306,7 @@ class ObjectClass extends FormItem {
                         type: 'object',
                         <?php if ($propert_id !== 0 && !$isMultiple) echo 'indexCoumpound:0,' ?>
                         value: id,
+                        collection_id: $("#collection_id").val(),
                         item_id: '<?php echo $item_id ?>',
                         compound_id: '<?php echo $compound_id ?>',
                         property_children_id: '<?php echo $propert_id ?>',
@@ -335,6 +337,7 @@ class ObjectClass extends FormItem {
                             <?php if ($propert_id !== 0 && !$isMultiple) echo 'indexCoumpound:0,' ?>
                             value: id,
                             item_id: '<?php echo $item_id ?>',
+                            collection_id: $("#collection_id").val(),
                             compound_id: '<?php echo $compound_id ?>',
                             property_children_id: '<?php echo $propert_id ?>',
                             index: <?php echo $index_id ?>,
@@ -350,6 +353,7 @@ class ObjectClass extends FormItem {
                         value: id,
                         item_id: '<?php echo $item_id ?>',
                         compound_id: '<?php echo $compound_id ?>',
+                        collection_id: $("#collection_id").val(),
                         property_children_id: '<?php echo $propert_id ?>',
                         index: <?php echo $index_id ?>,
                         reverse: $('#reverse_<?php echo $compound_id ?>_<?php echo $propert_id; ?>_<?php echo $index_id; ?>').val()

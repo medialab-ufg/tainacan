@@ -115,6 +115,7 @@ class CheckboxClass extends FormItem{
                              data: {
                                  operation: 'removeValue',
                                  type: 'term',
+                                 collection_id: $("#collection_id").val(),
                                  value: $(this).val(),
                                  item_id: '<?php echo $item_id ?>',
                                  compound_id: '<?php echo $compound_id ?>',
@@ -128,6 +129,7 @@ class CheckboxClass extends FormItem{
                              operation: 'saveValue',
                              type:'term',
                              value: $(this).val(),
+                             collection_id: $("#collection_id").val(),
                              item_id:'<?php echo $item_id ?>',
                              compound_id:'<?php echo $compound_id ?>',
                              property_children_id: '<?php echo $property_id ?>',

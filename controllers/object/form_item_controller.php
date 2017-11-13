@@ -80,16 +80,16 @@ class FormItemController extends Controller {
                         );
                 }
                 //INSERE O VALOR DE FATO
+	            if($data['property_children_id'] != 0)
+		            $property_id = $data['property_children_id'];
+	            else $property_id = $data['compound_id'];
+
 				if($data['type'] === 'term'){
-					if($data['property_children_id'] != 0)
-						$property_id = $data['property_children_id'];
-					else $property_id = $data['compound_id'];
-
-					$object_model->insert_object_add_metadata_term($data['item_id'], $property_id, $data['value'], $data);
+					$object_model->insert_object_add_metadata_term_event($data['item_id'], $property_id, $data['value'], $data);
 				}elseif ($data['type'] === 'object'){
-
+					$object_model->insert_object_add_metadata_object_event($data['item_id'], $property_id, $data['value'], $data);
 				}else{
-
+					$object_model->insert_object_add_metadata_data_event($data['item_id'], $property_id, $data['value'], $data);
 				}
 
                 return $class->saveValue($data['item_id'],
@@ -245,11 +245,10 @@ class FormItemController extends Controller {
                 update_post_meta($data['ID'], 'socialdb_object_collection_init', $data['collection_id']);
                 update_user_meta(get_current_user_id(), 'socialdb_collection_' . $data['collection_id'] . '_betatext', '');
                 if($item->post_status === 'publish'):
-                    /*$data['msg'] = __('The event was successful', 'tainacan');
+                    $data['msg'] = __('The event was successful', 'tainacan');
                     $data['type'] = 'success';
                     $data['title'] = __('Success', 'tainacan');
-                    return json_encode($data);*/
-                    return $object_model->insert_object_edit_event($data['ID'], $data);
+                    return json_encode($data);
                 else:
                     return $object_model->insert_object_event($data['ID'], $data);
                 endif;

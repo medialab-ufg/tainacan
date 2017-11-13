@@ -138,6 +138,7 @@ class SimpleTreeClass extends FormItem {
                                     operation: 'saveValue',
                                     type: 'term',
                                     value: node.data.key,
+                                    collection_id: $("#collection_id").val(),
                                     item_id: '<?php echo $item_id ?>',
                                     compound_id: '<?php echo $compound_id ?>',
                                     property_children_id: '<?php echo $property_id ?>',

@@ -35,6 +35,7 @@ class AutoIncrementClass extends FormItem{
                         operation: 'saveValue',
                         type:'data',
                         value: $(this).val(),
+                        collection_id: $("#collection_id").val(),
                         item_id:'<?php echo $item_id ?>',
                         compound_id:'<?php echo $compound_id ?>',
                         property_children_id: '<?php echo $property_id ?>',
