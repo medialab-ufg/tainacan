@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: socialdb\n"
-"POT-Creation-Date: 2017-11-13 10:01-0200\n"
-"PO-Revision-Date: 2017-11-13 10:02-0200\n"
+"POT-Creation-Date: 2017-11-13 13:13-0200\n"
+"PO-Revision-Date: 2017-11-13 13:15-0200\n"
 "Last-Translator: Rodrigo de Oliveira <webmaster@rodrigodeoliveira.net>\n"
 "Language-Team: \n"
 "Language: pt_BR\n"
@@ -50,7 +50,7 @@ msgid "Compounds"
 msgstr "Compostas"
 
 #: api/collections_metadata_api.php:80
-#: controllers/collection/collection_controller.php:373 functions.php:2074
+#: controllers/collection/collection_controller.php:373 functions.php:2075
 #: helpers/object/object_helper.php:23
 #: views/object/formItem/helper/formItem.class.php:163
 #: views/property/list_metadata.php:108 views/property/list_metadata.php:115
@@ -380,8 +380,8 @@ msgstr "Este nome não é permitido!"
 #: models/event/event_collection/event_collection_create_model.php:50
 #: models/event/event_collection/event_collection_delete_model.php:50
 #: models/event/event_comment/event_comment_create_model.php:53
-#: models/event/event_model.php:452 models/object/object_model.php:1884
-#: models/object/object_model.php:1957 models/search/search_model.php:494
+#: models/event/event_model.php:454 models/object/object_model.php:1894
+#: models/object/object_model.php:1967 models/search/search_model.php:494
 #: models/theme_options/theme_options_model.php:195
 #: partials/setup-header.php:44 views/collection/js/edit_js.php:129
 #: views/collection/js/edit_js.php:176 views/event/js/list_js.php:190
@@ -544,7 +544,6 @@ msgid "Logo"
 msgstr "Marca do Repositório"
 
 #: controllers/event/event_controller.php:126
-#: controllers/object/form_item_controller.php:238
 #: controllers/object/object_controller.php:1110
 #: models/category/category_model.php:1116
 #: models/collection/collection_import_model.php:180
@@ -563,6 +562,8 @@ msgstr "Marca do Repositório"
 #: models/event/event_object/event_object_delete_model.php:59
 #: models/event/event_object/event_object_delete_model.php:102
 #: models/event/event_object/event_object_delete_model.php:117
+#: models/event/event_object/event_object_edit_model.php:55
+#: models/event/event_object/event_object_edit_model.php:79
 #: models/event/event_property_compounds/event_property_compounds_create_model.php:48
 #: models/event/event_property_compounds/event_property_compounds_create_model.php:95
 #: models/event/event_property_compounds/event_property_compounds_create_model.php:106
@@ -614,8 +615,8 @@ msgstr "Marca do Repositório"
 #: models/license/license_model.php:30 models/license/license_model.php:42
 #: models/license/license_model.php:59 models/license/license_model.php:71
 #: models/license/license_model.php:179 models/mapping/mapping_model.php:61
-#: models/mapping/mapping_model.php:679 models/object/object_model.php:873
-#: models/object/object_model.php:1880 models/object/object_model.php:1953
+#: models/mapping/mapping_model.php:679 models/object/object_model.php:883
+#: models/object/object_model.php:1890 models/object/object_model.php:1963
 #: models/object/object_multiple_draft_model.php:148
 #: models/object/object_multiple_model.php:162
 #: models/object/object_multiple_model.php:671
@@ -755,12 +756,12 @@ msgstr "Por favor, preencha o delimitador corretamente!"
 #: models/collection/collection_import_model.php:186
 #: models/event/event_object/event_object_create_model.php:101
 #: models/general/general_model.php:1917 models/general/general_model.php:1957
-#: models/mapping/mapping_model.php:65 models/object/object_model.php:239
-#: models/object/object_model.php:249 models/object/object_model.php:256
-#: models/object/object_model.php:267 models/object/object_model.php:272
-#: models/object/object_model.php:277 models/object/object_model.php:282
-#: models/object/object_model.php:291 models/object/object_model.php:296
-#: models/object/object_model.php:301 models/object/object_model.php:1337
+#: models/mapping/mapping_model.php:65 models/object/object_model.php:240
+#: models/object/object_model.php:250 models/object/object_model.php:257
+#: models/object/object_model.php:268 models/object/object_model.php:273
+#: models/object/object_model.php:278 models/object/object_model.php:283
+#: models/object/object_model.php:292 models/object/object_model.php:297
+#: models/object/object_model.php:302 models/object/object_model.php:1347
 #: models/object/object_multiple_draft_model.php:152
 #: models/object/object_multiple_model.php:166
 #: models/object/object_multiple_model.php:675
@@ -850,7 +851,7 @@ msgstr "Comentários"
 msgid "Items"
 msgstr "Itens"
 
-#: controllers/log/log_controller.php:35 functions.php:1852
+#: controllers/log/log_controller.php:35 functions.php:1853
 #: helpers/log/log_helper.php:18 models/collection/collection_model.php:838
 #: models/collection/visualization_model.php:300
 #: models/collection/visualization_model.php:423
@@ -897,50 +898,6 @@ msgstr "Mapeamento padrão"
 #: controllers/object/form_item_controller.php:139
 msgid "Empty Title"
 msgstr "Título vazio"
-
-#: controllers/object/form_item_controller.php:236
-#: models/event/event_classification/event_classification_create_model.php:122
-#: models/event/event_classification/event_classification_create_model.php:189
-#: models/event/event_classification/event_classification_create_model.php:269
-#: models/event/event_classification/event_classification_delete_model.php:128
-#: models/event/event_classification/event_classification_delete_model.php:179
-#: models/event/event_classification/event_classification_delete_model.php:227
-#: models/event/event_collection/event_collection_create_model.php:80
-#: models/event/event_collection/event_collection_delete_model.php:82
-#: models/event/event_comment/event_comment_create_model.php:99
-#: models/event/event_comment/event_comment_delete_model.php:76
-#: models/event/event_comment/event_comment_edit_model.php:82
-#: models/event/event_object/event_object_create_model.php:94
-#: models/event/event_object/event_object_delete_model.php:100
-#: models/event/event_object/event_object_delete_model.php:115
-#: models/event/event_property_compounds/event_property_compounds_create_model.php:93
-#: models/event/event_property_compounds/event_property_compounds_create_model.php:104
-#: models/event/event_property_compounds/event_property_compounds_delete_model.php:103
-#: models/event/event_property_compounds/event_property_compounds_edit_model.php:101
-#: models/event/event_property_compounds/event_property_compounds_edit_value_model.php:145
-#: models/event/event_property_data/event_property_data_create_model.php:114
-#: models/event/event_property_data/event_property_data_create_model.php:126
-#: models/event/event_property_data/event_property_data_delete_model.php:93
-#: models/event/event_property_data/event_property_data_edit_model.php:125
-#: models/event/event_property_data/event_property_data_edit_value_model.php:229
-#: models/event/event_property_object/event_property_object_create_model.php:121
-#: models/event/event_property_object/event_property_object_create_model.php:134
-#: models/event/event_property_object/event_property_object_delete_model.php:93
-#: models/event/event_property_object/event_property_object_edit_model.php:155
-#: models/event/event_property_object/event_property_object_edit_value_model.php:159
-#: models/event/event_property_term/event_property_term_create_model.php:106
-#: models/event/event_property_term/event_property_term_create_model.php:119
-#: models/event/event_property_term/event_property_term_delete_model.php:91
-#: models/event/event_property_term/event_property_term_edit_model.php:142
-#: models/event/event_tag/event_tag_create_model.php:91
-#: models/event/event_tag/event_tag_delete_model.php:78
-#: models/event/event_tag/event_tag_edit_model.php:105
-#: models/event/event_term/event_term_create_model.php:85
-#: models/event/event_term/event_term_delete_model.php:92
-#: models/event/event_term/event_term_edit_model.php:112
-#: models/object/object_model.php:871
-msgid "The event was successful"
-msgstr "O evento foi realizado com sucesso"
 
 #: controllers/object/object_controller.php:32
 #: views/object/js/edit_item_text_js.php:5
@@ -1368,7 +1325,7 @@ msgstr "Nenhum item encontrado na lixeira"
 msgid "Category"
 msgstr "Categoria "
 
-#: functions.php:1150 models/event/event_model.php:291
+#: functions.php:1150 models/event/event_model.php:293
 #: views/collection/edit.php:1080 views/collection/modals.php:61
 msgid "Edit Category"
 msgstr "Editar Categoria"
@@ -1401,12 +1358,12 @@ msgstr "Categoria pai"
 msgid "Parent Category:"
 msgstr "Categoria pai:"
 
-#: functions.php:1417 models/object/object_model.php:1788
+#: functions.php:1417 models/object/object_model.php:1798
 #: models/wp_query/wp_query_model.php:1280
 msgid "Recents"
 msgstr "Recentes "
 
-#: functions.php:1761 models/collection/collection_model.php:583
+#: functions.php:1762 models/collection/collection_model.php:583
 #: models/event/event_property_data/event_property_data_edit_value_model.php:29
 #: models/mapping/extract_metadata_model.php:175
 #: partials/admin/admin-licenses.php:18 partials/admin/admin-tools.php:81
@@ -1428,7 +1385,7 @@ msgstr "Recentes "
 msgid "Title"
 msgstr "Título"
 
-#: functions.php:1774 models/collection/collection_model.php:630
+#: functions.php:1775 models/collection/collection_model.php:630
 #: models/event/event_property_data/event_property_data_edit_value_model.php:32
 #: models/mapping/extract_metadata_model.php:176 single-socialdb_object.php:422
 #: views/advanced_search/advanced_search.php:62 views/category/page.php:69
@@ -1447,7 +1404,7 @@ msgstr "Título"
 msgid "Description"
 msgstr "Descrição"
 
-#: functions.php:1787 models/collection/collection_model.php:630
+#: functions.php:1788 models/collection/collection_model.php:630
 #: models/export/rdf_repository_model.php:73
 #: models/export/rdf_repository_model.php:80
 #: models/mapping/extract_metadata_model.php:177
@@ -1461,7 +1418,7 @@ msgstr "Descrição"
 msgid "Content"
 msgstr "Conteúdo "
 
-#: functions.php:1800 models/collection/collection_model.php:630
+#: functions.php:1801 models/collection/collection_model.php:630
 #: models/event/event_property_data/event_property_data_edit_value_model.php:37
 #: models/mapping/extract_metadata_model.php:180
 #: models/mapping/extract_metadata_model.php:202
@@ -1480,17 +1437,17 @@ msgstr "Conteúdo "
 msgid "Source"
 msgstr "Fonte"
 
-#: functions.php:1813 models/collection/collection_model.php:630
+#: functions.php:1814 models/collection/collection_model.php:630
 #: models/event/event_property_data/event_property_data_edit_value_model.php:55
 #: models/export/rdf_repository_model.php:124
-#: models/object/object_model.php:1330 models/search/search_model.php:335
+#: models/object/object_model.php:1340 models/search/search_model.php:335
 #: single-socialdb_object.php:456 views/object/list_single_object.php:338
 #: views/object/list_single_object_version.php:391
 #: views/object/ranking/list_value_ordenation.php:43
 msgid "License"
 msgstr "Licença"
 
-#: functions.php:1826 models/collection/collection_model.php:630
+#: functions.php:1827 models/collection/collection_model.php:630
 #: models/event/event_property_data/event_property_data_edit_value_model.php:48
 #: single-socialdb_object.php:324 views/design/edit.php:89
 #: views/design/edit.php:120 views/design/edit.php:177
@@ -1504,7 +1461,7 @@ msgstr "Licença"
 msgid "Thumbnail"
 msgstr "Miniatura"
 
-#: functions.php:1839 models/collection/collection_model.php:630
+#: functions.php:1840 models/collection/collection_model.php:630
 #: models/import/oaipmh_model.php:196 views/object/create_item_text.php:139
 #: views/object/create_item_text.php:351 views/object/create_item_text.php:446
 #: views/object/edit_item_text.php:260 views/object/edit_item_text.php:554
@@ -1521,7 +1478,7 @@ msgstr "Miniatura"
 msgid "Attachments"
 msgstr "Anexos"
 
-#: functions.php:1867 models/collection/collection_model.php:630
+#: functions.php:1868 models/collection/collection_model.php:630
 #: models/event/event_property_data/event_property_data_edit_value_model.php:42
 #: models/mapping/extract_metadata_model.php:179
 #: models/search/search_model.php:327 single-socialdb_object.php:276
@@ -1545,101 +1502,101 @@ msgstr "Anexos"
 msgid "Type"
 msgstr "Tipo"
 
-#: functions.php:2074 partials/admin/admin-categories.php:107
+#: functions.php:2075 partials/admin/admin-categories.php:107
 #: views/category/list.php:134 views/property/list.php:165
 #: views/search/tags.php:54 views/theme_options/property/list.php:105
 msgid "Clear"
 msgstr "Limpar"
 
-#: functions.php:2074
+#: functions.php:2075
 msgid "Select Color"
 msgstr "Selecionar cor"
 
-#: functions.php:2090
+#: functions.php:2091
 msgid "Tainacan - Collections"
 msgstr "Tainacan - Coleções"
 
-#: functions.php:2091
+#: functions.php:2092
 msgid "The root collection"
 msgstr "a coleção raiz"
 
-#: functions.php:2100
+#: functions.php:2101
 msgid "Categories of Collection"
 msgstr "Categorias da coleção"
 
-#: functions.php:2315 functions.php:2343
+#: functions.php:2316 functions.php:2344
 #: models/theme_options/theme_options_model.php:959
 #: models/theme_options/theme_options_model.php:965
 msgid "Subject"
 msgstr "Assunto"
 
-#: functions.php:2315
+#: functions.php:2316
 msgid "of"
 msgstr "de"
 
-#: functions.php:3271
+#: functions.php:3272
 msgid "Videos"
 msgstr "Vídeos"
 
-#: functions.php:3272
+#: functions.php:3273
 msgid "Images"
 msgstr "Imagens"
 
-#: functions.php:3273
+#: functions.php:3274
 msgid "PDFs"
 msgstr "PDFs"
 
-#: functions.php:3274
+#: functions.php:3275
 msgid "Texts"
 msgstr "Textos"
 
-#: functions.php:3275
+#: functions.php:3276
 msgid "Audios"
 msgstr "Áudios"
 
-#: functions.php:3284
+#: functions.php:3285
 msgid "Visit original page"
 msgstr "Visitar página original"
 
-#: functions.php:3332 helpers/view_helper.php:81
+#: functions.php:3333 helpers/view_helper.php:81
 msgid "Tainacan"
 msgstr "Tainacan"
 
-#: functions.php:3493
+#: functions.php:3494
 msgid "Menu for Administrators"
 msgstr "Menu para Administradores"
 
-#: functions.php:3494
+#: functions.php:3495
 msgid "Visitor Menu"
 msgstr "Menu para Visitantes"
 
-#: functions.php:3584 functions.php:3685
+#: functions.php:3585 functions.php:3686
 msgid "Reindexation complete,Success"
 msgstr "Extração completa, Sucesso"
 
-#: functions.php:3880
+#: functions.php:3881
 msgid "Register the Collection's base name"
 msgstr "Registre o nome base de suas coleções"
 
-#: functions.php:3882
+#: functions.php:3883
 msgid "Enter Collection base URL"
 msgstr "Entre com a nome base de suas coleções"
 
-#: functions.php:3907
+#: functions.php:3908
 msgid "Home Page Sections"
 msgstr "Seções da Home Page"
 
-#: functions.php:3909
+#: functions.php:3910
 msgid "Select widgets to show at Home Page, and order them as you wish"
 msgstr ""
 "Selecione widgets para exibir na Página Inicial, e ordene-os conforme "
 "desejado"
 
-#: functions.php:3920
+#: functions.php:3921
 msgid "Contact Page Sections"
 msgstr "Seções da Página de Contato"
 
-#: functions.php:3922
+#: functions.php:3923
 msgid "Select widgets to show at Contact Page, and order them as you wish"
 msgstr ""
 "Selecione widgets para exibir na Página de contato, e ordene-os conforme "
@@ -2678,6 +2635,7 @@ msgstr " no item "
 #: models/event/event_comment/event_comment_edit_model.php:55
 #: models/event/event_object/event_object_create_model.php:54
 #: models/event/event_object/event_object_delete_model.php:61
+#: models/event/event_object/event_object_edit_model.php:57
 #: models/event/event_property_compounds/event_property_compounds_create_model.php:50
 #: models/event/event_property_compounds/event_property_compounds_delete_model.php:46
 #: models/event/event_property_compounds/event_property_compounds_edit_model.php:61
@@ -2701,6 +2659,50 @@ msgstr " no item "
 #: models/event/event_term/event_term_edit_model.php:55
 msgid "This event is already confirmed"
 msgstr "Este evento já foi confirmado"
+
+#: models/event/event_classification/event_classification_create_model.php:122
+#: models/event/event_classification/event_classification_create_model.php:189
+#: models/event/event_classification/event_classification_create_model.php:269
+#: models/event/event_classification/event_classification_delete_model.php:128
+#: models/event/event_classification/event_classification_delete_model.php:179
+#: models/event/event_classification/event_classification_delete_model.php:227
+#: models/event/event_collection/event_collection_create_model.php:80
+#: models/event/event_collection/event_collection_delete_model.php:82
+#: models/event/event_comment/event_comment_create_model.php:99
+#: models/event/event_comment/event_comment_delete_model.php:76
+#: models/event/event_comment/event_comment_edit_model.php:82
+#: models/event/event_object/event_object_create_model.php:94
+#: models/event/event_object/event_object_delete_model.php:100
+#: models/event/event_object/event_object_delete_model.php:115
+#: models/event/event_object/event_object_edit_model.php:77
+#: models/event/event_property_compounds/event_property_compounds_create_model.php:93
+#: models/event/event_property_compounds/event_property_compounds_create_model.php:104
+#: models/event/event_property_compounds/event_property_compounds_delete_model.php:103
+#: models/event/event_property_compounds/event_property_compounds_edit_model.php:101
+#: models/event/event_property_compounds/event_property_compounds_edit_value_model.php:145
+#: models/event/event_property_data/event_property_data_create_model.php:114
+#: models/event/event_property_data/event_property_data_create_model.php:126
+#: models/event/event_property_data/event_property_data_delete_model.php:93
+#: models/event/event_property_data/event_property_data_edit_model.php:125
+#: models/event/event_property_data/event_property_data_edit_value_model.php:229
+#: models/event/event_property_object/event_property_object_create_model.php:121
+#: models/event/event_property_object/event_property_object_create_model.php:134
+#: models/event/event_property_object/event_property_object_delete_model.php:93
+#: models/event/event_property_object/event_property_object_edit_model.php:155
+#: models/event/event_property_object/event_property_object_edit_value_model.php:159
+#: models/event/event_property_term/event_property_term_create_model.php:106
+#: models/event/event_property_term/event_property_term_create_model.php:119
+#: models/event/event_property_term/event_property_term_delete_model.php:91
+#: models/event/event_property_term/event_property_term_edit_model.php:142
+#: models/event/event_tag/event_tag_create_model.php:91
+#: models/event/event_tag/event_tag_delete_model.php:78
+#: models/event/event_tag/event_tag_edit_model.php:105
+#: models/event/event_term/event_term_create_model.php:85
+#: models/event/event_term/event_term_delete_model.php:92
+#: models/event/event_term/event_term_edit_model.php:112
+#: models/object/object_model.php:881
+msgid "The event was successful"
+msgstr "O evento foi realizado com sucesso"
 
 #: models/event/event_classification/event_classification_create_model.php:126
 #: models/event/event_classification/event_classification_delete_model.php:143
@@ -2741,6 +2743,7 @@ msgstr "Remover a tag :"
 #: models/event/event_comment/event_comment_edit_model.php:51
 #: models/event/event_object/event_object_create_model.php:50
 #: models/event/event_object/event_object_delete_model.php:57
+#: models/event/event_object/event_object_edit_model.php:53
 #: models/event/event_property_compounds/event_property_compounds_create_model.php:46
 #: models/event/event_property_compounds/event_property_compounds_delete_model.php:42
 #: models/event/event_property_compounds/event_property_compounds_edit_model.php:57
@@ -2823,6 +2826,7 @@ msgstr "no item"
 #: models/event/event_comment/event_comment_edit_model.php:57
 #: models/event/event_object/event_object_create_model.php:56
 #: models/event/event_object/event_object_delete_model.php:63
+#: models/event/event_object/event_object_edit_model.php:59
 #: models/event/event_property_compounds/event_property_compounds_create_model.php:52
 #: models/event/event_property_compounds/event_property_compounds_delete_model.php:48
 #: models/event/event_property_compounds/event_property_compounds_edit_model.php:63
@@ -2935,7 +2939,11 @@ msgstr "Ver item"
 msgid "Create Object"
 msgstr "Criar Item"
 
-#: models/event/event_model.php:281 views/collection/edit.php:1184
+#: models/event/event_model.php:281
+msgid "Edited Object"
+msgstr "Item editado"
+
+#: models/event/event_model.php:283 views/collection/edit.php:1184
 #: views/object/list_data_table.php:55 views/object/list_data_table.php:79
 #: views/object/list_modes/actions/item_actions.php:29
 #: views/object/list_modes/edit_btns.php:34
@@ -2948,87 +2956,87 @@ msgstr "Criar Item"
 msgid "Delete Object"
 msgstr "Deletar Item"
 
-#: models/event/event_model.php:283 views/collection/edit.php:1124
+#: models/event/event_model.php:285 views/collection/edit.php:1124
 msgid "Add Classification"
 msgstr "Adicionar Classificação"
 
-#: models/event/event_model.php:285 views/collection/edit.php:1144
+#: models/event/event_model.php:287 views/collection/edit.php:1144
 msgid "Delete Classification"
 msgstr "Deletar Classificação"
 
-#: models/event/event_model.php:287 views/collection/edit.php:1100
+#: models/event/event_model.php:289 views/collection/edit.php:1100
 msgid "Delete Category"
 msgstr "Deletar Categoria"
 
-#: models/event/event_model.php:289 views/collection/edit.php:1060
+#: models/event/event_model.php:291 views/collection/edit.php:1060
 msgid "Create Category"
 msgstr "Criar Categoria"
 
-#: models/event/event_model.php:293
+#: models/event/event_model.php:295
 msgid "Delete Tag"
 msgstr "Deletar Tag "
 
-#: models/event/event_model.php:295
+#: models/event/event_model.php:297
 msgid "Create Tag"
 msgstr "Criar Tag"
 
-#: models/event/event_model.php:297 views/collection/modals.php:286
+#: models/event/event_model.php:299 views/collection/modals.php:286
 msgid "Edit Tag"
 msgstr "Editar Tag"
 
-#: models/event/event_model.php:299
+#: models/event/event_model.php:301
 msgid "Delete Data Property"
 msgstr "Remover o metadado de dado"
 
-#: models/event/event_model.php:301
+#: models/event/event_model.php:303
 msgid "Create Data Property"
 msgstr "Criar Metadado de Dado "
 
-#: models/event/event_model.php:303
+#: models/event/event_model.php:305
 msgid "Edit Data Property"
 msgstr "Editar metadado de dado"
 
-#: models/event/event_model.php:305
+#: models/event/event_model.php:307
 msgid "Edit Data Property value"
 msgstr "Editar valor do Metadado de Dado "
 
-#: models/event/event_model.php:307
+#: models/event/event_model.php:309
 msgid "Delete Object Property"
 msgstr "Remover o metadado de objeto "
 
-#: models/event/event_model.php:309
+#: models/event/event_model.php:311
 msgid "Create Object Property"
 msgstr "Criar metadado de objeto"
 
-#: models/event/event_model.php:311
+#: models/event/event_model.php:313
 msgid "Edit Object Property"
 msgstr "Editar Metadado de objeto"
 
-#: models/event/event_model.php:313
+#: models/event/event_model.php:315
 msgid "Edit Object Property value"
 msgstr "Editar valor do Metadado de Objeto "
 
-#: models/event/event_model.php:315
+#: models/event/event_model.php:317
 msgid "Create Compound Property"
 msgstr "Criar metadado composto"
 
-#: models/event/event_model.php:317
+#: models/event/event_model.php:319
 msgid "Edit Compound Property"
 msgstr "Editar metadado composto"
 
-#: models/event/event_model.php:321
+#: models/event/event_model.php:323
 msgid "Delete Property"
 msgstr "Deletar Metadado"
 
-#: models/event/event_model.php:323
+#: models/event/event_model.php:325
 msgid "Create Term Property"
 msgstr "Criar Metadado de Termo"
 
-#: models/event/event_model.php:325
+#: models/event/event_model.php:327
 msgid "Edit Term Property"
 msgstr "Editar metadado de Termo"
 
-#: models/event/event_model.php:327 partials/admin/admin-config.php:160
+#: models/event/event_model.php:329 partials/admin/admin-config.php:160
 #: views/advanced_search/modals_adv.php:90 views/collection/config_menu.php:82
 #: views/collection/config_menu.php:161
 #: views/collection/header_collection.php:227
@@ -3037,86 +3045,86 @@ msgstr "Editar metadado de Termo"
 msgid "Delete Collection"
 msgstr "Excluir Coleção"
 
-#: models/event/event_model.php:329 partials/admin/admin-config.php:153
+#: models/event/event_model.php:331 partials/admin/admin-config.php:153
 #: partials/modals-header.php:12 views/theme_options/edit_configuration.php:131
 msgid "Create Collection"
 msgstr "Criar Coleção"
 
-#: models/event/event_model.php:331 views/collection/edit.php:1376
+#: models/event/event_model.php:333 views/collection/edit.php:1376
 msgid "Create Comment"
 msgstr "Criar Comentário"
 
-#: models/event/event_model.php:333 views/collection/edit.php:1396
+#: models/event/event_model.php:335 views/collection/edit.php:1396
 msgid "Edit Comment"
 msgstr "Editar Comentário"
 
-#: models/event/event_model.php:335 views/collection/edit.php:1411
+#: models/event/event_model.php:337 views/collection/edit.php:1411
 msgid "Delete Comment"
 msgstr "Deletar Comentário"
 
-#: models/event/event_model.php:338
+#: models/event/event_model.php:340
 msgid "Operation"
 msgstr "Operação"
 
-#: models/event/event_model.php:446
+#: models/event/event_model.php:448
 msgid "See item (Open a new Tab)"
 msgstr "Ver Item (Abrir uma nova aba) "
 
-#: models/event/event_model.php:450
+#: models/event/event_model.php:452
 msgid "The event was sent for approval"
 msgstr "O evento foi enviado para aprovação"
 
-#: models/event/event_model.php:455
+#: models/event/event_model.php:457
 msgid "An error happened, please try again"
 msgstr "Um erro ocorreu, por favor tente novamente"
 
-#: models/event/event_model.php:657
+#: models/event/event_model.php:659
 msgid "Event automatically verified"
 msgstr "Evento automaticamente verificado"
 
-#: models/event/event_model.php:685
+#: models/event/event_model.php:687
 msgid "Messages: Result of your event"
 msgstr "Mensagens: Resultado de seu evento"
 
-#: models/event/event_model.php:689
+#: models/event/event_model.php:691
 msgid "Event result"
 msgstr "Resultado do evento"
 
-#: models/event/event_model.php:692
+#: models/event/event_model.php:694
 msgid "Event in the collection "
 msgstr "Evento na coleção  "
 
-#: models/event/event_model.php:695 models/event/event_model.php:697
+#: models/event/event_model.php:697 models/event/event_model.php:699
 msgid "The event "
 msgstr "O evento "
 
-#: models/event/event_model.php:695
+#: models/event/event_model.php:697
 msgid " was confirmed "
 msgstr "foi confirmado"
 
-#: models/event/event_model.php:697
+#: models/event/event_model.php:699
 msgid "was not confirmed "
 msgstr "não foi confirmado"
 
-#: models/event/event_model.php:699
+#: models/event/event_model.php:701
 msgid "Obervations by collection's moderators "
 msgstr "Observações dos moderadores da Coleção"
 
-#: models/event/event_model.php:736 views/event/js/list_js.php:84
+#: models/event/event_model.php:738 views/event/js/list_js.php:84
 #: views/event/js/list_js.php:117 views/event/js/list_js.php:147
 #: views/permission/page.php:154
 msgid "Anonimous"
 msgstr "Anônimo"
 
-#: models/event/event_model.php:747
+#: models/event/event_model.php:749
 msgid "Warning: Event Approved"
 msgstr "Atenção: Evento aprovado"
 
-#: models/event/event_model.php:749
+#: models/event/event_model.php:751
 msgid "Warning: Event sent to Approvation"
 msgstr "Atenção: Evento enviado para aprovação"
 
-#: models/event/event_model.php:754 partials/actions-header.php:107
+#: models/event/event_model.php:756 partials/actions-header.php:107
 #: partials/admin/admin-events.php:23 views/collection/config_menu.php:95
 #: views/collection/config_menu.php:126 views/collection/modals.php:390
 #: views/event/js/list_js.php:3 views/event/list.php:13
@@ -3124,15 +3132,15 @@ msgstr "Atenção: Evento enviado para aprovação"
 msgid "Events"
 msgstr "Eventos"
 
-#: models/event/event_model.php:757
+#: models/event/event_model.php:759
 msgid "Event in collection "
 msgstr "Evento na coleção "
 
-#: models/event/event_model.php:758
+#: models/event/event_model.php:760
 msgid "Author User"
 msgstr "usuário"
 
-#: models/event/event_model.php:762
+#: models/event/event_model.php:764
 msgid "Description: "
 msgstr "Descrição: "
 
@@ -3142,6 +3150,7 @@ msgstr "Adicionar item"
 
 #: models/event/event_object/event_object_create_model.php:28
 #: models/event/event_object/event_object_create_model.php:30
+#: models/event/event_object/event_object_edit_model.php:29
 #: models/event/event_property_compounds/event_property_compounds_delete_model.php:23
 #: models/event/event_property_compounds/event_property_compounds_edit_model.php:32
 #: models/event/event_property_compounds/event_property_compounds_edit_model.php:37
@@ -3169,6 +3178,10 @@ msgstr "Criar Item "
 #: models/event/event_object/event_object_delete_model.php:22
 msgid "Delete the object "
 msgstr "Remover item "
+
+#: models/event/event_object/event_object_edit_model.php:29
+msgid "Edited object "
+msgstr "Item editado "
 
 #: models/event/event_property_compounds/event_property_compounds_create_model.php:27
 msgid "Create the compounds property "
@@ -3594,7 +3607,7 @@ msgid "Attachment"
 msgstr "Anexo "
 
 #: models/export/rdf_repository_model.php:94
-#: models/object/object_model.php:1785 models/wp_query/wp_query_model.php:1277
+#: models/object/object_model.php:1795 models/wp_query/wp_query_model.php:1277
 #: single-socialdb_object.php:351 views/object/list_single_object.php:253
 #: views/object/list_single_object_version.php:320
 #: views/property/js/list_metadata_js.php:2636
@@ -3805,59 +3818,59 @@ msgstr ""
 msgid "See repository"
 msgstr "Ver repositório"
 
-#: models/object/object_model.php:240
+#: models/object/object_model.php:241
 msgid "Please check a option in the field:"
 msgstr "Por favor verifique a opção no campo: "
 
-#: models/object/object_model.php:250
+#: models/object/object_model.php:251
 msgid "Please select a file to upload to this item"
 msgstr "Por favor, selecione um arquivo para upload neste item"
 
-#: models/object/object_model.php:257
+#: models/object/object_model.php:258
 msgid "Please select a URL to this item"
 msgstr "Por favor selecione uma URL para este item"
 
-#: models/object/object_model.php:268
+#: models/object/object_model.php:269
 msgid "The format not allowed for video"
 msgstr "Formato não permitido para vídeos"
 
-#: models/object/object_model.php:273 models/object/object_model.php:292
+#: models/object/object_model.php:274 models/object/object_model.php:293
 msgid "The format not allowed for image"
 msgstr "Formato não permitido para imagem"
 
-#: models/object/object_model.php:278 models/object/object_model.php:297
+#: models/object/object_model.php:279 models/object/object_model.php:298
 msgid "The format not allowed for audio"
 msgstr "Formato não permitido para áudio"
 
-#: models/object/object_model.php:283 models/object/object_model.php:302
+#: models/object/object_model.php:284 models/object/object_model.php:303
 msgid "This is not a PDF file!"
 msgstr "Este arquivo não está no formato PDF"
 
-#: models/object/object_model.php:1329
+#: models/object/object_model.php:1339
 msgid "Your suggested license is: "
 msgstr "A licença sugerida é: "
 
-#: models/object/object_model.php:1336
+#: models/object/object_model.php:1346
 msgid "Something went wrong! Please try again!"
 msgstr "Algo deu errado! Por favor tente novamente!"
 
-#: models/object/object_model.php:1783 models/wp_query/wp_query_model.php:1275
+#: models/object/object_model.php:1793 models/wp_query/wp_query_model.php:1275
 msgid "Data property"
 msgstr "Metadados de dado"
 
-#: models/object/object_model.php:1881 models/object/object_model.php:1954
+#: models/object/object_model.php:1891 models/object/object_model.php:1964
 msgid "All items removed successfully"
 msgstr "Item/itens removido(s) com sucesso!"
 
-#: models/object/object_model.php:1885 models/object/object_model.php:1958
+#: models/object/object_model.php:1895 models/object/object_model.php:1968
 msgid "No items added in this collection"
 msgstr "Nenhum item adicionados a esta coleção"
 
-#: models/object/object_model.php:2124
+#: models/object/object_model.php:2134
 msgid "Copy of "
 msgstr "Copiar de "
 
-#: models/object/object_model.php:2298
+#: models/object/object_model.php:2308
 msgid "Original Item"
 msgstr "Item original"
 

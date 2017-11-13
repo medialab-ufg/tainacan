@@ -277,6 +277,8 @@ abstract class EventModel extends Model {
             switch ($parent->name) {
                 case 'socialdb_event_object_create':
                     return __('Create Object', 'tainacan');
+	            case 'socialdb_event_object_edit':
+	            	return __('Edited Object', 'tainacan');
                 case 'socialdb_event_object_delete':
                     return __('Delete Object', 'tainacan');
                 case 'socialdb_event_classification_create':

@@ -1536,6 +1536,7 @@ function create_event_terms() {
     create_metas($event_object_term['term_id'], 'socialdb_event_object_metas', 'socialdb_event_object_item_id', 'socialdb_event_object_item_id');
     $event_object_create_term = create_register('socialdb_event_object_create', 'socialdb_event_type', array('parent' => $event_object_term['term_id']));
     $event_object_delete_term = create_register('socialdb_event_object_delete', 'socialdb_event_type', array('parent' => $event_object_term['term_id']));
+	$event_object_edit_term = create_register('socialdb_event_object_edit', 'socialdb_event_type', array('parent' => $event_object_term['term_id']));
     /*     * Classification* */
     $event_classification_term = create_register('socialdb_event_classification', 'socialdb_event_type', array('parent' => $event_root_term['term_id']));
     create_metas($event_classification_term['term_id'], 'socialdb_event_classification_metas', 'socialdb_event_classification_term_id', 'socialdb_event_classification_term_id');

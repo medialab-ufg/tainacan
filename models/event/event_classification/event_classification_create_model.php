@@ -25,7 +25,7 @@ class EventClassificationCreateModel extends EventModel {
         if ($data['socialdb_event_classification_type'] == 'category') {
             $category = get_term_by('id', $data['socialdb_event_classification_term_id'], 'socialdb_category_type');
             $title = __('Add the category : ','tainacan') . ' <i>'.$category->name.'</i> ';
-            $title .= __('from metadata','tainacan') . ' <b>'.get_term_by('id',$data['socialdb_event_classification_property_id'],'socialdb_property_type')->name.'</b>';
+            $title .= __('from metadata','tainacan') . ' <b>'.get_term_by('id', $data['socialdb_event_classification_property_id'],'socialdb_property_type')->name.'</b>';
         } elseif ($data['socialdb_event_classification_type'] != 'tag' && $data['socialdb_event_classification_type'] != 'category') {
             $property = get_term_by('id', $data['socialdb_event_classification_type'], 'socialdb_property_type');
             $value = get_post($data['socialdb_event_classification_term_id']);

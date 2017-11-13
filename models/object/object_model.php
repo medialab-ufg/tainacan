@@ -8,6 +8,10 @@ include_once (dirname(__FILE__) . '../../../models/property/property_model.php')
 include_once (dirname(__FILE__) . '../../../models/category/category_model.php');
 include_once (dirname(__FILE__) . '../../../models/event/event_object/event_object_create_model.php');
 include_once (dirname(__FILE__) . '../../../models/event/event_object/event_object_delete_model.php');
+include_once (dirname(__FILE__) . '../../../models/event/event_object/event_object_edit_model.php');
+
+include_once (dirname(__FILE__) . '../../../models/event/event_classification/event_classification_create_model.php');
+
 require_once(dirname(__FILE__) . '../../general/general_model.php');
 require_once(dirname(__FILE__) . '../../user/user_model.php');
 require_once(dirname(__FILE__) . '../../tag/tag_model.php');
@@ -711,6 +715,41 @@ class ObjectModel extends Model {
         $data['socialdb_event_create_date'] = time();
         return $eventAddObject->create_event($data);
     }
+
+	public function insert_object_edit_event($object_id, $data) {
+		$eventEditObject = new EventObjectEditModel();
+		$data['socialdb_event_object_item_id'] = $object_id;
+		$data['socialdb_event_collection_id'] = $data['collection_id'];
+		$data['socialdb_event_user_id'] = get_current_user_id();
+		$data['socialdb_event_create_date'] = time();
+		return $eventEditObject->create_event($data);
+	}
+
+	public function insert_object_add_metadata_term($object_id,$property_id,$term_id, $data){
+		$event = new EventClassificationCreateModel();
+		$data['socialdb_event_object_item_id'] = $object_id;
+		$data['socialdb_event_classification_property_id'] = $property_id;
+		$data['socialdb_event_classification_term_id'] = $term_id;
+		$data['socialdb_event_collection_id'] = $data['collection_id'];
+		$data['socialdb_event_user_id'] = get_current_user_id();
+		$data['socialdb_event_classification_type'] = 'category';
+		$data['socialdb_event_create_date'] = time();
+
+		return $event->create_event($data);
+		//
+	}
+
+	public function insert_object_add_metadata_object($object_id,$property_id,$value){
+		$event = new EventClassificationCreateModel();
+		$data['socialdb_event_object_item_id'] = $object_id;
+		$data['socialdb_event_classification_property_id'] = $property_id;
+		$data['socialdb_event_classification_term_id'] = $term_id;
+		$data['socialdb_event_collection_id'] = $data['collection_id'];
+		$data['socialdb_event_user_id'] = get_current_user_id();
+		$data['socialdb_event_classification_type'] = 'category';
+		$data['socialdb_event_create_date'] = time();
+		return $event->create_event($data);
+	}
 
     /**
      * @signature - function add_video($collection_id, $name, $content )
