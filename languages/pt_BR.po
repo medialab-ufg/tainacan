@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: socialdb\n"
-"POT-Creation-Date: 2017-11-10 15:47-0200\n"
-"PO-Revision-Date: 2017-11-10 15:47-0200\n"
+"POT-Creation-Date: 2017-11-13 10:01-0200\n"
+"PO-Revision-Date: 2017-11-13 10:02-0200\n"
 "Last-Translator: Rodrigo de Oliveira <webmaster@rodrigodeoliveira.net>\n"
 "Language-Team: \n"
 "Language: pt_BR\n"
@@ -202,9 +202,9 @@ msgstr "Responder Comentário"
 #: views/mapping/container_mapping.php:13
 #: views/mapping/container_mapping_metatags.php:13 views/object/edit.php:239
 #: views/object/edit_item_text.php:821
-#: views/object/formItem/helper/formItemCategory.class.php:132
+#: views/object/formItem/helper/formItemCategory.class.php:131
 #: views/object/formItem/helper/formItemLicense.class.php:97
-#: views/object/formItemMultiple/helper/formItemCategory.class.php:119
+#: views/object/formItemMultiple/helper/formItemCategory.class.php:124
 #: views/object/formItemMultiple/helper/formItemLicense.class.php:93
 #: views/object/list_data_table.php:78 views/object/list_single_object.php:512
 #: views/object/list_single_object_version.php:110
@@ -1182,8 +1182,8 @@ msgstr "(Painel de edição)"
 #: views/object/edit.php:240 views/object/edit_item_text.php:822
 #: views/object/edit_item_text.php:838
 #: views/object/formItem/helper/formItem.class.php:245
-#: views/object/formItem/helper/formItemCategory.class.php:133
-#: views/object/formItemMultiple/helper/formItemCategory.class.php:120
+#: views/object/formItem/helper/formItemCategory.class.php:132
+#: views/object/formItemMultiple/helper/formItemCategory.class.php:125
 #: views/object/single_object/single_data_property_form.php:51
 #: views/object/single_object/single_edit_data_property_form.php:48
 #: views/object/single_object/single_edit_object_property_form.php:65
@@ -2063,8 +2063,8 @@ msgstr "Campo vazio"
 #: views/object/append_properties_categories/properties_categories_accordion.php:490
 #: views/object/edit_object_properties/edit_list_properties_accordion.php:360
 #: views/object/edit_object_properties/edit_list_properties_accordion.php:414
-#: views/object/formItem/helper/formItemCategory.class.php:90
-#: views/object/formItemMultiple/helper/formItemCategory.class.php:77
+#: views/object/formItem/helper/formItemCategory.class.php:89
+#: views/object/formItemMultiple/helper/formItemCategory.class.php:82
 #: views/object/list_properties_accordion.php:381
 #: views/object/list_properties_accordion.php:437
 #: views/object/multiple_items/editor_items.php:313
@@ -4434,10 +4434,10 @@ msgstr "Adicionar categorias selecionadas como facetas"
 #: views/category/list.php:48 views/collection/modals.php:21
 #: views/collection/modals.php:22 views/collection/modals.php:72
 #: views/collection/modals.php:73
+#: views/object/formItem/helper/formItemCategory.class.php:97
 #: views/object/formItem/helper/formItemCategory.class.php:98
-#: views/object/formItem/helper/formItemCategory.class.php:99
-#: views/object/formItemMultiple/helper/formItemCategory.class.php:85
-#: views/object/formItemMultiple/helper/formItemCategory.class.php:86
+#: views/object/formItemMultiple/helper/formItemCategory.class.php:90
+#: views/object/formItemMultiple/helper/formItemCategory.class.php:91
 #: views/property/metadata/form_term.php:72
 #: views/theme_options/property/metadata/form_term.php:72
 msgid "Category name"
@@ -4450,31 +4450,31 @@ msgstr "Categoria pai"
 
 #: partials/admin/admin-categories.php:25 views/category/list.php:52
 #: views/collection/modals.php:26
-#: views/object/formItem/helper/formItemCategory.class.php:104
-#: views/object/formItemMultiple/helper/formItemCategory.class.php:91
+#: views/object/formItem/helper/formItemCategory.class.php:103
+#: views/object/formItemMultiple/helper/formItemCategory.class.php:96
 msgid "Right click on the tree and select the category as parent"
 msgstr "Clique com o botão direito na árvore e selecione a categoria pai"
 
 #: partials/admin/admin-categories.php:29 views/category/list.php:56
 #: views/collection/modals.php:30 views/collection/modals.php:83
-#: views/object/formItem/helper/formItemCategory.class.php:122
-#: views/object/formItemMultiple/helper/formItemCategory.class.php:109
+#: views/object/formItem/helper/formItemCategory.class.php:121
+#: views/object/formItemMultiple/helper/formItemCategory.class.php:114
 msgid "Category description"
 msgstr "Descrição da categoria"
 
 #: partials/admin/admin-categories.php:29 views/category/list.php:56
 #: views/collection/modals.php:30 views/collection/modals.php:83
 #: views/collection/modals.php:258 views/collection/modals.php:295
-#: views/object/formItem/helper/formItemCategory.class.php:122
-#: views/object/formItemMultiple/helper/formItemCategory.class.php:109
+#: views/object/formItem/helper/formItemCategory.class.php:121
+#: views/object/formItemMultiple/helper/formItemCategory.class.php:114
 #: views/search/tags.php:43
 msgid "Optional"
 msgstr "Opcional"
 
 #: partials/admin/admin-categories.php:30 views/category/list.php:57
 #: views/collection/modals.php:32 views/collection/modals.php:86
-#: views/object/formItem/helper/formItemCategory.class.php:124
-#: views/object/formItemMultiple/helper/formItemCategory.class.php:111
+#: views/object/formItem/helper/formItemCategory.class.php:123
+#: views/object/formItemMultiple/helper/formItemCategory.class.php:116
 msgid "Describe your category"
 msgstr "Descreva sua categoria"
 
@@ -5979,9 +5979,9 @@ msgstr "já está inserido!"
 #: views/object/edit_object_properties/js/edit_list_properties_accordion_js.php:602
 #: views/object/formItem/helper/formItem.class.php:990
 #: views/object/formItem/helper/formItem.class.php:1013
-#: views/object/formItem/helper/formItemCategory.class.php:217
+#: views/object/formItem/helper/formItemCategory.class.php:216
 #: views/object/formItem/input/object.class.php:629
-#: views/object/formItemMultiple/helper/formItemCategory.class.php:230
+#: views/object/formItemMultiple/helper/formItemCategory.class.php:235
 #: views/object/formItemMultiple/input/object.class.php:626
 #: views/object/js/list_properties_accordion_js.php:580
 msgid "Loading metadata for this field"
@@ -6658,7 +6658,7 @@ msgstr "Tem certeza"
 
 #: views/collection/js/header_js.php:174
 msgid "Delete this collection?"
-msgstr "Excluir esta coleção"
+msgstr "Excluir esta coleção?"
 
 #: views/collection/js/most_participatory_authors_js.php:20
 #: views/collection/most_participatory_authors.php:46
@@ -7967,27 +7967,28 @@ msgstr "Ocorreu um erro, arquivo já foi removido ou está corrompido!"
 msgid "File removed!"
 msgstr "Arquivo removido!"
 
-#: views/object/formItem/helper/formItemCategory.class.php:57
+#: views/object/formItem/helper/formItemCategory.class.php:54
+#: views/object/formItemMultiple/helper/formItemCategory.class.php:46
 msgid "This category has no children"
 msgstr "Esta categoria não tem categorias filhas"
 
-#: views/object/formItem/helper/formItemCategory.class.php:78
-#: views/object/formItemMultiple/helper/formItemCategory.class.php:64
+#: views/object/formItem/helper/formItemCategory.class.php:77
+#: views/object/formItemMultiple/helper/formItemCategory.class.php:69
 msgid "Add new category"
 msgstr "Adicionar nova categoria"
 
-#: views/object/formItem/helper/formItemCategory.class.php:103
-#: views/object/formItemMultiple/helper/formItemCategory.class.php:90
+#: views/object/formItem/helper/formItemCategory.class.php:102
+#: views/object/formItemMultiple/helper/formItemCategory.class.php:95
 msgid "Selected parent"
 msgstr "Pai selecionado"
 
-#: views/object/formItem/helper/formItemCategory.class.php:108
-#: views/object/formItemMultiple/helper/formItemCategory.class.php:95
+#: views/object/formItem/helper/formItemCategory.class.php:107
+#: views/object/formItemMultiple/helper/formItemCategory.class.php:100
 msgid "Root category"
 msgstr "Categoria raiz"
 
-#: views/object/formItem/helper/formItemCategory.class.php:112
-#: views/object/formItemMultiple/helper/formItemCategory.class.php:99
+#: views/object/formItem/helper/formItemCategory.class.php:111
+#: views/object/formItemMultiple/helper/formItemCategory.class.php:104
 msgid "Child category"
 msgstr "Categoria filha"
 
@@ -8734,6 +8735,10 @@ msgstr "Criar nova versão de "
 #: views/object/list_modes/modals.php:172
 msgid "Change ownership of "
 msgstr "Mudar proprietário de "
+
+#: views/object/list_modes/edit_btns_trash.php:19
+msgid "Are you sure to remove the item permanently: "
+msgstr "Você tem certeza em remover este item permanentemente:"
 
 #: views/object/list_modes/geolocation.php:7
 msgid "This collection is not configured to use geolocation mode."
@@ -11247,9 +11252,6 @@ msgstr "Texto:"
 
 #~ msgid "Click here to add a new collection"
 #~ msgstr "Clique aqui para adicionar um nova coleção! "
-
-#~ msgid "Are you sure to remove the object permanently: "
-#~ msgstr "Você tem certeza em remover este item permanentemente:"
 
 #~ msgid "Are you sure to remove the collection permanently: "
 #~ msgstr "Você tem certeza em remover esta coleção permanentemente:"
