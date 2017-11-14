@@ -6,17 +6,6 @@ e este projeto adere para [Semantic Versioning](http://semver.org/spec/v2.0.0.ht
 
 ## [Unreleased]
 
-## [0.7] -
-### Adicionado
-
-### Modificado
-
-### Corrigido
-
-### Removido
-
-### Obsoleto
-
 ## [0.6] - 2017-11-15
 ### Adicionado
 - Bbotão de pesquisar no fim da interface de busca avançada
@@ -73,7 +62,6 @@ e este projeto adere para [Semantic Versioning](http://semver.org/spec/v2.0.0.ht
 ## [0.3] - 2017-04-12
 
 [Unreleased]: https://github.com/olivierlacan/keep-a-changelog/compare/v0.2...HEAD
-[0.7]: https://github.com/medialab-ufg/tainacan/compare/v0.6...v0.7
 [0.6]: https://github.com/medialab-ufg/tainacan/compare/v0.5...v0.6
 [0.5]: https://github.com/medialab-ufg/tainacan/compare/v0.4...v0.5
 [0.4]: https://github.com/medialab-ufg/tainacan/compare/v0.3...v0.4
