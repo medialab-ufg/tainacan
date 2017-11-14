@@ -6,7 +6,7 @@ e este projeto adere para [Semantic Versioning](http://semver.org/spec/v2.0.0.ht
 
 ## [Unreleased]
 
-## [0.6] - 2017-11-15
+## [0.6] - 2017-11-16
 ### Adicionado
 - Botão de pesquisar no fim da interface de busca avançada
 - Botão de ocultar os filtros ao lado de botão pesquisar
