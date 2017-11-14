@@ -32,12 +32,12 @@ include_once ('js/create_js.php');
                 </span>&nbsp;<?php _e('Next step','tainacan') ?>
                 <span class="glyphicon glyphicon-arrow-right">
             </button>
-            <form class="exif_extraction pull-right">
+            <!--form class="exif_extraction pull-right">
                 <div class="extract-img-exif form-control" style="display: none; border: none; box-shadow: none">
                     <label for="extract_exif"><?php _e('Extract Exif from images?', 'tainacan'); ?></label>
                     <input type="checkbox" name="extract_exif">
                 </div>
-            </form>
+            </form-->
             
         </div> <br><br>
         <div  id="uploading">
