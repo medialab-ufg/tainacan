@@ -2083,7 +2083,7 @@
     // faz a importacao do tipo texto e joga para a tela de multiplos
     function import_text(url) {
         var key = $('#socialdb_embed_api_id').val();
-        var ajaxurl = 'http://api.embed.ly/1/oembed?key=:' + key + '&url=' + url;
+        var ajaxurl = 'http://api.embed.ly/1/oembed?key=:' + key + '&url=' + url.replace('www.','');
         //div loader
         if (key == '') {
             import_text_alternative(url);
