@@ -8,22 +8,22 @@ e este projeto adere para [Semantic Versioning](http://semver.org/spec/v2.0.0.ht
 
 ## [0.6] - 2017-11-15
 ### Adicionado
-- Bbotão de pesquisar no fim da interface de busca avançada
+- Botão de pesquisar no fim da interface de busca avançada
 - Botão de ocultar os filtros ao lado de botão pesquisar
-- Bbotão "Voltar ao topo" na tela de submissão de arquivos
+- Botão "Voltar ao topo" na tela de submissão de arquivos
 - Facilitar a remoção de muitas categorias de uma vez em "Minhas categorias'
-- Habilitação do botão para adicionar novas categorias
+- Botão para adicionar novas categorias
 
 ### Modificado
 - Melhoria na interface "Minhas Categorias"
 - Atualização de redirecionamentos e urls
 - Melhoria no envio de itens ao sistema, ao enviar seus ids e thumbnails.
-- Otimizar o envio de PDFs em grandes quantidades e tamanhos
+- Otimização do envio de PDFs em grandes quantidades e tamanhos
 - Melhoria nas notificações e eventos do sistema
-- Alterar a mensagem exibida na ativação/desativação de licenças
-- Permitir a submissão de imagens retangulares na marca do repositorio
+- Alteração da mensagem exibida na ativação/desativação de licenças
+- Permição da submissão de imagens retangulares na marca do repositorio
 - Aplicação de tema nas coleções
-- Metadados de categorias apresentado nos formulários de submissão de itens com espaçamentos em branc
+- Metadados de categorias apresentado nos formulários de submissão de itens com espaçamentos em branco
 
 
 ### Corrigido
