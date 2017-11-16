@@ -317,9 +317,8 @@ class FormItemController extends Controller {
             case 'publishItems':
                 delete_user_meta(get_current_user_id(), 'socialdb_collection_' . $data['collection_id'] . '_betafile');
                 $class = new ObjectSaveValuesModel();
-                if(!empty($data['titles'])){
-                	foreach($data['titles'] as $item)
-	                {
+                if(!empty($data['titles']) && is_array( $data['titles'] )){
+                	foreach($data['titles'] as $item){
 	                	$id_title[$item['id']] = $item['title'];
 	                }
                 }else
