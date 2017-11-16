@@ -244,7 +244,7 @@ class ObjectClass extends FormItem {
                                     }
                                     $('#results_property_<?php echo $compound_id; ?>_<?php echo $propert_id; ?>_<?php echo $index_id; ?> ul')
                                             .append('<li id="inserted_property_object<?php echo $compound_id; ?>_<?php echo $propert_id; ?>_<?php echo $index_id; ?>_' + ui.item.value + '" item="' + ui.item.value + '" class="selected-items-property-object property-<?php echo $compound_id; ?>_<?php echo $propert_id; ?>_<?php echo $index_id; ?>">' + ui.item.label
-                                                    + '<span  onclick="remove_item_objet(this)" style="cursor:pointer;" class="pull-right glyphicon glyphicon-trash"></span></li>');
+                                                    + '<span  onclick="original_remove_in_item_value_compound_<?php echo $compound_id ?>_<?php echo $propert_id; ?>_<?php echo $index_id; ?>(\'<?php echo $index_id; ?>\',this)" style="cursor:pointer;" class="pull-right glyphicon glyphicon-trash"></span></li>');
                                     //validacao do campo
                                     original_add_in_item_value_compound_<?php echo $compound_id ?>_<?php echo $propert_id; ?>_<?php echo $index_id; ?>(ui.item.value);
                                 }
