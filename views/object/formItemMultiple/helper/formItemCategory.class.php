@@ -15,7 +15,7 @@ class FormItemCategory extends FormItemMultiple{
 
     public function widget($property, $item_id) {
         $this->selectboxClass = new SelectboxClass(0,'',$this->value);
-        $this->simpleTreeClass = new SimpleTreeClass(0,'',$this->value);
+        $this->simpleTreeClass = new SimpleTreeMultipleClass(0,'',$this->value);
         $this->radioClass = new RadioClass(0,'',$this->value);
         $this->checkboxClass = new CheckboxClass(0,'',$this->value);
         $this->multipleTreeClass = new MultipleTreeClass(0,'',$this->value);

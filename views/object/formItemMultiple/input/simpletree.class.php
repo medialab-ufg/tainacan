@@ -1,6 +1,6 @@
 <?php
 
-class SimpleTreeClass extends FormItemMultiple {
+class SimpleTreeMultipleClass extends FormItemMultiple {
     var $hasDefaultValue;
     public function generate($compound, $property, $item_id, $index_id, $is_modal = false) {
         $compound_id = $compound['id'];
