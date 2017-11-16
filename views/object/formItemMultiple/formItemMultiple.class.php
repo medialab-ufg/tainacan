@@ -663,6 +663,20 @@ class FormItemMultiple extends Model {
                     $('#form_properties_items').find(".expand-all-link").html('Retrair todos <span class="caret"></span>');
                 }
             }
+
+            /**
+            *
+             * @param {type} val
+             * @param {type} compound_id
+             * @param {type} property_id
+             * @param {type} index_id
+             * @returns {undefined}             */
+            function validateFieldsMetadataText(val,compound_id,property_id,index_id){
+                //TODO: validate all items
+            }
+            Hook.register('validateFieldsMetadataText',function(args){
+              //TODO: validate all items
+            });
           </script>
         <?php
     }    
