@@ -84,13 +84,13 @@ class FormItemController extends Controller {
 		            $property_id = $data['property_children_id'];
 	            else $property_id = $data['compound_id'];
 
-				if($data['type'] === 'term'){
-					$object_model->insert_term_edit_event($data['item_id'], $property_id, $data['value'], $data);
-				}elseif ($data['type'] === 'object'){
-					$object_model->insert_object_edit_event($data['item_id'], $property_id, $data['value'], $data);
-				}else{
-					$object_model->insert_data_edit_event($data['item_id'], $property_id, $data['value'], $data);
-				}
+//				if($data['type'] === 'term'){
+//					$object_model->insert_term_edit_event($data['item_id'], $property_id, $data['value'], $data);
+//				}elseif ($data['type'] === 'object'){
+//					$object_model->insert_object_edit_event($data['item_id'], $property_id, $data['value'], $data);
+//				}else{
+//					$object_model->insert_data_edit_event($data['item_id'], $property_id, $data['value'], $data);
+//				}
 
                 return $class->saveValue($data['item_id'],
                         $data['compound_id'],
