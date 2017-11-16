@@ -423,7 +423,7 @@ abstract class EventModel extends Model {
      * Autor: Eduardo Humberto 
      */
     public function create_event($data) {
-        $title = $this->generate_title($data); // gera o titulo para o evento 
+        $title = $this->generate_title($data); // gera o titulo para o evento
         $this->notificate_moderators_email($data['socialdb_event_collection_id'], $title);
         $event_created = $this->insert_event($title); // insere o termo do evento no banco
         $this->create_democratic_vote(array('event_id' => $event_created['ID'], 'collection_id' => $data['socialdb_event_collection_id']));

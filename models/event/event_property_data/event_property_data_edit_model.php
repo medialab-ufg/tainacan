@@ -25,7 +25,8 @@ class EventPropertyDataEdit extends EventModel {
         $collection = get_post($data['socialdb_event_collection_id']);
         $property_name = $data['socialdb_event_property_data_edit_name'];
         $property = get_term_by('id',$data['socialdb_event_property_data_edit_id'],'socialdb_property_type');
-        if(trim($property->name)==trim($property_name)){
+
+        if(trim($property->name)==trim($property_name) ){
             $text = '';
             $newwidget = $data['socialdb_event_property_data_edit_widget'];
             $widget = get_term_meta($data['socialdb_event_property_data_edit_id'],'socialdb_property_data_widget',true);
@@ -58,6 +59,7 @@ class EventPropertyDataEdit extends EventModel {
                 __('To','tainacan').' : <i>'.$property_name.'</i><br>'.' '.
                 __(' in the collection ', 'tainacan') .' '.' <b><a target="_blank" href="'.  get_the_permalink($collection->ID).'">'.$collection->post_title.'</a></b> ';
         }
+
         return $title;
     }
 
@@ -72,7 +74,7 @@ class EventPropertyDataEdit extends EventModel {
     public function verify_event($data, $automatically_verified = false) {
         $actual_state = get_post_meta($data['event_id'], 'socialdb_event_confirmed', true);
         if ($actual_state != 'confirmed' && $automatically_verified || (isset($data['socialdb_event_confirmed']) && $data['socialdb_event_confirmed'] == 'true')) {// se o evento foi confirmado automaticamente ou pelos moderadores
-            $data = $this->update_property($data['event_id'], $data, $automatically_verified);
+	        $data = $this->update_property($data['event_id'], $data, $automatically_verified);
         } elseif ($actual_state != 'confirmed') {
             $this->set_approval_metas($data['event_id'], $data['socialdb_event_observation'], $automatically_verified);
             $this->update_event_state('not_confirmed', $data['event_id']);
@@ -112,6 +114,7 @@ class EventPropertyDataEdit extends EventModel {
         $data['property_visualization'] = get_post_meta($event_id, 'socialdb_event_property_visualization',true) ;
         $data['property_locked'] = get_post_meta($event_id, 'socialdb_event_property_lock_field',true) ;
         $data['socialdb_property_data_cardinality'] = get_post_meta($event_id, 'socialdb_event_property_data_edit_cardinality',true) ;
+
         // chamo a funcao do model de propriedade para fazer a insercao
         $result = json_decode($propertyModel->update_property_data($data));
         // verifying if is everything all right

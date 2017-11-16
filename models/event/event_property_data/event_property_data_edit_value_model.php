@@ -25,7 +25,9 @@ class EventPropertyDataEditValue extends EventModel {
         $object = get_post($data['socialdb_event_property_data_edit_value_object_id']);
         $property = get_term_by('id', $data['socialdb_event_property_data_edit_value_property_id'], 'socialdb_property_type');
         $values_before = get_post_meta($object->ID,'socialdb_property_'.$property->term_id);
-        if($data['socialdb_event_property_data_edit_value_property_id'] == 'title'){
+        print_r($object);
+        if($data['socialdb_event_property_data_edit_value_property_id'] == 'title')
+        {
             $title = __('Alter the ','tainacan').' <b>'.__('Title','tainacan').'</b> '.__('from ','tainacan').' ( <i>'.$object->post_title.'</i> ) '.__(' to ','tainacan').' ( <i>'.$data['socialdb_event_property_data_edit_value_attribute_value'].'</i> ) ';
         }else if($data['socialdb_event_property_data_edit_value_property_id'] == 'description'){
             $desc = (empty($object->post_content)) ? 'Vazio' : $object->post_content;

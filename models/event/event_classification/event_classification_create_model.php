@@ -41,6 +41,7 @@ class EventClassificationCreateModel extends EventModel {
         }
         $object = get_post($data['socialdb_event_classification_object_id']);
         $title.= __(' in the object ','tainacan') .' '.'<b><a target="_blank" href="'.  get_the_permalink($object->ID).'">'. $object->post_title.'</a></b>';
+
         return $title;
     }
 

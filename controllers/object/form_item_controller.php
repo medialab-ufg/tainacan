@@ -85,11 +85,11 @@ class FormItemController extends Controller {
 	            else $property_id = $data['compound_id'];
 
 				if($data['type'] === 'term'){
-					$object_model->insert_object_add_metadata_term_event($data['item_id'], $property_id, $data['value'], $data);
+					$object_model->insert_term_edit_event($data['item_id'], $property_id, $data['value'], $data);
 				}elseif ($data['type'] === 'object'){
-					$object_model->insert_object_add_metadata_object_event($data['item_id'], $property_id, $data['value'], $data);
+					$object_model->insert_object_edit_event($data['item_id'], $property_id, $data['value'], $data);
 				}else{
-					$object_model->insert_object_add_metadata_data_event($data['item_id'], $property_id, $data['value'], $data);
+					$object_model->insert_data_edit_event($data['item_id'], $property_id, $data['value'], $data);
 				}
 
                 return $class->saveValue($data['item_id'],
@@ -145,6 +145,7 @@ class FormItemController extends Controller {
                         }
                     }
                 }
+	            $object_model->insert_data_edit_event($data['item_id'], "title", $data['value'], $data);
                 $slug = wp_unique_post_slug(sanitize_title_with_dashes($data['value']), $data['item_id'], 'inherit', 'socialdb_object', 0);
                 $post = array(
                     'ID' => $data['item_id'],
@@ -153,6 +154,7 @@ class FormItemController extends Controller {
                 );
                 $data['ID'] = wp_update_post($post);
                 $object_model->set_common_field_values($data['ID'], 'title', $post['post_title']);
+
                 return json_encode([true]);
                 break;
             case 'saveDescription':
@@ -160,6 +162,7 @@ class FormItemController extends Controller {
                     'ID' => $data['item_id'],
                     'post_content' => $data['value']
                 );
+	            $object_model->insert_data_edit_event($data['item_id'], "description", $data['value'], $data);
                 $object_model->set_common_field_values($data['item_id'], 'description', $post['post_content']);
                 $data['ID'] = wp_update_post($post);
                 break;
@@ -168,18 +171,22 @@ class FormItemController extends Controller {
                     $object_model->set_common_field_values($data['item_id'], 'object_content', $data['value']);
                     break;
             case 'saveType':
+	                $object_model->insert_data_edit_event($data['item_id'], "type", $data['value'], $data);
                     update_post_meta($data['item_id'],'socialdb_object_dc_type',$data['value']);
                     $object_model->set_common_field_values($data['item_id'], 'object_type', $data['value']);
                     break;
             case 'saveSource':
+	            $object_model->insert_data_edit_event($data['item_id'], "source", $data['value'], $data);
                 update_post_meta($data['item_id'],'socialdb_object_dc_source',$data['value']);
                 $object_model->set_common_field_values($data['item_id'], 'object_source', $data['value']);
                 break;
             case 'saveLicense':
+	             $object_model->insert_data_edit_event($data['item_id'], "license", $data['value'], $data);
                  update_post_meta($data['item_id'],'socialdb_license_id',$data['value']);
                  break;
             case 'saveThumbnail':
                 $result = [];
+	            $object_model->insert_data_edit_event($data['item_id'], "thumbnail", $data['value'], $data);
                 if ($_FILES) {
                     $attachment_id = $object_model->add_thumbnail($data['item_id']);
                     $result['attachment'] = $attachment_id;

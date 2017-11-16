@@ -11,8 +11,8 @@ include_once (dirname(__FILE__) . '../../../models/event/event_object/event_obje
 include_once (dirname(__FILE__) . '../../../models/event/event_object/event_object_edit_model.php');
 
 include_once (dirname(__FILE__) . '../../../models/event/event_classification/event_classification_create_model.php');
-include_once (dirname(__FILE__) . '../../../models/event/event_property_object/event_property_object_create_model.php');
-include_once (dirname(__FILE__) . '../../../models/event/event_property_data/event_property_data_edit_model.php');
+include_once (dirname(__FILE__) . '../../../models/event/event_property_object/event_property_object_edit_value_model.php');
+include_once (dirname(__FILE__) . '../../../models/event/event_property_data/event_property_data_edit_value_model.php');
 
 require_once(dirname(__FILE__) . '../../general/general_model.php');
 require_once(dirname(__FILE__) . '../../user/user_model.php');
@@ -718,16 +718,8 @@ class ObjectModel extends Model {
         return $eventAddObject->create_event($data);
     }
 
-	/*public function insert_object_edit_event($object_id, $data) {
-		$eventEditObject = new EventObjectEditModel();
-		$data['socialdb_event_object_item_id'] = $object_id;
-		$data['socialdb_event_collection_id'] = $data['collection_id'];
-		$data['socialdb_event_user_id'] = get_current_user_id();
-		$data['socialdb_event_create_date'] = time();
-		return $eventEditObject->create_event($data);
-	}*/
-
-	public function insert_object_add_metadata_term_event($object_id,$property_id,$term_id, $data){
+    //Ok
+	public function insert_term_edit_event($object_id,$property_id,$term_id, $data){
 		$event = new EventClassificationCreateModel();
 		$data['socialdb_event_object_item_id'] = $object_id;
 		$data['socialdb_event_classification_property_id'] = $property_id;
@@ -736,33 +728,39 @@ class ObjectModel extends Model {
 		$data['socialdb_event_user_id'] = get_current_user_id();
 		$data['socialdb_event_classification_type'] = 'category';
 		$data['socialdb_event_create_date'] = time();
-
+		$data['socialdb_event_classification_object_id'] = $data['item_id'];
 		return $event->create_event($data);
 	}
 
-	public function insert_object_add_metadata_object_event($object_id, $property_id, $value, $data){
-		$event = new EventPropertyObjectCreate();
+	//Ok
+	public function insert_object_edit_event($object_id, $property_id, $value, $data){
+		$event = new EventPropertyObjectEditValue();
 		$data['socialdb_event_property_object_edit_object_id'] = $object_id;
 		$data['socialdb_event_property_object_edit_property_id'] = $property_id;
 		$data['socialdb_event_property_object_edit_value_suggested_value'] = [$value];
 		$data['socialdb_event_collection_id'] = $data['collection_id'];
 		$data['socialdb_event_user_id'] = get_current_user_id();
-		$data['socialdb_event_classification_type'] = 'category';
 		$data['socialdb_event_create_date'] = time();
 
 		return $event->create_event($data);
 	}
 
-	public function insert_object_add_metadata_data_event($object_id, $property_id, $value, $data){
-		$event = new EventPropertyDataEdit();//
+	//Ok
+	public function insert_data_edit_event($object_id, $property_id, $value, $data){
+		$event = new EventPropertyDataEditValue();
 		$data['socialdb_event_property_data_edit_value_object_id'] = $object_id;
 		$data['socialdb_event_property_data_edit_value_property_id'] = $property_id;
-		$data['socialdb_event_property_data_edit_value_attribute_value'][] = ['val' => $value, 'index' => $data['index']];
+		if(is_numeric($property_id))
+		{
+			$data['socialdb_event_property_data_edit_value_attribute_value'][] = ['val' => $value, 'index' => $data['index']];
+		}else
+		{
+			$data['socialdb_event_property_data_edit_value_attribute_value'] = $value;
+		}
+
 		$data['socialdb_event_collection_id'] = $data['collection_id'];
 		$data['socialdb_event_user_id'] = get_current_user_id();
-		$data['socialdb_event_classification_type'] = 'category';
 		$data['socialdb_event_create_date'] = time();
-
 		return $event->create_event($data);
 
 	}
