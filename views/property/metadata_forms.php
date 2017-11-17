@@ -253,7 +253,25 @@ endforeach;
                             <label for="property_fixed_required" style="display: block"><?php _e('Required metadata', 'tainacan'); ?></label>
                             <input type="checkbox" name="property_fixed_required" id="property_fixed_required"  value="true">&nbsp;<?php _e('Yes', 'tainacan'); ?>
                         </div>
-                    </div> 
+                    </div>
+
+                    <div class="create_form-group">
+                        <label for="socialdb_property_help"><?php _e('Text helper', 'tainacan'); ?></label>
+
+		                <?php
+		                if(has_action('help_text_change_input_type'))
+		                {
+			                do_action('help_text_change_input_type');
+		                }else
+		                {
+			                ?>
+                            <input type="text" class="form-control" id="socialdb_property_data_help" name="socialdb_property_data_help" />
+			                <?php
+		                }
+		                ?>
+                    </div>
+                    <br>
+
                     <div id='container_mask_field' style="display: none;">
                         <div id="mask_field" >
                             <label for="property_fixed_mask_key" style="display: block"><?php _e('Mask key', 'tainacan'); ?></label>

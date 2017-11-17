@@ -56,9 +56,17 @@ class FormItemCompound extends FormItemMultiple {
                 endif;
                 ?>
                 <?php if ($isRequired && $property['metas']['socialdb_property_required'] == 'true'): ?>
+	                <?php
+	                $help_text = get_term_meta($property['id'], 'socialdb_property_help', true);
+	                $property['metas']['socialdb_property_help'] = $help_text;
+	                $this->hasTextHelper($property);
+	                ?>
                     *
                     <span id="AllFieldsShouldBeFilled<?php echo $property['id']; ?>"></span>
                 <?php elseif ($isRequired && $property['metas']['socialdb_property_required'] === 'true_one_field'): ?>
+	                <?php
+	                add_helpText($property, $this);
+	                ?>
                     (*)
                     <input 
                         type="hidden" 

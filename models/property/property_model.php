@@ -415,7 +415,8 @@ class PropertyModel extends Model {
             ));
         }
         //apos a atualizacao
-        if (!is_wp_error($new_property)&&isset($new_property['term_id'])) {// se a propriedade foi inserida com sucesso
+        if (!is_wp_error($new_property)&&isset($new_property['term_id'])) // se a propriedade foi inserida com sucesso
+        {
             $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_collection_id', $data['collection_id']);
             $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_required', $data['property_object_required']);
             $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_object_is_reverse', $data['property_object_is_reverse']);
@@ -426,6 +427,9 @@ class PropertyModel extends Model {
             update_term_meta($new_property['term_id'], 'socialdb_property_to_search_in',$data['property_to_search_in']);
             update_term_meta($new_property['term_id'], 'socialdb_property_avoid_items',$data['property_avoid_items']);
             update_term_meta($new_property['term_id'], 'socialdb_property_habilitate_new_item',$data['property_habilitate_new_item']);
+
+	        //Save help text
+            update_post_meta($data['collection_id'], 'socialdb_property_'.$new_property['term_id'].'_help', $data['socialdb_property_data_help']);
             if($data['property_default_value']&&!empty($data['property_default_value'])){
                  $result[] = update_term_meta($new_property['term_id'], 'socialdb_property_default_value', $data['property_default_value']);
             }

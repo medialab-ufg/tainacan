@@ -299,9 +299,9 @@ class FormItemMultiple extends Model {
     }
     
     public function hasTextHelper($property){
-        if(has_filter('change_meta_info_icon'))
+        if(has_action('change_meta_info_icon'))
 	    {
-		    apply_filters('change_meta_info_icon', $property);
+		    do_action('change_meta_info_icon', $property);
 	    }else
         if($property['metas'] &&$property['metas']['socialdb_property_help']&&!empty(trim($property['metas']['socialdb_property_help']))){
             ?>

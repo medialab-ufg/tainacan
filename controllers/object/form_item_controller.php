@@ -84,22 +84,22 @@ class FormItemController extends Controller {
 		            $property_id = $data['property_children_id'];
 	            else $property_id = $data['compound_id'];
 
-//				if($data['type'] === 'term'){
-//					$object_model->insert_term_edit_event($data['item_id'], $property_id, $data['value'], $data);
-//				}elseif ($data['type'] === 'object'){
-//					$object_model->insert_object_edit_event($data['item_id'], $property_id, $data['value'], $data);
-//				}else{
-//					$object_model->insert_data_edit_event($data['item_id'], $property_id, $data['value'], $data);
-//				}
+				if($data['type'] === 'term'){
+					return $object_model->insert_term_edit_event($data['item_id'], $property_id, $data['value'], $data);
+				}elseif ($data['type'] === 'object'){
+					return $object_model->insert_object_edit_event($data['item_id'], $property_id, $data['value'], $data);
+				}else{
+					return $object_model->insert_data_edit_event($data['item_id'], $property_id, $data['value'], $data);
+				}
 
-                return $class->saveValue($data['item_id'],
+                /*return $class->saveValue($data['item_id'],
                         $data['compound_id'],
                         $data['property_children_id'],
                         $data['type'],
                         $data['index'],
                         $data['value'],
                         (isset($data['indexCoumpound']) ? $data['indexCoumpound'] : false )
-                        );
+                        );*/
             case "removeValue":
                 $class = new ObjectSaveValuesModel();
                 if(isset($data['reverse']) && $data['reverse'] !== 'true'){

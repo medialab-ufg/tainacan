@@ -15,6 +15,9 @@ class FormItemTags extends FormItem {
         <div class="form-group">
             <h2>
                 <?php echo ($this->terms_fixed['tags']) ? $this->terms_fixed['tags']->name :  _e('Tags','tainacan') ?>
+                <?php
+                add_helpText($property, $this);
+                ?>
                 <?php $this->validateIcon('alert-compound-'.$property['id'],__('Required field','tainacan')) ?>
             </h2>
             <div >

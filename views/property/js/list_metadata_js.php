@@ -1047,7 +1047,6 @@
         e.preventDefault();
         $('.modal').modal('hide');
         $('#modalImportMain').modal('show');
-
         $.ajax({
             url: src + '/controllers/property/property_controller.php',
             type: 'POST',
@@ -2732,6 +2731,7 @@
             data: {
                 collection_id: $('#collection_id').val(),
                 operation: 'alter_fixed_property_collection',
+                help_text: $("#modal_edit_fixed_property #socialdb_property_data_help").val(),
                 property_id: $('#property_fixed_id').val(),
                 tab: $('#socialdb_event_property_tab_fixed').val(),
                 property_fixed_name: $('#modal_edit_fixed_property #property_fixed_name').val(),
@@ -2786,6 +2786,14 @@
                 $('#container_mask_field').show();
             }else{
                 $('#container_mask_field').hide();
+            }
+
+            if(elem.socialdb_property_help)
+            {
+                $("#modal_edit_fixed_property #socialdb_property_data_help").val(elem.socialdb_property_help);
+            }else
+            {
+                $("#modal_edit_fixed_property #socialdb_property_data_help").val('');
             }
 
         });

@@ -1542,6 +1542,7 @@ function create_event_terms() {
     create_metas($event_classification_term['term_id'], 'socialdb_event_classification_metas', 'socialdb_event_classification_term_id', 'socialdb_event_classification_term_id');
     create_metas($event_classification_term['term_id'], 'socialdb_event_classification_metas', 'socialdb_event_classification_object_id', 'socialdb_event_classification_object_id');
     create_metas($event_classification_term['term_id'], 'socialdb_event_classification_metas', 'socialdb_event_classification_type', 'socialdb_event_classification_type');
+    create_metas($event_classification_term['term_id'], 'socialdb_event_classification_metas', 'socialdb_event_classification_index_compound', 'socialdb_event_classification_index_compound');
     $event_object_create_term = create_register('socialdb_event_classification_create', 'socialdb_event_type', array('parent' => $event_classification_term['term_id']));
     $event_object_delete_term = create_register('socialdb_event_classification_delete', 'socialdb_event_type', array('parent' => $event_classification_term['term_id']));
     /*     * term* */
@@ -1603,6 +1604,7 @@ function create_event_terms() {
     create_metas($event_edit_property_data_value['term_id'], 'socialdb_event_property_data_edit_value_metas', 'socialdb_event_property_data_edit_value_object_id', 'socialdb_event_property_data_edit_value_object_id');
     create_metas($event_edit_property_data_value['term_id'], 'socialdb_event_property_data_edit_value_metas', 'socialdb_event_property_data_edit_value_property_id', 'socialdb_event_property_data_edit_value_property_id');
     create_metas($event_edit_property_data_value['term_id'], 'socialdb_event_property_data_edit_value_metas', 'socialdb_event_property_data_edit_value_attribute_value', 'socialdb_event_property_data_edit_value_attribute_value');
+	create_metas($event_edit_property_data_value['term_id'], 'socialdb_event_property_data_edit_value_metas', 'socialdb_event_property_data_edit_value_index_compound', 'socialdb_event_property_data_edit_value_index_compound');
     /*     * property object* */
     $event_property_object_term = create_register('socialdb_event_property_object', 'socialdb_event_type', array('parent' => $event_root_term['term_id']));
     create_metas($event_property_object_term['term_id'], 'socialdb_event_property_object_metas', 'socialdb_event_property_used_by_categories', 'socialdb_event_property_used_by_categories');
@@ -1642,6 +1644,7 @@ function create_event_terms() {
     create_metas($event_edit_property_object_value['term_id'], 'socialdb_event_property_object_edit_value_metas', 'socialdb_event_property_object_edit_object_id', 'socialdb_event_property_object_edit_object_id');
     create_metas($event_edit_property_object_value['term_id'], 'socialdb_event_property_object_edit_value_metas', 'socialdb_event_property_object_edit_property_id', 'socialdb_event_property_object_edit_property_id');
     create_metas($event_edit_property_object_value['term_id'], 'socialdb_event_property_object_edit_value_metas', 'socialdb_event_property_object_edit_value_suggested_value', 'socialdb_event_property_object_edit_value_suggested_value');
+	create_metas($event_edit_property_object_value['term_id'], 'socialdb_event_property_object_edit_value_metas', 'socialdb_event_property_object_edit_value_index_compound', 'socialdb_event_property_object_edit_value_index_compound');
     /* Property Term* */
     $event_property_term_term = create_register('socialdb_event_property_term', 'socialdb_event_type', array('parent' => $event_root_term['term_id']));
     create_metas($event_property_term_term['term_id'], 'socialdb_event_property_term_metas', 'socialdb_event_property_used_by_categories', 'socialdb_event_property_used_by_categories');
@@ -3963,4 +3966,14 @@ function tainacan_contact_form($type, $message) {
 
     if($type == "success") $response = "<div class='success'>{$message}</div>";
     else $response = "<div class='error'>{$message}</div>";
+}
+
+function add_helpText ($property, $this_ref)
+{
+	$help_text = get_post_meta($this_ref->collection_id, 'socialdb_property_'.$property['id'].'_help', true);
+	if($help_text)
+	{
+		$property['metas']['socialdb_property_help'] = $help_text;
+		$this_ref->hasTextHelper($property);
+	}
 }

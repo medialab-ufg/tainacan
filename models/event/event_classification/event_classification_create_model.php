@@ -101,6 +101,11 @@ class EventClassificationCreateModel extends EventModel {
         $class = new ObjectSaveValuesModel();
         //pego a categoria
         $category = get_term_by('id',  get_post_meta($data['event_id'], 'socialdb_event_classification_term_id',true),'socialdb_category_type');
+	    $indexCompound = get_post_meta($data['event_id'], 'socialdb_event_classification_index_compound',true);
+	    if(!$indexCompound || strcmp($indexCompound, 'false') === 0)
+	    {
+		    $indexCompound = false;
+	    }
         //print_r($data);
         //print $this->getPropertyCategory( $category->term_id, $collection_id);
         if($category && $object_id)// se a categoria e objeto forem validos
@@ -114,7 +119,7 @@ class EventClassificationCreateModel extends EventModel {
                         'term',
                         0,
                         $category->term_id,
-                        false
+                        $indexCompound
                         );
             /*wp_set_object_terms( $object_id, $category->term_id,'socialdb_category_type',true);
             $this->concatenate_commom_field_value( $object_id, "socialdb_propertyterm_".$this->get_category_property($category->term_id, $collection_id), $category->term_id);*/
@@ -221,7 +226,12 @@ class EventClassificationCreateModel extends EventModel {
             else:
                 $relationship_id = get_post(get_post_meta($data['event_id'], 'socialdb_event_classification_term_id',true))->ID;
             endif;                   
-        }       
+        }
+	    $indexCompound = get_post_meta($data['event_id'], 'socialdb_event_classification_index_compound',true);
+	    if(!$indexCompound || strcmp($indexCompound, 'false') === 0)
+	    {
+		    $indexCompound = false;
+	    }
                   
        if($property&&$relationship_id&&$object_id) { // faco a validacao
             $ancestors = get_ancestors($property->term_id,'socialdb_property_type');
@@ -239,7 +249,7 @@ class EventClassificationCreateModel extends EventModel {
                         0,
                         $type,
                         0,
-                        $relationship_id, false
+                        $relationship_id, $indexCompound
                         );  
                 else:
                     $data['msg'] = __('This classification is already confirmed','tainacan');
@@ -260,7 +270,7 @@ class EventClassificationCreateModel extends EventModel {
                     0,
                     $type,
                     0,
-                    $relationship_id, false
+                    $relationship_id, $indexCompound
                 );
                 //update_post_meta($object_id, 'socialdb_property_'.$property->term_id, $relationship_id);
                 //$this->concatenate_commom_field_value_object($object_id, "socialdb_property_" . $property->term_id, $relationship_id);

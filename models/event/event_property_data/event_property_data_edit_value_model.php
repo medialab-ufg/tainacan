@@ -25,7 +25,7 @@ class EventPropertyDataEditValue extends EventModel {
         $object = get_post($data['socialdb_event_property_data_edit_value_object_id']);
         $property = get_term_by('id', $data['socialdb_event_property_data_edit_value_property_id'], 'socialdb_property_type');
         $values_before = get_post_meta($object->ID,'socialdb_property_'.$property->term_id);
-        print_r($object);
+
         if($data['socialdb_event_property_data_edit_value_property_id'] == 'title')
         {
             $title = __('Alter the ','tainacan').' <b>'.__('Title','tainacan').'</b> '.__('from ','tainacan').' ( <i>'.$object->post_title.'</i> ) '.__(' to ','tainacan').' ( <i>'.$data['socialdb_event_property_data_edit_value_attribute_value'].'</i> ) ';
@@ -143,6 +143,11 @@ class EventPropertyDataEditValue extends EventModel {
         $object_id = get_post_meta($event_id, 'socialdb_event_property_data_edit_value_object_id',true);
         $property = get_post_meta($event_id, 'socialdb_event_property_data_edit_value_property_id',true);
         $value = get_post_meta($event_id, 'socialdb_event_property_data_edit_value_attribute_value',true);
+        $indexCompound = get_post_meta($event_id, 'socialdb_event_property_data_edit_value_index_compound',true);
+        if(!$indexCompound || strcmp($indexCompound, 'false') === 0)
+        {
+        	$indexCompound = false;
+        }
 
         //alterando o valor de fato das propriedades fixas ou das demais
         if($property == 'title'){
@@ -179,7 +184,7 @@ class EventPropertyDataEditValue extends EventModel {
                         'data',
                         0,
                         $meta['val'],
-                        false
+                        $indexCompound
                     );
                 }else{
 

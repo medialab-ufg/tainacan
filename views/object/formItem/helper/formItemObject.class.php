@@ -21,6 +21,9 @@ class FormItemObject extends FormItem{
                     do_action('modificate_label_insert_item_properties', $property);
                 endif;
                 ?>
+	             <?php
+	             add_helpText($property, $this);
+	             ?>
                 <?php if ($isRequired): ?>
                 *
                 <?php $this->validateIcon('alert-compound-'.$property['id'],__('Required field','tainacan')) ?>

@@ -34,6 +34,9 @@ class FormItemCategory extends FormItemMultiple{
              <h2>
                 <?php echo $property['name']; ?>
                 <?php $this->hasTextHelper($property);  ?>
+	             <?php
+	             add_helpText($property, $this);
+	             ?>
                 <?php if ($isRequired): ?>
                 *
                 <?php $this->validateIcon('alert-compound-'.$property['id'],__('Required field','tainacan')) ?>

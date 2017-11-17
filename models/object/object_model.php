@@ -729,6 +729,7 @@ class ObjectModel extends Model {
 		$data['socialdb_event_classification_type'] = 'category';
 		$data['socialdb_event_create_date'] = time();
 		$data['socialdb_event_classification_object_id'] = $data['item_id'];
+		$data['socialdb_event_classification_index_compound'] = (isset($data['indexCoumpound']) ? $data['indexCoumpound'] : 'false' );
 		return $event->create_event($data);
 	}
 
@@ -741,6 +742,7 @@ class ObjectModel extends Model {
 		$data['socialdb_event_collection_id'] = $data['collection_id'];
 		$data['socialdb_event_user_id'] = get_current_user_id();
 		$data['socialdb_event_create_date'] = time();
+		$data['socialdb_event_property_object_edit_value_index_compound'] = (isset($data['indexCoumpound']) ? $data['indexCoumpound'] : 'false' );
 
 		return $event->create_event($data);
 	}
@@ -761,6 +763,7 @@ class ObjectModel extends Model {
 		$data['socialdb_event_collection_id'] = $data['collection_id'];
 		$data['socialdb_event_user_id'] = get_current_user_id();
 		$data['socialdb_event_create_date'] = time();
+		$data['socialdb_event_property_data_edit_value_index_compound'] = (isset($data['indexCoumpound']) ? $data['indexCoumpound'] : 'false' );
 		return $event->create_event($data);
 
 	}

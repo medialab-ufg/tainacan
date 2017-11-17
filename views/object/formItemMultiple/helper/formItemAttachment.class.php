@@ -8,6 +8,9 @@ class FormItemAttachment extends FormItemMultiple {
             <div class="form-group">
                  <?php echo ($isFocusMedia) ? '<h5>' : '<h2>' ?>
                     <?php echo ($this->terms_fixed['attachments']) ? $this->terms_fixed['attachments']->name : _e('Attachments', 'tainacan') ?>
+	            <?php
+	            add_helpText($property, $this);
+	            ?>
                     <?php $this->validateIcon('alert-compound-'.$property['id'],__('Required field','tainacan')) ?>
                 <?php echo ($isFocusMedia) ? '</h5>' : '</h2>' ?>
                 <div >

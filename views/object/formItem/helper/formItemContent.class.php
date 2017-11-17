@@ -10,6 +10,9 @@ class FormItemContent extends FormItem {
         <div class="form-group" >
              <?php echo ($isFocusMedia) ? '<h5>' : '<h2>' ?>
                 <?php echo ($this->terms_fixed['content']) ? $this->terms_fixed['content']->name : __('Content', 'tainacan') ?>
+	        <?php
+	        add_helpText($property, $this);
+	        ?>
                 <?php if($this->isRequired === 'true'): ?>
                 *
                 <?php endif; ?>
