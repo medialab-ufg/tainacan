@@ -36,7 +36,7 @@ class RadioClass extends FormItem{
                         <input type="radio"
                                <?php echo $is_selected ?>
                                name="radio-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>[]"
-                               value="<?php echo $child->term_id ?>">&nbsp;<?php echo $child->name ?>
+                               value="<?php echo $child->term_id ?>">&nbsp;<?php echo $child->name ?><br>
                     <?php endforeach;?>
 
         <?php endif;
