@@ -179,7 +179,7 @@ foreach ($view_helper->get_metadata_types() as $type => $label):
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default pull-left close-modal" data-dismiss="modal"><?php _e('Cancel', 'tainacan') ?></button>
                         <button type="submit" class="btn btn-primary action-continue" form="submit_form_property_data_<?php echo $type ?>">
-                            <?php _e('Continue', 'tainacan') ?>
+                            <?php _e('Save', 'tainacan') ?>
                         </button>
                     </div>
                 </div>
@@ -213,7 +213,7 @@ endforeach;
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal"><?php _e('Close', 'tainacan'); ?></button>
-                    <button type="submit" class="btn btn-primary"><?php _e('Salve', 'tainacan'); ?></button>
+                    <button type="submit" class="btn btn-primary"><?php _e('Save', 'tainacan'); ?></button>
                 </div>
             </form>
         </div>
@@ -283,7 +283,7 @@ endforeach;
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal"><?php _e('Close', 'tainacan'); ?></button>
-                <button onclick="alter_fixed_properties_label()" type="button" class="btn btn-primary"><?php _e('Salve', 'tainacan'); ?></button>
+                <button onclick="alter_fixed_properties_label()" type="button" class="btn btn-primary"><?php _e('Save', 'tainacan'); ?></button>
             </div>
         </div>
     </div>

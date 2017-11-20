@@ -142,7 +142,7 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-default pull-left close-modal" data-dismiss="modal"><?php _e('Cancel','tainacan') ?></button>
                 <button type="submit" class="btn btn-primary action-continue" form="submit_form_property_object">
-                    <?php _e('Continue','tainacan') ?>
+                    <?php _e('Save','tainacan') ?>
                 </button>
 <!--                <button type="button" onclick="clear_buttons()" class="btn btn-default" id="clear_categories">--><?php //_e('New','tainacan'); ?><!--</button>-->
             </div>
