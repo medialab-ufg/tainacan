@@ -2,7 +2,71 @@
     $(function () {
         event_single_list_properties_term_insert_objects();
         $('[data-toggle="tooltip"]').tooltip();
+
+
     });
+
+    // faz as filtragens de links externos e retorna para a pagina de listagem PARA termos
+    function wpquery_term_filter(value, facet_id)
+    {
+        /*$('#display_view_main_page').show();
+        $('#collection_post').show();
+        $('#configuration').hide();
+        $('#configuration').html('');
+        $('#main_part').show('slow');
+        var stateObj = {foo: "bar"};
+        history.replaceState(stateObj, "page 2", '?');
+        $('#list').hide();
+        $('#loader_objects').show();*/
+
+        /*$.ajax({
+            type: "POST",
+            url: $('#src').val() + "/controllers/wp_query/wp_query_controller.php",
+            data: {operation: 'wpquery_radio', facet_id: facet_id, wp_query_args: $('#wp_query_args').val(), value: value, collection_id: $('#collection_id').val()}
+        }).done(function (result) {
+            var elem = jQuery.parseJSON(result);
+            /!*$('#loader_objects').hide();
+            $('#list').html(elem.page);*!/
+            /!*Busca por categoria*!/
+            /!*$("#single_item_tainacan").html('');
+            $('#single_item_tainacan').html(elem.page);
+            $("#single_item_tainacan").show();*!/
+            /!*$('#wp_query_args').val(elem.args);
+            //set_popover_content($("#socialdb_permalink_collection").val() + '?' + elem.url + '&is_filter=1');
+            show_filters($('#collection_id').val(), elem.args);
+            $('#list').show();
+            if (elem.empty_collection) {
+                $('#collection_empty').show();
+            }
+            var curr_viewMode = $("#collection_single_ordenation").attr('data-viewMode');
+            if (curr_viewMode) {
+                changeViewMode(curr_viewMode);
+            }
+            setMenuContainerHeight();*!/
+        });*/
+    }
+
+    function show_filters(collection_id, filters)
+    {
+        $.ajax({
+            url: $('#src').val() + '/controllers/collection/collection_controller.php',
+            type: 'POST',
+            data: {
+                operation: 'show_filters',
+                collection_id: collection_id,
+                filters: filters
+            }
+        }).done(function (result) {
+            $('#filters_collection').html(result);
+            $('.remove-link-filters').show();
+            var result_set = $('.search-resultset').find('a').length;
+            if (result_set > 0 && !$('#propertiesRootAdvancedSearch').is(':visible')) {
+                $("button#clear").fadeIn();
+            } else {
+                $("button#clear").fadeOut('fast');
+            }
+        });
+    }
 
     function edit_term_property(property_id, object_id) {
         $("#single_cancel_" + property_id + "_" + object_id).show();

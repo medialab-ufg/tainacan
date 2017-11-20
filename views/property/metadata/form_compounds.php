@@ -18,7 +18,18 @@
                     </div>
                     <div class="form-group">
                         <label for="socialdb_property_help"><?php _e('Text helper','tainacan'); ?></label>
-                        <input type="text" class="form-control" id="socialdb_property_help" name="socialdb_property_help" />
+
+	                    <?php
+	                    if(has_action('help_text_change_input_type'))
+	                    {
+		                    do_action('help_text_change_input_type', 'socialdb_property_help');
+	                    }else
+	                    {
+		                    ?>
+                            <input type="text" class="form-control" id="socialdb_property_help" name="socialdb_property_help" />
+		                    <?php
+	                    }
+	                    ?>
                     </div>
                     <div class="form-group col-md-12 no-padding">
                         <label class="col-md-6 no-padding" for="socialdb_property_help"><?php _e('Ordenation','tainacan'); ?></label>

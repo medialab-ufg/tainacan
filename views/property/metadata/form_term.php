@@ -112,7 +112,18 @@
                                     <?php $view_helper->commomFieldsProperties() ?>
                                     <div class="create_form-group form-group">
                                         <label for="socialdb_property_help"><?php _e('Property term text helper','tainacan'); ?></label>
-                                        <input type="text" class="form-control" id="socialdb_property_help" name="socialdb_property_help" />
+	                                    <?php
+	                                    if(has_action('help_text_change_input_type'))
+	                                    {
+		                                    do_action('help_text_change_input_type', 'socialdb_property_help');
+	                                    }else
+	                                    {
+		                                    ?>
+                                            <input type="text" class="form-control" id="socialdb_property_help" name="socialdb_property_help" />
+		                                    <?php
+	                                    }
+	                                    ?>
+
                                     </div>
                                     <div class="form-group">
                                         <label for="socialdb_property_term_widget"><?php _e('Property Term Widget','tainacan'); ?></label>
