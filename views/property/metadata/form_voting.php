@@ -6,7 +6,6 @@
                 <h4 class="modal-title"> <span class="ranking-action"><?php _e('Add', 'tainacan'); ?></span> <?php _e('Ranking', 'tainacan'); ?> </h4>
             </div>
             <div class="modal-body">
-
                 <form id="submit_form_ranking" name="submit_ranking">
                     <div class="form-group">
                         <label for="ranking_name"><?php _e('Ranking Name','tainacan'); ?></label>
@@ -31,23 +30,24 @@
                         <input type="checkbox" value="use_filter" name="property_data_use_filter" class="property_data_use_filter" onchange="toggle_widget(this)"/>
                     </div>
 
-                    <div class="data-widget">
+                   <!-- <div class="data-widget">
                         <div class="use-voting-filter" style="display: none">
                         <div class="form-group">
-                            <label for="search_data_widget"><?php _e('Widget','tainacan'); ?></label>
+                            <label for="search_data_widget"><?php /*_e('Widget','tainacan'); */?></label>
                             <select class="form-control" id="search_data_widget" name="search_data_widget" required="" onchange="toggle_range_submit(this)">
-                                <option value="from_to"><?php _e('From/To','tainacan'); ?></option>
-                                <option value="range"><?php _e('Range','tainacan'); ?></option>
+                                <option value="from_to"><?php /*_e('From/To','tainacan'); */?></option>
+                                <option value="range"><?php /*_e('Range','tainacan'); */?></option>
                             </select>
                         </div>
                     </div>
                         <div id="range_submit" style="display: none;">
                             <div id="range_form"></div>
-                            <button type="button" onclick="increase_range()"><span class="glyphicon glyphicon-plus"></span><?php _e('Add','tainacan') ?></button>
+                            <button type="button" onclick="increase_range()"><span class="glyphicon glyphicon-plus"></span><?php /*_e('Add','tainacan') */?></button>
                         </div>
-                    </div>
+                    </div>-->
 
                     <input type="hidden" name="search_data_orientation" value="left-column">
+                    <input type="hidden" id="search_data_widget" name="search_data_widget" value="">
                     <input type="hidden" id="ranking_id" name="ranking_id" value="">
                     <input type="hidden" id="operation" name="operation" value="add">
                     <input type="hidden" id="search_collection_id" name="collection_id" value="<?php echo $collection_id; ?>">

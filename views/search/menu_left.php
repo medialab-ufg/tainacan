@@ -199,7 +199,31 @@ foreach ($facets as $facet):
              </div>
         </div>
         
-     <?php 
+     <?php
+
+     elseif($facet['widget'] == 'like'):
+     ?>
+        <div id="like_widget_<?php echo $facet['id']; ?>" class="form-group">
+            <label class="title-pipe"> <?php echo $facet['name']; ?> </label>
+            <div style="padding-left: 30px;text-decoration: none;font-size: 25px;">
+                <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>
+            </div>
+        </div>
+
+     <?php
+
+     elseif($facet['widget'] == 'binary'):
+     ?>
+        <div id="binary_widget_<?php echo $facet['id']; ?>" class="form-group">
+            <label class="title-pipe"> <?php echo $facet['name']; ?> </label>
+            <div style="padding-left: 30px;text-decoration: none;font-size: 25px;">
+                <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>
+                <span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span>
+            </div>
+        </div>
+     <?php
+
+
      //para listagem de autores mais colaborativos
      elseif ($facet['widget'] == 'ranking_colaborations'):  ?>    
         <!--div class="form-group" >

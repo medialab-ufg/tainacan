@@ -1944,7 +1944,7 @@
             data: {collection_id: $('#collection_list_ranking_id').val(), ranking_id: id, operation: "edit_ranking"}
         }).done(function (result) {
             elem = $.parseJSON(result);
-
+            console.log(elem);
             var item_type = elem.ranking.type;
             $("#submit_form_ranking .ranking-type").focus().val(item_type);
 
@@ -1972,6 +1972,7 @@
             $("#submit_form_ranking #ranking_type").val(ranking_type);
             $("#submit_form_ranking .socialdb_event_property_tab option[value='" + get_tab_property_id(elem.id) + "']").attr('selected', 'selected');
             $("#submit_form_ranking #operation").val(operation);
+            $("#submit_form_ranking #search_data_widget").val(elem.ranking.type);
 
         });
     }
@@ -2396,6 +2397,18 @@
             $("#meta-voting #range_submit").show();
             $widget_select.append('<option value="range"><?php _e('Range', 'tainacan'); ?></option><option value="from_to"><?php _e('From/To', 'tainacan'); ?></option>');
         }
+
+        /*Change widget*/
+        if(ranking_type === 'stars')
+        {
+            $("#meta-voting #search_data_widget").val('stars');
+        }else if(ranking_type === 'like')
+        {
+            $("#meta-voting #search_data_widget").val('like');
+        }else if(ranking_type === 'binary')
+        {
+            $("#meta-voting #search_data_widget").val('binary');
+        }
     }
 
     function define_voting_widget(ranking_type) {
@@ -2422,6 +2435,7 @@
     }
 
     function toggle_range_submit(el) {
+        console.log("Olá");
         ($(el).val() == "range") ? $("#range_submit").fadeIn() : $("#range_submit").fadeOut();
     }
 
