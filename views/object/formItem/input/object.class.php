@@ -1042,7 +1042,7 @@ class ObjectClass extends FormItem {
             <?php endif; ?>  
             <input type="hidden" name="operation" value="searchItemFormItem">        
             <div class="col-md-12 no-padding" style="margin-top: 15px;">
-                <button type="button" onclick="clear_all_field('<?php echo $form ?>')" class="btn btn-lg btn-default pull-left"><?php _e('Clear search', 'tainacan') ?></button>
+                <button type="button" onclick="clear_all_field('#property_object_search_submit_<?php echo $this->compound_id ?>_<?php echo $this->property_id ?>_<?php echo $this->index_id ?>')" class="btn btn-lg btn-default pull-left"><?php _e('Clear search', 'tainacan') ?></button>
                 <button type="submit"  class="btn btn-lg btn-success pull-right"><?php _e('Find', 'tainacan') ?></button>
             </div>
         </form>            
