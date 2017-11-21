@@ -205,21 +205,34 @@ foreach ($facets as $facet):
      ?>
         <div id="like_widget_<?php echo $facet['id']; ?>" class="form-group">
             <label class="title-pipe"> <?php echo $facet['name']; ?> </label>
-            <div style="padding-left: 30px;text-decoration: none;font-size: 25px;">
-                <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>
+            <div style="padding-left: 30px;text-decoration: none;font-size: 25px; cursor: pointer;">
+                <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true" onclick="like_ordenation(<?php echo $facet['id']; ?>);"></span>
             </div>
         </div>
-
+        <script>
+            function like_ordenation(val)
+            {
+                $('#collection_single_ordenation option[value="'+val+'"]').prop("selected", true);
+                $('#collection_single_ordenation option[value="'+val+'"]').trigger('change');
+            }
+        </script>
      <?php
 
      elseif($facet['widget'] == 'binary'):
      ?>
         <div id="binary_widget_<?php echo $facet['id']; ?>" class="form-group">
             <label class="title-pipe"> <?php echo $facet['name']; ?> </label>
-            <div style="padding-left: 30px;text-decoration: none;font-size: 25px;">
+            <div style="padding-left: 30px;text-decoration: none;font-size: 25px; cursor: pointer;" onclick="binary_ordenation(<?php echo $facet['id']; ?>)">
                 <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>
                 <span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span>
             </div>
+            <script>
+                function binary_ordenation(val)
+                {
+                    $('#collection_single_ordenation option[value="'+val+'"]').prop("selected", true);
+                    $('#collection_single_ordenation option[value="'+val+'"]').trigger('change');
+                }
+            </script>
         </div>
      <?php
 
