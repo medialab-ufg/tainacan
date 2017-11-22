@@ -4,10 +4,12 @@ class FormItemLicense extends FormItemMultiple {
     public function widget($property, $item_id) {
        $this->isRequired = get_post_meta($this->collection_id, 'socialdb_collection_property_'.$property['id'].'_required', true);
        $license_selected = get_post_meta($item_id, 'socialdb_license_id', true);
-       $licenses = $this->getLicenses($item_id,$this->collection_id)
+       $licenses = $this->getLicenses($item_id,$this->collection_id);
+       $license_pattern = get_post_meta($this->collection_id, 'socialdb_collection_license_pattern', true);
         ?>
         <!-- TAINACAN: a licencas do item -->
         <div class="form-group">
+            <?php print_r($license_selected); ?>
             <h2>
                 <?php echo ($this->terms_fixed['license']) ? $this->terms_fixed['license']->name : _e('Licenses', 'tainacan') ?>
                 <?php
@@ -31,11 +33,14 @@ class FormItemLicense extends FormItemMultiple {
                                             class="object_license"
                                             name="object_license"
                                             value="<?php echo $license['id']; ?>"
-                                            id="radio<?php echo $license['id']; ?>"
+                                            id="radio_left_menu<?php echo $license['id']; ?>"
                                             <?php
                                             if($license['id'] == $license_selected){
                                                 $has_checked = true;
                                                 echo "checked='checked'";
+                                            }else
+                                            if($license['id'] == $license_pattern){
+	                                            echo "checked='checked'";
                                             }
                                             ?>
                                             ><?php echo $license['nome']; ?></label>
@@ -185,8 +190,10 @@ class FormItemLicense extends FormItemMultiple {
                   }).done(function (result) {
                       $("#modalHelpCC").modal('hide');
                       elem = jQuery.parseJSON(result);
+                      console.log(elem);
                       if(elem.id && elem.id != ''){
-                          $('#radio' + elem.id).attr("checked", "checked");
+                          console.log($('#radio' + elem.id).length);
+                          $('#radio_left_menu' + elem.id).attr("checked", "checked");
                       }
                       showAlertGeneral(elem.title, elem.msg, elem.type);
                   });
