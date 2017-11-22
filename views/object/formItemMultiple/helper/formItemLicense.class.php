@@ -108,7 +108,7 @@ class FormItemLicense extends FormItemMultiple {
             </div>
         </div>
         <?php
-        $this->initScriptsLicenseContainer($property,$item_id);
+        $this->initScriptsLicenseContainer($property,$item_id, $license_pattern);
     }
 
     /**
@@ -176,7 +176,20 @@ class FormItemLicense extends FormItemMultiple {
     * @param type $item_id
     * @param type $index
     */
-    public function initScriptsLicenseContainer($property, $item_id) {
+    public function initScriptsLicenseContainer($property, $item_id, $license_pattern = null) {
+	    if($license_pattern != null)
+	    {
+		    if($license_pattern){
+			    ?>
+                <script>
+                    $(function(){
+                        $("input:radio.object_license:checked").trigger('change');
+                    });
+                </script>
+			    <?php
+		    }
+	    }
+
         ?>
               <script>
               $('#submit_help_cc').submit(function (e) {
