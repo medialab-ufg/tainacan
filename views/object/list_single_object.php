@@ -72,6 +72,7 @@ $view_helper = new ObjectHelper($collection_id);
                         <?php if ($metas['socialdb_object_dc_type'][0] == 'text') {
                             echo $metas['socialdb_object_content'][0];
                         } else {
+
                             if ($metas['socialdb_object_from'][0] == 'internal' && wp_get_attachment_url($metas['socialdb_object_content'][0])) {
                                 $url = wp_get_attachment_url($metas['socialdb_object_content'][0]);
                                 switch ($metas['socialdb_object_dc_type'][0]) {

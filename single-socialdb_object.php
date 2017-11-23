@@ -216,6 +216,11 @@ if (has_action('alter_page_item')) {
                                             $content = '<embed src="' . $metas['socialdb_object_content'][0] . '" width="600" height="500" alt="pdf" pluginspage="http://www.adobe.com/products/acrobat/readstep2.html">';
                                             break;
                                         default:
+                                            //colocando o http
+                                            if( strpos($metas['socialdb_object_content'][0],'http://') === false ||  strpos($metas['socialdb_object_content'][0],'https://') === false){
+                                                $metas['socialdb_object_content'][0] = 'http://'.$metas['socialdb_object_content'][0];
+                                            }
+
                                             $content = '<p style="text-align:center;">' . __('File link:', 'tainacan') . ' <a target="_blank" href="' . $metas['socialdb_object_content'][0] . '">' . __('Click here!', 'tainacan') . '</a></p>';
                                             break;
                                     }
