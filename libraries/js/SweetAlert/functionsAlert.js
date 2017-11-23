@@ -72,7 +72,7 @@ function remove_event_category_classication(title, text, category_id, object_id,
                 $('#modalImportMain').modal('hide');//mostro o modal de carregamento
                 elem_first = jQuery.parseJSON(result);
                 show_classifications(object_id);
-                set_containers_class($('#collection_id').val());
+                //set_containers_class($('#collection_id').val());
                 showAlertGeneral(elem_first.title, elem_first.msg, elem_first.type);
 
             });
