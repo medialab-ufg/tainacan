@@ -438,7 +438,8 @@ class CollectionController extends Controller {
 		            return json_encode(save_canvas_pdf_thumbnails($_POST['data'], true));
             	else
 	            {
-	            	$data = json_decode(stripslashes($_POST['data']));
+		            $data = json_decode(stripslashes($_POST['data']));
+		            $data = '';
 		            return json_encode(save_canvas_pdf_thumbnails($data));
 	            }
 
