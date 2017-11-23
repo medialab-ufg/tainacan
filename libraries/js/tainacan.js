@@ -3360,7 +3360,7 @@ function get_pdf_and_gen_thumb(count)
         let itemsFetcher = itens_id.map(function(info, index) {
             let post_id = info[0];
             let pdf_url = info[1];
-//
+
             try{
                 return new Promise(function(resolve, reject) {
                     PDFJS.getDocument(pdf_url).promise.then(function(doc) {
