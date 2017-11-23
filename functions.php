@@ -3945,6 +3945,18 @@ function facebook_meta() {
         } else {
             $excerpt = get_bloginfo('description');
         }
+        $image = wp_get_attachment_image_src(get_post_thumbnail_id(get_the_ID()), 'large');
+        if($image [1] !== 1) {
+	        $width = $image [1];
+        }else {
+            $width = 595;
+        }
+
+	    if($image [1] !== 1) {
+		    $height = $image [2];
+	    }else {
+		    $height = 842;
+	    }
 
         ?>
         <meta property="og:type" content="article"/>
@@ -3952,7 +3964,9 @@ function facebook_meta() {
         <meta property="og:site_name" content="<?php echo get_bloginfo(); ?>"/>
         <meta property="og:description" content="<?php echo $excerpt; ?>"/>
         <meta property="og:url" content="<?php echo the_permalink(); ?>"/>
-        <meta property="og:image" content="<?php echo wp_get_attachment_image_src(get_post_thumbnail_id(get_the_ID()), 'large')[0]; ?>"/>
+        <meta property="og:image" content="<?php echo $image[0]; ?>"/>
+        <meta property="og:image:width" content="<?= $width ?>">
+        <meta property="og:image:height" content="<?= $height ?>">
         <?php
     } else {
         return;
