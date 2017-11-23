@@ -3349,7 +3349,6 @@ function get_pdf_and_gen_thumb(count)
         result = jQuery.parseJSON(result);
         itens_id = Object.keys(result).map(function(post_id) {return [post_id, result[post_id]]; });
 
-        console.log(itens_id);
         if(itens_id.length === 0)
         {
             $("#modalImportMain").modal("hide");
@@ -3362,23 +3361,29 @@ function get_pdf_and_gen_thumb(count)
             let post_id = info[0];
             let pdf_url = info[1];
 
-            return new Promise(function(resolve, reject) {
-                PDFJS.getDocument(pdf_url).promise.then(function(doc) {
-                    let page = [];
-                    page.push(1); //Get first page
+            try{
+                return new Promise(function(resolve, reject) {
+                    PDFJS.getDocument(pdf_url).promise.then(function(doc) {
+                        let page = [];
+                        page.push(1); //Get first page
 
-                    return Promise.all(page.map(function(num) {
-                        return doc.getPage(num).then(makeThumb)
-                            .then(function(canvas) {
-                                let img = canvas.toDataURL("image/png");
+                        return Promise.all(page.map(function(num) {
+                            return doc.getPage(num).then(makeThumb)
+                                .then(function(canvas) {
+                                    let img = canvas.toDataURL("image/png");
 
-                                formIDImg.push({post_id: post_id, img: img});
-                                resolve("It's done!");
+                                    formIDImg.push({post_id: post_id, img: img});
+                                    resolve("It's done!");
 
-                            });
-                    }));
+                                });
+                        }));
+                    });
                 });
-            });
+            }catch (e)
+            {
+                console.log(e);
+            }
+
         });
 
         Promise.all(itemsFetcher).then(function(){
