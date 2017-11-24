@@ -44,15 +44,23 @@ class RankingModel extends Model {
         }
 
         if (!is_wp_error($new_ranking) && $ranking_id) {
-            $this->add_property_position_ordenation($data['collection_id'], $ranking_id);
-            $result[] = update_term_meta($ranking_id, 'socialdb_property_created_category', $this->get_category_root_of($data['collection_id']));
-            instantiate_metas($ranking_id, $type->name, 'socialdb_property_type', true);
-            $result[] = $this->vinculate_property($this->get_category_root_of($data['collection_id']), $ranking_id);
-            //possivelmente um problema
-            $this->vinculate_objects_with_property($ranking_id, $data['collection_id'], $this->get_category_root_of($data['collection_id']));
-            $this->insert_properties_hierarchy($this->get_category_root_of($data['collection_id']), $ranking_id);
-            $data['success'] = 'true';
-            $data['result'] = $result;
+            if( !isset( $data['collection_id'] ) || !$data['collection_id'] ){
+                $result[] = update_term_meta($ranking_id, 'socialdb_property_created_category', $data['property_category_id']);
+                instantiate_metas($ranking_id, $type->name, 'socialdb_property_type', true);
+                $result[] = $this->vinculate_property($data['property_category_id'], $ranking_id);
+                $data['success'] = 'true';
+                $data['result'] = $result;
+            }else{
+                $this->add_property_position_ordenation($data['collection_id'], $ranking_id);
+                $result[] = update_term_meta($ranking_id, 'socialdb_property_created_category', $this->get_category_root_of($data['collection_id']));
+                instantiate_metas($ranking_id, $type->name, 'socialdb_property_type', true);
+                $result[] = $this->vinculate_property($this->get_category_root_of($data['collection_id']), $ranking_id);
+                //possivelmente um problema
+                $this->vinculate_objects_with_property($ranking_id, $data['collection_id'], $this->get_category_root_of($data['collection_id']));
+                $this->insert_properties_hierarchy($this->get_category_root_of($data['collection_id']), $ranking_id);
+                $data['success'] = 'true';
+                $data['result'] = $result;
+            }
         } else {
             $data['success'] = 'false';
             if(trim($data['ranking_name'])==''){
