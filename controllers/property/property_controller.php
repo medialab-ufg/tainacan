@@ -455,8 +455,10 @@ require_once(dirname(__FILE__).'../../../helpers/object/single_properties_widget
          */
         if(has_filter('modificate_values_event_property_data_add')):
             $data = apply_filters( 'modificate_values_event_property_data_add', $data); 
-        endif;    
+        endif;
+
         return $eventAddProperty->create_event($data);
+
     }
      /**
      * @signature - function insert_event_update($object_id, $data )

@@ -239,12 +239,15 @@
                             //elem_first =jQuery.parseJSON(result); 
                             elem = jQuery.parseJSON(result);
                             if (elem.type.trim() === 'success') {
-                                $("#alert_error_categories").hide();
-                                $("#alert_success_categories").show();
+                                /*$("#alert_error_categories").hide();
+                                $("#alert_success_categories").show();*/
+
+                                swal('<?php _e("Success", "tainacan"); ?>', '<?php _e("Operation was successful", "tainacan"); ?>', "success");
                                 clean_archive_mode();
                             } else {
-                                $("#alert_error_categories").show();
-                                $("#alert_success_categories").hide();
+                                /*$("#alert_error_categories").show();
+                                $("#alert_success_categories").hide();*/
+                                swal('<?php _e("Success", "tainacan"); ?>', '<?php _e("Operation was unsuccessful", "tainacan");?>', "success");
                                 $("#message_category").html(elem.msg);
                             }
                             $('#category_name').val('');

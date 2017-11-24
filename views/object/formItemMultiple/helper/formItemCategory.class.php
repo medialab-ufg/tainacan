@@ -30,7 +30,7 @@ class FormItemCategory extends FormItemMultiple{
                 margin-left: -30px;
             }
         </style>
-        <div id="meta-item-<?php echo $property['id']; ?>" class="form-group" >
+        <div id="meta-item-<?php echo $property['id']; ?>" class="form-group">
              <h2>
                 <?php echo $property['name']; ?>
                 <?php $this->hasTextHelper($property);  ?>

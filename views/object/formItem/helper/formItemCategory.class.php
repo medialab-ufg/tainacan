@@ -47,6 +47,7 @@ class FormItemCategory extends FormItem{
                 <?php $this->validateIcon('alert-compound-'.$property['id'],__('Required field','tainacan')) ?>
                 <?php endif ?>
             </h2>
+
             <div>
                 <?php
                 if(empty($property['has_children']))
@@ -233,6 +234,11 @@ class FormItemCategory extends FormItem{
              });
            });
         Hook.call('appendCategoryMetadataHere',[ids, <?php echo $item_id ?>, '#appendCategoryMetadata_<?php echo $property['id']; ?>_0_0']);
+
+        /*function add_new_category(father_id)
+        {
+            
+        }*/
        </script>
         <?php 
         endif; ?>

@@ -29,6 +29,7 @@ $css = ($habilitateMedia == 'true') ? 'width: 72%; margin-left: 15px;margin-righ
         </h4>
         <hr>
         <!-- ABAS e TODO FORMULARIO -->
-        <?php $formItem->start($collection_id,$ID,$properties,true) ?>
+
+        <?php $formItem->start($collection_id,$ID,$properties,true); ?>
     </div>
 </div>
