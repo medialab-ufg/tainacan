@@ -6,7 +6,7 @@ e este projeto adere para [Semantic Versioning](http://semver.org/spec/v2.0.0.ht
 
 ## [Unreleased]
 
-## [0.6] - 2017-11-16
+## [0.6] - 2017-11-24
 ### Adicionado
 - Botão de pesquisar no fim da interface de busca avançada
 - Botão de ocultar os filtros ao lado de botão pesquisar
@@ -24,6 +24,7 @@ e este projeto adere para [Semantic Versioning](http://semver.org/spec/v2.0.0.ht
 - Permição da submissão de imagens retangulares na marca do repositorio
 - Aplicação de tema nas coleções
 - Metadados de categorias apresentado nos formulários de submissão de itens com espaçamentos em branco
+- Melhoria no tratamento de tipologia de itens
 
 
 ### Corrigido
@@ -48,12 +49,17 @@ e este projeto adere para [Semantic Versioning](http://semver.org/spec/v2.0.0.ht
 - Permissão de exclusão de item proprietário em uma coleção não proprietária
 - Não relacionamento dos metadados padrões e fixos do repositório a um item
 - Não apresentação expandida das categorias na faceta de filtros de uma coleção no MAC-OS
+- Reindexação de miniaturas de PDF
+- Não apresentação de resultados de uma categoria em um metadado de relacionamento
+- Bão apresentação do termo selecionado na ediço da categoria
 
 ### Removido
 - Remoção de opções não utilziadas na tela de registro de usuário
+- Remoção de extração de metadados Exif
 
 ### Obsoleto
 - Extração de metadados Exif
+- Duplicar em outra coleção na home do item
 
 ## [0.5] - 2017-10-09
 
