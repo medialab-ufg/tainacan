@@ -94,7 +94,7 @@ class FormItemMultiple extends Model {
         $this->collection_id = $properties_raw['collection_id'];
         ?>
         <input type="hidden" id="item-multiple-selected">
-        <div id='form_properties_items' class="col-md-3 menu_left_files menu-left-size">
+        <div id='form_properties_items' style="min-height: 724px;" class="col-md-3 menu_left_files menu-left-size">
             <h3 style="display:none;" id='labels_items_selected' >
                 <?php _e('Editting ','tainacan') ?>
                 <span id='number_of_items_selected'></span>
@@ -125,7 +125,8 @@ class FormItemMultiple extends Model {
         <div class='col-md-9' id="no_item_uploaded" style='display:none;'>
             <h3 style="text-align: center;"><?php _e('No items uploaded','tainacan') ?></h3>
         </div>
-        <div class='col-md-9 pull-right' 
+        <div class='col-md-9 pull-right'
+             id="all_types_items"
              style="background-color: white;border: 3px solid #E8E8E8;margin-left: 15px;">
             <?php if($this->operation !== 'add-files'): ?>
             <h3>
