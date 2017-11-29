@@ -156,16 +156,27 @@ if (has_action('alter_page_item')) {
                                             $content = '<video width="400" controls><source src="' . $url . '">' . __('Your browser does not support HTML5 video.', 'tainacan') . '</video>';
                                             break;
                                         case 'pdf':
-                                            $view = get_template_directory_uri() . '/libraries/js/pdfThumb/pdfJS/web/viewer.html?file=' . $url;
-                                            $iframe_script = "";
-                                            $content =
-                                                "
-                                             <script>
-                                                hide_pdf_viewer_buttons();
-                                             </script>
-                                             <iframe id='iframePDF' name='iframePDF' src='$view' height='500px' allowfullscreen webkitallowfullscreen>
-                                                        
-                                             </iframe>";
+                                            $directory_uri = get_template_directory_uri();
+
+                                            $root_directory_uri = substr($directory_uri, 0, strpos($directory_uri, "/wp-content/"));
+                                            $root_pdf_uri = substr($url, 0, strpos($url, "/wp-content/"));
+
+                                            if(strcmp($root_directory_uri, $root_pdf_uri) == 0)
+                                            {
+	                                            $view = $directory_uri . '/libraries/js/pdfThumb/pdfJS/web/viewer.html?file=' . $url;
+	                                            $iframe_script = "";
+	                                            $content =
+                                                        "
+                                                 <script>
+                                                    hide_pdf_viewer_buttons();
+                                                 </script>
+                                                 <iframe id='iframePDF' name='iframePDF' src='$view' height='500px' allowfullscreen webkitallowfullscreen>
+                                                            
+                                                 </iframe>";
+                                            }else
+                                            {
+                                                $content = '<embed src="' . $url . '" width="600" height="500" alt="pdf" pluginspage="http://www.adobe.com/products/acrobat/readstep2.html">';
+                                            }
 
                                             //'<embed src="' . $url . '" width="600" height="500" alt="pdf" pluginspage="http://www.adobe.com/products/acrobat/readstep2.html">';
                                             break;
