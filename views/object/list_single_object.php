@@ -91,7 +91,6 @@ $view_helper = new ObjectHelper($collection_id);
                                         $content = '<video width="400" controls><source src="' . $url . '">' . __('Your browser does not support HTML5 video.', 'tainacan') . '</video>';
                                         break;
                                     case 'pdf':
-
                                         $view = get_template_directory_uri() . '/libraries/js/pdfThumb/pdfJS/web/viewer.html?file='.$url;
                                         $iframe_script = "";
                                         $content =
@@ -99,6 +98,7 @@ $view_helper = new ObjectHelper($collection_id);
                                              <script>
                                                 hide_pdf_viewer_buttons();
                                              </script>
+                                            
                                              <iframe id='iframePDF' name='iframePDF' src='$view' height='500px' allowfullscreen webkitallowfullscreen>
                                                         
                                              </iframe>";

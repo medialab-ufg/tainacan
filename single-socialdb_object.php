@@ -156,7 +156,6 @@ if (has_action('alter_page_item')) {
                                             $content = '<video width="400" controls><source src="' . $url . '">' . __('Your browser does not support HTML5 video.', 'tainacan') . '</video>';
                                             break;
                                         case 'pdf':
-
                                             $view = get_template_directory_uri() . '/libraries/js/pdfThumb/pdfJS/web/viewer.html?file=' . $url;
                                             $iframe_script = "";
                                             $content =
