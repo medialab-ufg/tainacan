@@ -1042,7 +1042,7 @@
             if (temp_list_mode) {
                 changeViewMode(temp_list_mode);
             }
-
+            $('.col-items-per-page').val(elem.items_per_page);
             setMenuContainerHeight();
         });
     }
@@ -1069,6 +1069,7 @@
             }
 
             setMenuContainerHeight();
+            $('.col-items-per-page').val(elem.items_per_page);
         });
     }
 

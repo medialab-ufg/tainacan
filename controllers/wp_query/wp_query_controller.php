@@ -246,6 +246,7 @@ class WPQueryController extends Controller {
 //                     $return['page'] = iconv('ISO-8859-1', 'UTF-8',  utf8_decode($return['page']));
 //                }
                 $return['args'] = serialize($args);
+                $return['items_per_page'] = $args['posts_per_page'];
                 return json_encode($return);
             case "wpquery_orderby":
                 $return = array();
@@ -265,6 +266,7 @@ class WPQueryController extends Controller {
                 $data["table_meta_array"] = unserialize(base64_decode(get_post_meta($args['collection_id'], "socialdb_collection_table_metas", true)));
                 $return['page'] = $this->render(dirname(__FILE__) . '../../../views/object/list.php', $data);
                 $return['args'] = serialize($args);
+                $return['items_per_page'] = $args['posts_per_page'];
                 return json_encode($return);
             case "wpquery_page":
                 $return = array();
