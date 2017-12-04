@@ -339,6 +339,8 @@ $(window).load(function () {
     $('#submit_files_item_zip').submit(function (e) {
         $('.nav-tabs').tab();
         $('.dropdown-toggle').dropdown();
+        $('.modal').modal('hide');
+        show_modal_main();
         $.ajax({
             url: $('#src').val() + '/controllers/object/object_multiple_controller.php',
             type: 'POST',
@@ -346,11 +348,13 @@ $(window).load(function () {
             processData: false,
             contentType: false
         }).success(function (result) {
+            hide_modal_main();
             $('#sendFileItemZip').val('');
             $('.nav-tabs').tab();
             $('.dropdown-toggle').dropdown();
             elem = jQuery.parseJSON(result);
             if (elem) {
+                showAlertGeneral('Sucesso', 'Todos arquivos foram importados', 'success');
                 window.location = elem.url;
             } else {
                 $('#modalImportMain').modal('hide');
@@ -362,6 +366,7 @@ $(window).load(function () {
                 showAlertGeneral('Erro', message, 'error');
             }
         }).error(function (error) {
+            hide_modal_main();
             showAlertGeneral('Erro', 'Houve um erro na importação deste arquivo', 'error');
         });
         e.preventDefault();
@@ -621,6 +626,14 @@ $(window).load(function () {
             $("#myMenu,#myMenuSingle").hide();
         }
     }, true);
+
+    $(window).scroll(function(){
+        if ($(this).scrollTop() > 200) {
+            $('a[href="#top"]').fadeIn();
+        } else {
+            $('a[href="#top"]').fadeOut();
+        }
+    });
 }); // On load Tainacan' main page
 
 $(document).ready(function () {
@@ -668,6 +681,12 @@ $(document).ready(function () {
     );
 
 });
+
+function animateToTop()
+{
+    $('html, body').animate({scrollTop : 0},800);
+    return false;
+}
 
 /**
  * funcao que gera o arquivo csv
@@ -1350,7 +1369,7 @@ function reinit_synonyms_tree() {
 }
 
 function reinit_tag_tree() {
-    $("#dynatree_tags").dynatree("getTree").reload();
+   // $("#dynatree_tags").dynatree("getTree").reload();
 }
 
 function showHeaderCollection(src) {
@@ -3307,91 +3326,71 @@ $(document).on("submit", "#reindexation_form", function (event) {
             })
         );
 
-        //PDF Thumbnail
-        get_pdf_and_gen_thumb(formData, promises, 10);
-
         Promise.all(promises).then(function(values){
-            $("#modalImportMain").modal("hide");
-            var CompleteMsg, success, msg;
-            if(values[0].length > 0)
-            {
-                CompleteMsg = values[0];
-            }else CompleteMsg = values [1];
-
-            msg = CompleteMsg.split(",")[0];
-            success = CompleteMsg.split(",")[1];
-            swal(
-                success,
-                msg,
-                "success"
-            );
+            //PDF Thumbnail
+            if(formData.get('pdf_thumbnail')) {
+                get_pdf_and_gen_thumb(15);//Gera de 15 em 15
+            }
+            else {
+                $("#modalImportMain").modal("hide");
+                swal("Reindex", "Ok", "success");
+            }
         });
     }
 });
 
-function get_pdf_and_gen_thumb(formData, promises, count, resolveBefore = null, msg = null)
+function get_pdf_and_gen_thumb(count)
 {
-    promises.push(new Promise(function (right, wrong) {
-        if(formData.get('pdf_thumbnail'))
+    $.ajax({
+        url: $("#src").val() + '/controllers/collection/collection_controller.php',
+        type: 'POST',
+        data: {operation: 'pdf_no_thumb_ids', count: count}
+    }).done(function (result) {
+        result = jQuery.parseJSON(result);
+        var itens_id = Object.keys(result).map(function(post_id) {return [post_id, result[post_id]]; });
+
+        if(itens_id.length === 0)
         {
-            $.ajax({
-                url: $("#src").val() + '/controllers/collection/collection_controller.php',
-                type: 'POST',
-                data: {operation: 'pdf_no_thumb_ids', count: count}
-            }).done(function (result) {
-                result = jQuery.parseJSON(result);
-                itens_id = Object.keys(result).map(function(post_id) {return [post_id, result[post_id]]; });
-                if(itens_id.length === 0)
-                {
-                    if(resolveBefore != null)
-                    {
-                        resolveBefore(msg);
-                        return;
-                    }
+            $("#modalImportMain").modal("hide");
+            swal("Reindex", "Ok", "success");
+            return;
+        }
 
-                    setTimeout(function () {
-                        window.location = window.location.href;
-                    }, 2000);
-                }
+        var formIDImg = [];
+        let itemsFetcher = itens_id.map(function(info, index) {
+            let post_id = info[0];
+            let pdf_url = info[1];
 
-                var formIDImg = [];
-                let itemsFetcher = itens_id.map(function(info, index) {
-                    let post_id = info[0];
-                    let pdf_url = info[1];
+            return new Promise(function(resolve, reject) {
+                PDFJS.getDocument(pdf_url).promise.then(function(doc) {
+                    let page = [];
+                    page.push(1); //Get first page
 
-                    return new Promise(function(resolve, reject) {
-                        PDFJS.getDocument(pdf_url).promise.then(function(doc) {
-                            let page = [];
-                            page.push(1); //Get first page
+                    return Promise.all(page.map(function(num) {
+                        return doc.getPage(num).then(makeThumb)
+                            .then(function(canvas) {
+                                let img = canvas.toDataURL("image/png");
 
-                            return Promise.all(page.map(function(num) {
-                                return doc.getPage(num).then(makeThumb)
-                                    .then(function(canvas) {
-                                        let img = canvas.toDataURL("image/png");
+                                formIDImg.push({post_id: post_id, img: img});
+                                resolve("It's done!");
 
-                                        formIDImg.push({post_id: post_id, img: img});
-                                        resolve("It's done!");
-
-                                    });
-                            }));
-                        });
-                    });
-                });
-
-                Promise.all(itemsFetcher).then(function(){
-                    $.ajax({
-                        url: $("#src").val() + '/controllers/collection/collection_controller.php?operation=pdf_thumbnail&reindex=true',
-                        type: 'POST',
-                        data: {data: formIDImg}
-                    }).done(function (result) {
-                        elem = jQuery.parseJSON(result);
-                        get_pdf_and_gen_thumb(formData, promises, count, right, elem.msg);
-                    });
+                            });
+                    }));
                 });
             });
-        }
-        else right("");
-    }));
+
+        });
+
+        Promise.all(itemsFetcher).then(function(){
+            $.ajax({
+                url: $("#src").val() + '/controllers/collection/collection_controller.php?operation=pdf_thumbnail&reindex=true',
+                type: 'POST',
+                data: {data: formIDImg}
+            }).done(function (result) {
+                get_pdf_and_gen_thumb(count);
+            });
+        });
+    });
 }
 
 
@@ -3717,7 +3716,6 @@ function list_comments_general(item_id) {
         list_comments_term('comments_term', $('#socialdb_event_comment_term_id').val());
     }
 }
-
 
 function submit_comment(object_id) {
     var comment_content = $('#comment').val().trim();

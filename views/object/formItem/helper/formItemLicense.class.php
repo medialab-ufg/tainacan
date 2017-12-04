@@ -6,12 +6,15 @@ class FormItemLicense extends FormItem {
        $this->isRequired = get_post_meta($this->collection_id, 'socialdb_collection_property_'.$property['id'].'_required', true);
        $license_selected = get_post_meta($item_id, 'socialdb_license_id', true);
        $licenses = $this->getLicenses($item_id,$this->collection_id);
-        $license_pattern = get_post_meta($this->collection_id, 'socialdb_collection_license_pattern', true);
+       $license_pattern = get_post_meta($this->collection_id, 'socialdb_collection_license_pattern', true);
         ?>
         <!-- TAINACAN: a licencas do item -->
         <div class="form-group">
             <h2>
                 <?php echo ($this->terms_fixed['license']) ? $this->terms_fixed['license']->name : _e('Licenses', 'tainacan') ?>
+                <?php
+                add_helpText($property, $this);
+                ?>
                 <?php $this->validateIcon('alert-compound-'.$property['id'],__('Required field','tainacan')) ?>
             </h2>
             <div>
@@ -56,13 +59,15 @@ class FormItemLicense extends FormItem {
                <?php endif; ?>
              </div>
              <?php if($has_cc){ ?>
-                 <!--button type="button" class="btn btn-success" data-toggle="modal" data-target="#modalHelpCC"><?php _e("Help Choosing",'tainacan'); ?></button><br><br-->
+                 <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modalHelpCC"><?php _e("Help Choosing",'tainacan'); ?></button><br><br>
              <?php } ?>
 
              <!-- modal ajuda a escolher CC -->
                  <div class="modal fade" id="modalHelpCC" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                      <div class="modal-dialog">
                          <div class="modal-content">
+                             <form></form><!--Por algum motivo desconhecido o form de baixo estava sumindo, colocando esse form aqui o problema foi resolvido-->
+
                              <form  id="submit_help_cc">
                                  <input type="hidden" name="operation" id="operationCC" id="" value="help_choosing_license">
                                  <div class="modal-header">
@@ -104,7 +109,7 @@ class FormItemLicense extends FormItem {
             </div>
         </div>
         <?php
-        $this->initScriptsLicenseContainer($property,$item_id);
+        $this->initScriptsLicenseContainer($property,$item_id, $license_pattern);
     }
 
     /**
@@ -172,7 +177,20 @@ class FormItemLicense extends FormItem {
     * @param type $item_id
     * @param type $index
     */
-    public function initScriptsLicenseContainer($property, $item_id) {
+    public function initScriptsLicenseContainer($property, $item_id, $license_pattern = null) {
+	    if($license_pattern != null)
+        {
+	        if($license_pattern){
+		        ?>
+                <script>
+                    $(function(){
+                        $("input:radio.object_license:checked").trigger('change');
+                    });
+                </script>
+                <?php
+	        }
+        }
+
         ?>
               <script>
               $('#submit_help_cc').submit(function (e) {
@@ -194,23 +212,23 @@ class FormItemLicense extends FormItem {
               });
 
 
-                  $('input[name="object_license"]').change(function(){
-                        <?php if($this->isRequired === 'true'):  ?>
-                            validateFieldsMetadataText($(this).val(),'<?php echo $property['id'] ?>','0','0')
-                        <?php endif; ?>
-                        $.ajax({
-                            url: $('#src').val() + '/controllers/object/form_item_controller.php',
-                            type: 'POST',
-                            data: {
-                                operation: 'saveLicense',
-                                value: $(this).val(),
-                                collection_id:$('#collection_id').val(),
-                                item_id:'<?php echo $item_id ?>'
-                            }
-                        }).done(function (result) {
+              $('input[name="object_license"]').change(function(){
+                    <?php if($this->isRequired === 'true'):  ?>
+                        validateFieldsMetadataText($(this).val(),'<?php echo $property['id'] ?>','0','0')
+                    <?php endif; ?>
+                    $.ajax({
+                        url: $('#src').val() + '/controllers/object/form_item_controller.php',
+                        type: 'POST',
+                        data: {
+                            operation: 'saveLicense',
+                            value: $(this).val(),
+                            collection_id:$('#collection_id').val(),
+                            item_id:'<?php echo $item_id ?>'
+                        }
+                    }).done(function (result) {
 
-                        });
-                  });
+                    });
+              });
               </script>
         <?php
     }

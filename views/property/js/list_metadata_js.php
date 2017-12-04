@@ -556,10 +556,10 @@
             type: "POST",
             url: $('#src').val() + "/controllers/search/search_controller.php",
             data: {collection_id: collection_id, property_id: property_id, operation: 'add_property_ordenation'}
-        }).done(function (result) {
+        })/*.done(function (result) {
             elem = jQuery.parseJSON(result);
             //showAlertGeneral(elem.title, elem.msg, elem.type);
-        });
+        })*/;
     }
 
     function edit_metadata(id) {
@@ -818,6 +818,7 @@
 
                         //if (fixed_meta && fixed_meta == 'true' && (blog_email === '1')) {
                             class_var = 'fixed-property';
+                            let visibility_properties = $('#visibility_collection_properties').val().split(',');
                             if (visibility_properties.length === 0 || (visibility_properties.indexOf(current_id.toString()) < 0)) {
                                 button = '<a vis="show" id="visibility_' + current_id + '" onclick="change_visibility(' + current_id + ')" style="cursor:pointer;"><span class="glyphicon glyphicon-eye-open"></span></a>';
                             } else {
@@ -1012,20 +1013,31 @@
     }
 
     /**
-     funcao quer altera a visibilidade os metadados fixos de uma colecao 
-     * @param {type} e
+     funcao quer altera a visibilidade dos metadados fixos de uma colecao
+     * @param {type}
      * @returns {undefined}     */
     function change_visibility(property_id) {
+        let visibility = $('#visibility_collection_properties').val();
+
         if ($('#visibility_' + property_id).attr('vis') === 'hide') {
             $('#visibility_' + property_id).html('<span class="glyphicon glyphicon-eye-open"></span>');
             $('#visibility_' + property_id).attr('vis', 'show');
+
+            visibility = visibility.replace(","+property_id, '');
+            $('#visibility_collection_properties').val(visibility);
+
             $('#meta-item-' + property_id + ' .title-pipe').fadeTo("fast", 1);
         } else {
             //$('#meta-item-'+property_id+' .title-pipe').css('opacity','0.5');
             $('#meta-item-' + property_id + ' .title-pipe').fadeTo("fast", 0.33);
             $('#visibility_' + property_id).html('<span class="glyphicon glyphicon-eye-close"></span>');
+
+            visibility += ","+property_id;
+            $('#visibility_collection_properties').val(visibility);
+
             $('#visibility_' + property_id).attr('vis', 'hide');
         }
+
         $.ajax({
             url: $('#src').val() + '/controllers/collection/collection_controller.php',
             type: 'POST',
@@ -1033,9 +1045,10 @@
                 collection_id: $("#collection_id").val(),
                 operation: 'alter_visibility',
                 property_id: property_id}
-        }).done(function (result) {
+        })/*.done(function (result) {
             elem = jQuery.parseJSON(result);
-        });
+
+        })*/;
     }
 
     /**
@@ -1047,7 +1060,6 @@
         e.preventDefault();
         $('.modal').modal('hide');
         $('#modalImportMain').modal('show');
-
         $.ajax({
             url: src + '/controllers/property/property_controller.php',
             type: 'POST',
@@ -1943,7 +1955,7 @@
             data: {collection_id: $('#collection_list_ranking_id').val(), ranking_id: id, operation: "edit_ranking"}
         }).done(function (result) {
             elem = $.parseJSON(result);
-
+            console.log(elem);
             var item_type = elem.ranking.type;
             $("#submit_form_ranking .ranking-type").focus().val(item_type);
 
@@ -1971,6 +1983,7 @@
             $("#submit_form_ranking #ranking_type").val(ranking_type);
             $("#submit_form_ranking .socialdb_event_property_tab option[value='" + get_tab_property_id(elem.id) + "']").attr('selected', 'selected');
             $("#submit_form_ranking #operation").val(operation);
+            $("#submit_form_ranking #search_data_widget").val(elem.ranking.type);
 
         });
     }
@@ -2395,6 +2408,18 @@
             $("#meta-voting #range_submit").show();
             $widget_select.append('<option value="range"><?php _e('Range', 'tainacan'); ?></option><option value="from_to"><?php _e('From/To', 'tainacan'); ?></option>');
         }
+
+        /*Change widget*/
+        if(ranking_type === 'stars')
+        {
+            $("#meta-voting #search_data_widget").val('stars');
+        }else if(ranking_type === 'like')
+        {
+            $("#meta-voting #search_data_widget").val('like');
+        }else if(ranking_type === 'binary')
+        {
+            $("#meta-voting #search_data_widget").val('binary');
+        }
     }
 
     function define_voting_widget(ranking_type) {
@@ -2421,6 +2446,7 @@
     }
 
     function toggle_range_submit(el) {
+        console.log("Olá");
         ($(el).val() == "range") ? $("#range_submit").fadeIn() : $("#range_submit").fadeOut();
     }
 
@@ -2730,6 +2756,7 @@
             data: {
                 collection_id: $('#collection_id').val(),
                 operation: 'alter_fixed_property_collection',
+                help_text: $("#modal_edit_fixed_property #socialdb_property_data_help").val(),
                 property_id: $('#property_fixed_id').val(),
                 tab: $('#socialdb_event_property_tab_fixed').val(),
                 property_fixed_name: $('#modal_edit_fixed_property #property_fixed_name').val(),
@@ -2784,6 +2811,14 @@
                 $('#container_mask_field').show();
             }else{
                 $('#container_mask_field').hide();
+            }
+
+            if(elem.socialdb_property_help)
+            {
+                $("#modal_edit_fixed_property #socialdb_property_data_help").val(elem.socialdb_property_help);
+            }else
+            {
+                $("#modal_edit_fixed_property #socialdb_property_data_help").val('');
             }
 
         });

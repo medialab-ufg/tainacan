@@ -9,7 +9,7 @@ global $config;
 
         <div class="categories_menu">
             <div class="col-md-4">
-                <div id="categories_dynatree" style='height: 550px; overflow: scroll;' >
+                <div id="categories_dynatree" style='height: 550px; overflow: scroll;'>
                 </div>
                 <!--center><button onclick="add_facets()" class="btn btn-primary"><?php _e('Add selected categories as facets', 'tainacan'); ?></button></center-->
 
@@ -150,12 +150,14 @@ global $config;
                     <h4 class="modal-title" id="myModalLabel"><span class="glyphicon glyphicon-trash"></span>&nbsp;<?php echo __('Remove Category', 'tainacan'); ?></h4>
                 </div>
                 <div class="modal-body">
-                    <?php echo __('Confirm the exclusion of ', 'tainacan'); ?>: <span id="delete_category_name"></span>?
-                    <p>
-                        <?php
-                            _e("Case category is root so all your children will become root categories too.", "tainacan");
-                        ?>
-                    </p>
+                    <div id="modalBodyText">
+                        <?php echo __('Confirm the exclusion of ', 'tainacan'); ?>: <span id="delete_category_name"></span>?
+                        <p>
+                            <?php
+                                _e("Case category is root so all your children will become root categories too.", "tainacan");
+                            ?>
+                        </p>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal"><?php echo __('No', 'tainacan'); ?></button>

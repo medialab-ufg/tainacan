@@ -32,7 +32,7 @@ class FormItemCompound extends FormItemMultiple {
         $this->numericClass = new NumericClass($collection_id,'',$value);
         $this->autoincrementClass = new AutoIncrementClass($collection_id,'',$value);
         $this->selectboxClass = new SelectboxClass($collection_id,'',$value);
-        $this->simpleTreeClass = new SimpleTreeClass($collection_id,'',$value);
+        $this->simpleTreeClass = new SimpleTreeMultipleClass($collection_id,'',$value);
         $this->radioClass = new RadioClass($collection_id,'',$value);
         $this->checkboxClass = new CheckboxClass($collection_id,'',$value);
         $this->multipleTreeClass = new MultipleTreeClass($collection_id,'',$value);
@@ -56,9 +56,17 @@ class FormItemCompound extends FormItemMultiple {
                 endif;
                 ?>
                 <?php if ($isRequired && $property['metas']['socialdb_property_required'] == 'true'): ?>
+	                <?php
+	                $help_text = get_term_meta($property['id'], 'socialdb_property_help', true);
+	                $property['metas']['socialdb_property_help'] = $help_text;
+	                $this->hasTextHelper($property);
+	                ?>
                     *
                     <span id="AllFieldsShouldBeFilled<?php echo $property['id']; ?>"></span>
                 <?php elseif ($isRequired && $property['metas']['socialdb_property_required'] === 'true_one_field'): ?>
+	                <?php
+	                add_helpText($property, $this);
+	                ?>
                     (*)
                     <input 
                         type="hidden" 

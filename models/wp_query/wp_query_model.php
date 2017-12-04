@@ -537,7 +537,10 @@ class WPQueryModel extends Model {
             $array_defaults = ['socialdb_object_from','socialdb_object_dc_type','socialdb_object_dc_source','title','socialdb_license_id','comment_count'];
             if ($orderby == 'meta_value_num') {
                 $meta_key = 'socialdb_property_' . trim($recover_data['ordenation_id']);
-                $orderby = 'socialdb_property_' . trim($recover_data['ordenation_id']);
+                $type = get_term_meta($recover_data['ordenation_id'], 'socialdb_property_data_widget', true);
+                if( $type !== 'numeric' ){
+                    $orderby = 'socialdb_property_' . trim($recover_data['ordenation_id']);
+                }
             } elseif(in_array($orderby, $array_defaults)) {
                  $meta_key = $orderby;
             } else {
@@ -710,21 +713,18 @@ class WPQueryModel extends Model {
         $defaults = false;
         $array_defaults = ['socialdb_object_from','socialdb_object_dc_type','socialdb_object_dc_source','title','socialdb_license_id'];
 
-        if (isset($data['ordenation_id']))
-        {
+        if (isset($data['ordenation_id'])){
             $property = get_term_by('id', $data['ordenation_id'], 'socialdb_property_type');
         } else {
             $property = false;
         }
 
         if((isset($data['ordenation_id'])&&in_array($data['ordenation_id'], $array_defaults))||
-               (isset($data['orderby'])&& in_array($data['orderby'], $array_defaults)))
-        {
+               (isset($data['orderby'])&& in_array($data['orderby'], $array_defaults))){
             $defaults = true;
         }
 
-        if ($property && $property->slug != 'socialdb_ordenation_recent')
-        {
+        if ($property && $property->slug != 'socialdb_ordenation_recent'){
             return 'meta_value_num';
         }elseif($defaults){
             if(isset($data['ordenation_id'])){

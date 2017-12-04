@@ -28,6 +28,8 @@
                     ?>
                 </div>
             </div><!-- .widget-area -->
+
+            <!--Tainacan version: 0.6-->
         </footer>
     <?php endif; ?>
 

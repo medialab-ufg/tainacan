@@ -26,8 +26,13 @@ class YoutubeController extends Controller {
                     $id = socialdb_insert_object($title,'','draft');
                     if($id):
                         update_post_meta($id, 'socialdb_object_content', $data['video_url']);
-                        if (strpos($data['video_url'], 'youtube.com') !== false) {
+                        if (strpos($data['video_url'], 'youtube.com') !== false || strpos($data['video_url'], 'youtu.be') !== false) {
                             parse_str(parse_url($data['video_url'], PHP_URL_QUERY), $vars);
+                            if(empty($vars))
+                            {
+                            	$vars = ['v' => end(explode('/', $data['video_url']))];
+                            }
+
                             $object_model->add_thumbnail_url('https://i.ytimg.com/vi/' . $vars['v'] . '/0.jpg', $id);
                             update_post_meta($id, 'socialdb_object_dc_type', 'video');
                         }
@@ -36,9 +41,16 @@ class YoutubeController extends Controller {
                         return false;
                     endif;
                 }
+
+	            if(strpos($data['video_url'], 'youtu.be') !== false)
+	            {
+		            $data['video_url'] = 'https://www.youtube.com/watch?v='.end(explode('/', $data['video_url']));
+	            }
+
                 $urlVideoYoutube = explode('/', $data['video_url']);
-                $videoID = explode('=', $urlVideoYoutube[3]);
-                if ($videoID[1]&&$config) {
+	            $videoID = explode('=', $urlVideoYoutube[3]);
+
+                if ($videoID[1] && $config) {
                     $youtube = new youtubeModel($videoID[1], $config, false, true);
                     $object_model = new ObjectModel();
                     $id = $youtube->insertVideoItem($data, $object_model,'draft');

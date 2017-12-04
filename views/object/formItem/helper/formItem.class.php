@@ -108,6 +108,8 @@ class FormItem extends Model {
                        </div>
                    </div>
                 </div>
+
+                <!-- Add title, text and attachements -->
                 <div class="col-md-9">
                     <?php
 
@@ -364,11 +366,13 @@ class FormItem extends Model {
                         continue;
                     }
                 }
-                if (in_array($property['slug'], $this->fixed_slugs)) {
+                if (in_array($property['slug'], $this->fixed_slugs))
+                {
                     $visibility = (get_term_meta($property['id'],'socialdb_property_visibility',true));
                     if($visibility == 'hide' || in_array($property['id'], $this->collectionPropertiesView)){
                         continue;
                     }
+
                     if ($property['slug'] == 'socialdb_property_fixed_title' && !$this->isMediaFocus) {
                         $class = new FormItemTitle($this->collection_id);
                         $class->widget($property, $this->itemId);
@@ -401,6 +405,7 @@ class FormItem extends Model {
                     if(in_array($property['id'], $this->collectionPropertiesView)){
                         continue;
                     }
+
                     $data = ['text', 'textarea', 'date', 'number', 'numeric', 'auto-increment', 'user'];
                     $term = ['selectbox', 'radio', 'checkbox', 'tree', 'tree_checkbox', 'multipleselect'];
                     $object = (isset($property['metas']['socialdb_property_object_category_id']) && !empty($property['metas']['socialdb_property_object_category_id'])) ? true : false;
@@ -638,6 +643,10 @@ class FormItem extends Model {
     }
 
     public function hasTextHelper($property){
+	    if(has_action('change_meta_info_icon'))
+	    {
+		    do_action('change_meta_info_icon', $property);
+	    }else
         if($property['metas'] &&$property['metas']['socialdb_property_help']&&!empty(trim($property['metas']['socialdb_property_help']))){
             ?>
              <span     title="<?php echo $property['metas']['socialdb_property_help'] ?>"
@@ -762,7 +771,6 @@ class FormItem extends Model {
         ?>
         <script>
             $('input[type="text"], input[type="numeric"], input[type="date"], input[type="radio"] , select').focus(function(event){
-                console.log(event);
                 showChangesUpdate();
             });
 
@@ -899,7 +907,7 @@ class FormItem extends Model {
              * @returns {undefined}
              */
             function getPropertyTab(id){
-                var tab = ''
+                var tab = '';
                 if($('#tabs_item').length){
                     $('#tabs_item li').each(function(){
                         var key = $(this).attr('key');

@@ -31,8 +31,9 @@ class CategoryModel extends Model {
      * 
      * Autor: Eduardo Humberto 
      */
-    public function add($data) {
+    public function  add($data) {
         $is_new = $this->verify_category($data);
+
         if (!$is_new) {
             if ($data['category_parent_id'] == '0' ||
                     $data['category_parent_id'] == 'public_categories' || 
@@ -320,13 +321,18 @@ class CategoryModel extends Model {
     /* Author: Eduardo */
 
     public function initCategoriesDynatree($data) {
+    	if(strcmp($data['hideCheckbox'], "true") === 0)
+	    {
+	    	$hideCheckbox = true;
+	    }else $hideCheckbox = false;
+
         $dynatree = [];
-        $dynatree = $this->generate_user_categories_dynatree($data, $dynatree, true, true);
+        $dynatree = $this->generate_user_categories_dynatree($data, $dynatree, $hideCheckbox, true);
         //if(has_nav_menu('menu-ibram')){
-            $dynatree = $this->generate_collection_categories_dynatree($data, $dynatree, true, false);  
+            $dynatree = $this->generate_collection_categories_dynatree($data, $dynatree, $hideCheckbox, false);
         //}
-        $dynatree = $this->generate_shared_categories_dynatree($data, $dynatree, true);
-        $dynatree = $this->generate_public_categories_dynatree($data, $dynatree, true);
+        $dynatree = $this->generate_shared_categories_dynatree($data, $dynatree, $hideCheckbox);
+        $dynatree = $this->generate_public_categories_dynatree($data, $dynatree, $hideCheckbox);
         return json_encode($dynatree);
     }
 

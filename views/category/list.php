@@ -22,13 +22,13 @@ global $config;
 
         <div id="alert_success_categories" class="alert alert-success" style="display: none;">
             <button type="button" class="close" onclick="hide_alert();"><span aria-hidden="true">&times;</span></button>
-            <?php _e('Operation was successful.', 'tainacan') ?>
+            <?php _e('Operation was successful', 'tainacan') ?>
         </div>
 
         <div id="alert_error_categories" class="alert alert-danger" style="display: none;">
             <button type="button" class="close" onclick="hide_alert();"><span aria-hidden="true">&times;</span></button>
             <span id="default_message_error">
-                <?php _e('Error! Operation was unsuccessful.', 'tainacan') ?>
+                <?php _e('Error! Operation was unsuccessful', 'tainacan') ?>
             </span>&nbsp;
             <span id="message_category"></span>
         </div>    
@@ -36,7 +36,7 @@ global $config;
 </div>
 <div class="categories_menu">
     <div class="col-md-4">
-        <div id="categories_dynatree" style='height: 400px;overflow: scroll;' >
+        <div id="categories_dynatree" style='height: 400px;overflow: scroll;'>
         </div>
         <!--center><button onclick="add_facets()" class="btn btn-primary"><?php _e('Add selected categories as facets', 'tainacan'); ?></button></center-->
 

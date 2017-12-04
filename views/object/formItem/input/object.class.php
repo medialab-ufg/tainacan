@@ -244,7 +244,7 @@ class ObjectClass extends FormItem {
                                     }
                                     $('#results_property_<?php echo $compound_id; ?>_<?php echo $propert_id; ?>_<?php echo $index_id; ?> ul')
                                             .append('<li id="inserted_property_object<?php echo $compound_id; ?>_<?php echo $propert_id; ?>_<?php echo $index_id; ?>_' + ui.item.value + '" item="' + ui.item.value + '" class="selected-items-property-object property-<?php echo $compound_id; ?>_<?php echo $propert_id; ?>_<?php echo $index_id; ?>">' + ui.item.label
-                                                    + '<span  onclick="remove_item_objet(this)" style="cursor:pointer;" class="pull-right glyphicon glyphicon-trash"></span></li>');
+                                                    + '<span  onclick="original_remove_in_item_value_compound_<?php echo $compound_id ?>_<?php echo $propert_id; ?>_<?php echo $index_id; ?>(\'<?php echo $index_id; ?>\',this)" style="cursor:pointer;" class="pull-right glyphicon glyphicon-trash"></span></li>');
                                     //validacao do campo
                                     original_add_in_item_value_compound_<?php echo $compound_id ?>_<?php echo $propert_id; ?>_<?php echo $index_id; ?>(ui.item.value);
                                 }
@@ -291,6 +291,7 @@ class ObjectClass extends FormItem {
                             type: 'object',
                             <?php if ($propert_id !== 0 && !$isMultiple) echo 'indexCoumpound:0,' ?>
                             value: id,
+                            collection_id: $("#collection_id").val(),
                             item_id: '<?php echo $item_id ?>',
                             compound_id: '<?php echo $compound_id ?>',
                             property_children_id: '<?php echo $propert_id ?>',
@@ -305,6 +306,7 @@ class ObjectClass extends FormItem {
                         type: 'object',
                         <?php if ($propert_id !== 0 && !$isMultiple) echo 'indexCoumpound:0,' ?>
                         value: id,
+                        collection_id: $("#collection_id").val(),
                         item_id: '<?php echo $item_id ?>',
                         compound_id: '<?php echo $compound_id ?>',
                         property_children_id: '<?php echo $propert_id ?>',
@@ -335,6 +337,7 @@ class ObjectClass extends FormItem {
                             <?php if ($propert_id !== 0 && !$isMultiple) echo 'indexCoumpound:0,' ?>
                             value: id,
                             item_id: '<?php echo $item_id ?>',
+                            collection_id: $("#collection_id").val(),
                             compound_id: '<?php echo $compound_id ?>',
                             property_children_id: '<?php echo $propert_id ?>',
                             index: <?php echo $index_id ?>,
@@ -350,6 +353,7 @@ class ObjectClass extends FormItem {
                         value: id,
                         item_id: '<?php echo $item_id ?>',
                         compound_id: '<?php echo $compound_id ?>',
+                        collection_id: $("#collection_id").val(),
                         property_children_id: '<?php echo $propert_id ?>',
                         index: <?php echo $index_id ?>,
                         reverse: $('#reverse_<?php echo $compound_id ?>_<?php echo $propert_id; ?>_<?php echo $index_id; ?>').val()
@@ -1038,7 +1042,7 @@ class ObjectClass extends FormItem {
             <?php endif; ?>  
             <input type="hidden" name="operation" value="searchItemFormItem">        
             <div class="col-md-12 no-padding" style="margin-top: 15px;">
-                <button type="button" onclick="clear_all_field('<?php echo $form ?>')" class="btn btn-lg btn-default pull-left"><?php _e('Clear search', 'tainacan') ?></button>
+                <button type="button" onclick="clear_all_field('#property_object_search_submit_<?php echo $this->compound_id ?>_<?php echo $this->property_id ?>_<?php echo $this->index_id ?>')" class="btn btn-lg btn-default pull-left"><?php _e('Clear search', 'tainacan') ?></button>
                 <button type="submit"  class="btn btn-lg btn-success pull-right"><?php _e('Find', 'tainacan') ?></button>
             </div>
         </form>            

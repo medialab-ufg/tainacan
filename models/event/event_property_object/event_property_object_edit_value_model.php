@@ -119,6 +119,11 @@ class EventPropertyObjectEditValue extends EventModel {
         $dados = json_decode($property_model->edit_property(array('property_id' => $property)));
         $relations = get_post_meta($event_id, 'socialdb_event_property_object_edit_value_suggested_value', true);
         $all_metas = get_post_meta($object_id,'socialdb_property_'.$property);
+	    $indexCompound = get_post_meta($event_id, 'socialdb_event_property_object_edit_value_index_compound',true);
+	    if(!$indexCompound || strcmp($indexCompound, 'false') === 0)
+	    {
+		    $indexCompound = false;
+	    }
 
         //verificando se atualiza ou adiciona o meta da propriedade no objeto
         if (!isset($data['delete_all_values']) || ($data['delete_all_values'] != 'true')) {
@@ -131,7 +136,7 @@ class EventPropertyObjectEditValue extends EventModel {
                             'object',
                             0,
                             $relation_id,
-                            false
+                            $indexCompound
                         );
                     }
                 }

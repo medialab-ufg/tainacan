@@ -410,7 +410,7 @@ while (have_posts()) : the_post();
     <!-- Fim do conteudo principal da pagina (div main part) -->
 
     <!-- TAINACAN: esta div é mostrada quando é clicado com o botao direito sobre categorias e tags no dynatree  -->
-    <?php do_action('insert_new_contextmenu_dynatree') ?>
+    <?php do_action('insert_new_contextmenu_dynatree'); ?>
 
     <ul id="myMenuSingle" class="contextMenu" style="display:none; position: fixed">
         <?php if (!$visualization_page_category || $visualization_page_category === 'right_button'): ?>

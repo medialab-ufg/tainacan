@@ -109,7 +109,7 @@ include_once ( dirname(__FILE__) . '/../../views/theme_options/js/edit_tools_js.
             <div id="aba-reindexacao" class="tab-pane fade">
                 <h4 style="padding: 10px 0 0 15px"><?php _e('Reindexation', 'tainacan'); ?></h4>
                 <hr>
-                <?php _e('Choose what will be reindexed:');?>
+                <?php _e('Choose what will be reindexed:', 'tainacan');?>
                 <br><br>
                 <!-- Reindex options -->
                 <form id="reindexation_form">

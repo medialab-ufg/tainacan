@@ -2692,14 +2692,19 @@ class Model {
      */
     public function extract_metatags($url) {
         $tags = getUrlData($url);
-        if(!$tags)
-            return false;
+        if(!$tags){
+            $array['name_field'] = 'title';
+            $array['value'] = __('Empty title','tainacan');
+            $data['metadatas'][] = $array;
+            return $data['metadatas'];
+        }
         
         if($tags['title']):
             $array['name_field'] = 'title';
             $array['value'] = $tags['title'];
             $data['metadatas'][] = $array;
         endif;
+
         //metatags
         if($tags['metaTags'] &&  is_array($tags['metaTags'])):
             foreach ($tags['metaTags'] as $key => $value) {// percorro todos os dados

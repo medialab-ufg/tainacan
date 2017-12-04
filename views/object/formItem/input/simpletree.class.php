@@ -2,7 +2,7 @@
 
 class SimpleTreeClass extends FormItem {
     var $hasDefaultValue;
-    public function generate($compound, $property, $item_id, $index_id) {
+    public function generate($compound, $property, $item_id, $index_id, $is_modal = false) {
         $compound_id = $compound['id'];
         $property_id = $property['id'];
         if ($property_id == 0) {
@@ -27,6 +27,11 @@ class SimpleTreeClass extends FormItem {
         if($isView){
             return true;
         }
+
+	    if($is_modal)
+	    {
+		    $complemento = '-'.$property['metas']['socialdb_property_term_root'];
+	    }else $complemento = '';
         ?>
         <?php if ($this->isRequired): ?>
             <div class="form-group"
@@ -36,7 +41,7 @@ class SimpleTreeClass extends FormItem {
             <div class="row">
                 <div style='height: 150px;'
                      class='col-lg-12'
-                     id='simple-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>'>
+                     id='simple-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?><?php echo $complemento?>'>
                 </div>
             </div>
             <?php if ($this->isRequired): ?>
@@ -59,8 +64,11 @@ class SimpleTreeClass extends FormItem {
                 class="compound-one-field-should-be-filled-<?php echo $compound['id'] ?>"
                 value="<?php echo ($autoValidate) ? 'true' : 'false' ?>">
         <?php endif;
+
         if ($property['has_children'] && is_array($property['has_children']))
-            $this->initScriptsSimpleTreeClass($compound_id, $property_id, $item_id, $index_id, $property['has_children']);
+        {
+            $this->initScriptsSimpleTreeClass($compound_id, $property_id, $item_id, $index_id, $property['has_children'], $is_modal, $property['metas']['socialdb_property_term_root']);
+        }
     }
 
     /**
@@ -69,11 +77,17 @@ class SimpleTreeClass extends FormItem {
      * @param type $item_id
      * @param type $index
      */
-    public function initScriptsSimpleTreeClass($compound_id, $property_id, $item_id, $index_id, $children) {
+    public function initScriptsSimpleTreeClass($compound_id, $property_id, $item_id, $index_id, $children, $is_modal = false, $complemento = 0) {
         ?>
         <script>
             $(document).ready(function () {
-                $("#simple-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>").dynatree({
+                var is_modal = <?= $is_modal? true : 0 ?>, complemento = '';
+                if(is_modal)
+                {
+                    complemento = "-"+<?php echo $complemento; ?>;
+                }
+
+                $("#simple-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>"+complemento).dynatree({
                     checkbox: true,
                     // Override class name for checkbox icon:
                     classNames: {checkbox: "dynatree-radio"},
@@ -93,7 +107,15 @@ class SimpleTreeClass extends FormItem {
                         });
                     },
                     onSelect: function (flag, node) {
-                        if (node.bSelected) {
+                        if(is_modal)
+                        {
+                            if(node.bSelected)
+                            {
+                                $("#category_single_parent_name").val(node.data.title);
+                                $("#category_single_parent_id").val(node.data.key);
+                            }
+                        }
+                        else if (node.bSelected) {
                             if($('#AllFieldsShouldBeFilled'+<?php echo $compound_id ?>).length === 0) {
                                 $.ajax({
                                     url: $('#src').val() + '/controllers/object/form_item_controller.php',
@@ -102,6 +124,7 @@ class SimpleTreeClass extends FormItem {
                                         operation: 'saveValue',
                                         type: 'term',
                                         value: node.data.key,
+                                        collection_id: $("#collection_id").val(),
                                         item_id: '<?php echo $item_id ?>',
                                         compound_id: '<?php echo $compound_id ?>',
                                         property_children_id: '<?php echo $property_id ?>',
@@ -115,6 +138,7 @@ class SimpleTreeClass extends FormItem {
                                     operation: 'saveValue',
                                     type: 'term',
                                     value: node.data.key,
+                                    collection_id: $("#collection_id").val(),
                                     item_id: '<?php echo $item_id ?>',
                                     compound_id: '<?php echo $compound_id ?>',
                                     property_children_id: '<?php echo $property_id ?>',

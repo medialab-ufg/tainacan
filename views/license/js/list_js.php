@@ -99,7 +99,14 @@
         });// fim da inclusão 
     }
 
-    function changeStandartLicense(form, id) {
+    function changeStandartLicense(form, id)
+    {
+        if($('#checkbox' + id + ':checked').length == 0 && form != 'CalleByFunction')
+        {
+            $('#checkbox' + id).prop("checked", true);
+            changeEnabledLicense('CalledByFunction', id);
+        }
+
         $.ajax({
             url: src + '/controllers/license/license_controller.php',
             type: 'POST',
@@ -110,6 +117,7 @@
                     if (elem.uncheck) {
                         $('#radio' + id).prop('checked', false);
                     }
+
                     showAlertGeneral(elem.title, elem.msg, elem.type);
                 } // caso o controller retorne false
             }
@@ -117,6 +125,15 @@
     }
 
     function changeEnabledLicense(form, id) {
+        if($('td #radio' + id + ':checked').length == 1)
+        {
+            changeStandartLicense("CalleByFunction", id);
+            if(form != 'CalledByFunction')
+            {
+                $('td #radio' + id).prop("checked", false);
+            }
+        }
+
         $.ajax({
             url: src + '/controllers/license/license_controller.php',
             type: 'POST',

@@ -466,6 +466,7 @@
             // The event was bound to the <span> tag, but the node object
             // is stored in the parent <li> tag
             var node = $.ui.dynatree.getNode(el);
+
             switch (action) {
                 case "see":
                     var src = $('#src').val();
@@ -819,6 +820,7 @@
             }
 
             setMenuContainerHeight();
+            $('.col-items-per-page').val(elem.items_per_page);
         });
     }
 
@@ -1040,7 +1042,7 @@
             if (temp_list_mode) {
                 changeViewMode(temp_list_mode);
             }
-
+            $('.col-items-per-page').val(elem.items_per_page);
             setMenuContainerHeight();
         });
     }
@@ -1067,6 +1069,7 @@
             }
 
             setMenuContainerHeight();
+            $('.col-items-per-page').val(elem.items_per_page);
         });
     }
 
@@ -1612,13 +1615,13 @@
 
     function importAll_verify() {
         var inputImportAll = $('#item_url_import_all').val().trim();
-
         if (inputImportAll) {
             var youtube_url = validateYouTubeUrl();
             if (youtube_url) {
                 // É uma URL de um vídeo do youtube. Executar a importação do vídeo.
                 import_youtube_video_url();
-            } else {
+            }
+            else {
                 var youtube_channel_url = validateYouTubeChannelUrl();
                 if (youtube_channel_url) {
                     // É uma URL de um canal do youtube. Executar a importação dos vídeos de canal.
@@ -1654,7 +1657,8 @@
                                     import_flickr(flickr_url);
                                 }
                                 else {
-                                    var facebook_url = validateFacebookUrl();
+                                    //var facebook_url = validateFacebookUrl();
+                                    var facebook_url = false;
                                     if (facebook_url) {
                                         // É uma URL do Facebook. Executar a importação dos itens do usuário.
                                     }
@@ -1939,7 +1943,7 @@
                             $("#sites_import_icon").addClass("grayscale");
                         }
                         else {
-                            var instagram_url = validateInstagramUrl();
+                            var instagram_url = false;
                             if (instagram_url) {
                                 // É uma URL do instagram.
                                 $("#btn_import_fb").css('display', 'none');
@@ -1980,7 +1984,7 @@
                                         $("#sites_import_icon").addClass("grayscale");
                                     }
                                     else {
-                                        var facebook_url = validateFacebookUrl();
+                                        var facebook_url = false;
                                         if (facebook_url) {
                                             $("#btn_import_fb").css('display', 'block');
                                             $("#btn_import_allrest").css('display', 'none');
@@ -2082,7 +2086,7 @@
     // faz a importacao do tipo texto e joga para a tela de multiplos
     function import_text(url) {
         var key = $('#socialdb_embed_api_id').val();
-        var ajaxurl = 'http://api.embed.ly/1/oembed?key=:' + key + '&url=' + url;
+        var ajaxurl = 'http://api.embed.ly/1/oembed?key=:' + key + '&url=' + url.replace('www.','');
         //div loader
         if (key == '') {
             import_text_alternative(url);
@@ -2124,8 +2128,10 @@
                         collection_id: $("#collection_id").val(),
                         description: description,
                         thumbnail_url: img,
-                        type: 'text',
+                       // type: 'text',
+                        type: 'other',
                         url: url,
+                        content: url,
                         title: title}
                 }).done(function (result) {
                     var json = JSON.parse(result);
@@ -2183,8 +2189,9 @@
                     collection_id: $("#collection_id").val(),
                     description: description,
                     thumbnail_url: img,
-                    type: 'text',
+                    type: 'other',
                     url: url,
+                    content: url,
                     title: title}
             }).done(function (result) {
                 var json = JSON.parse(result);

@@ -45,16 +45,33 @@ $_showH = ("disabled" === $_en_header) ? false : true ;
                     <div id="thumb-idea-form" class="form-group enablelize" style="<?php echo ($_showH) ? '' : 'display:none'; ?>">
                         <div>
                             <label for="collection_thumbnail"> <?php _e('Collection thumbnail', 'tainacan'); ?> </label>
-                            <?php if($collection_thumb_id): ?>
+                            <?php
+                                $style = "display: block";
+                                if($collection_thumb_id):
+                                    $style = 'display: none'
+                            ?>
+                                <div id="thumbImg">
                                 <img src="<?php echo $thumb_url ?>"
-                                     alt="<?php _t("Collection thumbnail"); ?>" title="<?php _t("Collection thumbnail"); ?>" />
-                                <label for="remove_thumbnail"><?php _e('Remove Thumbnail', 'tainacan'); ?></label> &nbsp;
-                                <input type="checkbox"  id="remove_thumbnail" name="remove_thumbnail" value="true">
+                                     alt="<?php _t("Collection thumbnail"); ?>" title="<?php _t("Collection thumbnail"); ?>" class="img-thumbnail"/>
+                                </div>
+                                <button type="button" id="removeThumbnail" class="btn btn-danger"
+                                        data-loading-text="<?php _e("Removing", "tainacan"); ?>">
+
+                                    <span id="removing" class="glyphicon glyphicon-refresh" aria-hidden="true" style="display: none;"></span>
+                                    <span id="remove" class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                                    <span id="removeText">
+                                        <?php _e("Remove thumbnail", "tainacan"); ?>
+                                    </span>
+
+                                </button>
+
+                                <a id='showEditThumbnail'href="javascript:void(0)" onclick="show_edit_thumbnail()" class="btn btn-default"> <?php _e('Edit thumbnail', 'tainacan'); ?>  </a>
                             <?php endif; ?>
-                        </div>
-                        <div class="crop-wrapper">
-                            <p><?php _e("Image aspect ratio", "tainacan"); ?>  <strong>1:1</strong></p>
-                            <div id="collection_crop_thumb"></div>
+
+                            <div id="imageEditor" class="crop-wrapper" style="<?php echo $style; ?>">
+                                <p><?php _e("Image aspect ratio", "tainacan"); ?>  <strong>1:1</strong></p>
+                                <div id="collection_crop_thumb"></div>
+                            </div>
                         </div>
                     </div>
 
@@ -62,16 +79,25 @@ $_showH = ("disabled" === $_en_header) ? false : true ;
                         <?php if ($image_cover_url) { ?>
                             <hr />
                             <label for="socialdb_collection_cover"><?php _e('Collection cover', 'tainacan'); ?></label> <br />
-                            <img src="<?= $image_cover_url ?>" style='max-height:190px;' />
-                            <br /><br />
-                            <label for="remove_cover"><?php _e('Remove Cover', 'tainacan'); ?></label>
-                            <input type="checkbox"  id="remove_cover" name="remove_cover" value="true">
-                            &nbsp;&nbsp;&nbsp;
-                            <a href="javascript:void(0)" onclick="show_edit_cover()" class="btn btn-default"> <?php _e('Edit Cover', 'tainacan'); ?>  </a>
-                            <br /><br />
+                            <div id="coverImg" style="margin-top: 10px; margin-bottom: 10px;">
+                                <img src="<?= $image_cover_url ?>" style='max-height:190px;' class="img-thumbnail" />
+                            </div>
+
+                            <button type="button" id="removeCover" class="btn btn-danger"
+                                    data-loading-text="<?php _e("Removing", "tainacan"); ?>">
+
+                                <span id="removingCover" class="glyphicon glyphicon-refresh" aria-hidden="true" style="display: none;"></span>
+                                <span id="removeCover" class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                                <span id="removeTextCover">
+                                        <?php _e("Remove cover", "tainacan"); ?>
+                                    </span>
+
+                            </button>
+
+                            <a id='showEditCover'href="javascript:void(0)" onclick="show_edit_cover()" class="btn btn-default"> <?php _e('Edit Cover', 'tainacan'); ?>  </a>
                         <?php } ?>
 
-                        <div id="edit_cover_container" <?php echo ($image_cover_url) ? 'class="hideCropBox"' : ''; ?>>
+                        <div id="edit_cover_container" <?php echo ($image_cover_url) ? 'class="hideCropBox"' : ''; ?> style="margin-top: 5px;">
                             <label for="collection_cover_img_id"> <?php _e('Select Collection Cover', 'tainacan'); ?> </label>
                             <a href="javascript:void(0)" data-toggle="tooltip" title="<?php _e('After positioning the image cover as wished, click the green button to crop it.', 'tainacan'); ?>
                         (<?php _t('Minimum width recommended: 1920px',1) ?>)">

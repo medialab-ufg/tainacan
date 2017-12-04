@@ -27,7 +27,7 @@ $_trim_desc = $_object_description;
 
                 <div class="colFoto no-padding img-thumbnail">
                     <?php if(empty($trash_list)): ?>
-                        <a href="<?php echo $itemURL; ?>">
+                        <a target="_blank" href="<?php echo $itemURL; ?>">
                             <?php echo get_item_thumb_image($curr_id); ?>
                         </a>
                     <?php elseif ($trash_list): echo get_item_thumb_image($curr_id); endif; ?>
@@ -39,7 +39,7 @@ $_trim_desc = $_object_description;
                         <h4 class="item-display-title">
                             <?php if(empty($trash_list)): ?>
                                 <?php /* <a href="<?php echo get_collection_item_href($collection_id, $curr_id, $viewHelper); ?>" onclick="<?php get_item_click_event($collection_id, $curr_id) ?>">  */ ?>
-                                <a href="<?php echo $itemURL; ?>">
+                                <a target="_blank"  href="<?php echo $itemURL; ?>">
                                     <?php echo $item_title; ?>
                                 </a>
                             <?php elseif ($trash_list): echo $item_title; endif; ?>
@@ -59,7 +59,7 @@ $_trim_desc = $_object_description;
                                 </div>
                             </div>
                         </div>
-                        <?php if (get_option('collection_root_id') != $collection_id): ?>
+                        <?php //if (get_option('collection_root_id') != $collection_id): ?>
                             <button id="show_rankings_<?php echo $curr_id ?>" class="cards-ranking"> </button>
 
                             <div class="editing-item">
@@ -96,7 +96,7 @@ $_trim_desc = $_object_description;
 
                             </div> <!--.editing-item -->
 
-                        <?php endif; ?>
+                        <?php //endif; ?>
 
                         <!-- TAINACAN: container(AJAX) que mostra o html com as classificacoes do objeto -->
                         <div id="classifications_<?php echo $curr_id ?>" class="class-meta-box"></div>

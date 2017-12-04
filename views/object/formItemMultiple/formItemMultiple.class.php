@@ -94,7 +94,7 @@ class FormItemMultiple extends Model {
         $this->collection_id = $properties_raw['collection_id'];
         ?>
         <input type="hidden" id="item-multiple-selected">
-        <div id='form_properties_items' class="col-md-3 menu_left_files menu-left-size">
+        <div id='form_properties_items' style="min-height: 724px;" class="col-md-3 menu_left_files menu-left-size">
             <h3 style="display:none;" id='labels_items_selected' >
                 <?php _e('Editting ','tainacan') ?>
                 <span id='number_of_items_selected'></span>
@@ -125,7 +125,8 @@ class FormItemMultiple extends Model {
         <div class='col-md-9' id="no_item_uploaded" style='display:none;'>
             <h3 style="text-align: center;"><?php _e('No items uploaded','tainacan') ?></h3>
         </div>
-        <div class='col-md-9 pull-right' 
+        <div class='col-md-9 pull-right'
+             id="all_types_items"
              style="background-color: white;border: 3px solid #E8E8E8;margin-left: 15px;">
             <?php if($this->operation !== 'add-files'): ?>
             <h3>
@@ -299,6 +300,10 @@ class FormItemMultiple extends Model {
     }
     
     public function hasTextHelper($property){
+        if(has_action('change_meta_info_icon'))
+	    {
+		    do_action('change_meta_info_icon', $property);
+	    }else
         if($property['metas'] &&$property['metas']['socialdb_property_help']&&!empty(trim($property['metas']['socialdb_property_help']))){
             ?>
              <span     title="<?php echo $property['metas']['socialdb_property_help'] ?>" 
@@ -659,6 +664,20 @@ class FormItemMultiple extends Model {
                     $('#form_properties_items').find(".expand-all-link").html('Retrair todos <span class="caret"></span>');
                 }
             }
+
+            /**
+            *
+             * @param {type} val
+             * @param {type} compound_id
+             * @param {type} property_id
+             * @param {type} index_id
+             * @returns {undefined}             */
+            function validateFieldsMetadataText(val,compound_id,property_id,index_id){
+                //TODO: validate all items
+            }
+            Hook.register('validateFieldsMetadataText',function(args){
+              //TODO: validate all items
+            });
           </script>
         <?php
     }    

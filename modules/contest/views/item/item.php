@@ -2,14 +2,35 @@
 <?php require_once(dirname(__FILE__).'../../../helpers/view_helper.php'); ?>
 <?php $post = get_post($collection_id); ?>
 <?php $ranking = (get_post_meta($collection_id, 'socialdb_collection_ranking_default_id', true)) ? get_post_meta($collection_id, 'socialdb_collection_ranking_default_id', true) : get_term_by('name', __('In favor / Against', 'tainacan'),'socialdb_property_type')->term_id; ?>
-<?php $view_helper = new ViewHelper; ?>
+<?php $view_helper = new ViewHelperContest; ?>
 <?php 
     $temp = $object;
     while($temp->post_parent!==0){
         $temp = get_post($temp->post_parent);
         $parents[] = $temp;
     }
-?>   
+    $_special_configs = [
+        'info_messages' => ( (isset($_GET['info_messages'])) ? trim($_GET['info_messages']) : ''),
+        'item' => ( (isset($_GET['item'])) ? trim($_GET['item']) : ''),
+        'category' => ( (isset($_GET['category'])) ? trim($_GET['category']) : ''),
+        'property' => ( (isset($_GET['property'])) ? trim($_GET['property']) : ''),
+        'tag' => ( (isset($_GET['tag'])) ? trim($_GET['tag']) : ''),
+        'tax' => ( (isset($_GET['tax'])) ? trim($_GET['tax']) : '')
+    ];
+?>
+
+<input type="hidden" id="info_messages" name="info_messages" value="<?php echo $_special_configs['info_messages']; ?>" />
+<!-- PAGINA DA CATEGORIA -->
+<input type="hidden" id="category_page" name="category_page" value="<?php echo $_special_configs['category']; ?>" />
+<!-- PAGINA DA PROPRIEDADE -->
+<input type="hidden" id="property_page" name="property_page" value="<?php echo $_special_configs['property']; ?>" />
+<!-- PAGINA DA TAG -->
+<input type="hidden" id="tag_page" name="tag_page" value="<?php echo $_special_configs['tag']; ?>" />
+<!-- PAGINA DA TAXONOMIA -->
+<input type="hidden" id="tax_page" name="tax_page" value="<?php echo $_special_configs['tax']; ?>" />
+<input type="hidden" id="src" value="<?php echo get_template_directory_uri() ?>">
+<input type="hidden" id="current_user_id" name="current_user_id" value="<?php echo get_current_user_id(); ?>" />
+<input type="hidden" id="collection_id" value="<?php echo $collection_id ?>">
 <input type="hidden" id="item_id" value="<?php echo $object->ID; ?>">
 <input type="hidden" id="ranking_id" value="<?php echo $ranking; ?>">
 <input type="hidden" id="socialdb_permalink_object" name="socialdb_permalink_object" value="<?php echo get_the_permalink($collection_id) . '?item=' . $object->post_name; ?>" />
@@ -19,7 +40,7 @@
 <div class="chatContainer">
     <ol class="breadcrumb item-breadcrumbs breadcrumbs-debate" style="padding-top: 10px;">
         <li> <a href="<?php echo get_permalink(get_option('collection_root_id')); ?>"> <?php _e('Repository', 'tainacan') ?> </a> </li>
-        <li> <a href="#" onclick="backToMainPageSingleItem()"> <?php echo $post->post_title; ?> </a> </li>
+        <li> <a href="<?php echo get_the_permalink($collection_id) ?>" > <?php echo $post->post_title; ?> </a> </li>
         <?php 
            $parents = (isset($parents) && is_array($parents)) ? array_reverse($parents) : [];
            foreach ($parents as $parent) {

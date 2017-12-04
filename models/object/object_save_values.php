@@ -248,11 +248,14 @@ class ObjectSaveValuesModel extends Model {
             }
         }else if(strpos($meta_value->meta_key, 'socialdb_property_')!==false){
             $this->sdb_update_post_meta($meta_value->meta_id, $value);
-            if($this->is_Date($value)){
+            if($this->is_Date($value) || get_post_meta($item_id, 'socialdb_property_'.$property_children_id.'_date')){
                 $array = $this->is_Date($value);
                 $vinculate = get_post_meta($item_id,'_'.$meta_value->meta_id,true);
                 if($vinculate)
-                    $this->sdb_update_post_meta($vinculate, $array[2].'-'.$array[0].'-'.$array[1]);
+                    if(isset($array[2]))
+                        $this->sdb_update_post_meta($vinculate, $array[2].'-'.$array[0].'-'.$array[1]);
+                    else
+                        $this->sdb_update_post_meta($vinculate, '');
                 else{
                     $vinculate = $this->sdb_add_post_meta($item_id, 'socialdb_property_'.$property_children_id.'_date', $array[2].'-'.$array[0].'-'.$array[1]);
                     $this->sdb_add_post_meta($item_id, '_'.$meta_value->meta_id, $vinculate);

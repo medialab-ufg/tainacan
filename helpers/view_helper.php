@@ -784,10 +784,11 @@ class ViewHelper {
                             }
                         }else{
                             $ob = get_term_by('id',$value,'socialdb_category_type');
+
                             if ($ob) {
                                 ?>
                                 <b>
-                                    <a style="cursor:pointer;" onclick="wpquery_term_filter('<?php echo $ob->term_id ?>','<?php echo $property['id'] ?>')">
+                                    <a style="cursor:pointer;" onclick="wpquery_term_filter('<?php echo $ob->term_id ?>','<?php echo $property_id; ?>')">
                                         <?php echo $ob->name  ?>
                                     </a>
                                 </b><br>

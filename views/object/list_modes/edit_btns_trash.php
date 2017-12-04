@@ -16,7 +16,7 @@ if($_show_edit_buttons) {
     $del = ['title' => _t('Delete Object'), 'text' => $confirm_text . get_the_title() ];
     ?>
     <li class="remove-permanent">
-        <a onclick="delete_permanently_object('<?= $del['title'] ?>', '<?= $del['text'] ?>', '<?php echo $curr_id ?>')" href="javascript:void(0)" class="remove">
+        <a onclick="delete_permanently_object('<?= $del['title'] ?>', '<?php _e('Are you sure to remove the item permanently: ', "tainacan");?>'+ '<?php echo " ".get_the_title().'?'; ?>', '<?php echo $curr_id ?>')" href="javascript:void(0)" class="remove">
             <span class="glyphicon glyphicon-trash"></span>
         </a>
     </li>

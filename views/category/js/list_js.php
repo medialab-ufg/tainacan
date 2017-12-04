@@ -35,7 +35,7 @@
 
         // SUBMISSAO DO FORMULARIO
         $('#submit_form_category').submit(function (e) {
-
+            console.log("Ola");
             e.preventDefault();
             var formData = new FormData(this);
             verify_category_privacity(formData);// esta funcao chama a que insere o formulario de fato
@@ -239,12 +239,15 @@
                             //elem_first =jQuery.parseJSON(result); 
                             elem = jQuery.parseJSON(result);
                             if (elem.type.trim() === 'success') {
-                                $("#alert_error_categories").hide();
-                                $("#alert_success_categories").show();
+                                /*$("#alert_error_categories").hide();
+                                $("#alert_success_categories").show();*/
+
+                                swal('<?php _e("Success", "tainacan"); ?>', '<?php _e("Operation was successful", "tainacan"); ?>', "success");
                                 clean_archive_mode();
                             } else {
-                                $("#alert_error_categories").show();
-                                $("#alert_success_categories").hide();
+                                /*$("#alert_error_categories").show();
+                                $("#alert_success_categories").hide();*/
+                                swal('<?php _e("Success", "tainacan"); ?>', '<?php _e("Operation was unsuccessful", "tainacan");?>', "success");
                                 $("#message_category").html(elem.msg);
                             }
                             $('#category_name').val('');
@@ -319,13 +322,14 @@
     }
     function showCategoryDynatree(src) {
         $("#categories_dynatree").dynatree({
-            selectionVisible: true, // Make sure, selected nodes are visible (expanded).  
+            selectionVisible: true, // Make sure, selected nodes are visible (expanded).
             checkbox: true,
             initAjax: {
                 url: src + '/controllers/category/category_controller.php',
                 data: {
                     collection_id: $("#collection_id").val(),
-                    operation: 'initDynatree'
+                    operation: 'initDynatree',
+                    hideCheckbox: false
                 }
                 , addActiveKey: true
             },
@@ -427,16 +431,48 @@
                     }
                     $("#operation_category_form").val('add');
                     $("#category_id").val('');
-                     $('#category_property').html('');
+                    $('#category_property').html('');
                     clean_archive_mode();
                     break;
                 case "edit":
-                    edit_dynatree(node)
+                    edit_dynatree(node);
                     break;
                 case "delete":
-                     $('#category_property').html('');
-                    $("#category_delete_id").val(node.data.key);
-                    $("#delete_category_name").text(node.data.title);
+                    $('#category_property').html('');
+
+                    var nodes = $("#categories_dynatree").dynatree("getSelectedNodes");
+                    if(nodes.length > 1)
+                    {
+                        $("#myModalLabel").html('<?php _e("Remove categories", "tainacan"); ?>');
+                        //Setting ID's
+                        var currentValIds, categoriesNames = '';
+                        nodes.forEach(function(node){
+                            currentValIds = $("#category_delete_id").val();
+                            if(currentValIds === '')
+                            {
+                                $("#category_delete_id").val(node.data.key);
+                            }else
+                            {
+                                $("#category_delete_id").val(currentValIds + ","+node.data.key);
+                            }
+
+                            if(categoriesNames === '')
+                            {
+                                categoriesNames = node.data.title;
+                            }else
+                            {
+                                categoriesNames += ", " + node.data.title;
+                            }
+
+                            $("#modalBodyText").html('<?php _e("Would you really like to remove these categories?", 'tainacan')?>'+ '<br>' + categoriesNames);
+                        });
+                    }else
+                    {
+                        $("#modalBodyText").html('<?php echo __('Confirm the exclusion of ', 'tainacan'); ?>' + ': <span id="delete_category_name"></span>?<p>' + '<?php _e("Case category is root so all your children will become root categories too.", "tainacan");?>' + '</p>');
+                        $("#category_delete_id").val(node.data.key);
+                        $("#delete_category_name").text(node.data.title);
+                    }
+
                     $('#modalExcluirCategoriaUnique').modal('show');
                     $('.dropdown-toggle').dropdown();
                     break;
@@ -450,11 +486,11 @@
                     $('.dropdown-toggle').dropdown();
                     break;
                 case "import_taxonomy":
-                    show_modal_import_taxonomy(node.data.key, node.data.title)
+                    show_modal_import_taxonomy(node.data.key, node.data.title);
                     $('.dropdown-toggle').dropdown();
                     break;
                 case "export_taxonomy":
-                    show_modal_export_taxonomy(node.data.key, node.data.title)
+                    show_modal_export_taxonomy(node.data.key, node.data.title);
                     $('.dropdown-toggle').dropdown();
                     break;
                 default:

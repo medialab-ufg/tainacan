@@ -197,6 +197,7 @@ abstract class EventModel extends Model {
                 ORDER BY pm.meta_id DESC
         ";
         $result = $wpdb->get_results($query);
+
         if ($result && is_array($result) && count($result) > 0) {
             return $result;
         } else {
@@ -276,6 +277,8 @@ abstract class EventModel extends Model {
             switch ($parent->name) {
                 case 'socialdb_event_object_create':
                     return __('Create Object', 'tainacan');
+	            case 'socialdb_event_object_edit':
+	            	return __('Edited Object', 'tainacan');
                 case 'socialdb_event_object_delete':
                     return __('Delete Object', 'tainacan');
                 case 'socialdb_event_classification_create':
@@ -393,12 +396,10 @@ abstract class EventModel extends Model {
      * 
      * Autor: Eduardo Humberto 
      */
-    public function instantiate_metas_event($id, $name, $data)
-    {
+    public function instantiate_metas_event($id, $name, $data){
         global $wpdb;
         $term = get_term_by('name', $name, 'socialdb_event_type');
-        if ($term)
-        {
+        if ($term){
             $metas = $wpdb->get_results("SELECT meta_value FROM {$wpdb->prefix}termmeta"
                     . " WHERE meta_key like '{$name}_metas' ");
             if (is_array($metas)) {
@@ -422,7 +423,7 @@ abstract class EventModel extends Model {
      * Autor: Eduardo Humberto 
      */
     public function create_event($data) {
-        $title = $this->generate_title($data); // gera o titulo para o evento 
+        $title = $this->generate_title($data); // gera o titulo para o evento
         $this->notificate_moderators_email($data['socialdb_event_collection_id'], $title);
         $event_created = $this->insert_event($title); // insere o termo do evento no banco
         $this->create_democratic_vote(array('event_id' => $event_created['ID'], 'collection_id' => $data['socialdb_event_collection_id']));
@@ -430,24 +431,19 @@ abstract class EventModel extends Model {
         if ($event_created && $event_created['ID'])// se criou com sucesso
         {
             $this->instantiate_metas_event($event_created['ID'], $this->parent->name, $data); // instancia e coloca os valores nos meta dados do evento
-            if ($this->is_automatically_verify_event($data['socialdb_event_collection_id'], $this->permission_name, $data['socialdb_event_user_id'], $event_created['ID']))
-            {
+            if ($this->is_automatically_verify_event($data['socialdb_event_collection_id'], $this->permission_name, $data['socialdb_event_user_id'], $event_created['ID'])){
                 $data['event_id'] = $event_created['ID'];
                 $data = $this->verify_event($data, true);
                 return $data;
 
-            } elseif (isset($data['socialdb_event_delete_collection_id']) && get_post($data['socialdb_event_delete_collection_id'])->post_author == get_current_user_id())
-            {
+            } elseif (isset($data['socialdb_event_delete_collection_id']) && get_post($data['socialdb_event_delete_collection_id'])->post_author == get_current_user_id()){
                 $data['event_id'] = $event_created['ID'];
                 $data = $this->verify_event($data, true);
                 return $data;
-            } else
-            {
-                if (isset($data['socialdb_event_observation']) && $data['socialdb_event_observation'] !== '')
-                {
+            } else{
+                if (isset($data['socialdb_event_observation']) && $data['socialdb_event_observation'] !== ''){
                     update_post_meta($event_created['ID'], 'socialdb_event_observation', $data['socialdb_event_observation']);
-                } elseif ($this->parent->name == 'socialdb_event_object_create')
-                {
+                } elseif ($this->parent->name == 'socialdb_event_object_create'){
                     $object = get_post($data['socialdb_event_object_item_id']);
                     $url = '<a target="_blanck" href="' . get_the_permalink( $object->ID) . '">' . __('See item (Open a new Tab)','tainacan') . '</a>';
                     update_post_meta($event_created['ID'], 'socialdb_event_observation', $url);
@@ -457,8 +453,7 @@ abstract class EventModel extends Model {
                 $data['type'] = 'info';
                 $data['title'] = __('Attention', 'tainacan');
             }
-        } else
-        {
+        } else {
             $data['msg'] = __('An error happened, please try again', 'tainacan');
             $data['type'] = 'error';
             $data['title'] = 'Erro';
@@ -498,8 +493,7 @@ abstract class EventModel extends Model {
      * 
      * @author Eduardo Humberto 
      */
-    public function is_automatically_verify_event($collection_id, $action, $user_id, $event_id = 0)
-    {
+    public function is_automatically_verify_event($collection_id, $action, $user_id, $event_id = 0){
         if (has_filter('tainacan_alter_permission_actions')) {
             return apply_filters('tainacan_alter_permission_actions',$action, $collection_id, $event_id);
         }
@@ -539,6 +533,16 @@ abstract class EventModel extends Model {
             if (CollectionModel::is_moderator($collection_id, $user_id) || current_user_can('manage_options')) {
                 return true;
             } else {
+
+                //se estiver alterando algum item verifica se o usuario eh dono do mesmo
+                $has_item = get_post_meta($event_id, 'socialdb_event_object_item_id', true);
+                if($has_item && $has_item !== ''){
+                    $item = get_post($has_item);
+                    if($item && isset( $item->post_author ) && $item->post_author == $user_id){
+                        return true;
+                    }
+                }
+
                 $metadata_actions = [
                     'socialdb_collection_permission_create_property_data',
                     'socialdb_collection_permission_edit_property_data',
@@ -551,8 +555,7 @@ abstract class EventModel extends Model {
                     'socialdb_collection_permission_delete_property_term'
                 ];
 
-                if (in_array($action, ['socialdb_collection_permission_edit_category', 'socialdb_collection_permission_delete_category']))
-                {
+                if (in_array($action, ['socialdb_collection_permission_edit_category', 'socialdb_collection_permission_delete_category'])){
                     $category_id = get_post_meta($event_id, 'socialdb_event_term_id', true);
                     if (strpos($category_id, '_facet_category') !== false) {
                         $category_id = str_replace('_facet_category', '', $category_id);

@@ -119,9 +119,10 @@ $is_current_user_the_author = get_post($curr_id)->post_author == get_current_use
                         <?php endif; ?>
                     <?php } ?>
                 </li>
-                <li class="tainacan-museum-clear"> <a class="ac-duplicate-item" data-op="same"> <?php _t('Duplicate in this collection',1); ?> </a> </li>
-                <li class="tainacan-museum-clear"> <a class="ac-duplicate-item" data-op="other"> <?php _t('Duplicate in other collection',1); ?> </a> </li>
-            <?php
+                <?php if( !is_singular( 'socialdb_object' ) ): ?>
+                    <li class="tainacan-museum-clear"> <a class="ac-duplicate-item" data-op="same"> <?php _t('Duplicate in this collection',1); ?> </a> </li>
+                    <li class="tainacan-museum-clear"> <a class="ac-duplicate-item" data-op="other"> <?php _t('Duplicate in other collection',1); ?> </a> </li>
+                <?php endif;
             else:
                 if (verify_allowed_action($collection_id, 'socialdb_collection_permission_delete_object')): ?>
                 <li class="tainacan-museum-clear">

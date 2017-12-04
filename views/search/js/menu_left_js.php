@@ -376,74 +376,108 @@
                         if (!json.isAllowed) {
                             showAlertGeneral('<?php _e('Attention', 'tainacan') ?>', '<?php _e('This action was configured as "NOT ALLOWED" by moderators!', 'tainacan') ?>', 'info');
                         } else {
+                            var n = node.data.key.toString().indexOf("_");
 
-                            //$("#category_single_parent_name_edit").val(node.data.title);
-                            //$("#category_single_parent_id_edit").val(node.data.key);
-                            $("#category_single_edit_name").val(node.data.title);
-                            $("#socialdb_event_previous_name").val(node.data.title);
-                            $("#category_edit_description").val('');
-                            $("#category_single_edit_id").val(node.data.key);
-                            //ativando para um dynatree especifico
-                            if (menu) {
-                                $("#category_single_edit_dynatree_id").val(menu);
+                            //modal tags
+                            if(node.data.key.indexOf('_tag')>=0){
+                                $("#tag_single_edit_name").val(node.data.title);
+                                $("#tag_single_edit_id").val(node.data.key);
+                                $("#tag_edit_description").val('');
+                                $('#modalEditTag').modal('show');
+                                $("#operation").val('update');
+                                $.ajax({
+                                    type: "POST",
+                                    url: $('#src').val() + "/controllers/tag/tag_controller.php",
+                                    data: {tag_id: node.data.key, operation: 'get_tag'}
+                                }).done(function (result) {
+                                    elem = jQuery.parseJSON(result);
+                                    if (elem.term.description) {
+                                        $("#tag_edit_description").val(elem.term.description);
+                                    }
+                                    //sinonimos
+                                    clear_synonyms_tree();
+                                    if (elem.socialdb_term_synonyms && elem.socialdb_term_synonyms.length > 0) {
+                                        $('#tag_synonyms').val(elem.socialdb_term_synonyms.join(','));
+                                        $("#dynatree_synonyms_tag").dynatree("getRoot").visit(function (node) {
+                                            var str = node.data.key.replace("_tag", "");
+                                            if (elem.socialdb_term_synonyms.indexOf(str) >= 0) {
+                                                node.select(true);
+                                            }
+                                        });
+                                    }
+                                    $('.dropdown-toggle').dropdown();
+                                });
+                                $('.dropdown-toggle').dropdown();
+                            }else if(n<0||node.data.key.indexOf('_facet_category')>=0){
+
+                                //$("#category_single_parent_name_edit").val(node.data.title);
+                                //$("#category_single_parent_id_edit").val(node.data.key);
+                                $("#category_single_edit_name").val(node.data.title);
+                                $("#socialdb_event_previous_name").val(node.data.title);
+                                $("#category_edit_description").val('');
+                                $("#category_single_edit_id").val(node.data.key);
+                                //ativando para um dynatree especifico
+                                if (menu) {
+                                    $("#category_single_edit_dynatree_id").val(menu);
+                                }
+                                $('#modalEditCategoria').modal('show');
+                                //                $("#operation").val('update');
+                                $('.dropdown-toggle').dropdown();
+                                $.ajax({
+                                    type: "POST",
+                                    url: $('#src').val() + "/controllers/category/category_controller.php",
+                                    data: {category_id: node.data.key, operation: 'get_parent'}
+                                }).done(function (result) {
+                                    elem = jQuery.parseJSON(result);
+                                    $("#category_single_edit_name").val(elem.child_name);
+                                    if (elem.name) {
+                                        $("#category_single_parent_name_edit").val(elem.name);
+                                        $("#category_single_parent_id_edit").val(elem.term_id);
+                                        $("#socialdb_event_previous_parent").val(elem.term_id);
+                                    } else {
+                                        $("#category_single_parent_name_edit").val('Categoria raiz');
+                                    }
+                                    //$("#show_category_property").show();
+                                    $('.dropdown-toggle').dropdown();
+                                });
+                                // metas
+                                $.ajax({
+                                    type: "POST",
+                                    url: $('#src').val() + "/controllers/category/category_controller.php",
+                                    data: {category_id: node.data.key, operation: 'get_metas'}
+                                }).done(function (result) {
+                                    elem = jQuery.parseJSON(result);
+                                    $('#category_synonyms').val('');
+                                    if (elem.term.description) {
+                                        $("#category_edit_description").val(elem.term.description);
+                                    }
+                                    //sinonimos
+                                    clear_synonyms_tree();
+                                    if (elem.socialdb_term_synonyms && elem.socialdb_term_synonyms.length > 0) {
+                                        $('#category_synonyms').val(elem.socialdb_term_synonyms.join(','));
+                                        $("#dynatree_synonyms").dynatree("getRoot").visit(function (node) {
+                                            var str = node.data.key.replace("_tag", "");
+                                            if (elem.socialdb_term_synonyms.indexOf(str) >= 0) {
+                                                node.select(true);
+                                            }
+                                        });
+                                    }
+    <?php do_action('javascript_metas_category') ?>
+                                    //if (elem.socialdb_category_permission) {
+                                    //  $("#category_permission").val(elem.socialdb_category_permission);
+                                    //}
+    //                                if (elem.socialdb_category_moderators) {
+    //                                    $("#chosen-selected2-user").html('');
+    //                                    $.each(elem.socialdb_category_moderators, function (idx, user) {
+    //                                        if (user && user !== false) {
+    //                                            $("#chosen-selected2-user").append("<option class='selected' value='" + user.id + "' selected='selected' >" + user.name + "</option>");
+    //                                        }
+    //                                    });
+    //                                }
+                                    //set_fields_archive_mode(elem);
+                                    $('.dropdown-toggle').dropdown();
+                                });
                             }
-                            $('#modalEditCategoria').modal('show');
-                            //                $("#operation").val('update');
-                            $('.dropdown-toggle').dropdown();
-                            $.ajax({
-                                type: "POST",
-                                url: $('#src').val() + "/controllers/category/category_controller.php",
-                                data: {category_id: node.data.key, operation: 'get_parent'}
-                            }).done(function (result) {
-                                elem = jQuery.parseJSON(result);
-                                $("#category_single_edit_name").val(elem.child_name);
-                                if (elem.name) {
-                                    $("#category_single_parent_name_edit").val(elem.name);
-                                    $("#category_single_parent_id_edit").val(elem.term_id);
-                                    $("#socialdb_event_previous_parent").val(elem.term_id);
-                                } else {
-                                    $("#category_single_parent_name_edit").val('Categoria raiz');
-                                }
-                                //$("#show_category_property").show();
-                                $('.dropdown-toggle').dropdown();
-                            });
-                            // metas
-                            $.ajax({
-                                type: "POST",
-                                url: $('#src').val() + "/controllers/category/category_controller.php",
-                                data: {category_id: node.data.key, operation: 'get_metas'}
-                            }).done(function (result) {
-                                elem = jQuery.parseJSON(result);
-                                $('#category_synonyms').val('');
-                                if (elem.term.description) {
-                                    $("#category_edit_description").val(elem.term.description);
-                                }
-                                //sinonimos
-                                clear_synonyms_tree();
-                                if (elem.socialdb_term_synonyms && elem.socialdb_term_synonyms.length > 0) {
-                                    $('#category_synonyms').val(elem.socialdb_term_synonyms.join(','));
-                                    $("#dynatree_synonyms").dynatree("getRoot").visit(function (node) {
-                                        var str = node.data.key.replace("_tag", "");
-                                        if (elem.socialdb_term_synonyms.indexOf(str) >= 0) {
-                                            node.select(true);
-                                        }
-                                    });
-                                }
-<?php do_action('javascript_metas_category') ?>
-                                //if (elem.socialdb_category_permission) {
-                                //  $("#category_permission").val(elem.socialdb_category_permission);
-                                //}
-//                                if (elem.socialdb_category_moderators) {
-//                                    $("#chosen-selected2-user").html('');
-//                                    $.each(elem.socialdb_category_moderators, function (idx, user) {
-//                                        if (user && user !== false) {
-//                                            $("#chosen-selected2-user").append("<option class='selected' value='" + user.id + "' selected='selected' >" + user.name + "</option>");
-//                                        }
-//                                    });
-//                                }
-                                //set_fields_archive_mode(elem);
-                                $('.dropdown-toggle').dropdown();
-                            });
                         }
                     });
                     break;
@@ -573,12 +607,16 @@
         icons: false
     });
 
-    if(!isMobile())
-    {
-        $('#accordion .ui-accordion-content').show();
-    }
+      var macosPlatforms = ['Macintosh', 'MacIntel', 'MacPPC', 'Mac68K'];
+      var userAgent = window.navigator.userAgent
+      if(!isMobile()){
+          $('#accordion .ui-accordion-content').show();
+      }else if(macosPlatforms.indexOf(platform)  >= 0 ){
+          $('#accordion .ui-accordion-content').show();
+      }
 
-    $('.expand-all').toggle(function() {
+
+      $('.expand-all').toggle(function() {
         setMenuContainerHeight();
 
         $(this).find("div.action-text").text( '<?php _e('Expand all', 'tainacan') ?>' );

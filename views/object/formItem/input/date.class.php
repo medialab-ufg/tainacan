@@ -158,7 +158,7 @@ class DateClass extends FormItem {
             <script>
                 $('#date-field-<?php echo $compound['id'] ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>').trigger('blur');
             </script>
-        <?php endif;         
+        <?php endif;
         }
 
     public function initScriptsDate($property_id, $item_id, $compound_id, $index_id) { ?>
@@ -234,6 +234,7 @@ class DateClass extends FormItem {
                             operation: 'saveValue',
                             type: 'data',
                             value: $(this).val(),
+                            collection_id: $("#collection_id").val(),
                             item_id: '<?php echo $item_id ?>',
                             compound_id: '<?php echo $compound_id ?>',
                             property_children_id: '<?php echo $property_id ?>',
@@ -257,6 +258,7 @@ class DateClass extends FormItem {
                         type: 'data',
                         value: $(this).val().trim(),
                         item_id: '<?php echo $item_id ?>',
+                        collection_id: $("#collection_id").val(),
                         compound_id: '<?php echo $compound_id ?>',
                         property_children_id: '<?php echo $property_id ?>',
                         index: <?php echo $index_id ?>,

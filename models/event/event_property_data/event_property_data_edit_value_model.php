@@ -25,7 +25,9 @@ class EventPropertyDataEditValue extends EventModel {
         $object = get_post($data['socialdb_event_property_data_edit_value_object_id']);
         $property = get_term_by('id', $data['socialdb_event_property_data_edit_value_property_id'], 'socialdb_property_type');
         $values_before = get_post_meta($object->ID,'socialdb_property_'.$property->term_id);
-        if($data['socialdb_event_property_data_edit_value_property_id'] == 'title'){
+
+        if($data['socialdb_event_property_data_edit_value_property_id'] == 'title')
+        {
             $title = __('Alter the ','tainacan').' <b>'.__('Title','tainacan').'</b> '.__('from ','tainacan').' ( <i>'.$object->post_title.'</i> ) '.__(' to ','tainacan').' ( <i>'.$data['socialdb_event_property_data_edit_value_attribute_value'].'</i> ) ';
         }else if($data['socialdb_event_property_data_edit_value_property_id'] == 'description'){
             $desc = (empty($object->post_content)) ? 'Vazio' : $object->post_content;
@@ -61,7 +63,7 @@ class EventPropertyDataEditValue extends EventModel {
                     $names = [];
                     foreach ($data['socialdb_event_property_data_edit_value_attribute_value'] as $value) {
                         if(isset($value['val']))
-                            $names[] = $value['val'];
+                            $names[] = (is_array($value['val'])) ? implode(',',$value['val']) :  $value['val'];
                         else
                             $names[] = $value;
                     }
@@ -77,7 +79,7 @@ class EventPropertyDataEditValue extends EventModel {
                     $names = [];
                     foreach ($data['socialdb_event_property_data_edit_value_attribute_value'] as $value) {
                         if(isset($value['val']))
-                            $names[] = $value['val'];
+                            $names[] = (is_array($value['val'])) ? implode(',',$value['val']) :  $value['val'];
                         else
                             $names[] = $value;
                     }
@@ -85,6 +87,7 @@ class EventPropertyDataEditValue extends EventModel {
                         . __(' in the the object ','tainacan') . '<b><a target="_blank" href="'.  get_the_permalink($object->ID).'">'. $object->post_title.'</a></b>';
                 }else{
                     $text = $data['socialdb_event_property_data_edit_value_attribute_value'];
+                    $text = (is_array($text)) ? implode(',',$text) :  $text;
                     $title = __('Set the value: ','tainacan').' ( <i>'.$text.'</i> ) '.__(' of the data property ','tainacan').'<b>'.$property->name.'</b>'
                         . __(' in the the object ','tainacan') . '<b><a target="_blank" href="'.  get_the_permalink($object->ID).'">'. $object->post_title.'</a></b>';
                 }
@@ -140,6 +143,11 @@ class EventPropertyDataEditValue extends EventModel {
         $object_id = get_post_meta($event_id, 'socialdb_event_property_data_edit_value_object_id',true);
         $property = get_post_meta($event_id, 'socialdb_event_property_data_edit_value_property_id',true);
         $value = get_post_meta($event_id, 'socialdb_event_property_data_edit_value_attribute_value',true);
+        $indexCompound = get_post_meta($event_id, 'socialdb_event_property_data_edit_value_index_compound',true);
+        if(!$indexCompound || strcmp($indexCompound, 'false') === 0)
+        {
+        	$indexCompound = false;
+        }
 
         //alterando o valor de fato das propriedades fixas ou das demais
         if($property == 'title'){
@@ -168,8 +176,7 @@ class EventPropertyDataEditValue extends EventModel {
             $result = update_post_meta($object_id, 'socialdb_license_id', $value);
         }else if(is_array($value) || is_array(unserialize($value))){
             foreach ($value as $meta) {
-                if($meta['index'] == '0' || $meta['index'] == 'new')
-                {
+                if($meta['index'] == '0' || $meta['index'] == 'new'){
                     $class = new ObjectSaveValuesModel();
                     $class->saveValue($object_id,
                         $property,
@@ -177,12 +184,29 @@ class EventPropertyDataEditValue extends EventModel {
                         'data',
                         0,
                         $meta['val'],
-                        false
+                        $indexCompound
                     );
-                }else
-                {
+                }else{
+
+                    // caso for od tipo data ele salva um meta auxiliar
+                    if($this->is_Date($meta['val']) || get_post_meta($object_id, 'socialdb_property_'.$property.'_date')){
+                        $array = $this->is_Date($meta['val']);
+                        $vinculate = get_post_meta($object_id,'_'.$meta['index'],true);
+                        if($vinculate)
+                            if(isset($array[2]))
+                                $this->sdb_update_post_meta($vinculate, $array[2].'-'.$array[0].'-'.$array[1]);
+                            else
+                                $this->sdb_update_post_meta($vinculate, '');
+                        else{
+                            $vinculate = $this->sdb_add_post_meta($object_id, 'socialdb_property_'.$property.'_date', $array[2].'-'.$array[0].'-'.$array[1]);
+                            $this->sdb_add_post_meta($object_id, '_'.$meta['index'], $vinculate);
+                        }
+                    }
+
+                    // o real valor
                     $this->sdb_update_post_meta($meta['index'], $meta['val']);
                     $this->set_common_field_values($object_id, "socialdb_property_$property",$meta['val']);
+
                 }
             }
 
@@ -219,6 +243,22 @@ class EventPropertyDataEditValue extends EventModel {
             $data['title'] = 'Erro';
         }
         return $data;
+    }
+
+    /**
+     * @param $str
+     * @return bool
+     */
+    public function is_Date($str){
+        $str = str_replace('/', '-', $str);
+        $stamp = strtotime($str);
+        if (is_numeric($stamp)){
+            $month = date( 'm', $stamp );
+            $day   = date( 'd', $stamp );
+            $year  = date( 'Y', $stamp );
+            return [$month, $day, $year];
+        }
+        return false;
     }
 
 }

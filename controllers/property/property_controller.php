@@ -279,12 +279,20 @@ require_once(dirname(__FILE__).'../../../helpers/object/single_properties_widget
                 $property_model->update_tab_organization($data['collection_id'], $data["tab"], $data['property_id']);
                 update_post_meta($data['collection_id'], 'socialdb_collection_property_'.$data['property_id'].'_required', $data['required']);
                 update_post_meta($data['collection_id'], 'socialdb_collection_property_'.$data['property_id'].'_mask_key', $data['mask_key']);
+
+	            if(!empty($data['help_text']))
+	            {
+		            update_post_meta($data['collection_id'], 'socialdb_property_'.$data['property_id'].'_help', $data['help_text']);
+	            }
+
                 return json_encode($data);
             //buscando os dados da coleccao    
             case 'get_data_fixed_property_collection':
                 $data['is_required'] = get_post_meta($data['collection_id'], 'socialdb_collection_property_'.$data['property_id'].'_required', true);
                 $data['is_mask_key'] = get_post_meta($data['collection_id'], 'socialdb_collection_property_'.$data['property_id'].'_mask_key', true);
                 $data['term'] = get_term_by('id', $data['property_id'], 'socialdb_property_type');
+                $data['socialdb_property_help'] = get_post_meta($data['collection_id'], 'socialdb_property_'.$data['property_id'].'_help', true);
+
                 return json_encode($data);
             //salvando a faceta de usuarios
             case 'save_ranking_colaboration_facet':
@@ -447,8 +455,10 @@ require_once(dirname(__FILE__).'../../../helpers/object/single_properties_widget
          */
         if(has_filter('modificate_values_event_property_data_add')):
             $data = apply_filters( 'modificate_values_event_property_data_add', $data); 
-        endif;    
+        endif;
+
         return $eventAddProperty->create_event($data);
+
     }
      /**
      * @signature - function insert_event_update($object_id, $data )
@@ -540,7 +550,8 @@ require_once(dirname(__FILE__).'../../../helpers/object/single_properties_widget
          */
         if(has_filter('modificate_values_event_property_object_update')):
             $data = apply_filters( 'modificate_values_event_property_object_update', $data); 
-        endif;    
+        endif;
+
         return $eventAddProperty->create_event($data);
     }
      /**

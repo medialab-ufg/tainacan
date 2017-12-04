@@ -1,7 +1,7 @@
 <?php
 include_once(dirname(__FILE__).'/../models/ranking/ranking_model.php'); 
 
-class ViewHelper {
+class ViewHelperContest {
     
     /**
      * 

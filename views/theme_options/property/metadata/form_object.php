@@ -49,6 +49,7 @@
                             <input type="radio" name="property_object_required" id="property_object_required_true" value="true">&nbsp;<?php _e('Yes','tainacan'); ?>
                             <input type="radio" name="property_object_required" id="property_object_required_false" checked="checked" value="false">&nbsp;<?php _e('No','tainacan'); ?>
                         </div>
+
                         <!--div class="form-group">
                             <label for="property_object_is_reverse"><?php _e('Property object reverse','tainacan'); ?></label>
                             <input type="radio" name="property_object_is_reverse" id="property_object_is_reverse_true" value="true">&nbsp;<?php _e('Yes','tainacan'); ?>

@@ -12,6 +12,9 @@ class FormItemTitle extends FormItem{
         <div class="form-group">
             <?php echo ($isFocusMedia) ? '<h5>' : '<h2>' ?>
                 <?php echo ($this->terms_fixed['title']) ? $this->terms_fixed['title']->name :  _e('Title','tainacan') ?>
+                <?php
+                    add_helpText($property, $this);
+                ?>
                 <?php if($this->isRequired === 'true'): ?>
                 *
                 <?php endif; ?>

@@ -80,6 +80,19 @@ class FormItemController extends Controller {
                         );
                 }
                 //INSERE O VALOR DE FATO
+	            if($data['property_children_id'] != 0)
+		            $property_id = $data['property_children_id'];
+	            else $property_id = $data['compound_id'];
+
+
+//				if($data['type'] === 'term'){
+//					return $object_model->insert_term_edit_event($data['item_id'], $property_id, $data['value'], $data);
+//				}elseif ($data['type'] === 'object'){
+//					return $object_model->insert_object_edit_event($data['item_id'], $property_id, $data['value'], $data);
+//				}else{
+//					return $object_model->insert_data_edit_event($data['item_id'], $property_id, $data['value'], $data);
+//				}
+
                 return $class->saveValue($data['item_id'],
                         $data['compound_id'],
                         $data['property_children_id'],
@@ -133,6 +146,7 @@ class FormItemController extends Controller {
                         }
                     }
                 }
+	            $object_model->insert_data_edit_event($data['item_id'], "title", $data['value'], $data);
                 $slug = wp_unique_post_slug(sanitize_title_with_dashes($data['value']), $data['item_id'], 'inherit', 'socialdb_object', 0);
                 $post = array(
                     'ID' => $data['item_id'],
@@ -141,6 +155,7 @@ class FormItemController extends Controller {
                 );
                 $data['ID'] = wp_update_post($post);
                 $object_model->set_common_field_values($data['ID'], 'title', $post['post_title']);
+
                 return json_encode([true]);
                 break;
             case 'saveDescription':
@@ -148,6 +163,7 @@ class FormItemController extends Controller {
                     'ID' => $data['item_id'],
                     'post_content' => $data['value']
                 );
+	            $object_model->insert_data_edit_event($data['item_id'], "description", $data['value'], $data);
                 $object_model->set_common_field_values($data['item_id'], 'description', $post['post_content']);
                 $data['ID'] = wp_update_post($post);
                 break;
@@ -156,18 +172,22 @@ class FormItemController extends Controller {
                     $object_model->set_common_field_values($data['item_id'], 'object_content', $data['value']);
                     break;
             case 'saveType':
+	                $object_model->insert_data_edit_event($data['item_id'], "type", $data['value'], $data);
                     update_post_meta($data['item_id'],'socialdb_object_dc_type',$data['value']);
                     $object_model->set_common_field_values($data['item_id'], 'object_type', $data['value']);
                     break;
             case 'saveSource':
+	            $object_model->insert_data_edit_event($data['item_id'], "source", $data['value'], $data);
                 update_post_meta($data['item_id'],'socialdb_object_dc_source',$data['value']);
                 $object_model->set_common_field_values($data['item_id'], 'object_source', $data['value']);
                 break;
             case 'saveLicense':
+	             $object_model->insert_data_edit_event($data['item_id'], "license", $data['value'], $data);
                  update_post_meta($data['item_id'],'socialdb_license_id',$data['value']);
                  break;
             case 'saveThumbnail':
                 $result = [];
+	            $object_model->insert_data_edit_event($data['item_id'], "thumbnail", $data['value'], $data);
                 if ($_FILES) {
                     $attachment_id = $object_model->add_thumbnail($data['item_id']);
                     $result['attachment'] = $attachment_id;
@@ -298,31 +318,38 @@ class FormItemController extends Controller {
             case 'publishItems':
                 delete_user_meta(get_current_user_id(), 'socialdb_collection_' . $data['collection_id'] . '_betafile');
                 $class = new ObjectSaveValuesModel();
-                if(!empty($data['titles']))
-                {
-                	foreach($data['titles'] as $item)
-	                {
+                if(!empty($data['titles']) && is_array( $data['titles'] )){
+                	foreach($data['titles'] as $item){
 	                	$id_title[$item['id']] = $item['title'];
 	                }
-                }else $id_title = [];
+                }else
+                    $id_title = [];
 
-                if(is_array($data['items']))
-                {
+                $skip_event = (current_user_can('manage_option') || verify_collection_moderators($data['collection_id'], get_current_user_id())) ? true : false;
+
+                if(is_array($data['items'])){
                     foreach ($data['items'] as $item) {
-                        $post = array(
-                        'ID' => $item,
-                        'post_parent' => $data['collection_id']);
-                        $id = wp_update_post($post);
-                        $data['ID'][] =$id;
+                        if(!$skip_event) {
+                            $post = array(
+                                'ID' => $item,
+                                'post_parent' => $data['collection_id']);
+                            $id = wp_update_post($post);
+                            $data['ID'][] = $id;
+                            $json = json_decode($object_model->insert_object_event($id, $data));
+                        }else {
+                            $post = array(
+                                'ID' => $item,
+                                'post_status' => 'publish',
+                                'post_parent' => $data['collection_id']);
+                            $id = wp_update_post($post);
+                            $data['ID'][] = $id;
+                            $json = json_decode(json_encode(['there_are_pdfFiles' => false]));
+                        }
 
-                        $json =  json_decode($object_model->insert_object_event($id, $data));
                         $category_root_id = $class->get_category_root_of($data['collection_id']);
 
-                        if(!empty($id_title))
-						{
-							require_once( dirname( __FILE__ ) . '../../../models/general/general_model.php' );
-							$model = new Model();
-							$model->set_common_field_values( $item, "title", $id_title[ $item ] );
+                        if(!empty($id_title)){
+                            $object_model->set_common_field_values( $item, "title", $id_title[ $item ] );
 						}
 
                         //categoria raiz da colecao

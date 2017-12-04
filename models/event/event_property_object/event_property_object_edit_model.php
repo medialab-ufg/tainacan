@@ -143,6 +143,7 @@ class EventPropertyObjectEdit extends EventModel {
         }
         $data['property_category_id'] = get_term_meta($data['property_object_id'], 'socialdb_property_created_category',true) ;
         $data['socialdb_property_object_cardinality'] = get_post_meta($event_id, 'socialdb_event_property_object_edit_cardinality',true) ;
+
         // chamo a funcao do model de propriedade para fazer a insercao
         $result = json_decode($propertyModel->update_property_object($data));
         if(isset(get_term_by('id', $data['property_object_id'], 'socialdb_property_type')->term_id)){

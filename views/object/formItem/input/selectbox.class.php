@@ -21,7 +21,7 @@ class SelectboxClass extends FormItem{
         <div class="form-group"
              id="validation-<?php echo $compound['id'] ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>"
              style="border-bottom:none;padding: 0px;margin-bottom: 10px;">
-               <?php endif; ?>
+       <?php endif; ?>
                 <select class="form-control auto-save"
                         id='selectbox-field-<?php echo $compound_id ?>-<?php echo $property_id ?>-<?php echo $index_id; ?>' >
                     <option value=""><?php _e('Select','tainacan') ?>...</option>
@@ -92,6 +92,7 @@ class SelectboxClass extends FormItem{
                             operation: 'saveValue',
                             type: 'term',
                             value: $(this).val(),
+                            collection_id: $("#collection_id").val(),
                             item_id: '<?php echo $item_id ?>',
                             compound_id: '<?php echo $compound_id ?>',
                             property_children_id: '<?php echo $property_id ?>',
@@ -105,6 +106,7 @@ class SelectboxClass extends FormItem{
                         operation: 'saveValue',
                         type: 'term',
                         value: $(this).val(),
+                        collection_id: $("#collection_id").val(),
                         item_id: '<?php echo $item_id ?>',
                         compound_id: '<?php echo $compound_id ?>',
                         property_children_id: '<?php echo $property_id ?>',

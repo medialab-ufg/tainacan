@@ -84,8 +84,8 @@
 
         if( window.location.search.indexOf('open_wizard') > -1 ) {
             $("#collection-steps").show();
-            var stateObj = {clear: "ok"};
-            history.replaceState(stateObj, "tainacan", '?');
+//            var stateObj = {clear: "ok"};
+//            history.replaceState(stateObj, "tainacan", '?');
         } else {
             $("#collection-steps").hide();
         }

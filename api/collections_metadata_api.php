@@ -282,7 +282,7 @@ abstract class CollectionsMetadataApi {
         $return['object_category_id'] = empty($property['metas']['socialdb_property_object_category_id']) ? false : $property['metas']['socialdb_property_object_category_id'] ;
         $return['to_search_in'] = empty($property['metas']['socialdb_property_to_search_in']) ? false : $property['metas']['socialdb_property_to_search_in'] ;
         $return['is_filter'] = empty($property['metas']['socialdb_property_object_is_facet']) ? false : $property['metas']['socialdb_property_object_is_facet'] ;
-        $return['reverse'] = empty($property['metas']['socialdb_property_object_reverse']) ? false : $property['metas']['socialdb_property_object_is_facet'] ;
+        $return['reverse'] = empty($property['metas']['socialdb_property_object_reverse']) ? false : $property['metas']['socialdb_property_object_reverse'] ;
         //used always
         $return['collection_id'] = $property['metas']['socialdb_property_collection_id'];
         $return['cardinality'] = isset($property['metas']['socialdb_property_object_cardinality']) ? $property['metas']['socialdb_property_object_cardinality'] : '1';

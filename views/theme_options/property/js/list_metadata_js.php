@@ -1752,11 +1752,14 @@
      ****************************************************************************
      **/
     $(function(){
+        var $form_ranking = $("#meta-voting #submit_form_ranking");
+
         $( $form_ranking ).submit( function( e ) {
             e.preventDefault();
+            $('.modal').modal('hide');
             $('#modalImportMain').modal('show');
             $.ajax( {
-                url: src+'/controllers/ranking/ranking_controller.php',
+                url: $('#src').val() +'/controllers/ranking/ranking_controller.php',
                 type: 'POST',
                 data: new FormData(this),
                 processData: false,
@@ -1794,8 +1797,6 @@
                 }else{
                     $('#meta-item-'+ranking_id+' .property-name').text(ranking_name)
                 }
-                //limpando caches
-                delete_all_cache_collection();
             });
         });
     });
@@ -1806,7 +1807,7 @@
             $("#modal_remove_ranking").modal('hide');
             $('#modalImportMain').modal('show');
             $.ajax({
-                url: src + '/controllers/ranking/ranking_controller.php',
+                url: $('#src').val()  + '/controllers/ranking/ranking_controller.php',
                 type: 'POST',
                 data: new FormData(this),
                 processData: false,
@@ -1838,9 +1839,19 @@
             if (elem.no_properties !== true) {
 
                 $.each(elem.rankings, function (idx, ranking) {
-                    if (ranking.metas.socialdb_property_created_category==elem.category_root) {
+                    //if (ranking.metas.socialdb_property_created_category==elem.category_root) {
                         var current_id = ranking.id;
                         var current_title = ranking.name;
+
+                        if(ranking.metas.socialdb_property_visibility&&property.metas.socialdb_property_visibility==='show'){
+                            var visibility = '<a vis="show" id="visibility_' + current_id + '" onclick="change_visibility(' + current_id + ')" style="cursor:pointer;"><span class="glyphicon glyphicon-eye-open"></span></a>';
+                            var style = '',
+                                addFilterStyle = '';
+                        }else{
+                            var style = 'style="opacity:0.33;"';
+                            var visibility = '<a vis="hide" id="visibility_' + current_id + '" onclick="change_visibility(' + current_id + ')" style="cursor:pointer;"><span class="glyphicon glyphicon-eye-close"></span></a>',
+                                addFilterStyle = 'pointer-events: none;';
+                        }
 
                         if (ranking.range_options !== false ) {
                             $.each(ranking.range_options, function (key, value) {
@@ -1849,10 +1860,12 @@
                                 $('#submit_form_ranking #range_' + $('#counter_range').val() + '_2').val(value.value_2);
                             });
                         }
-
                         $('ul#metadata-container').append(
-                            '<li id="meta-item-'+current_id+'" data-widget="' + ranking.search_widget + '" class="ui-widget-content ui-corner-tr"><label class="title-pipe">' 
-                            + '<span class="property-name">' + current_title + '</span>' +
+                            '<li id="meta-item-' + current_id + '" data-widget="' + ranking.search_widget + '" class="ui-widget-content ui-corner-tr"><label class="title-pipe">'+
+                            '<a title="Adicionar como filtro" id ="addFilter_'+ ranking.id +'"  style="cursor:pointer; margin-right:15px;' + addFilterStyle + '" onclick="add_filter(' + ranking.id + ', \'' + ranking.slug +'\')">' +
+                            '<span class="glyphicon glyphicon-menu-left"></span>' +
+                            '</a>'
+                            + '<span class="property-name">' + ranking.name + '</span>' +
                             '</label><div class="action-icons"> <input type="hidden" class="property_data_id" value="'+ current_id +'">' +
                             '<a onclick="edit_ranking('+ current_id + ')" class="edit_ranking" href="javascript:void(0)">' +
                             '<span class="glyphicon glyphicon-edit"><span></a> ' +
@@ -1860,7 +1873,7 @@
                             '<input type="hidden" class="ranking_name" value="' + current_title + '">' +
                             '<a onclick="delete_ranking(' + current_id + ')" class="delete_ranking" href="javascript:void(0)">' +
                             '<span class="glyphicon glyphicon-trash"><span></a></div></li>');
-                    }
+                    //}
                 });
             }
         });
@@ -2247,10 +2260,10 @@
                         remove_label_box_term($("#socialdb_property_term_root").val(), "#terms_dynatree");
                     $("#socialdb_property_term_root").val(node.data.key);
                     $('#selected_categories_term').html('');
-                   // add_label_box_term(node.data.key, node.data.title, '#selected_categories_term');
+                    add_label_box_term(node.data.key, node.data.title, '#selected_categories_term');
                 } else {
                     $("#socialdb_property_term_root").val('');
-                   // remove_label_box_term(node.data.key, "#terms_dynatree");
+                    remove_label_box_term(node.data.key, "#terms_dynatree");
                     $('#selected_categories_term').html('');
                 }
             },
@@ -2279,6 +2292,20 @@
                 }
             }
         });
+    }
+
+    function add_label_box_term(id, name, seletor) {
+        $(seletor).append('<span id="label-box-' + id + '" class="label label-primary">'
+            + name + ' <a style="color:white;cursor:pointer;" onclick="remove_label_box_term(' + id + ')">x</a></span>&nbsp;');
+    }
+
+    function remove_label_box_term(id, dynatree) {
+        $('#terms_dynatree').dynatree("getRoot").visit(function (node) {
+            if (node.data.key == id) {
+                node.select(false);
+            }
+        });
+        $('#label-box-' + id).remove();
     }
 
     function hide_fields(e){

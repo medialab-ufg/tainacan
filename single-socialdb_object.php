@@ -12,7 +12,19 @@ if($post->post_parent === 0) {
 $collection_id = $parent->ID;
 $single_mode = get_post_meta($collection_id, 'socialdb_collection_item_visualization', true);
 
-if("one" === $single_mode) {
+if (has_action('alter_page_item')) {
+    $object_id = $post->ID;
+    $data['collection_id'] = $collection_id;
+    $data['object'] = $post;
+    $data['metas'] = get_post_meta($object_id);
+    $data['collection_metas'] = get_post_meta($col_id, 'socialdb_collection_download_control', true);
+    $data['collection_metas'] = ($data['collection_metas'] ? $data['collection_metas'] : 'allowed');
+    $data['has_watermark'] = get_post_meta($col_id, 'socialdb_collection_add_watermark', true);
+    get_header();
+    echo apply_filters('alter_page_item', $data);
+    get_footer();
+    exit();
+}else if("one" === $single_mode) {
     include_once(dirname(__FILE__) .  '/controllers/object/object_controller.php');
     $obj = new ObjectController();
     $item_data = ['collection_id' => $collection_id, 'object_id' => $post->ID];
@@ -120,6 +132,12 @@ if("one" === $single_mode) {
                             if ($metas['socialdb_object_dc_type'][0] == 'text') {
                                 echo $metas['socialdb_object_content'][0];
                             } else {
+                                if(isset($metas['socialdb_object_content'][0]) && strpos($metas['socialdb_object_content'][0],'<p>')!==false){
+                                    $string = explode('<p>',$metas['socialdb_object_content'][0])[1];
+                                    $metas['socialdb_object_content'][0] = str_replace('</p>','',$string);
+                                    update_post_meta( $post->ID, 'socialdb_object_content', str_replace('</p>','',$string));
+
+                                }
                                 if ($item_opts['from'] == 'internal' && wp_get_attachment_url($metas['socialdb_object_content'][0])) {
                                     $url = wp_get_attachment_url($metas['socialdb_object_content'][0]);
                                     switch ($metas['socialdb_object_dc_type'][0]) {
@@ -138,17 +156,27 @@ if("one" === $single_mode) {
                                             $content = '<video width="400" controls><source src="' . $url . '">' . __('Your browser does not support HTML5 video.', 'tainacan') . '</video>';
                                             break;
                                         case 'pdf':
+                                            $directory_uri = get_template_directory_uri();
 
-                                            $view = get_template_directory_uri() . '/libraries/js/pdfThumb/pdfJS/web/viewer.html?file=' . $url;
-                                            $iframe_script = "";
-                                            $content =
-                                                "
-                                             <script>
-                                                hide_pdf_viewer_buttons();
-                                             </script>
-                                             <iframe id='iframePDF' name='iframePDF' src='$view' height='500px' allowfullscreen webkitallowfullscreen>
-                                                        
-                                             </iframe>";
+                                            $root_directory_uri = substr($directory_uri, 0, strpos($directory_uri, "/wp-content/"));
+                                            $root_pdf_uri = substr($url, 0, strpos($url, "/wp-content/"));
+
+                                            if(strcmp($root_directory_uri, $root_pdf_uri) == 0)
+                                            {
+	                                            $view = $directory_uri . '/libraries/js/pdfThumb/pdfJS/web/viewer.html?file=' . $url;
+	                                            $iframe_script = "";
+	                                            $content =
+                                                        "
+                                                 <script>
+                                                    hide_pdf_viewer_buttons();
+                                                 </script>
+                                                 <iframe id='iframePDF' name='iframePDF' src='$view' height='500px' allowfullscreen webkitallowfullscreen>
+                                                            
+                                                 </iframe>";
+                                            }else
+                                            {
+                                                $content = '<embed src="' . $url . '" width="600" height="500" alt="pdf" pluginspage="http://www.adobe.com/products/acrobat/readstep2.html">';
+                                            }
 
                                             //'<embed src="' . $url . '" width="600" height="500" alt="pdf" pluginspage="http://www.adobe.com/products/acrobat/readstep2.html">';
                                             break;
@@ -175,11 +203,17 @@ if("one" === $single_mode) {
                                             }
                                             break;
                                         case 'video':
-                                            if (strpos($metas['socialdb_object_content'][0], 'youtube') !== false) {
+	                                        $short_url = strpos($metas['socialdb_object_content'][0], 'youtu.be') !== false;
+                                            if (strpos($metas['socialdb_object_content'][0], 'youtube') !== false || $short_url) {
                                                 $step1 = explode('v=', $metas['socialdb_object_content'][0]);
                                                 $step2 = explode('&', $step1[1]);
-                                                $video_id = $step2[0];
-                                                $content = "<div style='height:600px; display: flex !important;'  ><iframe  class='embed-responsive-item' src='https://www.youtube.com/embed/" . $video_id . "?html5=1' allowfullscreen frameborder='0'></iframe></div>";
+
+                                                if($short_url)
+                                                {
+                                                    $video_id = end(explode('/', $metas['socialdb_object_content'][0]));
+                                                }else $video_id = $step2[0];
+
+                                                $content = "<div style='height:600px; display: flex !important;'  ><iframe  class='embed-responsive-item'  src='https://www.youtube.com/embed/" . $video_id . "?html5=1' allowfullscreen frameborder='0'></iframe></div>";
                                             } elseif (strpos($metas['socialdb_object_content'][0], 'vimeo') !== false) {
                                                 $step1 = explode('/', rtrim($metas['socialdb_object_content'][0], '/'));
                                                 $video_id = end($step1);
@@ -192,6 +226,11 @@ if("one" === $single_mode) {
                                             $content = '<embed src="' . $metas['socialdb_object_content'][0] . '" width="600" height="500" alt="pdf" pluginspage="http://www.adobe.com/products/acrobat/readstep2.html">';
                                             break;
                                         default:
+                                            //colocando o http
+                                            if( strpos($metas['socialdb_object_content'][0],'http://') === false ||  strpos($metas['socialdb_object_content'][0],'https://') === false){
+                                                $metas['socialdb_object_content'][0] = 'http://'.$metas['socialdb_object_content'][0];
+                                            }
+
                                             $content = '<p style="text-align:center;">' . __('File link:', 'tainacan') . ' <a target="_blank" href="' . $metas['socialdb_object_content'][0] . '">' . __('Click here!', 'tainacan') . '</a></p>';
                                             break;
                                     }

@@ -8,6 +8,12 @@ include_once (dirname(__FILE__) . '../../../models/property/property_model.php')
 include_once (dirname(__FILE__) . '../../../models/category/category_model.php');
 include_once (dirname(__FILE__) . '../../../models/event/event_object/event_object_create_model.php');
 include_once (dirname(__FILE__) . '../../../models/event/event_object/event_object_delete_model.php');
+include_once (dirname(__FILE__) . '../../../models/event/event_object/event_object_edit_model.php');
+
+include_once (dirname(__FILE__) . '../../../models/event/event_classification/event_classification_create_model.php');
+include_once (dirname(__FILE__) . '../../../models/event/event_property_object/event_property_object_edit_value_model.php');
+include_once (dirname(__FILE__) . '../../../models/event/event_property_data/event_property_data_edit_value_model.php');
+
 require_once(dirname(__FILE__) . '../../general/general_model.php');
 require_once(dirname(__FILE__) . '../../user/user_model.php');
 require_once(dirname(__FILE__) . '../../tag/tag_model.php');
@@ -409,7 +415,9 @@ class ObjectModel extends Model {
         } else {
             if ($data['content']) {
                 update_post_meta($object_id, 'socialdb_object_dc_source', $data['content']);
-                if ($data['type'] == 'image') {
+                if (isset($data['thumbnail_url']) && $data['thumbnail_url'] && $data['thumbnail_url'] !== '') {
+                    $this->add_thumbnail_url($data['thumbnail_url'], $object_id);
+                }else if ($data['type'] == 'image') {
                     $this->add_thumbnail_url($data['content'], $object_id);
                 }
                 update_post_meta($object_id, 'socialdb_object_content', $data['content']);
@@ -709,6 +717,56 @@ class ObjectModel extends Model {
         $data['socialdb_event_create_date'] = time();
         return $eventAddObject->create_event($data);
     }
+
+    //Ok
+	public function insert_term_edit_event($object_id,$property_id,$term_id, $data){
+		$event = new EventClassificationCreateModel();
+		$data['socialdb_event_object_item_id'] = $object_id;
+		$data['socialdb_event_classification_property_id'] = $property_id;
+		$data['socialdb_event_classification_term_id'] = $term_id;
+		$data['socialdb_event_collection_id'] = $data['collection_id'];
+		$data['socialdb_event_user_id'] = get_current_user_id();
+		$data['socialdb_event_classification_type'] = 'category';
+		$data['socialdb_event_create_date'] = time();
+		$data['socialdb_event_classification_object_id'] = $data['item_id'];
+		$data['socialdb_event_classification_index_compound'] = (isset($data['indexCoumpound']) ? $data['indexCoumpound'] : 'false' );
+		return $event->create_event($data);
+	}
+
+	//Ok
+	public function insert_object_edit_event($object_id, $property_id, $value, $data){
+		$event = new EventPropertyObjectEditValue();
+		$data['socialdb_event_property_object_edit_object_id'] = $object_id;
+		$data['socialdb_event_property_object_edit_property_id'] = $property_id;
+		$data['socialdb_event_property_object_edit_value_suggested_value'] = [$value];
+		$data['socialdb_event_collection_id'] = $data['collection_id'];
+		$data['socialdb_event_user_id'] = get_current_user_id();
+		$data['socialdb_event_create_date'] = time();
+		$data['socialdb_event_property_object_edit_value_index_compound'] = (isset($data['indexCoumpound']) ? $data['indexCoumpound'] : 'false' );
+
+		return $event->create_event($data);
+	}
+
+	//Ok
+	public function insert_data_edit_event($object_id, $property_id, $value, $data){
+		$event = new EventPropertyDataEditValue();
+		$data['socialdb_event_property_data_edit_value_object_id'] = $object_id;
+		$data['socialdb_event_property_data_edit_value_property_id'] = $property_id;
+		if(is_numeric($property_id))
+		{
+			$data['socialdb_event_property_data_edit_value_attribute_value'][] = ['val' => $value, 'index' => $data['index']];
+		}else
+		{
+			$data['socialdb_event_property_data_edit_value_attribute_value'] = $value;
+		}
+
+		$data['socialdb_event_collection_id'] = $data['collection_id'];
+		$data['socialdb_event_user_id'] = get_current_user_id();
+		$data['socialdb_event_create_date'] = time();
+		$data['socialdb_event_property_data_edit_value_index_compound'] = (isset($data['indexCoumpound']) ? $data['indexCoumpound'] : 'false' );
+		return $event->create_event($data);
+
+	}
 
     /**
      * @signature - function add_video($collection_id, $name, $content )

@@ -73,12 +73,15 @@ class ThemeOptionsModel extends Model {
         $option = ($type == 'standart' ? 'socialdb_standart_licenses' : 'socialdb_custom_licenses');
         $pattern = get_option('socialdb_pattern_licenses');
         $arrLicenses = get_option($option);
-        foreach ($arrLicenses as $license) {
-            $object_post = get_post($license);
-            $data_license['id'] = $object_post->ID;
-            $data_license['nome'] = $object_post->post_title;
+        if(is_array($arrLicenses))
+        {
+	        foreach ($arrLicenses as $license) {
+		        $object_post = get_post($license);
+		        $data_license['id'] = $object_post->ID;
+		        $data_license['nome'] = $object_post->post_title;
 
-            $data['licenses'][] = $data_license;
+		        $data['licenses'][] = $data_license;
+	        }
         }
         $data['pattern'] = $pattern;
         return $data;

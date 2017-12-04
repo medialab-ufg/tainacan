@@ -78,6 +78,24 @@
                             &nbsp;<input type="radio" name="socialdb_event_property_visualization" id="socialdb_property_object_visualization_public" checked="checked"  value="public">&nbsp;<?php _e('Public','tainacan') ?>
                             &nbsp;<input type="radio" name="socialdb_event_property_visualization" id="socialdb_property_object_visualization_restrict" value="restrict">&nbsp;<?php _e('Restrict','tainacan') ?>
                         </div>
+
+                        <div class="create_form-group">
+                            <label for="socialdb_property_help"><?php _e('Text helper', 'tainacan'); ?></label>
+
+		                    <?php
+		                    if(has_action('help_text_change_input_type'))
+		                    {
+			                    do_action('help_text_change_input_type');
+		                    }else
+		                    {
+			                    ?>
+                                <input type="text" class="form-control" id="socialdb_property_data_help" name="socialdb_property_data_help" />
+			                    <?php
+		                    }
+		                    ?>
+                        </div>
+                        <br>
+
                         <div class="form-group">
                             <label for="socialdb_event_property_tab"><?php _e('Select the tab','tainacan'); ?></label>
                             <select class="socialdb_event_property_tab form-control" name="socialdb_event_property_tab">
@@ -124,7 +142,7 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-default pull-left close-modal" data-dismiss="modal"><?php _e('Cancel','tainacan') ?></button>
                 <button type="submit" class="btn btn-primary action-continue" form="submit_form_property_object">
-                    <?php _e('Continue','tainacan') ?>
+                    <?php _e('Save','tainacan') ?>
                 </button>
 <!--                <button type="button" onclick="clear_buttons()" class="btn btn-default" id="clear_categories">--><?php //_e('New','tainacan'); ?><!--</button>-->
             </div>

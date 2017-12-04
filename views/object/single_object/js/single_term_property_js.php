@@ -27,8 +27,9 @@ $(function(){
     $('#socialdb_property_term_cardinality_1').trigger('click');
 
     showTermsDynatree(src);
-    $('[data-toggle="popover"]').popover()
+    $('[data-toggle="popover"]').popover();
 });
+
 var src = $('#src').val();
 var selected_element;
 var new_category_html =

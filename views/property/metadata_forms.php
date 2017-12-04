@@ -54,7 +54,18 @@ foreach ($view_helper->get_metadata_types() as $type => $label):
                                     </div>
                                     <div class="create_form-group">
                                         <label for="socialdb_property_help"><?php _e('Text helper', 'tainacan'); ?></label>
-                                        <input type="text" class="form-control" id="socialdb_property_data_help" name="socialdb_property_data_help" />
+
+                                        <?php
+                                            if(has_action('help_text_change_input_type'))
+                                            {
+                                                do_action('help_text_change_input_type');
+                                            }else
+                                            {
+                                                ?>
+                                                <input type="text" class="form-control" id="socialdb_property_data_help" name="socialdb_property_data_help" />
+                                                <?php
+                                            }
+                                        ?>
                                     </div>
                                     <br>
                                     <hr>
@@ -168,7 +179,7 @@ foreach ($view_helper->get_metadata_types() as $type => $label):
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default pull-left close-modal" data-dismiss="modal"><?php _e('Cancel', 'tainacan') ?></button>
                         <button type="submit" class="btn btn-primary action-continue" form="submit_form_property_data_<?php echo $type ?>">
-                            <?php _e('Continue', 'tainacan') ?>
+                            <?php _e('Save', 'tainacan') ?>
                         </button>
                     </div>
                 </div>
@@ -202,7 +213,7 @@ endforeach;
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal"><?php _e('Close', 'tainacan'); ?></button>
-                    <button type="submit" class="btn btn-primary"><?php _e('Salve', 'tainacan'); ?></button>
+                    <button type="submit" class="btn btn-primary"><?php _e('Save', 'tainacan'); ?></button>
                 </div>
             </form>
         </div>
@@ -242,7 +253,25 @@ endforeach;
                             <label for="property_fixed_required" style="display: block"><?php _e('Required metadata', 'tainacan'); ?></label>
                             <input type="checkbox" name="property_fixed_required" id="property_fixed_required"  value="true">&nbsp;<?php _e('Yes', 'tainacan'); ?>
                         </div>
-                    </div> 
+                    </div>
+
+                    <div class="create_form-group">
+                        <label for="socialdb_property_help"><?php _e('Text helper', 'tainacan'); ?></label>
+
+		                <?php
+		                if(has_action('help_text_change_input_type'))
+		                {
+			                do_action('help_text_change_input_type');
+		                }else
+		                {
+			                ?>
+                            <input type="text" class="form-control" id="socialdb_property_data_help" name="socialdb_property_data_help" />
+			                <?php
+		                }
+		                ?>
+                    </div>
+                    <br>
+
                     <div id='container_mask_field' style="display: none;">
                         <div id="mask_field" >
                             <label for="property_fixed_mask_key" style="display: block"><?php _e('Mask key', 'tainacan'); ?></label>
@@ -254,7 +283,7 @@ endforeach;
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal"><?php _e('Close', 'tainacan'); ?></button>
-                <button onclick="alter_fixed_properties_label()" type="button" class="btn btn-primary"><?php _e('Salve', 'tainacan'); ?></button>
+                <button onclick="alter_fixed_properties_label()" type="button" class="btn btn-primary"><?php _e('Save', 'tainacan'); ?></button>
             </div>
         </div>
     </div>

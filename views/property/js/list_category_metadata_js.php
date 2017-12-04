@@ -450,6 +450,7 @@
                 data: current_data,
                 processData: false
             }).done(function(result) {
+                console.log("Olá");
                 $('#modalImportMain').modal('hide');
 
                 var current_modal = get_open_model_id();
@@ -906,7 +907,7 @@
     }
     /**
        funcao quer altera a visibilidade os metadados fixos de uma colecao 
-     * @param {type} e
+     * @param {type}
      * @returns {undefined}     */
     function change_visibility(property_id) {
         if ($('#visibility_'+property_id).attr('vis')==='hide') {
@@ -2574,7 +2575,7 @@
         //se estiver finalizando a edicao, isto eh, se apertar enter
         if (e.keyCode == 13&&seletor.hasClass('taxonomy-category-modified')&&$(input).val()!=='') {
             //pego o valor do input
-            var val =  $(input).val(); 
+            var val =  $(input).val();
             //mostro o texto
             $(seletor).show();
             //escondoo input
@@ -2586,11 +2587,11 @@
             if( $(object).find('ul').first().length>0){
                 children = "<ul >"+$(object).find('ul').first().html()+'</ul>';
             }
-            //atraves do seletor do li ou ul 
+            //atraves do seletor do li ou ul
             $(object)
             // create a new li item
             .before("<li class='taxonomy-list-create'   >"+
-                    "<span onclick='click_event_taxonomy_create_zone($(this).parent())'   class='li-default taxonomy-list-name taxonomy-category-finished'>" + val + 
+                    "<span onclick='click_event_taxonomy_create_zone($(this).parent())'   class='li-default taxonomy-list-name taxonomy-category-finished'>" + val +
                     "</span><input type='text' maxlength='255' style='display: none;' class='input-taxonomy-create style-input'"+
                     " onblur='blur_event_taxonomy_create_zone($(this).parent())'  onkeyup='keypress_event_taxonomy_create_zone($(this).parent(),event)' >"+
                     children+"</li>")
@@ -2614,7 +2615,7 @@
     function verify_has_li(){
         if($('#taxonomy_create_zone').has('ul').length==0){
            $('#taxonomy_create_zone').html('<ul class="root_ul"><li class="taxonomy-list-create">'+
-                   new_category_html+'</li></ul>') 
+                   new_category_html+'</li></ul>')
         }
     }
     //adicionando uma categoria na irma acima
@@ -2631,12 +2632,12 @@
         if(sibling.length>0){
             if(sibling.find('ul').first().length>0){
                  sibling.find('ul').first().append("<li class='taxonomy-list-create' >"+
-                    "<span style='display: none;'  onclick='click_event_taxonomy_create_zone($(this).parent())' class='li-default taxonomy-list-name taxonomy-category-finished'>" + $(input).val() + 
+                    "<span style='display: none;'  onclick='click_event_taxonomy_create_zone($(this).parent())' class='li-default taxonomy-list-name taxonomy-category-finished'>" + $(input).val() +
                     "</span><input type='text' maxlength='255' value='"+ $(input).val() +"' class='input-taxonomy-create style-input'"+
                     " onblur='blur_event_taxonomy_create_zone($(this).parent())'  onkeyup='keypress_event_taxonomy_create_zone($(this).parent(),event)' >"+children+"</li>");
             }else{
                 sibling.append("<ul><li class='taxonomy-list-create'  >"+
-                    "<span style='display: none;' onclick='click_event_taxonomy_create_zone($(this).parent())' class='li-default taxonomy-list-name taxonomy-category-finished'>" + $(input).val() + 
+                    "<span style='display: none;' onclick='click_event_taxonomy_create_zone($(this).parent())' class='li-default taxonomy-list-name taxonomy-category-finished'>" + $(input).val() +
                     "</span><input type='text' maxlength='255' value='"+ $(input).val() +"'  class='input-taxonomy-create style-input'"+
                     " onblur='blur_event_taxonomy_create_zone($(this).parent())'  onkeyup='keypress_event_taxonomy_create_zone($(this).parent(),event)' >"+children+"</li></ul>");
             }
@@ -2664,7 +2665,7 @@
         var parent_li = parent_direct.parent();
         var parent_to_insert = parent_li.parent();
         parent_to_insert.append("<li class='taxonomy-list-create' >"+
-                    "<span style='display: none;' onclick='click_event_taxonomy_create_zone($(this).parent())' class='li-default taxonomy-list-name taxonomy-category-finished'>" + $(input).val() + 
+                    "<span style='display: none;' onclick='click_event_taxonomy_create_zone($(this).parent())' class='li-default taxonomy-list-name taxonomy-category-finished'>" + $(input).val() +
                     "</span><input maxlength='255' type='text' value='"+ $(input).val() +"'  class='input-taxonomy-create style-input'"+
                     " onblur='blur_event_taxonomy_create_zone($(this).parent())'  onkeyup='keypress_event_taxonomy_create_zone($(this).parent(),event)' >"+children+"</li>");
         $(selected_element).remove();
@@ -2672,8 +2673,8 @@
     }
     //insere o input para adicao da categoria
     function add_field_category(){
-        $('.input-taxonomy-create').hide();    
-        $('.taxonomy-list-name').show();   
+        $('.input-taxonomy-create').hide();
+        $('.taxonomy-list-name').show();
         if($(selected_element).is(':visible')&&selected_element.length>0){
             if( $(selected_element).find('ul').first().length>0){
                 $(selected_element).find('ul').first().append('<li class="taxonomy-list-create">'+
@@ -2685,13 +2686,13 @@
         }else{
             if($('#taxonomy_create_zone').has('ul').length==0){
                  $('#taxonomy_create_zone').append('<ul class="root_ul"><li class="taxonomy-list-create">'+
-                   new_category_html+'</li></ul>'); 
+                   new_category_html+'</li></ul>');
             }else{
                 $('#taxonomy_create_zone .root_ul').append('<li class="taxonomy-list-create">'+
-                   new_category_html+'</li>'); 
+                   new_category_html+'</li>');
             }
         }
-        
+
         $('#taxonomy_create_zone').find('.input-taxonomy-create').focus().is(':visible');
     }
     //subir categoria entre as suas irmas na hieraquia
