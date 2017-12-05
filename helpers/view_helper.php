@@ -71,7 +71,7 @@ class ViewHelper {
                     $logo_src = $logo_obj->guid;
                 } else {
                     $extraClass = "logo-tainacan";
-                    $logo_src = get_template_directory_uri() . '/libraries/images/Tainacan_pb.svg';
+                    $logo_src = get_template_directory_uri() . '/libraries/images/Tainacan_pb.png';
                 }
             }
 
