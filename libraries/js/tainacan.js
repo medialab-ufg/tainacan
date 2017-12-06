@@ -33,13 +33,13 @@ var Hook = {
     }
 };
 
-//sobreescrevendo alert
+/*//sobreescrevendo alert
 var old = alert;
 
 alert = function() {
     console.log(new Error().stack);
     //old.apply(window, arguments);
-};
+};*/
 
 $(window).load(function () {
     (function(d, s, id) {
