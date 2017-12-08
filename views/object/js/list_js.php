@@ -676,9 +676,12 @@
                         closeOnConfirm: true,
                         closeOnCancel: true
                     },
-                    function (isCancel) {
-                        var win = window.open(json.new_collection_url, '_blank');
-                        win.focus();
+                    function (isConfirm) {
+                        if(!isConfirm)
+                        {
+                            var win = window.open(json.new_collection_url, '_blank');
+                            win.focus();
+                        }
                     });
             });
         } else if ($('input[name=duplicate_item]:checked', '#formDuplicateItem' + object_id).val() == 'versioning') {
