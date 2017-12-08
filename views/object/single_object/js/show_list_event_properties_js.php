@@ -269,7 +269,7 @@
                 $("#widget_" + property_id + "_" + object_id).hide();
                 $("#labels_" + property_id + "_" + object_id).fadeIn();
                 list_properties_single(object_id);
-                showAlertGeneral(elem.title, elem.msg, elem.type);
+                //showAlertGeneral(elem.title, elem.msg, elem.type);
                 //limpando caches
                 delete_all_cache_collection();
             });
@@ -354,7 +354,7 @@
             verifyPublishedItem(object_id); 
             elem = jQuery.parseJSON(result);
             list_properties_single(object_id);
-            showAlertGeneral(elem.title, elem.msg, elem.type);
+            //showAlertGeneral(elem.title, elem.msg, elem.type);
             //limpando caches
             delete_all_cache_collection();
         });
@@ -808,7 +808,7 @@
                         }).done(function (result) {
                             list_properties_single(object_id);
                             hide_modal_main();
-                            showAlertGeneral(elem_first.title, elem_first.msg, elem_first.type);
+                            //showAlertGeneral(elem_first.title, elem_first.msg, elem_first.type);
                         });
                     }else{
                         list_properties_single(object_id);
