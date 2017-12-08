@@ -651,6 +651,7 @@
         } else if ($('input[name=duplicate_item]:checked', '#formDuplicateItem' + object_id).val() == 'other_collection') {
             //Duplicate in other collections
             $('#modalImportMain').modal('show');//mostro o modal de carregamento
+            $('#modal_duplicate_object' + object_id).modal('hide');
             $.ajax({
                 type: "POST",
                 url: $('#src').val() + "/controllers/object/object_controller.php",
@@ -661,15 +662,27 @@
                     object_id: object_id
                 }
             }).done(function (result) {
-                //$('#modalImportMain').modal('hide');//escondo o modal de carregamento
-                //$('#modal_duplicate_object' + object_id).modal('hide');
+                $('#modalImportMain').modal('hide');//escondo o modal de carregamento
                 json = jQuery.parseJSON(result);
-                window.location.replace(json.new_collection_url);
-                /*$("#container_socialdb").hide('slow');
-                 $("#form").hide().html(result).show('slow');
-                 $('#create_button').hide();
-                 $('.dropdown-toggle').dropdown();
-                 $('.nav-tabs').tab();*/
+
+                swal({
+                        title: '<?php _e('Success','tainacan') ?>',
+                        text: '<?php _e('This item was duplicated','tainacan') ?>',
+                        type: "success",
+                        showCancelButton: true,
+                        confirmButtonClass: 'btn-primary',
+                        cancelButtonClass: 'btn-default',
+                        cancelButtonText: '<?php _e('Edit item','tainacan') ?>',
+                        closeOnConfirm: true,
+                        closeOnCancel: true
+                    },
+                    function (isConfirm) {
+                        if(!isConfirm)
+                        {
+                            var win = window.open(json.new_collection_url, '_blank');
+                            win.focus();
+                        }
+                    });
             });
         } else if ($('input[name=duplicate_item]:checked', '#formDuplicateItem' + object_id).val() == 'versioning') {
             //Versioning
