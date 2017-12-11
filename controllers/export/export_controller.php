@@ -34,6 +34,7 @@ class ExportController extends Controller {
                         if ($data['export_zip_csv'] == 'only_csv') {
                             $csv_data = $export_model->generate_csv_data($data);
                             $export_model->download_send_headers('tainacan_csv.csv');
+                            print_r($csv_data);
                             //echo utf8_decode($export_model->array2csv($csv_data, $data['socialdb_delimiter_csv']));
 	                        break;
                         } elseif ($data['export_zip_csv'] == 'csv_plus_zip') {
