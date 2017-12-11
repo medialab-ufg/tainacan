@@ -116,6 +116,7 @@ class ObjectSaveValuesModel extends Model {
                 $type = $array[$index][$property_children_id]['type'];
                 // array de valores (necessario se existir a necessidade de compostas com valores multivalorados)
                 $values = $array[$index][$property_children_id]['values'];
+
                 //busco o valor do postmeta bruto para ser atualizado
                 $meta_value = (is_numeric($indexCompound) && isset($values[(int)$indexCompound])) ? $this->sdb_get_post_meta($values[(int)$indexCompound]) : false;
                 //caso esse postmeta exista

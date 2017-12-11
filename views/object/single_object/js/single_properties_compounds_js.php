@@ -916,7 +916,8 @@
         var properties_id = $('#compounds_'+property_id).val().split(',');
         var values = [];
         var value = '';
-        var final_value = ''
+        var final_value = '';
+
         if(!clear_values){
             for(var i = 0;i<properties_id.length;i++ ){
                 value = $('[name="socialdb_property_'+property_id+'_'+properties_id[i]+'_'+row+'[]"]').val();
@@ -956,6 +957,7 @@
     
     function ajax_value_compounds(object_id,property_id,row,value){
         show_modal_main();
+
         $.ajax({
                 type: "POST",
                 url: $('#src').val() + "/controllers/event/event_controller.php",
