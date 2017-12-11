@@ -30,11 +30,12 @@ class ExportController extends Controller {
                 $data['encode_csv_export'] = trim($data['encode_csv_export']);
                 $data['export_zip_csv'] = trim($data['export_zip_csv']);
                 if ($data['socialdb_delimiter_csv'] != '') {
-                    if (true) {
+                    if (!empty($export_model->get_collection_posts($data['collection_id']))) {
                         if ($data['export_zip_csv'] == 'only_csv') {
                             $csv_data = $export_model->generate_csv_data($data);
                             $export_model->download_send_headers('tainacan_csv.csv');
-                            echo utf8_decode($export_model->array2csv($csv_data, $data['socialdb_delimiter_csv']));
+                            //echo utf8_decode($export_model->array2csv($csv_data, $data['socialdb_delimiter_csv']));
+	                        break;
                         } elseif ($data['export_zip_csv'] == 'csv_plus_zip') {
                             $csv_model = new CSVExportModel;
                             $csv_model->generate_zip($data['collection_id'], $data);
