@@ -40,7 +40,7 @@ after_success:
   #- sudo sshpass -p '$pass_user_server_tainacan'  ssh $user_server_tainacan@$host_server_tainacan "sh $path_deploy_script_tainacan"
  
   #- ssh l3p@medialab.ufg.br sh /home/l3p/atualiza_git/atualiza_dev_tainacan.sh
-  
+  - echo "$path_deploy_script_tainacan"
 deploy:
 - provider: script
   script: sshpass -p '$pass_user_server_tainacan'  ssh $user_server_tainacan@$host_server_tainacan "sh $path_deploy_script_tainacan"
