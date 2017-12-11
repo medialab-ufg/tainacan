@@ -25,9 +25,6 @@ before_install:
 - openssl aes-256-cbc -K $encrypted_f26652362650_key -iv $encrypted_f26652362650_iv
   -in deploy_rsa.enc -out deploy_rsa -d
 
-
-
-
 install:
 
   - sudo apt-get install sshpass
@@ -44,7 +41,7 @@ after_success:
   - rm -r deploy_rsa
   - echo -e "Host medialab.ufg.br\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
  
- deploy:
+deploy:
 - provider: script
   script:   sshpass -p '$pass_user_server_tainacan'  ssh $user_server_tainacan@$host_server_tainacan "sh $path_deploy_script_tainacan"
   skip_cleanup: true
