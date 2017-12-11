@@ -30,7 +30,7 @@ class ExportController extends Controller {
                 $data['encode_csv_export'] = trim($data['encode_csv_export']);
                 $data['export_zip_csv'] = trim($data['export_zip_csv']);
                 if ($data['socialdb_delimiter_csv'] != '') {
-                    if (!empty($export_model->get_collection_posts($data['collection_id']))) {
+                    if (true) {
                         if ($data['export_zip_csv'] == 'only_csv') {
                             $csv_data = $export_model->generate_csv_data($data);
                             $export_model->download_send_headers('tainacan_csv.csv');
@@ -40,6 +40,7 @@ class ExportController extends Controller {
                             $csv_model->generate_zip($data['collection_id'], $data);
                             break;
                         }
+
                         Log::addLog(['collection_id' => $data['collection_id'], 'event_type' => 'collection_imports', 'event' => 'export_csv']);
                     } else {
                         wp_redirect(get_the_permalink($data['collection_id']) . '?info_title=Attention&info_messages=' . urlencode(__('This collection has no items to export!', 'tainacan')));
