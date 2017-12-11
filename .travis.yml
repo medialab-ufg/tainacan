@@ -43,7 +43,7 @@ deploy:
   script:   sshpass -p '$pass_user_server_tainacan'  ssh $user_server_tainacan@$host_server_tainacan "sh $path_deploy_script_tainacan"
   skip_cleanup: true
   on:
-    branch: develop
+    branch: dev
   
   
 cache:
