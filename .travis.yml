@@ -19,6 +19,8 @@ matrix:
     - sshpass
 
 install:
+
+  - sudo apt-get install sshpass
   - composer self-update
   - composer install
 
