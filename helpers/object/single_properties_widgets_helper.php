@@ -222,7 +222,7 @@ class ObjectSingleWidgetsHelper extends ViewHelper {
                                             continue;
                                         }
                                         $coumpounds_id[] = $property_compounded['id']; 
-                                        $value = $this->get_value_helper($object_id, $property['id'], $property_compounded['id'], $i, $position);
+                                        $value = $this->get_value_helper($object_id, $property['id'], $property_compounded['id'], $i, $position, true);
                                         ?>
                                         <input  type="hidden" 
                                                 id='core_validation_<?php echo $references['compound_id'] ?>_<?php echo $property_compounded['id']; ?>_<?php echo $i ?>' 
@@ -243,7 +243,7 @@ class ObjectSingleWidgetsHelper extends ViewHelper {
                                                             <?php echo ($val) ? '<b><a style="cursor:pointer;" onclick="wpquery_link_filter(' . "'" . $val . "'" . ',' . $property['id'] . ')"  >'.$val.'</a></b>' : '<button type="button" onclick="edit_compounds_property('. $property['id'] .', '.$object_id.')" class="btn btn-default btn-xs">'.__('Empty field!','tainacan').'</button>' ?>
                                                         </div> 
                                                         <div style="display: none;" class="compounds_fields_value_<?php echo $property['id']; ?>">
-                                                            <?php 
+                                                            <?php
                                                             $this->widget_property_data($property_compounded, $i,$references,$val);
                                                             ?>
                                                         </div>
@@ -550,18 +550,30 @@ class ObjectSingleWidgetsHelper extends ViewHelper {
      * @param type $i
      * @return string/boolean
      */
-    public function get_value_helper($item_id,$compound_id,$property,$i,$position) {
+    public function get_value_helper($item_id,$compound_id,$property,$i,$position, $single = false) {
         $meta = unserialize(get_post_meta($item_id, 'socialdb_property_helper_' . $compound_id, true));
         $indexed_properties = [];
         if($meta && !empty($meta) && is_array($meta) && isset($meta[$i][$property])){
             $values = $meta[$i][$property]['values'];
-            foreach ($values as $value) {
-                $meta_value = $this->sdb_get_post_meta($value);
-                if(isset($meta_value->meta_value))
-                {
-                    $indexed_properties[] = $meta_value->meta_value;
-                }
+
+            if($single)
+            {
+	            $meta_value = $this->sdb_get_post_meta($values[count($values) - 1]);
+	            if(isset($meta_value->meta_value))
+	            {
+		            $indexed_properties[] = $meta_value->meta_value;
+	            }
             }
+            else{
+	            foreach ($values as $value) {
+		            $meta_value = $this->sdb_get_post_meta($value);
+		            if(isset($meta_value->meta_value))
+		            {
+			            $indexed_properties[] = $meta_value->meta_value;
+		            }
+	            }
+            }
+
             return implode(',',$indexed_properties);
         }
         return false;

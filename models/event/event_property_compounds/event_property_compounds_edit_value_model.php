@@ -101,6 +101,7 @@ class EventPropertyCompoundsEditValue extends EventModel {
                 }else{
                     $type = 'term';
                 }
+
                 $class->saveValue($object_id,
                     $property,
                     $property_compounds_id,

@@ -827,6 +827,7 @@ class ViewHelper {
     public function sdb_get_post_meta($meta_id) {
         global $wpdb;
         $query = "SELECT * FROM $wpdb->postmeta WHERE meta_id = $meta_id";
+
         $result = $wpdb->get_results($query);
         if ($result && is_array($result)) {
             return $result[0];
