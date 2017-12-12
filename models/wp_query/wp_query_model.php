@@ -598,19 +598,21 @@ class WPQueryModel extends Model {
             if (isset($meta_key)&&!in_array($meta_key, ['title','comment_count','date'])) {
                 $args['meta_key'] = $meta_key;
             }
-            if (isset($recover_data['post_type']) && $recover_data['post_type']=='socialdb_collection') {
-                $args['s'] = $recover_data['keyword'];
-            }
-            if(isset($recover_data['advanced_search']) && isset($recover_data['keyword'])){
-                if(has_filter('alter_s_wpquery_search')){
-                    $s = apply_filters('alter_s_wpquery_search',$recover_data['keyword']);
-                    if($s){
-                        $args['s'] = $s;
-                    }
-                }else{
-                    $args['s'] = $recover_data['keyword'];
-                }
-            }
+//            if (isset($recover_data['post_type']) && $recover_data['post_type']=='socialdb_collection') {
+//                $args['s'] = $recover_data['keyword'];
+//            }
+//            if(isset($recover_data['advanced_search']) && isset($recover_data['keyword'])){
+//                if(has_filter('alter_s_wpquery_search')){
+//                    $s = apply_filters('alter_s_wpquery_search',$recover_data['keyword']);
+//                    if($s){
+//                        $args['s'] = $s;
+//                    }
+//                }else{
+//                    $args['s'] = $recover_data['keyword'];
+//                }
+//            }
+            $args['s'] = $recover_data['keyword'];
+
             if(isset($recover_data['author']) && $recover_data['author'] != ''){
                 $args['author'] = $recover_data['author'];
             }
@@ -885,50 +887,50 @@ class WPQueryModel extends Model {
         $meta_query = array();
         $meta_query = array('relation' => 'AND');
         //se estiver buscando uma string em uma colecao de itens
-        if (isset($recover_data['keyword'])&&!is_array($recover_data['keyword']) && $recover_data['keyword'] != '') {
-            $length = strlen($recover_data['keyword']);
-            $recover_data['keyword'] = stripslashes ($recover_data['keyword'] );
-            if ((strpos($recover_data['keyword'], '"') === 0)) {
-                $array = explode('"', $recover_data['keyword']);
-                foreach ($array as $str) {
-                    if (trim($str) !== '') {
-                        $meta_query[] = array(
-                            'key' => 'socialdb_object_commom_values',
-                            'value' => trim($str),
-                            'compare' => 'LIKE'
-                        );
-                    }
-                }
-            } elseif ((strpos($recover_data['keyword'], "'") === 0)) {
-                $array = explode("'", $recover_data['keyword']);
-                foreach ($array as $str) {
-                    if (trim($str) !== '') {
-                        $meta_query[] = array(
-                            'key' => 'socialdb_object_commom_values',
-                            'value' => trim($str),
-                            'compare' => 'LIKE'
-                        );
-                    }
-                }
-            } else {
-                $array = explode(' ', $recover_data['keyword']);
-                foreach ($array as $str) {
-                    if (trim($str) !== '') {
-                        $meta_query[] = array(
-                            'key' => 'socialdb_object_commom_values',
-                            'value' => trim($str),
-                            'compare' => 'LIKE'
-                        );
-                    }
-                }
-            }
-        }else if(isset($recover_data['keyword'])&&is_array($recover_data['keyword'])){
-            $meta_query[] = array(
-                            'key' => 'socialdb_object_commom_values',
-                            'value' => $recover_data['keyword'],
-                            'compare' => 'IN'
-                        );
-        }
+//        if (isset($recover_data['keyword'])&&!is_array($recover_data['keyword']) && $recover_data['keyword'] != '') {
+//            $length = strlen($recover_data['keyword']);
+//            $recover_data['keyword'] = stripslashes ($recover_data['keyword'] );
+//            if ((strpos($recover_data['keyword'], '"') === 0)) {
+//                $array = explode('"', $recover_data['keyword']);
+//                foreach ($array as $str) {
+//                    if (trim($str) !== '') {
+//                        $meta_query[] = array(
+//                            'key' => 'socialdb_object_commom_values',
+//                            'value' => trim($str),
+//                            'compare' => 'LIKE'
+//                        );
+//                    }
+//                }
+//            } elseif ((strpos($recover_data['keyword'], "'") === 0)) {
+//                $array = explode("'", $recover_data['keyword']);
+//                foreach ($array as $str) {
+//                    if (trim($str) !== '') {
+//                        $meta_query[] = array(
+//                            'key' => 'socialdb_object_commom_values',
+//                            'value' => trim($str),
+//                            'compare' => 'LIKE'
+//                        );
+//                    }
+//                }
+//            } else {
+//                $array = explode(' ', $recover_data['keyword']);
+//                foreach ($array as $str) {
+//                    if (trim($str) !== '') {
+//                        $meta_query[] = array(
+//                            'key' => 'socialdb_object_commom_values',
+//                            'value' => trim($str),
+//                            'compare' => 'LIKE'
+//                        );
+//                    }
+//                }
+//            }
+//        }else if(isset($recover_data['keyword'])&&is_array($recover_data['keyword'])){
+//            $meta_query[] = array(
+//                            'key' => 'socialdb_object_commom_values',
+//                            'value' => $recover_data['keyword'],
+//                            'compare' => 'IN'
+//                        );
+//        }
 
         if (isset($recover_data['properties_tree'])) {
             foreach ($recover_data['properties_tree'] as $property_id => $value_id) {
