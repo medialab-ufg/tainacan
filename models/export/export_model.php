@@ -467,11 +467,16 @@ class ExportModel extends Model {
         socialdb_add_tax_terms($object_id, array($array['term_id']), 'socialdb_category_type');
     }
 
-    public function generate_csv_data($data) {
+    public function generate_csv_data($data, $objects = null) {
         $propertyModel = new PropertyModel;
-        $facets_id = CollectionModel::get_facets($data['collection_id']);
-        $objects = $this->get_collection_posts($data['collection_id']);
+	    $facets = CollectionModel::get_facets($data['collection_id']);
+        if(!$objects)
+        {
+        	$objects = $this->get_collection_posts($data['collection_id']);
+        }
+
         $csv_data = [];
+
         foreach ($objects as $object) {
             if ($object->ID == $data['collection_id']) {
                 continue;
@@ -552,7 +557,6 @@ class ExportModel extends Model {
             $categories_of_facet = array();
             $category_model = new CategoryModel;
             $categories = wp_get_object_terms($object->ID, 'socialdb_category_type');
-            $facets = CollectionModel::get_facets($data['collection_id']);
             if (is_array($categories)):
                 foreach ($categories as $category) {
                     $facet_id = $category_model->get_category_facet_parent($category->term_id, $data['collection_id']);
@@ -573,8 +577,6 @@ class ExportModel extends Model {
                     endif;
                 }
             }
-
-            $categories_of_facet = '';
 
             /** Propriedades de Atributos * */
             $root_category = $this->get_category_root_of($data['collection_id']);
