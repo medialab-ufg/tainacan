@@ -469,6 +469,7 @@ class ExportModel extends Model {
 
     public function generate_csv_data($data, $objects = null) {
         $propertyModel = new PropertyModel;
+
 	    $facets = CollectionModel::get_facets($data['collection_id']);
         if(!$objects)
         {
@@ -477,6 +478,8 @@ class ExportModel extends Model {
 
         $csv_data = [];
 
+	    $df = fopen("php://output", 'w');
+	    $first = true;
         foreach ($objects as $object) {
             if ($object->ID == $data['collection_id']) {
                 continue;
@@ -619,10 +622,15 @@ class ExportModel extends Model {
             }
 
 
-            /**             * ************************** */
-            $csv[] = $csv_data;
+            if($first)
+            {
+            	fputcsv($df, array_keys($csv_data), $data['socialdb_delimiter_csv']);
+	            $first = false;
+            }
+	        fputcsv($df, $csv_data, $data['socialdb_delimiter_csv']);
         }
-        return $csv;
+
+	    fclose($df);
     }
 
     public function generate_csv_data_selected($data) {
@@ -931,17 +939,16 @@ class ExportModel extends Model {
     }
 
     public function array2csv(array &$array, $delimiter = ';') {
-
         if (count($array) == 0) {
             return null;
         }
-        //$filename = $this->get_name_file();
-        $filename = 'tainacan_csv';
+
         $df = fopen("php://output", 'w');
         fputcsv($df, array_keys(reset($array)), $delimiter);
         foreach ($array as $row) {
             fputcsv($df, $row, $delimiter);
         }
+
         fclose($df);
     }
 
