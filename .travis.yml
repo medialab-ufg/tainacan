@@ -25,7 +25,7 @@ install:
 - composer install
 script: 
 after_success:
-- ssh l3p@medialab.ufg.br sh /home/l3p/atualiza_git/git_test.sh
+- ssh l3p@medialab.ufg.br sh /home/l3p/atualiza_git/atualiza_master_tainacan.sh
 cache:
   directories: 
 #  - vendor
