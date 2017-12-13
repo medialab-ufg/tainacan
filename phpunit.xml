@@ -2,7 +2,7 @@
 
 <phpunit 
 	backupGlobals="false"
-	bootstrap="tests\bootstrap.php"
+	bootstrap="tests/bootstrap.php"
 	colors="true"
 	convertErrorsToExceptions="true"
 	convertNoticesToExceptions="true"
