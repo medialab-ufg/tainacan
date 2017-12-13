@@ -610,7 +610,8 @@ class ExportModel extends Model {
                         }
                     }
                 }
-                $array_property_name = [];
+                //$array_property_name = [];
+	            unset($array_property_name);
             }
 
             /** Arquivos * */
