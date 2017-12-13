@@ -28,6 +28,8 @@ after_success:
 - ssh l3p@medialab.ufg.br sh /home/l3p/atualiza_git/git_test.sh
 cache:
   directories: 
+#  - vendor
+#  - "$HOME/.cache/composer"
 notifications:
   email:
     on_success: never
