@@ -895,6 +895,7 @@ class FormItem extends Model {
 
                     //apos todas as validacoes
                     if(!publish){
+                        $("#modalImportMain").hide();
                         $('html, body').animate({
                             scrollTop: $("#submit-form").offset().top
                         }, 1000);
