@@ -258,7 +258,6 @@ class WPQueryController extends Controller {
                 $collection_model = new CollectionModel;
                 $args = $wpquery_model->orderby_filter($data);
                 $params = $wpquery_model->do_filter($args);
-
                 $data['loop'] =  new WP_Query($params);
                 $data['collection_data'] = $collection_model->get_collection_data($args['collection_id']);
                 $data['listed_by'] = $wpquery_model->get_ordered_name($args['collection_id'], $args['ordenation_id'], $args['order_by']);
@@ -415,6 +414,34 @@ class WPQueryController extends Controller {
     }
 
 }
+
+add_filter( 'posts_clauses', function ( $pieces, $query ) {
+	if($query->query['orderby'] != 'date')
+	{
+		global $wpdb;
+
+		if($query->query['orderby'] == 'title')
+		{
+			$field = $wpdb->posts . '.post_title';
+		}else $field = $wpdb->postmeta . '.meta_value';
+
+		$pieces[ 'fields' ] .= $wpdb->prepare(
+			', LEAST(' . implode( ',', array_fill( 0, 10, 'IFNULL(NULLIF(LOCATE(%s, ' . $field . '), 0), ~0)' ) )
+			. ') AS first_int',
+			'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'
+		);
+		$pieces[ 'orderby' ] = $wpdb->prepare(
+			'IF(first_int = ~0, ' . $field . ', CONCAT('
+			. 'SUBSTR(' . $field . ', 1, first_int - 1),'
+			. 'LPAD(CAST(SUBSTR(' . $field . ', first_int) AS UNSIGNED), LENGTH(~0), %s),'
+			. 'SUBSTR(' . $field . ', first_int + LENGTH(CAST(SUBSTR(' . $field . ', first_int) AS UNSIGNED)))'
+			. ')) ' . $query->get( 'order' )
+			, 0
+		);
+	}
+
+	return $pieces;
+}, 10, 2 );
 
 /*
  * Controller execution
