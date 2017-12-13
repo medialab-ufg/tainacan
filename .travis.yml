@@ -19,8 +19,8 @@ before_install:
 - rm -r deploy_rsa
 - echo -e "Host medialab.ufg.br\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
 install:
-- composer self-update
-- composer install
+#- composer self-update
+#- composer install
 script:
 #- "./vendor/bin/phpunit tests"
 after_success:
