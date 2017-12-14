@@ -484,12 +484,12 @@ class ExportModel extends Model {
             if ($object->ID == $data['collection_id']) {
                 continue;
             }
-            
+
             /** ID * */
             if ($object->ID != "") {
                 $csv_data['ID'] = $object->ID;
             }
-            
+
             /** Title * */
             if ($object->post_title != "") {
                 $value = $object->post_title;
@@ -610,8 +610,8 @@ class ExportModel extends Model {
                         }
                     }
                 }
-                //$array_property_name = [];
-	            unset($array_property_name);
+
+                $array_property_name = [];
             }
 
             /** Arquivos * */
@@ -622,15 +622,15 @@ class ExportModel extends Model {
                 $csv_data['Files'] = '';
             }
 
-
             if($first)
             {
             	fputcsv($df, array_keys($csv_data), $data['socialdb_delimiter_csv']);
 	            $first = false;
             }
-	        fputcsv($df, $csv_data, $data['socialdb_delimiter_csv']);
-        }
 
+            fputcsv($df, $csv_data, $data['socialdb_delimiter_csv']);
+	        clean_post_cache($object->ID);
+        }
 	    fclose($df);
     }
 
