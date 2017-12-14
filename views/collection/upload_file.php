@@ -1,21 +1,21 @@
 <?php
 if( $_SERVER["REQUEST_METHOD"] === "POST" ) {
     include_once('../../../../../wp-config.php');
-    include_once('../../../../../wp-load.php');
-    include_once('../../../../../wp-includes/wp-db.php');
+    //include_once('../../../../../wp-load.php');
+    //include_once('../../../../../wp-includes/wp-db.php');
 
-    $upload_dir = wp_upload_dir();
+    /*$upload_dir = wp_upload_dir();
     $imagePath = $upload_dir["path"] . "/";
-    $imageURL = $upload_dir["url"] . "/";
+    $imageURL = $upload_dir["url"] . "/";*/
 
     $allowedExts = ["gif", "jpeg", "jpg", "png", "GIF", "JPEG", "JPG", "PNG"];
     $temp = explode(".", $_FILES["img"]["name"]);
     $extension = end($temp);
 
-    if (!is_writable($imagePath)) {
+    /*if (!is_writable($imagePath)) {
         print json_encode(["status" => 'error', "message" => _t("Can't upload File - permission denied.")]);
         return false;
-    }
+    }*/
 
     if (in_array($extension, $allowedExts)) {
         if ($_FILES["img"]["error"] > 0) {
@@ -23,11 +23,18 @@ if( $_SERVER["REQUEST_METHOD"] === "POST" ) {
         } else {
             $filename = $_FILES["img"]["tmp_name"];
             list($width, $height) = getimagesize($filename);
-            $_sanitized_img_name = sanitize_file_name(remove_accents($_FILES["img"]["name"]));
+            /*$_sanitized_img_name = sanitize_file_name(remove_accents($_FILES["img"]["name"]));
             $_new_file_name = $imagePath . $_sanitized_img_name;
-            move_uploaded_file($filename, $_new_file_name);
-
-            $response = ["status" => 'success', "url" => $imageURL . $_sanitized_img_name, "width" => $width, "height" => $height];
+            move_uploaded_file($filename, $_new_file_name);*/
+	        $attachment_id = media_handle_upload('img', 0);
+            if(!is_wp_error( $attachment_id ) )
+	        {
+		        $response = ["status" => 'success', "url" => wp_get_attachment_url($attachment_id), "width" => $width, "height" => $height];
+	        }else
+            {
+	            print json_encode(["status" => 'error', "message" => _t("An error occurred.")]);
+	            return false;
+            }
         }
     } else {
         $response = ["status" => 'error', "message" => __("Something went wrong. Is file too large for upload?", "tainacan")];
