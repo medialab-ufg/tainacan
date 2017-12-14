@@ -12,6 +12,7 @@ if( $_SERVER["REQUEST_METHOD"] === "POST" ) {
     $temp = explode(".", $_FILES["img"]["name"]);
     $extension = end($temp);
 
+    print "Image Path: ".$imagePath."\n";
     if (!is_writable($imagePath)) {
         print json_encode(["status" => 'error', "message" => _t("Can't upload File - permission denied.")]);
         return false;
