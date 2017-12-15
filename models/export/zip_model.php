@@ -109,6 +109,8 @@ class ZipModel extends Model {
           $ext = pathinfo($fullsize_path, PATHINFO_EXTENSION);
           copy($fullsize_path, $dir.'/package/metadata/cover.'.$ext);
         }
+
+	    clean_post_cache($collection_id);
     }
     /**
      * @signature - export_collection($collection_id)
@@ -141,6 +143,8 @@ class ZipModel extends Model {
         $categoryModel->export_zip_taxonomies(array_unique($terms_id),$dir,$collection_id);
         $xml_collection = $this->export_collection_settings($collection_id, $all_properties_id);
         $this->create_xml_file($dir.'/package/metadata/administrative_settings.xml', $xml_collection);
+
+	    clean_post_cache($collection_id);
     }
     
     /**
@@ -459,7 +463,7 @@ class ZipModel extends Model {
       }
      /**
      * @signature - export_items($collection_id)
-     * @param int collection_id
+     * @param int $collection_id
       * * @param string (Optional) O diretorio aonde sera criado
      * @return 
      * @description - 
@@ -472,8 +476,9 @@ class ZipModel extends Model {
         $items = $this->get_collection_posts($collection_id);
         if($items && is_array($items)){
             foreach ($items as $index => $item) {
-                mkdir($dir.'/package/items/'.$index);
-                $this->generate_item_xml($item, $index,$dir);
+            	mkdir($dir.'/package/items/'.$index);
+
+	            $this->generate_item_xml($item, $index, $dir);
                 $this->export_item_thumbnail($item->ID, $index,$dir);
                 $this->export_files($item->ID, $index,$dir);
                 $this->export_content($item->ID, $index,$dir);
@@ -630,10 +635,14 @@ class ZipModel extends Model {
                             copy($fullsize_path, dirname(__FILE__).'/package/items/'.$index.'/files/'.$filename_only.'.'.$ext);
                         }
                     }
+
+	                clean_post_cache($item_id);
                 }
             }
+
+	        clean_post_cache($post->ID);
         }
-        clean_post_cache($post->ID);
+
         clean_post_cache($item_id);
      }
      /**
@@ -669,7 +678,8 @@ class ZipModel extends Model {
              copy($fullsize_path, dirname(__FILE__).'/package/items/'.$index.'/content/'.$filename_only.'.'.$ext);
         }
 
-	     clean_post_cache($item_id);
+        clean_post_cache($object_content);
+	    clean_post_cache($item_id);
      }
     
 }
