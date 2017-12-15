@@ -66,7 +66,8 @@ class ZipModel extends Model {
         $this->recursiveRemoveDirectory(dirname(__FILE__).'/package/taxonomies');
         $this->recursiveRemoveDirectory(dirname(__FILE__).'/package/items');
         $this->recursiveRemoveDirectory(dirname(__FILE__).'/package/metadata');
-        
+
+        //Create directories
         if(!is_dir(dirname(__FILE__).'/package/')){
              mkdir(dirname(__FILE__).'/package');
         }
@@ -75,10 +76,15 @@ class ZipModel extends Model {
         mkdir(dirname(__FILE__).'/package/metadata');
         //array_map('unlink', glob(dirname(__FILE__).'/package/items/*'));
         //array_map('unlink', glob(dirname(__FILE__).'/package/metadata/*'));
-        $this->generate_taxonomy_files($collection_id);
+
+	    //Generate files
+        $this->generate_taxonomy_files($collection_id);//ok
         $this->get_collection_images($collection_id);
         $this->export_items($collection_id);
+
+        //Zip file
         $this->create_zip_by_folder(dirname(__FILE__).'/');
+
         $this->download_send_headers(dirname(__FILE__).'/package.zip');
     }
      /**
@@ -464,13 +470,15 @@ class ZipModel extends Model {
             $dir = dirname(__FILE__);
         } 
         $items = $this->get_collection_posts($collection_id);
-        if($items&&is_array($items)){
+        if($items && is_array($items)){
             foreach ($items as $index => $item) {
                 mkdir($dir.'/package/items/'.$index);
                 $this->generate_item_xml($item, $index,$dir);
                 $this->export_item_thumbnail($item->ID, $index,$dir);
                 $this->export_files($item->ID, $index,$dir);
                 $this->export_content($item->ID, $index,$dir);
+
+	            clean_post_cache($item->ID);
             }
         }
      }
@@ -508,6 +516,8 @@ class ZipModel extends Model {
         $xml .= '</properties>';
         $xml .= '</item>';
         $this->create_xml_file($dir.'/package/items/'.$index.'/item.xml', $xml);
+
+	    clean_post_cache($item->ID);
     }
      /**
      * @signature - generate_categories_item($item_id)
@@ -623,6 +633,8 @@ class ZipModel extends Model {
                 }
             }
         }
+        clean_post_cache($post->ID);
+        clean_post_cache($item_id);
      }
      /**
       * 
@@ -638,6 +650,8 @@ class ZipModel extends Model {
           $filename_only = basename($fullsize_path); // Just the file name
           copy($fullsize_path,$dir.'/package/items/'.$index.'/thumbnail.'.$ext);
         }
+
+	     clean_post_cache($item_id);
      }
      /**
       * 
@@ -654,6 +668,8 @@ class ZipModel extends Model {
              $filename_only = basename($fullsize_path); // Just the file name
              copy($fullsize_path, dirname(__FILE__).'/package/items/'.$index.'/content/'.$filename_only.'.'.$ext);
         }
+
+	     clean_post_cache($item_id);
      }
     
 }

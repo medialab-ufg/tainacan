@@ -9,8 +9,7 @@ if( $_SERVER["REQUEST_METHOD"] === "POST" ) {
     $imageURL = $upload_dir["url"] . "/";*/
 
     $allowedExts = ["gif", "jpeg", "jpg", "png", "GIF", "JPEG", "JPG", "PNG"];
-    $temp = explode(".", $_FILES["img"]["name"]);
-    $extension = end($temp);
+    $extension = end(explode(".", $_FILES["img"]["name"]));
 
     /*if (!is_writable($imagePath)) {
         print json_encode(["status" => 'error', "message" => _t("Can't upload File - permission denied.")]);

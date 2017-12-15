@@ -468,6 +468,8 @@ class ExportModel extends Model {
     }
 
     public function generate_csv_data($data, $objects = null) {
+    	print "Count Objects: ".count($objects)."\n";
+    	return;
         $propertyModel = new PropertyModel;
 
 	    $facets = CollectionModel::get_facets($data['collection_id']);
