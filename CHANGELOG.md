@@ -5,6 +5,18 @@ O formato é baseado em [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 e este projeto adere para [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Adicionado
+
+### Modificado
+
+### Corrigido
+
+### Removido
+
+### Obsoleto
+
+## [0.6.1] - 2017-11-27
+### Atualização da branch master para correção da release 0.6.
 
 ## [0.6] - 2017-11-24
 ### Adicionado
@@ -25,7 +37,6 @@ e este projeto adere para [Semantic Versioning](http://semver.org/spec/v2.0.0.ht
 - Aplicação de tema nas coleções
 - Metadados de categorias apresentado nos formulários de submissão de itens com espaçamentos em branco
 - Melhoria no tratamento de tipologia de itens
-
 
 ### Corrigido
 - API: erro de retorno de thumbnail
@@ -51,7 +62,7 @@ e este projeto adere para [Semantic Versioning](http://semver.org/spec/v2.0.0.ht
 - Não apresentação expandida das categorias na faceta de filtros de uma coleção no MAC-OS
 - Reindexação de miniaturas de PDF
 - Não apresentação de resultados de uma categoria em um metadado de relacionamento
-- Bão apresentação do termo selecionado na ediço da categoria
+- Não apresentação do termo selecionado na ediço da categoria
 
 ### Removido
 - Remoção de opções não utilziadas na tela de registro de usuário
@@ -67,7 +78,8 @@ e este projeto adere para [Semantic Versioning](http://semver.org/spec/v2.0.0.ht
 
 ## [0.3] - 2017-04-12
 
-[Unreleased]: https://github.com/medialab-ufg/tainacan/compare/v0.6...HEAD
+[Unreleased]: https://github.com/medialab-ufg/tainacan/compare/v0.6.1...HEAD
+[0.6.1]: https://github.com/medialab-ufg/tainacan/compare/v0.6...v0.6.1
 [0.6]: https://github.com/medialab-ufg/tainacan/compare/v0.5...v0.6
 [0.5]: https://github.com/medialab-ufg/tainacan/compare/v0.4...v0.5
 [0.4]: https://github.com/medialab-ufg/tainacan/compare/v0.3...v0.4
