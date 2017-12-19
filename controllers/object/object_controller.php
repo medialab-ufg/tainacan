@@ -1119,6 +1119,30 @@ class ObjectController extends Controller {
                    $result[] = ['value'=>$item->post_title,'label'=>$item->post_title,'item_id'=>$item->ID] ;
                 }
                 return json_encode($result);
+		    case 'change_item_file':
+		    	$attachment_id_old = get_post_meta( $data['item_id'],'socialdb_object_content', true);
+
+			    if($attachment_id_old)
+			    {
+				    $attachment_id = media_handle_upload('new_file', $data['item_id']);
+				    if(!is_wp_error($attachment_id))
+				    {
+					    update_post_meta($data['item_id'], 'socialdb_object_content', $attachment_id);
+				    	if($_FILES['new_file']['type'] == 'application/pdf')
+					    {
+						    $canvas_images[] = ['post_id' => $data['item_id'], 'img' => $data['img']];
+						    save_canvas_pdf_thumbnails($canvas_images, true);
+					    }else
+					    {
+						    set_post_thumbnail($data['item_id'], $attachment_id);
+					    }
+
+					    return true;
+				    }else {
+						return false;
+				    }
+			    }
+		    	break;
         }
     }
 

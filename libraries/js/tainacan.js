@@ -3439,7 +3439,7 @@ function change_to_cards()
 {
     if(isMobile())
     {
-        $("#collectionViewMode")
+        $("#collectionViewMode");
     }
 }
 

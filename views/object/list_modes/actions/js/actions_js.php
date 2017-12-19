@@ -70,6 +70,87 @@
 
         });
 
+        $("#change_item_file").click(function(){
+            $("#change_item_file_modal").modal("show");
+
+        });
+
+        $("#new_item_file").submit(function (event) {
+            event.preventDefault();
+
+            if( document.getElementById("new_file").files.length === 0 ){
+                swal("<?php _t("No file selected", "tainacan")?>", "<?php _t("You need to select a file before proceed", "tainacan");?>", "info");
+            }else
+            {
+                let name = document.getElementById("new_file").files[0].name;
+                let ext = name.split('.');
+                ext = ext[ext.length - 1];
+
+                let data =  new FormData(this);
+                data.append('item_id', $(this).parents().find('.open_item_actions').first().attr('id').replace('action-', ''));
+                data.append("operation", "change_item_file");
+
+                if(ext === 'pdf')
+                {
+                    var fileReader = new FileReader();
+
+                    fileReader.onload = function() {
+                        var pdffile = new Uint8Array(this.result);
+
+                        PDFJS.getDocument(pdffile).promise.then(function(doc) {
+                            let page = [];
+                            page.push(1); //Get first page
+
+                            return Promise.all(page.map(function(num) {
+                                return doc.getPage(num).then(makeThumb)
+                                    .then(function(canvas) {
+                                        let img = canvas.toDataURL("image/png");
+                                        data.append("img", img);
+                                        senddata(data);
+                                    });
+                            }));
+                        });
+                    };
+                    fileReader.readAsArrayBuffer(document.getElementById("new_file").files[0]);
+                }else if(ext == 'jpg')
+                {
+                    senddata(data);
+                }
+            }
+        });
+
+        function senddata(data)
+        {
+            $.ajax({
+                url: path,
+                type: "POST",
+                data: data,
+                processData: false,
+                contentType: false
+            }).done(function (result) {
+                $("#change_item_file_modal").modal("hide");
+                if(result == true)
+                {
+                    swal(
+                        {
+                            title: "<?php _t("Changed", "tainacan")?>",
+                            text: "<?php _t("File changed with success, page will reload", "tainacan")?>"
+                        },
+                        function(is_confirm)
+                        {
+                            location.reload();
+                        }
+                    );
+                }else {
+                    swal({
+                        title: "<?php _t("Error", "tainacan")?>",
+                        text: "<?php _t("File could not be changed ", "tainacan")?>",
+                        type: "error"
+                    });
+                };
+            });
+        }
+
         $('a.ac-open-file').on('click', function() {
             var item_id = $(this).parents().find('.open_item_actions').first().attr('id').replace('action-', '');
             show_modal_main();

@@ -105,6 +105,28 @@ $col_controller = $_src_ . "/controllers/collection/collection_controller.php";
     </div>
 </div>
 
+<div class="modal fade" id="change_item_file_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header"><!--Cabeçalho-->
+                <h3><?php _t("Change file", "tainacan");?></h3>
+            </div><!--Fim cabeçalho-->
+
+            <div class="modal-body">
+                <form id="new_item_file" method="post" enctype="multipart/form-data">
+                    <input type="file" name="new_file" id="new_file" class="form-control">
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button id="send_new_file" type="submit" form="new_item_file" class="btn btn-primary pull-right">
+		            <?php _t("Send", "tainacan");?>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <?php
     do_action("tainacan_global_modals");
 ?>

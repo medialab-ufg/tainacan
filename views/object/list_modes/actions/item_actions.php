@@ -87,7 +87,16 @@ $is_current_user_the_author = get_post($curr_id)->post_author == get_current_use
             ?>
 
             <li> <a class="ac-open-file"> <?php _t('Print item',1); ?> </a> </li>
+            <?php
+            if (($is_moderator || get_post($curr_id)->post_author == get_current_user_id()) && ($metas['socialdb_object_dc_type'][0] == 'pdf' || $metas['socialdb_object_dc_type'][0] == 'image')){
+                ?>
+                <li class="tainacan-museum-clear">
+                    <a href="javascript:void(0);" id="change_item_file"> <?php _t('Change file',1); ?> </a>
+                </li>
+                <?php
+            }
 
+            ?>
             <?php if($is_repo_admin): ?>
                 <li class="tainacan-museum-clear">
                     <a href="javascript:void(0)" class="change-owner" data-item="<?php echo $curr_id; ?>"><?php _t('Change item owner',1); ?></a>
