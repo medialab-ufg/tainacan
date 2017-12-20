@@ -675,7 +675,7 @@
             elem = jQuery.parseJSON(result);
             if(elem.type === 'success'){
                 //$("#text_title").text(value);
-                showAlertGeneral(elem.title, elem.msg, elem.type);
+                //showAlertGeneral(elem.title, elem.msg, elem.type);
                 location.reload()
             }else{
                 showAlertGeneral(elem.title, elem.msg, elem.type);
