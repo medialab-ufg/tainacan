@@ -416,8 +416,8 @@ class WPQueryController extends Controller {
 }
 
 add_filter( 'posts_clauses', function ( $pieces, $query ) {
-	if($query->query['orderby'] != 'date')
-	{
+    if($query->query['orderby'] != 'date' && $query->query['orderby'] != 'title')
+    {
 		global $wpdb;
 
 		if($query->query['orderby'] == 'title')

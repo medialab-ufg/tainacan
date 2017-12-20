@@ -384,5 +384,5 @@
 </div>
 <div class="col-md-12 no-padding" style="margin-top: 15px;">
                 <button type="button" onclick="reboot_form()" class="btn btn-lg btn-default pull-left"><?php _e('Clear search', 'tainacan') ?></button>
-                <button type="submit" onclick="clear_general_field()" class="btn btn-lg btn-success pull-right"><?php _e('Find', 'tainacan') ?></button>
+                <button type="submit" onclick="$('#advanced_search_general').val('')" class="btn btn-lg btn-success pull-right"><?php _e('Find', 'tainacan') ?></button>
     </div>
