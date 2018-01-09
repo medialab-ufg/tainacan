@@ -10,6 +10,11 @@
                     <?php
                     foreach ($item['data'] as $key => $item_data):
                         $item_id = $item_data->ID;
+
+                        if($item_id == 5)//Tainacan - Coleções
+                        {
+                            continue;
+                        }
                         $output = "";
                         $collection_name = explode(" ", $item_data->post_title);
                         if (has_post_thumbnail($item_id)):

@@ -6,13 +6,17 @@ include_once ('js/geolocation_js.php');
 include_once ('helper/loader.php');
 $objHelper->renderCollectionPagination($loop->found_posts, (isset($posts_per_page)) ? $posts_per_page : $loop->post_count, $pagid, $show_string, 'top_pag',$loop);
 
-if ( $loop->have_posts() ) { ?>
+if ( $loop->have_posts() && $loop->post_count > 1) { ?>
 
     <div id="collection-view-mode">
         <div id='<?php echo $collection_list_mode; ?>-viewMode' class='col-md-12 no-padding list-mode-set'>
             <?php
             while ( $loop->have_posts() ) : $loop->the_post(); $countLine++;
                 $curr_id = get_the_ID();
+                if($curr_id == 5) //Tainacan - Coleções
+                {
+                    continue;
+                }
                 $itemURL = get_the_permalink($curr_id);
                 include "list_modes/modals.php";
                 include "list_modes/cards.php";
