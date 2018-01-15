@@ -468,7 +468,7 @@ class ExportModel extends Model {
     }
 
     public function generate_csv_data($data, $objects = null) {
-    	print "Memory limit: ".ini_get('max_input_vars')."<br>";
+    	ini_set('max_execution_time', 120);
         $propertyModel = new PropertyModel;
 
 	    $facets = CollectionModel::get_facets($data['collection_id']);
@@ -487,7 +487,6 @@ class ExportModel extends Model {
                 continue;
             }
 
-	        //print memory_get_usage()." ".__LINE__."<br>";
             /** ID * */
             if ($object->ID != "") {
                 $csv_data['ID'] = $object->ID;
@@ -631,9 +630,8 @@ class ExportModel extends Model {
 	            $first = false;
             }
 
-            //  fputcsv($df, $csv_data, $data['socialdb_delimiter_csv']);
+            fputcsv($df, $csv_data, $data['socialdb_delimiter_csv']);
 	        clean_post_cache($object->ID);
-	        print memory_get_usage()." ".$i++."<br>";
         }
 	    fclose($df);
     }

@@ -33,7 +33,7 @@ class ExportController extends Controller {
                 	$collection_posts = $export_model->get_collection_posts($data['collection_id']);
                     if (!empty($collection_posts)) {
                         if ($data['export_zip_csv'] == 'only_csv') {
-	                        //$export_model->download_send_headers('tainacan_csv.csv');
+	                        $export_model->download_send_headers('tainacan_csv.csv');
 	                        echo utf8_decode($export_model->generate_csv_data($data, $collection_posts));
                         } elseif ($data['export_zip_csv'] == 'csv_plus_zip') {
                             $csv_model = new CSVExportModel;
