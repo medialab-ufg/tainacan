@@ -480,12 +480,13 @@ class ExportModel extends Model {
 
 	    $df = fopen("php://output", 'w');
 	    $first = true;
+	    $i = 0;
         foreach ($objects as $object) {
             if ($object->ID == $data['collection_id']) {
                 continue;
             }
 
-	        print memory_get_usage()." ".__LINE__."<br>";
+	        //print memory_get_usage()." ".__LINE__."<br>";
             /** ID * */
             if ($object->ID != "") {
                 $csv_data['ID'] = $object->ID;
@@ -629,9 +630,9 @@ class ExportModel extends Model {
 	            $first = false;
             }
 
-            //fputcsv($df, $csv_data, $data['socialdb_delimiter_csv']);
+            //  fputcsv($df, $csv_data, $data['socialdb_delimiter_csv']);
 	        clean_post_cache($object->ID);
-	        print memory_get_usage()." ".__LINE__."<br>";
+	        print memory_get_usage()." ".$i++."<br>";
         }
 	    fclose($df);
     }
