@@ -632,7 +632,7 @@ class ExportModel extends Model {
             }
 
             //  fputcsv($df, $csv_data, $data['socialdb_delimiter_csv']);
-	        clean_post_cache($object->ID);
+	        //clean_post_cache($object->ID);
 	        print memory_get_usage()." ".$i++."<br>";
         }
 	    fclose($df);
