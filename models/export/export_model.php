@@ -468,7 +468,7 @@ class ExportModel extends Model {
     }
 
     public function generate_csv_data($data, $objects = null) {
-    	print ini_get('memory_limit')."<br>";
+    	print "Memory limit: ".ini_get('memory_limit')."<br>";
         $propertyModel = new PropertyModel;
 
 	    $facets = CollectionModel::get_facets($data['collection_id']);
