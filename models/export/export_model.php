@@ -468,7 +468,7 @@ class ExportModel extends Model {
     }
 
     public function generate_csv_data($data, $objects = null) {
-    	print "Memory limit: ".ini_get('memory_limit')."<br>";
+    	print "Memory limit: ".ini_get('max_input_vars')."<br>";
         $propertyModel = new PropertyModel;
 
 	    $facets = CollectionModel::get_facets($data['collection_id']);
@@ -632,7 +632,7 @@ class ExportModel extends Model {
             }
 
             //  fputcsv($df, $csv_data, $data['socialdb_delimiter_csv']);
-	        //clean_post_cache($object->ID);
+	        clean_post_cache($object->ID);
 	        print memory_get_usage()." ".$i++."<br>";
         }
 	    fclose($df);
