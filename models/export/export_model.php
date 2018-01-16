@@ -481,7 +481,6 @@ class ExportModel extends Model {
 
 	    $df = fopen("php://output", 'w');
 	    $first = true;
-	    $i = 0;
         foreach ($objects as $object) {
             if ($object->ID == $data['collection_id']) {
                 continue;
