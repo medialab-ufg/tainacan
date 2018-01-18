@@ -17,7 +17,7 @@
         <div class="col-md-4 no-padding">
             <h4 class="item-display-title">
                 <?php if(empty($trash_list)): ?>
-                    <a target="_blank" href="<?php echo $itemURL; ?>">
+                    <a href="<?php echo $itemURL; ?>">
                         <?php the_title(); ?>
                     </a>
                 <?php elseif ($trash_list): the_title(); endif; ?>

@@ -16,7 +16,7 @@
 
         <div class="item-thumb">
             <?php if(empty($trash_list)): ?>
-                <a target="_blank"  href="<?php echo $itemURL; ?>">
+                <a  href="<?php echo $itemURL; ?>">
                     <?php echo get_item_thumb_image($curr_id); ?>
                 </a>
             <?php elseif ($trash_list): echo get_item_thumb_image($curr_id); endif; ?>
@@ -25,7 +25,7 @@
         <div class=" title-container">
             <h5 class="item-display-title">
                 <?php if(empty($trash_list)): ?>
-                    <a target="_blank"  href="<?php echo $itemURL; ?>">
+                    <a  href="<?php echo $itemURL; ?>">
                         <?php  echo wp_trim_words( get_the_title(), 4 ); ?>
                     </a>
                 <?php elseif ($trash_list): echo wp_trim_words( get_the_title(), 4 ); endif; ?>

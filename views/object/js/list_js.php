@@ -86,7 +86,7 @@
                     if(trash_check) {
                         _table_html += "<td>";
                     } else {
-                        _table_html += "<td> <a target='_blank' class='tview-title' data-id='"+c_id+"' href='"+link+"' title='"+see_more+"'>";
+                        _table_html += "<td> <a class='tview-title' data-id='"+c_id+"' href='"+link+"' title='"+see_more+"'>";
                     }
 
                     if(image_brand == n) {
@@ -108,7 +108,7 @@
             } else {
                 var title = $.trim($("#object_" + c_id + " .item-display-title a").text());
                 var hrf = $.trim($("#object_" + c_id + " .item-display-title a").attr('href'));
-                _table_html += "<td> <a target='_blank' class='tview-title' data-id='"+c_id+"' href='"+hrf+"'>"+title+" </a></td>";
+                _table_html += "<td> <a class='tview-title' data-id='"+c_id+"' href='"+hrf+"'>"+title+" </a></td>";
             }
 
             _table_html += "<td style='width: 7%'> " + actions + " </td> </tr>";
