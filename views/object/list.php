@@ -6,7 +6,7 @@ include_once ('js/geolocation_js.php');
 include_once ('helper/loader.php');
 $objHelper->renderCollectionPagination($loop->found_posts, (isset($posts_per_page)) ? $posts_per_page : $loop->post_count, $pagid, $show_string, 'top_pag',$loop);
 
-if ( $loop->have_posts() && $loop->post_count > 1) { ?>
+if ( $loop->have_posts()) { ?>
 
     <div id="collection-view-mode">
         <div id='<?php echo $collection_list_mode; ?>-viewMode' class='col-md-12 no-padding list-mode-set'>
