@@ -5,9 +5,10 @@ if(!isset($collection_post)){
     $current_collection_id = $collection_post->ID;
     $border_color = get_post_meta($current_collection_id, "socialdb_collection_board_link_color", true);
 }
-if($_enable_header_ != 'enabled') {
+
+if($_enable_header_ !== 'enabled' && !(empty($_enable_header_))) {
 	?>
-    <div class="row tainacan-museum-clear" style="position:  relative; top: -15px;left:  -55px;">
+    <div class="row tainacan-museum-clear" style="position:  relative; top: -32px;left:  -55px;">
         <?php
         require_once( "share_buttons.php" );
         ?>
