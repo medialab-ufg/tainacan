@@ -371,7 +371,6 @@ if (has_action('alter_page_item')) {
 
                             <div class="content-redesocial-NO" style="width: 100%">
                                 <div id="fb-root"></div>
-                                <script></script>
 
                                 <a class="fb" target="_blank"
                                    href="http://www.facebook.com/sharer.php?u=<?php echo the_permalink(); ?>">
