@@ -35,464 +35,513 @@ $ids = [];
 
 $ordenation = unserialize(get_post_meta($collection_id, 'socialdb_collection_properties_ordenation', true));
 
+//Gen sintatic ordenation
+if(!$ordenation)
+{
+    if(isset($property_object))
+    {
+        foreach ($property_object as $item_in)
+        {
+            $ordenation[] = $item_in['id'];
+        }
+    }
+
+	if(isset($property_data))
+	{
+		foreach ($property_data as $item_in)
+		{
+			$ordenation[] = $item_in['id'];
+		}
+	}
+
+	if(isset($property_term))
+	{
+		foreach ($property_term as $item_in)
+		{
+			$ordenation[] = $item_in['id'];
+		}
+	}
+
+	if(isset($property_compounds))
+	{
+		foreach ($property_compounds as $item_in)
+		{
+			$ordenation[] = $item_in['id'];
+		}
+	}
+}
+
 foreach($ordenation as $ids){
 	$ids = explode(",", $ids);
 	foreach ($ids as $id)
 	{
-		foreach($property_object as $index => $propertyOb)
+		if(isset($property_object))
 		{
-			//Trata metadados de objeto
-			if($id == $propertyOb['id'])
+			foreach($property_object as $index => $propertyOb)
 			{
-				if(!$objectHelper->is_public_property($propertyOb))
-					continue;
-				$object_id = $propertyOb['metas']['object_id'];
-				$ids[] = $propertyOb['id'];
-				?>
-                <div class="col-md-6 property-root no-padding">
-                    <div class="box-item-paddings">
-                        <h4 class="title-pipe single-title"> <?php echo $propertyOb['name']; ?> </h4>
-						<?php
-						if( $propertyOb['type'] != "user")
-						{
-							?>
-                            <div class="edit-field-btn">
-                                <button type="button"
-                                        onclick="cancel_object_property('<?php echo $propertyOb['id']; ?>', '<?php echo $object_id; ?>')"
-                                        id="single_cancel_<?php echo $propertyOb['id']; ?>_<?php echo $object_id; ?>"
-                                        class="btn btn-default btn-xs" style="display: none;" >
-                                    <span class="glyphicon glyphicon-arrow-left" ></span>
-                                </button>
-								<?php
-								// verifico se o metadado pode ser alterado
-								if((get_current_user_id() == 0 && verify_anonimous_approval_allowed($collection_id, 'socialdb_collection_permission_edit_property_object_value'))
-								   || get_current_user_id() != 0)
-								{
-									if (verify_allowed_action($collection_id, 'socialdb_collection_permission_edit_property_object_value', $object_id))
-									{
-										?>
-                                        <button type="button" onclick="edit_object_property('<?php echo $propertyOb['id']; ?>', '<?php echo $object_id; ?>')" id="single_edit_<?php echo $propertyOb['id']; ?>_<?php echo $object_id; ?>" class="btn btn-default btn-xs" >
-                                            <span class="glyphicon glyphicon-edit"></span>
-                                        </button>
-										<?php
-									}
-								}
-								?>
-
-                                <button type="button" onclick="save_object_property('<?php echo $propertyOb['id']; ?>', '<?php echo $object_id; ?>')" id="single_save_<?php echo $propertyOb['id']; ?>_<?php echo $object_id; ?>" class="btn btn-default btn-xs" style="display: none;"><span class="glyphicon glyphicon-floppy-disk"></span></button>
-
-                            </div>
+				//Trata metadados de objeto
+				if($id == $propertyOb['id'])
+				{
+					if(!$objectHelper->is_public_property($propertyOb))
+						continue;
+					$object_id = $propertyOb['metas']['object_id'];
+					$ids[] = $propertyOb['id'];
+					?>
+                    <div class="col-md-6 property-root no-padding">
+                        <div class="box-item-paddings">
+                            <h4 class="title-pipe single-title"> <?php echo $propertyOb['name']; ?> </h4>
 							<?php
-						}
-						?>
-
-
-                        <div id="labels_<?php echo $propertyOb['id']; ?>_<?php echo $object_id; ?>">
-							<?php if ( !empty($propertyOb['metas']['objects']) && !empty($propertyOb['metas']['value'])) {
-								// percoro todos os objetos
-								foreach ($propertyOb['metas']['objects'] as $object) {
-									if ( isset($propertyOb['metas']['value']) && !empty($propertyOb['metas']['value']) && in_array($object->ID, $propertyOb['metas']['value'])): // verifico se ele esta na lista de objetos da colecao
-										echo '<b><a href="' . get_the_permalink($propertyOb['metas']['collection_data'][0]->ID) . '?item=' . $object->post_name . '" >' . $object->post_title . '</a></b><br>';
-									endif;
-								}
-							} else {
-								// verifico se o metadado pode ser alterado
-								if (verify_allowed_action($collection_id, 'socialdb_collection_permission_edit_property_object_value',$object_id)): ?>
-                                    <button type="button" onclick="edit_object_property('<?php echo $propertyOb['id']; ?>', '<?php echo $object_id; ?>')" id="single_edit_<?php echo $propertyOb['id']; ?>_<?php echo $object_id; ?>" class="btn btn-default" >
-										<?php _e('Empty field. Click to edit','tainacan'); ?>
+							if( $propertyOb['type'] != "user")
+							{
+								?>
+                                <div class="edit-field-btn">
+                                    <button type="button"
+                                            onclick="cancel_object_property('<?php echo $propertyOb['id']; ?>', '<?php echo $object_id; ?>')"
+                                            id="single_cancel_<?php echo $propertyOb['id']; ?>_<?php echo $object_id; ?>"
+                                            class="btn btn-default btn-xs" style="display: none;" >
+                                        <span class="glyphicon glyphicon-arrow-left" ></span>
                                     </button>
-								<?php else:
-									echo '<p>' . __('empty field', 'tainacan') . '</p>';
-								endif;
+									<?php
+									// verifico se o metadado pode ser alterado
+									if((get_current_user_id() == 0 && verify_anonimous_approval_allowed($collection_id, 'socialdb_collection_permission_edit_property_object_value'))
+									   || get_current_user_id() != 0)
+									{
+										if (verify_allowed_action($collection_id, 'socialdb_collection_permission_edit_property_object_value', $object_id))
+										{
+											?>
+                                            <button type="button" onclick="edit_object_property('<?php echo $propertyOb['id']; ?>', '<?php echo $object_id; ?>')" id="single_edit_<?php echo $propertyOb['id']; ?>_<?php echo $object_id; ?>" class="btn btn-default btn-xs" >
+                                                <span class="glyphicon glyphicon-edit"></span>
+                                            </button>
+											<?php
+										}
+									}
+									?>
+
+                                    <button type="button" onclick="save_object_property('<?php echo $propertyOb['id']; ?>', '<?php echo $object_id; ?>')" id="single_save_<?php echo $propertyOb['id']; ?>_<?php echo $object_id; ?>" class="btn btn-default btn-xs" style="display: none;"><span class="glyphicon glyphicon-floppy-disk"></span></button>
+
+                                </div>
+								<?php
 							}
 							?>
-                        </div>
-                        <div style="display: none;" id="widget_<?php echo $propertyOb['id']; ?>_<?php echo $object_id; ?>">
-							<?php
-							//acao para modificaco da propriedade de objeto na insercao do item
-							if(has_action('modificate_single_item_properties_object')):
-								do_action('modificate_single_item_properties_object',$propertyOb);
-							endif;
-							?>
-							<?php
-							if(has_action('modificate_label_insert_item_properties')):
-								do_action('modificate_label_insert_item_properties', $propertyOb);
-							endif;
-							?>
 
-                            <input type="text" onkeyup="autocomplete_object_property('<?php echo $propertyOb['id']; ?>', '<?php echo $object_id; ?>');" id="single_autocomplete_value_<?php echo $propertyOb['id']; ?>_<?php echo $object_id; ?>" placeholder="<?php _e('Type the three first letters of the object ', 'tainacan'); ?>" class="chosen-selected form-control" />
-                            <select onclick="clear_select_object_property(this,'<?php echo $propertyOb['id']; ?>', '<?php echo $object_id; ?>');" id="single_property_value_<?php echo $propertyOb['id']; ?>_<?php echo $object_id; ?>" multiple class="chosen-selected2 form-control" style="height: auto;" multiple name="socialdb_property_<?php echo $propertyOb['id']; ?>[]" id="chosen-selected2-user"  >
-								<?php if (!empty($propertyOb['metas']['objects'])) { ?>
-									<?php foreach ($propertyOb['metas']['objects'] as $object) { // percoro todos os objetos  ?>
-										<?php if ( isset($propertyOb['metas']['value']) && !empty($propertyOb['metas']['value']) && in_array($object->ID, $propertyOb['metas']['value'])): // verifico se ele esta na lista de objetos da colecao  ?>
-                                            <option selected='selected' value="<?php echo $object->ID ?>"><?php echo $object->post_title ?></option>
-										<?php endif; ?>
+
+                            <div id="labels_<?php echo $propertyOb['id']; ?>_<?php echo $object_id; ?>">
+								<?php if ( !empty($propertyOb['metas']['objects']) && !empty($propertyOb['metas']['value'])) {
+									// percoro todos os objetos
+									foreach ($propertyOb['metas']['objects'] as $object) {
+										if ( isset($propertyOb['metas']['value']) && !empty($propertyOb['metas']['value']) && in_array($object->ID, $propertyOb['metas']['value'])): // verifico se ele esta na lista de objetos da colecao
+											echo '<b><a href="' . get_the_permalink($propertyOb['metas']['collection_data'][0]->ID) . '?item=' . $object->post_name . '" >' . $object->post_title . '</a></b><br>';
+										endif;
+									}
+								} else {
+									// verifico se o metadado pode ser alterado
+									if (verify_allowed_action($collection_id, 'socialdb_collection_permission_edit_property_object_value',$object_id)): ?>
+                                        <button type="button" onclick="edit_object_property('<?php echo $propertyOb['id']; ?>', '<?php echo $object_id; ?>')" id="single_edit_<?php echo $propertyOb['id']; ?>_<?php echo $object_id; ?>" class="btn btn-default" >
+											<?php _e('Empty field. Click to edit','tainacan'); ?>
+                                        </button>
+									<?php else:
+										echo '<p>' . __('empty field', 'tainacan') . '</p>';
+									endif;
+								}
+								?>
+                            </div>
+                            <div style="display: none;" id="widget_<?php echo $propertyOb['id']; ?>_<?php echo $object_id; ?>">
+								<?php
+								//acao para modificaco da propriedade de objeto na insercao do item
+								if(has_action('modificate_single_item_properties_object')):
+									do_action('modificate_single_item_properties_object',$propertyOb);
+								endif;
+								?>
+								<?php
+								if(has_action('modificate_label_insert_item_properties')):
+									do_action('modificate_label_insert_item_properties', $propertyOb);
+								endif;
+								?>
+
+                                <input type="text" onkeyup="autocomplete_object_property('<?php echo $propertyOb['id']; ?>', '<?php echo $object_id; ?>');" id="single_autocomplete_value_<?php echo $propertyOb['id']; ?>_<?php echo $object_id; ?>" placeholder="<?php _e('Type the three first letters of the object ', 'tainacan'); ?>" class="chosen-selected form-control" />
+                                <select onclick="clear_select_object_property(this,'<?php echo $propertyOb['id']; ?>', '<?php echo $object_id; ?>');" id="single_property_value_<?php echo $propertyOb['id']; ?>_<?php echo $object_id; ?>" multiple class="chosen-selected2 form-control" style="height: auto;" multiple name="socialdb_property_<?php echo $propertyOb['id']; ?>[]" id="chosen-selected2-user"  >
+									<?php if (!empty($propertyOb['metas']['objects'])) { ?>
+										<?php foreach ($propertyOb['metas']['objects'] as $object) { // percoro todos os objetos  ?>
+											<?php if ( isset($propertyOb['metas']['value']) && !empty($propertyOb['metas']['value']) && in_array($object->ID, $propertyOb['metas']['value'])): // verifico se ele esta na lista de objetos da colecao  ?>
+                                                <option selected='selected' value="<?php echo $object->ID ?>"><?php echo $object->post_title ?></option>
+											<?php endif; ?>
+										<?php } ?>
+									<?php }else { ?>
+                                        <option value=""><?php _e('No objects added in this collection', 'tainacan'); ?></option>
 									<?php } ?>
-								<?php }else { ?>
-                                    <option value=""><?php _e('No objects added in this collection', 'tainacan'); ?></option>
-								<?php } ?>
-                            </select>
-                            <input type="hidden" id="single_property_<?php echo $propertyOb['id']; ?>_<?php echo $object_id; ?>_value_before" name="property_<?php echo $propertyOb['id']; ?>_<?php echo $object_id; ?>_value_before" value="<?php if (is_array($propertyOb['metas']['value'])) echo implode(',', is_array($propertyOb['metas']['value'])); ?>">
-                        </div>
+                                </select>
+                                <input type="hidden" id="single_property_<?php echo $propertyOb['id']; ?>_<?php echo $object_id; ?>_value_before" name="property_<?php echo $propertyOb['id']; ?>_<?php echo $object_id; ?>_value_before" value="<?php if (is_array($propertyOb['metas']['value'])) echo implode(',', is_array($propertyOb['metas']['value'])); ?>">
+                            </div>
 
+                        </div>
                     </div>
-                </div>
-				<?php
-                unset($property_object[$index]);
-				continue;
+					<?php
+					unset($property_object[$index]);
+					continue;
+				}
 			}
 		}
 
-		foreach($property_data as $index => $propertyDa)
+		if(isset($property_data))
 		{
-			//Trata metadados de dado
-			if($id == $propertyDa['id'])
+			foreach($property_data as $index => $propertyDa)
 			{
-                $counter = 0;
+				//Trata metadados de dado
+				if($id == $propertyDa['id'])
+				{
+					$counter = 0;
 
-                $meta = get_post_meta($collection_id, 'socialdb_collection_fixed_properties_visibility', true);
-                if ($meta && $meta != ''):
-                    $collectionPropertiesView = explode(',', $meta);
-                else:
-                    $collectionPropertiesView = [];
-                endif;
+					$meta = get_post_meta($collection_id, 'socialdb_collection_fixed_properties_visibility', true);
+					if ($meta && $meta != ''):
+						$collectionPropertiesView = explode(',', $meta);
+					else:
+						$collectionPropertiesView = [];
+					endif;
 
-                if( !$objectHelper->is_public_property($propertyDa) || in_array($propertyDa['id'], $collectionPropertiesView))
-                    continue;
+					if( !$objectHelper->is_public_property($propertyDa) || in_array($propertyDa['id'], $collectionPropertiesView))
+						continue;
 
-                $object_id = $propertyDa['metas']['object_id'];
+					$object_id = $propertyDa['metas']['object_id'];
 
 
-                $tooltip_text =  __('Help: ', 'tainacan');
-                if ($propertyDa['metas']['socialdb_property_help']) {
-                    $tooltip_text .= $propertyDa['metas']['socialdb_property_help'];
-                }
-                ?>
+					$tooltip_text =  __('Help: ', 'tainacan');
+					if ($propertyDa['metas']['socialdb_property_help']) {
+						$tooltip_text .= $propertyDa['metas']['socialdb_property_help'];
+					}
+					?>
 
-                <div class="col-md-6 property-data no-padding">
-                    <div class="box-item-paddings">
-                        <h4 class="title-pipe single-title">
-                            <?php echo $propertyDa['name']; ?>
-                            <span class="help-block" style="display: inline-block; font-size: 12px;">
+                    <div class="col-md-6 property-data no-padding">
+                        <div class="box-item-paddings">
+                            <h4 class="title-pipe single-title">
+								<?php echo $propertyDa['name']; ?>
+                                <span class="help-block" style="display: inline-block; font-size: 12px;">
                 <a href="javascript:void(0)" data-toggle="tooltip" title="<?php echo $tooltip_text ?>" style="color: black">
                     <?php ViewHelper::render_icon("help"); ?>
                 </a>
             </span>
-                        </h4>
-                        <?php if( $propertyDa['type'] != 'user') { ?>
-                            <div class="edit-field-btn">
-                                <button type="button" onclick="cancel_data_property('<?php echo $propertyDa['id']; ?>', '<?php echo $object_id; ?>')" id="single_cancel_<?php echo $propertyDa['id']; ?>_<?php echo $object_id; ?>" class="btn btn-default btn-xs" style="display: none;" ><span class="glyphicon glyphicon-arrow-left" ></span></button>
-                                <?php // verifico se o metadado pode ser alterado
-                                if (verify_allowed_action($collection_id, 'socialdb_collection_permission_edit_property_data_value',$object_id)): ?>
-                                    <button type="button" onclick="edit_data_property('<?php echo $propertyDa['id']; ?>', '<?php echo $object_id; ?>')" id="single_edit_<?php echo $propertyDa['id']; ?>_<?php echo $object_id; ?>" class="btn btn-default btn-xs" ><span class="glyphicon glyphicon-edit"></span></button>
-                                <?php endif; ?>
-                                <button type="button" onclick="save_data_property('<?php echo $propertyDa['id']; ?>', '<?php echo $object_id; ?>')" id="single_save_<?php echo $propertyDa['id']; ?>_<?php echo $object_id; ?>" class="btn btn-default btn-xs" style="display: none;"><span class="glyphicon glyphicon-floppy-disk"></span></button>
+                            </h4>
+							<?php if( $propertyDa['type'] != 'user') { ?>
+                                <div class="edit-field-btn">
+                                    <button type="button" onclick="cancel_data_property('<?php echo $propertyDa['id']; ?>', '<?php echo $object_id; ?>')" id="single_cancel_<?php echo $propertyDa['id']; ?>_<?php echo $object_id; ?>" class="btn btn-default btn-xs" style="display: none;" ><span class="glyphicon glyphicon-arrow-left" ></span></button>
+									<?php // verifico se o metadado pode ser alterado
+									if (verify_allowed_action($collection_id, 'socialdb_collection_permission_edit_property_data_value',$object_id)): ?>
+                                        <button type="button" onclick="edit_data_property('<?php echo $propertyDa['id']; ?>', '<?php echo $object_id; ?>')" id="single_edit_<?php echo $propertyDa['id']; ?>_<?php echo $object_id; ?>" class="btn btn-default btn-xs" ><span class="glyphicon glyphicon-edit"></span></button>
+									<?php endif; ?>
+                                    <button type="button" onclick="save_data_property('<?php echo $propertyDa['id']; ?>', '<?php echo $object_id; ?>')" id="single_save_<?php echo $propertyDa['id']; ?>_<?php echo $object_id; ?>" class="btn btn-default btn-xs" style="display: none;"><span class="glyphicon glyphicon-floppy-disk"></span></button>
+                                </div>
+								<?php
+							}
+							?>
+
+                            <!--- Mostra o valor do metadado----->
+                            <div id="value_<?php echo $propertyDa['id']; ?>_<?php echo $object_id; ?>">
+								<?php if( $propertyDa['metas']['value'] && !empty($propertyDa['metas']['value']) && is_array($propertyDa['metas']['value'])): ?>
+									<?php foreach ($propertyDa['metas']['value'] as $value){
+										if( $propertyDa['type'] == 'user')
+										{
+											$user = get_user_by("id", $value);
+											$value = $user->data->display_name;
+										}
+										?>
+
+
+                                        <p>
+											<?php
+											$is_url = filter_var($value, FILTER_VALIDATE_URL);
+											/*if(!$is_url) { $is_url = filter_var("http://".$value, FILTER_VALIDATE_URL);
+												if(!$is_url) { $is_url = filter_var("http://www.".$value, FILTER_VALIDATE_URL);
+													if($is_url) { $value_href = "http://www.".$value; }
+												} else $value_href = "http://".$value;
+											} else $value_href = $value;*/
+
+											if ($is_url):
+												echo '<b><a class="can_short" target="_blank" href="' . $value . '" >' . $value . '</a></b>';
+                                            elseif (filter_var(trim($value), FILTER_VALIDATE_EMAIL)):
+												echo '<b><a class="can_short" target="_blank" href="mailto:' . $value . '">' . $value . '</a></b>';
+                                            elseif ($value):
+												// echo '<b><a style="cursor:pointer; white-space: pre-wrap;" onclick="wpquery_link_filter(' . "'" . preg_replace('/\s+/', ' ', $value) . "'" . ',' . $property['id'] . ')">' . $value . '</a></b>';
+												echo '<b style="white-space: pre-wrap; color: #88A6CC;">' . $value . '</b>';
+											endif;
+											?>
+                                        </p>
+										<?php
+									} ?>
+								<?php else: ?>
+
+									<?php // verifico se o metadado pode ser alterado
+									if (verify_allowed_action($collection_id, 'socialdb_collection_permission_edit_property_data_value',$object_id)): ?>
+                                        <button type="button" onclick="edit_data_property('<?php echo $propertyDa['id']; ?>', '<?php echo $object_id; ?>')" id="single_edit_<?php echo $propertyDa['id']; ?>_<?php echo $object_id; ?>" class="btn btn-default" >
+											<?php _e('Empty field. Click to edit','tainacan'); ?>
+                                        </button>
+									<?php else: ?>
+										<?php _e('empty field','tainacan'); ?>
+									<?php endif; ?>
+								<?php endif; ?>
                             </div>
-                            <?php
-                        }
-                        ?>
+                            <p>
+                                <!--- Fim: Mostra o valor do metadado----->
+                                <!-- Widgets para edicao -->
+								<?php
 
-                        <!--- Mostra o valor do metadado----->
-                        <div id="value_<?php echo $propertyDa['id']; ?>_<?php echo $object_id; ?>">
-                            <?php if( $propertyDa['metas']['value'] && !empty($propertyDa['metas']['value']) && is_array($propertyDa['metas']['value'])): ?>
-                                <?php foreach ($propertyDa['metas']['value'] as $value){
-                                    if( $propertyDa['type'] == 'user')
-                                    {
-                                        $user = get_user_by("id", $value);
-                                        $value = $user->data->display_name;
-                                    }
-                                    ?>
+								$object_properties_widgets_helper = new ObjectWidgetsHelper();
+								$meta = unserialize(get_post_meta($object_id, 'socialdb_property_helper_' . $propertyDa['id'], true));
+								$indexed_properties = [];
+								if($meta && !empty($meta) && is_array($meta))
+								{
+									foreach ($meta as $property_index => $property_helper) {
+										foreach ($property_helper as $atom) {
+											$type = $atom['type'];
+											$values = $atom['values'];
+
+											foreach ($values as $value) {
+												$meta_value = $object_properties_widgets_helper->sdb_get_post_meta($value);
+												//$indexed_properties[$meta_value->meta_id] = $meta_value->meta_value;
+												if(isset($meta_value->meta_value))
+												{
+													$indexed_properties[$meta_value->meta_id] = $meta_value->meta_value;
+												}
+											}
+										}
+									}
+								}
 
 
-                                    <p>
-                                        <?php
-                                        $is_url = filter_var($value, FILTER_VALIDATE_URL);
-                                        /*if(!$is_url) { $is_url = filter_var("http://".$value, FILTER_VALIDATE_URL);
-                                            if(!$is_url) { $is_url = filter_var("http://www.".$value, FILTER_VALIDATE_URL);
-                                                if($is_url) { $value_href = "http://www.".$value; }
-                                            } else $value_href = "http://".$value;
-                                        } else $value_href = $value;*/
+								if(empty($indexed_properties))
+								{
+									$indexed_properties[] = '';
+								}
 
-                                        if ($is_url):
-                                            echo '<b><a class="can_short" target="_blank" href="' . $value . '" >' . $value . '</a></b>';
-                                        elseif (filter_var(trim($value), FILTER_VALIDATE_EMAIL)):
-                                            echo '<b><a class="can_short" target="_blank" href="mailto:' . $value . '">' . $value . '</a></b>';
-                                        elseif ($value):
-                                            // echo '<b><a style="cursor:pointer; white-space: pre-wrap;" onclick="wpquery_link_filter(' . "'" . preg_replace('/\s+/', ' ', $value) . "'" . ',' . $property['id'] . ')">' . $value . '</a></b>';
-                                            echo '<b style="white-space: pre-wrap; color: #88A6CC;">' . $value . '</b>';
-                                        endif;
-                                        ?>
-                                    </p>
-                                    <?php
-                                } ?>
-                            <?php else: ?>
+								if(has_action('modificate_single_item_properties_data')){
+									do_action('modificate_single_item_properties_data',$propertyDa,$object_id);
+								}else if ( $propertyDa['type'] === 'text')
+								{
+									foreach($indexed_properties as $index => $value)
+									{
+										?>
+                                        <input id="single_property_value_<?php echo $propertyDa['id']; ?>_<?php echo $object_id; ?>_<?php echo $index?>" style="display: none; margin: 7px 0px 7px 0px;" disabled="disabled" value="<?php if ($value) echo $value ?>" type="text" class="form-control"
+                                               name="socialdb_property_<?php echo $propertyDa['id']; ?>"
+                                               data-index="<?php echo $index; ?>"
+											<?php
+											if (!$propertyDa['metas']['socialdb_property_required']):
+												echo 'required="required"';
+											endif;
+											?>
+                                        >
+										<?php
+									}
+								} elseif ( $propertyDa['type'] === 'textarea')
+								{
+									foreach($indexed_properties as $index => $value)
+									{
+										?>
+                                        <textarea disabled="disabled"
+                                                  style="display: none;margin: 7px 0px 7px 0px;"
+                                                  id="single_property_value_<?php echo $propertyDa['id']; ?>_<?php echo $object_id; ?>"
+                                                  class="form-control" name="socialdb_property_<?php echo $propertyDa['id']; ?>"
+                                                  data-index="<?php echo $index; ?>"
+											<?php
+											if (!$propertyDa['metas']['socialdb_property_required']):
+												echo 'required="required"';
+											endif;
+											?> ><?php
+											if ($value)
+												echo $value;
+											?></textarea>
+										<?php
+									}
+								}elseif ( $propertyDa['type'] === 'date' && !has_action('modificate_single_item_properties_data'))
+								{
+									foreach($indexed_properties as $index => $value)
+									{
+										?>
+                                        <input style="display: none;"
+                                               disabled="disabled"
+                                               value="<?php if ($value) echo $value ?>"
+                                               id="single_property_value_<?php echo $propertyDa['id']; ?>_<?php echo $object_id; ?>"
+                                               type="text" class="form-control input_date"
+                                               name="socialdb_property_<?php echo $propertyDa['id']; ?>"
+                                               data-index="<?php echo $index; ?>"
+                                        >
+										<?php
+									}
+								}
+								else
+								{
+									foreach($indexed_properties as $index => $value)
+									{
+										?>
+                                        <input style="display: none;" disabled="disabled"
+                                               value="<?php if ($value) echo $value ?>"
+                                               id="single_property_value_<?php echo $propertyDa['id']; ?>_<?php echo $object_id; ?>"
+                                               type="text" class="form-control"
+                                               data-index="<?php echo $index; ?>"
+                                               name="socialdb_property_<?php echo $propertyDa['id']; ?>"
+											<?php
+											if (!$propertyDa['metas']['socialdb_property_required']):
+												echo 'required="required"';
+											endif;
+											?>
+                                        >
+										<?php
+									}
+								}
 
-                                <?php // verifico se o metadado pode ser alterado
-                                if (verify_allowed_action($collection_id, 'socialdb_collection_permission_edit_property_data_value',$object_id)): ?>
-                                    <button type="button" onclick="edit_data_property('<?php echo $propertyDa['id']; ?>', '<?php echo $object_id; ?>')" id="single_edit_<?php echo $propertyDa['id']; ?>_<?php echo $object_id; ?>" class="btn btn-default" >
-                                        <?php _e('Empty field. Click to edit','tainacan'); ?>
-                                    </button>
-                                <?php else: ?>
-                                    <?php _e('empty field','tainacan'); ?>
-                                <?php endif; ?>
-                            <?php endif; ?>
+								if( isset($propertyDa['metas']["socialdb_property_data_cardinality"]) && $propertyDa['metas']["socialdb_property_data_cardinality"] == 'n'):
+								?>
+                            <div id="area_<?php echo $propertyDa['id']; ?>_<?php echo $object_id; ?>" style="display: none;">
+                                <div id="new_fields_<?php echo $propertyDa['id']; ?>_<?php echo $object_id; ?>"></div>
+                                <button onclick="showNewField(<?php echo $propertyDa['id']; ?>,<?php echo $object_id; ?>,'<?php echo $propertyDa['type'] ; ?>')" class="btn btn-primary"><?php _e('Add new field','tainacan') ?></button>
+                            </div>
+						<?php
+						endif;
+						?>
+
+                            <!-- arrumar num -->
+                            <input style="display: none;" type="hidden" id="single_property_<?php echo $propertyDa['id']; ?>_<?php echo $object_id; ?>_value_before" name="property_<?php echo $propertyDa['id']; ?>_<?php echo $object_id; ?>_value_before" value="<?php if (is_array($propertyDa['metas']['value'])) echo implode(',', $propertyDa['metas']['value']); ?>">
+                            </p>
+
                         </div>
-                        <p>
-                            <!--- Fim: Mostra o valor do metadado----->
-                            <!-- Widgets para edicao -->
-                            <?php
-
-                            $object_properties_widgets_helper = new ObjectWidgetsHelper();
-                            $meta = unserialize(get_post_meta($object_id, 'socialdb_property_helper_' . $propertyDa['id'], true));
-                            $indexed_properties = [];
-                            if($meta && !empty($meta) && is_array($meta))
-                            {
-                                foreach ($meta as $property_index => $property_helper) {
-                                    foreach ($property_helper as $atom) {
-                                        $type = $atom['type'];
-                                        $values = $atom['values'];
-
-                                        foreach ($values as $value) {
-                                            $meta_value = $object_properties_widgets_helper->sdb_get_post_meta($value);
-                                            //$indexed_properties[$meta_value->meta_id] = $meta_value->meta_value;
-                                            if(isset($meta_value->meta_value))
-                                            {
-                                                $indexed_properties[$meta_value->meta_id] = $meta_value->meta_value;
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-
-
-                            if(empty($indexed_properties))
-                            {
-                                $indexed_properties[] = '';
-                            }
-
-                            if(has_action('modificate_single_item_properties_data')){
-                                do_action('modificate_single_item_properties_data',$propertyDa,$object_id);
-                            }else if ( $propertyDa['type'] === 'text')
-                            {
-                                foreach($indexed_properties as $index => $value)
-                                {
-                                    ?>
-                                    <input id="single_property_value_<?php echo $propertyDa['id']; ?>_<?php echo $object_id; ?>_<?php echo $index?>" style="display: none; margin: 7px 0px 7px 0px;" disabled="disabled" value="<?php if ($value) echo $value ?>" type="text" class="form-control"
-                                           name="socialdb_property_<?php echo $propertyDa['id']; ?>"
-                                           data-index="<?php echo $index; ?>"
-                                        <?php
-                                        if (!$propertyDa['metas']['socialdb_property_required']):
-                                            echo 'required="required"';
-                                        endif;
-                                        ?>
-                                    >
-                                    <?php
-                                }
-                            } elseif ( $propertyDa['type'] === 'textarea')
-                            {
-                                foreach($indexed_properties as $index => $value)
-                                {
-                                    ?>
-                                    <textarea disabled="disabled"
-                                              style="display: none;margin: 7px 0px 7px 0px;"
-                                              id="single_property_value_<?php echo $propertyDa['id']; ?>_<?php echo $object_id; ?>"
-                                              class="form-control" name="socialdb_property_<?php echo $propertyDa['id']; ?>"
-                                              data-index="<?php echo $index; ?>"
-                                        <?php
-                                        if (!$propertyDa['metas']['socialdb_property_required']):
-                                            echo 'required="required"';
-                                        endif;
-                                        ?> ><?php
-                                        if ($value)
-                                            echo $value;
-                                        ?></textarea>
-                                    <?php
-                                }
-                            }elseif ( $propertyDa['type'] === 'date' && !has_action('modificate_single_item_properties_data'))
-                            {
-                                foreach($indexed_properties as $index => $value)
-                                {
-                                    ?>
-                                    <input style="display: none;"
-                                           disabled="disabled"
-                                           value="<?php if ($value) echo $value ?>"
-                                           id="single_property_value_<?php echo $propertyDa['id']; ?>_<?php echo $object_id; ?>"
-                                           type="text" class="form-control input_date"
-                                           name="socialdb_property_<?php echo $propertyDa['id']; ?>"
-                                           data-index="<?php echo $index; ?>"
-                                    >
-                                    <?php
-                                }
-                            }
-                            else
-                            {
-                                foreach($indexed_properties as $index => $value)
-                                {
-                                    ?>
-                                    <input style="display: none;" disabled="disabled"
-                                           value="<?php if ($value) echo $value ?>"
-                                           id="single_property_value_<?php echo $propertyDa['id']; ?>_<?php echo $object_id; ?>"
-                                           type="text" class="form-control"
-                                           data-index="<?php echo $index; ?>"
-                                           name="socialdb_property_<?php echo $propertyDa['id']; ?>"
-                                        <?php
-                                        if (!$propertyDa['metas']['socialdb_property_required']):
-                                            echo 'required="required"';
-                                        endif;
-                                        ?>
-                                    >
-                                    <?php
-                                }
-                            }
-
-                            if( isset($propertyDa['metas']["socialdb_property_data_cardinality"]) && $propertyDa['metas']["socialdb_property_data_cardinality"] == 'n'):
-                            ?>
-                        <div id="area_<?php echo $propertyDa['id']; ?>_<?php echo $object_id; ?>" style="display: none;">
-                            <div id="new_fields_<?php echo $propertyDa['id']; ?>_<?php echo $object_id; ?>"></div>
-                            <button onclick="showNewField(<?php echo $propertyDa['id']; ?>,<?php echo $object_id; ?>,'<?php echo $propertyDa['type'] ; ?>')" class="btn btn-primary"><?php _e('Add new field','tainacan') ?></button>
-                        </div>
-                    <?php
-                    endif;
-                    ?>
-
-                        <!-- arrumar num -->
-                        <input style="display: none;" type="hidden" id="single_property_<?php echo $propertyDa['id']; ?>_<?php echo $object_id; ?>_value_before" name="property_<?php echo $propertyDa['id']; ?>_<?php echo $object_id; ?>_value_before" value="<?php if (is_array($propertyDa['metas']['value'])) echo implode(',', $propertyDa['metas']['value']); ?>">
-                        </p>
-
                     </div>
-                </div>
-				<?php
-				unset($property_data[$index]);
-				continue;
+					<?php
+					unset($property_data[$index]);
+					continue;
+				}
 			}
 		}
 
-		foreach($property_term as $index => $propertyTe)
+		if(isset($property_term))
 		{
-			//Trata metadados de termo
-			if($id == $propertyTe['id'])
+			foreach($property_term as $index => $propertyTe)
 			{
-				if(!$objectHelper->is_public_property($propertyTe))
-					continue;
+				//Trata metadados de termo
+				if($id == $propertyTe['id'])
+				{
+					if(!$objectHelper->is_public_property($propertyTe))
+						continue;
 // if (count($property['has_children']) > 0):?>
-                <div class="col-md-6 property-term no-padding">
-                    <div class="box-item-paddings">
-                        <h4 class="title-pipe single-title"> <?php echo $propertyTe['name']; ?></h4>
-						<?php
-						if( $propertyTe['type'] != 'user')
-						{
-							?>
-                            <div class="edit-field-btn">
-								<?php
-								if( !$propertyTe['metas']['socialdb_property_required'] && $propertyTe['metas']['socialdb_property_term_cardinality'] == 1
-								    && (verify_allowed_action($collection_id, 'socialdb_collection_permission_delete_classification',$object_id) || current_user_can( "manage_options", $object_id )))
-								{
-									$category_id = end(get_post_meta($propertyTe['metas']['object_id'], 'socialdb_property_' . $propertyTe['id'] . '_cat'));
-									?>
-                                    <!--button type="button"
+                    <div class="col-md-6 property-term no-padding">
+                        <div class="box-item-paddings">
+                            <h4 class="title-pipe single-title"> <?php echo $propertyTe['name']; ?></h4>
+							<?php
+							if( $propertyTe['type'] != 'user')
+							{
+								?>
+                                <div class="edit-field-btn">
+									<?php
+									if( !$propertyTe['metas']['socialdb_property_required'] && $propertyTe['metas']['socialdb_property_term_cardinality'] == 1
+									    && (verify_allowed_action($collection_id, 'socialdb_collection_permission_delete_classification',$object_id) || current_user_can( "manage_options", $object_id )))
+									{
+										$category_id = end(get_post_meta($propertyTe['metas']['object_id'], 'socialdb_property_' . $propertyTe['id'] . '_cat'));
+										?>
+                                        <!--button type="button"
                                                 onclick="remove_classication('<?php _e('Remove classification', 'tainacan') ?>', '<?php _e('Are you sure to remove this classification', 'tainacan') ?>', <?= $category_id ?>, <?= $object_id ?>, '<?php echo mktime(); ?>');"
                                             id="single_remove_<?php echo $propertyTe['id']; ?>_<?php echo $object_id; ?>"
                                             class="btn btn-default btn-xs" >
                                         <span class="glyphicon glyphicon glyphicon-remove" ></span>
                                     </button-->
-									<?php
-								}
-								?>
-                                <button type="button" onclick="cancel_term_property('<?php echo $propertyTe['id']; ?>', '<?php echo $object_id; ?>')" id="single_cancel_<?php echo $propertyTe['id']; ?>_<?php echo $object_id; ?>" class="btn btn-default btn-xs" style="display: none;" >
-                                    <span class="glyphicon glyphicon-arrow-left" ></span>
-                                </button>
-								<?php
-								// verifico se o metadado pode ser alterado
-								if (verify_allowed_action($collection_id, 'socialdb_collection_permission_add_classification',$object_id)): ?>
-                                    <button type="button" onclick="edit_term_property('<?php echo $propertyTe['id']; ?>', '<?php echo $object_id; ?>')" id="single_edit_<?php echo $propertyTe['id']; ?>_<?php echo $object_id; ?>" class="btn btn-default btn-xs" >
-                                        <span class="glyphicon glyphicon-edit"></span>
+										<?php
+									}
+									?>
+                                    <button type="button" onclick="cancel_term_property('<?php echo $propertyTe['id']; ?>', '<?php echo $object_id; ?>')" id="single_cancel_<?php echo $propertyTe['id']; ?>_<?php echo $object_id; ?>" class="btn btn-default btn-xs" style="display: none;" >
+                                        <span class="glyphicon glyphicon-arrow-left" ></span>
                                     </button>
-								<?php endif; ?>
-                            </div>
-							<?php
-						}
-						?>
-                        <!--button type="button" onclick="cancel_term_property('<?php echo $propertyTe['id']; ?>', '<?php echo $object_id; ?>')" id="cancel_<?php echo $propertyTe['id']; ?>_<?php echo $object_id; ?>" class="btn btn-default btn-xs" style="display: none;" ><span class="glyphicon glyphicon-arrow-left" ></span></button>
+									<?php
+									// verifico se o metadado pode ser alterado
+									if (verify_allowed_action($collection_id, 'socialdb_collection_permission_add_classification',$object_id)): ?>
+                                        <button type="button" onclick="edit_term_property('<?php echo $propertyTe['id']; ?>', '<?php echo $object_id; ?>')" id="single_edit_<?php echo $propertyTe['id']; ?>_<?php echo $object_id; ?>" class="btn btn-default btn-xs" >
+                                            <span class="glyphicon glyphicon-edit"></span>
+                                        </button>
+									<?php endif; ?>
+                                </div>
+								<?php
+							}
+							?>
+                            <!--button type="button" onclick="cancel_term_property('<?php echo $propertyTe['id']; ?>', '<?php echo $object_id; ?>')" id="cancel_<?php echo $propertyTe['id']; ?>_<?php echo $object_id; ?>" class="btn btn-default btn-xs" style="display: none;" ><span class="glyphicon glyphicon-arrow-left" ></span></button>
                         <button type="button" onclick="edit_term_property('<?php echo $propertyTe['id']; ?>', '<?php echo $object_id; ?>')" id="edit_<?php echo $propertyTe['id']; ?>_<?php echo $object_id; ?>" class="btn btn-default btn-xs" ><span class="glyphicon glyphicon-edit"></span></button-->
-                        <!--button type="button" onclick="save_term_property('<?php echo $propertyTe['id']; ?>', '<?php echo $object_id; ?>')" id="save_<?php echo $propertyTe['id']; ?>_<?php echo $object_id; ?>"class="btn btn-default btn-xs" ><span class="glyphicon glyphicon-floppy-disk"></span></button-->
-                        <p> <?php if ($propertyTe['metas']['socialdb_property_help']) {
-								echo $propertyTe['metas']['socialdb_property_help'];
-							} ?>
-                        </p>
+                            <!--button type="button" onclick="save_term_property('<?php echo $propertyTe['id']; ?>', '<?php echo $object_id; ?>')" id="save_<?php echo $propertyTe['id']; ?>_<?php echo $object_id; ?>"class="btn btn-default btn-xs" ><span class="glyphicon glyphicon-floppy-disk"></span></button-->
+                            <p> <?php if ($propertyTe['metas']['socialdb_property_help']) {
+									echo $propertyTe['metas']['socialdb_property_help'];
+								} ?>
+                            </p>
 
 
-                        <div id="labels_<?php echo $propertyTe['id']; ?>_<?php echo $object_id; ?>">
-							<?php
-							$meta = get_post_meta($object_id, 'socialdb_property_helper_' . $propertyTe['id'], true);
-							$objectHelper->getValuesViewSingleMedia($meta,$propertyTe['id'],$object_id,$collection_id);
-							?>
-                        </div>
-                        <!-- Edição de metadado -->
-                        <div style="display:none;" id="widget_<?php echo $propertyTe['id']; ?>_<?php echo $object_id; ?>">
-							<?php
-							if ( $propertyTe['type'] == 'radio') {
-								$properties_terms_radio[] = $propertyTe['id'];
-								?>
-                                <div id='field_event_single_property_term_<?php echo $propertyTe['id']; ?>_<?php echo $object_id; ?>'></div>
-                                <input type="hidden" value="" name="value_radio_<?php echo $propertyTe['id']; ?>_<?php echo $object_id; ?>" id="value_single_radio_<?php echo $propertyTe['id']; ?>_<?php echo $object_id; ?>">
+                            <div id="labels_<?php echo $propertyTe['id']; ?>_<?php echo $object_id; ?>">
 								<?php
-							} elseif ( $propertyTe['type'] == 'tree') {
-								$properties_terms_tree[] = $propertyTe['id'];
+								$meta = get_post_meta($object_id, 'socialdb_property_helper_' . $propertyTe['id'], true);
+								$objectHelper->getValuesViewSingleMedia($meta,$propertyTe['id'],$object_id,$collection_id);
 								?>
-                                <div class="row">
-                                    <div class='col-lg-12'  id='field_event_single_property_term_<?php echo $propertyTe['id']; ?>_<?php echo $object_id; ?>' ></div>
-                                    <!--select name='socialdb_propertyterm_<?php echo $propertyTe['id']; ?>' size='2' class='col-lg-6' id='socialdb_propertyterm_<?php echo $propertyTe['id']; ?>_<?php echo $object_id; ?>' ></select-->
-                                    <input type="hidden" value="" name="value_tree_<?php echo $propertyTe['id']; ?>_<?php echo $object_id; ?>" id="value_single_tree_<?php echo $propertyTe['id']; ?>_<?php echo $object_id; ?>">
-                                </div>
+                            </div>
+                            <!-- Edição de metadado -->
+                            <div style="display:none;" id="widget_<?php echo $propertyTe['id']; ?>_<?php echo $object_id; ?>">
 								<?php
-							} elseif ( $propertyTe['type'] == 'selectbox') {
-								$properties_terms_selectbox[] = $propertyTe['id'];
+								if ( $propertyTe['type'] == 'radio') {
+									$properties_terms_radio[] = $propertyTe['id'];
+									?>
+                                    <div id='field_event_single_property_term_<?php echo $propertyTe['id']; ?>_<?php echo $object_id; ?>'></div>
+                                    <input type="hidden" value="" name="value_radio_<?php echo $propertyTe['id']; ?>_<?php echo $object_id; ?>" id="value_single_radio_<?php echo $propertyTe['id']; ?>_<?php echo $object_id; ?>">
+									<?php
+								} elseif ( $propertyTe['type'] == 'tree') {
+									$properties_terms_tree[] = $propertyTe['id'];
+									?>
+                                    <div class="row">
+                                        <div class='col-lg-12'  id='field_event_single_property_term_<?php echo $propertyTe['id']; ?>_<?php echo $object_id; ?>' ></div>
+                                        <!--select name='socialdb_propertyterm_<?php echo $propertyTe['id']; ?>' size='2' class='col-lg-6' id='socialdb_propertyterm_<?php echo $propertyTe['id']; ?>_<?php echo $object_id; ?>' ></select-->
+                                        <input type="hidden" value="" name="value_tree_<?php echo $propertyTe['id']; ?>_<?php echo $object_id; ?>" id="value_single_tree_<?php echo $propertyTe['id']; ?>_<?php echo $object_id; ?>">
+                                    </div>
+									<?php
+								} elseif ( $propertyTe['type'] == 'selectbox') {
+									$properties_terms_selectbox[] = $propertyTe['id'];
+									?>
+                                    <select onchange="get_event_single_select(this,<?php echo $propertyTe['id']; ?>,<?php echo $object_id; ?>)" class="form-control" name="socialdb_propertyterm_<?php echo $propertyTe['id']; ?>_<?php echo $object_id; ?>" id='field_event_single_property_term_<?php echo $propertyTe['id']; ?>_<?php echo $object_id; ?>' ></select>
+                                    <input type="hidden" value="" name="value_select_<?php echo $propertyTe['id']; ?>_<?php echo $object_id; ?>" id="value_single_select_<?php echo $propertyTe['id']; ?>_<?php echo $object_id; ?>">
+									<?php
+								} elseif ( $propertyTe['type'] == 'checkbox') {
+									$properties_terms_checkbox[] = $propertyTe['id'];
+									?>
+                                    <div id='field_event_single_property_term_<?php echo $propertyTe['id']; ?>_<?php echo $object_id; ?>'></div>
+									<?php
+								} elseif ( $propertyTe['type'] == 'multipleselect') {
+									$properties_terms_multipleselect[] = $propertyTe['id'];
+									?>
+                                    <select multiple class="form-control" name="socialdb_propertyterm_<?php echo $propertyTe['id']; ?>_<?php echo $object_id; ?>" id='field_event_single_property_term_<?php echo $propertyTe['id']; ?>_<?php echo $object_id; ?>' ></select>
+									<?php
+								} elseif ( $propertyTe['type'] == 'tree_checkbox') {
+									$properties_terms_treecheckbox[] = $propertyTe['id'];
+									?>
+                                    <div class="row">
+                                        <div class='col-lg-12'  id='field_event_single_property_term_<?php echo $propertyTe['id']; ?>_<?php echo $object_id; ?>'></div>
+                                        <!--select onclick="remove_classication('<?php _e('Remove classification') ?>', '<?php _e('Are you sure to remove this classification', 'tainacan') ?>', $(this).val()[0],<?php echo $object_id; ?>, '<?php echo mktime(); ?>')" multiple size='6' class='col-lg-6' name='socialdb_propertyterm_<?php echo $propertyTe['id']; ?>[]' id='socialdb_propertyterm_<?php echo $propertyTe['id']; ?>_<?php echo $object_id; ?>' ></select-->
+                                    </div>
+								<?php }
 								?>
-                                <select onchange="get_event_single_select(this,<?php echo $propertyTe['id']; ?>,<?php echo $object_id; ?>)" class="form-control" name="socialdb_propertyterm_<?php echo $propertyTe['id']; ?>_<?php echo $object_id; ?>" id='field_event_single_property_term_<?php echo $propertyTe['id']; ?>_<?php echo $object_id; ?>' ></select>
-                                <input type="hidden" value="" name="value_select_<?php echo $propertyTe['id']; ?>_<?php echo $object_id; ?>" id="value_single_select_<?php echo $propertyTe['id']; ?>_<?php echo $object_id; ?>">
-								<?php
-							} elseif ( $propertyTe['type'] == 'checkbox') {
-								$properties_terms_checkbox[] = $propertyTe['id'];
-								?>
-                                <div id='field_event_single_property_term_<?php echo $propertyTe['id']; ?>_<?php echo $object_id; ?>'></div>
-								<?php
-							} elseif ( $propertyTe['type'] == 'multipleselect') {
-								$properties_terms_multipleselect[] = $propertyTe['id'];
-								?>
-                                <select multiple class="form-control" name="socialdb_propertyterm_<?php echo $propertyTe['id']; ?>_<?php echo $object_id; ?>" id='field_event_single_property_term_<?php echo $propertyTe['id']; ?>_<?php echo $object_id; ?>' ></select>
-								<?php
-							} elseif ( $propertyTe['type'] == 'tree_checkbox') {
-								$properties_terms_treecheckbox[] = $propertyTe['id'];
-								?>
-                                <div class="row">
-                                    <div class='col-lg-12'  id='field_event_single_property_term_<?php echo $propertyTe['id']; ?>_<?php echo $object_id; ?>'></div>
-                                    <!--select onclick="remove_classication('<?php _e('Remove classification') ?>', '<?php _e('Are you sure to remove this classification', 'tainacan') ?>', $(this).val()[0],<?php echo $object_id; ?>, '<?php echo mktime(); ?>')" multiple size='6' class='col-lg-6' name='socialdb_propertyterm_<?php echo $propertyTe['id']; ?>[]' id='socialdb_propertyterm_<?php echo $propertyTe['id']; ?>_<?php echo $object_id; ?>' ></select-->
-                                </div>
-							<?php }
-							?>
+                            </div>
                         </div>
                     </div>
-                </div>
-				<?php
-				unset($property_term[$index]);
-				continue;
+					<?php
+					unset($property_term[$index]);
+					continue;
+				}
 			}
 		}
 
-		foreach ($property_compounds as $index => $compounds)
-        {
-            //Trata composta
-            if($id == $compounds['id'])
-            {
-                $comp[] = $compounds;
-	            $objectHelper->list_properties_compounds($comp, $object_id, $references);
-	            $comp = [];
-	            unset($property_compounds[$index]);
-	            continue;
-            }
-        }
+		if(isset($property_compounds))
+		{
+			foreach ($property_compounds as $index => $compounds)
+			{
+				//Trata composta
+				if($id == $compounds['id'])
+				{
+					$comp[] = $compounds;
+					$objectHelper->list_properties_compounds($comp, $object_id, $references);
+					$comp = [];
+					unset($property_compounds[$index]);
+					continue;
+				}
+			}
+		}
 	}
 }
+
     ?>
     <input type="hidden" id="delete-classification" value="<?php echo verify_allowed_action($collection_id, 'socialdb_collection_permission_delete_classification',$object_id) ?>">
     <input type="hidden" name="categories_id" id='event_single_object_categories_id_<?php echo $object_id; ?>' value="<?php echo implode(',', $categories_id); ?>">
