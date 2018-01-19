@@ -77,7 +77,7 @@
                 actions += $("#object_" + c_id + " .new-item-actions").html();
             }
 
-            var _table_html = "<tr>";
+            var _table_html = "<tr data-item-id=\""+c_id+"\">";
             if(meta_table_set) {
                 var item_table_metas = $('#object_' + c_id + ' input[type="hidden"][name="item_table_meta"]');
                 $(item_table_metas).each(function(n, meta) {

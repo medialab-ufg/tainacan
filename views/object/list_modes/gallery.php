@@ -7,7 +7,7 @@
     }    
 ?>
 
-<div class="col-md-3 gallery-view-container top-div <?php echo $additional_curr_class ?>" data-order="<?php echo $countLine; ?>"
+<div class="col-md-3 gallery-view-container top-div <?php echo $additional_curr_class; echo " object_".$curr_id; ?>" data-order="<?php echo $countLine; ?>"
      <?php if ($collection_list_mode != "gallery"): ?> style="display: none" <?php endif ?> >
     
     <input type="hidden" id="add_classification_allowed_<?php echo get_the_ID() ?>" name="add_classification_allowed" value="<?php echo (string) verify_allowed_action($collection_id, 'socialdb_collection_permission_add_classification', get_the_ID()); ?>" />

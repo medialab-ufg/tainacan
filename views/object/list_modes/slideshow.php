@@ -12,7 +12,7 @@
                     <div class="container col-md-12 center">
                         <div class="collection-slides">
                             <?php $cntr = 1; while ( $loop->have_posts() ): $loop->the_post(); ?>
-                                <div class="sSitem-<?= $cntr; ?>"> <?php echo get_item_thumb_image(get_the_ID()); ?> </div>
+                                <div class="sSitem-<?= $cntr;?>"> <?php echo get_item_thumb_image(get_the_ID()); ?> </div>
                             <?php $cntr++; endwhile; ?>
                         </div>
                         <div class="main-slide col-md-12 center">

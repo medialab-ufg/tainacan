@@ -1,5 +1,5 @@
-<div class="droppableClassifications col-md-12 no-padding list-view-container top-div toggleSelect"
-    data-order="<?php echo $countLine; ?>"
+<div class="droppableClassifications col-md-12 no-padding list-view-container top-div toggleSelect <?php echo " object_".$curr_id; ?>"
+    data-order="<?php echo $countLine;?>"
     <?php if ($collection_list_mode != "list"): ?> style="display: none" <?php endif ?> >
     
     <input type="hidden" id="add_classification_allowed_<?php echo $curr_id ?>" name="add_classification_allowed"
