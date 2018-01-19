@@ -598,7 +598,7 @@ class ExportModel extends Model {
                         if(mb_detect_encoding($value)==='UTF-8'){
                             $value = utf8_decode($value);
                         }
-                        $csv_data[utf8_decode($property->name)] = get_post_meta($object->ID, 'socialdb_property_' . $property_id, true);
+                        $csv_data[utf8_decode($property->name)] = $value;
                     } elseif ($type == 'socialdb_property_object') {
                         $property_result_meta_value = get_post_meta($object->ID, 'socialdb_property_' . $property_id);
                         if (is_array($property_result_meta_value) && $property_result_meta_value[0] != '') {
