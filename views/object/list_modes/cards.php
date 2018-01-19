@@ -27,7 +27,7 @@ $_trim_desc = $_object_description;
 
                 <div class="colFoto no-padding img-thumbnail">
                     <?php if(empty($trash_list)): ?>
-                        <a target="_blank" href="<?php echo $itemURL; ?>">
+                        <a href="<?php echo $itemURL; ?>">
                             <?php echo get_item_thumb_image($curr_id); ?>
                         </a>
                     <?php elseif ($trash_list): echo get_item_thumb_image($curr_id); endif; ?>
