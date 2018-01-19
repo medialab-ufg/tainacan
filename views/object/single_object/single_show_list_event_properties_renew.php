@@ -260,7 +260,7 @@ foreach($ordenation as $ids){
 												echo '<b><a class="can_short" target="_blank" href="mailto:' . $value . '">' . $value . '</a></b>';
                                             elseif ($value):
 												// echo '<b><a style="cursor:pointer; white-space: pre-wrap;" onclick="wpquery_link_filter(' . "'" . preg_replace('/\s+/', ' ', $value) . "'" . ',' . $property['id'] . ')">' . $value . '</a></b>';
-												echo '<b style="white-space: pre-wrap; color: #88A6CC;">' . $value . '</b>';
+												echo '<span style="white-space: pre-wrap; color: #88A6CC; color: black;">' . $value . '</span>';
 											endif;
 											?>
                                         </p>
