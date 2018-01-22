@@ -259,6 +259,7 @@ class ObjectController extends Controller {
                 $recover_wpquery = $object_model->get_args($data);
                 $args = $object_model->list_all($data);
                 $recover_wpquery['posts_per_page'] = $args['posts_per_page'];
+
                 $start = microtime(true);
                 $data['loop'] = new WP_Query($args);
                 $return['wpquerytime'] = microtime(true) - $start;

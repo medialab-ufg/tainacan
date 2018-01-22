@@ -736,8 +736,8 @@ class WPQueryModel extends Model {
             }
         }
         else {
-             $default = get_post_meta($data['collection_id'], 'socialdb_collection_default_ordering',true);
-            if((empty($default)||$default=='')||($property && $property->slug == 'socialdb_ordenation_recent')){
+        	$default = get_post_meta($data['collection_id'], 'socialdb_collection_default_ordering',true);
+            if((empty($default)||$default=='' || is_numeric($default))||($property && $property->slug == 'socialdb_ordenation_recent')){
                 return 'date';
             }else{
                 return trim($default);

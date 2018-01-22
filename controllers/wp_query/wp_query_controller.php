@@ -276,10 +276,12 @@ class WPQueryController extends Controller {
                 }
                 $collection_model = new CollectionModel;
                 $args = $wpquery_model->page_filter($data);
+
                 $data['pagid'] =$args['pagid'];
                 $data['posts_per_page'] = $args['posts_per_page'];
                 $data['col_id'] = $args['collection_id'];
                 $paramters = $wpquery_model->do_filter($args);
+
                 $data['loop'] =  new WP_Query($paramters);
                 $data['collection_data'] = $collection_model->get_collection_data($args['collection_id']);
                 $data["show_string"] = is_root_category($data['col_id']) ? _t('Showing collections:') : _t('Showing Items:');
