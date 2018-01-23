@@ -47,7 +47,7 @@ class Document extends atoum\test
         $this->assert->variable($document->getObjectById(1))->isNull();
         $document->setObjects(array(1 => $object));
         // Obj #1 exists
-        $this->assert->object($document->getObjectById(1))->isInstanceOf('\Smalot\PdfParser\Object');
+        $this->assert->object($document->getObjectById(1))->isInstanceOf( '\Smalot\PdfParser\Object' );
 
         $content = '<</Type/Page>>';
         $header  = \Smalot\PdfParser\Header::parse($content, $document);
@@ -56,7 +56,7 @@ class Document extends atoum\test
         // Obj #1 is missing
         $this->assert->assert->variable($document->getObjectById(1))->isNull();
         // Obj #2 exists
-        $this->assert->object($document->getObjectById(2))->isInstanceOf('\Smalot\PdfParser\Object');
+        $this->assert->object($document->getObjectById(2))->isInstanceOf( '\Smalot\PdfParser\Object' );
     }
 
     public function testGetObjects()
@@ -70,8 +70,8 @@ class Document extends atoum\test
         $document->setObjects(array(1 => $object1, 2 => $object2));
 
         $this->assert->integer(count($objects = $document->getObjects()))->isEqualTo(2);
-        $this->assert->object($objects[1])->isInstanceOf('\Smalot\PdfParser\Object');
-        $this->assert->object($objects[2])->isInstanceOf('\Smalot\PdfParser\Object');
+        $this->assert->object($objects[1])->isInstanceOf( '\Smalot\PdfParser\Object' );
+        $this->assert->object($objects[2])->isInstanceOf( '\Smalot\PdfParser\Object' );
         $this->assert->object($objects[2])->isInstanceOf('\Smalot\PdfParser\Page');
     }
 
@@ -98,7 +98,7 @@ class Document extends atoum\test
         $object2  = new \Smalot\PdfParser\Page($document, $header);
         $document->setObjects(array(1 => $object1, 2 => $object2));
         $this->assert->integer(count($objects = $document->getObjectsByType('Page')))->isEqualTo(1);
-        $this->assert->object($objects[2])->isInstanceOf('\Smalot\PdfParser\Object');
+        $this->assert->object($objects[2])->isInstanceOf( '\Smalot\PdfParser\Object' );
         $this->assert->object($objects[2])->isInstanceOf('\Smalot\PdfParser\Page');
     }
 

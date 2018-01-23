@@ -359,7 +359,7 @@ class Font extends Object
         foreach ($commands as $command) {
             switch ($command[Object::TYPE]) {
                 case 'n':
-                    if (floatval(trim($command[Object::COMMAND])) < $font_space) {
+                    if ( floatval(trim($command[Object::COMMAND])) < $font_space) {
                         $word_position = count($words);
                     }
                     continue(2);
@@ -425,7 +425,7 @@ class Font extends Object
                         $char = $decoded;
                     } elseif ($this->has('DescendantFonts')) {
 
-                        if ($this->get('DescendantFonts') instanceof Object) {
+                        if ( $this->get('DescendantFonts') instanceof Object) {
                             $fonts   = $this->get('DescendantFonts')->getHeader()->getElements();
                         } else {
                             $fonts   = $this->get('DescendantFonts')->getContent();

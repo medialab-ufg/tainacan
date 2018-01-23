@@ -84,7 +84,7 @@ class ElementArray extends Element
         foreach ($elements as $key => $element) {
             if ($element instanceof Header && $deep) {
                 $values[$key] = $element->getDetails($deep);
-            } elseif ($element instanceof Object && $deep) {
+            } elseif ( $element instanceof Object && $deep) {
                 $values[$key] = $element->getDetails(false);
             } elseif ($element instanceof ElementArray) {
                 if ($deep) {

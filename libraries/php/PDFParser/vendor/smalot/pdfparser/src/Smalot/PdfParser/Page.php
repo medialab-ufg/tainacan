@@ -188,7 +188,7 @@ class Page extends Object
                 return '';
 			} elseif ($contents instanceof ElementNull) {
 				return '';
-            } elseif ($contents instanceof Object) {
+            } elseif ( $contents instanceof Object) {
                 $elements = $contents->getHeader()->getElements();
 
                 if (is_numeric(key($elements))) {
@@ -236,7 +236,7 @@ class Page extends Object
 				return array();
 			} elseif ($contents instanceof ElementNull) {
 				return array();
-			} elseif ($contents instanceof Object) {
+			} elseif ( $contents instanceof Object) {
 				$elements = $contents->getHeader()->getElements();
 
 				if (is_numeric(key($elements))) {
