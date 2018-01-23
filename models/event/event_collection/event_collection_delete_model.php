@@ -8,7 +8,7 @@ require_once(dirname(__FILE__) . '../../../event/event_model.php');
 
 class EventCollectionDeleteModel extends EventModel {
 
-    public function EventCollectionDeleteModel() {
+    public function __construct() {
         $this->parent = get_term_by('name', 'socialdb_event_collection_delete', 'socialdb_event_type');
         $this->permission_name = 'socialdb_collection_permission_delete_collection';
     }

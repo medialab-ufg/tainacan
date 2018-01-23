@@ -9,7 +9,7 @@ require_once(dirname(__FILE__) . '../../../property/property_model.php');
 
 class EventPropertyObjectCreate extends EventModel {
 
-    public function EventPropertyObjectCreate() {
+    public function __construct() {
         $this->parent = get_term_by('name', 'socialdb_event_property_object_create', 'socialdb_event_type');
         $this->permission_name = 'socialdb_collection_permission_create_property_object';
     }

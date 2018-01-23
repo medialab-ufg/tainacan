@@ -9,7 +9,7 @@ require_once(dirname(__FILE__) . '../../../property/property_model.php');
 
 class EventPropertyObjectDelete extends EventModel {
 
-    public function EventPropertyObjectDelete() {
+    public function __construct() {
         $this->parent = get_term_by('name', 'socialdb_event_property_object_delete', 'socialdb_event_type');
         $this->permission_name = 'socialdb_collection_permission_delete_property_object';
     }

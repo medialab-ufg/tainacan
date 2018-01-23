@@ -9,7 +9,7 @@ require_once(dirname(__FILE__) . '../../../category/category_model.php');
 
 class EventTagDelete extends EventModel {
 
-    public function EventTagDelete() {
+    public function __construct() {
         $this->parent = get_term_by('name', 'socialdb_event_tag_delete', 'socialdb_event_type');
         $this->permission_name = 'socialdb_collection_permission_delete_tags';
     }
