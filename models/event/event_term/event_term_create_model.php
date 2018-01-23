@@ -9,7 +9,7 @@ require_once(dirname(__FILE__) . '../../../category/category_model.php');
 
 class EventTermCreate extends EventModel {
 
-    public function EventTermCreate() {
+    public function __construct() {
         $this->parent = get_term_by('name', 'socialdb_event_term_create', 'socialdb_event_type');
         $this->permission_name = 'socialdb_collection_permission_create_category';
     }

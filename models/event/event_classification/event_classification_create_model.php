@@ -9,7 +9,7 @@ require_once(dirname(__FILE__) . '../../../object/object_save_values.php');
 
 class EventClassificationCreateModel extends EventModel {
 
-    public function EventClassificationCreateModel() {
+    public function __construct() {
         $this->parent = get_term_by('name', 'socialdb_event_classification_create', 'socialdb_event_type');
         $this->permission_name = 'socialdb_collection_permission_add_classification';
     }

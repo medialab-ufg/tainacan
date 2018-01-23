@@ -9,7 +9,7 @@ require_once(dirname(__FILE__) . '../../../category/category_model.php');
 
 class EventTermDelete extends EventModel {
 
-    public function EventTermDelete() {
+    public function __construct() {
         $this->parent = get_term_by('name', 'socialdb_event_term_delete', 'socialdb_event_type');
         $this->permission_name = 'socialdb_collection_permission_delete_category';
     }
