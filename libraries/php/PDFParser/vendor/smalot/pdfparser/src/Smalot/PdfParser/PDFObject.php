@@ -34,11 +34,11 @@ use Smalot\PdfParser\XObject\Form;
 use Smalot\PdfParser\XObject\Image;
 
 /**
- * Class Object
+ * Class PDFObject
  *
  * @package Smalot\PdfParser
  */
-class Object
+class PDFObject
 {
     const TYPE = 't';
 
@@ -99,7 +99,7 @@ class Object
     /**
      * @param string $name
      *
-     * @return Element|Object
+     * @return Element|PDFObject
      */
     public function get($name)
     {
@@ -342,6 +342,12 @@ class Object
                         $args = preg_split('/\s/s', $command[self::COMMAND]);
                         $y    = array_pop($args);
                         $x    = array_pop($args);
+                        if ($current_position_tm['x'] !== false) {
+                            $delta = abs(floatval($x) - floatval($current_position_tm['x']));
+                            if ($delta > 10) {
+                                $text .= "\t";
+                            }
+                        }
                         if ($current_position_tm['y'] !== false) {
                             $delta = abs(floatval($y) - floatval($current_position_tm['y']));
                             if ($delta > 10) {
@@ -727,7 +733,7 @@ class Object
      * @param $header   Header
      * @param $content  string
      *
-     * @return Object
+     * @return PDFObject
      */
     public static function factory(Document $document, Header $header, $content)
     {
@@ -741,7 +747,7 @@ class Object
                         return new Form($document, $header, $content);
 
                     default:
-                        return new Object($document, $header, $content);
+                        return new PDFObject($document, $header, $content);
                 }
                 break;
 
@@ -765,7 +771,7 @@ class Object
                 }
 
             default:
-                return new Object($document, $header, $content);
+                return new PDFObject($document, $header, $content);
         }
     }
 

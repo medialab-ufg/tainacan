@@ -6,7 +6,7 @@ add_action('init', 'register_post_types');
 add_action('init', 'register_taxonomies');
 include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 include_once( dirname(__FILE__) . "/config/config.php" );
-//require_once (dirname(__FILE__) . '/libraries/php/PDFParser/vendor/autoload.php');
+require_once (dirname(__FILE__) . '/libraries/php/PDFParser/vendor/autoload.php');
 require_once (dirname(__FILE__) . '/libraries/php/OfficeToPlainText/OfficeDocumentToPlainText.php');
 require_once('wp_bootstrap_navwalker.php');
 include_once("models/log/log_model.php");
@@ -3568,13 +3568,13 @@ function reindex($options) {
             }
         }
 
-        /*if ($pdf_text) {
+        if ($pdf_text) {
             foreach ($PDFidPostAttachmentURL as $post_id => $info) {
                 if (!array_key_exists('socialdb_pdf_text', $info['post_meta'])) {
                     get_add_pdf_text($post_id, $info['attachment_id']);
                 }
             }
-        }*/
+        }
 
         if ($office_text) {
             foreach ($OFFICEidPostAttachmentURL as $post_id => $info) {
@@ -3701,9 +3701,12 @@ function get_add_pdf_text($post_id, $item_id) {
 		//Can't read PDF file, just move on.
 	}
 
-	$model = new Model();
-	$model->set_common_field_values($post_id, "socialdb_property_$item_id", $pdf_text);
-	update_post_meta($post_id, "socialdb_pdf_text", true);
+	if(isset($pdf_text) && !empty($pdf_text))
+    {
+	    $model = new Model();
+	    $model->set_common_field_values($post_id, "socialdb_property_$item_id", $pdf_text);
+	    update_post_meta($post_id, "socialdb_pdf_text", true);
+    }
 }
 
 function get_add_office_document_text($post_id, $item_id) {
@@ -3767,13 +3770,13 @@ function get_documents_text($ids)
         }
     }
 
-    /*foreach($PDFidPostAttachmentURL as $post_id => $info)
+    foreach($PDFidPostAttachmentURL as $post_id => $info)
     {
         if(!array_key_exists('socialdb_pdf_text', $info['post_meta']))
         {
             get_add_pdf_text($post_id, $info['attachment_id']);
         }
-    }*/
+    }
 
     foreach($OFFICEidPostAttachmentURL as $post_id => $info)
     {
