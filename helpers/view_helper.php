@@ -63,14 +63,14 @@ class ViewHelper {
         if(isset($_logo_id)) {
             $former_logo = get_the_post_thumbnail($_logo_id, 'thumbnail');
             if($former_logo) {
-                $extraClass = "repository-logo";
+                //$extraClass = "repository-logo";
                 $logo_src = wp_get_attachment_url( get_post_thumbnail_id($_logo_id) );
             } else {
                 $logo_obj = get_post($_logo_id);
                 if(is_object($logo_obj) && $logo_obj->post_type === "attachment") {
                     $logo_src = $logo_obj->guid;
                 } else {
-                    $extraClass = "logo-tainacan";
+                    //$extraClass = "logo-tainacan";
                     $logo_src = get_template_directory_uri() . '/libraries/images/Tainacan_pb.png';
                 }
             }
@@ -81,7 +81,7 @@ class ViewHelper {
             $ret = empty($fallback_title) ? _t("Tainacan") : $fallback_title;
         }
 
-        return "<a class='col-md-3 navbar-brand $extraClass' href='$home'> $ret </a>";
+        return "<a class='col-md-3 navbar-brand logo-tainacan' href='$home'> $ret </a>";
     }
 
     public function get_metadata_types() {
