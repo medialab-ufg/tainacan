@@ -36,10 +36,12 @@ $ids = [];
 $ordenation = unserialize(get_post_meta($collection_id, 'socialdb_collection_properties_ordenation', true));
 
 //Gen sintatic ordenation
-if(!$ordenation)
+if(!$ordenation || (is_array($ordenation['default'])))
 {
+    $ordenation = [];
     if(isset($property_object))
     {
+        print_r($property_object);
         foreach ($property_object as $item_in)
         {
             $ordenation[] = $item_in['id'];

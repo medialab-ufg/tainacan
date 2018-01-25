@@ -787,11 +787,10 @@ class ViewHelper {
 
                             if ($ob) {
                                 ?>
-                                <b>
-                                    <a style="cursor:pointer;" onclick="wpquery_term_filter('<?php echo $ob->term_id ?>','<?php echo $property_id; ?>')">
-                                        <?php echo $ob->name  ?>
-                                    </a>
-                                </b><br>
+                                <a style="color: black;" onclick="wpquery_term_filter('<?php echo $ob->term_id ?>','<?php echo $property_id; ?>')">
+                                    <?php echo $ob->name  ?>
+                                </a>
+                                <br>
                                 <script>
 //                                    setTimeout(function(){
 //                                        append_category_properties('<?php //echo $ob->term_id ?>//',0,'<?php //echo $property_id ?>//');
