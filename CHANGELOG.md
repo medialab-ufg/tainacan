@@ -8,8 +8,17 @@ e este projeto adere para [Semantic Versioning](http://semver.org/spec/v2.0.0.ht
 ### Adicionado
 
 ### Modificado
+- Leitor de PDF na home do item indisponível 
+- Definir a imagem do cabeçalho e a marca do repo de acordo com o recorte definido na submissão dos mesmos
+- 
 
 ### Corrigido
+- 'Duplicar em outra coleção' dentro da home do item não funciona
+- Quebra de linha em item do tipo 'texto' esta se transformando em divisão de colunas na visualização do item
+- Não permite ter mais de duas votações do tipo estrela
+- Corrigir duplicação de valores de metadados de dados
+- Corrigir a busca avançada do tainacan na home inicial e na home da coleção
+- 
 
 ### Removido
 
