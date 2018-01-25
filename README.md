@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/medialab-ufg/tainacan.svg?branch=dev)](https://travis-ci.org/medialab-ufg/tainacan)
 # Tainacan
 
 ## Brief description
