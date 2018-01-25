@@ -4,7 +4,13 @@ include_once('./../../helpers/object/object_helper.php');
 include_once ('js/list_js.php');
 include_once ('js/geolocation_js.php');
 include_once ('helper/loader.php');
-$objHelper->renderCollectionPagination($loop->found_posts, (isset($posts_per_page)) ? $posts_per_page : $loop->post_count, $pagid, $show_string, 'top_pag',$loop);
+
+$items_per_page = get_post_meta($collection_id, 'socialdb_collection_itens_per_page', true);
+if(empty($items_per_page))
+{
+    $items_per_page = (isset($posts_per_page)) ? $posts_per_page : $loop->post_count;
+}
+$objHelper->renderCollectionPagination($loop->found_posts, $items_per_page, $pagid, $show_string, 'top_pag',$loop);
 
 if ( $loop->have_posts()) { ?>
 

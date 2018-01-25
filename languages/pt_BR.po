@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: socialdb\n"
-"POT-Creation-Date: 2018-01-22 09:17-0200\n"
-"PO-Revision-Date: 2018-01-22 09:18-0200\n"
+"POT-Creation-Date: 2018-01-24 14:53-0200\n"
+"PO-Revision-Date: 2018-01-24 14:54-0200\n"
 "Last-Translator: Rodrigo de Oliveira <webmaster@rodrigodeoliveira.net>\n"
 "Language-Team: \n"
 "Language: pt_BR\n"
@@ -50,7 +50,7 @@ msgid "Compounds"
 msgstr "Compostas"
 
 #: api/collections_metadata_api.php:80
-#: controllers/collection/collection_controller.php:373 functions.php:2078
+#: controllers/collection/collection_controller.php:372 functions.php:2078
 #: helpers/object/object_helper.php:23
 #: views/object/formItem/helper/formItem.class.php:165
 #: views/property/list_metadata.php:108 views/property/list_metadata.php:115
@@ -382,7 +382,7 @@ msgstr "Este nome não é permitido!"
 #: models/event/event_collection/event_collection_delete_model.php:50
 #: models/event/event_comment/event_comment_create_model.php:53
 #: models/event/event_model.php:454 models/object/object_model.php:1940
-#: models/object/object_model.php:2013 models/search/search_model.php:494
+#: models/object/object_model.php:2013 models/search/search_model.php:496
 #: models/theme_options/theme_options_model.php:195
 #: partials/setup-header.php:44 views/collection/js/edit_js.php:129
 #: views/collection/js/edit_js.php:176 views/event/js/list_js.php:190
@@ -546,7 +546,7 @@ msgstr "Marca do Repositório"
 
 #: controllers/event/event_controller.php:126
 #: controllers/object/form_item_controller.php:258
-#: controllers/object/object_controller.php:1111
+#: controllers/object/object_controller.php:1112
 #: models/category/category_model.php:1116
 #: models/collection/collection_import_model.php:180
 #: models/collection/collection_model.php:465
@@ -624,8 +624,8 @@ msgstr "Marca do Repositório"
 #: models/object/object_multiple_model.php:671
 #: models/search/search_model.php:66 models/search/search_model.php:148
 #: models/search/search_model.php:170 models/search/search_model.php:269
-#: models/search/search_model.php:282 models/search/search_model.php:450
-#: models/search/search_model.php:489 models/search/search_model.php:507
+#: models/search/search_model.php:282 models/search/search_model.php:452
+#: models/search/search_model.php:491 models/search/search_model.php:509
 #: models/theme_options/theme_options_model.php:16
 #: models/theme_options/theme_options_model.php:37
 #: models/theme_options/theme_options_model.php:55
@@ -978,29 +978,29 @@ msgstr "Adicionar novo item - Enviar arquivo local"
 msgid "Add new item - Insert URL"
 msgstr "Adicionar novo item  - Inserir URL"
 
-#: controllers/object/object_controller.php:266
-#: controllers/object/object_controller.php:313
-#: controllers/wp_query/wp_query_controller.php:285
+#: controllers/object/object_controller.php:267
+#: controllers/object/object_controller.php:314
+#: controllers/wp_query/wp_query_controller.php:287
 #: views/advanced_search/list_advanced_search.php:160
 #: views/advanced_search/loops_page/list_collection_search.php:124
 msgid "Showing collections:"
 msgstr "Exibindo coleções:"
 
-#: controllers/object/object_controller.php:266
-#: controllers/object/object_controller.php:313
-#: controllers/wp_query/wp_query_controller.php:285
+#: controllers/object/object_controller.php:267
+#: controllers/object/object_controller.php:314
+#: controllers/wp_query/wp_query_controller.php:287
 msgid "Showing Items:"
 msgstr "Exibindo itens:"
 
-#: controllers/object/object_controller.php:935
+#: controllers/object/object_controller.php:936
 msgid "Edit items"
 msgstr "Editar vários itens"
 
-#: controllers/object/object_controller.php:1087
+#: controllers/object/object_controller.php:1088
 msgid "No Metadata Found"
 msgstr "Nenhum metadado encontrado"
 
-#: controllers/object/object_controller.php:1112
+#: controllers/object/object_controller.php:1113
 #: models/ranking/ranking_model.php:127
 msgid "Operation is successfully"
 msgstr "Operação realizada com sucesso"
@@ -1203,7 +1203,7 @@ msgstr "(Painel de edição)"
 #: views/property/metadata_forms.php:182 views/property/metadata_forms.php:216
 #: views/property/metadata_forms.php:286 views/ranking/list.php:99
 #: views/search/edit.php:102 views/search/edit.php:315
-#: views/search/layout.php:57 views/search/layout.php:234
+#: views/search/layout.php:58 views/search/layout.php:266
 #: views/theme_options/licenses/edit.php:43
 #: views/theme_options/oaipmh/mapping_attributes.php:25
 #: views/theme_options/property/metadata/form_compounds.php:91
@@ -1628,29 +1628,29 @@ msgstr "Menu para Visitantes"
 msgid "Reindexation complete,Success"
 msgstr "Extração completa, Sucesso"
 
-#: functions.php:3883
+#: functions.php:3886
 msgid "Register the Collection's base name"
 msgstr "Registre o nome base de suas coleções"
 
-#: functions.php:3885
+#: functions.php:3888
 msgid "Enter Collection base URL"
 msgstr "Entre com a nome base de suas coleções"
 
-#: functions.php:3910
+#: functions.php:3913
 msgid "Home Page Sections"
 msgstr "Seções da Home Page"
 
-#: functions.php:3912
+#: functions.php:3915
 msgid "Select widgets to show at Home Page, and order them as you wish"
 msgstr ""
 "Selecione widgets para exibir na Página Inicial, e ordene-os conforme "
 "desejado"
 
-#: functions.php:3923
+#: functions.php:3926
 msgid "Contact Page Sections"
 msgstr "Seções da Página de Contato"
 
-#: functions.php:3925
+#: functions.php:3928
 msgid "Select widgets to show at Contact Page, and order them as you wish"
 msgstr ""
 "Selecione widgets para exibir na Página de contato, e ordene-os conforme "
@@ -2117,7 +2117,7 @@ msgstr "Clique em adicionar para pesquisar novos itens"
 #: views/property/metadata/form_user.php:124
 #: views/property/metadata/form_voting.php:6
 #: views/property/metadata_forms.php:140 views/search/edit.php:288
-#: views/search/layout.php:45
+#: views/search/layout.php:46
 #: views/theme_options/property/js/list_metadata_js.php:2381
 #: views/theme_options/property/metadata/form_compounds.php:11
 #: views/theme_options/property/metadata/form_voting.php:6
@@ -2286,7 +2286,7 @@ msgid "Set the facet color"
 msgstr "Setar a cor da faceta"
 
 #: helpers/view_helper.php:203 views/property/metadata/form_filter.php:33
-#: views/property/metadata_forms.php:158 views/search/layout.php:39
+#: views/property/metadata_forms.php:158 views/search/layout.php:40
 #: views/theme_options/property/metadata/form_filter.php:33
 #: views/theme_options/property/metadata_forms.php:111
 #: views/user/js/register_js.php:24 views/user/register.php:99
@@ -2317,19 +2317,19 @@ msgstr "Layout"
 msgid "Conclude"
 msgstr "Finalizar"
 
-#: helpers/view_helper.php:411 views/search/layout.php:66
+#: helpers/view_helper.php:411 views/search/layout.php:67
 msgid "Cards"
 msgstr "Colunas"
 
-#: helpers/view_helper.php:412 views/search/layout.php:68
+#: helpers/view_helper.php:412 views/search/layout.php:69
 msgid "List"
 msgstr "Lista"
 
-#: helpers/view_helper.php:413 views/search/layout.php:67
+#: helpers/view_helper.php:413 views/search/layout.php:68
 msgid "Gallery"
 msgstr "Galeria"
 
-#: helpers/view_helper.php:414 views/search/layout.php:69
+#: helpers/view_helper.php:414 views/search/layout.php:70
 msgid "Slideshow"
 msgstr "Slide show"
 
@@ -2346,7 +2346,7 @@ msgstr "Painel"
 #: views/property/list_metadata.php:97
 #: views/property/list_metadata_category.php:93 views/property/page.php:54
 #: views/ranking/list.php:29 views/search/edit.php:50 views/search/edit.php:53
-#: views/search/layout.php:235 views/tag/page.php:53
+#: views/search/layout.php:267 views/tag/page.php:53
 #: views/theme_options/common/redirect_button.php:9
 #: views/theme_options/property/list.php:28
 #: views/theme_options/property/list_metadata.php:96
@@ -2366,7 +2366,7 @@ msgstr "Voltar para a coleção"
 #: views/object/formItem/formItemMetadata.php:25
 #: views/object/formItem/helper/formItem.class.php:229
 #: views/permission/page.php:51 views/ranking/add.php:52
-#: views/ranking/edit.php:55 views/search/layout.php:239
+#: views/ranking/edit.php:55 views/search/layout.php:271
 msgid "Back"
 msgstr "Voltar"
 
@@ -4056,19 +4056,19 @@ msgstr "Ranking de Colaborações"
 msgid "Format"
 msgstr "Formato"
 
-#: models/search/search_model.php:451
+#: models/search/search_model.php:453
 msgid "Ordenation changed successfully"
 msgstr "Ordenação alterada com sucesso"
 
-#: models/search/search_model.php:490
+#: models/search/search_model.php:492
 msgid "The property was removed as property ordination"
 msgstr "Metadado foi removido das ordenações"
 
-#: models/search/search_model.php:495
+#: models/search/search_model.php:497
 msgid "You can not remove ordination owned by another collecion"
 msgstr "Você não pode remover ordenação pertencente a outra coleção"
 
-#: models/search/search_model.php:508
+#: models/search/search_model.php:510
 msgid "The property was added as property ordination"
 msgstr "A propriedade foi adicionada como ordenação"
 
@@ -5712,7 +5712,7 @@ msgstr "Exibir:"
 msgid "Map"
 msgstr "Mapa"
 
-#: single-socialdb_collection.php:250 views/search/layout.php:71
+#: single-socialdb_collection.php:250 views/search/layout.php:72
 msgid "Table"
 msgstr "Tabela"
 
@@ -6989,11 +6989,11 @@ msgstr "Múltiplos vídeos de um canal do Youtube ou de um canal do Vimeo"
 msgid "Images from Flickr, Facebook or Instagram"
 msgstr "Imagens do Flick,Facebook ou Instagram"
 
-#: views/collection/upload_file.php:34
-msgid "An error occurred."
-msgstr "Um erro ocorreu."
+#: views/collection/upload_file.php:16
+msgid "Can't upload File - permission denied."
+msgstr "Não é possível enviar arquivos - permissão negada."
 
-#: views/collection/upload_file.php:39
+#: views/collection/upload_file.php:33
 msgid "Something went wrong. Is file too large for upload?"
 msgstr "Algo deu errado. O tamanho do arquivo para upload é muito grande?"
 
@@ -8778,11 +8778,11 @@ msgstr "Mudar"
 
 #: views/object/list_modes/actions/js/actions_js.php:137
 msgid "File changed with success, page will reload"
-msgstr ""
+msgstr "Arquivo modificado com sucesso, a página será atualizada"
 
 #: views/object/list_modes/actions/js/actions_js.php:147
 msgid "File could not be changed "
-msgstr ""
+msgstr "Arquivo não pode ser modificado"
 
 #: views/object/list_modes/actions/js/actions_js.php:389
 #: views/object/list_modes/modals.php:172
@@ -10133,19 +10133,19 @@ msgstr "Ordenação"
 msgid "Select the properties for ordenation"
 msgstr "Selecionar os metadados para ordenação"
 
-#: views/search/edit.php:75 views/search/layout.php:115
+#: views/search/edit.php:75 views/search/layout.php:116
 msgid "Select the default ordination"
 msgstr "Selecionar ordenação padrão"
 
-#: views/search/edit.php:82 views/search/layout.php:122
+#: views/search/edit.php:82 views/search/layout.php:123
 msgid "Select the ordination form"
 msgstr "Selecione a forma de ordenação"
 
-#: views/search/edit.php:89 views/search/layout.php:125
+#: views/search/edit.php:89 views/search/layout.php:126
 msgid "DESC"
 msgstr "Decrescente"
 
-#: views/search/edit.php:96 views/search/layout.php:128
+#: views/search/edit.php:96 views/search/layout.php:129
 msgid "ASC"
 msgstr "Ascendente"
 
@@ -10354,111 +10354,115 @@ msgstr "Necessário informar algo "
 msgid "Necessary to inform Instagram URL with user identifier"
 msgstr "Necessário informar a URL do Instagram com identificador do usuário"
 
-#: views/search/layout.php:29
+#: views/search/layout.php:30
 msgid "Collection style"
 msgstr "Estilo da coleção"
 
-#: views/search/layout.php:49
+#: views/search/layout.php:50
 msgid "Your colors"
 msgstr "Suas cores"
 
-#: views/search/layout.php:64
+#: views/search/layout.php:65
 msgid "Default list mode"
 msgstr "Modo padrão de listagem"
 
-#: views/search/layout.php:70
+#: views/search/layout.php:71
 msgid "Geolocation"
 msgstr "Geo localização"
 
-#: views/search/layout.php:76
+#: views/search/layout.php:77
 msgid "Slideshow time (seconds)"
 msgstr "Tempo de slideshow (segundos)"
 
-#: views/search/layout.php:88
+#: views/search/layout.php:89
 msgid "Approximate mode"
 msgstr "Modo aproximado"
 
-#: views/search/layout.php:93
+#: views/search/layout.php:94
 msgid "Location"
 msgstr "Localização"
 
-#: views/search/layout.php:99
+#: views/search/layout.php:100
 msgid "Latitude"
 msgstr "Latitude"
 
-#: views/search/layout.php:104
+#: views/search/layout.php:105
 msgid "Longitude"
 msgstr "Longitude"
 
-#: views/search/layout.php:109
+#: views/search/layout.php:110
 msgid "Select metadata and the order that will show up at table"
 msgstr "Selecione os metadados e a ordem em que eles irão aparecer na tabela"
 
-#: views/search/layout.php:135
+#: views/search/layout.php:142
+msgid "Itens per page"
+msgstr "Itens por página"
+
+#: views/search/layout.php:167
 msgid "Select the mode to open category page"
 msgstr "Selecione o modo para abrir a página de visualização da categoria"
 
-#: views/search/layout.php:138
+#: views/search/layout.php:170
 msgid "Click at the category"
 msgstr "Clique na categoria"
 
-#: views/search/layout.php:141
+#: views/search/layout.php:173
 msgid "Right button at the category"
 msgstr "Botão direito na categoria"
 
-#: views/search/layout.php:152
+#: views/search/layout.php:184
 msgid "Enable Write text"
 msgstr "Habilitar Escrever Texto"
 
-#: views/search/layout.php:152
+#: views/search/layout.php:184
 msgid "Enable Send file(s)"
 msgstr "Habilitar Enviar arquivo(s)"
 
-#: views/search/layout.php:153
+#: views/search/layout.php:185
 msgid "Enable Send file(s) via zip"
 msgstr "Habilitar Enviar arquivos no formato zip"
 
-#: views/search/layout.php:153
+#: views/search/layout.php:185
 msgid "Enable Insert URL"
 msgstr "Habilitar Inserir URL"
 
-#: views/search/layout.php:156
+#: views/search/layout.php:188
 msgid "Select the options to add a new item"
 msgstr "Selecione as opções para submissão de um novo item"
 
-#: views/search/layout.php:179
+#: views/search/layout.php:211
 msgid "Item view style"
 msgstr "Estilo da visualização do item"
 
-#: views/search/layout.php:183
+#: views/search/layout.php:215
 msgid "Select the layout for the item visualization"
 msgstr "Selecione o layout para a visualização do item"
 
-#: views/search/layout.php:188 views/search/layout.php:209
+#: views/search/layout.php:220 views/search/layout.php:241
 msgid "Focus in media"
 msgstr "Ênfase na mídia"
 
-#: views/search/layout.php:193 views/search/layout.php:214
+#: views/search/layout.php:225 views/search/layout.php:246
 msgid "Focus in metadata"
 msgstr "Ênfase no metadado"
 
-#: views/search/layout.php:196 views/search/layout.php:226
+#: views/search/layout.php:228 views/search/layout.php:258
 msgid "Habilitate visualization of image and attachments"
 msgstr "Habilitar visualização de imagem e anexo"
 
-#: views/search/layout.php:200
+#: views/search/layout.php:232
 msgid "Item insert style"
 msgstr "Estilo da submissão do item"
 
-#: views/search/layout.php:204
+#: views/search/layout.php:236
 msgid "Select the form layout to create a new text item"
 msgstr "Selecione o layout do formulário para criar um novo item de texto"
 
-#: views/search/layout.php:218
+#: views/search/layout.php:250
 msgid "1 column"
 msgstr "1 coluna"
 
-#: views/search/layout.php:221
+#: views/search/layout.php:253
 msgid "2 columns"
 msgstr "2 colunas"
 
@@ -11197,11 +11201,11 @@ msgstr "Título do Widget"
 msgid "Teaser Text:"
 msgstr "Texto:"
 
+#~ msgid "An error occurred."
+#~ msgstr "Um erro ocorreu."
+
 #~ msgid "My collections"
 #~ msgstr "Minhas Coleções"
-
-#~ msgid "Can't upload File - permission denied."
-#~ msgstr "Não é possível enviar arquivos - permissão negada."
 
 #~ msgid "Change enabled license successfully"
 #~ msgstr "Ativação da licença feita com sucesso!"

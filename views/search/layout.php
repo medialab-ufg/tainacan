@@ -23,6 +23,7 @@ $view_helper = new ViewHelper();
         $habilitate_media = (isset($ordenation['collection_metas']['socialdb_collection_habilitate_media'])) ? $ordenation['collection_metas']['socialdb_collection_habilitate_media']:'';
         $habilitate_item_media = (isset($ordenation['collection_metas']['socialdb_collection_item_habilitate_media'])) ? $ordenation['collection_metas']['socialdb_collection_item_habilitate_media']:'';
         $visualization_page_category = $ordenation['collection_metas']['socialdb_collection_visualization_page_category'];
+        $itens_per_page = $ordenation['collection_metas']['socialdb_collection_itens_per_page'];
         ?>
         <form method="POST" name="form_ordenation_search" style="padding-left: 15px;margin-top: 10px" id="form_ordenation_search">
         <div id="layout-accordion" class="menu_left" style="margin-top: 20px; padding-right: 0; font-size: 12px;border: none;">
@@ -126,6 +127,37 @@ $view_helper = new ViewHelper();
                             </option>
                             <option value="asc" <?php if ($collection_ordenation == 'asc') { echo 'selected = "selected"'; } ?> >
                                 <?php _e('ASC','tainacan'); ?> <!-- Rename portuguese version to Crescente -->
+                            </option>
+                        </select>
+                    </div>
+
+                    <!------------------- Quantidade de itens por página -------------------------->
+                    <?php
+                        if(empty($itens_per_page))
+                        {
+                            $itens_per_page = 10;
+                        }
+                    ?>
+                    <div class="form-group">
+                        <label><?php _e("Itens per page", "tainacan")?></label>
+                        <select class="form-control" name="socialdb_collection_itens_per_page">
+                            <option value="5" <?php if($itens_per_page == 5) echo 'selected'?>>
+                                5
+                            </option>
+                            <option value="8" <?php if($itens_per_page == 8) echo 'selected'?>>
+                                8
+                            </option>
+                            <option value="10" <?php if($itens_per_page == 10) echo 'selected'?>>
+                                10
+                            </option>
+                            <option value="15" <?php if($itens_per_page == 15) echo 'selected'?>>
+                                15
+                            </option>
+                            <option value="25" <?php if($itens_per_page == 25) echo 'selected'?>>
+                                25
+                            </option>
+                            <option value="50" <?php if($itens_per_page == 50) echo 'selected'?>>
+                                50
                             </option>
                         </select>
                     </div>
