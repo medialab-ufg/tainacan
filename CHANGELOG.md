@@ -10,7 +10,12 @@ e este projeto adere para [Semantic Versioning](http://semver.org/spec/v2.0.0.ht
 ### Modificado
 - Leitor de PDF na home do item indisponível 
 - Definir a imagem do cabeçalho e a marca do repo de acordo com o recorte definido na submissão dos mesmos
-- 
+- Ocultar a coleção 'tainacan-colleções" do repositorio para não permitir o acesso ao mesmo
+- Retirar a visualização de um item em uma nova aba no navegador
+- Modificar o filtro aplicado no canto superior esquerdo da home da coleção de 'minhas coleções' para 'todas as coleções'
+- Refatorar a exclusão de itens na qual ao excluir um item não realizar a atualização de pagina
+- Retirar a busca de categorias na home da item
+- Retirar alertas de "evento cadastrado com sucesso" na home do item para usuarios adm
 
 ### Corrigido
 - 'Duplicar em outra coleção' dentro da home do item não funciona
@@ -18,7 +23,11 @@ e este projeto adere para [Semantic Versioning](http://semver.org/spec/v2.0.0.ht
 - Não permite ter mais de duas votações do tipo estrela
 - Corrigir duplicação de valores de metadados de dados
 - Corrigir a busca avançada do tainacan na home inicial e na home da coleção
-- 
+- Erro ao tentar exportar o CSV e pacote do tainacan de itens de uma coleção
+- Definir a imagem do cabeçalho e a marca do repo de acordo com o recorte definido na submissão dos mesmos
+- Centralização, corte e preenchimento das miniaturas dos itens 
+- Corrigir a busca geral do repositório permitindo filtrar pelos metadados 'titulo' e 'descrição' dos itens
+- Corrigir a ordenação dos itens na home da coleção
 
 ### Removido
 
