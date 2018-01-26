@@ -439,7 +439,6 @@ class ObjectSingleWidgetsHelper extends ViewHelper {
      * @param int $i O indice do for da cardinalidade
      */
     public function widget_property_term($property,$i,$references,$value = false) {
-        print "Value: ".$value;
         ?>
         <input 
             type="hidden" 
