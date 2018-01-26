@@ -98,7 +98,7 @@ class ObjectHelper extends ViewHelper {
     }
     
     private function getItemsPerPage($itens_per_page) {
-        $_show_values = [5,8,10,15,25,50];
+        $_show_values = [8,12,24,40];
         foreach ($_show_values as $vl) {
             if($itens_per_page == $vl)
                 $select = 'selected';

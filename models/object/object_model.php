@@ -1061,9 +1061,15 @@ class ObjectModel extends Model {
         }
         //a forma de ordenacao
         $order = $this->set_type_order($args);
+
+        if(strcmp($mode_view, 'table') === 0)
+            $posts_per_page = -1;
+        else if(!empty($qtd = get_post_meta($args['collection_id'], 'socialdb_collection_itens_per_page', true)))
+        	$posts_per_page = $qtd;
+        else $posts_per_page = 12;
         $args = array(
             //'ep_integrate'   => true,
-            'posts_per_page' => ($mode_view === 'table') ? -1 : get_post_meta($args['collection_id'], 'socialdb_collection_itens_per_page', true), // -1 to fetchs all items 50 or 10
+            'posts_per_page' => $posts_per_page, // -1 to fetchs all items 50 or 10
             'post_type' => 'socialdb_object',
             'post_status' => array($post_status),
             'paged' => 1,

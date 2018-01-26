@@ -135,26 +135,23 @@ $view_helper = new ViewHelper();
                     <?php
                         if(empty($itens_per_page))
                         {
-                            $itens_per_page = 10;
+                            $itens_per_page = 12;
                         }
                     ?>
                     <div class="form-group">
                         <label><?php _e("Itens per page", "tainacan")?></label>
                         <select class="form-control" name="socialdb_collection_itens_per_page">
-                            <option value="5" <?php if($itens_per_page == 5) echo 'selected'?>>
-                                5
-                            </option>
                             <option value="8" <?php if($itens_per_page == 8) echo 'selected'?>>
                                 8
                             </option>
-                            <option value="10" <?php if($itens_per_page == 10) echo 'selected'?>>
-                                10
+                            <option value="12" <?php if($itens_per_page == 12) echo 'selected'?>>
+                                12
                             </option>
-                            <option value="15" <?php if($itens_per_page == 15) echo 'selected'?>>
-                                15
+                            <option value="24" <?php if($itens_per_page == 24) echo 'selected'?>>
+                                24
                             </option>
-                            <option value="25" <?php if($itens_per_page == 25) echo 'selected'?>>
-                                25
+                            <option value="40" <?php if($itens_per_page == 40) echo 'selected'?>>
+                                40
                             </option>
                             <option value="50" <?php if($itens_per_page == 50) echo 'selected'?>>
                                 50

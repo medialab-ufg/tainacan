@@ -8,7 +8,7 @@ include_once ('helper/loader.php');
 $items_per_page = get_post_meta($collection_id, 'socialdb_collection_itens_per_page', true);
 if(empty($items_per_page))
 {
-    $items_per_page = (isset($posts_per_page)) ? $posts_per_page : $loop->post_count;
+    $items_per_page = 12;//(isset($posts_per_page)) ? $posts_per_page : $loop->post_count;
 }
 $objHelper->renderCollectionPagination($loop->found_posts, $items_per_page, $pagid, $show_string, 'top_pag',$loop);
 
@@ -61,4 +61,4 @@ if ( $loop->have_posts()) { ?>
 
 }
 
-$objHelper->renderCollectionPagination($loop->found_posts, (isset($posts_per_page)) ? $posts_per_page : $loop->post_count, $pagid, $show_string, 'bottom_pag',$loop);
+$objHelper->renderCollectionPagination($loop->found_posts, $items_per_page, $pagid, $show_string, 'bottom_pag',$loop);
