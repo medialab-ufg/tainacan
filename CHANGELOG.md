@@ -18,7 +18,6 @@ e este projeto adere para [Semantic Versioning](http://semver.org/spec/v2.0.0.ht
 - Retirar alertas de "evento cadastrado com sucesso" na home do item para usuarios adm
 
 ### Corrigido
-- 'Duplicar em outra coleção' dentro da home do item não funciona
 - Quebra de linha em item do tipo 'texto' esta se transformando em divisão de colunas na visualização do item
 - Não permite ter mais de duas votações do tipo estrela
 - Corrigir duplicação de valores de metadados de dados
@@ -30,6 +29,7 @@ e este projeto adere para [Semantic Versioning](http://semver.org/spec/v2.0.0.ht
 - Corrigir a ordenação dos itens na home da coleção
 
 ### Removido
+- 'Duplicar em outra coleção' dentro da home do item não funciona
 
 ### Obsoleto
 
