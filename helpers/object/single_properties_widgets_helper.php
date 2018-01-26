@@ -28,7 +28,9 @@ class ObjectSingleWidgetsHelper extends ViewHelper {
         ?>
         <div id="container_field_<?php echo $property['id']; ?>_<?php echo $i; ?>"
              class="col-md-12 no-padding"
-             style="border-style: solid;border-width: 1px;border-color: #ccc; padding: 10px;margin-bottom: 5px;">
+             style="border-style: solid;border-width: 1px;border-color: #ccc; padding: 10px;margin-bottom: 5px;"
+             data-edit-required=""
+        >
             <div class="col-md-1 no-padding">
                 <div style="display: none;" class="pull-right compounds_buttons_<?php echo $property['id']; ?> ">
                     <button type="button"
@@ -199,7 +201,10 @@ class ObjectSingleWidgetsHelper extends ViewHelper {
                                 ?>
                                 <div id="container_field_<?php echo $property['id']; ?>_<?php echo $i; ?>" 
                                      class="col-md-12 no-padding"
-                                     style="border-style: solid;border-width: 1px;border-color: #ccc; padding: 10px;margin-bottom: 5px;">
+                                     style="border-style: solid;border-width: 1px;border-color: #ccc; padding: 10px;margin-bottom: 5px;"
+                                >
+                                    <input type="hidden" id="socialdb_property_required_<?php echo $property['id']; ?>"
+                                           value="<?php echo($property['metas']['socialdb_property_required']); ?>">
                                     <div class="col-md-1 no-padding">
                                         <div style="display: none;" class="pull-right compounds_buttons_<?php echo $property['id']; ?> ">    
                                             <button type="button" 
@@ -434,6 +439,7 @@ class ObjectSingleWidgetsHelper extends ViewHelper {
      * @param int $i O indice do for da cardinalidade
      */
     public function widget_property_term($property,$i,$references,$value = false) {
+        print "Value: ".$value;
         ?>
         <input 
             type="hidden" 
@@ -465,7 +471,7 @@ class ObjectSingleWidgetsHelper extends ViewHelper {
                 <input type="hidden" 
                        id='field_property_term_<?php echo $references['compound_id']; ?>_<?php echo $property['id']; ?>_<?php echo $i; ?>'
                        name="socialdb_property_<?php echo $references['compound_id']; ?>_<?php echo $property['id']; ?>_<?php echo $i; ?>[]" 
-                       value="<?php if ($value) echo $value; ?>">
+                       value="<?php if ($value != false) echo $value;?>">
             </div>
             <?php
         }elseif ($property['type'] == 'selectbox') {

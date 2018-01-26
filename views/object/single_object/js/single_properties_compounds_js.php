@@ -911,23 +911,33 @@
             }
         });
     }
-    //salvando um metadado composto
-    function save_compounds(object_id,property_id,row,clear_values){
-        var properties_id = $('#compounds_'+property_id).val().split(',');
-        var values = [];
-        var value = '';
-        var final_value = '';
 
+    //salvando um metadado composto
+    function save_compounds(object_id, property_id, row, clear_values){
+        var properties_id = $('#compounds_'+property_id).val().split(','),
+            values = [],
+            value = '',
+            final_value = '';
+        var property_required = $("#socialdb_property_required_"+property_id).val();
         if(!clear_values){
-            for(var i = 0;i<properties_id.length;i++ ){
+            for(var i = 0; i < properties_id.length;i++ ){
                 value = $('[name="socialdb_property_'+property_id+'_'+properties_id[i]+'_'+row+'[]"]').val();
                 if(value){
                     values.push(value);
-                }
+                }else values.push('');
             }
-            if(values.length==properties_id.length){
+
+            var send = false;
+            if((property_required == 'true' && values.length === properties_id.length) || //Todas obrigatorias
+                property_required == 'true_one_field' && values.length >= 1 || //Pelo menos uma
+                property_required == 'false')
+            {
+                send = true;
+            }
+
+            if(send){
                 final_value = values.join(',');
-                ajax_value_compounds(object_id,property_id,row,final_value);
+                ajax_value_compounds(object_id, property_id, row, final_value);
             }else{
                  showAlertGeneral('<?php _e('Attention!','tainacan') ?>', '<?php _e('Fill all fields!','tainacan') ?>', 'info');
             }
@@ -935,6 +945,7 @@
             ajax_value_compounds(object_id,property_id,row,'');
         }
     }
+
     //limpando uma linha do metadado composto
     function clear_compounds(object_id,property_id,row){
         swal({
