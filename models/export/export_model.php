@@ -625,11 +625,10 @@ class ExportModel extends Model {
 
             if($first)
             {
-            	fputcsv($df, array_keys($csv_data), $data['socialdb_delimiter_csv']);
+            	fputs($df, implode( $data['socialdb_delimiter_csv'], array_keys($csv_data))."\r\n");
 	            $first = false;
             }
-
-            fputcsv($df, $csv_data, $data['socialdb_delimiter_csv']);
+            fputs($df, implode( $data['socialdb_delimiter_csv'], array_map(array($this, 'encodeFunc'), $csv_data))."\r\n");
 	        clean_post_cache($object->ID);
         }
 	    fclose($df);
@@ -1014,5 +1013,19 @@ class ExportModel extends Model {
             }
         }
     }
+
+    /***
+     * @param $value array
+     * @return string array values enclosed in quotes every time.
+     */
+    function encodeFunc($value) {
+        ///remove any ESCAPED double quotes within string.
+        $value = str_replace('\\"','"',$value);
+        //then force escape these same double quotes And Any UNESCAPED Ones.
+        $value = str_replace('"','\"',$value);
+        //force wrap value in quotes and return
+        return '"'.$value.'"';
+    }
+
 
 }
