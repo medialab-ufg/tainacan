@@ -176,7 +176,7 @@
         endif;
         
         
-         if((isset($property_term)&&count($property_term)>1)||(count($property_term)==1&&!empty($property_term[0]['has_children']))): 
+         if(isset($property_term) && (count($property_term) > 1 || (count($property_term) == 1 && !empty($property_term[0]['has_children'])))):
             ?>
             <?php foreach ($property_term as $property) { ?>
             <div class="form-group col-md-12 no-padding" >
