@@ -225,6 +225,26 @@
     /**
      *
      **/
+
+    $("#submit_form_tag").submit(function (e) {
+        e.preventDefault();
+        var id_correto = $("#meta-tag #tag_id").val();
+        var data_widget = $("#meta-tag #search_data_widget").val();
+
+        $("#meta-tag").modal('hide');
+        var use_filter = $("#meta-tag .property_data_use_filter").prop('checked');
+        var ordenation = $('#meta-tag input[name=filter_ordenation]:checked').val()
+        if (use_filter) {
+            setCollectionFacet("update", id_correto, data_widget, ordenation);
+        } else {
+            removeFacet(id_correto);
+        }
+
+        //list_collection_facets();
+        //limpando caches
+        delete_all_cache_collection();
+    });
+
     function setCollectionFacet(operation, metadata_id, metadata_widget, ordenation, color_facet, counter_obj, menu_style_id,enable_more_options) {
         var collection_id = $("#property_data_collection_id").val();
         var meta_id;
@@ -271,7 +291,7 @@
                 type: 'POST',
                 data: data
             }).done(function (r) {
-                elem = $.parseJSON(r);
+                //elem = $.parseJSON(r);
                 list_collection_facets();
             });
         }
@@ -923,25 +943,6 @@
         $("#meta-tag #search_add_facet").val(item_id);
         $("#meta-tag").modal('show');
     }
-
-    $("#submit_form_tag").submit(function (e) {
-        e.preventDefault();
-        var id_correto = $("#meta-tag #tag_id").val();
-        var data_widget = $("#meta-tag #search_data_widget").val();
-
-        $("#meta-tag").modal('hide');
-        var use_filter = $("#meta-tag .property_data_use_filter").prop('checked');
-        var ordenation = $('#meta-tag input[name=filter_ordenation]:checked').val()
-        if (use_filter) {
-            setCollectionFacet("update", id_correto, data_widget, ordenation);
-        } else {
-            removeFacet(id_correto);
-        }
-
-        list_collection_facets();
-        //limpando caches
-        delete_all_cache_collection();
-    });
 
     function delete_property(id, type) {
         $("#property_delete_collection_id").val($("#collection_id").val());

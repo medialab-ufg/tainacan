@@ -1419,8 +1419,10 @@ class VisualizationModel extends CollectionModel {
         $facets = array();
         $facet = array();
         $facets_id = array_filter(array_unique(get_post_meta($collection_id, 'socialdb_collection_facets')));
+
         foreach ($facets_id as $facet_id) {
             $widget = get_post_meta($collection_id, 'socialdb_collection_facet_' . $facet_id . '_widget', true);
+
             // $orientation = get_post_meta($collection_id, 'socialdb_collection_facet_' . $facet_id . '_orientation', true);
             $orientation_tree = get_post_meta($collection_id, 'socialdb_collection_facet_widget_tree_orientation', true);
             //adicionar para um novo filtro para modulos
