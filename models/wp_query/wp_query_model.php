@@ -582,7 +582,7 @@ class WPQueryModel extends Model {
                 'paged'          => (int) $page,
                 'posts_per_page' => (isset($recover_data['posts_per_page']))?$recover_data['posts_per_page']:50,
                 'tax_query'      => $tax_query,
-                'orderby'        => 'meta_value',
+                'orderby'        => $orderby,
                 'order'          => $order,
                 'post_status'    => $status,
                 //'no_found_rows' => true, // counts posts, remove if pagination required
