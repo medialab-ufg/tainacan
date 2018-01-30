@@ -236,7 +236,6 @@ class WPQueryController extends Controller {
                 $collection_model = new CollectionModel;
                 $args = $wpquery_model->ordenation_filter($data);
                 $parameters = $wpquery_model->do_filter($args);
-                print_r($parameters);
                 $data['loop'] =  new WP_Query($parameters);
                 $data['collection_data'] = $collection_model->get_collection_data($args['collection_id']);
                 $data['listed_by'] = $wpquery_model->get_ordered_name($args['collection_id'], $args['ordenation_id'], $args['order_by']);
