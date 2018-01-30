@@ -61,7 +61,7 @@ include_once ('../../helpers/view_helper.php');
                                 <div class="form-group">
                                     <label for="encode_csv_export"><?php _e('File Encoding', 'tainacan'); ?></label><br>
                                     <select id="encode_csv_export" name="encode_csv_export" required="required" disabled="disabled" class="form-control">
-                                        <option value="utf8">UTF8</option>  
+                                        <option value="iso_8859_1">ISO 8859-1</option>
                                     </select>
                                 </div>
                                 <div class="form-group">
