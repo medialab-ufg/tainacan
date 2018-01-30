@@ -582,7 +582,7 @@ class WPQueryModel extends Model {
                 'paged'          => (int) $page,
                 'posts_per_page' => (isset($recover_data['posts_per_page']))?$recover_data['posts_per_page']:50,
                 'tax_query'      => $tax_query,
-                'orderby'        => $orderby,
+                'orderby'        => 'meta_value',
                 'order'          => $order,
                 'post_status'    => $status,
                 //'no_found_rows' => true, // counts posts, remove if pagination required
@@ -593,6 +593,17 @@ class WPQueryModel extends Model {
             $meta_query = (!isset($recover_data['post_type']) || empty($recover_data['post_type']) || $recover_data['post_type'] =='socialdb_object') ? $this->get_meta_query($recover_data) : false;
             if ($meta_query) {
                 $args['meta_query'] = $meta_query;
+	            /*$args['meta_query'] = array(
+		            'relation' => 'OR',
+		            'with_value' => array(
+			            'key' => $orderby,
+			            'compare' => 'EXISTS'
+		            ),
+		            'without_value' => array(
+			            'key' => $orderby,
+			            'compare' => 'NOT EXISTS'
+		            )
+	            );*/
             }
 
             if (isset($meta_key)&&!in_array($meta_key, ['title','comment_count','date'])) {
@@ -616,6 +627,7 @@ class WPQueryModel extends Model {
             if(isset($recover_data['author']) && $recover_data['author'] != ''){
                 $args['author'] = $recover_data['author'];
             }
+
             return $args;
         }
     }
