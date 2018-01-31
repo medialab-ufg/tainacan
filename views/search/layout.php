@@ -153,9 +153,6 @@ $view_helper = new ViewHelper();
                             <option value="40" <?php if($itens_per_page == 40) echo 'selected'?>>
                                 40
                             </option>
-                            <option value="50" <?php if($itens_per_page == 50) echo 'selected'?>>
-                                50
-                            </option>
                         </select>
                     </div>
                     
