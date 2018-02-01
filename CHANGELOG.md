@@ -6,9 +6,11 @@ e este projeto adere para [Semantic Versioning](http://semver.org/spec/v2.0.0.ht
 
 ## [Unreleased]
 ### Adicionado
+- Permitir alterar o arquivo raiz ex. '.pdf e .jpg' na interface do tainacan. Para evitar que ter que subir de novo um item.
+- Permitir ordenar os metadados na home de visualização do item
+- Implementar no admin do layout da coleção um campo para definir numero de 'itens por pagina' padrão e definir os valores de exibição como 8,12,24,40;
 
 ### Modificado
-- Leitor de PDF na home do item indisponível 
 - Definir a imagem do cabeçalho e a marca do repo de acordo com o recorte definido na submissão dos mesmos
 - Ocultar a coleção 'tainacan-colleções" do repositorio para não permitir o acesso ao mesmo
 - Retirar a visualização de um item em uma nova aba no navegador
@@ -16,8 +18,10 @@ e este projeto adere para [Semantic Versioning](http://semver.org/spec/v2.0.0.ht
 - Refatorar a exclusão de itens na qual ao excluir um item não realizar a atualização de pagina
 - Retirar a busca de categorias na home da item
 - Retirar alertas de "evento cadastrado com sucesso" na home do item para usuarios adm
+- Alterar a codificação do arquivo no exportar csv
 
 ### Corrigido
+- Leitor de PDF na home do item indisponível 
 - Quebra de linha em item do tipo 'texto' esta se transformando em divisão de colunas na visualização do item
 - Não permite ter mais de duas votações do tipo estrela
 - Corrigir duplicação de valores de metadados de dados
@@ -27,6 +31,13 @@ e este projeto adere para [Semantic Versioning](http://semver.org/spec/v2.0.0.ht
 - Centralização, corte e preenchimento das miniaturas dos itens 
 - Corrigir a busca geral do repositório permitindo filtrar pelos metadados 'titulo' e 'descrição' dos itens
 - Corrigir a ordenação dos itens na home da coleção
+- Metadados compostos com alterações na home do item inconsistente
+- Erro ao tentar definir somente uma unica submissão de itens
+- Corrigir a definição do filtro para o metadado 'Tags' 
+- Corrigir filtro do tipo data permitindo filtrar por valores de datas informadas
+- Corrigir submissão em massa de arquivos retirando o travamento de tela
+- Corrigir a ocultação de coleções
+- Corrigir a busca avançada permitindo pesquisar por valores exato
 
 ### Removido
 - 'Duplicar em outra coleção' dentro da home do item não funciona
