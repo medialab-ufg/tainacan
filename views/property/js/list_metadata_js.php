@@ -2197,7 +2197,7 @@
                 $($search_data_widget)
                         .append('<option value="tree"> ' + '<?php _e('Tree', 'tainacan') ?>' + ' </option>')
                         .append('<option value="from_to">' + '<?php _e('From/To', 'tainacan') ?>' + '</option>')
-                        .append('<option value="range"> ' + '<?php _e('Range', 'tainacan') ?>' + ' </option>');
+                        /*.append('<option value="range"> ' + '<?php _e('Range', 'tainacan') ?>' + ' </option>')*/;
             } else if (meta_type == 'socialdb_property_object') {
                 $("#meta-relationship #search_data_widget").html('')
                         .append('<option value="tree"> ' + '<?php _e('Tree', 'tainacan') ?>' + ' </option>')
