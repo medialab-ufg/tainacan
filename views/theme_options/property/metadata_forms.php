@@ -82,7 +82,7 @@ foreach( $view_helper->get_metadata_types() as $type => $label):
                                     <select name="search_data_widget" id="search_data_widget" class="form-control" data-type="<?php echo $type ?>"
                                             onclick="select_tree_color('<?php echo "#meta-$type" ?>')"
                                             onchange="show_increase_btn('<?php echo $type ?>', this)">
-                                        <?php echo $view_helper->render_widgets_options(); ?>
+                                        <?php echo $view_helper->render_widgets_options($type); ?>
                                     </select>
 
                                     <?php if (in_array($type, ["date", "numeric"])) { ?>

@@ -178,13 +178,31 @@ class ViewHelper {
         }
     }
     
-    public function render_widgets_options()
+    public function render_widgets_options($type = '')
     {
         ?>
-            <option value='tree'> <?php _e('Tree', 'tainacan'); ?> </option>
+        <option value='tree'> <?php _e('Tree', 'tainacan'); ?> </option>
+        <?php
+
+        if(strcmp($type, 'numeric') === 0 || strcmp($type, 'date') === 0)
+        {
+	        ?>
+            <option value="from_to"><?php _e('From/To', 'tainacan'); ?></option>
+	        <?php
+        }
+        elseif (strcmp($type, "socialdb_property_object") === 0)
+        {
+	        ?>
+            <option value="multipleselect"><?php _e('Multiple Select', 'tainacan'); ?></option>
+	        <?php
+        }
+        else
+        {
+	        ?>
             <option value='searchbox'><?php _e('Search box with autocomplete', 'tainacan'); ?></option>
             <option value='cloud'><?php _e('Tag Cloud', 'tainacan'); ?>  </option>
-        <?php
+	        <?php
+        }
     }
     
     public function render_tree_colors() {
