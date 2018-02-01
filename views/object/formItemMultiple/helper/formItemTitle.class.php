@@ -62,7 +62,7 @@ class FormItemTitle extends FormItemMultiple{
                     //atualizo o input
                     $.each(ids,function(index,value){
                         $('#title_'+value).val($('#item-title').val().trim());
-                    })
+                    });
                     //
                     $.ajax({
                         url: $('#src').val() + '/controllers/object/form_item_controller.php',

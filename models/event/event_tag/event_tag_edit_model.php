@@ -9,7 +9,7 @@ require_once(dirname(__FILE__) . '../../../category/category_model.php');
 
 class EventTagEdit extends EventModel {
 
-    public function EventTagEdit() {
+    public function __construct() {
         $this->parent = get_term_by('name', 'socialdb_event_tag_edit', 'socialdb_event_type');
         $this->permission_name = 'socialdb_collection_permission_edit_tags';
     }

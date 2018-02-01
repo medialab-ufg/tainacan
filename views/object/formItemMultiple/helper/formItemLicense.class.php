@@ -177,19 +177,6 @@ class FormItemLicense extends FormItemMultiple {
     * @param type $index
     */
     public function initScriptsLicenseContainer($property, $item_id, $license_pattern = null) {
-	    if($license_pattern != null)
-	    {
-		    if($license_pattern){
-			    ?>
-                <script>
-                    $(function(){
-                        $("input:radio.object_license:checked").trigger('change');
-                    });
-                </script>
-			    <?php
-		    }
-	    }
-
         ?>
               <script>
               $('#submit_help_cc').submit(function (e) {
@@ -203,9 +190,7 @@ class FormItemLicense extends FormItemMultiple {
                   }).done(function (result) {
                       $("#modalHelpCC").modal('hide');
                       elem = jQuery.parseJSON(result);
-                      console.log(elem);
                       if(elem.id && elem.id != ''){
-                          console.log($('#radio' + elem.id).length);
                           $('#radio_left_menu' + elem.id).attr("checked", "checked");
                       }
                       showAlertGeneral(elem.title, elem.msg, elem.type);
@@ -213,25 +198,44 @@ class FormItemLicense extends FormItemMultiple {
               });
 
 
-                  $('#object_license').change(function(){
-                        <?php if($this->isRequired === 'true'):  ?>
-                            validateFieldsMetadataText($(this).val(),'<?php echo $property['id'] ?>','0','0')
-                        <?php endif; ?>
-                        $.ajax({
-                            url: $('#src').val() + '/controllers/object/form_item_controller.php',
-                            type: 'POST',
-                            data: {
-                                operation: 'saveLicense',
-                                value: $(this).val(),
-                                collection_id:$('#collection_id').val(),
-                                item_id:'<?php echo $item_id ?>'
-                            }
-                        }).done(function (result) {
+              $('input[name="object_license"]').change(function(){
+                    <?php if($this->isRequired === 'true'):  ?>
+                        validateFieldsMetadataText($(this).val(),'<?php echo $property['id'] ?>','0','0');
+                    <?php endif; ?>
+                    $.ajax({
+                        url: $('#src').val() + '/controllers/object/form_item_controller.php',
+                        type: 'POST',
+                        data: {
+                            operation: 'saveLicense',
+                            value: $(this).val(),
+                            collection_id: $('#collection_id').val(),
+                            item_id: $('#item-multiple-selected').val().trim()
+                        }
+                    }).done(function (result) {
 
-                        });
-                  });
+                    });
+              });
               </script>
         <?php
+
+	    if($license_pattern != null)
+	    {
+		    if($license_pattern){
+			    ?>
+                <script>
+                    $(function(){
+                        var ids = [];
+                        $('div[id^="wrapper_"]').each(function () {
+                            ids.push($(this).attr('item'));
+                        });
+                        ids = ids.join(', ');
+                        $('#item-multiple-selected').val(ids);
+                        $("input:radio.object_license:checked").trigger('change');
+                    });
+                </script>
+			    <?php
+		    }
+	    }
     }
 
 }

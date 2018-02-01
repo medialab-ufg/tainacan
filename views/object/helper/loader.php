@@ -30,7 +30,7 @@ $_fxd_meta = [
 $numberItems = ceil($loop->found_posts / 10);
 ?>
 
-<img style='display:none' src="<?php echo get_template_directory_uri().'/libraries/images/logo/tainacan-repo-logotipo2.png' ?>" alt="" class="tainacan-logo-cor">
+<img style='display:none' src="<?php echo get_template_directory_uri().'/libraries/images/logo/tainacan_logo_print.png' ?>" alt="" class="tainacan-logo-cor">
 
 <!-- TAINACAN: hidden utilizados para execucao de processos desta view (list.php)  -->
 <input type="hidden" id="keyword_pagination" name="keyword_pagination" value="<?php if (isset($keyword)) echo $keyword; ?>" />

@@ -33,13 +33,13 @@ var Hook = {
     }
 };
 
-//sobreescrevendo alert
+/*//sobreescrevendo alert
 var old = alert;
 
 alert = function() {
     console.log(new Error().stack);
     //old.apply(window, arguments);
-};
+};*/
 
 $(window).load(function () {
     (function(d, s, id) {
@@ -1034,7 +1034,7 @@ function showList(src) {
                 $('#loader_objects').hide();
                 $('#wp_query_args').val(elem.args);
                 $('#list').html(elem.page).show();
-                $('.col-items-per-page').val(elem.items_per_page);
+                //$('.col-items-per-page').val(elem.items_per_page);
                 if (elem.empty_collection) {
                     $('#collection_empty').show();
                     $('#items_not_found').hide();
@@ -3439,7 +3439,7 @@ function change_to_cards()
 {
     if(isMobile())
     {
-        $("#collectionViewMode")
+        $("#collectionViewMode");
     }
 }
 

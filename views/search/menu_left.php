@@ -20,15 +20,6 @@ foreach ($facets as $facet):
                 <?php _e('Categories','tainacan'); ?>
             </label>
             <div>
-                <?php /* <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="btnGroupVerticalDrop1">
-                    <!-- TAINACAN: abre modal para adicao de categorias  -
-                    <li></li>
-                    <!-- TAINACAN: abre modal para adicao de tags  --
-                    <li><a onclick="showModalFilters('add_tag');" href="#submit_filters_add_tag"><span class="glyphicon glyphicon-tag"></span>&nbsp;<?php _e('Add Tag','tainacan'); ?></a></li>
-                </ul> */ ?>
-                <!-- TAINACAN: os filtros do dynatree eram mostrados neste local -- desativado -->
-                <div id="dynatree_filters"></div>
-
                 <!-- TAINACAN: arvore montado nesta div pela biblioteca dynatree, html e css neste local totamente gerado pela biblioteca -->
                 <div id="dynatree"></div>
             </div>

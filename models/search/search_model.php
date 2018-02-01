@@ -27,10 +27,15 @@ public function add($data) {
         $result['result'] = 'false';
     } else {
         $collection_id = $data['collection_id'];
+	    $fixed_id = get_term_by('slug', 'socialdb_property_fixed_tags', 'socialdb_property_type')->term_id;
+	    if($data['search_add_facet'] == $fixed_id){
+		    $data['search_add_facet'] = 'tag';
+	    }
+
         add_post_meta($collection_id, 'socialdb_collection_facets', $data['search_add_facet']);
         update_post_meta($collection_id, 'socialdb_collection_facet_' . $data['search_add_facet'] . '_widget', $data['search_data_widget']);
         update_post_meta($collection_id, 'socialdb_collection_facet_' . $data['search_add_facet'] . '_ordenation', $data['ordenation']);
-        $orientation = ($orientation == '' ? 'left-column' : $orientation);
+        $orientation = ($data['search_data_orientation'] == '' ? 'left-column' : $data['search_data_orientation']);
 
         if ($data['search_data_widget'] == 'tree') {
             update_post_meta($collection_id, 'socialdb_collection_facet_' . $data['search_add_facet'] . '_color', $data['color_facet']);
@@ -107,7 +112,7 @@ public function add($data) {
         if ($data['property_id'] != '')
         {
             $fixed_id = get_term_by('slug', 'socialdb_property_fixed_tags', 'socialdb_property_type')->term_id;
-            if($data['property_id']==$fixed_id){
+            if($data['property_id'] == $fixed_id){
                 $data['property_id'] = 'tag';
             }
             $facets = get_post_meta($collection_id, 'socialdb_collection_facets');
@@ -415,6 +420,8 @@ public function add($data) {
         update_post_meta($post_id, 'socialdb_collection_slideshow_time', $data['slideshow_time']);
         update_post_meta($post_id, 'socialdb_collection_ordenation_form', $data['socialdb_collection_ordenation_form']);
         update_post_meta($post_id, 'socialdb_collection_visualization_page_category', $data['socialdb_collection_visualization_page_category']);
+
+	    update_post_meta($post_id, 'socialdb_collection_itens_per_page', $data['socialdb_collection_itens_per_page']);
 
         if (isset($data['prox_mode'])) {
             update_post_meta($post_id, 'socialdb_collection_use_prox_mode', $data['prox_mode']);

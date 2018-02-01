@@ -9,7 +9,7 @@ require_once(dirname(__FILE__) . '../../../comment/comment_model.php');
 
 class EventCommentDelete extends EventModel {
 
-    public function EventCommentDelete() {
+    public function __construct() {
         $this->parent = get_term_by('name', 'socialdb_event_comment_delete', 'socialdb_event_type');
         $this->permission_name = 'socialdb_collection_permission_delete_comment';
     }

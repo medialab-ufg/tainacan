@@ -3630,7 +3630,6 @@ function get_pdf_no_thumb_ids($count) {
 function save_canvas_pdf_thumbnails($canvas_images, $reindex = false) {
     $upload_dir = wp_upload_dir();
     $upload_path = str_replace('/', DIRECTORY_SEPARATOR, $upload_dir['path']) . DIRECTORY_SEPARATOR;
-    
     foreach($canvas_images as $item)
     {
         if(!$reindex)
@@ -3692,7 +3691,6 @@ function save_canvas_pdf_thumbnails($canvas_images, $reindex = false) {
 }
 
 function get_add_pdf_text($post_id, $item_id) {
-	error_reporting(1);
 	$url_file = wp_get_attachment_url($item_id);
 	try {
 		$parser = new \Smalot\PdfParser\Parser();
@@ -3702,9 +3700,12 @@ function get_add_pdf_text($post_id, $item_id) {
 		//Can't read PDF file, just move on.
 	}
 
-	$model = new Model();
-	$model->set_common_field_values($post_id, "socialdb_property_$item_id", $pdf_text);
-	update_post_meta($post_id, "socialdb_pdf_text", true);
+	if(isset($pdf_text) && !empty($pdf_text))
+    {
+	    $model = new Model();
+	    $model->set_common_field_values($post_id, "socialdb_property_$item_id", $pdf_text);
+	    update_post_meta($post_id, "socialdb_pdf_text", true);
+    }
 }
 
 function get_add_office_document_text($post_id, $item_id) {
@@ -3768,13 +3769,13 @@ function get_documents_text($ids)
         }
     }
 
-    foreach($PDFidPostAttachmentURL as $post_id => $info)
+    /*foreach($PDFidPostAttachmentURL as $post_id => $info)
     {
         if(!array_key_exists('socialdb_pdf_text', $info['post_meta']))
         {
             get_add_pdf_text($post_id, $info['attachment_id']);
         }
-    }
+    }*/
 
     foreach($OFFICEidPostAttachmentURL as $post_id => $info)
     {

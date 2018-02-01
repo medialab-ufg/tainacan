@@ -11,10 +11,8 @@ matrix:
   - php: nightly
   fast_finish: true
 before_install:
-- openssl aes-256-cbc -K $encrypted_02c37e8cba41_key -iv $encrypted_02c37e8cba41_iv
+- openssl aes-256-cbc -K $encrypted_9afa2311d8c3_key -iv $encrypted_9afa2311d8c3_iv
   -in deploy_rsa.enc -out deploy_rsa -d
-#- openssl aes-256-cbc -K $encrypted_f26652362650_key -iv $encrypted_f26652362650_iv
-#  -in deploy_rsa.enc -out deploy_rsa -d
 - eval "$(ssh-agent -s)"
 - chmod 600 deploy_rsa
 - ssh-add  deploy_rsa
@@ -23,13 +21,15 @@ before_install:
 install:
 - composer self-update
 - composer install
-script: 
+script:
+#- "./vendor/bin/phpunit tests"
 after_success:
-- ssh l3p@medialab.ufg.br sh /home/l3p/atualiza_git/atualiza_master_tainacan.sh
+- ssh l3p@medialab.ufg.br sh /home/l3p/atualiza_git/atualiza_dev_tainacan.sh
 cache:
-  directories: 
+  directories:
 #  - vendor
 #  - "$HOME/.cache/composer"
+#tMUdei Aqui
 notifications:
   email:
     on_success: never

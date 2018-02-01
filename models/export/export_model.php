@@ -467,21 +467,30 @@ class ExportModel extends Model {
         socialdb_add_tax_terms($object_id, array($array['term_id']), 'socialdb_category_type');
     }
 
-    public function generate_csv_data($data) {
+    public function generate_csv_data($data, $objects = null) {
+    	ini_set('max_execution_time', 120);
         $propertyModel = new PropertyModel;
-        $facets_id = CollectionModel::get_facets($data['collection_id']);
-        $objects = $this->get_collection_posts($data['collection_id']);
+
+	    $facets = CollectionModel::get_facets($data['collection_id']);
+        if(!$objects)
+        {
+        	$objects = $this->get_collection_posts($data['collection_id']);
+        }
+
         $csv_data = [];
+
+	    $df = fopen("php://output", 'w');
+	    $first = true;
         foreach ($objects as $object) {
             if ($object->ID == $data['collection_id']) {
                 continue;
             }
-            
+
             /** ID * */
             if ($object->ID != "") {
                 $csv_data['ID'] = $object->ID;
             }
-            
+
             /** Title * */
             if ($object->post_title != "") {
                 $value = $object->post_title;
@@ -499,7 +508,7 @@ class ExportModel extends Model {
                 if(mb_detect_encoding($value)==='UTF-8'){
                     $value = utf8_decode($value);
                 }
-                $csv_data['description'] = $value;
+	            $csv_data['description'] = str_replace('"','',$value);
             } else {
                 $csv_data['description'] = '';
             }
@@ -552,7 +561,6 @@ class ExportModel extends Model {
             $categories_of_facet = array();
             $category_model = new CategoryModel;
             $categories = wp_get_object_terms($object->ID, 'socialdb_category_type');
-            $facets = CollectionModel::get_facets($data['collection_id']);
             if (is_array($categories)):
                 foreach ($categories as $category) {
                     $facet_id = $category_model->get_category_facet_parent($category->term_id, $data['collection_id']);
@@ -574,8 +582,6 @@ class ExportModel extends Model {
                 }
             }
 
-            $categories_of_facet = '';
-
             /** Propriedades de Atributos * */
             $root_category = $this->get_category_root_of($data['collection_id']);
             //$all_properties_id = get_term_meta($root_category, 'socialdb_category_property_id');
@@ -592,7 +598,7 @@ class ExportModel extends Model {
                         if(mb_detect_encoding($value)==='UTF-8'){
                             $value = utf8_decode($value);
                         }
-                        $csv_data[utf8_decode($property->name)] = get_post_meta($object->ID, 'socialdb_property_' . $property_id, true);
+                        $csv_data[utf8_decode($property->name)] = $value;
                     } elseif ($type == 'socialdb_property_object') {
                         $property_result_meta_value = get_post_meta($object->ID, 'socialdb_property_' . $property_id);
                         if (is_array($property_result_meta_value) && $property_result_meta_value[0] != '') {
@@ -605,6 +611,7 @@ class ExportModel extends Model {
                         }
                     }
                 }
+
                 $array_property_name = [];
             }
 
@@ -616,11 +623,15 @@ class ExportModel extends Model {
                 $csv_data['Files'] = '';
             }
 
-
-            /**             * ************************** */
-            $csv[] = $csv_data;
+            if($first)
+            {
+            	fputs($df, implode( $data['socialdb_delimiter_csv'], array_keys($csv_data))."\r\n");
+	            $first = false;
+            }
+            fputs($df, implode( $data['socialdb_delimiter_csv'], array_map(array($this, 'encodeFunc'), $csv_data))."\r\n");
+	        clean_post_cache($object->ID);
         }
-        return $csv;
+	    fclose($df);
     }
 
     public function generate_csv_data_selected($data) {
@@ -929,17 +940,16 @@ class ExportModel extends Model {
     }
 
     public function array2csv(array &$array, $delimiter = ';') {
-
         if (count($array) == 0) {
             return null;
         }
-        //$filename = $this->get_name_file();
-        $filename = 'tainacan_csv';
+
         $df = fopen("php://output", 'w');
         fputcsv($df, array_keys(reset($array)), $delimiter);
         foreach ($array as $row) {
             fputcsv($df, $row, $delimiter);
         }
+
         fclose($df);
     }
 
@@ -1003,5 +1013,19 @@ class ExportModel extends Model {
             }
         }
     }
+
+    /***
+     * @param $value array
+     * @return string array values enclosed in quotes every time.
+     */
+    function encodeFunc($value) {
+        ///remove any ESCAPED double quotes within string.
+        $value = str_replace('\\"','"',$value);
+        //then force escape these same double quotes And Any UNESCAPED Ones.
+        $value = str_replace('"','\"',$value);
+        //force wrap value in quotes and return
+        return '"'.$value.'"';
+    }
+
 
 }

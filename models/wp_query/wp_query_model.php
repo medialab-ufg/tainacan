@@ -593,6 +593,17 @@ class WPQueryModel extends Model {
             $meta_query = (!isset($recover_data['post_type']) || empty($recover_data['post_type']) || $recover_data['post_type'] =='socialdb_object') ? $this->get_meta_query($recover_data) : false;
             if ($meta_query) {
                 $args['meta_query'] = $meta_query;
+	            /*$args['meta_query'] = array(
+		            'relation' => 'OR',
+		            'with_value' => array(
+			            'key' => $orderby,
+			            'compare' => 'EXISTS'
+		            ),
+		            'without_value' => array(
+			            'key' => $orderby,
+			            'compare' => 'NOT EXISTS'
+		            )
+	            );*/
             }
 
             if (isset($meta_key)&&!in_array($meta_key, ['title','comment_count','date'])) {
@@ -616,6 +627,7 @@ class WPQueryModel extends Model {
             if(isset($recover_data['author']) && $recover_data['author'] != ''){
                 $args['author'] = $recover_data['author'];
             }
+
             return $args;
         }
     }
@@ -736,8 +748,8 @@ class WPQueryModel extends Model {
             }
         }
         else {
-             $default = get_post_meta($data['collection_id'], 'socialdb_collection_default_ordering',true);
-            if((empty($default)||$default=='')||($property && $property->slug == 'socialdb_ordenation_recent')){
+        	$default = get_post_meta($data['collection_id'], 'socialdb_collection_default_ordering',true);
+            if((empty($default)||$default=='' || is_numeric($default))||($property && $property->slug == 'socialdb_ordenation_recent')){
                 return 'date';
             }else{
                 return trim($default);

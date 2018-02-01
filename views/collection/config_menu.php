@@ -5,7 +5,18 @@ if(!isset($collection_post)){
     $current_collection_id = $collection_post->ID;
     $border_color = get_post_meta($current_collection_id, "socialdb_collection_board_link_color", true);
 }
+
+if($_enable_header_ !== 'enabled' && !(empty($_enable_header_))) {
+	?>
+    <div class="row tainacan-museum-clear" style="position:  relative; top: -32px;left:  -55px;">
+        <?php
+        require_once( "share_buttons.php" );
+        ?>
+    </div>
+    <?php
+}
 ?>
+
 <ul class="nav navbar-bar navbar-right">
     <li class="dropdown collec_menu_opnr">
     <?php if ((verify_collection_moderators($current_collection_id, get_current_user_id()) || current_user_can('manage_options')) && get_post_type($current_collection_id) == 'socialdb_collection'): ?>

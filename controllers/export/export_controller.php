@@ -30,11 +30,11 @@ class ExportController extends Controller {
                 $data['encode_csv_export'] = trim($data['encode_csv_export']);
                 $data['export_zip_csv'] = trim($data['export_zip_csv']);
                 if ($data['socialdb_delimiter_csv'] != '') {
-                    if (!empty($export_model->get_collection_posts($data['collection_id']))) {
+                	$collection_posts = $export_model->get_collection_posts($data['collection_id']);
+                    if (!empty($collection_posts)) {
                         if ($data['export_zip_csv'] == 'only_csv') {
-                            $csv_data = $export_model->generate_csv_data($data);
-                            $export_model->download_send_headers('tainacan_csv.csv');
-                            echo utf8_decode($export_model->array2csv($csv_data, $data['socialdb_delimiter_csv']));
+	                        $export_model->download_send_headers('tainacan_csv.csv');
+	                        echo utf8_decode($export_model->generate_csv_data($data, $collection_posts));
                         } elseif ($data['export_zip_csv'] == 'csv_plus_zip') {
                             $csv_model = new CSVExportModel;
                             $csv_model->generate_zip($data['collection_id'], $data);
@@ -47,6 +47,7 @@ class ExportController extends Controller {
                 } else {
                     wp_redirect(get_the_permalink($data['collection_id']) . '?info_title=Attention&info_messages=' . urlencode(__('Please, fill the delimiter correctly!', 'tainacan')));
                 }
+
                 break;
             case "export_csv_file_full":
                 error_reporting(0);

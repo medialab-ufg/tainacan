@@ -30,7 +30,7 @@ foreach ($tcpdf_files as $key => $file) {
 include_once  $vendorDir . "smalot/pdfparser/src/Smalot/PdfParser/Parser.php";
 include_once  $vendorDir . "smalot/pdfparser/src/Smalot/PdfParser/Document.php";
 include_once  $vendorDir . "smalot/pdfparser/src/Smalot/PdfParser/Header.php";
-include_once  $vendorDir . "smalot/pdfparser/src/Smalot/PdfParser/Object.php";
+include_once $vendorDir . "smalot/pdfparser/src/Smalot/PdfParser/PDFObject.php";
 include_once  $vendorDir . "smalot/pdfparser/src/Smalot/PdfParser/Element.php";
 include_once  $vendorDir . "smalot/pdfparser/src/Smalot/PdfParser/Encoding.php";
 include_once  $vendorDir . "smalot/pdfparser/src/Smalot/PdfParser/Font.php";

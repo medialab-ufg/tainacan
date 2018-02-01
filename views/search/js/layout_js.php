@@ -132,10 +132,17 @@
                 contentType: false
             }).done(function (result) {
                 elem = jQuery.parseJSON(result);
-                showAlertGeneral(elem.title, '<?php _t('The page will be loaded to show the new design!', 1); ?>', 'info');
+                swal({
+                    title: elem.title,
+                    text: '<?php _t('The page will be loaded to show the new design!', 1); ?>',
+                    type: 'info',
+                    timer: 2500,
+                    showCancelButton: false,
+                    showConfirmButton: false
+                });
                 setTimeout(function(){
                     window.location = $('#socialdb_permalink_collection').val();
-                }, 3000);
+                }, 2500);
             });
         });
     });

@@ -165,9 +165,21 @@ while (have_posts()) : the_post();
                                             $hideStr = "";
                                             if (is_array($_add_opts) && (count($_add_opts) === 1)) {
                                                 $hideStr = "style='display:none'";
-                                                $temp = _t('Add');
-                                                $add_item_str = '<a href="'. $new_add_url .'" style="color: white; width: 100%;" class="btn"';
-                                                $add_item_str .= '>' . $temp . '</a>';
+	                                            $temp = _t('Add');
+	                                            $style = 'style="color: white; width: 100%;" class="btn"';
+                                                foreach ($_add_modes as $_mode => $_item)
+                                                {
+	                                                if (in_array($_mode, $_add_opts)) {
+		                                                if($_item['action'] !== 'showAddItemText()'){
+                                                            $add_item_str = '<a '.$style.' class="btn" href="javascript:void(0)" onclick="'.$_item['action'].'" class="add_<?php echo $_mode ?>">'. $temp .' </a>';
+		                                                } else {
+			                                                $add_item_str =  '<a '.$style.' class="btn" href="'.$new_add_url.'">' . $temp . '</a>';
+		                                                }
+		                                                break;
+	                                                }
+                                                }
+                                                /*$add_item_str = '<a href="'. $new_add_url .'" style="color: white; width: 100%;" class="btn"';
+                                                $add_item_str .= '>' . $temp . '</a>';*/
                                             }
                                             ?>
 
@@ -185,7 +197,7 @@ while (have_posts()) : the_post();
                                                             <li><a onclick="showAddItemURL();"> <?php _e('Insert URL', 'tainacan') ?> </a> </li>
                                                             <?php
                                                         } else if (is_array($_add_opts)) {
-                                                            if (count($_add_opts) > 0) {
+                                                            if (count($_add_opts) > 1) {
                                                                 foreach ($_add_modes as $_mode => $_item) {
                                                                     if (in_array($_mode, $_add_opts)) {
                                                                         if($_item['action'] !== 'showAddItemText()'){

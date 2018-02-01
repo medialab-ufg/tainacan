@@ -1333,7 +1333,7 @@
         //list_all_objects(selKeys.join(", "), $("#collection_id").val(), $(value).val());
     }
 
-    // funcao que captura a action on change no selectbox na pagina single.php
+    //Função para clique do botão do tipo de ordenação
     function change_ordenation(order) {
         var curr_viewMode = $("#collection_single_ordenation").attr('data-viewMode');
         wpquery_orderBy(order, curr_viewMode);

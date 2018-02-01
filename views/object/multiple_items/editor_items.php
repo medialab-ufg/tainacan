@@ -205,7 +205,8 @@ $references = [
                 </div>    
                 <?php// endif; ?>
             <?php  } ?>
-        <?php endif; 
+        <?php endif;
+
         //lista as propriedades de dados da colecao atual
         if(isset($properties['property_data'])): ?>
             <!--h4><?php _e('Data properties','tainacan'); ?></h4-->
@@ -279,7 +280,8 @@ $references = [
                     </div>       
                 </div>    
              <?php  } ?>
-        <?php endif; 
+        <?php endif;
+
         //lista as propriedades de dados
          if((isset($properties['property_term']))): ?>
             <?php foreach ( $properties['property_term'] as $property ) {
@@ -365,7 +367,13 @@ $references = [
                 </div>
              <?php  } ?>
         <?php endif; ?>
-        <?php $object_properties_widgets_helper->list_properties_compounds($properties['property_compounds'], 0,$references)  ?>
+
+
+        <?php
+        //Lista compostas
+        $object_properties_widgets_helper->list_properties_compounds($properties['property_compounds'], 0,$references);
+        ?>
+
         <!-- TAINACAN: a licencas do item -->
         <div id="list_licenses_items"
              <?php echo $view_helper->get_visibility($view_helper->terms_fixed['license']) ?>  

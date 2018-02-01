@@ -7,7 +7,7 @@ $item_title = wp_trim_words(get_the_title(), 13);
 $_trim_desc = $_object_description;
 ?>
 
-<div class="col-md-6 cards-view-container top-div no-padding" id="object_<?php echo $curr_id ?>" data-order="<?php echo $countLine; ?>"
+<div class="col-md-6 cards-view-container top-div no-padding <?php echo " object_".$curr_id; ?>" id="object_<?php echo $curr_id ?>" data-order="<?php echo $countLine; ?>"
     <?php if ($collection_list_mode != "cards"): ?> style="display: none;" <?php endif ?> >
 
     <input type="hidden" id="add_classification_allowed_<?php echo $curr_id ?>" name="add_classification_allowed" value="<?php echo (string) verify_allowed_action($collection_id, 'socialdb_collection_permission_add_classification', $curr_id); ?>" />
@@ -27,7 +27,7 @@ $_trim_desc = $_object_description;
 
                 <div class="colFoto no-padding img-thumbnail">
                     <?php if(empty($trash_list)): ?>
-                        <a target="_blank" href="<?php echo $itemURL; ?>">
+                        <a href="<?php echo $itemURL; ?>">
                             <?php echo get_item_thumb_image($curr_id); ?>
                         </a>
                     <?php elseif ($trash_list): echo get_item_thumb_image($curr_id); endif; ?>
@@ -39,7 +39,7 @@ $_trim_desc = $_object_description;
                         <h4 class="item-display-title">
                             <?php if(empty($trash_list)): ?>
                                 <?php /* <a href="<?php echo get_collection_item_href($collection_id, $curr_id, $viewHelper); ?>" onclick="<?php get_item_click_event($collection_id, $curr_id) ?>">  */ ?>
-                                <a target="_blank"  href="<?php echo $itemURL; ?>">
+                                <a  href="<?php echo $itemURL; ?>">
                                     <?php echo $item_title; ?>
                                 </a>
                             <?php elseif ($trash_list): echo $item_title; endif; ?>

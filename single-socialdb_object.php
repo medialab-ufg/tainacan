@@ -125,7 +125,7 @@ if (has_action('alter_page_item')) {
                 </div>
 
                 <div class="col-md-12" style="padding-bottom: 20px;">
-                    <div class="content-wrapper" <?php if (has_action('home_item_content_div')) do_action('home_item_content_div') ?>
+                    <div  <?php if($metas['socialdb_object_dc_type'][0] != 'text') echo 'class="content-wrapper"'; if (has_action('home_item_content_div')) do_action('home_item_content_div') ?>
                          style="padding: 0; margin-top: 10px;">
                         <div>
                             <?php
@@ -371,7 +371,6 @@ if (has_action('alter_page_item')) {
 
                             <div class="content-redesocial-NO" style="width: 100%">
                                 <div id="fb-root"></div>
-                                <script></script>
 
                                 <a class="fb" target="_blank"
                                    href="http://www.facebook.com/sharer.php?u=<?php echo the_permalink(); ?>">

@@ -89,7 +89,7 @@ class ObjectHelper extends ViewHelper {
                 <div class="col-md-3 pull-right per_page">
                     <?php _t('Items per page:', 1); ?>
                     <select name="items-per-page" class="col-items-per-page">
-                       <?php $this->getItemsPerPage(); ?>
+                       <?php $this->getItemsPerPage($items_per_page); ?>
                     </select>
                 </div>
 
@@ -97,15 +97,13 @@ class ObjectHelper extends ViewHelper {
         <?php }
     }
     
-    private function getItemsPerPage() {
-        // By default, let 10 items selected
-        $_show_values = [5,8,10,15,25,50];
-        foreach ($_show_values as $k => $vl) {
-            if($k == 2) {
+    private function getItemsPerPage($itens_per_page) {
+        $_show_values = [8,12,24,40];
+        foreach ($_show_values as $vl) {
+            if($itens_per_page == $vl)
                 $select = 'selected';
-            } else {
-                $select = "";
-            }
+            else $select = '';
+
             echo "<option value='$vl' $select> $vl </option>";
         }
     }

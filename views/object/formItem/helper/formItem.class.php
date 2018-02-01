@@ -837,8 +837,10 @@ class FormItem extends Model {
 
             /* Verificando se o item pode ser publicado ou atualizado */
             $('#submit-form-item').click(function(){
+                show_modal_main();
                 setTimeout(function(){
                     var publish = true;
+
                     //escondo as mensagens anteriores
                     $('.validateIcon').hide();
                     //var compounds = {};
@@ -890,15 +892,17 @@ class FormItem extends Model {
                             }
                         }
                     });
+
                     //apos todas as validacoes
                     if(!publish){
+                        $("#modalImportMain").hide();
                         $('html, body').animate({
                             scrollTop: $("#submit-form").offset().top
                         }, 1000);
                     }else{
                         updateItem();
                     }
-                }, 600);
+                }, 2000);
             });
 
             /**
@@ -971,7 +975,6 @@ class FormItem extends Model {
              * @returns {undefined}
              */
             function updateItem(){
-                show_modal_main();
                 $.ajax({
                     url: $('#src').val() + '/controllers/object/form_item_controller.php',
                     type: 'POST',

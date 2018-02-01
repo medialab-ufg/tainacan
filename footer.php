@@ -34,8 +34,8 @@
     <?php endif; ?>
 
     <section class="logo-footer flogo-bar">
-        <img class="logofooter" src="<?php echo get_template_directory_uri().'/libraries/images/Tainacan_pb.svg' ?>"
-             alt='<?php _t("Logo"); ?>' title='<?php _t("Logo"); ?>' width="60" />
+        <img class="logofooter" src="<?php echo get_template_directory_uri().'/libraries/images/Tainacan_pb.png' ?>"
+             alt='<?php _t("Logo"); ?>' title='<?php _t("Logo"); ?>' width="66" />
         <section class="wordpress-powered">
             <?php bloginfo( 'name' ); _e(' is proudly powered by', 'tainacan'); ?>
             <a class="text-info" href="http://tainacan.org" target="_blank" rel="noopener"> Tainacan </a> <?php _e('and', 'tainacan') ?>

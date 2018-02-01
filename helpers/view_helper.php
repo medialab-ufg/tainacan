@@ -63,15 +63,15 @@ class ViewHelper {
         if(isset($_logo_id)) {
             $former_logo = get_the_post_thumbnail($_logo_id, 'thumbnail');
             if($former_logo) {
-                $extraClass = "repository-logo";
+                //$extraClass = "repository-logo";
                 $logo_src = wp_get_attachment_url( get_post_thumbnail_id($_logo_id) );
             } else {
                 $logo_obj = get_post($_logo_id);
                 if(is_object($logo_obj) && $logo_obj->post_type === "attachment") {
                     $logo_src = $logo_obj->guid;
                 } else {
-                    $extraClass = "logo-tainacan";
-                    $logo_src = get_template_directory_uri() . '/libraries/images/Tainacan_pb.svg';
+                    //$extraClass = "logo-tainacan";
+                    $logo_src = get_template_directory_uri() . '/libraries/images/Tainacan_pb.png';
                 }
             }
 
@@ -81,7 +81,7 @@ class ViewHelper {
             $ret = empty($fallback_title) ? _t("Tainacan") : $fallback_title;
         }
 
-        return "<a class='col-md-3 navbar-brand $extraClass' href='$home'> $ret </a>";
+        return "<a class='col-md-3 navbar-brand logo-tainacan' href='$home'> $ret </a>";
     }
 
     public function get_metadata_types() {
@@ -178,13 +178,31 @@ class ViewHelper {
         }
     }
     
-    public function render_widgets_options()
+    public function render_widgets_options($type = '')
     {
         ?>
-            <option value='tree'> <?php _e('Tree', 'tainacan'); ?> </option>
+        <option value='tree'> <?php _e('Tree', 'tainacan'); ?> </option>
+        <?php
+
+        if(strcmp($type, 'numeric') === 0 || strcmp($type, 'date') === 0)
+        {
+	        ?>
+            <option value="from_to"><?php _e('From/To', 'tainacan'); ?></option>
+	        <?php
+        }
+        elseif (strcmp($type, "socialdb_property_object") === 0)
+        {
+	        ?>
+            <option value="multipleselect"><?php _e('Multiple Select', 'tainacan'); ?></option>
+	        <?php
+        }
+        else
+        {
+	        ?>
             <option value='searchbox'><?php _e('Search box with autocomplete', 'tainacan'); ?></option>
             <option value='cloud'><?php _e('Tag Cloud', 'tainacan'); ?>  </option>
-        <?php
+	        <?php
+        }
     }
     
     public function render_tree_colors() {
@@ -787,11 +805,10 @@ class ViewHelper {
 
                             if ($ob) {
                                 ?>
-                                <b>
-                                    <a style="cursor:pointer;" onclick="wpquery_term_filter('<?php echo $ob->term_id ?>','<?php echo $property_id; ?>')">
-                                        <?php echo $ob->name  ?>
-                                    </a>
-                                </b><br>
+                                <a style="color: black;" onclick="wpquery_term_filter('<?php echo $ob->term_id ?>','<?php echo $property_id; ?>')">
+                                    <?php echo $ob->name  ?>
+                                </a>
+                                <br>
                                 <script>
 //                                    setTimeout(function(){
 //                                        append_category_properties('<?php //echo $ob->term_id ?>//',0,'<?php //echo $property_id ?>//');

@@ -39,8 +39,7 @@ $number_elements = [10,20,50,100];
                             <div class="col-md-8 flex-box item-meta-box" style="flex-direction:column;">
                                 <div class="item-meta col-md-12 no-padding">
                                     <h4 class="item-display-title">
-                                       <a href="<?php echo $link; ?>"
-                                           target="_blank">
+                                       <a href="<?php echo $link; ?>">
                                             <?php the_title(); ?>
                                         </a>
                                     </h4>

@@ -130,6 +130,7 @@ function delete_object(title, text, object_id, time) {
     function (isConfirm) {
         if (isConfirm) {
             $('#modalImportMain').modal('show');//mostro o modal de carregamento
+
             $.ajax({
                 type: "POST",
                 url: $('#src').val() + "/controllers/event/event_controller.php",
@@ -140,11 +141,22 @@ function delete_object(title, text, object_id, time) {
                     socialdb_event_object_item_id: object_id,
                     socialdb_event_collection_id: $('#collection_id').val()}
             }).done(function (result) {
-                $('#modalImportMain').modal('hide');//escondo o modal de carregamento
+                $('#modalImportMain').modal('hide');//esconde o modal de carregamento
                 elem_first = jQuery.parseJSON(result);
-                showList($('#src').val());
-                set_containers_class($('#collection_id').val());
                 showAlertGeneral(elem_first.title, elem_first.msg, elem_first.type);
+
+                if(elem_first.type === "success")
+                {
+                    $(".object_" + object_id).remove();
+                    $("tr[data-item-id = "+object_id+"]").remove();
+                    let qtd_itens = parseInt($(".col-total-items").text());
+                    qtd_itens -= 1;
+                    $(".col-total-items").text(""+qtd_itens);
+                    /*showList($('#src').val());
+                    set_containers_class($('#collection_id').val());*/
+                }
+
+
             });
         }
     });

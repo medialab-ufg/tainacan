@@ -269,6 +269,7 @@ class VisualizationModel extends CollectionModel {
                    $skip = true;
                }
             }
+
             if($skip)
                 continue;
             $ordenation = $this->get_ordenation_facet($data['collection_id'],$facet_id);
@@ -303,7 +304,7 @@ class VisualizationModel extends CollectionModel {
             }elseif(get_term_by('id', $facet_id, 'socialdb_property_type')){
                 $facet = get_term_by('id', $facet_id, 'socialdb_property_type');
                 $widget = get_post_meta($data['collection_id'], 'socialdb_collection_facet_'.$facet_id.'_widget', true);
-                //$widget = ($widget !== '' ) ? $widget : (isset($repositoryFacets[$facet_id])) ? $repositoryFacets[$facet_id]['widget'] : $widget ;
+
                 $type = $propertyModel->get_property_type($facet_id); // pego o tipo da propriedade;
                 //METADADOS FIXOS
                 if ('socialdb_property_fixed_type'==$facet->slug) {
@@ -356,7 +357,7 @@ class VisualizationModel extends CollectionModel {
                         $property = $propertyModel->get_all_property($facet_id, true);
                         $dynatree[] = array('title' => ucfirst($facet->name), 'key' => $facet->term_id . "_facet_property" . $facet_id, 'isLazy' => true, 'data' => $url, 'expand' => true, 'hideCheckbox' => true, 'addClass' => $classCss);
                         $ordenation = ($ordenation =='alphabetic') ? 'pm.meta_value' : 'count DESC';
-                        $dynatree[end(array_keys($dynatree))] = $this->getPropertyDataDynatree($property, $dynatree[end(array_keys($dynatree))], $classCss,$ordenation);
+                        $dynatree[end(array_keys($dynatree))] = $this->getPropertyDataDynatree($property, $dynatree[end(array_keys($dynatree))], $data['collection_id'], $classCss,$ordenation);
                     }
                 }elseif($type == 'socialdb_property_term'){
                     $property = $propertyModel->get_all_property($facet_id, true);
@@ -385,8 +386,6 @@ class VisualizationModel extends CollectionModel {
 
 
         }
-        //json_encode($dynatree,JSON_UNESCAPED_UNICODE);
-        //var_dump(json_last_error());
 
         return json_encode($dynatree,JSON_UNESCAPED_UNICODE);
     }
@@ -535,8 +534,8 @@ class VisualizationModel extends CollectionModel {
      * @param array $dynatree O array do dynatree que esta sendo montado
      * @param string $classCss A classe Css do icone do dynatree
      */
-    public function getPropertyDataDynatree($properties, $dynatree, $classCss = 'color4',$ordenation = 'pm.meta_value') {
-        $metas = $this->get_property_data_values($properties['id'],$ordenation);
+    public function getPropertyDataDynatree($properties, $dynatree, $collection_id, $classCss = 'color4',$ordenation = 'pm.meta_value') {
+        $metas = $this->get_property_data_values($properties['id'],$ordenation, $collection_id);
         $counter = 0;
         if (count($metas) > 0) {
             foreach ($metas as $meta_id => $meta_value) {
@@ -682,9 +681,9 @@ class VisualizationModel extends CollectionModel {
     /* Return the children of the facets and insert in the array of the dynatree */
     /* Author: Eduardo */
 
-    public function getChildrenDynatree($facet_id, $dynatree, $classCss = 'color4',$ordenation = 't.name ASC') {
+    public function getChildrenDynatree($facet_id, $dynatree, $classCss = 'color4',$ordenation = 't.name ASC', $collection_id = null) {
         $counter = 0;
-        $children = $this->getChildren($facet_id,$ordenation);
+        $children = $this->getChildren($facet_id, $ordenation);
         if (count($children) > 0) {
             foreach ($children as $child) {
                 $children_of_child = $this->getChildren($child->term_id,$ordenation);
@@ -1419,8 +1418,10 @@ class VisualizationModel extends CollectionModel {
         $facets = array();
         $facet = array();
         $facets_id = array_filter(array_unique(get_post_meta($collection_id, 'socialdb_collection_facets')));
+
         foreach ($facets_id as $facet_id) {
             $widget = get_post_meta($collection_id, 'socialdb_collection_facet_' . $facet_id . '_widget', true);
+
             // $orientation = get_post_meta($collection_id, 'socialdb_collection_facet_' . $facet_id . '_orientation', true);
             $orientation_tree = get_post_meta($collection_id, 'socialdb_collection_facet_widget_tree_orientation', true);
             //adicionar para um novo filtro para modulos
@@ -1610,18 +1611,24 @@ class VisualizationModel extends CollectionModel {
      * @return json com o id e o nome de cada objeto
      * @author Eduardo Humberto
      */
-    public function get_property_data_values($id,$order = 'pm.meta_value') {
+    public function get_property_data_values($id, $order = 'pm.meta_value', $collection_id = null) {
         global $wpdb;
         $wp_posts = $wpdb->prefix . "posts";
         $wp_postmeta = $wpdb->prefix . "postmeta";
+
+        if($collection_id)
+        	$by_collection = "AND p.post_parent = $collection_id";
+        else $by_collection = '';
+
         $query = "
                         SELECT COUNT(pm.meta_value) AS count,pm.* FROM $wp_posts p
                         INNER JOIN $wp_postmeta pm ON p.ID = pm.post_id
                         WHERE pm.meta_key like 'socialdb_property_{$id}'
-                        AND p.post_status LIKE 'publish'
+                        AND p.post_status LIKE 'publish' $by_collection
                         GROUP BY pm.meta_value
                         ORDER BY $order
                 ";
+
         $result = $wpdb->get_results($query);
         if ($result) {
             foreach ($result as $object) {

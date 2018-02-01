@@ -9,7 +9,7 @@ require_once(dirname(__FILE__) . '../../../object/object_save_values.php');
 
 class EventClassificationDeleteModel extends EventModel {
 
-    public function EventClassificationDeleteModel() {
+    public function __construct() {
         $this->parent = get_term_by('name', 'socialdb_event_classification_delete', 'socialdb_event_type');
         $this->permission_name = 'socialdb_collection_permission_delete_classification';
     }

@@ -9,7 +9,7 @@ require_once(dirname(__FILE__) . '../../../category/category_model.php');
 
 class EventTermEdit extends EventModel {
 
-    public function EventTermEdit() {
+    public function __construct() {
         $this->parent = get_term_by('name', 'socialdb_event_term_edit', 'socialdb_event_type');
         $this->permission_name = 'socialdb_collection_permission_edit_category';
     }

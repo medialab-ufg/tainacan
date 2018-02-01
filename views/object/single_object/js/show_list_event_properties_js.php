@@ -812,7 +812,7 @@
                         });
                     }else{
                         list_properties_single(object_id);
-                        showAlertGeneral(elem_first.title, elem_first.msg, elem_first.type);
+                        //showAlertGeneral(elem_first.title, elem_first.msg, elem_first.type);
                         hide_modal_main();
                     }
                 });

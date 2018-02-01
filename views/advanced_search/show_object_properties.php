@@ -176,7 +176,7 @@
         endif;
         
         
-         if((isset($property_term)&&count($property_term)>1)||(count($property_term)==1&&!empty($property_term[0]['has_children']))): 
+         if(isset($property_term) && (count($property_term) > 1 || (count($property_term) == 1 && !empty($property_term[0]['has_children'])))):
             ?>
             <?php foreach ($property_term as $property) { ?>
             <div class="form-group col-md-12 no-padding" >
@@ -384,5 +384,5 @@
 </div>
 <div class="col-md-12 no-padding" style="margin-top: 15px;">
                 <button type="button" onclick="reboot_form()" class="btn btn-lg btn-default pull-left"><?php _e('Clear search', 'tainacan') ?></button>
-                <button type="submit" onclick="clear_general_field()" class="btn btn-lg btn-success pull-right"><?php _e('Find', 'tainacan') ?></button>
+                <button type="submit" onclick="$('#advanced_search_general').val('')" class="btn btn-lg btn-success pull-right"><?php _e('Find', 'tainacan') ?></button>
     </div>

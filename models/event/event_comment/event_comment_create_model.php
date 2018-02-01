@@ -9,7 +9,7 @@ require_once(dirname(__FILE__) . '../../../comment/comment_model.php');
 
 class EventCommentCreate extends EventModel {
 
-    public function EventCommentCreate() {
+    public function __construct() {
         $this->parent = get_term_by('name', 'socialdb_event_comment_create', 'socialdb_event_type');
         $this->permission_name = 'socialdb_collection_permission_create_comment';
     }
