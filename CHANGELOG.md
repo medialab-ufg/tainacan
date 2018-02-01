@@ -5,6 +5,8 @@ O formato é baseado em [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 e este projeto adere para [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [0.7] - 2018-02-01
 ### Adicionado
 - Permitir alterar o arquivo raiz ex. '.pdf e .jpg' na interface do tainacan. Para evitar que ter que subir de novo um item.
 - Permitir ordenar os metadados na home de visualização do item
@@ -107,7 +109,8 @@ e este projeto adere para [Semantic Versioning](http://semver.org/spec/v2.0.0.ht
 
 ## [0.3] - 2017-04-12
 
-[Unreleased]: https://github.com/medialab-ufg/tainacan/compare/v0.6.1...HEAD
+[Unreleased]: https://github.com/medialab-ufg/tainacan/compare/v0.7...HEAD
+[0.7]: https://github.com/medialab-ufg/tainacan/compare/v0.6.1...v0.7
 [0.6.1]: https://github.com/medialab-ufg/tainacan/compare/v0.6...v0.6.1
 [0.6]: https://github.com/medialab-ufg/tainacan/compare/v0.5...v0.6
 [0.5]: https://github.com/medialab-ufg/tainacan/compare/v0.4...v0.5
