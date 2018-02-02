@@ -2195,7 +2195,7 @@ class ObjectModel extends Model {
             //'post_modified' =>  $item->post_modified,
             //'post_modified_gmt' =>  $item->post_modified_gmt,
             'post_content_filtered' => $item->post_content_filtered,
-            'post_parent' => $item->post_parent,
+            'post_parent' => $collection_id,
             //'guid' =>  $item->guid,
             //'menu_order' =>  $item->menu_order,
             'post_type' => $item->post_type,
