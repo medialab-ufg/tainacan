@@ -306,7 +306,14 @@ class ObjectController extends Controller {
                 //$post_status = ($collection_id == get_option('collection_root_id') ? 'draft' : 'trash');
                 $post_status = 'draft';
                 $recover_wpquery['post_status'] = $post_status;
-                $data['mycollections'] = 'true';
+
+                $user = wp_get_current_user();
+	            $data['mycollections'] = 'true';
+	            $allowed_roles = array('administrator');
+	            if( array_intersect($allowed_roles, $user->roles ) ){
+		            $data['mycollections'] = 'false';
+                }
+
                 $args = $object_model->list_all($data, $post_status);
                 $data['loop'] = new WP_Query($args);
                 $data['trash_list'] = true;
@@ -330,6 +337,7 @@ class ObjectController extends Controller {
 
                 $return['page'] = $this->render(dirname(__FILE__) . '../../../views/object/list.php', $data);
                 $return['args'] = serialize($recover_wpquery);
+                //print_r($return);
                 if (empty($object_model->get_collection_posts($data['collection_id']))) {
                     $return['empty_collection'] = true;
                 } else {

@@ -417,6 +417,7 @@ class Model {
 				WHERE p.post_id = {$collection_id}
 		";
         $collections_data = $wpdb->get_results($query);
+
         foreach ($collections_data as $collection_data)
         {
             if ($collection_data->meta_key == 'socialdb_collection_facets') {
