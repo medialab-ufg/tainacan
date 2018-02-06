@@ -605,33 +605,36 @@
     }
     //save Description
     function save_tag(object_id) {
-        $('#modalImportMain').modal('show');//mostro o modal de carregamento
-        $.ajax({
-            url: $('#src').val() + '/controllers/event/event_controller.php',
-            type: 'POST',
-            data: {
-                operation: 'add_event_tag_create',
-                socialdb_event_create_date: '<?php echo time() ?>',
-                socialdb_event_user_id: $('#current_user_id').val(),
-                socialdb_event_tag_suggested_name: $('#event_tag_field').val(),
-                socialdb_event_collection_id: $('#collection_id').val()
-            }
-        }).done(function (result) {
-            $('#cancel_tag').hide();
-            $('#save_tag').hide();
-            $('#event_tag').hide();
-            $('#edit_tag').show();
-            $('#event_tag_field').val('');
-            elem = jQuery.parseJSON(result);
+        if($("#event_tag_field").val() !== '')
+        {
+            $('#modalImportMain').modal('show');//mostro o modal de carregamento
+            $.ajax({
+                url: $('#src').val() + '/controllers/event/event_controller.php',
+                type: 'POST',
+                data: {
+                    operation: 'add_event_tag_create',
+                    socialdb_event_create_date: '<?php echo time() ?>',
+                    socialdb_event_user_id: $('#current_user_id').val(),
+                    socialdb_event_tag_suggested_name: $('#event_tag_field').val(),
+                    socialdb_event_collection_id: $('#collection_id').val()
+                }
+            }).done(function (result) {
+                $('#cancel_tag').hide();
+                $('#save_tag').hide();
+                $('#event_tag').hide();
+                $('#edit_tag').show();
+                $('#event_tag_field').val('');
+                elem = jQuery.parseJSON(result);
 
-            if (elem.term_id && elem.term_id.length > 0) {
-                add_tag_item(object_id, elem.term_id);
-            } else {
-                $('#modalImportMain').modal('hide');//mostro o modal de carregamento
-                showAlertGeneral(elem.title, '<?php _e('This tag was sent for approval, the classification will be able after this operation!', 'tainacan') ?>', elem.type);
-            }
+                if (elem.term_id && elem.term_id.length > 0) {
+                    add_tag_item(object_id, elem.term_id);
+                } else {
+                    $('#modalImportMain').modal('hide');//mostro o modal de carregamento
+                    showAlertGeneral(elem.title, '<?php _e('This tag was sent for approval, the classification will be able after this operation!', 'tainacan') ?>', elem.type);
+                }
 
-        });
+            });
+        }
     }
 
     //adiciona a tag no item

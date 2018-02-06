@@ -362,7 +362,14 @@
                         } else {
                             $("#category_single_parent_name").val(node.data.title);
                             $("#category_single_parent_id").val(node.data.key);
-                            $('#modalAddCategoria').modal('show');
+                            if(menu === 'myMenuSingleTag')
+                            {
+                                $('#modalAdicionarTag').modal('show');
+                            }else
+                            {
+                                $('#modalAddCategoria').modal('show');
+                            }
+
                             $('.dropdown-toggle').dropdown();
                             //ativando para um dynatree especifico
                             //$("#category_single_add_dynatree_id").val(dynatree_id);
