@@ -735,3 +735,9 @@ a[href="#top"]:hover{
     text-decoration:none;
 }
 
+.padding_right{
+    padding-top: 0;
+    padding-right: 10px;
+    padding-bottom: 0;
+    padding-left: 0;
+}

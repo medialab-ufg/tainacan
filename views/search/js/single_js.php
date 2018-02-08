@@ -191,49 +191,33 @@
         //mostro o loader para carregar os metadados
         if($('#collection_id').val() === $('#collection_root_id').val() && $('#search-advanced-text').val() != ''){
             show_modal_main();
-            setTimeout(function(){
-                //ajax properties
-                $.ajax({
-                    url: $('#src').val() + '/controllers/advanced_search/advanced_search_controller.php',
-                    type: 'POST',
-                    data: {operation: 'show_object_properties_auto_load', collection_id: collection_id}
-                }).done(function (result) {
-                    $('#propertiesRootAdvancedSearch').html(result);
-                    //$('#propertiesRootAdvancedSearch').show();
-                    revalidate_adv_autocomplete(collection_id);
-                    //se estiver buscando algo nos campos de busca externos e que esteja na home de colecoes
-                    if($('#collection_id').val()===$('#collection_root_id').val() && $('#search-advanced-text').val() != ''){
-                        if($('#search-advanced-text').val()!=='@')
-                            $('#advanced_search_title').val($('#search-advanced-text').val());
-
-                        slideFormAdvancedDown();
-                        $('#advanced_search_collection_form').trigger('submit');
-                        $('#search-advanced-text').val('');
-                    }
-                });
-            }, 1000);
+            show_adv_search(collection_id);
         }else{
-            //ajax properties
-            $.ajax({
-                url: $('#src').val() + '/controllers/advanced_search/advanced_search_controller.php',
-                type: 'POST',
-                data: {operation: 'show_object_properties_auto_load', collection_id: collection_id}
-            }).done(function (result) {
-                $('#propertiesRootAdvancedSearch').html(result);
-                //$('#propertiesRootAdvancedSearch').show();
-                revalidate_adv_autocomplete(collection_id);
-                //se estiver buscando algo nos campos de busca externos e que esteja na home de colecoes
-                if($('#collection_id').val()===$('#collection_root_id').val() && $('#search-advanced-text').val() != ''){
-                    if($('#search-advanced-text').val()!=='@')
-                        $('#advanced_search_title').val($('#search-advanced-text').val());
-
-                    slideFormAdvancedDown();
-                    $('#advanced_search_collection_form').trigger('submit');
-                    $('#search-advanced-text').val('');
-                }
-            });
+           show_adv_search(collection_id);
         }
 
+    }
+
+    function show_adv_search(collection_id)
+    {
+        $.ajax({
+            url: $('#src').val() + '/controllers/advanced_search/advanced_search_controller.php',
+            type: 'POST',
+            data: {operation: 'show_object_properties_auto_load', collection_id: collection_id}
+        }).done(function (result) {
+            $('#propertiesRootAdvancedSearch').html(result);
+            //$('#propertiesRootAdvancedSearch').show();
+            revalidate_adv_autocomplete(collection_id);
+            //se estiver buscando algo nos campos de busca externos e que esteja na home de colecoes
+            if($('#collection_id').val()===$('#collection_root_id').val() && $('#search-advanced-text').val() != ''){
+                if($('#search-advanced-text').val()!=='@')
+                    $('#advanced_search_title').val($('#search-advanced-text').val());
+
+                slideFormAdvancedDown();
+                $('#advanced_search_collection_form').trigger('submit');
+                $('#search-advanced-text').val('');
+            }
+        });
     }
 
     function revalidate_adv_autocomplete(collection_id) {
