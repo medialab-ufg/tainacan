@@ -18,7 +18,7 @@
             </div>
 
             <div class="modal-body">
-                <form id="submit_form_property_term">
+                <form id="submit_form_property_term" onkeypress="return event.keyCode != 13;">
                     <div>
                             <div class="metadata-common-fields">
                                 <div class="create_form-group form-group">

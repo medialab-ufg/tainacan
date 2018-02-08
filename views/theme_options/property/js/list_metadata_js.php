@@ -1562,8 +1562,11 @@
             var obj = $.parseJSON(result);
             $(obj).each( function(idx, el) {
                 var m = $("option#menu_style_" + el.id);
-                var item_classes = (el.terms).join(' ');
-                $(m).addClass( item_classes );
+                if(el.terms !== null)
+                {
+                    var item_classes = (el.terms).join(' ');
+                    $(m).addClass( item_classes );
+                }
             });
         });
     }
