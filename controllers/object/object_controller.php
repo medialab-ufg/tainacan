@@ -1129,6 +1129,10 @@ class ObjectController extends Controller {
                 }
                 return json_encode($result);
 		    case 'change_item_file':
+			    require_once(ABSPATH . 'wp-admin/includes/image.php');
+			    require_once(ABSPATH . 'wp-admin/includes/file.php');
+			    require_once(ABSPATH . 'wp-admin/includes/media.php');
+
 		    	$attachment_id_old = get_post_meta( $data['item_id'],'socialdb_object_content', true);
 
 			    if($attachment_id_old)

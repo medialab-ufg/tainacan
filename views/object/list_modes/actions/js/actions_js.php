@@ -112,7 +112,7 @@
                         });
                     };
                     fileReader.readAsArrayBuffer(document.getElementById("new_file").files[0]);
-                }else if(ext == 'jpg')
+                }else if(ext === 'jpg')
                 {
                     senddata(data);
                 }

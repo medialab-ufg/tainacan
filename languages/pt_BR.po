@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: socialdb\n"
 "POT-Creation-Date: 2018-01-24 14:53-0200\n"
-"PO-Revision-Date: 2018-01-24 14:54-0200\n"
+"PO-Revision-Date: 2018-02-08 13:03-0200\n"
 "Last-Translator: Rodrigo de Oliveira <webmaster@rodrigodeoliveira.net>\n"
 "Language-Team: \n"
 "Language: pt_BR\n"
@@ -8770,7 +8770,7 @@ msgstr "Nenhum arquivo selecionado"
 
 #: views/object/list_modes/actions/js/actions_js.php:82
 msgid "You need to select a file before proceed"
-msgstr "Você não selecionou nenhum item para deletar"
+msgstr "Você precisa escolher um arquivo antes de continuar"
 
 #: views/object/list_modes/actions/js/actions_js.php:136
 msgid "Changed"
