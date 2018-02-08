@@ -3,7 +3,7 @@ require_once(dirname(__FILE__) . '../../../models/social_network/Facebook/autolo
 
 global $wp_query;
 $collection_id = $wp_query->post->ID;
-$_redir_url = get_bloginfo(template_directory) . '/controllers/user/user_controller.php?collection_id=' . $collection_id . '&operation=return_login_fb';
+$_redir_url = get_bloginfo($template_directory) . '/controllers/user/user_controller.php?collection_id=' . $collection_id . '&operation=return_login_fb';
 
 $config = get_option('socialdb_theme_options');
 $app['app_id'] = $config['socialdb_fb_api_id'];
