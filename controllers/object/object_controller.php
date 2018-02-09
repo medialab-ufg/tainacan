@@ -261,7 +261,18 @@ class ObjectController extends Controller {
                 $recover_wpquery['posts_per_page'] = $args['posts_per_page'];
 
                 $start = microtime(true);
-                $data['loop'] = new WP_Query($args);
+	            $data['loop'] = new WP_Query($args);
+
+	            /*Get All Collection ID's*/
+                $args['posts_per_page'] = -1;
+                $secondary_loop = new WP_Query($args);
+                while ($secondary_loop->have_posts())
+                {
+                	$secondary_loop->the_post();
+                	$data['items_id'][] = get_the_ID();
+
+                }
+
                 $return['wpquerytime'] = microtime(true) - $start;
                 $data['collection_data'] = $collection_model->get_collection_data($collection_id);
                 $data["show_string"] = is_root_category($collection_id) ? __('Showing collections:', 'tainacan') : __('Showing Items:', 'tainacan');

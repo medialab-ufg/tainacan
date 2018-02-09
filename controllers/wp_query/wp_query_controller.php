@@ -20,6 +20,9 @@ class WPQueryController extends Controller {
                 $collection_id = $args['collection_id'];
                 $parameters = $wpquery_model->do_filter($args);
                 $data['loop'] =  new WP_Query($parameters);
+
+	            gen_items_id($parameters, $data);
+
                 $data['collection_data'] = $collection_model->get_collection_data($collection_id);
                 $data['listed_by'] = $wpquery_model->get_ordered_name($collection_id, $args['ordenation_id'], $args['order_by']);
                 $data['is_moderator'] = CollectionModel::is_moderator($collection_id, get_current_user_id());
@@ -42,6 +45,9 @@ class WPQueryController extends Controller {
                 $parameters = $wpquery_model->do_filter($args);
                 $collection_id = $args['collection_id'];
                 $data['loop'] =  new WP_Query($parameters);
+
+	            gen_items_id($parameters, $data);
+
                 $data['collection_data'] = $collection_model->get_collection_data($collection_id);
                 $data['listed_by'] = $wpquery_model->get_ordered_name($collection_id, $args['ordenation_id'], $args['order_by']);
                 $data['is_moderator'] = CollectionModel::is_moderator($collection_id, get_current_user_id());
@@ -65,6 +71,9 @@ class WPQueryController extends Controller {
                 $collection_id = $args['collection_id'];
                 
                 $data['loop'] =  new WP_Query($parameters);
+
+	            gen_items_id($parameters, $data);
+
                 $data['collection_data'] = $collection_model->get_collection_data($collection_id);               
                 $data['listed_by'] = $wpquery_model->get_ordered_name($collection_id, $args['ordenation_id'], $args['order_by']);
                 $data['is_moderator'] = CollectionModel::is_moderator($collection_id, get_current_user_id());               
@@ -87,6 +96,9 @@ class WPQueryController extends Controller {
                 $args = $wpquery_model->multipleselect_filter($data);
                 $parameters = $wpquery_model->do_filter($args);
                 $data['loop'] =  new WP_Query($parameters);
+
+	            gen_items_id($parameters, $data);
+
                 $data['collection_data'] = $collection_model->get_collection_data($args['collection_id']);
                 $data['listed_by'] = $wpquery_model->get_ordered_name($args['collection_id'], $args['ordenation_id'], $args['order_by']);
                 $data['is_moderator'] = CollectionModel::is_moderator($args['collection_id'], get_current_user_id());
@@ -109,6 +121,9 @@ class WPQueryController extends Controller {
                 $args = $wpquery_model->range_filter($data);
                 $parameters = $wpquery_model->do_filter($args);
                 $data['loop'] =  new WP_Query($parameters);
+
+	            gen_items_id($parameters, $data);
+
                 $data['collection_data'] = $collection_model->get_collection_data($args['collection_id']);
                 $data['listed_by'] = $wpquery_model->get_ordered_name($args['collection_id'], $args['ordenation_id'], $args['order_by']);
                 $data['is_moderator'] = CollectionModel::is_moderator($args['collection_id'], get_current_user_id());
@@ -136,6 +151,8 @@ class WPQueryController extends Controller {
                 $result_objects = $wpquery_model->getRangeItems($param_type, $date_range, $meta_id);
                 $data['loop'] =  new WP_Query($parameters);
 
+	            gen_items_id($parameters, $data);
+
                 $data['collection_data'] = $collection_model->get_collection_data($args['collection_id']);
                 $data['listed_by'] = $wpquery_model->get_ordered_name($args['collection_id'], $args['ordenation_id'], $args['order_by']);
                 $data['is_moderator'] = CollectionModel::is_moderator($args['collection_id'], get_current_user_id());
@@ -155,6 +172,9 @@ class WPQueryController extends Controller {
                 $args = $wpquery_model->dynatree_filter($data);
                 $parameters = $wpquery_model->do_filter($args);
                 $data['loop'] =  new WP_Query($parameters);
+
+	            gen_items_id($parameters, $data);
+
                 $data['col_id'] = $args['collection_id'];
                 $data['collection_data'] = $collection_model->get_collection_data($args['collection_id']);
                 $data['listed_by'] = $wpquery_model->get_ordered_name($args['collection_id'], $args['ordenation_id'], $args['order_by']);
@@ -179,6 +199,9 @@ class WPQueryController extends Controller {
                 $args = $wpquery_model->cloud_filter($data);
                 $parameters = $wpquery_model->do_filter($args);
                 $data['loop'] =  new WP_Query($parameters);
+
+	            gen_items_id($parameters, $data);
+
                 $data['collection_data'] = $collection_model->get_collection_data($args['collection_id']);
                 $data['listed_by'] = $wpquery_model->get_ordered_name($args['collection_id'], $args['ordenation_id'], $args['order_by']);
                 $data['is_moderator'] = CollectionModel::is_moderator($args['collection_id'], get_current_user_id());
@@ -200,6 +223,9 @@ class WPQueryController extends Controller {
                 $args = $wpquery_model->link_metadata_filter($data);
                 $parameters = $wpquery_model->do_filter($args);
                 $data['loop'] =  new WP_Query($parameters);
+
+	            gen_items_id($parameters, $data);
+
                 $data['collection_data'] = $collection_model->get_collection_data($args['collection_id']);
                 $data['listed_by'] = $wpquery_model->get_ordered_name($args['collection_id'], $args['ordenation_id'], $args['order_by']);
                 $data['is_moderator'] = CollectionModel::is_moderator($args['collection_id'], get_current_user_id());
@@ -216,6 +242,9 @@ class WPQueryController extends Controller {
                 $args = $wpquery_model->dynatree_filter($data);
                 $parameters = $wpquery_model->do_filter($args);
                 $data['loop'] =  new WP_Query($parameters);
+
+	            gen_items_id($parameters, $data);
+
                 $data['collection_data'] = $collection_model->get_collection_data($args['collection_id']);
                 $data['listed_by'] = $wpquery_model->get_ordered_name($args['collection_id'], $args['ordenation_id'], $args['order_by']);
                 $data['is_moderator'] = CollectionModel::is_moderator($args['collection_id'], get_current_user_id());
@@ -237,6 +266,9 @@ class WPQueryController extends Controller {
                 $args = $wpquery_model->ordenation_filter($data);
                 $parameters = $wpquery_model->do_filter($args);
                 $data['loop'] =  new WP_Query($parameters);
+
+	            gen_items_id($parameters, $data);
+
                 $data['collection_data'] = $collection_model->get_collection_data($args['collection_id']);
                 $data['listed_by'] = $wpquery_model->get_ordered_name($args['collection_id'], $args['ordenation_id'], $args['order_by']);
                 $data['is_moderator'] = CollectionModel::is_moderator($args['collection_id'], get_current_user_id());
@@ -259,6 +291,9 @@ class WPQueryController extends Controller {
                 $args = $wpquery_model->orderby_filter($data);
                 $params = $wpquery_model->do_filter($args);
                 $data['loop'] =  new WP_Query($params);
+
+	            gen_items_id($parameters, $data);
+
                 $data['collection_data'] = $collection_model->get_collection_data($args['collection_id']);
                 $data['listed_by'] = $wpquery_model->get_ordered_name($args['collection_id'], $args['ordenation_id'], $args['order_by']);
                 $data['is_moderator'] = CollectionModel::is_moderator($args['collection_id'], get_current_user_id());
@@ -283,6 +318,9 @@ class WPQueryController extends Controller {
                 $parameters = $wpquery_model->do_filter($args);
 
                 $data['loop'] =  new WP_Query($parameters);
+
+	            gen_items_id($parameters, $data);
+
                 $data['collection_data'] = $collection_model->get_collection_data($args['collection_id']);
                 $data["show_string"] = is_root_category($data['col_id']) ? _t('Showing collections:') : _t('Showing Items:');
                 $data['listed_by'] = $wpquery_model->get_ordered_name($args['collection_id'], $args['ordenation_id'], $args['order_by']);
@@ -311,6 +349,9 @@ class WPQueryController extends Controller {
                 $data['author'] = $data['value'];
                 $parameters = $wpquery_model->do_filter($args);
                 $data['loop'] =  new WP_Query($parameters);
+
+	            gen_items_id($parameters, $data);
+
                 $data['collection_data'] = $collection_model->get_collection_data($args['collection_id']);
                 $data['listed_by'] = $wpquery_model->get_ordered_name($args['collection_id'], $args['ordenation_id'], $args['order_by']);
                 $data['is_moderator'] = CollectionModel::is_moderator($args['collection_id'], get_current_user_id());
@@ -330,6 +371,9 @@ class WPQueryController extends Controller {
                 $args = $wpquery_model->keyword_filter($data);
                 $parameters = $wpquery_model->do_filter($args);
                 $data['loop'] =  new WP_Query($parameters);
+
+	            gen_items_id($parameters, $data);
+
                 $return['has_post'] = $data['loop']->have_posts();
                 $data['collection_data'] = $collection_model->get_collection_data($args['collection_id']);
                 $data['listed_by'] = $wpquery_model->get_ordered_name($args['collection_id'], $args['ordenation_id'], $args['order_by']);
@@ -349,6 +393,9 @@ class WPQueryController extends Controller {
                 $args = $wpquery_model->filter($data);
                 $parameters = $wpquery_model->do_filter($args);
                 $data['loop'] =  new WP_Query($parameters);
+
+	            gen_items_id($parameters, $data);
+
                 $data['has_post'] = $data['loop']->have_posts();
                 $data['collection_data'] = $collection_model->get_collection_data($args['collection_id']);
                 $data['listed_by'] = $wpquery_model->get_ordered_name($args['collection_id'], $args['ordenation_id'], $args['order_by']);
@@ -373,6 +420,9 @@ class WPQueryController extends Controller {
                 $args = $wpquery_model->clean($data);
                 $parameters = $wpquery_model->do_filter($args);
                 $data['loop'] =  new WP_Query($parameters);
+
+	            gen_items_id($parameters, $data);
+
                 $data['collection_data'] = $collection_model->get_collection_data($args['collection_id']);
                 $term = get_term_by('slug', 'socialdb_ordenation_recent', 'socialdb_property_type');
                 $data['listed_by'] = $wpquery_model->get_ordered_name($args['collection_id'], $term->term_id, $args['order_by']);
@@ -401,6 +451,9 @@ class WPQueryController extends Controller {
                 $args = $wpquery_model->remove_filter($data);
                 $parameters = $wpquery_model->do_filter($args);
                 $data['loop'] =  new WP_Query($parameters);
+
+	            gen_items_id($parameters, $data);
+
                 $data['collection_data'] = $collection_model->get_collection_data($args['collection_id']);
                 $data['listed_by'] = $wpquery_model->get_ordered_name($args['collection_id'], $args['ordenation_id'], $args['order_by']);
                 $data['is_moderator'] = CollectionModel::is_moderator($args['collection_id'], get_current_user_id());
@@ -445,6 +498,17 @@ add_filter( 'posts_clauses', function ( $pieces, $query ) {
 	return $pieces;
 }, 10, 2 );
 
+function gen_items_id($parameters, &$data)
+{
+	//Get All Collection ID's*/
+	$parameters['posts_per_page'] = -1;
+	$secondary_loop = new WP_Query($parameters);
+	while ($secondary_loop->have_posts())
+	{
+		$secondary_loop->the_post();
+		$data['items_id'][] = get_the_ID();
+	}
+}
 
 
 /*

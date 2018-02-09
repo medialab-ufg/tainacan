@@ -260,7 +260,7 @@ function delete_collection_redirect(title, text, collection_id, time, collection
     });
 }
 
-function clean_collection(title, text, collection_id) {
+function clean_collection(title, text, collection_id, selected_items = null) {
     swal({
         title: title,
         text: text,
@@ -278,7 +278,9 @@ function clean_collection(title, text, collection_id) {
                 url: $('#src').val() + "/controllers/object/object_controller.php",
                 data: {
                     operation: 'clean_collection_itens',
-                    collection_id: collection_id}
+                    collection_id: collection_id,
+                    selected_items: selected_items
+                }
             }).done(function (result) {
                 $('#modalImportMain').modal('hide');//escondo o modal de carregamento
                 elem_first = jQuery.parseJSON(result);
