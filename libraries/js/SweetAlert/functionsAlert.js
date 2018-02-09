@@ -260,7 +260,7 @@ function delete_collection_redirect(title, text, collection_id, time, collection
     });
 }
 
-function clean_collection(title, text, collection_id, selected_items = null) {
+function clean_collection(title, text, collection_id) {
     swal({
         title: title,
         text: text,
@@ -279,12 +279,18 @@ function clean_collection(title, text, collection_id, selected_items = null) {
                 data: {
                     operation: 'clean_collection_itens',
                     collection_id: collection_id,
-                    selected_items: selected_items
+                    selected_items: $("#items_id").val()
                 }
             }).done(function (result) {
                 $('#modalImportMain').modal('hide');//escondo o modal de carregamento
-                elem_first = jQuery.parseJSON(result);
-                showList($('#src').val());
+
+                let clear = $("#clear");
+                let elem_first = jQuery.parseJSON(result);
+
+                if($(clear).is(':visible'))
+                    $(clear).click();
+                else showList($('#src').val());
+
                 showAlertGeneral(elem_first.title, elem_first.msg, elem_first.type);
             });
         }

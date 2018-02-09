@@ -116,26 +116,28 @@
         
         $('a.move_edition').on('click', function(event) {
             event.preventDefault();
-            var edit_data = [];
+            let edit_data = [];
             show_modal_main();
-            
-            //$('.list-mode-set').hide();
-            $('.selected-item').each(function(idx, el) {
-                var item_id = $(el).parent().attr("id").replace("object_", "");
-                var item_title = $("#object_" + item_id + " h4.item-display-title").text().trim();
-                var item_desc = $("#object_" + item_id + " .item-desc-hidden-full").text().trim();
-                edit_data.push( { id: item_id, title: item_title, desc: item_desc } );
+
+            let ids = $("#items_id").val().split(',');
+
+            $(ids).each(function(idx, el) {
+                edit_data.push( { id: el} );
             });
+
             $.ajax({
                 type: "POST",
                 url: $('#src').val() + "/controllers/object/object_controller.php",
-                data: { operation: 'edit_multiple_items', items_data: edit_data,collection_id:$('#collection_id').val() }
+                data: {
+                    operation: 'edit_multiple_items',
+                    items_data: edit_data,
+                    collection_id:$('#collection_id').val()
+                }
             }).done(function(html_res){
                 hide_modal_main();
                 isLoading = false;
                 $('#main_part').hide();
                 $('#configuration').html(html_res).show();
-                //$("#main_part").html(html_res);
             });
         });
     });

@@ -938,7 +938,6 @@ class ObjectController extends Controller {
                 }
                 return true;
             case 'edit_multiple_items':
-                $set = [];
                 if (!$data['items_data']) {
                     exit();
                 }

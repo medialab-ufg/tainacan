@@ -1888,8 +1888,12 @@ class ObjectModel extends Model {
      */
     public function clean_collection($data) {
         $items = $this->get_collection_posts_trash($data['collection_id']);
+        $selected_items = explode(",", $data['selected_items']);
+
         if ($items && is_array($items)) {
             foreach ($items as $item) {
+            	if(!in_array($item->ID, $selected_items))
+            		continue;
                 $object = array(
                     'ID' => $item->ID,
                     'post_status' => 'draft'
