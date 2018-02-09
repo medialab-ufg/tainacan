@@ -138,18 +138,17 @@ if (has_action('alter_page_item')) {
                                     update_post_meta( $post->ID, 'socialdb_object_content', str_replace('</p>','',$string));
 
                                 }
-                                if ($item_opts['from'] == 'internal' && wp_get_attachment_url($metas['socialdb_object_content'][0])) {
-                                    $url = wp_get_attachment_url($metas['socialdb_object_content'][0]);
+                                $url = wp_get_attachment_url($metas['socialdb_object_content'][0]);
+                                if ($item_opts['from'] == 'internal' && $url) {
                                     switch ($metas['socialdb_object_dc_type'][0]) {
                                         case 'audio':
                                             $content = '<audio controls><source src="' . $url . '">' . __('Your browser does not support the audio element.', 'tainacan') . '</audio>';
                                             break;
                                         case 'image':
                                             if (get_the_post_thumbnail($post->ID, 'thumbnail')) {
-                                                $url_image = get_the_post_thumbnail($post->ID, 'large', ['class' => 'img-responsive img-thumbnail']);
                                                 $style_watermark = ($has_watermark ? 'style="background:url(' . $url_watermark . ') no-repeat center; background-size: contain;"' : '');
                                                 $opacity_watermark = ($has_watermark ? 'opacity: 0.80;' : '');
-                                                $content = '<center ' . $style_watermark . '>' . $url_image . '</center>';
+                                                $content = '<div style="text-align:center; display: block;"' . $style_watermark . '> <img class="img-responsive img-thumbnail" src="' . $url . '"></div>';
                                             }
                                             break;
                                         case 'video':

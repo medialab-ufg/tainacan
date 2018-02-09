@@ -112,9 +112,12 @@
                         });
                     };
                     fileReader.readAsArrayBuffer(document.getElementById("new_file").files[0]);
-                }else if(ext === 'jpg')
+                }else if(ext == 'jpg')
                 {
                     senddata(data);
+                }else
+                {
+                    swal("<?php _t("File not accepted", "tainacan")?>", "<?php _t("Select a new file", "tainacan");?>", "error");
                 }
             }
         });
