@@ -121,9 +121,18 @@
 
             let ids = $("#items_id").val().split(',');
 
-            $(ids).each(function(idx, el) {
-                edit_data.push( { id: el} );
-            });
+            if($('input.bulk_action').val() === 'select_some')
+            {
+                $(".selected-item").each(function(idx, el) {
+                    let item_id = $(el).parent().attr("id").replace("object_", "");
+                    edit_data.push( { id: item_id } );
+                });
+            }else
+            {
+                $(ids).each(function(idx, el) {
+                    edit_data.push( { id: el } );
+                });
+            }
 
             $.ajax({
                 type: "POST",
