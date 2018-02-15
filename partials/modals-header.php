@@ -109,6 +109,9 @@ $col_controller = $_src_ . "/controllers/collection/collection_controller.php";
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header"><!--Cabeçalho-->
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
                 <h3><?php _t("Change file", "tainacan");?></h3>
             </div><!--Fim cabeçalho-->
 
