@@ -1163,6 +1163,7 @@ class ObjectController extends Controller {
 						    set_post_thumbnail($data['item_id'], $attachment_id);
 					    }
 
+					    delete_post_meta( $data['item_id'], '_file_id' );
 					    return true;
 				    }else {
 						return false;
