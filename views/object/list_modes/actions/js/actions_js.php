@@ -114,6 +114,7 @@
                     fileReader.readAsArrayBuffer(document.getElementById("new_file").files[0]);
                 }else if(ext == 'jpg' || ext == 'jpeg' || ext == 'png' || ext == 'bmp')
                 {
+                    alert("OLá");
                     senddata(data);
                 }else
                 {
