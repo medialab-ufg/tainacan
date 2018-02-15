@@ -49,7 +49,17 @@ if ( $loop->have_posts()) { ?>
             ?>
         </div>
 
-    </div> <br />
+    </div>
+    <br>
+    <script>
+        if($(".select_some").hasClass("highlight"))
+        {
+            $('.object_id').each(function(idx, el) {
+                var item = $("#object_" + $(el).val() );
+                $(item).find('.toggleSelect').addClass('selecting-item');
+            });
+        }
+    </script>
 
 <?php } else {
     if(get_option('collection_root_id') != $collection_id): ?>

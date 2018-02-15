@@ -327,17 +327,21 @@
                 var collect_id = $("#collection_id").val();
                 clean_collection( '<?php _e("Clean Collection", "tainacan") ?>', '<?php _e("Are you sure to remove all items", "tainacan") ?>', collect_id );
             } else if(bulk_type === "select_some") {
-                var selected_total = $('.selected-item').length;
                 var bulkds = [];
-                $('.selected-item').each(function(idx, el) {
-                    var item_id = $(el).parent().attr("id").replace("object_", "");
-                    bulkds.push(item_id);
-                });
 
-                if( selected_total > 0 ) {
+                let selectect_ids = sessionStorage.getItem("selected_ids");
+                if(selectect_ids != null && selectect_ids.length > 0)
+                {
+                    selectect_ids = selectect_ids.split(",");
+                    selectect_ids.forEach(function (item_id) {
+                        bulkds.push(item_id);
+                    })
+                }
+
+                if( selectect_ids.length > 0 ) {
                     var collection_id = $('#collection_id').val();
                     var main_title = '<?php _e("Attention","tainacan"); ?>';
-                    var desc = '<?php _e("Send ", "tainacan"); ?>' + selected_total + '<?php _e(" items to trash?", "tainacan"); ?>';
+                    var desc = '<?php _e("Send ", "tainacan"); ?>' + selectect_ids.length + '<?php _e(" items to trash?", "tainacan"); ?>';
                     move_items_to_trash( main_title, desc, bulkds, collection_id);
                 } else {
                     showAlertGeneral('<?php _e('Attention', 'tainacan') ?>', '<?php _e("You did not select any items to delete!", "tainacan") ?>', 'info');
@@ -360,9 +364,37 @@
         });
 
         $('.toggleSelect').click(function() {
+            let count = 1;
             if( $(this).hasClass('selecting-item') ) {
                 $(this).toggleClass('selected-item');
+                let selectect_ids = sessionStorage.getItem("selected_ids"),
+                    item_id = $(this).parent().attr("id").replace("object_", "");
+                if($(this).hasClass('selected-item'))
+                {
+                    if(selectect_ids != null && selectect_ids.length > 0)
+                    {
+                        selectect_ids = selectect_ids.split(',');
+                        if(selectect_ids.indexOf(item_id) < 0)
+                        {
+                            count = selectect_ids.length+1;
+                            selectect_ids = selectect_ids.join(',');
+                            selectect_ids += ',' + item_id;
+                            sessionStorage.setItem('selected_ids', selectect_ids);
+                        }
+                    }else sessionStorage.setItem('selected_ids', item_id);
+                }else
+                {
+                    selectect_ids = selectect_ids.split(',');
+                    selectect_ids.splice(selectect_ids.indexOf(item_id), 1);
+
+                    count = selectect_ids.length;
+                    selectect_ids = selectect_ids.join(',');
+                    sessionStorage.setItem('selected_ids', selectect_ids);
+                }
             }
+
+            toastr.remove();
+            toastr.info('<?php _e('Selected item', 'tainacan') ?>: '+count, '', set_toastr_class(300000));
         });
 
         $('#collection-slideShow .item-menu-container').removeClass('navbar-right').addClass('navbar-left');
@@ -393,11 +425,12 @@
         }
     });
 
-    function set_toastr_class() {
-        return { positionClass: 'toast-bottom-right', preventDuplicates: true };
+    function set_toastr_class(timeOut = 5000) {
+        return { positionClass: 'toast-bottom-right', preventDuplicates: true, timeOut: timeOut};
     }
 
      function select_some() {
+        sessionStorage.clear();
          if( ! $('.toggleSelect').hasClass('selecting-item') ) {
              toastr.info('<?php _e('Select items below to edit or exclude!', 'tainacan') ?>', '', set_toastr_class());
          }
@@ -406,6 +439,18 @@
             var item = $("#object_" + $(el).val() );
             $(item).find('.toggleSelect').addClass('selecting-item');
          });
+
+         let items_id = [];
+         $('.selected-item').each(function (idx, elem) {
+             if($(elem).hasClass('selected-item'))
+             {
+                 items_id.push($(elem).parent().attr("id").replace("object_", ""));
+             }
+         });
+         if(items_id.length > 0)
+         {
+             sessionStorage.setItem("selected_ids", items_id.join(','));
+         }
     }
 
     function select_all() {

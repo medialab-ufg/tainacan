@@ -123,10 +123,14 @@
 
             if($('input.bulk_action').val() === 'select_some')
             {
-                $(".selected-item").each(function(idx, el) {
-                    let item_id = $(el).parent().attr("id").replace("object_", "");
-                    edit_data.push( { id: item_id } );
-                });
+                let selectect_ids = sessionStorage.getItem("selected_ids");
+                if(selectect_ids != null && selectect_ids.length > 0)
+                {
+                    selectect_ids = selectect_ids.split(",");
+                    selectect_ids.forEach(function (item_id) {
+                        edit_data.push({ id: item_id });
+                    })
+                }
             }else
             {
                 $(ids).each(function(idx, el) {

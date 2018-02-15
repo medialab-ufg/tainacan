@@ -335,6 +335,7 @@ function move_items_to_trash(title, text, obj_ids, collection_id) {
        cancelButtonText: "Cancelar"
     }, function(isConfirm){
         if (isConfirm) {
+            toastr.clear();
             $("#modalImportMain").modal('show');
             $.ajax({
                 type: "POST",
