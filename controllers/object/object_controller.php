@@ -1150,6 +1150,7 @@ class ObjectController extends Controller {
 				    $attachment_id = media_handle_upload('new_file', $data['item_id']);
 				    if(!is_wp_error($attachment_id))
 				    {
+				    	delete_post_meta($data['item_id'],'socialdb_object_content');
 					    update_post_meta($data['item_id'], 'socialdb_object_content', $attachment_id);
 				    	if($_FILES['new_file']['type'] == 'application/pdf')
 					    {
