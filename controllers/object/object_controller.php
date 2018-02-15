@@ -1151,6 +1151,8 @@ class ObjectController extends Controller {
 				    if(!is_wp_error($attachment_id))
 				    {
 				    	delete_post_meta($data['item_id'],'socialdb_object_content');
+				    	wp_delete_post($attachment_id_old);
+
 					    update_post_meta($data['item_id'], 'socialdb_object_content', $attachment_id);
 				    	if($_FILES['new_file']['type'] == 'application/pdf')
 					    {
