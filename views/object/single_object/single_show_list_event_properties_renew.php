@@ -298,11 +298,6 @@ foreach($ordenation as $id){
                                     <p>
 										<?php
 										$is_url = filter_var($value, FILTER_VALIDATE_URL);
-										/*if(!$is_url) { $is_url = filter_var("http://".$value, FILTER_VALIDATE_URL);
-											if(!$is_url) { $is_url = filter_var("http://www.".$value, FILTER_VALIDATE_URL);
-												if($is_url) { $value_href = "http://www.".$value; }
-											} else $value_href = "http://".$value;
-										} else $value_href = $value;*/
 
 										if ($is_url):
 											echo '<b><a class="can_short" target="_blank" href="' . $value . '" >' . $value . '</a></b>';
@@ -335,6 +330,7 @@ foreach($ordenation as $id){
 
 							$object_properties_widgets_helper = new ObjectWidgetsHelper();
 							$meta = unserialize(get_post_meta($object_id, 'socialdb_property_helper_' . $propertyDa['id'], true));
+							$meta = maybe_unserialize($meta);
 							$indexed_properties = [];
 							if($meta && !empty($meta) && is_array($meta))
 							{
@@ -355,7 +351,6 @@ foreach($ordenation as $id){
 								}
 							}
 
-
 							if(empty($indexed_properties))
 							{
 								$indexed_properties[] = '';
@@ -368,7 +363,8 @@ foreach($ordenation as $id){
 								foreach($indexed_properties as $index => $value)
 								{
 									?>
-                                    <input id="single_property_value_<?php echo $propertyDa['id']; ?>_<?php echo $object_id; ?>_<?php echo $index?>" style="display: none; margin: 7px 0px 7px 0px;" disabled="disabled" value="<?php if ($value) echo $value ?>" type="text" class="form-control"
+                                    <input id="single_property_value_<?php echo $propertyDa['id']; ?>_<?php echo $object_id; ?>_<?php echo $index?>" style="display: none; margin: 7px 0px 7px 0px;" disabled="disabled"
+                                           value="<?php if ($value) echo $value ?>" type="text" class="form-control"
                                            name="socialdb_property_<?php echo $propertyDa['id']; ?>"
                                            data-index="<?php echo $index; ?>"
 										<?php
@@ -447,7 +443,9 @@ foreach($ordenation as $id){
 					?>
 
                         <!-- arrumar num -->
-                        <input style="display: none;" type="hidden" id="single_property_<?php echo $propertyDa['id']; ?>_<?php echo $object_id; ?>_value_before" name="property_<?php echo $propertyDa['id']; ?>_<?php echo $object_id; ?>_value_before" value="<?php if (is_array($propertyDa['metas']['value'])) echo implode(',', $propertyDa['metas']['value']); ?>">
+                        <input style="display: none;" type="hidden" id="single_property_<?php echo $propertyDa['id']; ?>_<?php echo $object_id; ?>_value_before"
+                               name="property_<?php echo $propertyDa['id']; ?>_<?php echo $object_id; ?>_value_before"
+                               value="<?php if (is_array($propertyDa['metas']['value'])) echo implode(',', $propertyDa['metas']['value']); ?>">
                         </p>
 
                     </div>

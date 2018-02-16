@@ -971,7 +971,7 @@ class ObjectController extends Controller {
             case 'duplicate_item_same_collection':
                 $item = get_post($data['object_id']);
                 $newItem = $object_model->copyItem($item, $data['collection_id']);
-                $metas = get_post_meta($item->ID);
+                $metas = $object_model->get_metas($item->ID);
                 $object_model->copyItemMetas($newItem, $metas);
                 $object_model->copyItemCategories($newItem, $data['object_id']);
                 $object_model->copyItemTags($newItem, $data['object_id']);
@@ -987,7 +987,8 @@ class ObjectController extends Controller {
                 $data['socialdb_object_dc_source'] = get_post_meta($data['object']->ID, 'socialdb_object_dc_source', true);
                 $data['socialdb_object_content'] = get_post_meta($data['object']->ID, 'socialdb_object_content', true);
                 $data['socialdb_object_dc_type'] = get_post_meta($data['object']->ID, 'socialdb_object_dc_type', true);
-                return $this->render(dirname(__FILE__) . '../../../views/object/edit_item_text.php', $data);
+
+                //return $this->render(dirname(__FILE__) . '../../../views/object/edit_item_text.php', $data);
                 break;
             case 'duplicate_item_other_collection':
                 $collection_id = $data['collection_id'];

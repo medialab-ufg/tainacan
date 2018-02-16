@@ -1004,10 +1004,29 @@ class PropertyModel extends Model {
      */
     public function get_object_property_value($object_id, $property_id)
     {
-        $value = get_post_meta($object_id, 'socialdb_property_' . $property_id);
-        $return = $this->eliminate_invalid_values($value);
-        if ($return) {
-            return $return;
+	    $meta = unserialize(get_post_meta($object_id, 'socialdb_property_helper_' . $property_id, true));
+	    $meta = maybe_unserialize($meta);
+	    $indexed_properties = [];
+	    if($meta && !empty($meta) && is_array($meta))
+	    {
+		    foreach ($meta as $property_index => $property_helper) {
+			    foreach ($property_helper as $atom) {
+				    $values = $atom['values'];
+
+				    foreach ($values as $value) {
+					    $meta_value = $this->sdb_get_post_meta($value);
+					    //$indexed_properties[$meta_value->meta_id] = $meta_value->meta_value;
+					    if(isset($meta_value->meta_value))
+					    {
+						    $indexed_properties[$meta_value->meta_id] = $meta_value->meta_value;
+					    }
+				    }
+			    }
+		    }
+	    }
+
+        if ($indexed_properties) {
+            return $indexed_properties;
         } else {
             return false;
         }

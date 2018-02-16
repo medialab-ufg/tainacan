@@ -7,7 +7,7 @@
             var item_id = $(this).parents().find('.open_item_actions').first().attr('id').replace('action-', '');
             var duplicate_op = $(this).attr('data-op');
             var op = 'duplicate_item_' + duplicate_op + '_collection';
-            var send_data = { object_id: item_id, operation: op };
+            var send_data = { object_id: item_id, operation: op, collection_id: $("#collection_id").val() };
 
             if("other" == duplicate_op) {
                 send_data.collection_id = _col_id;
@@ -25,9 +25,8 @@
                     type: 'POST', url: path,
                     data: send_data
                 }).done(function(r){
-                    $('#main_part').hide();
-                    $('#configuration').html(r).show();
                     $('#modalImportMain').modal('hide');
+                    location.reload();
                 });
             }
         });

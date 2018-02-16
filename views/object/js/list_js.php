@@ -450,6 +450,7 @@
          if(items_id.length > 0)
          {
              sessionStorage.setItem("selected_ids", items_id.join(','));
+             console.log(sessionStorage.getItem())
          }
     }
 
@@ -670,9 +671,10 @@
             $.ajax({
                 type: "POST",
                 url: $('#src').val() + "/controllers/object/object_controller.php",
-                data: {collection_id: $('#collection_id').val(),
+                data: {
+                    collection_id: $('#collection_id').val(),
                     operation: 'duplicate_item_same_collection',
-                    object_id: object_id
+                    object_id: object_id,
                 }
             }).done(function (result) {
                 /*$('#modalImportMain').modal('hide');//escondo o modal de carregamento
@@ -714,20 +716,20 @@
                         title: '<?php _e('Success','tainacan') ?>',
                         text: '<?php _e('This item was duplicated','tainacan') ?>',
                         type: "success",
-                        showCancelButton: true,
+                        //showCancelButton: true,
                         confirmButtonClass: 'btn-primary',
-                        cancelButtonClass: 'btn-default',
-                        cancelButtonText: '<?php _e('Edit item','tainacan') ?>',
+                        /*cancelButtonClass: 'btn-default',
+                        cancelButtonText: '<?php _e('Edit item','tainacan') ?>',*/
                         closeOnConfirm: true,
-                        closeOnCancel: true
-                    },
+                        //closeOnCancel: true
+                    }/*,
                     function (isConfirm) {
                         if(!isConfirm)
                         {
                             var win = window.open(json.new_collection_url, '_blank');
                             win.focus();
                         }
-                    });
+                    }*/);
             });
         } else if ($('input[name=duplicate_item]:checked', '#formDuplicateItem' + object_id).val() == 'versioning') {
             //Versioning

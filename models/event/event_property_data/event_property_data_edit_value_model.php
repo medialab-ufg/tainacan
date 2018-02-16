@@ -187,7 +187,6 @@ class EventPropertyDataEditValue extends EventModel {
                         $indexCompound
                     );
                 }else{
-
                     // caso for od tipo data ele salva um meta auxiliar
                     if($this->is_Date($meta['val']) || get_post_meta($object_id, 'socialdb_property_'.$property.'_date')){
                         $array = $this->is_Date($meta['val']);

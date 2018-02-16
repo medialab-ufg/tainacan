@@ -84,7 +84,6 @@
     }
 
     function edit_data_property(property_id, object_id) {
-        console.log('this');
         $("#single_edit_" + property_id + "_" + object_id).hide();
         $("#single_cancel_" + property_id + "_" + object_id).show();
         $("#single_save_" + property_id + "_" + object_id).show();
@@ -102,6 +101,7 @@
             disabled: false
         });
 
+        /*let val = $("input[id ^= 'single_property_" + property_id + "_" + object_id + "_value_before']").val();*/
         $("input[id ^= 'single_property_value_" + property_id + "_" + object_id + "']").show();
         $("textarea[id ^= 'single_property_value_" + property_id + "_" + object_id + "']").show();
         $("#area_" + property_id + "_" + object_id ).show();
