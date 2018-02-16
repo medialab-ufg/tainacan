@@ -325,6 +325,14 @@ class CollectionModel extends Model {
             }
         }
 
+        if(isset($data['socialdb_collection_hide_search']))
+        {
+        	update_post_meta($post_id, 'socialdb_collection_hide_search', 'true');
+        }
+        else {
+	        update_post_meta($post_id, 'socialdb_collection_hide_search', 'false');
+        }
+
         if ($data['socialdb_collection_moderation_type'] == 'democratico') {
             update_post_meta($post_id, 'socialdb_collection_moderation_days', $data['socialdb_collection_moderation_days']);
         }

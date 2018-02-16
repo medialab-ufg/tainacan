@@ -397,7 +397,16 @@ $_showH = ("disabled" === $_en_header) ? false : true ;
                             <?php } ?> 
                         <?php } ?>            
                     </select>
-                </div>    
+                </div>
+                <div class="form-group">
+		            <?php
+		            $hide_search = get_post_meta($collection_post->ID, 'socialdb_collection_hide_search', true);
+		            ?>
+                    <label> <?php _e('Appearance','tainacan'); ?> </label>
+                    <br>
+                    <input type="checkbox" value="true" name="socialdb_collection_hide_search" <?php  if(isset($hide_search) && $hide_search == 'true') echo 'checked' ?>>
+		            <?php _e("Hide collection search", "tainacan"); ?>
+                </div>
 
                 <div class="form-group row">
                     <div class="col-md-12">

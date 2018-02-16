@@ -258,6 +258,14 @@ class ThemeOptionsModel extends Model {
             update_option('disable_empty_collection', 'false');
         }
 
+        if(isset($data['socialdb_collection_hide_search']))
+        {
+	        update_option('socialdb_collection_hide_search', 'true');
+        }
+        else {
+	        update_option('socialdb_collection_hide_search', 'false');
+        }
+
         /*
         if ($_FILES) {
             if ($socialdb_logo) {
