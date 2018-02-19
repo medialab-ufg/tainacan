@@ -22,6 +22,10 @@ class Collections extends WP_Widget {
                 if($collections->have_posts()) {
                     $counter = 0;
                     while( $collections->have_posts() ): $collections->the_post();
+	                    if(strcmp(get_the_title(), "Tainacan - Coleções") === 0) //Tainacan - Coleções
+	                    {
+		                    continue;
+	                    }
                         $extra_class = ($counter === 0) ? 'first left' : 'aside right'; ?>
                         <div class="col-md-6 tainacan-new-wrapper no-padding">
                             <?php if( has_post_thumbnail() ):

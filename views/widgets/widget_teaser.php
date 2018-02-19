@@ -19,7 +19,7 @@ class Teaser extends WP_Widget {
         <div class="col-md-6">
             <h2> <?php echo $title; ?> </h2>
             <div class='home-widget-box col-md-12'>
-                <div class="teaser-cnt">
+                <div class="teaser-cnt text-justify">
                     <?php echo $teaser; ?>
                 </div>
 
