@@ -125,7 +125,7 @@ class ObjectSingleWidgetsHelper extends ViewHelper {
      * 
      * @param array $properties_compounds
      */
-    public function list_properties_compounds($properties_compounds,$object_id,$references) {
+    public function list_properties_compounds($properties_compounds,$object_id,$references, $collumns_to_show = 6) {
         include_once ( dirname(__FILE__).'/../../views/object/single_object/js/single_properties_compounds_js.php');
         $result = [];
         $coumpounds_id = [];
@@ -148,7 +148,7 @@ class ObjectSingleWidgetsHelper extends ViewHelper {
                     $key = key($array)+1;
                 }
                ?>
-                <div class="col-md-6 property-compounds no-padding">
+                <div class="col-md-<?php echo $collumns_to_show; ?> property-compounds no-padding">
                      <div class="box-item-paddings">
                         <h4 class="title-pipe single-title">
                             <?php echo $property['name']; ?>

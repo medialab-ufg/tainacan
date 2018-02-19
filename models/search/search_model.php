@@ -415,11 +415,13 @@ public function add($data) {
 
     function update_ordenation($data) {
         $post_id = $data['collection_id'];
+
         update_post_meta($post_id, 'socialdb_collection_table_metas', base64_encode(serialize($data['table_meta'])) );
         update_post_meta($post_id, 'socialdb_collection_list_mode', $data['collection_list_mode']);
         update_post_meta($post_id, 'socialdb_collection_slideshow_time', $data['slideshow_time']);
         update_post_meta($post_id, 'socialdb_collection_ordenation_form', $data['socialdb_collection_ordenation_form']);
         update_post_meta($post_id, 'socialdb_collection_visualization_page_category', $data['socialdb_collection_visualization_page_category']);
+        update_post_meta($post_id, "socialdb_collection_item_collumns", $data['socialdb_collection_item_collumns']);
 
 	    update_post_meta($post_id, 'socialdb_collection_itens_per_page', $data['socialdb_collection_itens_per_page']);
 

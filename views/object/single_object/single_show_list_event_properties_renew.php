@@ -34,8 +34,12 @@ $ids = [];
 <?php
 
 $ordenation = unserialize(get_post_meta($collection_id, 'socialdb_collection_properties_ordenation', true));
+$collumns_to_show = get_post_meta($collection_id,"socialdb_collection_item_collumns", true);
+if($collumns_to_show == 1){
+    $collumns_to_show = 12;
+}else $collumns_to_show = 6;
 
-//Gen sintatic ordenation
+//Gen ordenation
 if(!$ordenation || (is_array($ordenation['default'])))
 {
     $ordenation = [];
@@ -70,7 +74,8 @@ if(!$ordenation || (is_array($ordenation['default'])))
 			$ordenation[] = $item_in['id'];
 		}
 	}
-}else
+}
+else
 {
     $ordenation_alt = [];
 
@@ -129,6 +134,7 @@ foreach($ordenation as $id){
 	{
 		foreach($property_object as $index => $propertyOb)
 		{
+
 			//Trata metadados de objeto
 			if($id == $propertyOb['id'])
 			{
@@ -137,7 +143,7 @@ foreach($ordenation as $id){
 				$object_id = $propertyOb['metas']['object_id'];
 				$ids[] = $propertyOb['id'];
 				?>
-                <div class="col-md-6 property-root no-padding">
+                <div class="col-md-<?php echo $collumns_to_show; ?> property-root no-padding">
                     <div class="box-item-paddings">
                         <h4 class="title-pipe single-title"> <?php echo $propertyOb['name']; ?> </h4>
 						<?php
@@ -260,7 +266,7 @@ foreach($ordenation as $id){
 				}
 				?>
 
-                <div class="col-md-6 property-data no-padding">
+                <div class="col-md-<?php echo $collumns_to_show; ?> property-data no-padding">
                     <div class="box-item-paddings">
                         <h4 class="title-pipe single-title">
 							<?php echo $propertyDa['name']; ?>
@@ -467,7 +473,7 @@ foreach($ordenation as $id){
 				if(!$objectHelper->is_public_property($propertyTe))
 					continue;
 // if (count($property['has_children']) > 0):?>
-                <div class="col-md-6 property-term no-padding">
+                <div class="col-md-<?php echo $collumns_to_show; ?> property-term no-padding">
                     <div class="box-item-paddings">
                         <h4 class="title-pipe single-title"> <?php echo $propertyTe['name']; ?></h4>
 						<?php
@@ -580,7 +586,7 @@ foreach($ordenation as $id){
 			if($id == $compounds['id'])
 			{
 				$comp[] = $compounds;
-				$objectHelper->list_properties_compounds($comp, $object_id, $references);
+				$objectHelper->list_properties_compounds($comp, $object_id, $references, $collumns_to_show);
 				$comp = [];
 				unset($property_compounds[$index]);
 				continue;

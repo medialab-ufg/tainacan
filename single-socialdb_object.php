@@ -64,6 +64,11 @@ if (has_action('alter_page_item')) {
     ];
 
     $view_helper = new ObjectHelper($collection_id);
+	$collumns_to_show = get_post_meta($collection_id,"socialdb_collection_item_collumns", true);
+	if($collumns_to_show == 1){
+		$collumns_to_show = 12;
+	}else $collumns_to_show = 6;
+
     ?>
 
     <ol class="breadcrumb item-breadcrumbs">
