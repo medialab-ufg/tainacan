@@ -494,8 +494,8 @@ class ExportModel extends Model {
             /** Title * */
             if ($object->post_title != "") {
                 $value = $object->post_title;
-                if(mb_detect_encoding($value)==='UTF-8'){
-                    $value = utf8_decode($value);
+                if(mb_detect_encoding($value) !== 'UTF-8'){
+                	$value = utf8_encode($value);
                 }
                 $csv_data['title'] = $value;
             } else {
