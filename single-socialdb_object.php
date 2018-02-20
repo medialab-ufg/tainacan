@@ -477,12 +477,12 @@ if (has_action('alter_page_item')) {
                             // verifico se o metadado pode ser alterado
                             if (verify_allowed_action($collection_id, 'socialdb_collection_permission_edit_property_data_value', $object_id)): ?>
                                 <small>
-                                    <button type="button" onclick="cancel_license()" id="cancel_license"
-                                            class="btn btn-default btn-xs" style="display: none;"><span
-                                                class="glyphicon glyphicon-arrow-left"></span></button>
                                     <button type="button" onclick="edit_license()" id="edit_license"
                                             class="btn btn-default btn-xs"><span
                                                 class="glyphicon glyphicon-edit"></span></button>
+                                    <button type="button" onclick="cancel_license()" id="cancel_license"
+                                            class="btn btn-default btn-xs" style="display: none;"><span
+                                                class="glyphicon glyphicon-arrow-left"></span></button><br>
                                     <button type="button" onclick="save_license('<?php echo $post->ID ?>')"
                                             id="save_license" class="btn btn-default btn-xs" style="display: none;">
                                         <span class="glyphicon glyphicon-floppy-disk"></span></button>
@@ -511,11 +511,11 @@ if (has_action('alter_page_item')) {
                             // verifico se o metadado pode ser alterado
                             if (verify_allowed_action($collection_id, 'socialdb_collection_permission_edit_tag', $post->ID)):
                                 ?>
-                                <button type="button" onclick="cancel_tag()" id="cancel_tag"
-                                        class="btn btn-default btn-xs" style="display: none;"><span
-                                            class="glyphicon glyphicon-arrow-left"></span></button>
                                 <button type="button" onclick="edit_tag()" id="edit_tag" class="btn btn-default btn-xs">
                                     <span class="glyphicon glyphicon-edit"></span></button>
+                                <button type="button" onclick="cancel_tag()" id="cancel_tag"
+                                        class="btn btn-default btn-xs" style="display: none;"><span
+                                            class="glyphicon glyphicon-arrow-left"></span></button><br>
                                 <button type="button" onclick="save_tag('<?php echo $post->ID ?>')" id="save_tag"
                                         class="btn btn-default btn-xs" style="display: none;"><span
                                             class="glyphicon glyphicon-floppy-disk"></span></button>
