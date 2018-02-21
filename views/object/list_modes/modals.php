@@ -170,10 +170,7 @@ else:
 
                 <div class="modal-body">
                     <?php _t('Change ownership of ',1)?> <span class="current_col"> item </span>
-                    <form id="change_item_owner">
-
-                    </form>
-                    <input type="text" id="autocomplete_users" class="autocomplete_users form-control"
+                    <input type="text" class="autocomplete_users form-control"
                            onkeyup="autocomplete_users('<?php echo $collection_id; ?>', '<?php echo $curr_id; ?>');"
                            placeholder="<?php _t('Type the three first letters of the user name ', 1);?>"
                            class="chosen-selected form-control ui-autocomplete-input" autocomplete="off">
