@@ -6,6 +6,25 @@ e este projeto adere para [Semantic Versioning](http://semver.org/spec/v2.0.0.ht
 
 ## [Unreleased]
 
+## [0.8]
+### Adicionado
+- Adicionar na home do layout a opção de defnição de n° de colunas na exibição dos metadados na home do item
+
+### Modificado
+- Padronizar a estrutura dos metadados de uma coleção com os do repositório geral
+
+### Corrigido
+- Apos deletar uma coleção e clicar na 'Lixeira' em tainacan-coleções, ela aparece mas não é possível restaurar a coleção ou elimina-la para sempre
+- Limpar buscar de um metadado de relacionamento na submissão de item limpa todos os campos do formulário
+- Permitir alterar o arquivo raiz ex. '.pdf e .jpg' na interface do tainacan. Para evitar que ter que subir de novo um item
+- Permitir alterar o arquivo raiz ex. '.pdf e .jpg' na interface do tainacan. Para evitar que ter que subir de novo um item
+- Corrigir as ações de tags nas home da coleção e item
+- Corrigir a incompatibilidade da exportação de CSV do tainacan
+
+### Removido
+
+### Obsoleto
+
 ## [0.7] - 2018-02-01
 ### Adicionado
 - Permitir alterar o arquivo raiz ex. '.pdf e .jpg' na interface do tainacan. Para evitar que ter que subir de novo um item.
@@ -23,19 +42,19 @@ e este projeto adere para [Semantic Versioning](http://semver.org/spec/v2.0.0.ht
 - Alterar a codificação do arquivo no exportar csv
 
 ### Corrigido
-- Leitor de PDF na home do item indisponível 
+- Leitor de PDF na home do item indisponível
 - Quebra de linha em item do tipo 'texto' esta se transformando em divisão de colunas na visualização do item
 - Não permite ter mais de duas votações do tipo estrela
 - Corrigir duplicação de valores de metadados de dados
 - Corrigir a busca avançada do tainacan na home inicial e na home da coleção
 - Erro ao tentar exportar o CSV e pacote do tainacan de itens de uma coleção
 - Definir a imagem do cabeçalho e a marca do repo de acordo com o recorte definido na submissão dos mesmos
-- Centralização, corte e preenchimento das miniaturas dos itens 
+- Centralização, corte e preenchimento das miniaturas dos itens
 - Corrigir a busca geral do repositório permitindo filtrar pelos metadados 'titulo' e 'descrição' dos itens
 - Corrigir a ordenação dos itens na home da coleção
 - Metadados compostos com alterações na home do item inconsistente
 - Erro ao tentar definir somente uma unica submissão de itens
-- Corrigir a definição do filtro para o metadado 'Tags' 
+- Corrigir a definição do filtro para o metadado 'Tags'
 - Corrigir filtro do tipo data permitindo filtrar por valores de datas informadas
 - Corrigir submissão em massa de arquivos retirando o travamento de tela
 - Corrigir a ocultação de coleções
@@ -109,8 +128,9 @@ e este projeto adere para [Semantic Versioning](http://semver.org/spec/v2.0.0.ht
 
 ## [0.3] - 2017-04-12
 
-[Unreleased]: https://github.com/medialab-ufg/tainacan/compare/v0.7...HEAD
-[0.7]: https://github.com/medialab-ufg/tainacan/compare/v0.6.1...v0.7
+[Unreleased]: https://github.com/medialab-ufg/tainacan/compare/v0.8...HEAD
+[0.8]:https://github.com/medialab-ufg/tainacan/compare/vv0.7...v0.8
+[0.7]: https://github.com/medialab-ufg/tainacan/compare/v0.6.1...vv0.7
 [0.6.1]: https://github.com/medialab-ufg/tainacan/compare/v0.6...v0.6.1
 [0.6]: https://github.com/medialab-ufg/tainacan/compare/v0.5...v0.6
 [0.5]: https://github.com/medialab-ufg/tainacan/compare/v0.4...v0.5
