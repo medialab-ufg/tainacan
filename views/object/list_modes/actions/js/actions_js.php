@@ -83,13 +83,15 @@
             {
                 let name = document.getElementById("new_file").files[0].name;
                 let ext = name.split('.');
-                ext = ext[ext.length - 1];
+                ext = ext[ext.length - 1].toLowerCase();
 
                 let data =  new FormData(this);
                 data.append('item_id', $(this).parents().find('.open_item_actions').first().attr('id').replace('action-', ''));
                 data.append("operation", "change_item_file");
 
-                if(ext === 'pdf')
+                let fileType = $("#event_type input:checked").val();
+
+                if(ext === 'pdf' && fileType === 'pdf')
                 {
                     var fileReader = new FileReader();
 
@@ -111,7 +113,7 @@
                         });
                     };
                     fileReader.readAsArrayBuffer(document.getElementById("new_file").files[0]);
-                }else if(ext == 'jpg' || ext == 'jpeg' || ext == 'png' || ext == 'bmp')
+                }else if((ext == 'jpg' || ext == 'jpeg' || ext == 'png' || ext == 'bmp') && fileType === 'image')
                 {
                     senddata(data);
                 }else
@@ -123,6 +125,8 @@
 
         function senddata(data)
         {
+            $("#change_item_file_modal").modal('hide');
+            $("#modalImportMain").modal('show');
             $.ajax({
                 url: path,
                 type: "POST",
@@ -133,6 +137,7 @@
                 $("#change_item_file_modal").modal("hide");
                 if(result == true)
                 {
+                    $("#modalImportMain").modal('hide');
                     swal(
                         {
                             title: "<?php _t("Changed", "tainacan")?>",
@@ -144,6 +149,7 @@
                         }
                     );
                 }else {
+                    $("#modalImportMain").modal('hide');
                     swal({
                         title: "<?php _t("Error", "tainacan")?>",
                         text: "<?php _t("File could not be changed ", "tainacan")?>",
