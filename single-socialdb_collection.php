@@ -71,13 +71,6 @@ while (have_posts()) : the_post();
                     <!-- TAINACAN: esta div agrupa a submissao de novos itens e a ordenacao (estilo inline usado para afastar do painel da colecao) -->
                     <div id="menu_object" class="row col-md-12">
                         <div class="col-lg-12 no-padding">
-
-                            <?php
-                            $hide_search = get_post_meta($post->ID, 'socialdb_collection_hide_search', true);
-                            if(!isset($hide_search))
-                                $hide_search = false;
-                            else if($hide_search == 'false') $hide_search = false;
-                            ?>
                             <div class="col-md-12 no-padding">
                                 <div class="row search-top-container">
                                     <div class="col-md-12">
@@ -89,7 +82,6 @@ while (have_posts()) : the_post();
                                             <?php } ?>
                                         </div>
 
-                                        <?php if($hide_search == false){?>
                                         <div class="search-colecao">
                                             <div class="input-group">
                                                 <input class="form-control input-medium placeholder ui-autocomplete-input" id="search_objects"
@@ -106,11 +98,9 @@ while (have_posts()) : the_post();
                                                 </span>
                                             </div>
                                         </div>
-	                                    <?php } ?>
                                     </div>
                                 </div>
 
-                                <?php if($hide_search == false) { ?>
                                 <div class="col-md-12 no-padding">
                                     <!--button style="margin-top:5px;" class="btn btn-default btn-xs pull-right" onclick="showAdvancedSearch('<?php echo get_template_directory_uri() ?>');">
                                     <?php _e('Advanced Search', 'tainacan'); ?>
@@ -121,7 +111,6 @@ while (have_posts()) : the_post();
                                         <span id="icon-search-top" class="glyphicon glyphicon-triangle-top" style="font-size: 14px;display:none"></span>
                                     </a>
                                 </div>
-                                <?php } ?>
                             </div>
 
                             <div class="col-md-12 no-padding">

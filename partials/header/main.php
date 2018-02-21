@@ -5,11 +5,13 @@
             <h3> <?php bloginfo('description') ?> </h3>
         </div>
         <?php
-        $hide_seach = get_option('socialdb_collection_hide_search');
-        if(!isset($hide_search))
+        $hide_search = get_option('socialdb_collection_hide_search');
+
+        if($hide_search == 'false' || $hide_search == false)
 	        $hide_search = false;
-        else if($hide_search == 'false') $hide_search = false;
-        if(isset($hide_seach) && $hide_seach === false) {
+        else $hide_search = true;
+
+        if($hide_search == false) {
 	        ?>
             <div id="searchBoxIndex" class="col-md-3 col-sm-12 center">
                 <form id="formSearchCollections" role="search">
