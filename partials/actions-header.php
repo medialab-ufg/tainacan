@@ -194,24 +194,7 @@ $stat_page = get_page_by_title(__('Statistics', 'tainacan'))->ID;
     if (has_action("add_users_button"))
         do_action("add_users_button");
 
-    if (!is_front_page() && !is_plugin_active( 'ibram-tainacan/ibram-tainacan.php' )) : // !is_page($stat_page) ?>
-        <form id="formSearchCollections" class="navbar-form navbar-right search-tainacan-collection" role="search">
-            <div class="input-group search-collection search-home">
-                <input style="display: none" type="text" class="form-control" name="search_collections" id="search_collections" placeholder="<?php _e('Find', 'tainacan') ?>"/>
-                <button onclick="showTopSearch();" id="expand-top-search" class="btn btn-default" type="button">
-                    <?php echo ViewHelper::render_icon('search-white', 'png', __('Click to expand', 'tainacan')); ?>
-                </button>
-            </div>
-        </form>
-    <?php elseif (has_action('alter_home_page')): ?>
-        <form id="formSearchCollectionsTopSearch" class="navbar-form navbar-right search-tainacan-collection" role="search">
-            <div class="input-group search-collection search-home">
-                <input style="display: none" type="text" class="form-control" name="search_collections" id="search_collections" placeholder="<?php _e('Find', 'tainacan') ?>"/>
-                <button onclick="showTopSearch();" id="expand-top-search" class="btn btn-default" type="button">
-                    <?php echo ViewHelper::render_icon('search-white', 'png', __('Click to expand', 'tainacan')); ?>
-                </button>
-            </div>
-        </form>
-    <?php endif; ?>
+
+    ?>
 
 </div><!-- /.navbar-collapse -->
