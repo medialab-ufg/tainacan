@@ -790,8 +790,13 @@ class VisualizationModel extends CollectionModel {
      * Metodo reponsavel em gerar a listagem do dynatree
      * Autor: Eduardo Humberto
      */
+
     public function expandDynatree($data) {
-        if (strpos($data['key'], "_moreoptions") !== false && strpos($data['key'], "_moreoptionstag") === false && strpos($data['key'], "_moreoptionsproperty") === false && strpos($data['key'], "_moreoptionsdataproperty") === false) {
+        if (strpos($data['key'], "_moreoptions") !== false &&
+            strpos($data['key'], "_moreoptionstag") === false &&
+            strpos($data['key'], "_moreoptionsproperty") === false &&
+            strpos($data['key'], "_moreoptionsdataproperty") === false)
+        {
             return $this->expand_categories_moreoptions($data['collection'], $data['key'], $data);
         } elseif (strpos($data['key'], "?alphabet=") !== false) {
             return $this->expand_alphabet_dynatree_category($data['collection'], $data['key'], $data);
@@ -1030,28 +1035,42 @@ class VisualizationModel extends CollectionModel {
         } else {
             $hide_checkbox = false;
         }
+
         $string = str_replace('?alphabet=', ',', $key);
         $array = explode(',', $string);
         $children = $this->get_term_children_by_first_letter($array[0], $array[1]);
+
         $facet_id = $category_model->get_category_facet_parent($array[0], $collection_id);
+
         $classCss = $category_model->get_facet_class($facet_id, $collection_id);
+	    $classCss = ($classCss)?$classCss:'color4';
+
         $cont = 0;
         if (count($children) > 0) {
             foreach ($children as $child) {
                 $cont++;
-                if( strtolower($array[1]) == 'a' ){
+                /*if( strtolower($array[1]) == 'a' ){
                     if($cont <= ($this->getDynatreeNumberItems($facet_id,$array[0]) + 1))
                         continue;
-                }
+                }*/
                 $children_of_child = $this->getChildren($child->term_id);
 
-                if (count($children_of_child) > 0 || (!empty($children_of_child) && $children_of_child)) {
-                    $dynatree[] = array('title' => $child->name, 'hideCheckbox' => $hide_checkbox, 'key' => $child->term_id, 'isLazy' => true, 'addClass' => $classCss);
-                    //$dynatree[] = array('title' => $child->name.' ('. $this->count_items_related($child->term_id).')','hideCheckbox' => $hide_checkbox, 'key' => $child->term_id, 'isLazy' => true, 'addClass' => $classCss);
-                } else {
-                    $dynatree[] = array('title' => $child->name, 'hideCheckbox' => $hide_checkbox, 'key' => $child->term_id, 'addClass' => $classCss);
-                    //$dynatree[] = array('title' => $child->name.' ('. $this->count_items_related($child->term_id).')','hideCheckbox' => $hide_checkbox, 'key' => $child->term_id, 'addClass' => $classCss);
-                }
+	            if (count($children_of_child) > 0 || (!empty($children_of_child) && $children_of_child)) {// se tiver descendentes
+		            $dynatree[] = array('title' => $child->name,
+		                                'select'=>$category_model->isSelected($child->term_id,$data,'categories'),
+		                                'hideCheckbox' => $hide_checkbox,
+		                                'key' => $child->term_id,
+		                                'isLazy' => true,
+		                                'addClass' => $classCss);
+
+	            } else {// se nao tiver filhos
+		            $dynatree[] = array('title' => $child->name,
+		                                'select'=>$category_model->isSelected($child->term_id,$data,'categories'),
+		                                'hideCheckbox' => $hide_checkbox,
+		                                'key' => $child->term_id,
+		                                'addClass' => $classCss);
+	            }
+
                 $cont++;
             }
         }
@@ -1190,7 +1209,14 @@ class VisualizationModel extends CollectionModel {
         $arrayalphabet = $this->return_alphabet_array();
         foreach ($arrayalphabet as $letter) {
             if (count($this->get_term_children_by_first_letter($term_id, $letter)) > 0) {
-                $data = array('title' => strtoupper($letter), 'key' => $term_id . '?alphabet=' . $letter, 'isFolder' => false, 'hideCheckbox' => true, 'expand' => false, 'isLazy' => true, 'data' => '', 'addClass' => 'more');
+                $data = array('title' => strtoupper($letter),
+                              'key' => $term_id . '?alphabet=' . $letter,
+                              'isFolder' => false,
+                              'hideCheckbox' => true,
+                              'expand' => false,
+                              'isLazy' => true,
+                              'data' => '',
+                              'addClass' => 'more');
                 $dynatree[] = $data;
             }
             //  var_dump($value,$valor,$value!==null||$value!=='NULL');
@@ -1199,7 +1225,7 @@ class VisualizationModel extends CollectionModel {
         return $dynatree;
     }
 
-    /**
+	/**
      * @signature expand_categories_moreoptions($key, $classCss)
      * @param int $key O id da categoria a ser expandida
      * @param string $classCss A classe css que sera usada para mostrar o icone adequado

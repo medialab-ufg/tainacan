@@ -238,7 +238,6 @@
                         data: {
                             collection_id: $("#collection_id").val(),
                             property_id: tree,
-                           // hide_checkbox: 'true',
                             operation: 'initDynatreeDynamic'
                         }
                         , addActiveKey: true
@@ -249,7 +248,7 @@
                             data: {
                                 collection: $("#collection_id").val(),
                                 key: node.data.key,
-                                hide_checkbox: 'true',
+                                /*hide_checkbox: 'true',*/
                                 classCss: node.data.addClass,
                                 //operation: 'findDynatreeChild'
                                 operation: 'expand_dynatree'

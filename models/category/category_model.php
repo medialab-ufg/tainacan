@@ -263,39 +263,64 @@ class CategoryModel extends Model {
     /* Author: Eduardo */
 
     public function initCategoriesDynatreeDynamic($data) {
-        $counter = 0;
         if (isset($data['hide_checkbox'])) {
             $hide_checkbox = true;
         } else {
             $hide_checkbox = false;
         }
         $all_data = $this->get_all_property($data['property_id'], true); // pego todos os dados possiveis da propriedade
+
         $initial_term = get_term_by('id', $all_data['metas']['socialdb_property_term_root'], 'socialdb_category_type');
         $classCss = get_post_meta($data['collection_id'], 'socialdb_collection_facet_' . $initial_term->term_id . '_color', true);
         $classCss = ($classCss)?$classCss:'color4';
-//        $dynatree = array('title' => $initial_term->name, 'isLazy' => false,
-//            'key' => $initial_term->term_id, 'activate' => false, 'expand' => true,
-//            'hideCheckbox' => true, 'children' => array(), 'addClass' => $classCss);
 
         if (isset($data['order'])) {
             $children = $this->getChildren($all_data['metas']['socialdb_property_term_root'], 't.name ASC');
         } else {
             $children = $this->getChildren($all_data['metas']['socialdb_property_term_root']);
         }
-        if (count($children) > 0) {
+
+        if (count($children) > 0 && count($children) < 30) {
             foreach ($children as $child) {
                 $children_of_child = $this->getChildren($child->term_id);
                 if (count($children_of_child) > 0 || (!empty($children_of_child) && $children_of_child)) {// se tiver descendentes
-                    $dynatree[] = array('title' => $child->name,'select'=>$this->isSelected($child->term_id,$data,'categories'), 'hideCheckbox' => $hide_checkbox, 'key' => $child->term_id, 'isLazy' => true, 'addClass' => $classCss);
+                    $dynatree[] = array('title' => $child->name,
+                                        'select'=>$this->isSelected($child->term_id,$data,'categories'),
+                                        'hideCheckbox' => $hide_checkbox,
+                                        'key' => $child->term_id,
+                                        'isLazy' => true,
+                                        'addClass' => $classCss);
+
                 } else {// se nao tiver filhos
-                    $dynatree[] = array('title' => $child->name, 'select'=>$this->isSelected($child->term_id,$data,'categories'), 'hideCheckbox' => $hide_checkbox, 'key' => $child->term_id, 'addClass' => $classCss);
-                }
-                $counter++;
-                if ($counter == 25) {
-                    $dynatree[] = array('title' => __('See more', 'tainacan'), 'hideCheckbox' => true, 'key' => $all_data['metas']['socialdb_property_term_root'] . '_moreoptions', 'isLazy' => true, 'addClass' => 'more');
-                    break;
+                    $dynatree[] = array('title' => $child->name,
+                                        'select'=>$this->isSelected($child->term_id,$data,'categories'),
+                                        'hideCheckbox' => $hide_checkbox,
+                                        'key' => $child->term_id,
+                                        'addClass' => $classCss);
                 }
             }
+        }
+        else {
+	        $visualizationModel = new VisualizationModel();
+	        $alphabet           = $visualizationModel->return_alphabet_array();
+
+	        foreach ( $alphabet as $letter )
+	        {
+		        if ( count( $visualizationModel->get_term_children_by_first_letter( $all_data['metas']['socialdb_property_term_root'], $letter ) ) > 0 )
+		        {
+			        $data       = array(
+				        'title'        => strtoupper( $letter ),
+				        'key'          =>  $all_data['metas']['socialdb_property_term_root'] . '?alphabet=' . $letter,
+				        'isFolder'     => false,
+				        'hideCheckbox' => true,
+				        'expand'       => false,
+				        'isLazy'       => true,
+				        'data'         => '',
+				        'addClass'     => 'more'
+			        );
+			        $dynatree[] = $data;
+		        }
+	        }
         }
         return json_encode($dynatree);
     }

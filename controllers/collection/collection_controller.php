@@ -27,6 +27,7 @@ class CollectionController extends Controller {
                 return $visualization_model->initDynatreeSingleEdit($data);
             case "expand_dynatree":
                 return json_encode($visualization_model->expandDynatree($data));
+                break;
             case "create":
                 return $collection_model->create();
             case 'simple_add':
