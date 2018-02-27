@@ -149,6 +149,7 @@ foreach($ordenation as $id){
 						<?php
 						if( $propertyOb['type'] != "user")
 						{
+
 							?>
                             <div class="edit-field-btn">
                                 <button type="button"
@@ -156,7 +157,7 @@ foreach($ordenation as $id){
                                         id="single_cancel_<?php echo $propertyOb['id']; ?>_<?php echo $object_id; ?>"
                                         class="btn btn-default btn-xs" style="display: none;" >
                                     <span class="glyphicon glyphicon-arrow-left" ></span>
-                                </button><br>
+                                </button>
 								<?php
 								// verifico se o metadado pode ser alterado
 								if((get_current_user_id() == 0 && verify_anonimous_approval_allowed($collection_id, 'socialdb_collection_permission_edit_property_object_value'))
@@ -172,7 +173,7 @@ foreach($ordenation as $id){
 									}
 								}
 								?>
-
+                                <br>
                                 <button type="button" onclick="save_object_property('<?php echo $propertyOb['id']; ?>', '<?php echo $object_id; ?>')" id="single_save_<?php echo $propertyOb['id']; ?>_<?php echo $object_id; ?>" class="btn btn-default btn-xs" style="display: none;"><span class="glyphicon glyphicon-floppy-disk"></span></button>
 
                             </div>
@@ -279,11 +280,11 @@ foreach($ordenation as $id){
 						<?php if( $propertyDa['type'] != 'user') { ?>
                             <div class="edit-field-btn">
                                 <button type="button" onclick="cancel_data_property('<?php echo $propertyDa['id']; ?>', '<?php echo $object_id; ?>')" id="single_cancel_<?php echo $propertyDa['id']; ?>_<?php echo $object_id; ?>" class="btn btn-default btn-xs" style="display: none;" ><span class="glyphicon glyphicon-arrow-left" ></span></button>
-                                <br>
 								<?php // verifico se o metadado pode ser alterado
 								if (verify_allowed_action($collection_id, 'socialdb_collection_permission_edit_property_data_value',$object_id)): ?>
                                     <button type="button" onclick="edit_data_property('<?php echo $propertyDa['id']; ?>', '<?php echo $object_id; ?>')" id="single_edit_<?php echo $propertyDa['id']; ?>_<?php echo $object_id; ?>" class="btn btn-default btn-xs" ><span class="glyphicon glyphicon-edit"></span></button>
 								<?php endif; ?>
+                                <br>
                                 <button type="button" onclick="save_data_property('<?php echo $propertyDa['id']; ?>', '<?php echo $object_id; ?>')" id="single_save_<?php echo $propertyDa['id']; ?>_<?php echo $object_id; ?>" class="btn btn-default btn-xs" style="display: none;"><span class="glyphicon glyphicon-floppy-disk"></span></button>
                             </div>
 							<?php
@@ -497,9 +498,6 @@ foreach($ordenation as $id){
 									<?php
 								}
 								?>
-                                <button type="button" onclick="cancel_term_property('<?php echo $propertyTe['id']; ?>', '<?php echo $object_id; ?>')" id="single_cancel_<?php echo $propertyTe['id']; ?>_<?php echo $object_id; ?>" class="btn btn-default btn-xs" style="display: none;" >
-                                    <span class="glyphicon glyphicon-arrow-left" ></span>
-                                </button><br>
 								<?php
 								// verifico se o metadado pode ser alterado
 								if (verify_allowed_action($collection_id, 'socialdb_collection_permission_add_classification',$object_id)): ?>
@@ -507,6 +505,9 @@ foreach($ordenation as $id){
                                         <span class="glyphicon glyphicon-edit"></span>
                                     </button>
 								<?php endif; ?>
+                                <button type="button" onclick="cancel_term_property('<?php echo $propertyTe['id']; ?>', '<?php echo $object_id; ?>')" id="single_cancel_<?php echo $propertyTe['id']; ?>_<?php echo $object_id; ?>" class="btn btn-default btn-xs" style="display: none;" >
+                                    <span class="glyphicon glyphicon-arrow-left" ></span>
+                                </button>
                             </div>
 							<?php
 						}

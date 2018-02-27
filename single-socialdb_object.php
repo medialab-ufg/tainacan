@@ -450,9 +450,12 @@ if (has_action('alter_page_item')) {
                                 <button type="button" onclick="edit_description()" id="edit_description"
                                         class="btn btn-default btn-xs"><span class="glyphicon glyphicon-edit"></span>
                                 </button>
+
+                                <br>
                                 <button type="button" onclick="save_description('<?php echo $post->ID ?>')"
                                         id="save_description" class="btn btn-default btn-xs" style="display: none;">
-                                    <span class="glyphicon glyphicon-floppy-disk"></span></button>
+                                    <span class="glyphicon glyphicon-floppy-disk"></span>
+                                </button>
                             </small>
                         <?php endif; ?>
                     </div>
@@ -466,7 +469,7 @@ if (has_action('alter_page_item')) {
                     </div>
                 </div>
 
-                <div class="col-md-6 left-container" <?php echo $view_helper->get_visibility($view_helper->terms_fixed['license']) ?>
+                <div class="col-md-6 left-container no-padding" <?php echo $view_helper->get_visibility($view_helper->terms_fixed['license']) ?>
                      style="border-right: 3px solid #e8e8e8">
                     <!-- Licencas do item -->
                     <div class="box-item-paddings item-license" <?php if (has_action('home_item_license_div')) do_action('home_item_license_div') ?>
@@ -482,7 +485,10 @@ if (has_action('alter_page_item')) {
                                                 class="glyphicon glyphicon-edit"></span></button>
                                     <button type="button" onclick="cancel_license()" id="cancel_license"
                                             class="btn btn-default btn-xs" style="display: none;"><span
-                                                class="glyphicon glyphicon-arrow-left"></span></button><br>
+                                                class="glyphicon glyphicon-arrow-left"></span>
+                                    </button>
+
+                                    <br>
                                     <button type="button" onclick="save_license('<?php echo $post->ID ?>')"
                                             id="save_license" class="btn btn-default btn-xs" style="display: none;">
                                         <span class="glyphicon glyphicon-floppy-disk"></span></button>
