@@ -1110,14 +1110,19 @@
     function wpquery_page(value, collection_viewMode, is_trash) {
         $('#list').hide();
         $('#loader_objects').show();
-        var src =  "'"+$('#src').val()+"'";
+        let src =  "'"+$('#src').val()+"'";
         $.ajax({
             type: "POST",
             url: $('#src').val() + "/controllers/wp_query/wp_query_controller.php",
-            data: { operation: 'wpquery_page', wp_query_args: $('#wp_query_args').val(), value: value,
-                posts_per_page: $('.col-items-per-page').val(), collection_id: $('#collection_id').val(), is_trash: is_trash}
+            data: { operation: 'wpquery_page',
+                    wp_query_args: $('#wp_query_args').val(),
+                    value: value,
+                    posts_per_page: $('.col-items-per-page').val(),
+                    collection_id: $('#collection_id').val(),
+                    is_trash: is_trash
+                }
         }).done(function (result) {
-            elem = jQuery.parseJSON(result);
+            let elem = jQuery.parseJSON(result);
             $('#loader_objects').hide();
             $('#list').html(elem.page);
             $('#wp_query_args').val(elem.args);
@@ -1142,14 +1147,25 @@
                               var curr_id = $(this).find('.post_id').last().val();
                               $(this).find('.item-funcs').last().append('<li style="float: right; margin-left: 10px;"> <a onclick="showSingleObject(' + curr_id + ','+src+','+is_trash+')"> <span class="glyphicon glyphicon-eye-open"></span> </a></li>');
                         });
-                 <?php else:  ?>     
+                 <?php else:  ?>
                         $('li.item-redesocial').hide();
                         $('ul.item-menu-container').hide();
-                        $('#table-view tr').each(function(num, item) {
-                            var curr_id = $(item).find('td').first().find('a').attr('data-id');  
-                             $(item).find('td').last().html('<li> <a onclick="delete_permanently_object(\'Deletar Item\', \'Deletar este item permanentemente?\', ' + curr_id + ')" class="remove"> <span class="glyphicon glyphicon-trash"></span> </a> </li><li> <a onclick="restore_object(' + curr_id + ')"> <span class="glyphicon glyphicon-retweet"></span> </a></li>');
+                        $(".show-item-metadata").hide();
+                        $('.item-colecao').each(function(num, item) {
+                            var curr_id = $(this).find('.post_id').last().val();
+                            let buttons = '<li> <a onclick="delete_permanently_object(\'Deletar Item\', \'Deletar este item permanentemente?\', ' + curr_id + ')" class="remove"> <span class="glyphicon glyphicon-trash"></span> </a> </li><li> <a onclick="restore_object(' + curr_id + ')"> <span class="glyphicon glyphicon-retweet"></span> </a></li>'
+                            $(this).find('.item-funcs').last().append(buttons);
                         });
-                <?php endif; ?> 
+
+                        $('#table-view tr').each(function(num, item) {
+                            let buttons = '<li> <a onclick="delete_permanently_object(\'Deletar Item\', \'Deletar este item permanentemente?\', ' + curr_id + ')" class="remove"> <span class="glyphicon glyphicon-trash"></span> </a> </li><li> <a onclick="restore_object(' + curr_id + ')"> <span class="glyphicon glyphicon-retweet"></span> </a></li>';
+
+                            var curr_id = $(item).find('td').first().find('a').attr('data-id');
+                            $(item).find('td').last().html(buttons);
+                        });
+                <?php endif; ?>
+
+                $("#is_trash").val("1");
             }
 
             setMenuContainerHeight();

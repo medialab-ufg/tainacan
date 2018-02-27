@@ -137,8 +137,11 @@
             paged: function (page) {
                 var trash_page = false;
                 var list_trash = $("#is_trash").val();
-                if(1===list_trash)
+
+                if(list_trash === '1')
+                {
                     trash_page = true;
+                }
 
                 $('html,body').animate({scrollTop: 0}, 'slow');
                 var current_mode = $('.selected-viewMode').attr('class').split(" ")[0];
@@ -149,8 +152,10 @@
         $(".col-items-per-page").on('change', function() {
             var trash_page = false;
             var list_trash = $("#is_trash").val();
-            if(1===list_trash)
+            if(list_trash === '1')
+            {
                 trash_page = true;
+            }
             var current_mode = $('.selected-viewMode').attr('class').split(" ")[0];
              wpquery_page(1, current_mode, trash_page)
 //            var pag_status_qtd = $("#pagination_current_page").val();
