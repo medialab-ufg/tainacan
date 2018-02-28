@@ -396,10 +396,10 @@
                     selectect_ids = selectect_ids.join(',');
                     sessionStorage.setItem('selected_ids', selectect_ids);
                 }
-            }
 
-            toastr.remove();
-            toastr.info('<?php _e('Selected item', 'tainacan') ?>: '+count, '', set_toastr_class(300000));
+                toastr.remove();
+                toastr.info('<?php _e('Selected item', 'tainacan') ?>: '+count, '', set_toastr_class(300000));
+            }
         });
 
         $('#collection-slideShow .item-menu-container').removeClass('navbar-right').addClass('navbar-left');
