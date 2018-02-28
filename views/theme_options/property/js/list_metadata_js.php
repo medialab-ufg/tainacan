@@ -937,9 +937,9 @@
         var item_id = 'meta-item-' + id;
 
         let seletor = $("#" + item_id),
-            item_search_widget = seletor.attr("data-widget"),
-            is_fixed_meta = seletor.hasClass('fixed-property'),
-            is_blocked = seletor.hasClass('block-facet');
+            item_search_widget = seletor.attr("data-widget");
+            /*is_fixed_meta = seletor.hasClass('fixed-property'),
+            is_blocked = seletor.hasClass('block-facet');*/
             /*Not permited facet*/      /*Already inserted*/
         if (not_allowed_facet(slug) || $("#" + id).length > 0 /*is_blocked || (seletor.attr('term_root_id') && $("#" + seletor.attr('term_root_id')).length > 0)*/)
         {
@@ -999,7 +999,7 @@
             type: 'POST',
             data: {collection_id: $("#collection_id").val(), operation: 'alter_visibility', property_id: property_id}
         }).done(function (result) {
-            elem = jQuery.parseJSON(result);
+            let elem = jQuery.parseJSON(result);
             delete_all_cache_collection();
         });
     }
@@ -1132,7 +1132,7 @@
             type: 'POST',
             data: {collection_id: $("#collection_id").val(), category_id: $("#property_object_category_id").val(), operation: 'show_reverses', property_id: $('#property_category_id').val()}
         }).done(function (result) {
-            elem = jQuery.parseJSON(result);
+            let elem = jQuery.parseJSON(result);
             $('#property_object_reverse').html('');
             $('#property_object_reverse').append('<option value="false"><?php _e('None','tainacan'); ?></option>');
             if (elem.no_properties === false) {
@@ -1167,18 +1167,18 @@
                 contentType: false
             }).done(function (result) {
                 $('#modalImportMain').modal('hide');
-                elem = jQuery.parseJSON(result);
+                let elem = JSON.parse(result);
                 $("#meta-relationship").modal('hide');
 
-                var current_operation = elem.operation;
-                var enable_more_options = $("#meta-relationship #habilitate_more_options").val();
+                let current_operation = elem.operation,
+                    enable_more_options = $("#meta-relationship #habilitate_more_options").val();
 
 
-                if (elem.property_data_use_filter == "use_filter") {
+                if (elem.property_data_use_filter === "use_filter") {
                     if (current_operation == "add_property_object") {
                         setCollectionFacet("add", elem.results.new_property_id, elem.search_data_widget, elem.filter_ordenation, elem.color_facet, {}, '', enable_more_options);
-                    } else if (current_operation == "update_property_object") {
-                        var item_was_dragged = $("#meta-relationship .data-widget").hasClass('select-meta-filter');
+                    } else if (current_operation === "update_property_object") {
+                        let item_was_dragged = $("#meta-relationship .data-widget").hasClass('select-meta-filter');
 
                         if (item_was_dragged) {
                             // setCollectionFacet("add", elem.property_object_id, elem.search_data_widget, elem.filter_ordenation, elem.color_facet );
@@ -1193,7 +1193,7 @@
                     }
                 }
                 $("#dynatree_properties_filter").dynatree("getTree").reload();
-                if (elem.operation != 'update_property_object') {
+                if (elem.operation !== 'update_property_object') {
                     list_collection_metadata();
                 } else {
                     $('#meta-item-' + elem.property_object_id + ' .property-name').text(elem.property_object_name)
@@ -2495,6 +2495,7 @@
                 }else{
                     remove_label_box(node.data.key);
                 }
+
                 $('#default_value_text').val('');
                 $('#socialdb_property_object_default_value').val('');
                 setTargetProperties('#property_object_category_id');
@@ -2506,7 +2507,58 @@
             }
         });
     }
-     /**
+
+    function concatenate_in_array(key, seletor) {
+        let ids = [];
+        let result;
+        if ($(seletor).val() !== '')
+        {
+            ids = $(seletor).val().split(',');
+            let index = ids.indexOf(key);
+            if (index >= 0) {
+                ids.splice(index, 1);
+                result = false;
+            } else {
+                ids.push(key);
+                result = true;
+            }
+            $(seletor).val(ids.join(','));
+        } else {
+            ids.push(key);
+            $(seletor).val(ids.join(','));
+            result = true;
+        }
+
+        return result;
+    }
+
+    function add_label_box(id, name, seletor) {
+        $(seletor).append('<span id="label-box-' + id + '" class="label label-primary">'
+            + name + ' <a style="color:white;cursor:pointer;" onclick="remove_label_box(' + id + ')">x</a></span>&nbsp;');
+    }
+
+    function remove_label_box(id, dynatree) {
+        let cont = 0;
+        if (!dynatree)
+            dynatree = "#property_category_dynatree";
+        $(dynatree).dynatree("getRoot").visit(function (node) {
+            if (node.data.key == id) {
+                cont++;
+                node.select(false);
+            }
+        });
+        if (cont === 0) {
+            let ids = $('#property_object_category_id').val().split(',');
+            let index = ids.indexOf(id.toString());
+            if (index >= 0) {
+                ids.splice(index, 1);
+                $('#property_object_category_id').val(ids.join(','));
+            }
+        }
+        $('#label-box-' + id).remove();
+    }
+
+    /**
      *
      */
      function show_key_container() {

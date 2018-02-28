@@ -112,8 +112,7 @@ class FormItem extends Model {
                 <!-- Add title, text and attachements -->
                 <div class="col-md-9">
                     <?php
-
-                     foreach ($this->metadatas['default'] as $property) {
+                    foreach ($this->metadatas['default'] as $property) {
                         if (in_array($property['slug'], $this->fixed_slugs)) {
                             if ($property['slug'] == 'socialdb_property_fixed_title') {
                                 $class = new FormItemTitle($this->collection_id);
