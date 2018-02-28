@@ -120,7 +120,7 @@ $stat_page = get_page_by_title(__('Statistics', 'tainacan'))->ID;
                 <ul class="dropdown-menu" aria-labelledby="collectionEvents"></ul>
             </li>
             <li class="manual">
-                <a href="<?php echo MANUAL_TAINACAN_URL ?>">
+                <a target="_blank" href="<?php echo MANUAL_TAINACAN_URL ?>">
                     <?php echo ViewHelper::render_icon("help", "png", __('Click to download the manual', 'tainacan')); ?>
                 </a>
             </li>
