@@ -11,9 +11,6 @@ require_once(dirname(__FILE__) . '../../general/general_model.php');
 require_once(dirname(__FILE__) . '../../user/user_model.php');
 require_once(dirname(__FILE__) . '../../tag/tag_model.php');
 
-/*Extrator de texto PDF*/
-require_once (dirname(__FILE__) . '../../../libraries/php/PDFParser/vendor/autoload.php');
-
 /*Extrator de texto Office Documents*/
 require_once (dirname(__FILE__) . '../../../libraries/php/OfficeToPlainText/OfficeDocumentToPlainText.php');
 
