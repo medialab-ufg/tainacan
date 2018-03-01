@@ -153,7 +153,7 @@ if (has_action('alter_page_item')) {
                                             if (get_the_post_thumbnail($post->ID, 'thumbnail')) {
                                                 $style_watermark = ($has_watermark ? 'style="background:url(' . $url_watermark . ') no-repeat center; background-size: contain;"' : '');
                                                 $opacity_watermark = ($has_watermark ? 'opacity: 0.80;' : '');
-                                                $content = '<div style="text-align:center; display: block;"' . $style_watermark . '> <img class="img-responsive img-thumbnail" src="' . $url . '"></div>';
+                                                $content = '<div style="text-align:center; display: block; max-height: 1000px"' . $style_watermark . '> <a href="'.$url.'" target="_blank"><img title="'.__("See original image", "tainacan").'" style="max-height: 100%; width: auto; height: auto;"class="img-responsive img-thumbnail" src="' . $url . '"></a></div>';
                                             }
                                             break;
                                         case 'video':
