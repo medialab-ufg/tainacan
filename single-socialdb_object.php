@@ -182,62 +182,65 @@ if (has_action('alter_page_item')) {
                                                 $content = '<embed src="' . $url . '" width="600" height="500" alt="pdf" pluginspage="http://www.adobe.com/products/acrobat/readstep2.html">';
                                             }
 
-                                            //'<embed src="' . $url . '" width="600" height="500" alt="pdf" pluginspage="http://www.adobe.com/products/acrobat/readstep2.html">';
                                             break;
                                         default:
                                             $content = '<p style="text-align:center;">' . __('File link:') . ' <a target="_blank" href="' . $url . '">' . __('Click here!', 'tainacan') . '</a></p>';
                                             break;
                                     }
                                 } else {
-                                    switch ($metas['socialdb_object_dc_type'][0]) {
-                                        case 'audio':
-                                            $content = '<audio controls><source src="' . $metas['socialdb_object_content'][0] . '">' . __('Your browser does not support the audio element.', 'tainacan') . '</audio>';
-                                            break;
-                                        case 'image':
-                                            $style_watermark = ($has_watermark ? 'style="background:url(' . $url_watermark . ') no-repeat center; background-size: contain;"' : '');
-                                            $opacity_watermark = ($has_watermark ? 'opacity: 0.80;' : '');
-                                            if (get_the_post_thumbnail($post->ID, 'thumbnail')) {
-                                                $url_image = wp_get_attachment_url(get_post_thumbnail_id($post->ID, 'large'));
-                                                $content = '<center ' . $style_watermark . '><img style="max-width:480px; ' . $opacity_watermark . '"  src="' . $url_image . '" class="img-responsive" /></center>';
-//                                            $content = '<center><a href="#" onclick="$.prettyPhoto.open([\'' . $url_image . '\'], [\'\'], [\'\']);return false">
-//                                                        <img style="max-width:880px;"  src="' . $url_image . '" class="img-responsive" />
-//                                                    </a></center>';
-                                            } else {
-                                                $content = "<img src='" . $metas['socialdb_object_content'][0] . "' class='img-responsive' />";
-                                            }
-                                            break;
-                                        case 'video':
-	                                        $short_url = strpos($metas['socialdb_object_content'][0], 'youtu.be') !== false;
-                                            if (strpos($metas['socialdb_object_content'][0], 'youtube') !== false || $short_url) {
-                                                $step1 = explode('v=', $metas['socialdb_object_content'][0]);
-                                                $step2 = explode('&', $step1[1]);
+                                    if(!empty($metas['socialdb_object_content'][0]))
+                                    {
+	                                    switch ($metas['socialdb_object_dc_type'][0]) {
+		                                    case 'audio':
+			                                    $content = '<audio controls><source src="' . $metas['socialdb_object_content'][0] . '">' . __('Your browser does not support the audio element.', 'tainacan') . '</audio>';
+			                                    break;
+		                                    case 'image':
+			                                    $style_watermark = ($has_watermark ? 'style="background:url(' . $url_watermark . ') no-repeat center; background-size: contain;"' : '');
+			                                    $opacity_watermark = ($has_watermark ? 'opacity: 0.80;' : '');
+			                                    if (get_the_post_thumbnail($post->ID, 'thumbnail')) {
+				                                    $url_image = wp_get_attachment_url(get_post_thumbnail_id($post->ID, 'large'));
+				                                    $content = '<center ' . $style_watermark . '><img style="max-width:480px; ' . $opacity_watermark . '"  src="' . $url_image . '" class="img-responsive" /></center>';
+			                                    } else {
+				                                    $content = "<img src='" . $metas['socialdb_object_content'][0] . "' class='img-responsive' />";
+			                                    }
+			                                    break;
+		                                    case 'video':
+			                                    $short_url = strpos($metas['socialdb_object_content'][0], 'youtu.be') !== false;
+			                                    if (strpos($metas['socialdb_object_content'][0], 'youtube') !== false || $short_url) {
+				                                    $step1 = explode('v=', $metas['socialdb_object_content'][0]);
+				                                    $step2 = explode('&', $step1[1]);
 
-                                                if($short_url)
-                                                {
-                                                    $video_id = end(explode('/', $metas['socialdb_object_content'][0]));
-                                                }else $video_id = $step2[0];
+				                                    if($short_url)
+				                                    {
+					                                    $video_id = end(explode('/', $metas['socialdb_object_content'][0]));
+				                                    }else $video_id = $step2[0];
 
-                                                $content = "<div style='height:600px; display: flex !important;'  ><iframe  class='embed-responsive-item'  src='https://www.youtube.com/embed/" . $video_id . "?html5=1' allowfullscreen frameborder='0'></iframe></div>";
-                                            } elseif (strpos($metas['socialdb_object_content'][0], 'vimeo') !== false) {
-                                                $step1 = explode('/', rtrim($metas['socialdb_object_content'][0], '/'));
-                                                $video_id = end($step1);
-                                                $content = "<div class=\"embed-responsive embed-responsive-16by9\"><iframe class='embed-responsive-item' src='https://player.vimeo.com/video/" . $video_id . "' frameborder='0'></iframe></div>";
-                                            } else {
-                                                $content = "<div class=\"embed-responsive embed-responsive-16by9\"><iframe class='embed-responsive-item' src='" . $metas['socialdb_object_content'][0] . "' frameborder='0'></iframe></div>";
-                                            }
-                                            break;
-                                        case 'pdf':
-                                            $content = '<embed src="' . $metas['socialdb_object_content'][0] . '" width="600" height="500" alt="pdf" pluginspage="http://www.adobe.com/products/acrobat/readstep2.html">';
-                                            break;
-                                        default:
-                                            //colocando o http
-                                            if( strpos($metas['socialdb_object_content'][0],'http://') === false ||  strpos($metas['socialdb_object_content'][0],'https://') === false){
-                                                $metas['socialdb_object_content'][0] = 'http://'.$metas['socialdb_object_content'][0];
-                                            }
+				                                    $content = "<div style='height:600px; display: flex !important;'  ><iframe  class='embed-responsive-item'  src='https://www.youtube.com/embed/" . $video_id . "?html5=1' allowfullscreen frameborder='0'></iframe></div>";
+			                                    } elseif (strpos($metas['socialdb_object_content'][0], 'vimeo') !== false) {
+				                                    $step1 = explode('/', rtrim($metas['socialdb_object_content'][0], '/'));
+				                                    $video_id = end($step1);
+				                                    $content = "<div class=\"embed-responsive embed-responsive-16by9\"><iframe class='embed-responsive-item' src='https://player.vimeo.com/video/" . $video_id . "' frameborder='0'></iframe></div>";
+			                                    } else {
+				                                    $content = "<div class=\"embed-responsive embed-responsive-16by9\"><iframe class='embed-responsive-item' src='" . $metas['socialdb_object_content'][0] . "' frameborder='0'></iframe></div>";
+			                                    }
+			                                    break;
+		                                    case 'pdf':
+			                                    $content = '<embed src="' . $metas['socialdb_object_content'][0] . '" width="600" height="500" alt="pdf" pluginspage="http://www.adobe.com/products/acrobat/readstep2.html">';
+			                                    break;
+		                                    default:
+			                                    //colocando o http
+			                                    if( strpos($metas['socialdb_object_content'][0],'http://') === false ||  strpos($metas['socialdb_object_content'][0],'https://') === false){
+				                                    $metas['socialdb_object_content'][0] = 'http://'.$metas['socialdb_object_content'][0];
+			                                    }
 
-                                            $content = '<p style="text-align:center;">' . __('File link:', 'tainacan') . ' <a target="_blank" href="' . $metas['socialdb_object_content'][0] . '">' . __('Click here!', 'tainacan') . '</a></p>';
-                                            break;
+			                                    $content = '<p style="text-align:center;">' . __('File link:', 'tainacan') . ' <a target="_blank" href="' . $metas['socialdb_object_content'][0] . '">' . __('Click here!', 'tainacan') . '</a></p>';
+			                                    break;
+	                                    }
                                     }
+                                    else $content = '<div class="alert alert-info text-center">
+                                                              <strong>'.__('This item have no file', 'tainacan').'</strong>
+                                                     </div>';
+
                                 }
                                 echo $content;
                             }
