@@ -330,6 +330,7 @@ while (have_posts()) : the_post();
                                         if (get_the_ID() != get_option('collection_root_id') && verify_collection_moderators(get_the_ID(), get_current_user_id())) {
                                             ?>
                                             <button onclick="show_trash_page();" class="btn btn-default pull-right button-trash collection-trash">
+                                                <span class="glyphicon glyphicon-trash"></span>
                                                 <?php echo $trash_name ?>
                                             </button>
                                             <?php
@@ -340,6 +341,7 @@ while (have_posts()) : the_post();
                                             //if ($admin_email == $user_data || $blog_email == $user_data) {
                                             ?>
                                             <button onclick="show_trash_page();" class="btn btn-default button-trash pull-right">
+                                                <span class="glyphicon glyphicon-trash"></span>
                                                 <?php echo $trash_name; ?>
                                             </button>
                                             <?php
