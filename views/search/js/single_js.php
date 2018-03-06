@@ -120,7 +120,6 @@
             show_modal_main();
 
             let ids = $("#items_id").val().split(',');
-            console.log("Count items: "+ids.length);
 
             if($('input.bulk_action').val() === 'select_some')
             {
@@ -138,7 +137,7 @@
                     edit_data.push( { id: el } );
                 });
             }
-            console.log("Edita data length: "+edit_data.length);
+
             $.ajax({
                 type: "POST",
                 url: $('#src').val() + "/controllers/object/object_controller.php",

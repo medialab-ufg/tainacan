@@ -941,12 +941,12 @@ class ObjectController extends Controller {
                 if (!$data['items_data']) {
                     exit();
                 }
-                print (count($data['items_data'])."\n");
+
                 foreach ($data['items_data'] as $_previous) {
                     $data['items_id'] [] = $_previous['id'];
                     //array_push( $set, [ 'ID' => $_previous['id'], 'title' => $_previous['title'], 'desc' => $_previous['desc'] ] );
                 }
-	            print (count($data['items_id'])."\n");
+
                 $data['properties'] = $object_model->show_object_properties($data);
                 $data['items'] = $objectfile_model->get_inserted_items_social_network($data);
                 $data['edit_multiple'] = true;
