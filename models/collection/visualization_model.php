@@ -517,6 +517,7 @@ class VisualizationModel extends CollectionModel {
             foreach ($objects as $child) {
                 //$dynatree['children'][] = array('title' => $child->post_title.' ('.$this->count_metadata_by_value('socialdb_property_'.$properties['id'], $child->ID).')', 'key' => $child->ID . "_" . $properties['id'], 'addClass' => $classCss);
                 $dynatree['children'][] = array('title' => $child->post_title . '', 'key' => $child->ID . "_" . $properties['id'], 'addClass' => $classCss);
+                usort($dynatree['children'], "order_dynatree");
                 $counter++;
                 $id = ( $properties['term_id']) ? $properties['term_id'] : $properties['id'];
                 if ($counter > $this->getDynatreeNumberItems($id,$this->collection_id)) {
@@ -684,6 +685,7 @@ class VisualizationModel extends CollectionModel {
     public function getChildrenDynatree($facet_id, $dynatree, $classCss = 'color4',$ordenation = 't.name ASC', $collection_id = null) {
         $counter = 0;
         $children = $this->getChildren($facet_id, $ordenation);
+	    usort($children, "order_dynatree");
         if (count($children) > 0) {
             foreach ($children as $child) {
                 $children_of_child = $this->getChildren($child->term_id,$ordenation);
@@ -1028,6 +1030,7 @@ class VisualizationModel extends CollectionModel {
      * Metodo reponsavel gerar a lista apos expan
      * Autor: Eduardo Humberto
      */
+
     function expand_alphabet_dynatree_category($collection_id, $key, $data) {
         $category_model = new CategoryModel;
         if (isset($data['hide_checkbox'])) {
@@ -1046,7 +1049,9 @@ class VisualizationModel extends CollectionModel {
 	    $classCss = ($classCss)?$classCss:'color4';
 
         $cont = 0;
+
         if (count($children) > 0) {
+	        usort($children, "order_dynatree");
             foreach ($children as $child) {
                 $cont++;
                 /*if( strtolower($array[1]) == 'a' ){
@@ -1076,6 +1081,7 @@ class VisualizationModel extends CollectionModel {
         }
         return $dynatree;
     }
+
 
     /**
      * @signature expand_alphabet_dynatree($key, $classCss)

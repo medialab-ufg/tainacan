@@ -281,6 +281,7 @@ class CategoryModel extends Model {
         }
 
         if (count($children) > 0 && count($children) < 30) {
+	        usort($children, "order_dynatree");
             foreach ($children as $child) {
                 $children_of_child = $this->getChildren($child->term_id);
                 if (count($children_of_child) > 0 || (!empty($children_of_child) && $children_of_child)) {// se tiver descendentes
@@ -409,6 +410,8 @@ class CategoryModel extends Model {
                     $dynatree[$dynatree_index_parent]['children'][] = array('title' => ucfirst($facet->name), 'key' => $facet->term_id, 'isLazy' => true, 'data' => $url, 'expand' => true,
                         'hideCheckbox' => $hide_checkbox, 'addClass' => $classCss, 'activate' => false, 'expand' => false);
                 }
+
+	            usort($dynatree[$dynatree_index_parent]['children'], "order_dynatree");
             }
         }
         return $dynatree;
@@ -439,6 +442,8 @@ class CategoryModel extends Model {
                     $dynatree[$dynatree_index_parent]['children'][] = array('title' => ucfirst($facet->name), 'key' => $facet->term_id, 'isLazy' => true, 'data' => $url, 'expand' => true,
                         'hideCheckbox' => $hide_checkbox, 'addClass' => $classCss, 'activate' => false, 'expand' => false);
                 }
+
+	            usort($dynatree[$dynatree_index_parent]['children'], "order_dynatree");
             }
         }
         return $dynatree;
@@ -471,6 +476,8 @@ class CategoryModel extends Model {
                     $dynatree[$dynatree_index_parent]['children'][] = array('title' => ucfirst($facet->name), 'key' => $facet->term_id, 'isLazy' => true, 'data' => $url, 'expand' => true,
                         'hideCheckbox' => $hide_checkbox, 'addClass' => $classCss, 'activate' => false, 'expand' => false);
                 }
+
+	            usort($dynatree[$dynatree_index_parent]['children'], "order_dynatree");
             }
         }
         return $dynatree;
@@ -502,6 +509,8 @@ class CategoryModel extends Model {
                     $dynatree[$dynatree_index_parent]['children'][] = array('title' => ucfirst($facet->name), 'key' => $facet->term_id, 'isLazy' => true, 'data' => $url, 'expand' => true,
                         'hideCheckbox' => $hide_checkbox, 'addClass' => $classCss, 'activate' => false, 'expand' => false);
                 }
+
+	            usort($dynatree[$dynatree_index_parent]['children'], "order_dynatree");
             }
         }
         return $dynatree;

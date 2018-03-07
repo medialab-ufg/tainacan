@@ -3957,3 +3957,54 @@ function add_helpText ($property, $this_ref)
 		$this_ref->hasTextHelper($property);
 	}
 }
+
+function order_dynatree($a, $b)
+{
+    if(isset($a->name))
+    {
+	    $title_a = ltrim($a->name, '0');
+	    $title_b = ltrim($b->name, '0');
+    }else{
+	    $title_a = ltrim($a['title'], '0');
+	    $title_b = ltrim($b['title'], '0');
+    }
+
+	$pattern = "/(\d+)/";
+
+	$a_array = preg_split($pattern, $title_a, -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
+	$b_array = preg_split($pattern, $title_b, -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
+
+	for($i = 0, $j = 0; $i < count($a_array) && $j < count($b_array); $i++, $j++)
+	{
+		if(is_numeric($a_array[$i]) && is_numeric($b_array[$j]))//Both are numbers
+		{
+			$a_int = intval($a_array[$i]);
+			$b_int = intval($b_array[$j]);
+
+			if($a_int < $b_int)
+			{
+				return -1;
+			}else if($b_int < $a_int)
+			{
+				return 1;
+			}
+		}else if(is_numeric($a_array[$i]) && !is_numeric($b_array[$j]))//Just A is a number
+		{
+			return -1;
+		}else if(!is_numeric($a_array[$i]) && is_numeric($b_array[$j]))//Just B is a number
+		{
+			return 1;
+		}/*else //None of them is a number, in other words, both are string
+			    {
+				    if($a_array[$i] !== $b_array[$j])
+				    {
+				    	$to_sort['a'] = $a_array[$i];
+				    	$to_sort['b'] = $b_array[$j];
+
+				    	sort($to_sort);
+				    }
+			    }*/
+	}
+
+	return 0; //They're equals
+}
