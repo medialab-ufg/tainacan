@@ -3962,11 +3962,11 @@ function order_dynatree($a, $b)
 {
     if(isset($a->name))
     {
-	    $title_a = ltrim($a->name, '0');
-	    $title_b = ltrim($b->name, '0');
+	    $title_a = $a->name;
+	    $title_b = $b->name;
     }else{
-	    $title_a = ltrim($a['title'], '0');
-	    $title_b = ltrim($b['title'], '0');
+	    $title_a = $a['title'];
+	    $title_b = $b['title'];
     }
 
 	$pattern = "/(\d+)/";
@@ -3994,16 +3994,7 @@ function order_dynatree($a, $b)
 		}else if(!is_numeric($a_array[$i]) && is_numeric($b_array[$j]))//Just B is a number
 		{
 			return 1;
-		}/*else //None of them is a number, in other words, both are string
-			    {
-				    if($a_array[$i] !== $b_array[$j])
-				    {
-				    	$to_sort['a'] = $a_array[$i];
-				    	$to_sort['b'] = $b_array[$j];
-
-				    	sort($to_sort);
-				    }
-			    }*/
+		}
 	}
 
 	return 0; //They're equals
