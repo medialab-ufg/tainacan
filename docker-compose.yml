@@ -1,16 +1,25 @@
-version: '2'
+version: '3'
+
 services:
   database:
     image: mysql
-    container_name: some-mysql
-    environment:
-      - MYSQL_ROOT_PASSWORD=my-secret-pw
-  web:
-    container_name: tainacan
-    image: tainacan:1
-    ports:
-     - "8080:80"
     volumes:
-     - /home/leo/devel/docker:/var/www/html/wp-content/themes/tainacan
-    links:
-     - database
+      - db_data:/var/lib/mysql
+    restart: always
+    env_file:
+      - docker-database.env
+
+  wordpress:
+    depends_on:
+      - database
+    image: wordpress:latest
+    ports:
+      - "8000:80"
+    restart: always
+    env_file:
+      - docker-wordpress.env
+    volumes:
+      - .:/var/www/html/wp-content/themes/tainacan
+
+volumes:
+  db_data:
