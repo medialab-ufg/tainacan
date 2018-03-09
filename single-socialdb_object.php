@@ -229,7 +229,7 @@ if (has_action('alter_page_item')) {
 			                                    break;
 		                                    default:
 			                                    //colocando o http
-			                                    if( strpos($metas['socialdb_object_content'][0],'http://') === false ||  strpos($metas['socialdb_object_content'][0],'https://') === false){
+			                                    if( strpos($metas['socialdb_object_content'][0],'http://') === false &&  strpos($metas['socialdb_object_content'][0],'https://') === false){
 				                                    $metas['socialdb_object_content'][0] = 'http://'.$metas['socialdb_object_content'][0];
 			                                    }
 
