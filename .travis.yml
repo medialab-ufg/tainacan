@@ -25,7 +25,8 @@ install:
 - composer install
 script: 
 after_success:
-- ssh l3p@medialab.ufg.br sh /home/l3p/atualiza_git/atualiza_dev_tainacan.sh
+- sshpass -p '$ssh_user_pass'  ssh l3p@medialab.ufg.br "sh /home/l3p/atualiza_git/atualiza_mapas.sh"
+#- ssh l3p@medialab.ufg.br sh /home/l3p/atualiza_git/atualiza_dev_tainacan.sh
 cache:
   directories: 
 notifications:
