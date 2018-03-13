@@ -11,9 +11,9 @@ matrix:
   - php: nightly
   fast_finish: true
 addons:
-  ssh_known_hosts: $host_server_tainacan
+  ssh_known_hosts: "$host_server_tainacan"
 before_install:
-- openssl aes-256-cbc -K $encrypted_9afa2311d8c3_key -iv $encrypted_9afa2311d8c3_iv
+- openssl aes-256-cbc -K $encrypted_02c37e8cba41_key -iv $encrypted_02c37e8cba41_iv
   -in deploy_rsa.enc -out deploy_rsa -d
 - eval "$(ssh-agent -s)"
 - chmod 600 deploy_rsa
@@ -23,15 +23,11 @@ before_install:
 install:
 - composer self-update
 - composer install
-script:
-#- "./vendor/bin/phpunit tests"
+script: 
 after_success:
 - ssh l3p@medialab.ufg.br sh /home/l3p/atualiza_git/atualiza_dev_tainacan.sh
 cache:
-  directories:
-#  - vendor
-#  - "$HOME/.cache/composer"
-#tMUdei Aqui
+  directories: 
 notifications:
   email:
     on_success: never
