@@ -11,7 +11,11 @@ matrix:
   - php: nightly
   fast_finish: true
 addons:
-  ssh_known_hosts: "$host_server_tainacan"
+- ssh_know_hosts:
+  - "$host_server_tainacan"
+apt:
+  packages:
+  - sshpass
 before_install:
 - openssl aes-256-cbc -K $encrypted_02c37e8cba41_key -iv $encrypted_02c37e8cba41_iv
   -in deploy_rsa.enc -out deploy_rsa -d
