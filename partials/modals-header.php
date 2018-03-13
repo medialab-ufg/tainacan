@@ -130,6 +130,44 @@ $col_controller = $_src_ . "/controllers/collection/collection_controller.php";
     </div>
 </div>
 
+<div class="modal fade" id="att-captions" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header"><!--Cabeçalho-->
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h3><?php _t("Attachements captions", "tainacan");?></h3>
+            </div><!--Fim cabeçalho-->
+
+            <div class="modal-body">
+                <div class="form-group">
+                    <form id="captions" method="post">
+                        <div class="to_copy" style="display: none;">
+                            <div class="row" style="margin-bottom: 1rem;">
+                                <div class="col-lg-4">
+                                    <img src="" class="img-thumbnail img-responsive">
+                                    <div class="item_name form-control"></div>
+                                </div>
+                                <div class="col-lg-8">
+                                    <textarea name="" class="form-control" rows="3" placeholder="<?php _e("Attachement caption", "tainacan");?>"></textarea>
+                                </div>
+                            </div>
+
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button id="save_captions" type="submit" form="captions" class="btn btn-primary pull-right">
+                    <?php _t("Save", "tainacan");?>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <?php
     do_action("tainacan_global_modals");
 ?>

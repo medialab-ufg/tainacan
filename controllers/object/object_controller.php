@@ -879,6 +879,18 @@ class ObjectController extends Controller {
             //ACTION FILES
             case 'list_files':
                 return $objectfile_model->list_files($data);
+                break;
+		    case 'add_captions':
+		    	foreach ($data as $obj_id => $val)
+			    {
+			    	if(is_numeric($obj_id))
+				    {
+				    	update_post_meta($obj_id, 'socialdb_thumbnail_caption', $val);
+				    }
+			    }
+
+			    return true;
+		    	break;
             case 'save_file':
                 return $objectfile_model->save_file($data);
             case 'delete_file':

@@ -162,7 +162,7 @@
                     if (file.type === ".exe") {
                         done("Error! Files of this type are not accepted");
                     }
-                    else { 
+                    else {
                         done(); 
                         set_attachments_valid(myDropzone.getAcceptedFiles().length);
                     }

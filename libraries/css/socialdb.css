@@ -741,3 +741,8 @@ a[href="#top"]:hover{
     padding-bottom: 0;
     padding-left: 0;
 }
+
+.item_name{
+    display: none;
+
+}

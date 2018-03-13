@@ -42,6 +42,8 @@ class ObjectFileModel extends Model {
                             $obj['name'] = $attachment->post_title;
                             $obj['ID'] = $attachment->ID;
                             $obj['size'] = filesize(get_attached_file($attachment->ID));
+                            $obj['thumbnail'] = wp_get_attachment_thumb_url($attachment->ID);
+                            $obj['caption'] = get_post_meta($attachment->ID, "socialdb_thumbnail_caption", true);
                             $result[] = $obj;
                         }
                     }

@@ -30,6 +30,8 @@ class FormItemAttachment extends FormItem {
                         </div>
                     </div>
                 </div>
+
+                <button type="button" id="edit-captions" class="btn btn-primary btn-xs pull-right" style="margin-bottom: 10px;"><?php _e("Edit attachement captions", "tainacan");?></button>
             </div>
          <?php
         $this->initScriptsAttachmentContainer($property, $item_id); ?>    
@@ -44,6 +46,24 @@ class FormItemAttachment extends FormItem {
      */
     public function initScriptsAttachmentContainer($property, $item_id) { ?>
         <script>
+            $("#captions").submit(function (event) {
+                let formData = new FormData();
+                $(this).find("textarea").each(function (index, element) {
+                    formData.append($(element).attr('name'), $(element).val());
+                });
+
+                formData.append('operation', 'add_captions');
+
+                event.preventDefault();
+                $.ajax({
+                    url: $('#src').val() + '/controllers/object/object_controller.php',
+                    type: 'POST', data: formData,
+                    processData: false, contentType: false
+                }).done(function( result ) {
+                    $("#att-captions").modal('hide');
+                });
+            });
+
             Dropzone.autoDiscover = false;
             var myDropzone = new Dropzone("#dropzone_form", {
                 addRemoveLinks: true,
@@ -56,7 +76,7 @@ class FormItemAttachment extends FormItem {
                     }
                 },
                 init: function () {
-                    thisDropzone = this;
+                    let thisDropzone = this;
                     this.on("removedfile", function (file) {
                         //    if (!file.serverId) { return; } // The file hasn't been uploaded
                         $.get($('#src').val() + '/controllers/object/object_controller.php?operation=delete_file&object_id=<?php echo $item_id ?>&file_name=' + file.name, function (data) {
@@ -68,25 +88,64 @@ class FormItemAttachment extends FormItem {
                             }
                         }); // Send the file id along
                     });
-                    $.get($('#src').val() + '/controllers/object/object_controller.php?operation=list_files&object_id=<?php echo $item_id ?>', function (data) {
-                        try {
-                            //var jsonObject = JSON.parse(data);
-                            $.each(data, function (key, value) {
-                                if (value.name !== undefined && value.name !== 0) {
-                                    var mockFile = {name: value.name, size: value.size};
-                                    thisDropzone.options.addedfile.call(thisDropzone, mockFile);
-                                }
-                            });
-                            //set_attachments_valid(thisDropzone.getAcceptedFiles().length);
-                        }
-                        catch (e) { }
+                    $("#edit-captions").click(function () {
+                        list_att(thisDropzone, true);
                     });
+
+                    list_att(thisDropzone);
                     this.on("success", function (file, message) {
                         file.id = message.trim();
                        });
                     },
                 url: $('#src').val() + '/controllers/object/object_controller.php?operation=save_file&object_id=<?php echo $item_id ?>',
             });
+
+            function list_att(thisDropzone, openModal = false) {
+                $.get($('#src').val() + '/controllers/object/object_controller.php?operation=list_files&object_id=<?php echo $item_id ?>', function (data) {
+                    try {
+                        if(openModal)
+                        {
+                            $("#captions").html($(".to_copy:first"));
+                        }
+                        $.each(data, function (key, value) {
+                            if (value.name !== undefined && value.name !== 0) {
+                                if(openModal === false)
+                                {
+                                    let mockFile = {name: value.name, size: value.size};
+                                    thisDropzone.options.addedfile.call(thisDropzone, mockFile);
+                                }else
+                                {
+                                    /*Add to modal*/
+                                    $(".to_copy:first").clone().insertAfter(".to_copy:last");
+                                    let last = $(".to_copy:last");
+                                    if(value.thumbnail !== false)
+                                    {
+                                        $(last).find("img").attr("src", value.thumbnail);
+                                    }else {
+                                        $(last).find("img").hide();
+                                        $(last).find(".item_name").text(value.name).show();
+                                    }
+
+                                    $(last).find("textarea").attr("name", value.ID);
+                                    if(value.caption.length > 0)
+                                    {
+                                        $(last).find("textarea").val(value.caption);
+                                    }
+
+                                    $(last).show();
+                                }
+                            }
+                        });
+                        //set_attachments_valid(thisDropzone.getAcceptedFiles().length);
+                    }
+                    catch (e) { }
+                });
+
+                if(openModal)
+                {
+                    $("#att-captions").modal('show');
+                }
+            }
         </script>
         <?php
     }
