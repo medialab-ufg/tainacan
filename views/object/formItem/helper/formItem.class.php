@@ -985,8 +985,9 @@ class FormItem extends Model {
                     hide_modal_main();
                     var json = JSON.parse(result);
                     if(json.ok) {
-                        showAlertGeneral(json.title,json.msg,json.type);
-                        window.location = '<?php echo get_the_permalink($this->collection_id) ?>';
+                        //showAlertGeneral(json.title,json.msg,json.type);
+                        //window.location = '<?php //echo get_the_permalink($this->collection_id) ?>';
+                        window.location = document.referrer;
                     } else {
                         showAlertGeneral(json.title,json.msg,json.type);
                     }

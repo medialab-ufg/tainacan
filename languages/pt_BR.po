@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: socialdb\n"
-"POT-Creation-Date: 2018-03-06 14:02-0300\n"
-"PO-Revision-Date: 2018-03-06 14:02-0300\n"
+"POT-Creation-Date: 2018-03-14 09:40-0300\n"
+"PO-Revision-Date: 2018-03-14 09:40-0300\n"
 "Last-Translator: Rodrigo de Oliveira <webmaster@rodrigodeoliveira.net>\n"
 "Language-Team: \n"
 "Language: pt_BR\n"
@@ -374,8 +374,8 @@ msgstr "Este nome não é permitido!"
 #: controllers/collection/collection_controller.php:65
 #: controllers/collection/collection_controller.php:68
 #: controllers/collection/collection_controller.php:82
-#: models/category/category_model.php:1145
-#: models/category/category_model.php:1305
+#: models/category/category_model.php:1154
+#: models/category/category_model.php:1314
 #: models/collection/collection_model.php:469
 #: models/collection/collection_model.php:951
 #: models/event/event_collection/event_collection_create_model.php:50
@@ -546,8 +546,8 @@ msgstr "Marca do Repositório"
 
 #: controllers/event/event_controller.php:126
 #: controllers/object/form_item_controller.php:258
-#: controllers/object/object_controller.php:1133
-#: models/category/category_model.php:1141
+#: controllers/object/object_controller.php:1145
+#: models/category/category_model.php:1150
 #: models/collection/collection_import_model.php:180
 #: models/collection/collection_model.php:465
 #: models/event/event_collection/event_collection_create_model.php:46
@@ -643,7 +643,7 @@ msgstr "Marca do Repositório"
 #: views/import/metatags/js/mapping_attributes_js.php:58
 #: views/import/metatags/js/mapping_attributes_js.php:60
 #: views/import/oaipmh/js/edit_maping_attributes_js.php:99
-#: views/object/formItem/helper/formItemAttachment.class.php:67
+#: views/object/formItem/helper/formItemAttachment.class.php:87
 #: views/object/formItemMultiple/formItemMultiple.class.php:645
 #: views/object/formItemMultiple/helper/formItemAttachment.class.php:67
 #: views/object/formItemMultiple/items/items.class.php:264
@@ -752,10 +752,10 @@ msgstr "Por favor, preencha o delimitador corretamente!"
 #: controllers/license/license_controller.php:24
 #: controllers/license/license_controller.php:45
 #: controllers/theme_options/theme_options_controller.php:65
-#: models/category/category_model.php:1118
-#: models/category/category_model.php:1124
-#: models/category/category_model.php:1252
-#: models/category/category_model.php:1276
+#: models/category/category_model.php:1127
+#: models/category/category_model.php:1133
+#: models/category/category_model.php:1261
+#: models/category/category_model.php:1285
 #: models/collection/collection_import_model.php:186
 #: models/event/event_object/event_object_create_model.php:101
 #: models/general/general_model.php:1918 models/general/general_model.php:1958
@@ -992,15 +992,15 @@ msgstr "Exibindo coleções:"
 msgid "Showing Items:"
 msgstr "Exibindo itens:"
 
-#: controllers/object/object_controller.php:956
+#: controllers/object/object_controller.php:968
 msgid "Edit items"
 msgstr "Editar vários itens"
 
-#: controllers/object/object_controller.php:1109
+#: controllers/object/object_controller.php:1121
 msgid "No Metadata Found"
 msgstr "Nenhum metadado encontrado"
 
-#: controllers/object/object_controller.php:1134
+#: controllers/object/object_controller.php:1146
 #: models/ranking/ranking_model.php:127
 msgid "Operation is successfully"
 msgstr "Operação realizada com sucesso"
@@ -1167,12 +1167,12 @@ msgstr "(Painel de edição)"
 #: functions.php:610 helpers/view_helper.php:424
 #: partials/admin/admin-categories.php:108 partials/admin/admin-events.php:307
 #: partials/admin/admin-events.php:342 partials/admin/admin-licenses.php:42
-#: partials/modals-header.php:91 views/category/list.php:135
-#: views/category/taxonomy_zone.php:76 views/collection/edit.php:1511
-#: views/collection/modals.php:41 views/collection/modals.php:111
-#: views/collection/modals.php:230 views/collection/modals.php:270
-#: views/collection/modals.php:673 views/design/edit.php:239
-#: views/event/list.php:298 views/event/list.php:333
+#: partials/modals-header.php:91 partials/modals-header.php:164
+#: views/category/list.php:135 views/category/taxonomy_zone.php:76
+#: views/collection/edit.php:1511 views/collection/modals.php:41
+#: views/collection/modals.php:111 views/collection/modals.php:230
+#: views/collection/modals.php:270 views/collection/modals.php:673
+#: views/design/edit.php:239 views/event/list.php:298 views/event/list.php:333
 #: views/export/oaipmh/mapping_attributes.php:38
 #: views/import/csv/add_mapping.php:25
 #: views/import/csv/edit_maping_attributes.php:69
@@ -1520,7 +1520,7 @@ msgstr "Miniatura"
 #: views/object/create_item_text.php:351 views/object/create_item_text.php:446
 #: views/object/edit_item_text.php:260 views/object/edit_item_text.php:554
 #: views/object/edit_item_text.php:756 views/object/file/list_file.php:20
-#: views/object/file/list_file.php:71
+#: views/object/file/list_file.php:77
 #: views/object/formItem/helper/formItem.class.php:729
 #: views/object/formItem/helper/formItemAttachment.class.php:11
 #: views/object/formItemMultiple/formItemMultiple.class.php:198
@@ -1852,7 +1852,7 @@ msgid "Click here to create a sub-category"
 msgstr "Clique aqui para criar uma subcategoria"
 
 #: helpers/log/log_helper.php:24 models/collection/collection_model.php:1107
-#: models/collection/visualization_model.php:621
+#: models/collection/visualization_model.php:622
 #: models/ranking/ranking_model.php:289 single-socialdb_object.php:335
 #: views/advanced_search/show_object_properties.php:33
 #: views/object/create.php:45 views/object/create_item_text.php:423
@@ -1915,7 +1915,7 @@ msgstr "Criar "
 
 #: helpers/mapping/mapping_helper.php:88 helpers/view_helper.php:89
 #: helpers/view_helper.php:109 models/collection/collection_model.php:1095
-#: models/collection/visualization_model.php:612
+#: models/collection/visualization_model.php:613
 #: models/ranking/ranking_model.php:283 single-socialdb_object.php:323
 #: views/advanced_search/show_object_properties.php:31
 #: views/object/create.php:32 views/object/create_item_text.php:414
@@ -2422,47 +2422,47 @@ msgstr "Esta categoria já existe!"
 msgid "Collection root category cannot be deleted"
 msgstr "Categoria raiz não pode ser deletada"
 
-#: models/category/category_model.php:395
+#: models/category/category_model.php:396
 msgid "Collection Categories"
 msgstr "Categorias de Coleção"
 
-#: models/category/category_model.php:425
+#: models/category/category_model.php:428
 msgid "User Categories"
 msgstr "Categorias do Usuário"
 
-#: models/category/category_model.php:456
+#: models/category/category_model.php:461
 msgid "Shared Categories"
 msgstr "Categorias Compartilhadas"
 
-#: models/category/category_model.php:488 views/category/js/list_js.php:286
+#: models/category/category_model.php:495 views/category/js/list_js.php:286
 msgid "Public Categories"
 msgstr "Categorias Públicas"
 
-#: models/category/category_model.php:1119
+#: models/category/category_model.php:1128
 msgid "Xml unformated"
 msgstr "XML não formatado "
 
-#: models/category/category_model.php:1125
+#: models/category/category_model.php:1134
 msgid "File corrupted"
 msgstr "Arquivo corrompido"
 
-#: models/category/category_model.php:1142
+#: models/category/category_model.php:1151
 msgid " successfully selected!"
 msgstr "selecionado com sucesso!"
 
-#: models/category/category_model.php:1146
+#: models/category/category_model.php:1155
 msgid "This category has no category children"
 msgstr "Esta categoria não tem categorias filhas"
 
-#: models/category/category_model.php:1251
+#: models/category/category_model.php:1260
 msgid "Category name is empty."
 msgstr "Nome da categoria está vazio"
 
-#: models/category/category_model.php:1275
+#: models/category/category_model.php:1284
 msgid "There is a category with this name and this parent"
 msgstr "Há categorias com este nome e com este pai"
 
-#: models/category/category_model.php:1304
+#: models/category/category_model.php:1313
 msgid ""
 "There is a category with this name in this hierarchy, are you sure to create "
 "another? Cancel edit the category, ok creates the new one."
@@ -2515,7 +2515,7 @@ msgid "You are not allowed to access this collection!"
 msgstr "Você não tem permissão para acessar esta coleção!"
 
 #: models/collection/collection_model.php:1098
-#: models/collection/visualization_model.php:615
+#: models/collection/visualization_model.php:616
 #: models/ranking/ranking_model.php:285 single-socialdb_object.php:326
 #: views/advanced_search/show_object_properties.php:32
 #: views/object/create.php:41 views/object/create_item_text.php:420
@@ -2530,7 +2530,7 @@ msgid "Image"
 msgstr "Imagem"
 
 #: models/collection/collection_model.php:1101
-#: models/collection/visualization_model.php:618
+#: models/collection/visualization_model.php:619
 #: models/ranking/ranking_model.php:287 single-socialdb_object.php:332
 #: views/advanced_search/show_object_properties.php:34
 #: views/object/create.php:37 views/object/create_item_text.php:417
@@ -2545,7 +2545,7 @@ msgid "Video"
 msgstr "Vídeo"
 
 #: models/collection/collection_model.php:1104
-#: models/collection/visualization_model.php:624
+#: models/collection/visualization_model.php:625
 #: models/ranking/ranking_model.php:291 single-socialdb_object.php:329
 #: views/advanced_search/show_object_properties.php:35
 #: views/object/create.php:49 views/object/create_item_text.php:426
@@ -2560,7 +2560,7 @@ msgid "Audio"
 msgstr "Áudio"
 
 #: models/collection/collection_model.php:1110
-#: models/collection/visualization_model.php:627
+#: models/collection/visualization_model.php:628
 #: models/ranking/ranking_model.php:293 single-socialdb_object.php:338
 #: views/advanced_search/show_object_properties.php:36
 #: views/object/create.php:53 views/object/create_item_text.php:429
@@ -2607,30 +2607,30 @@ msgstr "Modelos do Tainacan"
 msgid "Collection default"
 msgstr "Coleção padrão"
 
-#: models/collection/visualization_model.php:523
-#: models/collection/visualization_model.php:546
-#: models/collection/visualization_model.php:569
-#: models/collection/visualization_model.php:699
-#: models/collection/visualization_model.php:778
+#: models/collection/visualization_model.php:524
+#: models/collection/visualization_model.php:547
+#: models/collection/visualization_model.php:570
+#: models/collection/visualization_model.php:701
+#: models/collection/visualization_model.php:780
 msgid "See more"
 msgstr "Veja mais"
 
-#: models/collection/visualization_model.php:648
+#: models/collection/visualization_model.php:649
 #: models/ranking/ranking_model.php:300
 msgid "Internal"
 msgstr "Interno"
 
-#: models/collection/visualization_model.php:651
+#: models/collection/visualization_model.php:652
 #: models/ranking/ranking_model.php:302
 msgid "External"
 msgstr "Externo"
 
-#: models/collection/visualization_model.php:1485
+#: models/collection/visualization_model.php:1491
 #: models/search/search_model.php:196
 msgid "Ranking of colaborations"
 msgstr "Ranking de Colaborações"
 
-#: models/collection/visualization_model.php:1487
+#: models/collection/visualization_model.php:1493
 #: models/search/search_model.php:198 models/search/search_model.php:325
 #: views/search/edit.php:203
 msgid "Notifications"
@@ -5657,6 +5657,14 @@ msgstr "Aguarde, por favor..."
 msgid "Change file"
 msgstr "Alterar arquivo"
 
+#: partials/modals-header.php:140
+msgid "Attachments captions"
+msgstr "Legendas dos anexos"
+
+#: partials/modals-header.php:153
+msgid "Attachment caption"
+msgstr "Legenda do anexo"
+
 #: partials/setup-header.php:45 views/search/js/single_js.php:430
 msgid "This item has been removed, redirecting to collection home page! "
 msgstr "Este item foi removido, redirecionando para página da coleção!"
@@ -7964,7 +7972,11 @@ msgstr "Salvo em "
 msgid "Required field"
 msgstr "Campo obrigatório"
 
-#: views/object/formItem/helper/formItemAttachment.class.php:65
+#: views/object/formItem/helper/formItemAttachment.class.php:34
+msgid "Edit attachment captions"
+msgstr "Editar legendas dos anexos"
+
+#: views/object/formItem/helper/formItemAttachment.class.php:85
 #: views/object/formItem/helper/formItemThumbnail.class.php:80
 #: views/object/formItemMultiple/helper/formItemAttachment.class.php:65
 #: views/object/formItemMultiple/helper/formItemThumbnail.class.php:80
@@ -7980,7 +7992,7 @@ msgstr "Campo obrigatório"
 msgid "Atention!"
 msgstr "Atenção!"
 
-#: views/object/formItem/helper/formItemAttachment.class.php:65
+#: views/object/formItem/helper/formItemAttachment.class.php:85
 #: views/object/formItemMultiple/helper/formItemAttachment.class.php:65
 #: views/object/formItemMultiple/items/items.class.php:462
 #: views/object/js/create_item_text_js.php:167
@@ -7993,7 +8005,7 @@ msgstr "Atenção!"
 msgid "An error ocurred, File already removed or corrupted!"
 msgstr "Ocorreu um erro, arquivo já foi removido ou está corrompido!"
 
-#: views/object/formItem/helper/formItemAttachment.class.php:67
+#: views/object/formItem/helper/formItemAttachment.class.php:87
 #: views/object/formItemMultiple/helper/formItemAttachment.class.php:67
 #: views/object/formItemMultiple/items/items.class.php:464
 #: views/object/js/create_item_text_js.php:169
