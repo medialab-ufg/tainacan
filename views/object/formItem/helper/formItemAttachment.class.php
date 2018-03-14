@@ -31,7 +31,7 @@ class FormItemAttachment extends FormItem {
                     </div>
                 </div>
 
-                <button type="button" id="edit-captions" class="btn btn-primary btn-xs pull-right" style="margin-bottom: 10px;"><?php _e("Edit attachement captions", "tainacan");?></button>
+                <button type="button" id="edit-captions" class="btn btn-primary btn-xs pull-right" style="margin-bottom: 10px;"><?php _e("Edit attachment captions", "tainacan");?></button>
             </div>
          <?php
         $this->initScriptsAttachmentContainer($property, $item_id); ?>    
@@ -136,15 +136,14 @@ class FormItemAttachment extends FormItem {
                                 }
                             }
                         });
-                        //set_attachments_valid(thisDropzone.getAcceptedFiles().length);
+
+                        if(openModal)
+                        {
+                            $("#att-captions").modal('show');
+                        }
                     }
                     catch (e) { }
                 });
-
-                if(openModal)
-                {
-                    $("#att-captions").modal('show');
-                }
             }
         </script>
         <?php

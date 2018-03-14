@@ -744,5 +744,9 @@ a[href="#top"]:hover{
 
 .item_name{
     display: none;
+}
 
+.att-caption{
+    color: black;
+    white-space: pre-wrap;
 }

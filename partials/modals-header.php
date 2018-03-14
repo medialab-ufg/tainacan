@@ -137,7 +137,7 @@ $col_controller = $_src_ . "/controllers/collection/collection_controller.php";
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
-                <h3><?php _t("Attachements captions", "tainacan");?></h3>
+                <h3><?php _t("Attachments captions", "tainacan");?></h3>
             </div><!--Fim cabeçalho-->
 
             <div class="modal-body">
@@ -150,7 +150,7 @@ $col_controller = $_src_ . "/controllers/collection/collection_controller.php";
                                     <div class="item_name form-control"></div>
                                 </div>
                                 <div class="col-lg-8">
-                                    <textarea name="" class="form-control" rows="3" placeholder="<?php _e("Attachement caption", "tainacan");?>"></textarea>
+                                    <textarea name="" class="form-control" rows="3" placeholder="<?php _e("Attachment caption", "tainacan");?>"></textarea>
                                 </div>
                             </div>
 
