@@ -6,24 +6,33 @@ e este projeto adere para [Semantic Versioning](http://semver.org/spec/v2.0.0.ht
 
 ## [Unreleased]
 
-## [0.8]
+## [0.8] - 2018-03-18
 ### Adicionado
-- Adicionar na home do layout a opção de defnição de n° de colunas na exibição dos metadados na home do item
+- Opção para busca no cabeçalho
+- Link para visualizar o item do tipo imagem na resolução original
+- Opção para definir a imagem raiz apos transformar um item no tipo imagem
+- Legendas nos anexos
 
 ### Modificado
-- Padronizar a estrutura dos metadados de uma coleção com os do repositório geral
+- Interface de busca avançada
+- Seleção de itens em massa
+- Posição do botão 'Salvar' metadado na home do item
+- Margem da caixa de opções do item na home do item
 
 ### Corrigido
-- Apos deletar uma coleção e clicar na 'Lixeira' em tainacan-coleções, ela aparece mas não é possível restaurar a coleção ou elimina-la para sempre
-- Limpar buscar de um metadado de relacionamento na submissão de item limpa todos os campos do formulário
-- Permitir alterar o arquivo raiz ex. '.pdf e .jpg' na interface do tainacan. Para evitar que ter que subir de novo um item
-- Permitir alterar o arquivo raiz ex. '.pdf e .jpg' na interface do tainacan. Para evitar que ter que subir de novo um item
-- Corrigir as ações de tags nas home da coleção e item
-- Corrigir a incompatibilidade da exportação de CSV do tainacan
+- Não apresentação dos metadados na home do item
+- Duplicação de itens em outras coleções
+- Duplicação de valores na edição de itens na home do item
+- Inserção de anexos
+- Filtros de categorias na busca avançada
+- Aprensetação das opções da lixeira no item ao avançar a pagina
+- Remoção de links nos valores e inserção de datas nos metadados compostos
+- Remoção do manual tainacan e substituição por link para Wiki
 
 ### Removido
 
 ### Obsoleto
+- Ajuda
 
 ## [0.7] - 2018-02-01
 ### Adicionado
@@ -129,8 +138,8 @@ e este projeto adere para [Semantic Versioning](http://semver.org/spec/v2.0.0.ht
 ## [0.3] - 2017-04-12
 
 [Unreleased]: https://github.com/medialab-ufg/tainacan/compare/v0.8...HEAD
-[0.8]:https://github.com/medialab-ufg/tainacan/compare/vv0.7...v0.8
-[0.7]: https://github.com/medialab-ufg/tainacan/compare/v0.6.1...vv0.7
+[0.8]: https://github.com/medialab-ufg/tainacan/compare/v0.7...v0.8
+[0.7]: https://github.com/medialab-ufg/tainacan/compare/v0.6.1...v0.7
 [0.6.1]: https://github.com/medialab-ufg/tainacan/compare/v0.6...v0.6.1
 [0.6]: https://github.com/medialab-ufg/tainacan/compare/v0.5...v0.6
 [0.5]: https://github.com/medialab-ufg/tainacan/compare/v0.4...v0.5
