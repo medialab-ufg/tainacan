@@ -28,6 +28,9 @@ e este projeto adere para [Semantic Versioning](http://semver.org/spec/v2.0.0.ht
 - Aprensetação das opções da lixeira no item ao avançar a pagina
 - Remoção de links nos valores e inserção de datas nos metadados compostos
 - Remoção do manual tainacan e substituição por link para Wiki
+- Redirecionamento ao editar um item
+- Links de itens exibidos na home de eventos da coleção
+- Metadados de relacionamento em nivel de repositorio
 
 ### Removido
 
