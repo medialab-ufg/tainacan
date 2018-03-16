@@ -81,7 +81,7 @@ if (has_action('footer_sidebar_item')) {
                     <?php if(isset($attachments['image']) && is_array($attachments['image'])): ?>
                         <?php foreach ($attachments['image'] as $image): ?>
                             <div id="div_show_image_modal">
-                                <img style="max-height: 100%;" src="<?= $image->guid ?>" class="img-responsive"/>
+                                <img style="max-height: 100%; max-width: 100%" src="<?= $image->guid ?>" class="img-responsive"/>
                             </div>
                         <?php endforeach; ?>
                     <?php endif; ?>
