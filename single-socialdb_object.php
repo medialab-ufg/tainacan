@@ -151,9 +151,10 @@ if (has_action('alter_page_item')) {
                                             break;
                                         case 'image':
                                             if (get_the_post_thumbnail($post->ID, 'thumbnail')) {
+                                                $url_large = wp_get_attachment_image_src($metas['socialdb_object_content'][0], "large")[0];
                                                 $style_watermark = ($has_watermark ? 'style="background:url(' . $url_watermark . ') no-repeat center; background-size: contain;"' : '');
                                                 $opacity_watermark = ($has_watermark ? 'opacity: 0.80;' : '');
-                                                $content = '<div style="text-align:center; display: block; max-height: 1000px"' . $style_watermark . '> <a href="'.$url.'" target="_blank"><img title="'.__("See original image", "tainacan").'" style="max-height: 100%; width: auto; height: auto;"class="img-responsive img-thumbnail" src="' . $url . '"></a></div>';
+                                                $content = '<div style="text-align:center; display: block; max-height: 1000px"' . $style_watermark . '> <a href="'.$url.'" target="_blank"><img title="'.__("See original image", "tainacan").'" style="max-height: 100%; width: auto; height: auto;"class="img-responsive img-thumbnail" src="' . $url_large . '"></a></div>';
                                             }
                                             break;
                                         case 'video':
