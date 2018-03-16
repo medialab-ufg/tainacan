@@ -32,12 +32,13 @@ if (has_action('header_sidebar_item')) {
             $counter = 0;
             foreach ($attachments['posts'] as $attachment):
                 $attachment_url = wp_get_attachment_url( $attachment->ID );
+                $url_large = wp_get_attachment_image_src($attachment->ID, "large")[0];
                 $attachment_caption = wp_trim_words(get_post_meta($attachment->ID, 'socialdb_thumbnail_caption', true), 15);
 
                 echo '<div class="col-md-12" style="display:block; margin-bottom: 20px;">';
                     if(wp_attachment_is_image( $attachment->ID )): ?>
                         <a onclick="showSlideShow('<?php echo $counter ?>')" class="btn btn-default btn-sm" style="border: none; display: block">
-                            <img src="<?php echo $attachment_url ?>" alt="" class="img-responsive" style="display: inline-block; max-height: 180px;"/>
+                            <img src="<?php echo $url_large ?>" alt="" class="img-responsive" style="display: inline-block; max-height: 180px;"/>
                             <p class="att-caption">
                                 <?php echo $attachment_caption; ?>
                             </p>
