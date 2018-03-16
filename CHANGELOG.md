@@ -141,8 +141,8 @@ e este projeto adere para [Semantic Versioning](http://semver.org/spec/v2.0.0.ht
 ## [0.3] - 2017-04-12
 
 [Unreleased]: https://github.com/medialab-ufg/tainacan/compare/v0.8...HEAD
-[0.8]: https://github.com/medialab-ufg/tainacan/compare/v0.7...v0.8
-[0.7]: https://github.com/medialab-ufg/tainacan/compare/v0.6.1...v0.7
+[0.8]: https://github.com/medialab-ufg/tainacan/compare/vv0.7...v0.8
+[0.7]: https://github.com/medialab-ufg/tainacan/compare/v0.6.1...vv0.7
 [0.6.1]: https://github.com/medialab-ufg/tainacan/compare/v0.6...v0.6.1
 [0.6]: https://github.com/medialab-ufg/tainacan/compare/v0.5...v0.6
 [0.5]: https://github.com/medialab-ufg/tainacan/compare/v0.4...v0.5
