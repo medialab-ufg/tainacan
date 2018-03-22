@@ -29,7 +29,7 @@
                 </div>
             </div><!-- .widget-area -->
 
-            <!--Tainacan version: 0.7-->
+            <!--Tainacan version: 0.8-->
         </footer>
     <?php endif; ?>
 

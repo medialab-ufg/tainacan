@@ -13,6 +13,9 @@
 
     .modal-dialog {
       width: 980px;
+      @media screen and (max-width: 979px) {
+        width: 700px;
+      }
       .modal-content {
         max-height: none !important;
 
