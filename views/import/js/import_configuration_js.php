@@ -628,7 +628,7 @@
         }).done(function (result) {
             hide_modal_main();
             listTableCSV();
-            var jsonObject = jQuery.parseJSON(result);
+            let jsonObject = jQuery.parseJSON(result);
             if (jsonObject) {
                 showAlertGeneral('<?php _e('Attention', 'tainacan') ?>', '<?php _e('All objects imported succesfully!', 'tainacan') ?>', 'success');
             } else {

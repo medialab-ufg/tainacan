@@ -599,7 +599,7 @@ class ExportModel extends Model {
             if ($facets) {
                 foreach ($facets as $facet) {
                     $term = get_term_by('id', $facet, 'socialdb_category_type');
-                    if(mb_detect_encoding($term->name) !== 'UTF-8')
+                    if(!empty($term->name) && mb_detect_encoding($term->name) !== 'UTF-8')
                     {
 	                    $term->name = utf8_encode($term->name);
                     }

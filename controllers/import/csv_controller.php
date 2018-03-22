@@ -49,10 +49,7 @@ class CsvController extends Controller {
                 break;
             case "do_import_csv":
                 $data = $csv_model->do_import_csv($data);
-
                 return json_encode($data);
-            // case 'saving_data':
-            // return json_encode($oaipmh_model->saving_data($data));
             case 'import_list_set':
                 $oaipmh_model->import_list_set($data['url'], $data['collection_id']);
                 return true;
