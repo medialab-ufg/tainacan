@@ -162,41 +162,41 @@ class AdvancedSearchController extends Controller {
             case 'redirect_collection':
                 $data['url'] = get_permalink($data['collection_id']);
                 return json_encode($data);
-              case 'do_advanced_search_collection':
-                $wpquery_model = new WPQueryModel();
-                $return = array();
-                // Se estiver buscando em todas as colecoes
-                if($data['advanced_search_collection']==get_option('collection_root_id')) {
-                        $args_object = $wpquery_model->advanced_searched_filter($data);
-                        $paramters_object = $wpquery_model->do_filter($args_object);
-                        $args_collection = $wpquery_model->advanced_searched_filter($data);
-                        $args_collection['collection_id'] = $data['advanced_search_collection'];
-                        $paramters_collection = $wpquery_model->do_filter($args_collection);
-                        //$loop_objects = new WP_Query($paramters_object);
-                        $loop_collections = new WP_Query($paramters_collection);
-                        $loop_objects = new WP_Query($paramters_object);
-                } else{
-                        $args_object = $wpquery_model->advanced_searched_filter($data);
-                        $paramters_object = $wpquery_model->do_filter($args_object);
-                        $loop_objects = new WP_Query($paramters_object);
-                }
-                
-                if ($paramters_object) : 
-                    $return['args_item'] = serialize($args_object);
-                    $return['has_item'] = $loop_objects->have_posts();
-                endif;
-                if ($paramters_collection) : 
-                    $return['args_collection'] =  serialize($args_collection);
-                    $return['has_collection'] = $loop_collections->have_posts();
-                endif;
-                //if($data['advanced_search_title']){
-                // Feito: Mudar advanced_search_general para advanced_search_title resolve o problema de registro das buscas
-                    $logData = ['collection_id' => $data['collection_id'], 'event_type' => 'advanced_search', 'event' => $data['advanced_search_title'] ];
-                    Log::addLog($logData);
-                //}
-                //$return['page'] = $this->render(dirname(__FILE__) . '../../../views/advanced_search/list_advanced_search.php', $data);
-                $return['data'] =  $data['data'];
-                return json_encode($return);    
+			case 'do_advanced_search_collection':
+				$wpquery_model = new WPQueryModel();
+				$return = array();
+				// Se estiver buscando em todas as colecoes
+				if($data['advanced_search_collection'] == get_option('collection_root_id')) {
+			        $args_object = $wpquery_model->advanced_searched_filter($data);
+			        $paramters_object = $wpquery_model->do_filter($args_object);
+			        $args_collection = $wpquery_model->advanced_searched_filter($data);
+			        $args_collection['collection_id'] = $data['advanced_search_collection'];
+			        $paramters_collection = $wpquery_model->do_filter($args_collection);
+			        //$loop_objects = new WP_Query($paramters_object);
+			        $loop_collections = new WP_Query($paramters_collection);
+			        $loop_objects = new WP_Query($paramters_object);
+				} else{
+			        $args_object = $wpquery_model->advanced_searched_filter($data);
+			        $paramters_object = $wpquery_model->do_filter($args_object);
+			        $loop_objects = new WP_Query($paramters_object);
+				}
+
+				if ($paramters_object) :
+				    $return['args_item'] = serialize($args_object);
+				    $return['has_item'] = $loop_objects->have_posts();
+				endif;
+				if ($paramters_collection) :
+				    $return['args_collection'] =  serialize($args_collection);
+				    $return['has_collection'] = $loop_collections->have_posts();
+				endif;
+				//if($data['advanced_search_title']){
+				// Feito: Mudar advanced_search_general para advanced_search_title resolve o problema de registro das buscas
+				    $logData = ['collection_id' => $data['collection_id'], 'event_type' => 'advanced_search', 'event' => $data['advanced_search_title'] ];
+				    Log::addLog($logData);
+				//}
+				//$return['page'] = $this->render(dirname(__FILE__) . '../../../views/advanced_search/list_advanced_search.php', $data);
+				$return['data'] =  $data['data'];
+				return json_encode($return);
             case 'get_categories_properties':  
                 $return = $object_model->show_object_properties($data);
                 $return['property_searched_id'] = $data['property_searched_id'];
