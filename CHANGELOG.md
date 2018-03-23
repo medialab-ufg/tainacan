@@ -31,6 +31,7 @@ e este projeto adere para [Semantic Versioning](http://semver.org/spec/v2.0.0.ht
 - Redirecionamento ao editar um item
 - Links de itens exibidos na home de eventos da coleção
 - Metadados de relacionamento em nivel de repositorio
+- Redicionamento dos slides referente aos anexos na home do item
 
 ### Removido
 
