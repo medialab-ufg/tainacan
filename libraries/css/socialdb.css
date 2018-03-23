@@ -750,3 +750,10 @@ a[href="#top"]:hover{
     color: black;
     white-space: pre-wrap;
 }
+
+.cover-home{
+    background-size: cover;
+    background-repeat: no-repeat;
+    min-height: 380px;
+    background-position: center;
+}

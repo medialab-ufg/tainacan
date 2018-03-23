@@ -3,7 +3,7 @@ $front = [ 'config' => get_option('show_on_front'), 'page' => get_option('page_o
 
 get_header();
 ?>
-    <header class="custom-header" style="<?php echo home_header_bg($socialdb_logo) ?>">
+    <header class="custom-header cover-home" style="<?php echo home_header_bg($socialdb_logo) ?>">
         <div class="menu-transp-cover"></div>
         <?php
         if (has_action('alter_home_page'))
