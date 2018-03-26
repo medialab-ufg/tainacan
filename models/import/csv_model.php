@@ -151,6 +151,12 @@ class CsvModel extends Model {
                         if ($metadata['socialdb_entity'] !== '') {
                             $field_value = $lines[$i][str_replace('csv_p', '', $metadata['value'])];
                             if ($metadata['socialdb_entity'] == 'post_title'):
+	                            wp_update_post(
+		                            array(
+			                            'ID' => $object_id,
+			                            'post_parent' => $data['collection_id']
+		                            )
+	                            );
                                 update_post_title($object_id, $this->codification_value((string)$field_value,$code));
                                 $this->set_common_field_values($object_id, 'title', $this->codification_value($field_value,$code));
                             elseif ($metadata['socialdb_entity'] == 'post_content'):
@@ -242,31 +248,36 @@ class CsvModel extends Model {
                             elseif (strpos($metadata['socialdb_entity'], "objectproperty_") !== false):
 	                            $trans = array("objectproperty_" => "");
                                 $id = strtr($metadata['socialdb_entity'], $trans);
-                                //add_post_meta($object_id, 'socialdb_property_' . $id . '', $this->insertPropertyObjectItem($id,$this->codification_value($field_value,$code)));
-	                            $class = new ObjectSaveValuesModel();
-	                            $class->saveValue($object_id,
-		                            $id,
-		                            0,
-		                            "object",
-		                            0,
-		                            $this->insertPropertyObjectItem($id,$this->codification_value($field_value,$code)),
-		                            ( false )
-	                            );
+                                $value = $this->insertPropertyObjectItem($id,$this->codification_value($field_value,$code));
+                                if(!empty($value))
+                                {
+	                                $class = new ObjectSaveValuesModel();
+	                                $class->saveValue($object_id,
+		                                $id,
+		                                0,
+		                                "object",
+		                                0,
+		                                $value,
+		                                ( false )
+	                                );
+                                };
                             elseif (strpos($metadata['socialdb_entity'], "dataproperty_") !== false):
 	                            $trans = array("dataproperty_" => "");
                                 $id = strtr($metadata['socialdb_entity'], $trans);
                                 $value = $this->codification_value($field_value,$code);
-
-	                            $class = new ObjectSaveValuesModel();
-	                            $class->saveValue($object_id,
-		                            $id,
-		                            0,
-		                            "data",
-		                            0,
-		                            $value,
-		                            ( false )
-	                            );
-                                $this->set_common_field_values($object_id, "socialdb_property_$id", $value);
+                                if(!empty($value))
+                                {
+	                                $class = new ObjectSaveValuesModel();
+	                                $class->saveValue($object_id,
+		                                $id,
+		                                0,
+		                                "data",
+		                                0,
+		                                $value,
+		                                ( false )
+	                                );
+	                                $this->set_common_field_values($object_id, "socialdb_property_$id", $value);
+                                }
                             endif;
                         }
                     }

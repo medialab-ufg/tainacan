@@ -262,11 +262,12 @@ class VisualizationModel extends CollectionModel {
         ksort($facets);
         foreach ($facets as &$facet_id) {
             $facet = get_term_by('id', $facet_id, 'socialdb_category_type');
+
             $ancestors = get_ancestors($facet->term_id,'socialdb_category_type');
             $skip = false;
             foreach ($ancestors as $value) {
                if(in_array($value, $facets)){
-                   $skip = true;
+               	    $skip = true;
                }
             }
 
@@ -306,12 +307,13 @@ class VisualizationModel extends CollectionModel {
                 $widget = get_post_meta($data['collection_id'], 'socialdb_collection_facet_'.$facet_id.'_widget', true);
 
                 $type = $propertyModel->get_property_type($facet_id); // pego o tipo da propriedade;
+
                 //METADADOS FIXOS
-                if ('socialdb_property_fixed_type'==$facet->slug) {
+                if ('socialdb_property_fixed_type' == $facet->slug) {
                     $classCss = get_post_meta($data['collection_id'], 'socialdb_collection_facet_' . $facet_id . '_color', true);
                     $dynatree[] = array('title' => $facet->name, 'key' => 'socialdb_object_dc_type_facet', 'isLazy' => true, 'data' => $url, 'expand' => true, 'hideCheckbox' => true, 'addClass' => $classCss);
                     $dynatree[end(array_keys($dynatree))] = $this->getTypeDynatree($data['collection_id'], $dynatree[end(array_keys($dynatree))], $classCss);
-                }elseif ('socialdb_property_fixed_title'==$facet->slug&&$widget=='tree') {
+                }elseif ('socialdb_property_fixed_title' == $facet->slug && $widget == 'tree') {
                    $classCss = get_post_meta($data['collection_id'], 'socialdb_collection_facet_' . $facet_id . '_color', true);
                     $dynatree[] = array('title' =>$facet->name, 'key' => 'socialdb_object_dc_type_facet', 'isLazy' => true, 'data' => $url, 'expand' => true, 'hideCheckbox' => true, 'addClass' => $classCss);
                     $property['metas']['socialdb_property_object_category_id'] = $this->get_category_root_of($data['collection_id']);
@@ -320,19 +322,19 @@ class VisualizationModel extends CollectionModel {
                     $dynatree[end(array_keys($dynatree))] = $this->getPropertyRelDynatree($property, $dynatree[end(array_keys($dynatree))], $classCss);
                 }
                 // para o formato
-                elseif ('socialdb_property_fixed_from'==$facet->slug) {
+                elseif ('socialdb_property_fixed_from' == $facet->slug) {
                     $classCss = get_post_meta($data['collection_id'], 'socialdb_collection_facet_' . $facet_id . '_color', true);
                     $dynatree[] = array('title' =>$facet->name, 'key' => 'socialdb_object_from_facet', 'isLazy' => true, 'data' => $url, 'expand' => true, 'hideCheckbox' => true, 'addClass' => $classCss);
                     $dynatree[end(array_keys($dynatree))] = $this->getFormatDynatree($data['collection_id'], $dynatree[end(array_keys($dynatree))], $classCss);
                 }
                 //fonte dos dados
-                elseif ('socialdb_property_fixed_source'==$facet->slug) {
+                elseif ('socialdb_property_fixed_source' == $facet->slug) {
                     $classCss = get_post_meta($data['collection_id'], 'socialdb_collection_facet_' . $facet_id . '_color', true);
                     $dynatree[] = array('title' => $facet->name, 'key' => 'socialdb_object_from_facet', 'isLazy' => true, 'data' => $url, 'expand' => true, 'hideCheckbox' => true, 'addClass' => $classCss);
                     $dynatree[end(array_keys($dynatree))] = $this->getSourceDynatree($data['collection_id'], $dynatree[end(array_keys($dynatree))], $classCss);
                 }
                 //tags
-                elseif ('socialdb_property_fixed_tags'==$facet->slug && ( $widget=='tree')) {
+                elseif ('socialdb_property_fixed_tags' == $facet->slug && ( $widget=='tree')) {
                     //tags
                     if($labels_collection){
                         $array = unserialize($labels_collection);
@@ -344,7 +346,7 @@ class VisualizationModel extends CollectionModel {
                     $dynatree[end(array_keys($dynatree))] = $this->getTagRelDynatree($data['collection_id'], $dynatree[end(array_keys($dynatree))], 'tag_img');
                 }
                 //licencas dos itens
-                elseif ('socialdb_property_fixed_license'==$facet->slug) {
+                elseif ('socialdb_property_fixed_license' == $facet->slug) {
                     $classCss = get_post_meta($data['collection_id'], 'socialdb_collection_facet_socialdb_license_id_color', true);
                     $dynatree[] = array('title' => $facet->name, 'key' => 'socialdb_license_id_facet_tag', 'isLazy' => true, 'data' => $url, 'expand' => true, 'hideCheckbox' => true, 'addClass' => $classCss);
                     $dynatree[end(array_keys($dynatree))] = $this->getLicensesDynatree($data['collection_id'], $dynatree[end(array_keys($dynatree))], $classCss);
