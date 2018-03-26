@@ -133,22 +133,26 @@ class MappingController extends Controller {
                 }                
                 $mapping_model->save_delimiter_csv($mapping_id, $delimiter, $multi_values, $hierarchy, $import_url_external, $csv_has_header,$code);
                 $files = $mapping_model->show_files_csv($mapping_id);
-                foreach ($files as $file) {
-                    //$name_file =  wp_get_attachment_link($file->ID, 'thumbnail', false, true);
-                    $name_file = wp_get_attachment_url($file->ID);
-                    $type = pathinfo($name_file);
-                    if($type['extension']=='zip'){
-                       $data['csv_data'] = $mapping_model->get_csv_in_zip_file($name_file, $delimiter);
-                    }else{
-                        $objeto = fopen($name_file, 'r');
-                        if(strpos($name_file, 'socialdb_csv')!==false && strpos($name_file, 'tainacan_csv')!==false)
-                            $csv_data = fgetcsv($objeto, 0, $delimiter);
-                        while(($csv_data = fgetcsv($objeto, 0, $delimiter)) !== false){
-                             $data['csv_data'] = $csv_data;
-                             break;
-                        }
-                    }
-                    break;
+
+                if(isset($files) && !empty($files))
+                {
+                	foreach ($files as $file) {
+		                //$name_file =  wp_get_attachment_link($file->ID, 'thumbnail', false, true);
+		                $name_file = wp_get_attachment_url($file->ID);
+		                $type = pathinfo($name_file);
+		                if($type['extension']=='zip'){
+			                $data['csv_data'] = $mapping_model->get_csv_in_zip_file($name_file, $delimiter);
+		                }else{
+			                $objeto = fopen($name_file, 'r');
+			                if(strpos($name_file, 'socialdb_csv')!==false && strpos($name_file, 'tainacan_csv')!==false)
+				                $csv_data = fgetcsv($objeto, 0, $delimiter);
+			                while(($csv_data = fgetcsv($objeto, 0, $delimiter)) !== false){
+				                $data['csv_data'] = $csv_data;
+				                break;
+			                }
+		                }
+		                break;
+	                }
                 }
                 $data['mapping_id'] = $mapping_id;
                 unset($data['file']);
