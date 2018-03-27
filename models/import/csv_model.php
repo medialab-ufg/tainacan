@@ -190,7 +190,7 @@ class CsvModel extends Model {
                                 $this->set_common_field_values($object_id, 'object_source', $field_value);
                             elseif ($metadata['socialdb_entity'] == 'socialdb_object_content') :
                                 if (!isset($information)):
-                                    if (!filter_var($field_value, FILTER_VALIDATE_URL) === false && $import_zip_csv !== 'false') {
+                                    if (filter_var($field_value, FILTER_VALIDATE_URL) === false && $import_zip_csv !== 'false') {
                                         $content_id = $this->add_file_url($field_value, $object_id);
                                         add_post_meta($object_id, '_file_id', $content_id);
                                         update_post_meta($object_id, 'socialdb_object_content', $content_id);
@@ -203,6 +203,7 @@ class CsvModel extends Model {
                                         $this->set_common_field_values($object_id, 'object_content', $field_value);
                                     }
                                 else:
+	                                print "No Information\n";
                                     if (mb_detect_encoding($field_value, 'auto') == 'UTF-8') {
                                         $field_value = iconv('ISO-8859-1', 'UTF-8', $field_value);
                                     }

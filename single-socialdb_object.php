@@ -154,7 +154,8 @@ if (has_action('alter_page_item')) {
                                                 $url_large = wp_get_attachment_image_src($metas['socialdb_object_content'][0], "large")[0];
                                                 $style_watermark = ($has_watermark ? 'style="background:url(' . $url_watermark . ') no-repeat center; background-size: contain;"' : '');
                                                 $opacity_watermark = ($has_watermark ? 'opacity: 0.80;' : '');
-                                                $content = '<div style="text-align:center; display: block; max-height: 1000px"' . $style_watermark . '> <a href="'.$url.'" target="_blank"><img title="'.__("See original image", "tainacan").'" style="max-height: 100%; width: auto; height: auto;"class="img-responsive img-thumbnail" src="' . $url_large . '"></a></div>';
+                                                $text = __("See original image", "tainacan");
+                                                $content = '<div style="text-align:center; display: block; max-height: 1000px"' . $style_watermark . '> <a href="'.$url.'" target="_blank"><img title="'.$text.'" style="max-height: 100%; width: auto; height: auto;"class="img-responsive img-thumbnail" src="' . $url_large . '"></a></div>';
                                             }
                                             break;
                                         case 'video':
@@ -202,7 +203,8 @@ if (has_action('alter_page_item')) {
 				                                    $url_image = wp_get_attachment_url(get_post_thumbnail_id($post->ID, 'large'));
 				                                    $content = '<center ' . $style_watermark . '><img style="max-width:480px; ' . $opacity_watermark . '"  src="' . $url_image . '" class="img-responsive" /></center>';
 			                                    } else {
-				                                    $content = "<img src='" . $metas['socialdb_object_content'][0] . "' class='img-responsive' />";
+			                                        $text = __("See original image", "tainacan");
+			                                        $content = '<div style="text-align:center; display: block; max-height: 1000px"> <a href="'.$metas['socialdb_object_content'][0].'" target="_blank"><img title="'.$text.'" style="max-height: 100%; width: auto; height: auto;" class="img-responsive img-thumbnail" src="' . $metas['socialdb_object_content'][0] . '"></a></div>';
 			                                    }
 			                                    break;
 		                                    case 'video':
