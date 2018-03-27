@@ -1029,6 +1029,7 @@ class ExportModel extends Model {
         if (count($array) == 0) {
             return null;
         }
+
         if (!is_dir(dirname(__FILE__) . '/collections/')) {
             mkdir(dirname(__FILE__) . '/collections');
         }
@@ -1045,7 +1046,8 @@ class ExportModel extends Model {
     }
 
     public function force_zip_download() {
-        $file = dirname(__FILE__) . '/tainacan_full_csv.zip';
+        $file = './tainacan_full_csv.zip';
+
         if (headers_sent()) {
             echo 'HTTP header already sent';
         } else {

@@ -1844,16 +1844,18 @@ class Model {
         fclose($df);
     }
     
-    public function create_zip_by_folder($folder, $from = 'package/', $name = 'package',$only_file = false) {
+    public function create_zip_by_folder($folder, $from = 'package/', $name = 'package', $only_file = false) {
         $rootPath = realpath($folder);
         // Initialize archive object
         $zip = new ZipArchive();
         $zip->open($rootPath . '/' . $name . '.zip', ZipArchive::CREATE | ZipArchive::OVERWRITE);
         // Create recursive directory iterator
         /** @var SplFileInfo[] $files */
+
         $files = new RecursiveIteratorIterator(
                 new RecursiveDirectoryIterator($folder . $from)
         );
+
         foreach ($files as $name => $file) {
             // Skip directories (they would be added automatically)
             if (!$file->isDir()) {
@@ -1862,9 +1864,9 @@ class Model {
                 $relativePath = (!$only_file) ? substr($filePath, strlen($rootPath) + 1) : basename($filePath);
 
                 // Add current file to archive
-                    $zip->addFile($filePath, $relativePath);
-                }
+                $zip->addFile($filePath, $relativePath);
             }
+        }
         // Zip archive will be created only after closing object
         $zip->close();
     }
