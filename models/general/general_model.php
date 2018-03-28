@@ -94,13 +94,16 @@ class Model {
      */
     public function insert_attachment($file_handler, $post_id, $setthumb = 'true') {
         if ($_FILES[$file_handler]['error'] !== UPLOAD_ERR_OK) {
-            __return_false();
+        	__return_false();
         }
+
         require_once(ABSPATH . "wp-admin" . '/includes/image.php');
         require_once(ABSPATH . "wp-admin" . '/includes/file.php');
         require_once(ABSPATH . "wp-admin" . '/includes/media.php');
+
         $attach_id = media_handle_upload($file_handler, $post_id);
-        if ($setthumb) {
+
+        if ($setthumb && !is_wp_error($attach_id)) {
             if ($file_handler != "socialdb_collection_cover" && $file_handler != "socialdb_collection_watermark" && $file_handler != "object_file" && $file_handler != "arquivo" && $file_handler != "file") {
                 $array = get_post_meta($post_id, '_thumbnail_id');
                 if (empty($array) || !$array) {
