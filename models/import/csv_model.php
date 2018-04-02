@@ -160,7 +160,14 @@ class CsvModel extends Model {
                                 update_post_title($object_id, $this->codification_value((string)$field_value,$code));
                                 $this->set_common_field_values($object_id, 'title', $this->codification_value($field_value,$code));
                             elseif ($metadata['socialdb_entity'] == 'post_content'):
-                                $content .= $field_value . ",";
+                                $content .= $field_value;
+                                if(mb_detect_encoding($content) !== 'UTF-8')
+                                {
+                                    $content = utf8_encode($content);
+                                }
+
+                                update_post_content($object_id, $content);
+                                $this->set_common_field_values($object_id, 'description', $content);
                             elseif ($metadata['socialdb_entity'] == 'attach'):
                                 //attachment (Files)
                                 $files = explode(', ', utf8_decode($field_value));
@@ -188,9 +195,9 @@ class CsvModel extends Model {
                                 } elseif ($metadata['socialdb_entity'] == 'post_permalink'):
                                 update_post_meta($object_id, 'socialdb_object_dc_source', $field_value);
                                 $this->set_common_field_values($object_id, 'object_source', $field_value);
-                            elseif ($metadata['socialdb_entity'] == 'socialdb_object_content') :
+                            elseif ($metadata['socialdb_entity'] == 'socialdb_object_content') ://content
                                 if (!isset($information)):
-                                    if (filter_var($field_value, FILTER_VALIDATE_URL) === false && $import_zip_csv !== 'false') {
+                                    if (filter_var($field_value, FILTER_VALIDATE_URL) === true && $import_zip_csv !== 'false') {
                                         $content_id = $this->add_file_url($field_value, $object_id);
                                         add_post_meta($object_id, '_file_id', $content_id);
                                         update_post_meta($object_id, 'socialdb_object_content', $content_id);
@@ -203,7 +210,6 @@ class CsvModel extends Model {
                                         $this->set_common_field_values($object_id, 'object_content', $field_value);
                                     }
                                 else:
-	                                print "No Information\n";
                                     if (mb_detect_encoding($field_value, 'auto') == 'UTF-8') {
                                         $field_value = iconv('ISO-8859-1', 'UTF-8', $field_value);
                                     }
@@ -283,11 +289,9 @@ class CsvModel extends Model {
                         }
                     }
 
-                    $content = $this->codification_value($field_value,$content);
+                    //$content = $this->codification_value($field_value, $content);
                     update_post_meta($object_id, 'socialdb_object_from', 'external');
                     $this->set_common_field_values($object_id, 'object_from', 'external');
-                    update_post_content($object_id, utf8_decode($content));
-                    $this->set_common_field_values($object_id, 'description', $content);
                     socialdb_add_tax_terms($object_id, $categories, 'socialdb_category_type');
 
                     //se estiver importando de um zip devera buscar os itens em suas pastas
