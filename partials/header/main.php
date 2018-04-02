@@ -1,4 +1,4 @@
-<div id="main_part" class="home">
+<div id="main_part" class="home cover-home">
     <div class="row container-fluid">
         <div class="project-info">
             <h1> <?php bloginfo('name') ?> </h1>
