@@ -220,15 +220,19 @@ class CsvModel extends Model {
                                 update_post_meta($object_id, 'socialdb_object_dc_type', $field_value);
                                 $this->set_common_field_values($object_id, 'object_type', $field_value);
                             elseif ($metadata['socialdb_entity'] == 'tag' && $field_value != ''):
-                                $fields_value = explode($multi_values, utf8_decode($field_value));
-                                foreach ($fields_value as $field_value):
-                                    $fields[] = explode($hierarchy, $field_value);
-                                endforeach;
-                                foreach ($fields as $fields_value):
-                                    foreach ($fields_value as $field_value):
-                                        $this->insert_tag($field_value, $object_id, $data['collection_id']);
-                                    endforeach;
-                                endforeach;
+                                if(mb_detect_encoding($field_value) !== 'UTF-8')
+                                {
+                                    $field_value = utf8_encode($field_value);
+                                }
+
+                                $fields_value = explode($multi_values, $field_value);
+                                $fields_value = array_filter($fields_value, function($value) { return $value !== ''; });
+
+                                foreach ($fields_value as $field_value)
+                                {
+                                    $this->insert_tag($field_value, $object_id, $data['collection_id']);
+                                }
+
                             elseif (strpos($metadata['socialdb_entity'], "termproperty_") !== false):
                                 if (is_array($field_value) && count($field_value) == 1) {
                                     $fields_value = $field_value[0];
