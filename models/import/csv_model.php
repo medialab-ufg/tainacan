@@ -299,7 +299,7 @@ class CsvModel extends Model {
 		                                0,
 		                                "data",
 		                                0,
-		                                $value,
+		                                trim($value),
 		                                ( false )
 	                                );
 	                                $this->set_common_field_values($object_id, "socialdb_property_$id", $value);
