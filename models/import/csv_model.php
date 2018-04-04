@@ -238,19 +238,34 @@ class CsvModel extends Model {
                                 } else {
                                     $fields_value = $field_value;
                                 }
+
                                 if (!empty($fields_value)):
                                     if (strpos($fields_value, $multi_values) !== false) {
                                         $fields_value = explode($multi_values, $fields_value);
                                     } else {
                                         $fields_value = explode(', ', $fields_value);
                                     }
+
                                     $trans = array("termproperty_" => "");
                                     $property_id = strtr($metadata['socialdb_entity'], $trans);
                                     $parent = get_term_meta($property_id, 'socialdb_property_term_root', true);
 
-                                    foreach ($fields_value as $field_value):
-                                        $this->insert_hierarchy($this->codification_value($field_value,$code), $object_id, $data['collection_id'], $parent, $property_id, $hierarchy);
-                                    endforeach;
+                                    global $wpdb;
+                                    foreach ($fields_value as $field_value) {
+                                        $sql = "SELECT t.term_id FROM $wpdb->terms t, $wpdb->termmeta tm WHERE t.name = '$field_value' AND tm.meta_key = 'socialdb_property_term_root' AND tm.meta_value=$parent;";
+                                        $term_id = $wpdb->get_results($sql);
+                                        $term_id = $term_id[0]->term_id;
+
+                                        $class = new ObjectSaveValuesModel();
+                                        $class->saveValue($object_id,
+                                            $property_id,
+                                            0,
+                                            'term',
+                                            0,
+                                            $term_id,
+                                            (false)
+                                        );
+                                    }
                                 endif;
                             elseif (strpos($metadata['socialdb_entity'], "objectproperty_") !== false):
 	                            $trans = array("objectproperty_" => "");

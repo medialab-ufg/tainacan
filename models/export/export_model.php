@@ -582,7 +582,7 @@ class ExportModel extends Model {
                 $csv_data['tags'] = '';
             }
 
-            /** Categories * */
+            /** Categories **/
             $categories_of_facet = array();
             $category_model = new CategoryModel;
             $categories = wp_get_object_terms($object->ID, 'socialdb_category_type');
@@ -603,7 +603,6 @@ class ExportModel extends Model {
                     {
 	                    $term->name = utf8_encode($term->name);
                     }
-
                     if (is_array($categories_of_facet[$facet])) {
 	                    $csv_data[ $term->name ] = implode( ', ', $categories_of_facet[ $facet ] );
 	                    if ( mb_detect_encoding( $csv_data[ $term->name ] ) !== 'UTF-8' ) {
@@ -624,6 +623,7 @@ class ExportModel extends Model {
             if ($all_properties_id) {
                 foreach ($all_properties_id as $property_id) {
                     $property = get_term_by("id", $property_id, "socialdb_property_type");
+
                     if (in_array($property->slug, $this->fixed_slugs)):
                         continue;
                     endif;
@@ -634,6 +634,7 @@ class ExportModel extends Model {
 	                }
 
                     $type = $propertyModel->get_property_type($property_id); // pego o tipo da propriedade
+
                     if ($type == 'socialdb_property_data') {
                         $value = get_post_meta($object->ID, 'socialdb_property_' . $property_id, true);
                         if(mb_detect_encoding($value) !== 'UTF-8'){
