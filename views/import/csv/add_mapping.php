@@ -13,7 +13,11 @@ include_once ('js/maping_attributes_js.php');
              <?php foreach ($csv_data as $key=>$csv) { ?>
             <div class='row form-group'>
                 <label class='col-md-4'>
-                    <?php echo utf8_encode($csv); ?>
+                    <?php
+                        if(mb_detect_encoding($csv) !== 'UTF-8')
+                            echo utf8_encode($csv);
+                        else echo $csv;
+                    ?>
                 </label>    
                 <div class='col-md-8'>
                     <select name='<?php echo 'csv_p'.$key; ?>' class='data form-control' id='<?php echo 'csv_p'.$key; ?>'>

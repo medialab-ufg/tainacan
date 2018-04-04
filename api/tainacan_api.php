@@ -5,7 +5,6 @@ class TainacanApi extends WP_REST_Controller {
     private $base = array();
     public static $version = 1;
     public static $namespace_tainacan = 'tainacan/v';
-            
     
     function __construct() {
         $this->base['collections'] = '/collections';
