@@ -1428,6 +1428,7 @@ class Model {
                         AND p.post_type like 'socialdb_object' AND p.post_status like 'publish' and p.post_title LIKE '%{$data['term']}%'
                 ";
         $result = $wpdb->get_results($query);
+
         if ($result) {
             foreach ($result as $object) {
                 $json[] = array('value' => $object->ID, 'label' => $object->post_title);
@@ -1533,17 +1534,20 @@ class Model {
                         INNER JOIN $term_relationships t ON p.ID = t.object_id    
                         WHERE t.term_taxonomy_id = {$category_root_id->term_taxonomy_id}
                         AND p.post_status IN ('publish','draft') and pm.meta_key like '$meta_key' and pm.meta_value LIKE '%{$data['term']}%'
+                        ORDER BY pm.meta_value 
                 ";
         }else if($has_mask){
             $query = "
                         SELECT pm.* FROM $wp_posts p
                         INNER JOIN $wp_postmeta pm ON p.ID = pm.post_id    
                         WHERE p.post_status IN ('publish','draft') and pm.meta_key like '$meta_key' and pm.meta_value LIKE '%{$data['term']}%'
+                        ORDER BY pm.meta_value
                 ";
         }else{
             return json_encode([]);
         }
         $result = $wpdb->get_results($query);
+        usort($result, "sort_results");
         if ($result) {
             foreach ($result as $object) {
                 $json[] = array('value' => $object->meta_value, 'label' => $object->meta_value,'item_id'=>$object->post_id);

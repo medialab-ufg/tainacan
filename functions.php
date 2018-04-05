@@ -3958,6 +3958,14 @@ function add_helpText ($property, $this_ref)
 	}
 }
 
+function sort_results($a, $b)
+{
+    $title_a = $a->meta_value;
+    $title_b = $b->meta_value;
+
+    return usort_sort($title_a, $title_b);
+}
+
 function order_dynatree($a, $b)
 {
     if(isset($a->name))
@@ -3969,33 +3977,38 @@ function order_dynatree($a, $b)
 	    $title_b = $b['title'];
     }
 
-	$pattern = "/(\d+)/";
+	return usort_sort($title_a, $title_b);
+}
 
-	$a_array = preg_split($pattern, $title_a, -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
-	$b_array = preg_split($pattern, $title_b, -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
+function usort_sort($title_a, $title_b)
+{
+    $pattern = "/(\d+)/";
 
-	for($i = 0, $j = 0; $i < count($a_array) && $j < count($b_array); $i++, $j++)
-	{
-		if(is_numeric($a_array[$i]) && is_numeric($b_array[$j]))//Both are numbers
-		{
-			$a_int = intval($a_array[$i]);
-			$b_int = intval($b_array[$j]);
+    $a_array = preg_split($pattern, $title_a, -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
+    $b_array = preg_split($pattern, $title_b, -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
 
-			if($a_int < $b_int)
-			{
-				return -1;
-			}else if($b_int < $a_int)
-			{
-				return 1;
-			}
-		}else if(is_numeric($a_array[$i]) && !is_numeric($b_array[$j]))//Just A is a number
-		{
-			return -1;
-		}else if(!is_numeric($a_array[$i]) && is_numeric($b_array[$j]))//Just B is a number
-		{
-			return 1;
-		}
-	}
+    for($i = 0, $j = 0; $i < count($a_array) && $j < count($b_array); $i++, $j++)
+    {
+        if(is_numeric($a_array[$i]) && is_numeric($b_array[$j]))//Both are numbers
+        {
+            $a_int = intval($a_array[$i]);
+            $b_int = intval($b_array[$j]);
 
-	return 0; //They're equals
+            if($a_int < $b_int)
+            {
+                return -1;
+            }else if($b_int < $a_int)
+            {
+                return 1;
+            }
+        }else if(is_numeric($a_array[$i]) && !is_numeric($b_array[$j]))//Just A is a number
+        {
+            return -1;
+        }else if(!is_numeric($a_array[$i]) && is_numeric($b_array[$j]))//Just B is a number
+        {
+            return 1;
+        }
+    }
+
+    return 0; //They're equals
 }
