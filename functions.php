@@ -3267,7 +3267,7 @@ function display_img_items_collection($collection_id, $max_itens, $is_popular = 
  * */
 
 function set_navbar_bg_color($color, $special_page) {
-    return ( is_front_page() || is_page($special_page) ) ? '' : "style='background-color: ${color}'";
+    return ( is_front_page() || is_page() ) ? '' : "style='background-color: ${color}'";
 }
 
 function get_home_collection_types() {

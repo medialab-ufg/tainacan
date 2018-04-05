@@ -1,3 +1,7 @@
+<?php
+if(is_page() || is_front_page())
+    echo "<div class='menu-transp-cover'></div>"
+?>
 <div id="main_part" class="home cover-home">
     <div class="row container-fluid">
         <div class="project-info">
