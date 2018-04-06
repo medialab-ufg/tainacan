@@ -144,7 +144,11 @@ class CsvModel extends Model {
                 }
 
                 // insercao dos dados
-                for ($i = 0; $i < count($lines); $i++):
+                if(isset($data['index']))
+                {
+                    $i = $data['index'] * $data['slice_size'];
+                }else $i = 0;
+                for (; $i < count($lines); $i++):
                     $object_id = socialdb_insert_object_csv('Import CSV ' . $count);
                     $ID = $lines[$i][0];
                     foreach ($bd_csv_data as $metadata) {
@@ -234,7 +238,7 @@ class CsvModel extends Model {
                                 }
 
                             elseif (strpos($metadata['socialdb_entity'], "termproperty_") !== false):
-                                if (is_array($field_value)) {
+                                if (is_array($field_value) && count($field_value) == 1) {
                                     $fields_value = $field_value[0];
                                     if (trim($fields_value) == '') {
                                         continue;

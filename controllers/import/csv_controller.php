@@ -47,6 +47,26 @@ class CsvController extends Controller {
                     return json_encode($data);
                 }
                 break;
+            case "get_csv_bd_iterations":
+                $mapping_model = new MappingModel('socialdb_channel_csv');
+                $file = $mapping_model->show_files_csv($data['mapping_id'])[0];
+
+
+                $name_file = wp_get_attachment_url($file->ID);
+                $type = pathinfo($name_file);
+                $delimiter = get_post_meta($data['mapping_id'], 'socialdb_channel_csv_delimiter', true);
+                $csv_has_header = get_post_meta($data['mapping_id'], 'socialdb_channel_csv_has_header', true);
+
+                if ($type['extension'] == 'csv') {
+                    $lines = $csv_model->read_csv_file($name_file, $delimiter, $csv_has_header);
+                } elseif ($type['extension'] == 'zip') {
+                    // metodo retornara um array com o nome do arquivo criado e a pasta do folder criado
+                    $information = $csv_model->get_csv_from_zip($name_file);
+                    $lines = $csv_model->read_csv_file($information['file'], $delimiter, $csv_has_header);
+                }
+                $slices = array_chunk($lines, $data['slice_size']);
+
+                return count($slices);
             case "do_import_csv":
                 $data = $csv_model->do_import_csv($data);
                 return json_encode($data);
