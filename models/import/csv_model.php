@@ -234,7 +234,7 @@ class CsvModel extends Model {
                                 }
 
                             elseif (strpos($metadata['socialdb_entity'], "termproperty_") !== false):
-                                if (is_array($field_value) && count($field_value) == 1) {
+                                if (is_array($field_value)) {
                                     $fields_value = $field_value[0];
                                     if (trim($fields_value) == '') {
                                         continue;
