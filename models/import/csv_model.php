@@ -147,8 +147,17 @@ class CsvModel extends Model {
                 if(isset($data['index']))
                 {
                     $i = $data['index'] * $data['slice_size'];
-                }else $i = 0;
-                for (; $i < count($lines); $i++):
+                    $limit =  $i + $data['slice_size'];
+                    if($limit > count($lines))
+                    {
+                        $limit = count($lines);
+                    }
+                }else {
+                    $i = 0;
+                    $limit = count($lines);
+                }
+
+                for (; $i < $limit; $i++):
                     $object_id = socialdb_insert_object_csv('Import CSV ' . $count);
                     $ID = $lines[$i][0];
                     foreach ($bd_csv_data as $metadata) {

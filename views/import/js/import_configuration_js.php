@@ -617,7 +617,7 @@
 
     function do_import_csv(mapping_id) {
         show_modal_main();
-        let index = 0, slice_size = 500;
+        let slice_size = 500;
 
         $.ajax({
             type: "POST",
@@ -628,16 +628,34 @@
                 slice_size: slice_size
             }
         }).done(function (count_slices) {
-            let result, index = 0;
-            while (index < count_slices)
+            let count_slices_array = [], promises;
+
+            for(let i = 0; i < count_slices; i++)
             {
-                import_csv_slice(index, mapping_id, slice_size);
-                index++;
+                count_slices_array.push(i);
             }
+
+            promises = count_slices_array.map(function (slice) {
+                return new Promise(function (resolve) {
+                    import_csv_slice(slice, mapping_id, slice_size, resolve);
+                });
+            });
+
+
+            Promise.all(promises).then(function (result) {
+                hide_modal_main();
+                listTableCSV();
+                let jsonObject = JSON.parse(result);
+                if (jsonObject == true) {
+                    showAlertGeneral('<?php _e('Attention', 'tainacan') ?>', '<?php _e('All objects imported succesfully!', 'tainacan') ?>', 'success');
+                } else {
+                    showAlertGeneral('<?php _e('Attention', 'tainacan') ?>', '<?php _e('Please, do the mapping!', 'tainacan') ?>', 'info');
+                }
+            });
         });
     }
 
-    function import_csv_slice(index, mapping_id, slice_size)
+    function import_csv_slice(index, mapping_id, slice_size, resolve)
     {
         $.ajax({
             type: "POST",
@@ -650,7 +668,7 @@
                 index: index
             }
         }).done(function (result) {
-            return result;
+            resolve(result);
         });
     }
 
