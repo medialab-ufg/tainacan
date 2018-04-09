@@ -617,7 +617,7 @@
 
     function do_import_csv(mapping_id) {
         show_modal_main();
-        let slice_size = 400;
+        let slice_size = 60;
 
         $.ajax({
             type: "POST",
