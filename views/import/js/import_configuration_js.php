@@ -616,8 +616,7 @@
     }
 
     function do_import_csv(mapping_id) {
-        show_modal_main();
-        let slice_size = 60;
+        let slice_size = 50;
 
         $.ajax({
             type: "POST",
@@ -627,7 +626,10 @@
                 operation: 'get_csv_bd_iterations',
                 slice_size: slice_size
             }
-        }).done(function (count_slices) {
+        }).done(function (info) {
+            info = JSON.parse(info);
+            let count_slices = info.slices, step = 100/info.linesCount;
+
             let count_slices_array = [], promises;
 
             for(let i = 0; i < count_slices; i++)
@@ -635,9 +637,13 @@
                 count_slices_array.push(i);
             }
 
+            $("#modalImportLoading").modal('show');
             const promiseSerial = funcs =>
                 funcs.reduce((promise, func) =>
-                        promise.then(result => func().then(Array.prototype.concat.bind(result))),
+                        promise.then(result => func().then(function () {
+                            Array.prototype.concat.bind(result);
+                            $("#progressbargeneral").val($("#progressbargeneral").val() + step);
+                        })),
                     Promise.resolve([]));
 
             const funcs = count_slices_array.map(slice => () => $.ajax({
@@ -654,45 +660,10 @@
 
             promiseSerial(funcs)
                 .then(function () {
-                    hide_modal_main();
+                    $("#modalImportLoading").modal('hide');
                     listTableCSV();
                     showAlertGeneral('<?php _e('Attention', 'tainacan') ?>', '<?php _e('All objects imported succesfully!', 'tainacan') ?>', 'success');
                 });
-
-            /*promises = count_slices_array.map(function (slice) {
-                return new Promise(function (resolve) {
-                    import_csv_slice(slice, mapping_id, slice_size, resolve);
-                });
-            });
-
-
-            Promise.all(promises).then(function (result) {
-                hide_modal_main();
-                listTableCSV();
-                let jsonObject = JSON.parse(result);
-                if (jsonObject == true) {
-                    showAlertGeneral('<?php _e('Attention', 'tainacan') ?>', '<?php _e('All objects imported succesfully!', 'tainacan') ?>', 'success');
-                } else {
-                    showAlertGeneral('<?php _e('Attention', 'tainacan') ?>', '<?php _e('Please, do the mapping!', 'tainacan') ?>', 'info');
-                }
-            });*/
-        });
-    }
-
-    function import_csv_slice(index, mapping_id, slice_size, resolve)
-    {
-        $.ajax({
-            type: "POST",
-            url: $('#src').val() + "/controllers/import/csv_controller.php",
-            data: {
-                collection_id: $('#collection_id').val(),
-                mapping_id: mapping_id,
-                operation: 'do_import_csv',
-                slice_size: slice_size,
-                index: index
-            }
-        }).done(function (result) {
-            resolve(result);
         });
     }
 

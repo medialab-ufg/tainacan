@@ -66,7 +66,8 @@ class CsvController extends Controller {
                 }
                 $slices = array_chunk($lines, $data['slice_size']);
 
-                return count($slices);
+                $data = ['slices' => count($slices), 'linesCount' => count($lines)];
+                return json_encode($data);
             case "do_import_csv":
                 $data = $csv_model->do_import_csv($data);
                 return json_encode($data);
