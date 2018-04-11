@@ -628,7 +628,7 @@
             }
         }).done(function (info) {
             info = JSON.parse(info);
-            let count_slices = info.slices, step = 100/info.linesCount;
+            let count_slices = info.slices, step = 100/info.slices;
 
             let count_slices_array = [], promises;
 
