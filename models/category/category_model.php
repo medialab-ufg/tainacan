@@ -37,11 +37,18 @@ class CategoryModel extends Model {
         if (!$is_new) {
             if ($data['category_parent_id'] == '0' ||
                     $data['category_parent_id'] == 'public_categories' || 
-                    $data['category_parent_id'] == 'shared_categories'||$data['category_parent_id'] == 'socialdb_category'||$data['category_parent_id'] == 'socialdb_taxonomy') {// se nao o usuario nao setou o parent
+                    $data['category_parent_id'] == 'shared_categories' ||
+                    $data['category_parent_id'] == 'socialdb_category' ||
+                    $data['category_parent_id'] == 'socialdb_taxonomy') {// se nao o usuario nao setou o parent
                 $new_category = wp_insert_term($data['category_name'], 'socialdb_category_type', array('parent' => $this->get_category_taxonomy_root(),
                     'slug' => $this->generate_slug($data['category_name'], $data['collection_id']), 'description' => $this->set_description($data)));
             } else {
-                $data['category_parent_id'] = (($data['category_parent_id'] == 'user_categories' || $data['category_parent_id'] == 'socialdb_taxonomy' ) ? $this->get_category_taxonomy_root() : $data['category_parent_id']);
+                if($data['category_parent_id'] == 'user_categories' || $data['category_parent_id'] == 'socialdb_taxonomy')
+                {
+                    $data['category_parent_id'] = $this->get_category_taxonomy_root();
+                }
+
+                print_r(array('parent' => $data['category_parent_id'], 'slug' => $this->generate_slug($data['category_name'], $data['collection_id'])));
                 $new_category = create_register($data['category_name'], 'socialdb_category_type', array('parent' => $data['category_parent_id'],
                     'slug' => $this->generate_slug($data['category_name'], $data['collection_id']), 'description' => $this->set_description($data)));
             }

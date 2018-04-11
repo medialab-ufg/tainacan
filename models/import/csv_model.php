@@ -274,14 +274,43 @@ class CsvModel extends Model {
                                         $term_id = $term_id[0]->term_id;
 
                                         $class = new ObjectSaveValuesModel();
-                                        $class->saveValue($object_id,
-                                            $property_id,
-                                            0,
-                                            'term',
-                                            0,
-                                            $term_id,
-                                            (false)
-                                        );
+                                        if($term_id)
+                                        {
+                                            $class->saveValue($object_id,
+                                                $property_id,
+                                                0,
+                                                'term',
+                                                0,
+                                                $term_id,
+                                                (false)
+                                            );
+                                        }/*else
+                                        {
+                                            print "no";
+                                            require_once (dirname(__FILE__). '../../category/category_model.php');
+                                            $categoryModel = new CategoryModel();
+
+                                            $data['category_name'] = $field_value;
+                                            $data['category_des'] = $field_value;
+                                            $data['category_parend_id'] = $parent;
+
+                                            $categoryModel->add($data);
+                                            /*$meta_id = $class->createValue($object_id,
+                                                'term',
+                                                 $property_id,
+                                                0,
+                                                0,
+                                                $field_value
+                                            );
+
+                                            $new_children = [
+                                                'type' => "term",
+                                                'values' => [$meta_id]
+                                            ];
+                                            $array[0][0]= $new_children;
+
+                                            update_post_meta($object_id, 'socialdb_property_helper_'.$property_id, serialize($array));
+                                        }*/
                                     }
                                 endif;
                             elseif (strpos($metadata['socialdb_entity'], "objectproperty_") !== false):
