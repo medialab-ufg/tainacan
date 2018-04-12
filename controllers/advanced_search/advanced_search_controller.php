@@ -167,11 +167,8 @@ class AdvancedSearchController extends Controller {
 				$return = array();
 				// Se estiver buscando em todas as colecoes
 				if($data['advanced_search_collection'] == get_option('collection_root_id')) {
-				    print_r($data);
 			        $args_object = $wpquery_model->advanced_searched_filter($data);
-			        print_r($args_object);
 			        $paramters_object = $wpquery_model->do_filter($args_object);
-			        print_r($paramters_object);
 
 			        $args_collection = $wpquery_model->advanced_searched_filter($data);
 			        $args_collection['collection_id'] = $data['advanced_search_collection'];

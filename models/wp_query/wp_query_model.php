@@ -550,14 +550,9 @@ class WPQueryModel extends Model {
             // inserindo as categorias e as tags na query
             $tax_query = $this->get_tax_query($recover_data);
             if(has_filter('update_tax_query')){
-                print 'update_tax_query\n';
                 $tax_query = apply_filters('update_tax_query',$tax_query,$recover_data['collection_id'],TRUE);
             }else if(has_filter('update_tax_query_args')){
-                print "update_tax_query_args\n";
                 $tax_query = apply_filters('update_tax_query_args',$tax_query);
-            }else
-            {
-                print "Nothing of them!\n";
             }
 
             //a forma de ordenacao
@@ -831,6 +826,7 @@ class WPQueryModel extends Model {
                 'operator' => 'IN'
             );
         }else if(!isset($recover_data['author']) || $recover_data['author']===''){
+            /*print "No Author\n";
             $private_collections = get_option('socialdb_private_collections');
             $private_collections = ($private_collections) ?  unserialize($private_collections) : [];
             if(!empty($private_collections)){
@@ -840,7 +836,7 @@ class WPQueryModel extends Model {
                     'terms' => $private_collections,
                     'operator' => 'NOT IN'
                 );
-            }
+            }*/
         }
         $tax_query = $this->get_hash_synomys($recover_data,$tax_query);
         if(isset($recover_data['advanced_search']['tags'])){
