@@ -57,6 +57,7 @@
                 hide_modal_main();
                 if (elem.args_collection) {
                     let search_collections_query = elem.args_collection;
+                    console.log(elem);
                     console.log(search_collections_query);
                     $('#wp_query_args').val(search_collections_query);
                     if (elem.args_item)
