@@ -32,7 +32,8 @@ if ( $loop->have_posts()) { ?>
 
             while ( $loop->have_posts() ) : $loop->the_post(); $countLine++;
                 $curr_id = get_the_ID();
-                if(strcmp(get_the_title(), "Tainacan - Coleções") === 0) //Tainacan - Coleções
+
+                if($curr_id === 5) //Tainacan - Coleções
                 {
                     continue;
                 }
