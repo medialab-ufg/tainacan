@@ -550,9 +550,14 @@ class WPQueryModel extends Model {
             // inserindo as categorias e as tags na query
             $tax_query = $this->get_tax_query($recover_data);
             if(has_filter('update_tax_query')){
+                print 'update_tax_query\n';
                 $tax_query = apply_filters('update_tax_query',$tax_query,$recover_data['collection_id'],TRUE);
             }else if(has_filter('update_tax_query_args')){
+                print "update_tax_query_args\n";
                 $tax_query = apply_filters('update_tax_query_args',$tax_query);
+            }else
+            {
+                print "Nothing of them!\n";
             }
 
             //a forma de ordenacao
