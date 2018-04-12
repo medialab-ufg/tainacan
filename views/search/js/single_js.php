@@ -60,10 +60,6 @@
                     console.log(elem);
                     console.log(search_collections_query);
                     $('#wp_query_args').val(search_collections_query);
-                    if (elem.args_item)
-                    {
-                        var search_items_query = elem.args_item;
-                    }
 
                     if(elem.has_collection && elem.has_item)
                     {
