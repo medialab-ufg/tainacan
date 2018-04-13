@@ -248,17 +248,8 @@ $view_helper = new ViewHelper();
                            onchange="showHabilitateMedia(this,true)" 
                            <?php echo ( $submission_visualization == 'one' ) ? "checked = 'checked'" : ''; ?>
                            value="one">&nbsp;<?php _e('Focus in metadata','tainacan'); ?><br>
-                    
-                            <!--select name="socialdb_collection_submission_visualization" id="socialdb_collection_submission_visualization" onchange="showHabilitateMedia(this)" class="form-control">
-                                <option value="one" <?php ( $submission_visualization == 'one' ) ? "selected = 'selected'" : ''; ?> >
-                                    <?php _e('1 column','tainacan'); ?>
-                                </option>
-                                <option value="two" <?php if ($submission_visualization == 'two'|| empty($submission_visualization)) { echo 'selected = "selected"'; } ?> >
-                                    <?php _e('2 columns','tainacan'); ?>
-                                </option>
-                            </select-->
                     <div id="habilitateMedia" <?php echo ($submission_visualization == 'two' || empty($submission_visualization))?'style="display:none;"' : '' ?> >
-                        &nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" name="habilitateMedia" value="true"    <?php echo ( $habilitate_media == 'true' ) ? "checked = 'checked'" : ''; ?>>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" name="habilitateMedia" value="true"    <?php echo ($submission_visualization == 'one' && $habilitate_media == 'true' ) ? "checked = 'checked'" : ''; ?>>
                         <?php _e('Habilitate visualization of image and attachments','tainacan') ?>
                     </div>
                 </div>

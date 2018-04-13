@@ -5,7 +5,7 @@ class FormItemAttachment extends FormItem {
 
     public function widget($property, $item_id,$isFocusMedia = false) {
         ?>
-        <?php if (!$this->mediaHabilitate): ?>
+        <?php if ($this->mediaHabilitate): ?>
             <div class="form-group">
                  <?php echo ($isFocusMedia) ? '<h5>' : '<h2>' ?>
                     <?php echo ($this->terms_fixed['attachments']) ? $this->terms_fixed['attachments']->name : _e('Attachments', 'tainacan') ?>
@@ -14,7 +14,7 @@ class FormItemAttachment extends FormItem {
 	            ?>
                     <?php $this->validateIcon('alert-compound-'.$property['id'],__('Required field','tainacan')) ?>
                 <?php echo ($isFocusMedia) ? '</h5>' : '</h2>' ?>
-                <div >
+                <div>
                     <div id="dropzone_form"
                          class="dropzone"
                          style="margin-bottom: 15px;min-height: 150px;padding-top: 0px;">

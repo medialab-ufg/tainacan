@@ -432,7 +432,7 @@ public function add($data) {
             update_post_meta($post_id, 'socialdb_collection_use_prox_mode', 'false');
         }
         //habilitate
-        if(isset($data['habilitateMedia']) && $data['habilitateMedia'] == 'true'){
+        if((isset($data['habilitateMedia']) && $data['habilitateMedia'] == 'true') || $data['socialdb_collection_submission_visualization'] == 'two'){
              update_post_meta($post_id, 'socialdb_collection_habilitate_media', 'true');
         }else{
              update_post_meta($post_id, 'socialdb_collection_habilitate_media', 'false');
