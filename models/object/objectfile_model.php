@@ -71,6 +71,7 @@ class ObjectFileModel extends Model {
                 if (!empty($_FILES[$file]["name"])) {
 	                $_FILES[$file]["name"] = remove_accents($_FILES[$file]["name"]);
 	                $newupload = $this->insert_attachment($file, $data['object_id']);
+
 	                echo json_encode($newupload);
                 }
             }

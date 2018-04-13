@@ -3372,9 +3372,12 @@ function get_item_thumb_image($item_id, $size = "thumbnail") {
             return '<img src="' . get_item_thumbnail_default($item_id) . '" class="img-responsive height100" style="max-width: 100%;">';
         }
     } else {
+        add_image_size( 'custom-size', 220, 180, true );
+
         $html_image = wp_get_attachment_image(get_post_thumbnail_id($item_id), $size, false, array('class' => 'img-responsive'));
 
         $image = wp_get_attachment_image_src(get_post_thumbnail_id($item_id), "thumbnail", false);
+        //print "<pre>".print_r($html_image); echo "</pre>";
 
         if (preg_match("/pdf_thumb_/", basename($image[0]))) {
             $DOM = simplexml_load_string($html_image);
