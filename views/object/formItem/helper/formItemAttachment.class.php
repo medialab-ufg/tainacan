@@ -5,7 +5,7 @@ class FormItemAttachment extends FormItem {
 
     public function widget($property, $item_id,$isFocusMedia = false) {
         ?>
-        <?php if ($this->mediaHabilitate): ?>
+        <?php if ($this->mediaHabilitate || empty($this->mediaHabilitate)): ?>
             <div class="form-group">
                  <?php echo ($isFocusMedia) ? '<h5>' : '<h2>' ?>
                     <?php echo ($this->terms_fixed['attachments']) ? $this->terms_fixed['attachments']->name : _e('Attachments', 'tainacan') ?>
