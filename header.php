@@ -61,7 +61,14 @@ $_header_enabled = get_post_meta($collection_id, 'socialdb_collection_show_heade
 </head>
 
 <!-- TAINACAN: tag body adaptado para o gplus -->
-<body  <?php body_class(); ?> itemscope>
+<body  <?php
+if(is_page())
+    $classes[] = 'home';
+else $classes = [];
+
+body_class($classes);
+        ?>
+        itemscope>
 
     <!-- TAINACAN: tag nav, utilizando classes do bootstrap nao modificadas, onde estao localizados os links que chamam paginas da administracao do repositorio -->
     <nav <?php echo set_navbar_bg_color('black', $stat_page); ?> class="navbar navbar-default header-navbar">
