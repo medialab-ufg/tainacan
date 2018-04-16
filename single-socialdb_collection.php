@@ -267,8 +267,10 @@ while (have_posts()) : the_post();
 
                                 <div class="col-md-2 selectable-items <?= $HideFromPlugin; ?>" id="normal-selectable">
                                     <?php
-                                    if (is_user_logged_in() && get_the_ID() != get_option('collection_root_id') &&
-                                        verify_collection_moderators(get_the_ID(), get_current_user_id())):
+                                    if (is_user_logged_in() &&
+                                        ((get_the_ID() != get_option('collection_root_id') &&
+                                        verify_collection_moderators(get_the_ID(), get_current_user_id())) ||
+                                        current_user_can('administrator'))):
                                         ?>
                                         <label><?php _t('Select: ', 1); ?></label>
                                         <div class="selectors">
