@@ -266,27 +266,13 @@ class ThemeOptionsModel extends Model {
 	        update_option('socialdb_collection_hide_search', 'false');
         }
 
-        /*
-        if ($_FILES) {
-            if ($socialdb_logo) {
-                $this->add_thumbnail($socialdb_logo);
-            } else {
-                $post = array(
-                    'post_title' => 'socialdb-repository-logo',
-                    'post_status' => 'publish'
-                );
-                $object_id = wp_insert_post($post);
-                update_option('socialdb_logo', $object_id);
-                $this->add_thumbnail($object_id);
-                $socialdb_logo = $object_id;
-            }
-
-            if (isset($_FILES['socialdb_collection_cover']) && !empty($_FILES['socialdb_collection_cover']) && !empty($_FILES['socialdb_collection_cover']['name'])) {
-                $cover_id = $this->add_cover(get_option('collection_root_id'));
-                update_option('socialdb_repository_cover_id', $cover_id);
-                $reload = true;
-            }
-        } */
+        if(isset($data['socialdb_collection_hide_footer']))
+        {
+            update_option('socialdb_collection_hide_footer', 'true');
+        }
+        else {
+            update_option('socialdb_collection_hide_footer', 'false');
+        }
 
         if (isset($data['tainacan_cache']) && $data['tainacan_cache'] == 'true') {
             update_option('tainacan_cache', 'false');
