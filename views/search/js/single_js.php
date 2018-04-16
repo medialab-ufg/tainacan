@@ -111,6 +111,7 @@
         
         $('a.move_edition').on('click', function(event) {
             event.preventDefault();
+            toastr.clear();
             let edit_data = [];
             show_modal_main();
 
@@ -1075,7 +1076,7 @@
             url: $('#src').val() + "/controllers/wp_query/wp_query_controller.php",
             data: {operation: 'wpquery_keyword', wp_query_args: $('#wp_query_args').val(), value: value, collection_id: $('#collection_id').val()}
         }).done(function (result) {
-            elem = jQuery.parseJSON(result);
+            let elem = jQuery.parseJSON(result);
             $('#loader_objects').hide();
             $('#list').html(elem.page);
             $('#wp_query_args').val(elem.args);

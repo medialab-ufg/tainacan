@@ -370,6 +370,7 @@ class WPQueryController extends Controller {
                 $collection_model = new CollectionModel;
                 $args = $wpquery_model->keyword_filter($data);
                 $parameters = $wpquery_model->do_filter($args);
+
                 $data['loop'] =  new WP_Query($parameters);
 
 	            gen_items_id($parameters, $data);

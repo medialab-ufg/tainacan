@@ -328,6 +328,7 @@
 
         $('a.move_trash').on('click', function() {
             var bulk_type = $('input.bulk_action').val();
+            toastr.clear();
             if( bulk_type === 'select_all' ) {
                 var collect_id = $("#collection_id").val();
                 clean_collection( '<?php _e("Clean Collection", "tainacan") ?>', '<?php _e("Are you sure to remove all items", "tainacan") ?>', collect_id );
