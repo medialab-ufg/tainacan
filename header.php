@@ -62,11 +62,11 @@ $_header_enabled = get_post_meta($collection_id, 'socialdb_collection_show_heade
 
 <!-- TAINACAN: tag body adaptado para o gplus -->
 <body  <?php
-if(is_page())
-    $classes[] = 'home';
-else $classes = [];
+        if(is_page())
+            $classes[] = 'home';//This is for show correctly nav bar in pages
+        else $classes = [];
 
-body_class($classes);
+        body_class($classes);
         ?>
         itemscope>
 
