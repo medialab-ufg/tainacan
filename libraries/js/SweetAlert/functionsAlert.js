@@ -142,7 +142,7 @@ function delete_object(title, text, object_id, time) {
                     socialdb_event_collection_id: $('#collection_id').val()}
             }).done(function (result) {
                 $('#modalImportMain').modal('hide');//esconde o modal de carregamento
-                elem_first = jQuery.parseJSON(result);
+                let elem_first = JSON.parse(result);
                 showAlertGeneral(elem_first.title, elem_first.msg, elem_first.type);
 
                 if(elem_first.type === "success")
