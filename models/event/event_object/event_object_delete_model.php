@@ -94,7 +94,15 @@ class EventObjectDeleteModel extends EventModel {
                 'post_status' => 'draft'
             );
             // Update the post into the database
-            $value = wp_update_post($object);
+            $value = wp_update_post($object, true);
+
+            if (is_wp_error($value)) {
+                $errors = $value->get_error_messages();
+                foreach ($errors as $error) {
+                    echo $error;
+                }
+            }
+
             print("Value: ".$value."\n");
 
             if(has_filter('tainacan_delete_item_perm')) {
