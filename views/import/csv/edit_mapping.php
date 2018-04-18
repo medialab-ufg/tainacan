@@ -13,6 +13,11 @@ include_once ('js/edit_maping_attributes_js.php');
             <?php
                 if(isset($csv_data) && !empty($csv_data))
                 {
+                    $csv_data = array_filter($csv_data, function($value) {
+                        return !empty($value) || $value === 0;
+                    });
+
+                    asort($csv_data, SORT_STRING);
                     foreach ($csv_data as $key => $csv) {
                 ?>
                     <div class='row form-group'>
