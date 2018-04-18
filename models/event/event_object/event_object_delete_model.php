@@ -79,33 +79,26 @@ class EventObjectDeleteModel extends EventModel {
         // verifico se o item nao eh apenas vinculado
         $array =  get_post_meta($collection_id, 'socialdb_collection_vinculated_object');
         if($array && is_array($array) && in_array($object_id, $array) && is_numeric($object_id)) {
-            print_r($array);
             delete_post_meta($collection_id, 'socialdb_collection_vinculated_object',$object_id);
             $category_id = $this->get_category_root_of($collection_id);
             if(is_numeric($category_id))
               $result = wp_remove_object_terms( $object_id,[absint($category_id)],'socialdb_category_type');
             $value = $object_id;
-            print $value;
         } else {
-            print "Obj: $object_id\n";
             // Update the post
             $object = array(
                 'ID' => $object_id,
                 'post_status' => 'draft'
             );
             // Update the post into the database
-            $value = wp_update_post($object, true);
+            $value = wp_update_post($object);
 
-            if (is_wp_error($value)) {
-                $errors = $value->get_error_messages();
-                foreach ($errors as $error) {
-                    echo $error;
+            if ($value === 0) {
+                if(wp_delete_post($object_id))
+                {
+                    $value = 1;
                 }
-            }
-
-            print("Value: ".$value."\n");
-
-            if(has_filter('tainacan_delete_item_perm')) {
+            }else if(has_filter('tainacan_delete_item_perm')) {
                 $this->update_event_state('confirmed', $data['event_id']); // seto a o evento como invalido
                 //return apply_filters('tainacan_delete_item_perm', $value, $collection_id);
                 apply_filters('tainacan_delete_item_perm', $value, $collection_id);
