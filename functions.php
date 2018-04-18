@@ -3982,7 +3982,7 @@ function order_dynatree($a, $b)
 
 	return usort_sort($title_a, $title_b);
 }
-
+//Considera que já está em ordem alfabetica
 function usort_sort($title_a, $title_b)
 {
     $pattern = "/(\d+)/";
@@ -4013,5 +4013,9 @@ function usort_sort($title_a, $title_b)
         }
     }
 
-    return 0; //They're equals
+    $sort = [$title_a, $title_b];
+    sort($sort, SORT_STRING);
+    if($sort[0] === $title_a)
+        return -1;
+    else return 1;
 }

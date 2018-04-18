@@ -1547,6 +1547,7 @@ class Model {
             return json_encode([]);
         }
         $result = $wpdb->get_results($query);
+
         usort($result, "sort_results");
         if ($result) {
             foreach ($result as $object) {

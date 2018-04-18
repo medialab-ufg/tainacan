@@ -388,6 +388,12 @@ class VisualizationModel extends CollectionModel {
 
 
         }
+        //
+        foreach ($dynatree as $index => $tree)
+        {
+            usort($tree['children'], 'order_dynatree');
+            $dynatree[$index]['children'] = $tree['children'];
+        }
 
         return json_encode($dynatree,JSON_UNESCAPED_UNICODE);
     }
@@ -519,7 +525,6 @@ class VisualizationModel extends CollectionModel {
             foreach ($objects as $child) {
                 //$dynatree['children'][] = array('title' => $child->post_title.' ('.$this->count_metadata_by_value('socialdb_property_'.$properties['id'], $child->ID).')', 'key' => $child->ID . "_" . $properties['id'], 'addClass' => $classCss);
                 $dynatree['children'][] = array('title' => $child->post_title . '', 'key' => $child->ID . "_" . $properties['id'], 'addClass' => $classCss);
-                usort($dynatree['children'], "order_dynatree");
                 $counter++;
                 $id = ( $properties['term_id']) ? $properties['term_id'] : $properties['id'];
                 if ($counter > $this->getDynatreeNumberItems($id,$this->collection_id)) {
