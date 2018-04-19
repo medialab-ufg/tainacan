@@ -173,14 +173,21 @@ class CsvModel extends Model {
                                 update_post_title($object_id, $this->codification_value((string)$field_value,$code));
                                 $this->set_common_field_values($object_id, 'title', $this->codification_value($field_value,$code));
                             elseif ($metadata['socialdb_entity'] == 'post_content'):
-                                $content .= $field_value;
-                                if(mb_detect_encoding($content) !== 'UTF-8')
-                                {
-                                    $content = utf8_encode($content);
-                                }
+                                if(!empty($field_value)):
 
-                                update_post_content($object_id, $content);
-                                $this->set_common_field_values($object_id, 'description', $content);
+                                    if(mb_detect_encoding($field_value) !== 'UTF-8')
+                                    {
+                                        $field_value = utf8_encode($field_value);
+                                    }
+
+                                    $post = array(
+                                        'ID' => $object_id,
+                                        'post_content' => $field_value
+                                    );
+
+                                    wp_update_post($post);
+                                    $this->set_common_field_values($object_id, 'description', $field_value);
+                                endif;
                             elseif ($metadata['socialdb_entity'] == 'attach'):
                                 //attachment (Files)
                                 $files = explode(', ', utf8_decode($field_value));
