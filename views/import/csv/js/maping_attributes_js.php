@@ -11,7 +11,6 @@
         }).done(function (result) {
             $('.data').html(result);
             $('#tmp_div_all_metas').html(result);
-
         });
     });
     function cancel_import_csv() {
