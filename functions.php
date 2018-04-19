@@ -4019,3 +4019,99 @@ function usort_sort($title_a, $title_b)
         return -1;
     else return 1;
 }
+
+//Gera ordenação sintetica caso não haja ordenação definida
+function gen_ordenation($collection_id, $property_object = null, $property_data = null, $property_term = null, $property_compounds = null)
+{
+    $ordenation = unserialize(get_post_meta($collection_id, 'socialdb_collection_properties_ordenation', true));
+    if(!$ordenation || (is_array($ordenation['default'])))
+    {
+        $ordenation = [];
+        if(isset($property_object))
+        {
+            foreach ($property_object as $item_in)
+            {
+                $ordenation[] = $item_in['id'];
+            }
+        }
+
+        if(isset($property_data))
+        {
+            foreach ($property_data as $item_in)
+            {
+                $ordenation[] = $item_in['id'];
+            }
+        }
+
+        if(isset($property_term))
+        {
+            foreach ($property_term as $item_in)
+            {
+                $ordenation[] = $item_in['id'];
+            }
+        }
+
+        if(isset($property_compounds))
+        {
+            foreach ($property_compounds as $item_in)
+            {
+                $ordenation[] = $item_in['id'];
+            }
+        }
+    }
+    else
+    {
+        $ordenation_alt = [];
+
+        foreach ($ordenation as $tab){
+            $ids = explode(",", $tab);
+            foreach ($ids as $id)
+            {
+                $ordenation_alt[] = $id;
+            }
+        }
+
+        foreach ($ordenation_alt as $id)
+        {
+            if(isset($property_object))
+            {
+                foreach ($property_object as $item_in)
+                {
+                    if(!in_array($item_in['id'], $ordenation_alt))
+                        $ordenation_alt[] = $item_in['id'];
+                }
+            }
+
+            if(isset($property_data))
+            {
+                foreach ($property_data as $item_in)
+                {
+                    if(!in_array($item_in['id'], $ordenation_alt))
+                        $ordenation_alt[] = $item_in['id'];
+                }
+            }
+
+            if(isset($property_term))
+            {
+                foreach ($property_term as $item_in)
+                {
+                    if(!in_array($item_in['id'], $ordenation_alt))
+                        $ordenation_alt[] = $item_in['id'];
+                }
+            }
+
+            if(isset($property_compounds))
+            {
+                foreach ($property_compounds as $item_in)
+                {
+                    if(!in_array($item_in['id'], $ordenation_alt))
+                        $ordenation_alt[] = $item_in['id'];
+                }
+            }
+        }
+
+        $ordenation = $ordenation_alt;
+    }
+
+    return $ordenation;
+}

@@ -99,65 +99,114 @@
     $properties_terms_multipleselect = [];
     $properties_terms_treecheckbox = [];
     $properties_autocomplete = [];
-    ?>
-    <?php
+    $ordenation = gen_ordenation($collection_id, $property_object, $property_data, $property_term, $property_compounds);
 
-    if (isset($property_data)): ?>
-             
-            <?php foreach ($property_data as $property) {
-                if(strcmp($property['type'], 'autoincrement') === 0){
-                    continue;
-                }
-
-                $properties_autocomplete[] = $property['id'];
-
-            ?>
-                <div class="form-group">   
-                         <label class="col-md-12 no-padding" for="advanced_search_tags">
+    foreach ($ordenation as $id)
+    {
+        if(isset($property_object))
+        {
+            foreach($property_object as $index => $property)
+            {
+                //Trata metadados de objeto
+                if ($id == $property['id'])
+                {
+                    ?>
+                    <div class="form-group col-md-12 no-padding">
+                        <label class="col-md-12 no-padding" for="object_tags">
                             <?php echo $property['name']; ?>
                             <?php if ($property['metas']['socialdb_property_help']&&!empty(trim($property['metas']['socialdb_property_help']))) {
-                                    ?>
-                                    <a  
-                                       style="margin-right: 20px;" >
-                                        <span title="<?php echo $property['metas']['socialdb_property_help'] ?>" 
-                                              data-toggle="tooltip" 
-                                              data-placement="bottom" 
-                                              class="glyphicon glyphicon-question-sign"></span>
-                                   </a>
+                                ?>
+                                <a
+                                        style="margin-right: 20px;" >
+                                    <span title="<?php echo $property['metas']['socialdb_property_help'] ?>"
+                                          data-toggle="tooltip"
+                                          data-placement="bottom"
+                                          class="glyphicon glyphicon-question-sign"></span>
+                                </a>
                             <?php } ?>
-                         </label> 
-                        <?php if ($property['type'] == 'text') { ?>   
+                        </label>
+                        <div class="col-md-8 padding_right">
+                            <input type="text" onkeyup="autocomplete_object_property_add('<?php echo $property['id']; ?>', '<?php echo $object_id; ?>');" id="autocomplete_value_<?php echo $property['id']; ?>_<?php echo $object_id; ?>" placeholder="<?php _e('Type the three first letters of the item of this collection ','tainacan'); ?>"  class="chosen-selected form-control"  />
+                            <select onclick="clear_select_object_property(this);" id="property_value_<?php echo $property['id']; ?>_<?php echo $object_id; ?>_add" multiple class="chosen-selected2 form-control" style="height: auto;" name="socialdb_property_<?php echo $property['id']; ?>[]"
+                            >
+                                <?php if (!empty($property['metas']['objects'])) {  }
+                                else { ?>
+                                    <option value=""><?php _e('No objects added in this collection','tainacan'); ?></option>
+                                <?php } ?>
+                            </select>
+                        </div>
+                        <div class="col-md-4 padding_right padding-left-space">
+                            <select class="form-control" id="socialdb_property_<?php echo $property['id']; ?>_operation" name="socialdb_property_<?php echo $property['id']; ?>_operation">
+                                <option value="3"><?php _e('Contains','tainacan'); ?></option>
+                                <option value="4"><?php _e('Does not Contain','tainacan'); ?></option>
+                            </select>
+                        </div>
+                    </div>
+                    <?php
+                }
+            }
+        }
+
+        if(isset($property_data))
+        {
+            foreach($property_data as $index => $property)
+            {
+                //Trata metadados de dado
+                if($id == $property['id'])
+                {
+                    if(strcmp($property['type'], 'autoincrement') === 0){
+                        continue;
+                    }
+
+                    $properties_autocomplete[] = $property['id'];
+
+                    ?>
+                    <div class="form-group">
+                        <label class="col-md-12 no-padding" for="advanced_search_tags">
+                            <?php echo $property['name']; ?>
+                            <?php if ($property['metas']['socialdb_property_help']&&!empty(trim($property['metas']['socialdb_property_help']))) {
+                                ?>
+                                <a
+                                        style="margin-right: 20px;" >
+                                        <span title="<?php echo $property['metas']['socialdb_property_help'] ?>"
+                                              data-toggle="tooltip"
+                                              data-placement="bottom"
+                                              class="glyphicon glyphicon-question-sign"></span>
+                                </a>
+                            <?php } ?>
+                        </label>
+                        <?php if ($property['type'] == 'text') { ?>
                             <div class="col-md-8 padding_right">
-                                <input type="text" 
-                                       class="form-control" 
-                                       id="autocomplete_value_<?php echo $property['id']; ?>" 
-                                       name="socialdb_property_<?php echo $property['id']; ?>" 
+                                <input type="text"
+                                       class="form-control"
+                                       id="autocomplete_value_<?php echo $property['id']; ?>"
+                                       name="socialdb_property_<?php echo $property['id']; ?>"
                                        placeholder="">
-                            </div> 
-                           <div class="col-md-4 padding_right padding-left-space">
+                            </div>
+                            <div class="col-md-4 padding_right padding-left-space">
                                 <select class="form-control" id="advanced_search_property_<?php echo $property['id']; ?>_operation" name="socialdb_property_<?php echo $property['id']; ?>_operation">
                                     <option value="1"><?php _e('Equals','tainacan'); ?></option>
                                     <option value="2"><?php _e('Not equals','tainacan'); ?></option>
                                     <option value="3" selected><?php _e('Contains','tainacan'); ?></option>
                                     <option value="4"><?php _e('Does not Contain','tainacan'); ?></option>
                                 </select>
-                           </div>
-                        <?php }elseif ($property['type'] == 'textarea') { $properties_autocomplete[] = $property['id']; ?>   
+                            </div>
+                        <?php }elseif ($property['type'] == 'textarea') { $properties_autocomplete[] = $property['id']; ?>
                             <div class="col-md-8 padding_right">
                                 <input type="text" class="form-control" id="autocomplete_value_<?php echo $property['id']; ?>" name="socialdb_property_<?php echo $property['id']; ?>"  placeholder="<?php echo $property['name']; ?>"></textarea>
-                            </div> 
-                           <div class="col-md-4 padding_right padding-left-space">
+                            </div>
+                            <div class="col-md-4 padding_right padding-left-space">
                                 <select class="form-control" id="socialdb_property_<?php echo $property['id']; ?>_operation" name="socialdb_property_<?php echo $property['id']; ?>_operation">
                                     <option value="1"><?php _e('Equals','tainacan'); ?></option>
                                     <option value="2"><?php _e('Not equals','tainacan'); ?></option>
                                     <option value="3" selected><?php _e('Contains','tainacan'); ?></option>
                                     <option value="4"><?php _e('Does not Contain','tainacan'); ?></option>
                                 </select>
-                           </div> 
-                        <?php }elseif($property['type'] == 'numeric') { ?> 
+                            </div>
+                        <?php }elseif($property['type'] == 'numeric') { ?>
                             <div class="col-md-8 padding_right">
-                                 <input class="form-control"  placeholder="<?php echo $property['name']; ?>" type="numeric"  name="socialdb_property_<?php echo $property['id']; ?>" >
-                            </div>     
+                                <input class="form-control"  placeholder="<?php echo $property['name']; ?>" type="numeric"  name="socialdb_property_<?php echo $property['id']; ?>" >
+                            </div>
                             <div class="col-md-4 padding_right padding-left-space">
                                 <select class="form-control" id="advanced_search_property_<?php echo $property['id']; ?>_operation" name="socialdb_property_<?php echo $property['id']; ?>_operation">
                                     <option value="1"><?php _e('Equals','tainacan'); ?></option>
@@ -165,11 +214,11 @@
                                     <option value="3"><?php _e('Higher','tainacan'); ?></option>
                                     <option value="4"><?php _e('Lower','tainacan'); ?></option>
                                 </select>
-                           </div>
-                        <?php }elseif($property['type'] == 'date') { $properties_autocomplete[] = $property['id']; ?> 
+                            </div>
+                        <?php }elseif($property['type'] == 'date') { $properties_autocomplete[] = $property['id']; ?>
                             <div class="col-md-8 padding_right">
-                                 <input class="form-control input_date" id="autocomplete_value_<?php echo $property['id']; ?>"  placeholder="<?php echo $property['name']; ?>" type="text"  name="socialdb_property_<?php echo $property['id']; ?>" >
-                            </div>     
+                                <input class="form-control input_date" id="autocomplete_value_<?php echo $property['id']; ?>"  placeholder="<?php echo $property['name']; ?>" type="text"  name="socialdb_property_<?php echo $property['id']; ?>" >
+                            </div>
                             <div class="col-md-4 padding_right padding-left-space">
                                 <select class="form-control" id="advanced_search_property_<?php echo $property['id']; ?>_operation" name="socialdb_property_<?php echo $property['id']; ?>_operation">
                                     <option value="1"><?php _e('Equals','tainacan'); ?></option>
@@ -177,129 +226,116 @@
                                     <option value="3"><?php _e('After','tainacan'); ?></option>
                                     <option value="4"><?php _e('Before','tainacan'); ?></option>
                                 </select>
-                           </div>
-                        <?php } ?> 
-                </div>
-            <?php } ?>
-            <?php
-    endif;
+                            </div>
+                        <?php } ?>
+                    </div>
+                    <?php
+                }
+            }
+        }
 
-    if(isset($property_term) && (count($property_term) > 1 || (count($property_term) == 1 && !empty($property_term[0]['has_children'])))):
-        ?>
-        <?php foreach ($property_term as $property) { ?>
-        <div class="form-group col-md-12 no-padding" >
-            <label class="col-md-12 no-padding" >
-                <?php echo $property['name']; ?>
-                 <?php if ($property['metas']['socialdb_property_help']&&!empty(trim($property['metas']['socialdb_property_help']))) {
-                  ?>
-                        <a
-                           style="margin-right: 20px;" >
+        if(isset($property_term) && (count($property_term) > 1 || (count($property_term) == 1 && !empty($property_term[0]['has_children']))))
+        {
+            foreach($property_term as $index => $property)
+            {
+                //Trata metadados de termo
+                if ($id == $property['id'])
+                {
+                    ?>
+                    <div class="form-group col-md-12 no-padding" >
+                        <label class="col-md-12 no-padding" >
+                            <?php echo $property['name']; ?>
+                            <?php if ($property['metas']['socialdb_property_help']&&!empty(trim($property['metas']['socialdb_property_help']))) {
+                                ?>
+                                <a
+                                        style="margin-right: 20px;" >
                             <span title="<?php echo $property['metas']['socialdb_property_help'] ?>"
                                   data-toggle="tooltip"
                                   data-placement="bottom"
                                   class="glyphicon glyphicon-question-sign"></span>
-                       </a>
-                <?php } ?>
-            </label>
-            <div class="col-md-8 padding_right" style="padding-right: 26px">
-                    <?php
-                    if ($property['type'] == 'radio') {
-                        $properties_terms_radio[] = $property['id'];
-                        ?>
-                        <div id='search_field_property_term_<?php echo $property['id']; ?>'></div>
-                        <?php
-                    } elseif ($property['type'] == 'tree') {
-                          $properties_terms_tree[] = $property['id'];
-                            ?>
-                            <div class="row">
-                                <div  style='height: 150px;padding-left: 15px;'   id='search_field_property_term_<?php echo $property['id']; ?>'></div>
-                                 <input type="hidden"
-                                        id='socialdb_propertyterm_<?php echo $property['id']; ?>'
+                                </a>
+                            <?php } ?>
+                        </label>
+                        <div class="col-md-8 padding_right" style="padding-right: 26px">
+                            <?php
+                            if ($property['type'] == 'radio') {
+                                $properties_terms_radio[] = $property['id'];
+                                ?>
+                                <div id='search_field_property_term_<?php echo $property['id']; ?>'></div>
+                                <?php
+                            } elseif ($property['type'] == 'tree') {
+                                $properties_terms_tree[] = $property['id'];
+                                ?>
+                                <div class="row">
+                                    <div  style='height: 150px;padding-left: 15px;'   id='search_field_property_term_<?php echo $property['id']; ?>'></div>
+                                    <input type="hidden"
+                                           id='socialdb_propertyterm_<?php echo $property['id']; ?>'
+                                           name="socialdb_propertyterm_<?php echo $property['id']; ?>"
+                                           value="">
+                                </div>
+                                <?php
+                            } elseif ($property['type'] == 'selectbox') {
+                                $properties_terms_selectbox[] = $property['id'];
+                                ?>
+                                <select class="form-control"
+                                        onchange="onSelectValue(this,<?php echo $property['id']; ?>)"
                                         name="socialdb_propertyterm_<?php echo $property['id']; ?>"
-                                        value="">
-                           </div>
-                           <?php
-                    } elseif ($property['type'] == 'selectbox') {
-                        $properties_terms_selectbox[] = $property['id'];
-                        ?>
-                        <select class="form-control"
-                                onchange="onSelectValue(this,<?php echo $property['id']; ?>)"
-                                name="socialdb_propertyterm_<?php echo $property['id']; ?>"
-                                id='search_field_property_term_<?php echo $property['id']; ?>' <?php
+                                        id='search_field_property_term_<?php echo $property['id']; ?>' <?php
 
-                        ?>></select>
+                                ?>></select>
                                 <?php
                             }elseif ($property['type'] == 'checkbox') {
                                 $properties_terms_checkbox[] = $property['id'];
                                 ?>
-                        <div id='search_field_property_term_<?php echo $property['id']; ?>'></div>
-                        <?php
-                    } elseif ($property['type'] == 'multipleselect') {
-                        $properties_terms_multipleselect[] = $property['id'];
-                        ?>
-                         <select   onchange="onSelectValue(this,<?php echo $property['id']; ?>)" multiple class="form-control" name="socialdb_propertyterm_<?php echo $property['id']; ?>" id='search_field_property_term_<?php echo $property['id']; ?>' ></select>
-                        <?php
-                    } elseif ($property['type'] == 'tree_checkbox') {
-                        $properties_terms_treecheckbox[] = $property['id'];
-                        ?>
-                       <div class="row">
-                            <div style='height: 150px;'  id='search_field_property_term_<?php echo $property['id']; ?>'></div>
-                            <div id='socialdb_propertyterm_<?php echo $property['id']; ?>' ></div>
-                       </div>
-                       <?php
-                    }
-                    ?>
-            </div>
-            <div class="col-md-4 padding_right padding-left-space">
-                <select class="form-control" id="socialdb_property_<?php echo $property['id']; ?>_operation" name="socialdb_property_<?php echo $property['id']; ?>_operation">
-                   <option value=""><?php _e('Select','tainacan'); ?>...</option>
-                   <option value="3"><?php _e('Contains','tainacan'); ?></option>
-                   <option value="4"><?php _e('Does not Contain','tainacan'); ?></option>
-                </select>
-           </div>
-           <div class="col-md-12" id="append_properties_categories_<?php echo $property['id']; ?>_adv"></div>
-       </div>
-        <?php } ?>
-    <?php endif;
-    ?>
-
-    <?php if (isset($property_object)):
-        ?>
-        <?php foreach ($property_object as $property) { ?>
-            <?php //if($property['metas']['socialdb_property_object_is_facet']=='false'):  ?>
-            <div class="form-group col-md-12 no-padding">
-                <label class="col-md-12 no-padding" for="object_tags">
-                    <?php echo $property['name']; ?>
-                    <?php if ($property['metas']['socialdb_property_help']&&!empty(trim($property['metas']['socialdb_property_help']))) {
+                                <div id='search_field_property_term_<?php echo $property['id']; ?>'></div>
+                                <?php
+                            } elseif ($property['type'] == 'multipleselect') {
+                                $properties_terms_multipleselect[] = $property['id'];
                                 ?>
-                                <a
-                                   style="margin-right: 20px;" >
-                                    <span title="<?php echo $property['metas']['socialdb_property_help'] ?>"
-                                          data-toggle="tooltip"
-                                          data-placement="bottom"
-                                          class="glyphicon glyphicon-question-sign"></span>
-                               </a>
-                    <?php } ?>
-                </label>
-                <div class="col-md-8 padding_right">
-                    <input type="text" onkeyup="autocomplete_object_property_add('<?php echo $property['id']; ?>', '<?php echo $object_id; ?>');" id="autocomplete_value_<?php echo $property['id']; ?>_<?php echo $object_id; ?>" placeholder="<?php _e('Type the three first letters of the item of this collection ','tainacan'); ?>"  class="chosen-selected form-control"  />
-                    <select onclick="clear_select_object_property(this);" id="property_value_<?php echo $property['id']; ?>_<?php echo $object_id; ?>_add" multiple class="chosen-selected2 form-control" style="height: auto;" name="socialdb_property_<?php echo $property['id']; ?>[]"
-                    >
-                        <?php if (!empty($property['metas']['objects'])) {  }
-                                else { ?>
-                            <option value=""><?php _e('No objects added in this collection','tainacan'); ?></option>
-                        <?php } ?>
-                    </select>
-                </div>
-                <div class="col-md-4 padding_right padding-left-space">
-                    <select class="form-control" id="socialdb_property_<?php echo $property['id']; ?>_operation" name="socialdb_property_<?php echo $property['id']; ?>_operation">
-                        <option value="3"><?php _e('Contains','tainacan'); ?></option>
-                        <option value="4"><?php _e('Does not Contain','tainacan'); ?></option>
-                    </select>
-               </div>
-             </div>
-        <?php } ?>
-    <?php endif; ?>
+                                <select   onchange="onSelectValue(this,<?php echo $property['id']; ?>)" multiple class="form-control" name="socialdb_propertyterm_<?php echo $property['id']; ?>" id='search_field_property_term_<?php echo $property['id']; ?>' ></select>
+                                <?php
+                            } elseif ($property['type'] == 'tree_checkbox') {
+                                $properties_terms_treecheckbox[] = $property['id'];
+                                ?>
+                                <div class="row">
+                                    <div style='height: 150px;'  id='search_field_property_term_<?php echo $property['id']; ?>'></div>
+                                    <div id='socialdb_propertyterm_<?php echo $property['id']; ?>' ></div>
+                                </div>
+                                <?php
+                            }
+                            ?>
+                        </div>
+                        <div class="col-md-4 padding_right padding-left-space">
+                            <select class="form-control" id="socialdb_property_<?php echo $property['id']; ?>_operation" name="socialdb_property_<?php echo $property['id']; ?>_operation">
+                                <option value=""><?php _e('Select','tainacan'); ?>...</option>
+                                <option value="3"><?php _e('Contains','tainacan'); ?></option>
+                                <option value="4"><?php _e('Does not Contain','tainacan'); ?></option>
+                            </select>
+                        </div>
+                        <div class="col-md-12" id="append_properties_categories_<?php echo $property['id']; ?>_adv"></div>
+                    </div>
+                    <?php
+                }
+            }
+        }
+
+        if(isset($property_compounds))
+        {
+            foreach ($property_compounds as $index => $compounds)
+            {
+                //Trata composta
+                if ($id == $compounds['id'])
+                {
+                    $comp[] = $compounds;
+                    $advanced_search_helper->list_properties_compounds_search($comp);
+                    $comp = [];
+                    unset($property_compounds[$index]);
+                    continue;
+                }
+            }
+        }
+    }
+    ?>
 
     <?php if (isset($rankings)): ?>
         <?php foreach ($rankings as $property) { ?>
@@ -307,14 +343,14 @@
                 <label class="col-md-12 no-padding" for="object_tags">
                     <?php echo $property['name']; ?>
                     <?php if ($property['metas']['socialdb_property_help']&&!empty(trim($property['metas']['socialdb_property_help']))) {
-                                ?>
-                                <a
-                                   style="margin-right: 20px;" >
-                                    <span title="<?php echo $property['metas']['socialdb_property_help'] ?>"
-                                          data-toggle="tooltip"
-                                          data-placement="bottom"
-                                          class="glyphicon glyphicon-question-sign"></span>
-                               </a>
+                        ?>
+                        <a
+                                style="margin-right: 20px;" >
+                                <span title="<?php echo $property['metas']['socialdb_property_help'] ?>"
+                                      data-toggle="tooltip"
+                                      data-placement="bottom"
+                                      class="glyphicon glyphicon-question-sign"></span>
+                        </a>
                     <?php } ?>
                 </label>
                 <div class="col-md-8 padding_right">
@@ -325,7 +361,7 @@
                                value=""
                                id="facet_<?php echo $facet['id']; ?>_1"
                                name="socialdb_property_<?php echo $property['id']; ?>_1">
-                                   <?php _e('until','tainacan') ?>
+                        <?php _e('until','tainacan') ?>
                         <input style="width: 30%"
                                type="number"
                                size="7"
@@ -333,11 +369,11 @@
                                id="facet_<?php echo $facet['id']; ?>_2"
                                name="socialdb_property_<?php echo $property['id']; ?>_2">
                     <?php elseif($property['type']=='stars'): ?>
-                            <input type="radio" value="4.1_5" name="socialdb_property_<?php echo $property['id']; ?>_stars"><img src="<?php echo get_template_directory_uri() . '/libraries/images/star5.png' ?>"></a><br>
-                            <input type="radio" value="3.1_4" name="socialdb_property_<?php echo $property['id']; ?>_stars"><img src="<?php echo get_template_directory_uri() . '/libraries/images/star4.png' ?>"></a><br>
-                            <input type="radio" value="2.1_3" name="socialdb_property_<?php echo $property['id']; ?>_stars"><img src="<?php echo get_template_directory_uri() . '/libraries/images/star3.png' ?>"></a><br>
-                            <input type="radio" value="1.1_2" name="socialdb_property_<?php echo $property['id']; ?>_stars"><img src="<?php echo get_template_directory_uri() . '/libraries/images/star2.png' ?>"></a><br>
-                            <input type="radio" value="0_1" name="socialdb_property_<?php echo $property['id']; ?>_stars"><img src="<?php echo get_template_directory_uri() . '/libraries/images/star1.png' ?>"></a><br>
+                        <input type="radio" value="4.1_5" name="socialdb_property_<?php echo $property['id']; ?>_stars"><img src="<?php echo get_template_directory_uri() . '/libraries/images/star5.png' ?>"></a><br>
+                        <input type="radio" value="3.1_4" name="socialdb_property_<?php echo $property['id']; ?>_stars"><img src="<?php echo get_template_directory_uri() . '/libraries/images/star4.png' ?>"></a><br>
+                        <input type="radio" value="2.1_3" name="socialdb_property_<?php echo $property['id']; ?>_stars"><img src="<?php echo get_template_directory_uri() . '/libraries/images/star3.png' ?>"></a><br>
+                        <input type="radio" value="1.1_2" name="socialdb_property_<?php echo $property['id']; ?>_stars"><img src="<?php echo get_template_directory_uri() . '/libraries/images/star2.png' ?>"></a><br>
+                        <input type="radio" value="0_1" name="socialdb_property_<?php echo $property['id']; ?>_stars"><img src="<?php echo get_template_directory_uri() . '/libraries/images/star1.png' ?>"></a><br>
                     <?php endif;?>
                 </div>
                 <div class="col-md-4 padding_right padding-left-space">
@@ -345,13 +381,9 @@
                         <option value="1"><?php _e('Between','tainacan'); ?></option>
                         <option value="2"><?php _e('Not Between','tainacan'); ?></option>
                     </select>
-               </div>
-             </div>
+                </div>
+            </div>
         <?php } ?>
-    <?php endif; ?>
-
-    <?php if(isset($property_compounds)): ?>
-        <?php $advanced_search_helper->list_properties_compounds_search($property_compounds) ?>
     <?php endif; ?>
 
         <div id="list_licenses_items" class="form-group col-md-12 no-padding" >

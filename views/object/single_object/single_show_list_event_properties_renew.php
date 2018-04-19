@@ -33,101 +33,11 @@ $ids = [];
     <input type="hidden" name="properties_object_ids" id='properties_object_ids' value="<?php echo implode(',', $ids); ?>">
 <?php
 
-$ordenation = unserialize(get_post_meta($collection_id, 'socialdb_collection_properties_ordenation', true));
+$ordenation = gen_ordenation($collection_id, $property_object, $property_data, $property_term, $property_compounds);
 $collumns_to_show = get_post_meta($collection_id,"socialdb_collection_item_collumns", true);
 if($collumns_to_show == 1){
     $collumns_to_show = 12;
 }else $collumns_to_show = 6;
-
-//Gen ordenation
-if(!$ordenation || (is_array($ordenation['default'])))
-{
-    $ordenation = [];
-    if(isset($property_object))
-    {
-        foreach ($property_object as $item_in)
-        {
-            $ordenation[] = $item_in['id'];
-        }
-    }
-
-	if(isset($property_data))
-	{
-		foreach ($property_data as $item_in)
-		{
-			$ordenation[] = $item_in['id'];
-		}
-	}
-
-	if(isset($property_term))
-	{
-		foreach ($property_term as $item_in)
-		{
-			$ordenation[] = $item_in['id'];
-		}
-	}
-
-	if(isset($property_compounds))
-	{
-		foreach ($property_compounds as $item_in)
-		{
-			$ordenation[] = $item_in['id'];
-		}
-	}
-}
-else
-{
-    $ordenation_alt = [];
-
-    foreach ($ordenation as $tab){
-	    $ids = explode(",", $tab);
-        foreach ($ids as $id)
-        {
-	        $ordenation_alt[] = $id;
-        }
-    }
-
-    foreach ($ordenation_alt as $id)
-    {
-	    if(isset($property_object))
-	    {
-		    foreach ($property_object as $item_in)
-		    {
-		        if(!in_array($item_in['id'], $ordenation_alt))
-			        $ordenation_alt[] = $item_in['id'];
-		    }
-	    }
-
-	    if(isset($property_data))
-	    {
-		    foreach ($property_data as $item_in)
-		    {
-			    if(!in_array($item_in['id'], $ordenation_alt))
-				    $ordenation_alt[] = $item_in['id'];
-		    }
-	    }
-
-	    if(isset($property_term))
-	    {
-		    foreach ($property_term as $item_in)
-		    {
-			    if(!in_array($item_in['id'], $ordenation_alt))
-				    $ordenation_alt[] = $item_in['id'];
-		    }
-	    }
-
-	    if(isset($property_compounds))
-	    {
-		    foreach ($property_compounds as $item_in)
-		    {
-			    if(!in_array($item_in['id'], $ordenation_alt))
-				    $ordenation_alt[] = $item_in['id'];
-		    }
-	    }
-    }
-
-    $ordenation = $ordenation_alt;
-}
 
 foreach($ordenation as $id){
 	if(isset($property_object))
