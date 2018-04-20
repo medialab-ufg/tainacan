@@ -3593,20 +3593,17 @@ function get_pdf_no_thumb_ids($count) {
     $posts = get_posts($args);
 
     $PDFidAttachment = [];
-    foreach ($posts as $post) {
-        print "$post->ID\n";
+    foreach ($posts as $post)
+    {
         if (!has_post_thumbnail($post->ID))
         {
-            print "No thumb\n";
             $post_meta = get_post_meta($post->ID);
             $attachment_id = $post_meta['socialdb_object_content'][0];
-            print "ATT id: $attachment_id\n";
             $url_file = wp_get_attachment_url($attachment_id);
-            print "$url_file\n";
+
             if ($url_file)
             {
                 $post_mime = get_post_mime_type($attachment_id);
-                print "$post_mime\n";
                 if (strcmp($post_mime, 'application/pdf') == 0)
                 {
                     $PDFidAttachment[$post->ID] = $url_file;
@@ -3617,7 +3614,6 @@ function get_pdf_no_thumb_ids($count) {
 
         if($count == 0)
         {
-            print "END\n";
             return $PDFidAttachment;
         }
     }
