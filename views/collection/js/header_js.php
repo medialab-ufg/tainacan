@@ -46,7 +46,7 @@
         }
 
         $('.dropdown-toggle').dropdown();
-        $("#search_objects").catcomplete({
+        /*$("#search_objects").catcomplete({
             delay: 0,
             minLength: 2,
             source: <?php echo json_encode($json_autocomplete); ?>,
@@ -62,7 +62,7 @@
                     $("#search_objects").val(ui.item.label);
                 }, 100);
             }
-        });
+        });*/
         
         $('#resources_collection_button').click(function (e) {
             var posX = e.target.offsetLeft;
