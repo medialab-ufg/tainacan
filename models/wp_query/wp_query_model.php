@@ -624,7 +624,7 @@ class WPQueryModel extends Model {
                     $args['s'] = $recover_data['keyword'];
                 }
             }*/
-            //$args['s'] = $recover_data['keyword'];
+            $args['s'] = $recover_data['keyword'];
 
             if(isset($recover_data['author']) && $recover_data['author'] != ''){
                 $args['author'] = $recover_data['author'];
@@ -901,7 +901,7 @@ class WPQueryModel extends Model {
     public function get_meta_query($recover_data) {
         $meta_query = array('relation' => 'AND');
         //se estiver buscando uma string em uma colecao de itens
-        if (isset($recover_data['keyword'])&&!is_array($recover_data['keyword']) && $recover_data['keyword'] != '') {
+        /*if (isset($recover_data['keyword'])&&!is_array($recover_data['keyword']) && $recover_data['keyword'] != '') {
             $length = strlen($recover_data['keyword']);
             $recover_data['keyword'] = stripslashes ($recover_data['keyword'] );
             if ((strpos($recover_data['keyword'], '"') === 0)) {
@@ -944,7 +944,7 @@ class WPQueryModel extends Model {
                             'value' => $recover_data['keyword'],
                             'compare' => 'IN'
                         );
-        }
+        }*/
         /*End String search*/
         if (isset($recover_data['properties_tree'])) {
             foreach ($recover_data['properties_tree'] as $property_id => $value_id) {
