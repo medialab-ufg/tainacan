@@ -57,7 +57,7 @@ class UserModel extends Model {
      */
     public function list_user($data) {
         global $wpdb;
-        $wp_user = "wp_users";
+        $wp_user = $wpdb->users;
         $query = "
                 SELECT u.ID AS ID ,u.user_nicename AS user_nicename FROM $wp_user u
                 WHERE u.user_nicename LIKE '%{$data['term']}%'

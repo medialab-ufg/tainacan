@@ -2,9 +2,8 @@
 require_once(dirname(__FILE__) . '../../../models/user/user_model.php');
 require_once(dirname(__FILE__) . '../../general/general_controller.php');
 include_once (dirname(__FILE__) . '../../../models/event/event_object/event_object_create_model.php');
-//require_once(dirname(__FILE__) . '../../../models/user/facebook.php');
-//require_once(dirname(__FILE__) . '../../../models/user/FacebookSocialDB.class.php');
 require_once(dirname(__FILE__) . '../../../models/social_network/Facebook/autoload.php');
+
 try{
     require_once(dirname(__FILE__) . '../../../models/user/google-api-php-client/src/apiClient.php');
     require_once(dirname(__FILE__) . '../../../models/user/google-api-php-client/src/contrib/apiPlusService.php');
