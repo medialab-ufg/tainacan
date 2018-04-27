@@ -1139,6 +1139,7 @@ function register_post_types() {
 function register_taxonomies() {
     $category_args = array(
         'hierarchical' => true,
+        'show_in_rest' => true,
         'query_var' => 'category',
         'rewrite' => array(
             'slug' => 'category',
@@ -1155,13 +1156,15 @@ function register_taxonomies() {
             'parent_item' => __('Parent Category', 'tainacan'),
             'parent_item_colon' => __('Parent Category:', 'tainacan')),
     );
+
+    $other_category_args = ['show_in_rest' => true];
     register_taxonomy('socialdb_category_type', array('socialdb_object'), $category_args);
-    register_taxonomy('socialdb_tag_type', array('socialdb_collection'));
-    register_taxonomy('socialdb_channel_type', array('socialdb_channel'));
-    register_taxonomy('socialdb_license_type', array('socialdb_license'));
-    register_taxonomy('socialdb_collection_type', array('socialdb_collection'));
-    register_taxonomy('socialdb_property_type', array('socialdb_vote'));
-    register_taxonomy('socialdb_event_type', array('socialdb_event'));
+    register_taxonomy('socialdb_tag_type', array('socialdb_collection'), $other_category_args);
+    register_taxonomy('socialdb_channel_type', array('socialdb_channel'), $other_category_args);
+    register_taxonomy('socialdb_license_type', array('socialdb_license'), $other_category_args);
+    register_taxonomy('socialdb_collection_type', array('socialdb_collection'), $other_category_args);
+    register_taxonomy('socialdb_property_type', array('socialdb_vote'), $other_category_args);
+    register_taxonomy('socialdb_event_type', array('socialdb_event'), $other_category_args);
 }
 
 function create_oai_post() {
