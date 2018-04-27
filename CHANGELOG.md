@@ -12,12 +12,25 @@ e este projeto adere para [Semantic Versioning](http://semver.org/spec/v2.0.0.ht
 - Link para visualizar o item do tipo imagem na resolução original
 - Opção para definir a imagem raiz apos transformar um item no tipo imagem
 - Legendas nos anexos
+- Opção para esconder rodapé do repositorio
+- Mostrar taxonomias na API rest
+- Barra de progresso para importação de CSV
+- Adicionado um icone de lixeira para a lixeira
+- Adicionada a opção para ocultar busca do repositorio
+- Exibição de itens em uma coluna foi adicionado como opção para o modo de visualização em mídia
 
 ### Modificado
 - Interface de busca avançada
 - Seleção de itens em massa
 - Posição do botão 'Salvar' metadado na home do item
 - Margem da caixa de opções do item na home do item
+- Aceita tabela de usuarios com nome diferente do padrão
+- Autocompletar mostra somente itens e não mais tags, categorias e etc.
+- Ordenação em ordem alfabetica do metadados do CSV e da coleção durante o mapeamento CSV => Tainacan
+- Ordenação da Dynatree na busca lateral
+- Importação de CSV de forma serial e paginada (evitar timeout)
+- Imagens como anexo são exibidas em um modal com tamanho maximo igual ao tamanho da tela
+- Ordenação dos metadados da busca avaçanda de uma coleção para refletir a ordenação definida pelo usuario 
 
 ### Corrigido
 - Não apresentação dos metadados na home do item
@@ -32,8 +45,18 @@ e este projeto adere para [Semantic Versioning](http://semver.org/spec/v2.0.0.ht
 - Links de itens exibidos na home de eventos da coleção
 - Metadados de relacionamento em nivel de repositorio
 - Redicionamento dos slides referente aos anexos na home do item
+- Importador de CSV refeito
+- Ordenação da Dynatree corrigida
+- Deleção de itens "defeituosos" de forma definitiva
+- Correção do posicionamento da barra principal na exibição de páginas
+- Capa do ropositorio é exibido do mesmo tamanho em todas as páginas
+- Remoção do tostr após seleção em massa ser finalizada
+- Correção do posicionamento do logo do repositorio
+- Paginação na lixeira funcionando corretamente
+- Problemas de codificação de CSV
 
 ### Removido
+- Remoção PDFSmallot 
 
 ### Obsoleto
 - Ajuda
