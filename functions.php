@@ -4119,17 +4119,12 @@ function gen_ordenation($collection_id, $property_object = null, $property_data 
     return $ordenation;
 }
 
-function get_all_children($wpdb, &$all_categories, $categories_search = null)
+function get_all_children($wpdb, &$all_categories)
 {
-    if($categories_search == null)
-    {
-        $categories_search = $all_categories;
-    }
-
     $wp_term_taxonomy = $wpdb->prefix . "term_taxonomy";
     $wp_terms = $wpdb->prefix . "terms";
 
-    foreach ($categories_search as $category)
+    foreach ($all_categories as $index => $category)
     {
         $parent = $category->term_id;
         $query = "
@@ -4142,8 +4137,8 @@ function get_all_children($wpdb, &$all_categories, $categories_search = null)
         $children = $wpdb->get_results($query);
         if(!empty($children))
         {
-            $all_categories = array_merge($all_categories, $children);
-            get_all_children($wpdb, $all_categories, $children);
+            $all_categories[$index]->children =  $children;
+            get_all_children($wpdb, $all_categories[$index]->children);
         }
     }
 }
