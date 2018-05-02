@@ -41,6 +41,97 @@ abstract class RepositoryApi {
     }
 
     /**
+     *
+     * @param /WP_REST_Request $request
+     */
+    public function get_repository_categories($request)
+    {
+        global $wpdb;
+
+        $wp_term_taxonomy = $wpdb->prefix . "term_taxonomy";
+        $wp_terms = $wpdb->prefix . "terms";
+        $wp_taxonomymeta = $wpdb->prefix . "termmeta";
+
+        /*Collection categories*/
+        $term = get_term_by('name', 'socialdb_category', 'socialdb_category_type');
+        $parent = $term->term_id;
+
+        $query = "
+			SELECT * FROM $wp_terms t
+			INNER JOIN $wp_term_taxonomy tt ON t.term_id = tt.term_id
+                        INNER JOIN $wp_taxonomymeta tx on tx.term_id = tt.term_id
+			WHERE tt.parent = {$parent} AND (tx.meta_key LIKE 'socialdb_category_owner')
+                        ORDER BY t.name ASC  
+		";
+
+        $collection_categories = $wpdb->get_results($query);
+
+        /*User Categories*/
+        $term = get_term_by('name', 'socialdb_taxonomy', 'socialdb_category_type');
+        $parent = $term->term_id;
+
+        $query = "
+			SELECT * FROM $wp_terms t
+			INNER JOIN $wp_term_taxonomy tt ON t.term_id = tt.term_id
+                        INNER JOIN $wp_taxonomymeta tx on tx.term_id = tt.term_id
+			WHERE tt.parent = {$parent} AND (tx.meta_key LIKE 'socialdb_category_owner')
+                        ORDER BY t.name ASC  
+		";
+
+        $user_categories = $wpdb->get_results($query);
+
+        $response = array_merge($collection_categories, $user_categories);
+
+        /*Public categories*/
+        $flag_eliminate = false;
+        $query = "
+                    SELECT * FROM $wp_terms t
+                    INNER JOIN $wp_term_taxonomy tt ON t.term_id = tt.term_id 
+                    INNER JOIN $wp_taxonomymeta tx ON t.term_id = tx.term_id
+                    WHERE tx.meta_key LIKE 'socialdb_category_permission' and tx.meta_value LIKE 'public'  
+                    ORDER BY t.name
+                    ";
+        $result = $wpdb->get_results($query);
+        if ($result && is_array($result) && count($result) > 0) {
+            foreach ($result as $category) {
+                $categories[$category->term_id] = $category->term_id;
+            }
+        }
+        if ($categories && is_array($categories) && count($categories) > 0) {
+            foreach ($categories as $category) {
+                $hierarchies = array_reverse(get_ancestors($category, 'socialdb_category_type'));
+                if (is_array($hierarchies)) {
+                    $hierarchies[] = $category;
+                } else {
+                    $hierarchies = [];
+                    $hierarchies[] = $category;
+                }
+                foreach ($hierarchies as $hierarchy) {
+                    if (in_array($hierarchy, $categories)) {
+                        if ($flag_eliminate) {
+                            unset($categories[$hierarchy]);
+                        }
+                        $flag_eliminate = true;
+                    }
+                }
+                $flag_eliminate = false;
+            }
+        }
+        //
+        $result = [];
+        if ($categories && is_array($categories) && count($categories) > 0) {
+            foreach ($categories as $category) {
+                $result[] = get_term_by('id', $category, 'socialdb_category_type');
+            }
+        }
+        $response = array_merge($response, $result);
+
+        get_all_children($wpdb, $response);
+
+        return new WP_REST_Response($response, 200);
+    }
+
+    /**
      * 
      * @param /WP_REST_Request $request
      */

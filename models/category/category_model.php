@@ -360,12 +360,12 @@ class CategoryModel extends Model {
 	    }else $hideCheckbox = false;
 
         $dynatree = [];
+
         $dynatree = $this->generate_user_categories_dynatree($data, $dynatree, $hideCheckbox, true);
-        //if(has_nav_menu('menu-ibram')){
-            $dynatree = $this->generate_collection_categories_dynatree($data, $dynatree, $hideCheckbox, false);
-        //}
+        $dynatree = $this->generate_collection_categories_dynatree($data, $dynatree, $hideCheckbox, false);
         $dynatree = $this->generate_shared_categories_dynatree($data, $dynatree, $hideCheckbox);
         $dynatree = $this->generate_public_categories_dynatree($data, $dynatree, $hideCheckbox);
+
         return json_encode($dynatree);
     }
 
@@ -430,7 +430,7 @@ class CategoryModel extends Model {
       /* Retorna os filhos para as categorias no dynatree */
     /* @author Eduardo */
 
-    public function generate_user_categories_dynatree($data, $dynatree, $hide_checkbox = false,$show_select = true) {
+    public function generate_user_categories_dynatree($data, $dynatree, $hide_checkbox = false, $show_select = true) {
         $classCss = 'user_img';
         $dynatree[] = array('title' => __('User Categories', 'tainacan'), 'isLazy' => false,
             'key' => 'user_categories', 'activate' => false, 'expand' => true,

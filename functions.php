@@ -4118,3 +4118,32 @@ function gen_ordenation($collection_id, $property_object = null, $property_data 
 
     return $ordenation;
 }
+
+function get_all_children($wpdb, &$all_categories, $categories_search = null)
+{
+    if($categories_search == null)
+    {
+        $categories_search = $all_categories;
+    }
+
+    $wp_term_taxonomy = $wpdb->prefix . "term_taxonomy";
+    $wp_terms = $wpdb->prefix . "terms";
+
+    foreach ($categories_search as $category)
+    {
+        $parent = $category->term_id;
+        $query = "
+        SELECT * FROM $wp_terms t
+        INNER JOIN $wp_term_taxonomy tt ON t.term_id = tt.term_id
+        WHERE tt.parent = {$parent}
+                    ORDER BY t.name
+        ";
+
+        $children = $wpdb->get_results($query);
+        if(!empty($children))
+        {
+            $all_categories = array_merge($all_categories, $children);
+            get_all_children($wpdb, $all_categories, $children);
+        }
+    }
+}
