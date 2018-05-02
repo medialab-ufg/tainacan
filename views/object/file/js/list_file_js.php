@@ -1,5 +1,9 @@
 <script>
 function showSlideShow( item_index ) {
+    let height = $(window).height() -180;
+
+    $(".div_show_image_modal").height(height);
+
     $("#modalSlideShow").modal('show');
 
     var slider_opts = {

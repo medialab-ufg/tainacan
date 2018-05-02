@@ -851,7 +851,7 @@
                         return true;
                     }
 
-                    var current_id = property.id,
+                    let current_id = property.id,
                         current_search_widget = property.search_widget,
                         fixed_meta = property.metas.socialdb_property_is_fixed,
                         property_visibility = property.metas.socialdb_property_visibility;
@@ -861,24 +861,26 @@
                         default_search_widget.push(property.id);
                         current_search_widget = 'tree';
                     }
-                    
+
+                    let visibility, style, addFilterStyle;
+                    if(property_visibility && property_visibility === 'show')
+                    {
+                        visibility = '<a vis="show" id="visibility_' + current_id + '" onclick="change_visibility(' + current_id + ')" style="cursor:pointer;"><span class="glyphicon glyphicon-eye-open"></span></a>';
+                        style = '';
+                        addFilterStyle = '';
+                    }
+                    else
+                    {
+                        style = 'opacity:0.33;';
+                        visibility = '<a vis="hide" id="visibility_' + current_id + '" onclick="change_visibility(' + current_id + ')" style="cursor:pointer;"><span class="glyphicon glyphicon-eye-close"></span></a>';
+                        addFilterStyle = 'pointer-events: none;';
+                    }
+
                     if ( fixed_meta && fixed_meta === 'true' )
                     {
-                        if(property_visibility && property_visibility === 'show')
-                        {
-                            var visibility = '<a vis="show" id="visibility_' + current_id + '" onclick="change_visibility(' + current_id + ')" style="cursor:pointer;"><span class="glyphicon glyphicon-eye-open"></span></a>';
-                            var style = '',
-                                addFilterStyle = '';
-                        }
-                        else
-                        {
-                            var style = 'opacity:0.33;';
-                            var visibility = '<a vis="hide" id="visibility_' + current_id + '" onclick="change_visibility(' + current_id + ')" style="cursor:pointer;"><span class="glyphicon glyphicon-eye-close"></span></a>',
-                                addFilterStyle = 'pointer-events: none;';
-                        }
                         /* Standard meta */
                         $('ul#metadata-container').append(
-                            '<li id="meta-item-' + current_id + '" data-widget="' + current_search_widget + '" class="root_category ui-widget-content ui-corner-tr fixed-property">' +
+                            '<li data-jk="afd" id="meta-item-' + current_id + '" data-widget="' + current_search_widget + '" class="root_category ui-widget-content ui-corner-tr fixed-property">' +
                                 '<label style="'+style+'" class="title-pipe">' +
                                     '<a title="Adicionar como filtro" id ="addFilter_'+ property.id +'"  style="cursor:pointer; margin-right:15px;' + addFilterStyle + '" onclick="add_filter(' + property.id + ', \'' + property.slug +'\')">' +
                                         '<span class="glyphicon glyphicon-menu-left"></span>' +
@@ -934,10 +936,10 @@
     function add_filter(id, slug) {
         var item_id = 'meta-item-' + id;
 
-        var seletor = $("#" + item_id);
-        var item_search_widget = seletor.attr("data-widget");
-        var is_fixed_meta = seletor.hasClass('fixed-property');
-        var is_blocked = seletor.hasClass('block-facet');
+        let seletor = $("#" + item_id),
+            item_search_widget = seletor.attr("data-widget");
+            /*is_fixed_meta = seletor.hasClass('fixed-property'),
+            is_blocked = seletor.hasClass('block-facet');*/
             /*Not permited facet*/      /*Already inserted*/
         if (not_allowed_facet(slug) || $("#" + id).length > 0 /*is_blocked || (seletor.attr('term_root_id') && $("#" + seletor.attr('term_root_id')).length > 0)*/)
         {
@@ -951,7 +953,7 @@
                 $('.data-widget').addClass('select-meta-filter').show();
                 $('.term-widget').addClass('select-meta-filter').show();
             } else {*/
-                if (item_search_widget === "null" || item_search_widget == "undefined")
+                if (item_search_widget === "null" || item_search_widget === "undefined")
                 {
                     $("#" + item_id + " .edit_property_data").click();
                     $("#" + item_id + " .edit_ranking").click();
@@ -997,7 +999,7 @@
             type: 'POST',
             data: {collection_id: $("#collection_id").val(), operation: 'alter_visibility', property_id: property_id}
         }).done(function (result) {
-            elem = jQuery.parseJSON(result);
+            let elem = jQuery.parseJSON(result);
             delete_all_cache_collection();
         });
     }
@@ -1130,7 +1132,7 @@
             type: 'POST',
             data: {collection_id: $("#collection_id").val(), category_id: $("#property_object_category_id").val(), operation: 'show_reverses', property_id: $('#property_category_id').val()}
         }).done(function (result) {
-            elem = jQuery.parseJSON(result);
+            let elem = jQuery.parseJSON(result);
             $('#property_object_reverse').html('');
             $('#property_object_reverse').append('<option value="false"><?php _e('None','tainacan'); ?></option>');
             if (elem.no_properties === false) {
@@ -1165,18 +1167,18 @@
                 contentType: false
             }).done(function (result) {
                 $('#modalImportMain').modal('hide');
-                elem = jQuery.parseJSON(result);
+                let elem = JSON.parse(result);
                 $("#meta-relationship").modal('hide');
 
-                var current_operation = elem.operation;
-                var enable_more_options = $("#meta-relationship #habilitate_more_options").val();
+                let current_operation = elem.operation,
+                    enable_more_options = $("#meta-relationship #habilitate_more_options").val();
 
 
-                if (elem.property_data_use_filter == "use_filter") {
+                if (elem.property_data_use_filter === "use_filter") {
                     if (current_operation == "add_property_object") {
                         setCollectionFacet("add", elem.results.new_property_id, elem.search_data_widget, elem.filter_ordenation, elem.color_facet, {}, '', enable_more_options);
-                    } else if (current_operation == "update_property_object") {
-                        var item_was_dragged = $("#meta-relationship .data-widget").hasClass('select-meta-filter');
+                    } else if (current_operation === "update_property_object") {
+                        let item_was_dragged = $("#meta-relationship .data-widget").hasClass('select-meta-filter');
 
                         if (item_was_dragged) {
                             // setCollectionFacet("add", elem.property_object_id, elem.search_data_widget, elem.filter_ordenation, elem.color_facet );
@@ -1191,7 +1193,7 @@
                     }
                 }
                 $("#dynatree_properties_filter").dynatree("getTree").reload();
-                if (elem.operation != 'update_property_object') {
+                if (elem.operation !== 'update_property_object') {
                     list_collection_metadata();
                 } else {
                     $('#meta-item-' + elem.property_object_id + ' .property-name').text(elem.property_object_name)
@@ -1215,37 +1217,73 @@
         });
         
         xhr.done(function (result) {
-            elem = jQuery.parseJSON(result);
+            let elem = jQuery.parseJSON(result);
             if (elem && elem.no_properties !== true) {
                 $('#no_properties_object').hide();
                 $('#table_property_object').html('');
                 $.each(elem.property_object, function (idx, property) {
                     //visibilidade do metadado
-                    var isCompounded = is_compounded(property.metas.socialdb_property_is_compounds);
-                    types_compounds[property.id] = 2;
+                    let isCompounded = is_compounded(property.metas.socialdb_property_is_compounds);
+                    /*let types_compounds[property.id] = 2;*/
                     if(isCompounded){
                         return true;
                     }
+
+                    let visibility, style, addFilterStyle, property_visibility = property.metas.socialdb_property_visibility;
+                    if(property_visibility && property_visibility === 'show')
+                    {
+                        visibility = '<a vis="show" id="visibility_' + current_id + '" onclick="change_visibility(' + current_id + ')" style="cursor:pointer;"><span class="glyphicon glyphicon-eye-open"></span></a>';
+                        style = '';
+                        addFilterStyle = '';
+                    }
+                    else
+                    {
+                        style = 'opacity:0.33;';
+                        visibility = '<a vis="hide" id="visibility_' + current_id + '" onclick="change_visibility(' + current_id + ')" style="cursor:pointer;"><span class="glyphicon glyphicon-eye-close"></span></a>';
+                        addFilterStyle = 'pointer-events: none;';
+                    }
+
                     // o id
                     var current_id = property.id;
                     if (property.metas.socialdb_property_is_fixed && property.metas.socialdb_property_is_fixed === 'true' ) {
                         $('ul#metadata-container').append(
                             '<li id="meta-item-'+current_id+'" data-widget="' + property.search_widget + '" class="root_category ui-widget-content ui-corner-tr">' +
-                            '<label class="title-pipe">' + '<span class="property-name">' + property.name + '</span>' + '</label>' +
+                                '<label class="title-pipe">' +
+                                    '<a title="Adicionar como filtro" id ="addFilter_'+ property.id +'"  style="cursor:pointer; margin-right:15px;' + '' + '" onclick="add_filter(' + property.id + ', \'' + property.slug +'\')">' +
+                                        '<span class="glyphicon glyphicon-menu-left"></span>' +
+                                    '</a>' +
+                                    '<span class="property-name">' +
+                                        property.name +
+                                    '</span>' +
+                                '</label>' +
                             '<a onclick="edit_property_object('+ current_id +')" class="edit_property_data" href="javascript:void(0)">' +
-                            '<div class="action-icons default-metadata"><span class="glyphicon glyphicon-edit"><span></a> ' +
-                            ' <span class="glyphicon glyphicon-trash no-edit"><span> </div></li>' );
+                            '<div class="action-icons default-metadata">' +
+                            '   <span class="glyphicon glyphicon-edit"><span>' +
+                            '</a> ' +
+                            ' <span class="glyphicon glyphicon-trash no-edit"><span> ' +
+                            '</div>' +
+                            '</li>' );
                     } else {
                         if ( $.inArray(property.type, ranking_types) == -1 ) {
                             $('ul#metadata-container').append(
-                                '<li id="meta-item-'+current_id+'" data-widget="' + property.search_widget + '" class="ui-widget-content ui-corner-tr"><label class="title-pipe">' + '<span class="property-name">' + property.name + '</span>' +
-                                '</label><div class="action-icons">' +
-                                '<a onclick="edit_property_object('+ current_id +')" class="edit_property_data" href="javascript:void(0)">' +
-                                '<span class="glyphicon glyphicon-edit"><span></a> ' +
-                                '<input type="hidden" class="property_object_id" value="' + current_id + '">' +
-                                '<input type="hidden" class="property_name" value="' + property.name + '">' +
-                                '<a onclick="delete_property('+ current_id + ',' + 2 + ')" class="delete_property" href="javascript:void(0)">' +
-                                '<span class="glyphicon glyphicon-trash"><span></a></div></li>');
+                                '<li id="meta-item-'+current_id+'" data-widget="' + property.search_widget + '" class="ui-widget-content ui-corner-tr">' +
+                                    '<label class="title-pipe">' +
+                                        '<a title="Adicionar como filtro" id ="addFilter_'+ property.id +'"  style="cursor:pointer; margin-right:15px;' + '' + '" onclick="add_filter(' + property.id + ', \'' + property.slug +'\')">' +
+                                            '<span class="glyphicon glyphicon-menu-left"></span>' +
+                                        '</a>' +
+                                        '<span class="property-name">' + property.name + '</span>' +
+                                    '</label>' +
+                                    '<div class="action-icons">' +
+                                        '<a onclick="edit_property_object('+ current_id +')" class="edit_property_data" href="javascript:void(0)">' +
+                                            '<span class="glyphicon glyphicon-edit"><span>' +
+                                        '</a> ' +
+                                        '<input type="hidden" class="property_object_id" value="' + current_id + '">' +
+                                        '<input type="hidden" class="property_name" value="' + property.name + '">' +
+                                        '<a onclick="delete_property('+ current_id + ',' + 2 + ')" class="delete_property" href="javascript:void(0)">' +
+                                            '<span class="glyphicon glyphicon-trash"><span>' +
+                                        '</a>' +
+                                    '</div>' +
+                                '</li>');
                         }
                     }
                 });
@@ -1489,32 +1527,32 @@
         }); 
         
         xhr.done(function (result) {
-            elem = jQuery.parseJSON(result);
+            let elem = jQuery.parseJSON(result);
 
             if (elem && elem.no_properties !== true) {
                 $.each(elem.property_terms, function (idx, property) {
                     //visibilidade do metadado
-                    var isCompounded = is_compounded(property.metas.socialdb_property_is_compounds);
-                    types_compounds[property.id] = 3;
+                    let isCompounded = is_compounded(property.metas.socialdb_property_is_compounds);
+                    /*let types_compounds[property.id] = 3;*/
                     if(isCompounded){  
                         return true;
                     }
-                    var current_id = property.id;
+                    let  current_id = property.id,
+                        repository_property = property.metas.is_repository_property,
+                        created_category = property.metas.socialdb_property_created_category;
 
-                    var repository_property = property.metas.is_repository_property;
-                    var created_category = property.metas.socialdb_property_created_category;
+                    let visibility, style, addFilterStyle;
+                    if(property.metas.socialdb_property_visibility && property.metas.socialdb_property_visibility === 'show'){
+                        visibility = '<a vis="show" id="visibility_' + current_id + '" onclick="change_visibility(' + current_id + ')" style="cursor:pointer;"><span class="glyphicon glyphicon-eye-open"></span></a>';
+                        style = '';
+                        addFilterStyle = '';
+                    }else{
+                        style = 'style="opacity:0.33;"';
+                        visibility = '<a vis="hide" id="visibility_' + current_id + '" onclick="change_visibility(' + current_id + ')" style="cursor:pointer;"><span class="glyphicon glyphicon-eye-close"></span></a>',
+                        addFilterStyle = 'pointer-events: none;';
+                    }
 
-                     if ( property.metas.socialdb_property_is_fixed && property.metas.socialdb_property_is_fixed === 'true' ) {
-                        if(property.metas.socialdb_property_visibility&&property.metas.socialdb_property_visibility==='show'){
-                            var visibility = '<a vis="show" id="visibility_' + current_id + '" onclick="change_visibility(' + current_id + ')" style="cursor:pointer;"><span class="glyphicon glyphicon-eye-open"></span></a>';
-                            var style = '',
-                                addFilterStyle = '';
-                        }else{
-                            var style = 'style="opacity:0.33;"';
-                            var visibility = '<a vis="hide" id="visibility_' + current_id + '" onclick="change_visibility(' + current_id + ')" style="cursor:pointer;"><span class="glyphicon glyphicon-eye-close"></span></a>',
-                                addFilterStyle = 'pointer-events: none;';
-                        }
-                        
+                    if ( property.metas.socialdb_property_is_fixed && property.metas.socialdb_property_is_fixed === 'true' ) {
                         $('ul#metadata-container').append(
                             '<li id="meta-item-' + current_id + '" data-widget="' + property.search_widget + '" class="root_category ui-widget-content ui-corner-tr">' +
                                 '<label '+style+' class="title-pipe">' +
@@ -1562,8 +1600,11 @@
             var obj = $.parseJSON(result);
             $(obj).each( function(idx, el) {
                 var m = $("option#menu_style_" + el.id);
-                var item_classes = (el.terms).join(' ');
-                $(m).addClass( item_classes );
+                if(el.terms !== null)
+                {
+                    var item_classes = (el.terms).join(' ');
+                    $(m).addClass( item_classes );
+                }
             });
         });
     }
@@ -2454,6 +2495,7 @@
                 }else{
                     remove_label_box(node.data.key);
                 }
+
                 $('#default_value_text').val('');
                 $('#socialdb_property_object_default_value').val('');
                 setTargetProperties('#property_object_category_id');
@@ -2465,7 +2507,58 @@
             }
         });
     }
-     /**
+
+    function concatenate_in_array(key, seletor) {
+        let ids = [];
+        let result;
+        if ($(seletor).val() !== '')
+        {
+            ids = $(seletor).val().split(',');
+            let index = ids.indexOf(key);
+            if (index >= 0) {
+                ids.splice(index, 1);
+                result = false;
+            } else {
+                ids.push(key);
+                result = true;
+            }
+            $(seletor).val(ids.join(','));
+        } else {
+            ids.push(key);
+            $(seletor).val(ids.join(','));
+            result = true;
+        }
+
+        return result;
+    }
+
+    function add_label_box(id, name, seletor) {
+        $(seletor).append('<span id="label-box-' + id + '" class="label label-primary">'
+            + name + ' <a style="color:white;cursor:pointer;" onclick="remove_label_box(' + id + ')">x</a></span>&nbsp;');
+    }
+
+    function remove_label_box(id, dynatree) {
+        let cont = 0;
+        if (!dynatree)
+            dynatree = "#property_category_dynatree";
+        $(dynatree).dynatree("getRoot").visit(function (node) {
+            if (node.data.key == id) {
+                cont++;
+                node.select(false);
+            }
+        });
+        if (cont === 0) {
+            let ids = $('#property_object_category_id').val().split(',');
+            let index = ids.indexOf(id.toString());
+            if (index >= 0) {
+                ids.splice(index, 1);
+                $('#property_object_category_id').val(ids.join(','));
+            }
+        }
+        $('#label-box-' + id).remove();
+    }
+
+    /**
      *
      */
      function show_key_container() {

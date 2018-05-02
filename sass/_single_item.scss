@@ -13,6 +13,9 @@
 
     .modal-dialog {
       width: 980px;
+      @media screen and (max-width: 979px) {
+        width: 700px;
+      }
       .modal-content {
         max-height: none !important;
 
@@ -68,7 +71,7 @@
 
   } // .single_list_properties
 
-  .all-metadata {
+  .all-metadata{
     border-top: 3px solid $item-border;
 
     .meta-header {
@@ -116,7 +119,7 @@
       }
     }
 
-    .col-md-6 {
+    .col-md-6, .col-md-12{
       border: 3px solid $item-border;
       //min-height: 118px;
 

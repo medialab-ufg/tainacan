@@ -112,8 +112,7 @@ class FormItem extends Model {
                 <!-- Add title, text and attachements -->
                 <div class="col-md-9">
                     <?php
-
-                     foreach ($this->metadatas['default'] as $property) {
+                    foreach ($this->metadatas['default'] as $property) {
                         if (in_array($property['slug'], $this->fixed_slugs)) {
                             if ($property['slug'] == 'socialdb_property_fixed_title') {
                                 $class = new FormItemTitle($this->collection_id);
@@ -986,8 +985,9 @@ class FormItem extends Model {
                     hide_modal_main();
                     var json = JSON.parse(result);
                     if(json.ok) {
-                        showAlertGeneral(json.title,json.msg,json.type);
-                        window.location = '<?php echo get_the_permalink($this->collection_id) ?>';
+                        //showAlertGeneral(json.title,json.msg,json.type);
+                        //window.location = '<?php //echo get_the_permalink($this->collection_id) ?>';
+                        window.location = document.referrer;
                     } else {
                         showAlertGeneral(json.title,json.msg,json.type);
                     }

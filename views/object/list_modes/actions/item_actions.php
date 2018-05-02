@@ -89,9 +89,12 @@ $is_current_user_the_author = get_post($curr_id)->post_author == get_current_use
             <li> <a class="ac-open-file"> <?php _t('Print item',1); ?> </a> </li>
             <?php
             if (($is_moderator || get_post($curr_id)->post_author == get_current_user_id()) && ($metas['socialdb_object_dc_type'][0] == 'pdf' || $metas['socialdb_object_dc_type'][0] == 'image')){
+	            if($metas['socialdb_object_content'][0])
+                    $button_text = __("Change file", 'tainacan');
+	            else $button_text = __("Add file", 'tainacan');
                 ?>
                 <li class="tainacan-museum-clear">
-                    <a href="javascript:void(0);" id="change_item_file"> <?php _t('Change file',1); ?> </a>
+                    <a href="javascript:void(0);" id="change_item_file"> <?php echo $button_text; ?> </a>
                 </li>
                 <?php
             }

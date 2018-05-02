@@ -261,7 +261,18 @@ class ObjectController extends Controller {
                 $recover_wpquery['posts_per_page'] = $args['posts_per_page'];
 
                 $start = microtime(true);
-                $data['loop'] = new WP_Query($args);
+	            $data['loop'] = new WP_Query($args);
+
+	            /*Get All Collection ID's*/
+                $args['posts_per_page'] = -1;
+                $secondary_loop = new WP_Query($args);
+                while ($secondary_loop->have_posts())
+                {
+                	$secondary_loop->the_post();
+                	$data['items_id'][] = get_the_ID();
+
+                }
+
                 $return['wpquerytime'] = microtime(true) - $start;
                 $data['collection_data'] = $collection_model->get_collection_data($collection_id);
                 $data["show_string"] = is_root_category($collection_id) ? __('Showing collections:', 'tainacan') : __('Showing Items:', 'tainacan');
@@ -306,7 +317,14 @@ class ObjectController extends Controller {
                 //$post_status = ($collection_id == get_option('collection_root_id') ? 'draft' : 'trash');
                 $post_status = 'draft';
                 $recover_wpquery['post_status'] = $post_status;
-                $data['mycollections'] = 'true';
+
+                $user = wp_get_current_user();
+	            $data['mycollections'] = 'true';
+	            $allowed_roles = array('administrator');
+	            if( array_intersect($allowed_roles, $user->roles ) ){
+		            $data['mycollections'] = 'false';
+                }
+
                 $args = $object_model->list_all($data, $post_status);
                 $data['loop'] = new WP_Query($args);
                 $data['trash_list'] = true;
@@ -330,6 +348,7 @@ class ObjectController extends Controller {
 
                 $return['page'] = $this->render(dirname(__FILE__) . '../../../views/object/list.php', $data);
                 $return['args'] = serialize($recover_wpquery);
+                //print_r($return);
                 if (empty($object_model->get_collection_posts($data['collection_id']))) {
                     $return['empty_collection'] = true;
                 } else {
@@ -860,6 +879,18 @@ class ObjectController extends Controller {
             //ACTION FILES
             case 'list_files':
                 return $objectfile_model->list_files($data);
+                break;
+		    case 'add_captions':
+		    	foreach ($data as $obj_id => $val)
+			    {
+			    	if(is_numeric($obj_id))
+				    {
+				    	update_post_meta($obj_id, 'socialdb_thumbnail_caption', $val);
+				    }
+			    }
+
+			    return true;
+		    	break;
             case 'save_file':
                 return $objectfile_model->save_file($data);
             case 'delete_file':
@@ -919,14 +950,15 @@ class ObjectController extends Controller {
                 }
                 return true;
             case 'edit_multiple_items':
-                $set = [];
                 if (!$data['items_data']) {
                     exit();
                 }
+
                 foreach ($data['items_data'] as $_previous) {
                     $data['items_id'] [] = $_previous['id'];
                     //array_push( $set, [ 'ID' => $_previous['id'], 'title' => $_previous['title'], 'desc' => $_previous['desc'] ] );
                 }
+
                 $data['properties'] = $object_model->show_object_properties($data);
                 $data['items'] = $objectfile_model->get_inserted_items_social_network($data);
                 $data['edit_multiple'] = true;
@@ -953,7 +985,7 @@ class ObjectController extends Controller {
             case 'duplicate_item_same_collection':
                 $item = get_post($data['object_id']);
                 $newItem = $object_model->copyItem($item, $data['collection_id']);
-                $metas = get_post_meta($item->ID);
+                $metas = $object_model->get_metas($item->ID);
                 $object_model->copyItemMetas($newItem, $metas);
                 $object_model->copyItemCategories($newItem, $data['object_id']);
                 $object_model->copyItemTags($newItem, $data['object_id']);
@@ -969,7 +1001,8 @@ class ObjectController extends Controller {
                 $data['socialdb_object_dc_source'] = get_post_meta($data['object']->ID, 'socialdb_object_dc_source', true);
                 $data['socialdb_object_content'] = get_post_meta($data['object']->ID, 'socialdb_object_content', true);
                 $data['socialdb_object_dc_type'] = get_post_meta($data['object']->ID, 'socialdb_object_dc_type', true);
-                return $this->render(dirname(__FILE__) . '../../../views/object/edit_item_text.php', $data);
+
+                //return $this->render(dirname(__FILE__) . '../../../views/object/edit_item_text.php', $data);
                 break;
             case 'duplicate_item_other_collection':
                 $collection_id = $data['collection_id'];
@@ -1121,27 +1154,34 @@ class ObjectController extends Controller {
                 }
                 return json_encode($result);
 		    case 'change_item_file':
+			    require_once(ABSPATH . 'wp-admin/includes/image.php');
+			    require_once(ABSPATH . 'wp-admin/includes/file.php');
+			    require_once(ABSPATH . 'wp-admin/includes/media.php');
+
 		    	$attachment_id_old = get_post_meta( $data['item_id'],'socialdb_object_content', true);
 
-			    if($attachment_id_old)
+			    $attachment_id = media_handle_upload('new_file', $data['item_id']);
+			    if(!is_wp_error($attachment_id))
 			    {
-				    $attachment_id = media_handle_upload('new_file', $data['item_id']);
-				    if(!is_wp_error($attachment_id))
-				    {
-					    update_post_meta($data['item_id'], 'socialdb_object_content', $attachment_id);
-				    	if($_FILES['new_file']['type'] == 'application/pdf')
-					    {
-						    $canvas_images[] = ['post_id' => $data['item_id'], 'img' => $data['img']];
-						    save_canvas_pdf_thumbnails($canvas_images, true);
-					    }else
-					    {
-						    set_post_thumbnail($data['item_id'], $attachment_id);
-					    }
+			        delete_post_meta($data['item_id'],'socialdb_object_content');
 
-					    return true;
-				    }else {
-						return false;
+			        if($attachment_id_old) wp_delete_post($attachment_id_old);
+
+				    update_post_meta($data['item_id'], 'socialdb_object_content', $attachment_id);
+				    update_post_meta($data['item_id'], 'socialdb_object_from', 'internal');
+			        if($_FILES['new_file']['type'] == 'application/pdf')
+				    {
+					    $canvas_images[] = ['post_id' => $data['item_id'], 'img' => $data['img']];
+					    save_canvas_pdf_thumbnails($canvas_images, true);
+				    }else
+				    {
+					    set_post_thumbnail($data['item_id'], $attachment_id);
 				    }
+
+				    delete_post_meta( $data['item_id'], '_file_id' );
+				    return true;
+			    }else {
+					return false;
 			    }
 		    	break;
         }

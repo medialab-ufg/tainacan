@@ -61,7 +61,14 @@ $_header_enabled = get_post_meta($collection_id, 'socialdb_collection_show_heade
 </head>
 
 <!-- TAINACAN: tag body adaptado para o gplus -->
-<body <?php body_class(); ?> itemscope>
+<body  <?php
+        if(is_page())
+            $classes[] = 'home';//This is for show correctly nav bar in pages
+        else $classes = [];
+
+        body_class($classes);
+        ?>
+        itemscope>
 
     <!-- TAINACAN: tag nav, utilizando classes do bootstrap nao modificadas, onde estao localizados os links que chamam paginas da administracao do repositorio -->
     <nav <?php echo set_navbar_bg_color('black', $stat_page); ?> class="navbar navbar-default header-navbar">
@@ -89,7 +96,6 @@ $_header_enabled = get_post_meta($collection_id, 'socialdb_collection_show_heade
 
         </div> <!-- /.container-fluid -->
     </nav>
-
     <?php
 
     get_template_part("partials/modals","header");
@@ -100,7 +106,7 @@ $_header_enabled = get_post_meta($collection_id, 'socialdb_collection_show_heade
             $_menu_ = ['container_class' => 'container', 'container' => false, 'walker' => new wp_bootstrap_navwalker(), 'menu_class' => 'navbar navbar-inverse menu-ibram'];
             if (!is_front_page()) {
                 echo "<header class='custom-header' style='" . home_header_bg($socialdb_logo) . "'>";
-                echo "<div class='menu-transp-cover'></div>" . get_template_part("partials/header/main");
+                echo get_template_part("partials/header/main");
                 echo "</header>";
                 wp_nav_menu($_menu_);
             }

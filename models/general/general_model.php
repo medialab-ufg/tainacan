@@ -94,13 +94,16 @@ class Model {
      */
     public function insert_attachment($file_handler, $post_id, $setthumb = 'true') {
         if ($_FILES[$file_handler]['error'] !== UPLOAD_ERR_OK) {
-            __return_false();
+        	__return_false();
         }
+
         require_once(ABSPATH . "wp-admin" . '/includes/image.php');
         require_once(ABSPATH . "wp-admin" . '/includes/file.php');
         require_once(ABSPATH . "wp-admin" . '/includes/media.php');
+
         $attach_id = media_handle_upload($file_handler, $post_id);
-        if ($setthumb) {
+
+        if ($setthumb && !is_wp_error($attach_id)) {
             if ($file_handler != "socialdb_collection_cover" && $file_handler != "socialdb_collection_watermark" && $file_handler != "object_file" && $file_handler != "arquivo" && $file_handler != "file") {
                 $array = get_post_meta($post_id, '_thumbnail_id');
                 if (empty($array) || !$array) {
@@ -417,6 +420,7 @@ class Model {
 				WHERE p.post_id = {$collection_id}
 		";
         $collections_data = $wpdb->get_results($query);
+
         foreach ($collections_data as $collection_data)
         {
             if ($collection_data->meta_key == 'socialdb_collection_facets') {
@@ -1424,6 +1428,7 @@ class Model {
                         AND p.post_type like 'socialdb_object' AND p.post_status like 'publish' and p.post_title LIKE '%{$data['term']}%'
                 ";
         $result = $wpdb->get_results($query);
+
         if ($result) {
             foreach ($result as $object) {
                 $json[] = array('value' => $object->ID, 'label' => $object->post_title);
@@ -1529,17 +1534,21 @@ class Model {
                         INNER JOIN $term_relationships t ON p.ID = t.object_id    
                         WHERE t.term_taxonomy_id = {$category_root_id->term_taxonomy_id}
                         AND p.post_status IN ('publish','draft') and pm.meta_key like '$meta_key' and pm.meta_value LIKE '%{$data['term']}%'
+                        ORDER BY pm.meta_value 
                 ";
         }else if($has_mask){
             $query = "
                         SELECT pm.* FROM $wp_posts p
                         INNER JOIN $wp_postmeta pm ON p.ID = pm.post_id    
                         WHERE p.post_status IN ('publish','draft') and pm.meta_key like '$meta_key' and pm.meta_value LIKE '%{$data['term']}%'
+                        ORDER BY pm.meta_value
                 ";
         }else{
             return json_encode([]);
         }
         $result = $wpdb->get_results($query);
+
+        usort($result, "sort_results");
         if ($result) {
             foreach ($result as $object) {
                 $json[] = array('value' => $object->meta_value, 'label' => $object->meta_value,'item_id'=>$object->post_id);
@@ -1843,16 +1852,18 @@ class Model {
         fclose($df);
     }
     
-    public function create_zip_by_folder($folder, $from = 'package/', $name = 'package',$only_file = false) {
+    public function create_zip_by_folder($folder, $from = 'package/', $name = 'package', $only_file = false) {
         $rootPath = realpath($folder);
         // Initialize archive object
         $zip = new ZipArchive();
         $zip->open($rootPath . '/' . $name . '.zip', ZipArchive::CREATE | ZipArchive::OVERWRITE);
         // Create recursive directory iterator
         /** @var SplFileInfo[] $files */
+
         $files = new RecursiveIteratorIterator(
                 new RecursiveDirectoryIterator($folder . $from)
         );
+
         foreach ($files as $name => $file) {
             // Skip directories (they would be added automatically)
             if (!$file->isDir()) {
@@ -1861,9 +1872,9 @@ class Model {
                 $relativePath = (!$only_file) ? substr($filePath, strlen($rootPath) + 1) : basename($filePath);
 
                 // Add current file to archive
-                    $zip->addFile($filePath, $relativePath);
-                }
+                $zip->addFile($filePath, $relativePath);
             }
+        }
         // Zip archive will be created only after closing object
         $zip->close();
     }

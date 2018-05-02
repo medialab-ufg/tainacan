@@ -22,7 +22,6 @@ $_trim_desc = $_object_description;
         <input type="hidden" class="location" value="<?php echo $location[0]; ?>" />
 
         <div class="droppableClassifications">
-
             <div class="item-info">
 
                 <div class="colFoto no-padding img-thumbnail">

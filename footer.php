@@ -1,5 +1,8 @@
 <div>
-    <?php if( ! is_front_page() &&  !is_page_template('page-contato.php')): ?>
+    <?php
+        $hide_footer = get_option('socialdb_collection_hide_footer');
+        if( ! is_front_page() &&  !is_page_template('page-contato.php') && $hide_footer !==  'true'):
+    ?>
         <footer id="footer" role="contentinfo">
             <div class="row">
                 <div class="col-md-5">
@@ -29,7 +32,7 @@
                 </div>
             </div><!-- .widget-area -->
 
-            <!--Tainacan version: 0.6-->
+            <!--Tainacan version: 0.8-->
         </footer>
     <?php endif; ?>
 

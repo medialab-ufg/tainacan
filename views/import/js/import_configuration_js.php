@@ -616,24 +616,53 @@
     }
 
     function do_import_csv(mapping_id) {
-        show_modal_main();
+        let slice_size = 50;
+
         $.ajax({
             type: "POST",
             url: $('#src').val() + "/controllers/import/csv_controller.php",
             data: {
-                collection_id: $('#collection_id').val(),
                 mapping_id: mapping_id,
-                async: false,
-                operation: 'do_import_csv'}
-        }).done(function (result) {
-            hide_modal_main();
-            listTableCSV();
-            var jsonObject = jQuery.parseJSON(result);
-            if (jsonObject) {
-                showAlertGeneral('<?php _e('Attention', 'tainacan') ?>', '<?php _e('All objects imported succesfully!', 'tainacan') ?>', 'success');
-            } else {
-                showAlertGeneral('<?php _e('Attention', 'tainacan') ?>', '<?php _e('Please, do the mapping!', 'tainacan') ?>', 'info');
+                operation: 'get_csv_bd_iterations',
+                slice_size: slice_size
             }
+        }).done(function (info) {
+            info = JSON.parse(info);
+            let count_slices = info.slices, step = 100/info.slices;
+            let count_slices_array = [], promises;
+
+            for(let i = 0; i < count_slices; i++)
+            {
+                count_slices_array.push(i);
+            }
+
+            $("#modalImportLoading").modal('show');
+            const promiseSerial = funcs =>
+                funcs.reduce((promise, func) =>
+                        promise.then(result => func().then(function () {
+                            Array.prototype.concat.bind(result);
+                            $("#progressbargeneral").val($("#progressbargeneral").val() + step);
+                        })),
+                    Promise.resolve([]));
+
+            const funcs = count_slices_array.map(slice => () => $.ajax({
+                type: "POST",
+                url: $('#src').val() + "/controllers/import/csv_controller.php",
+                data: {
+                    collection_id: $('#collection_id').val(),
+                    mapping_id: mapping_id,
+                    operation: 'do_import_csv',
+                    slice_size: slice_size,
+                    index: slice
+                }
+            }));
+
+            promiseSerial(funcs)
+                .then(function () {
+                    $("#modalImportLoading").modal('hide');
+                    listTableCSV();
+                    showAlertGeneral('<?php _e('Attention', 'tainacan') ?>', '<?php _e('All objects imported succesfully!', 'tainacan') ?>', 'success');
+                });
         });
     }
 

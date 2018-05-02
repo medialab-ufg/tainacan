@@ -735,3 +735,25 @@ a[href="#top"]:hover{
     text-decoration:none;
 }
 
+.padding_right{
+    padding-top: 0;
+    padding-right: 10px;
+    padding-bottom: 0;
+    padding-left: 0;
+}
+
+.item_name{
+    display: none;
+}
+
+.att-caption{
+    color: black;
+    white-space: pre-wrap;
+}
+
+.cover-home{
+    background-size: cover;
+    background-repeat: no-repeat;
+    min-height: 380px;
+    background-position: center;
+}

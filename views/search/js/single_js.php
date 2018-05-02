@@ -53,16 +53,13 @@
                 processData: false,
                 contentType: false
             }).done(function (result) {
-                elem = jQuery.parseJSON(result);
+                let elem = jQuery.parseJSON(result);
                 hide_modal_main();
                 if (elem.args_collection) {
-
-                    search_collections_query = elem.args_collection;
+                    let search_collections_query = elem.args_collection;
+                    console.log(elem);
+                    console.log(search_collections_query);
                     $('#wp_query_args').val(search_collections_query);
-                    if (elem.args_item)
-                    {
-                        search_items_query = elem.args_item;
-                    }
 
                     if(elem.has_collection && elem.has_item)
                     {
@@ -84,14 +81,12 @@
                         $('#click_ad_search_items').trigger('click');
                         $('#click_ad_search_collection').parent().hide();
                         $('#click_ad_search_items').parent().hide();
-                        $("#items_not_found").show();
-
                     }
                     
                 }
                 else if (elem.args_item)
                 {
-                    search_items_query = elem.args_item;
+                    let search_items_query = elem.args_item;
                     $('#wp_query_args').val(search_items_query);
                     if( $('#click_ad_search_items').length>0){
                         $('#click_ad_search_items').trigger('click');
@@ -116,26 +111,42 @@
         
         $('a.move_edition').on('click', function(event) {
             event.preventDefault();
-            var edit_data = [];
+            toastr.clear();
+            let edit_data = [];
             show_modal_main();
-            
-            //$('.list-mode-set').hide();
-            $('.selected-item').each(function(idx, el) {
-                var item_id = $(el).parent().attr("id").replace("object_", "");
-                var item_title = $("#object_" + item_id + " h4.item-display-title").text().trim();
-                var item_desc = $("#object_" + item_id + " .item-desc-hidden-full").text().trim();
-                edit_data.push( { id: item_id, title: item_title, desc: item_desc } );
-            });
+
+            let ids = $("#items_id").val().split(',');
+
+            if($('input.bulk_action').val() === 'select_some')
+            {
+                let selectect_ids = sessionStorage.getItem("selected_ids");
+                if(selectect_ids != null && selectect_ids.length > 0)
+                {
+                    selectect_ids = selectect_ids.split(",");
+                    selectect_ids.forEach(function (item_id) {
+                        edit_data.push({ id: item_id });
+                    })
+                }
+            }else
+            {
+                $(ids).each(function(idx, el) {
+                    edit_data.push( { id: el } );
+                });
+            }
+
             $.ajax({
                 type: "POST",
                 url: $('#src').val() + "/controllers/object/object_controller.php",
-                data: { operation: 'edit_multiple_items', items_data: edit_data,collection_id:$('#collection_id').val() }
+                data: {
+                    operation: 'edit_multiple_items',
+                    items_data: edit_data,
+                    collection_id:$('#collection_id').val()
+                }
             }).done(function(html_res){
                 hide_modal_main();
                 isLoading = false;
                 $('#main_part').hide();
                 $('#configuration').html(html_res).show();
-                //$("#main_part").html(html_res);
             });
         });
     });
@@ -191,49 +202,33 @@
         //mostro o loader para carregar os metadados
         if($('#collection_id').val() === $('#collection_root_id').val() && $('#search-advanced-text').val() != ''){
             show_modal_main();
-            setTimeout(function(){
-                //ajax properties
-                $.ajax({
-                    url: $('#src').val() + '/controllers/advanced_search/advanced_search_controller.php',
-                    type: 'POST',
-                    data: {operation: 'show_object_properties_auto_load', collection_id: collection_id}
-                }).done(function (result) {
-                    $('#propertiesRootAdvancedSearch').html(result);
-                    //$('#propertiesRootAdvancedSearch').show();
-                    revalidate_adv_autocomplete(collection_id);
-                    //se estiver buscando algo nos campos de busca externos e que esteja na home de colecoes
-                    if($('#collection_id').val()===$('#collection_root_id').val() && $('#search-advanced-text').val() != ''){
-                        if($('#search-advanced-text').val()!=='@')
-                            $('#advanced_search_title').val($('#search-advanced-text').val());
-
-                        slideFormAdvancedDown();
-                        $('#advanced_search_collection_form').trigger('submit');
-                        $('#search-advanced-text').val('');
-                    }
-                });
-            }, 1000);
+            show_adv_search(collection_id);
         }else{
-            //ajax properties
-            $.ajax({
-                url: $('#src').val() + '/controllers/advanced_search/advanced_search_controller.php',
-                type: 'POST',
-                data: {operation: 'show_object_properties_auto_load', collection_id: collection_id}
-            }).done(function (result) {
-                $('#propertiesRootAdvancedSearch').html(result);
-                //$('#propertiesRootAdvancedSearch').show();
-                revalidate_adv_autocomplete(collection_id);
-                //se estiver buscando algo nos campos de busca externos e que esteja na home de colecoes
-                if($('#collection_id').val()===$('#collection_root_id').val() && $('#search-advanced-text').val() != ''){
-                    if($('#search-advanced-text').val()!=='@')
-                        $('#advanced_search_title').val($('#search-advanced-text').val());
-
-                    slideFormAdvancedDown();
-                    $('#advanced_search_collection_form').trigger('submit');
-                    $('#search-advanced-text').val('');
-                }
-            });
+           show_adv_search(collection_id);
         }
 
+    }
+
+    function show_adv_search(collection_id)
+    {
+        $.ajax({
+            url: $('#src').val() + '/controllers/advanced_search/advanced_search_controller.php',
+            type: 'POST',
+            data: {operation: 'show_object_properties_auto_load', collection_id: collection_id}
+        }).done(function (result) {
+            $('#propertiesRootAdvancedSearch').html(result);
+            //$('#propertiesRootAdvancedSearch').show();
+            revalidate_adv_autocomplete(collection_id);
+            //se estiver buscando algo nos campos de busca externos e que esteja na home de colecoes
+            if($('#collection_id').val()===$('#collection_root_id').val() && $('#search-advanced-text').val() != ''){
+                if($('#search-advanced-text').val()!=='@')
+                    $('#advanced_search_title').val($('#search-advanced-text').val());
+
+                slideFormAdvancedDown();
+                $('#advanced_search_collection_form').trigger('submit');
+                $('#search-advanced-text').val('');
+            }
+        });
     }
 
     function revalidate_adv_autocomplete(collection_id) {
@@ -1081,7 +1076,7 @@
             url: $('#src').val() + "/controllers/wp_query/wp_query_controller.php",
             data: {operation: 'wpquery_keyword', wp_query_args: $('#wp_query_args').val(), value: value, collection_id: $('#collection_id').val()}
         }).done(function (result) {
-            elem = jQuery.parseJSON(result);
+            let elem = jQuery.parseJSON(result);
             $('#loader_objects').hide();
             $('#list').html(elem.page);
             $('#wp_query_args').val(elem.args);
@@ -1111,14 +1106,19 @@
     function wpquery_page(value, collection_viewMode, is_trash) {
         $('#list').hide();
         $('#loader_objects').show();
-        var src =  "'"+$('#src').val()+"'";
+        let src =  "'"+$('#src').val()+"'";
         $.ajax({
             type: "POST",
             url: $('#src').val() + "/controllers/wp_query/wp_query_controller.php",
-            data: { operation: 'wpquery_page', wp_query_args: $('#wp_query_args').val(), value: value,
-                posts_per_page: $('.col-items-per-page').val(), collection_id: $('#collection_id').val(), is_trash: is_trash}
+            data: { operation: 'wpquery_page',
+                    wp_query_args: $('#wp_query_args').val(),
+                    value: value,
+                    posts_per_page: $('.col-items-per-page').val(),
+                    collection_id: $('#collection_id').val(),
+                    is_trash: is_trash
+                }
         }).done(function (result) {
-            elem = jQuery.parseJSON(result);
+            let elem = jQuery.parseJSON(result);
             $('#loader_objects').hide();
             $('#list').html(elem.page);
             $('#wp_query_args').val(elem.args);
@@ -1143,14 +1143,25 @@
                               var curr_id = $(this).find('.post_id').last().val();
                               $(this).find('.item-funcs').last().append('<li style="float: right; margin-left: 10px;"> <a onclick="showSingleObject(' + curr_id + ','+src+','+is_trash+')"> <span class="glyphicon glyphicon-eye-open"></span> </a></li>');
                         });
-                 <?php else:  ?>     
+                 <?php else:  ?>
                         $('li.item-redesocial').hide();
                         $('ul.item-menu-container').hide();
-                        $('#table-view tr').each(function(num, item) {
-                            var curr_id = $(item).find('td').first().find('a').attr('data-id');  
-                             $(item).find('td').last().html('<li> <a onclick="delete_permanently_object(\'Deletar Item\', \'Deletar este item permanentemente?\', ' + curr_id + ')" class="remove"> <span class="glyphicon glyphicon-trash"></span> </a> </li><li> <a onclick="restore_object(' + curr_id + ')"> <span class="glyphicon glyphicon-retweet"></span> </a></li>');
+                        $(".show-item-metadata").hide();
+                        $('.item-colecao').each(function(num, item) {
+                            var curr_id = $(this).find('.post_id').last().val();
+                            let buttons = '<li> <a onclick="delete_permanently_object(\'Deletar Item\', \'Deletar este item permanentemente?\', ' + curr_id + ')" class="remove"> <span class="glyphicon glyphicon-trash"></span> </a> </li><li> <a onclick="restore_object(' + curr_id + ')"> <span class="glyphicon glyphicon-retweet"></span> </a></li>'
+                            $(this).find('.item-funcs').last().append(buttons);
                         });
-                <?php endif; ?> 
+
+                        $('#table-view tr').each(function(num, item) {
+                            let buttons = '<li> <a onclick="delete_permanently_object(\'Deletar Item\', \'Deletar este item permanentemente?\', ' + curr_id + ')" class="remove"> <span class="glyphicon glyphicon-trash"></span> </a> </li><li> <a onclick="restore_object(' + curr_id + ')"> <span class="glyphicon glyphicon-retweet"></span> </a></li>';
+
+                            var curr_id = $(item).find('td').first().find('a').attr('data-id');
+                            $(item).find('td').last().html(buttons);
+                        });
+                <?php endif; ?>
+
+                $("#is_trash").val("1");
             }
 
             setMenuContainerHeight();
@@ -1220,40 +1231,37 @@
     function wpquery_filter(type) {
         if (!type) {
             type = '';
-        } else if (type == 'socialdb_collection') {
-            $('#wp_query_args').val(search_collections_query);
+        } else if (type === 'socialdb_collection') {
             $('#options-collections-search').show();
             $('#options-items-search').hide();
-        } else if (type == 'socialdb_object') {
-            $('#wp_query_args').val(search_items_query);
+        } else if (type === 'socialdb_object') {
             $('#options-items-search').show();
             $('#options-collections-search').hide();
         }
+
         $('#list').hide();
         $('#loader_objects').show();
+
         $.ajax({
             type: "POST",
             url: $('#src').val() + "/controllers/wp_query/wp_query_controller.php",
             data: {operation: 'filter', wp_query_args: $('#wp_query_args').val(), collection_id: $('#collection_id').val(), post_type: type}
         }).done(function (result) {
-            elem = jQuery.parseJSON(result);
+            let elem = jQuery.parseJSON(result);
             $('#loader_objects').hide();
             $('#list').html(elem.page);
             $('#wp_query_args').val(elem.args);
-            if (type && type == 'socialdb_collection') {
+
+            if (type && type === 'socialdb_collection') {
                 if(!elem.has_post && $("#collection_id").val() ===  $("#collection_root_id").val()){
-                    search_items_query = $('#wp_query_args').val();
-                    search_collections_query = $('#wp_query_args').val();
                    $('#click_ad_search_items').trigger('click');
-                }else{
-                   search_collections_query = $('#wp_query_args').val();
                 }
-            } else if (type && type == 'socialdb_object') {
-                search_items_query = $('#wp_query_args').val();
             }
+
             set_popover_content($("#socialdb_permalink_collection").val() + '?' + elem.url + '&is_filter=1');
-            //show_filters($('#collection_id').val(), elem.args);
+
             $('#list').show();
+
             if (elem.empty_collection) {
                 $('#collection_empty').show();
                 $('#items_not_found').hide();

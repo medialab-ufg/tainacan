@@ -397,7 +397,7 @@ $_showH = ("disabled" === $_en_header) ? false : true ;
                             <?php } ?> 
                         <?php } ?>            
                     </select>
-                </div>    
+                </div>
 
                 <div class="form-group row">
                     <div class="col-md-12">

@@ -9,6 +9,7 @@ require_once(dirname(__FILE__) . '../../property/property_model.php');
 require_once(dirname(__FILE__) . '../../category/category_model.php');
 require_once(dirname(__FILE__) . '../../mapping/mapping_model.php');
 require_once(dirname(__FILE__) . '../../collection/collection_model.php');
+require_once (dirname(__FILE__). '../../object/object_save_values.php');
 
 class CsvModel extends Model {
 
@@ -105,7 +106,6 @@ class CsvModel extends Model {
     }
 
     public function do_import_csv($data) {
-        // $time_start = microtime(true);
         session_write_close();
         ini_set('max_execution_time', '0');
         $count = 0;
@@ -133,43 +133,61 @@ class CsvModel extends Model {
 
             $files = $mapping_model->show_files_csv($mapping_id);
             foreach ($files as $file) {
-                //$name_file =  wp_get_attachment_link($file->ID, 'thumbnail', false, true);
                 $name_file = wp_get_attachment_url($file->ID);
                 $type = pathinfo($name_file);
                 if ($type['extension'] == 'csv') {
                     $lines = $this->read_csv_file($name_file, $delimiter, $csv_has_header);
                 } elseif ($type['extension'] == 'zip') {
-                    // metodo retornara um array com o nome do arquivo criado
-                    // e a pasta do folder criado
+                    // metodo retornara um array com o nome do arquivo criado e a pasta do folder criado
                     $information = $this->get_csv_from_zip($name_file);
                     $lines = $this->read_csv_file($information['file'], $delimiter, $csv_has_header);
                 }
-                // $time_after_read = microtime() - $time_start;
-                // var_dump(' Fim Leitura dos dados',$time_before_read,$time_after_read);
+
                 // insercao dos dados
-                for ($i = 0; $i < count($lines); $i++):
+                if(isset($data['index']))
+                {
+                    $i = $data['index'] * $data['slice_size'];
+                    $limit =  $i + $data['slice_size'];
+                    if($limit > count($lines))
+                    {
+                        $limit = count($lines);
+                    }
+                }else {
+                    $i = 0;
+                    $limit = count($lines);
+                }
+
+                for (; $i < $limit; $i++):
                     $object_id = socialdb_insert_object_csv('Import CSV ' . $count);
                     $ID = $lines[$i][0];
                     foreach ($bd_csv_data as $metadata) {
                         if ($metadata['socialdb_entity'] !== '') {
                             $field_value = $lines[$i][str_replace('csv_p', '', $metadata['value'])];
                             if ($metadata['socialdb_entity'] == 'post_title'):
-//                                if (mb_detect_encoding($field_value, 'auto') == 'UTF-8')
-//                                    $field_value = iconv('ISO-8859-1', 'UTF-8', $field_value);
-                                //$this->update_title($object_id, utf8_decode($field_value));
+	                            wp_update_post(
+		                            array(
+			                            'ID' => $object_id,
+			                            'post_parent' => $data['collection_id']
+		                            )
+	                            );
                                 update_post_title($object_id, $this->codification_value((string)$field_value,$code));
                                 $this->set_common_field_values($object_id, 'title', $this->codification_value($field_value,$code));
                             elseif ($metadata['socialdb_entity'] == 'post_content'):
-                                $content .= $field_value . ",";
-                            /* if (!isset($information)):
-                              if (!filter_var($field_value, FILTER_VALIDATE_URL) === false && $import_zip_csv !== 'false') {
-                              $content_id = $this->add_file_url($field_value, $object_id);
-                              add_post_meta($object_id, '_file_id', $content_id);
-                              update_post_meta($object_id, 'socialdb_object_content', $content_id);
-                              } else {
-                              $content .= $field_value . ",";
-                              }
-                              endif; */
+                                if(!empty($field_value)):
+
+                                    if(mb_detect_encoding($field_value) !== 'UTF-8')
+                                    {
+                                        $field_value = utf8_encode($field_value);
+                                    }
+
+                                    $post = array(
+                                        'ID' => $object_id,
+                                        'post_content' => $field_value
+                                    );
+
+                                    wp_update_post($post);
+                                    $this->set_common_field_values($object_id, 'description', $field_value);
+                                endif;
                             elseif ($metadata['socialdb_entity'] == 'attach'):
                                 //attachment (Files)
                                 $files = explode(', ', utf8_decode($field_value));
@@ -197,9 +215,9 @@ class CsvModel extends Model {
                                 } elseif ($metadata['socialdb_entity'] == 'post_permalink'):
                                 update_post_meta($object_id, 'socialdb_object_dc_source', $field_value);
                                 $this->set_common_field_values($object_id, 'object_source', $field_value);
-                            elseif ($metadata['socialdb_entity'] == 'socialdb_object_content') :
+                            elseif ($metadata['socialdb_entity'] == 'socialdb_object_content') ://content
                                 if (!isset($information)):
-                                    if (!filter_var($field_value, FILTER_VALIDATE_URL) === false && $import_zip_csv !== 'false') {
+                                    if (filter_var($field_value, FILTER_VALIDATE_URL) === true && $import_zip_csv !== 'false') {
                                         $content_id = $this->add_file_url($field_value, $object_id);
                                         add_post_meta($object_id, '_file_id', $content_id);
                                         update_post_meta($object_id, 'socialdb_object_content', $content_id);
@@ -207,7 +225,7 @@ class CsvModel extends Model {
                                         if (mb_detect_encoding($field_value, 'auto') == 'UTF-8') {
                                             $field_value = iconv('ISO-8859-1', 'UTF-8', $field_value);
                                         }
-                                        //$content .= $field_value . ",";
+
                                         update_post_meta($object_id, 'socialdb_object_content', $field_value);
                                         $this->set_common_field_values($object_id, 'object_content', $field_value);
                                     }
@@ -218,26 +236,23 @@ class CsvModel extends Model {
                                     update_post_meta($object_id, 'socialdb_object_content', utf8_decode($field_value));
                                     $this->set_common_field_values($object_id, 'object_content', $field_value);
                                 endif;
-                            /* if (mb_detect_encoding($field_value, 'auto') == 'UTF-8') {
-                              $field_value = iconv('ISO-8859-1', 'UTF-8', $field_value);
-                              }
-                              update_post_meta($object_id, 'socialdb_object_content', $field_value);
-                              $this->set_common_field_values($object_id, 'object_content', $field_value); */ elseif ($metadata['socialdb_entity'] == 'socialdb_object_dc_type'):
+                            elseif ($metadata['socialdb_entity'] == 'socialdb_object_dc_type'):
                                 update_post_meta($object_id, 'socialdb_object_dc_type', $field_value);
                                 $this->set_common_field_values($object_id, 'object_type', $field_value);
                             elseif ($metadata['socialdb_entity'] == 'tag' && $field_value != ''):
-                                //$fields_value = explode('||', $field_value);
-                                $fields_value = explode($multi_values, utf8_decode($field_value));
-                                foreach ($fields_value as $field_value):
-                                    //$fields[] = explode('::', $field_value);
-                                    $fields[] = explode($hierarchy, $field_value);
-                                endforeach;
-                                foreach ($fields as $fields_value):
-                                    foreach ($fields_value as $field_value):
-                                        $this->insert_tag($field_value, $object_id, $data['collection_id']);
-                                    endforeach;
-                                endforeach;
-// elseif (strpos($metadata['socialdb_entity'], "facet_") !== false):
+                                if(mb_detect_encoding($field_value) !== 'UTF-8')
+                                {
+                                    $field_value = utf8_encode($field_value);
+                                }
+
+                                $fields_value = explode($multi_values, $field_value);
+                                $fields_value = array_filter($fields_value, function($value) { return $value !== ''; });
+
+                                foreach ($fields_value as $field_value)
+                                {
+                                    $this->insert_tag($field_value, $object_id, $data['collection_id']);
+                                }
+
                             elseif (strpos($metadata['socialdb_entity'], "termproperty_") !== false):
                                 if (is_array($field_value) && count($field_value) == 1) {
                                     $fields_value = $field_value[0];
@@ -247,55 +262,97 @@ class CsvModel extends Model {
                                 } else {
                                     $fields_value = $field_value;
                                 }
+
                                 if (!empty($fields_value)):
-//if (strpos($fields_value, '||') !== false) {
-//    $fields_value = explode('||', $fields_value);
                                     if (strpos($fields_value, $multi_values) !== false) {
                                         $fields_value = explode($multi_values, $fields_value);
                                     } else {
                                         $fields_value = explode(', ', $fields_value);
                                     }
+
                                     $trans = array("termproperty_" => "");
                                     $property_id = strtr($metadata['socialdb_entity'], $trans);
                                     $parent = get_term_meta($property_id, 'socialdb_property_term_root', true);
-//$fields_value = explode(', ', $field_value);
-//$trans = array("facet_" => "");
-//$parent = strtr($metadata['socialdb_entity'], $trans);
-                                    foreach ($fields_value as $field_value):
-//$this->insert_category($field_value, $object_id, $data['collection_id'], $parent);
-                                        $this->insert_hierarchy($this->codification_value($field_value,$code), $object_id, $data['collection_id'], $parent, $property_id, $hierarchy);
-                                    endforeach;
+
+                                    global $wpdb;
+                                    foreach ($fields_value as $field_value) {
+                                        $sql = "SELECT t.term_id FROM $wpdb->terms t, $wpdb->termmeta tm WHERE t.name = '$field_value' AND tm.meta_key = 'socialdb_property_term_root' AND tm.meta_value=$parent;";
+                                        $term_id = $wpdb->get_results($sql);
+                                        $term_id = $term_id[0]->term_id;
+
+                                        $class = new ObjectSaveValuesModel();
+                                        if($term_id)
+                                        {
+                                            $class->saveValue($object_id,
+                                                $property_id,
+                                                0,
+                                                'term',
+                                                0,
+                                                $term_id,
+                                                (false)
+                                            );
+                                        }else{
+                                            $class->saveValue($object_id,
+                                                $property_id,
+                                                0,
+                                                'term',
+                                                0,
+                                                $field_value,
+                                                (false)
+                                            );
+                                        }
+                                    }
                                 endif;
                             elseif (strpos($metadata['socialdb_entity'], "objectproperty_") !== false):
-                                $trans = array("objectproperty_" => "");
+	                            $trans = array("objectproperty_" => "");
                                 $id = strtr($metadata['socialdb_entity'], $trans);
-                                add_post_meta($object_id, 'socialdb_property_' . $id . '', $this->insertPropertyObjectItem($id,$this->codification_value($field_value,$code)));
+                                $value = $this->insertPropertyObjectItem($id,$this->codification_value($field_value,$code));
+                                if(!empty($value))
+                                {
+	                                $class = new ObjectSaveValuesModel();
+	                                $class->saveValue($object_id,
+		                                $id,
+		                                0,
+		                                "object",
+		                                0,
+		                                $value,
+		                                ( false )
+	                                );
+                                };
                             elseif (strpos($metadata['socialdb_entity'], "dataproperty_") !== false):
-                                $trans = array("dataproperty_" => "");
+	                            $trans = array("dataproperty_" => "");
                                 $id = strtr($metadata['socialdb_entity'], $trans);
-                                $has_inserted = add_post_meta($object_id, 'socialdb_property_' . $id, $this->codification_value($field_value,$code));
-                                $this->set_common_field_values($object_id, "socialdb_property_$id", $this->codification_value($field_value,$code));
+                                $value = $this->codification_value($field_value,$code);
+                                if(!empty($value))
+                                {
+	                                $class = new ObjectSaveValuesModel();
+	                                $class->saveValue($object_id,
+		                                $id,
+		                                0,
+		                                "data",
+		                                0,
+		                                trim($value),
+		                                ( false )
+	                                );
+	                                $this->set_common_field_values($object_id, "socialdb_property_$id", $value);
+                                }
                             endif;
                         }
                     }
-                    //if (mb_detect_encoding($content, 'auto') == 'UTF-8') {
-                        $content = $this->codification_value($field_value,$content);
-                    //}
+
+                    //$content = $this->codification_value($field_value, $content);
                     update_post_meta($object_id, 'socialdb_object_from', 'external');
                     $this->set_common_field_values($object_id, 'object_from', 'external');
-                    update_post_content($object_id, utf8_decode($content));
-                    $this->set_common_field_values($object_id, 'description', $content);
                     socialdb_add_tax_terms($object_id, $categories, 'socialdb_category_type');
+
                     //se estiver importando de um zip devera buscar os itens em suas pastas
                     $this->insert_data_zip($object_id, $information, $ID);
                     $content = '';
-                    //$time_after_insert = microtime() - $time_start;
-                    //var_dump(' Fim da insercao do item',$time_after_insert);
                 endfor;
                 //como existe apeans um arquivo
                 break;
             }
-            //se caso foi importado um arquyivo zip, ele devera ser eliminado
+            //se caso foi importado um arquivo zip, ele devera ser eliminado
             if (isset($information) && isset($information['folder'])) {
                 $targetdir = dirname(__FILE__) . "/" . $information['folder'];
                 $targetzip = dirname(__FILE__) . "/" . $information['folder'] . ".zip";
@@ -805,10 +862,15 @@ class CsvModel extends Model {
      * 
      */
     public function codification_value($value,$code){
-        if($code == 'utf8'){
-            return utf8_encode(utf8_decode($value));
+        if($code === 'utf8'){
+            if(mb_detect_encoding($value) === 'UTF-8')
+            {
+	            return $value;
+            }else
+            {
+            	return utf8_encode(utf8_decode($value));
+            }
         }else{
-           // var_dump($code,mb_detect_encoding($value, 'auto'),iconv("Windows-1252","UTF-8" , $value), utf8_encode(utf8_decode($value)),(!mb_detect_encoding($value, 'auto') || mb_detect_encoding($value, 'auto')=='UTF-8' || mb_detect_encoding($value, 'auto')=='ANSII'));
             if(!mb_detect_encoding($value, 'auto') || mb_detect_encoding($value, 'auto')=='UTF-8' || mb_detect_encoding($value, 'auto')=='ANSII'){
                return  iconv("Windows-1252","UTF-8" , $value);
             }else{

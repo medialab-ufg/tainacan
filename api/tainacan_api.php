@@ -5,7 +5,6 @@ class TainacanApi extends WP_REST_Controller {
     private $base = array();
     public static $version = 1;
     public static $namespace_tainacan = 'tainacan/v';
-            
     
     function __construct() {
         $this->base['collections'] = '/collections';
@@ -17,6 +16,7 @@ class TainacanApi extends WP_REST_Controller {
         $this->base['repository'] = '/repository';
         $this->base['repository-items'] = '/repository/items';
         $this->base['repository-metadata'] = '/repository/metadata';
+        $this->base['categories'] = '/categories';
 
         add_action('rest_api_init', array(&$this, 'register_routes'));
     }
@@ -26,9 +26,11 @@ class TainacanApi extends WP_REST_Controller {
      */
     public function register_routes() {
 	    error_reporting(0);
-        $version = self::$version;
         $namespace = self::$namespace_tainacan . self::$version;
-        $base = 'route';
+
+        /*$version = self::$version;
+        $base = 'route';*/
+
         //************* START COLLECTION ENDPOINTS ****************//
         register_rest_route($namespace, $this->base['collections'], array(
             array(
@@ -39,6 +41,7 @@ class TainacanApi extends WP_REST_Controller {
                 ),
             )
         ));
+
         register_rest_route($namespace, $this->base['collection'], array(
             array(
                 'methods' => WP_REST_Server::READABLE,
@@ -48,6 +51,7 @@ class TainacanApi extends WP_REST_Controller {
                 ),
             )
         ));
+
         //************* END COLLECTION ENDPOINTS ****************//
         //************* START COLLECTION METADATA ENDPOINTS ****************//
         register_rest_route($namespace, $this->base['metadatas'], array(
@@ -59,6 +63,7 @@ class TainacanApi extends WP_REST_Controller {
                 ),
             )
         ));
+
         register_rest_route($namespace, $this->base['metadata'], array(
             array(
                 'methods' => WP_REST_Server::READABLE,
@@ -68,6 +73,7 @@ class TainacanApi extends WP_REST_Controller {
                 ),
             )
         ));
+
         //************* END COLLECTION METADATA ENDPOINTS ****************//
         //************* START COLLECTION ITEMS ENDPOINTS ****************//
         register_rest_route($namespace, $this->base['items'], array(
@@ -79,6 +85,7 @@ class TainacanApi extends WP_REST_Controller {
                 ),
             )
         ));
+
         register_rest_route($namespace, $this->base['item'], array(
             array(
                 'methods' => WP_REST_Server::READABLE,
@@ -88,6 +95,7 @@ class TainacanApi extends WP_REST_Controller {
                 ),
             )
         ));
+
         //************* END COLLECTION ITEMS ENDPOINTS ****************//
         //************* START REPOSITORY ENDPOINTS ****************//
         register_rest_route($namespace, $this->base['repository'], array(
@@ -99,6 +107,7 @@ class TainacanApi extends WP_REST_Controller {
                 ),
             )
         ));
+
         register_rest_route($namespace, $this->base['repository-items'], array(
             array(
                 'methods' => WP_REST_Server::READABLE,
@@ -108,6 +117,7 @@ class TainacanApi extends WP_REST_Controller {
                 ),
             )
         ));
+
         register_rest_route($namespace, $this->base['repository-metadata'], array(
             array(
                 'methods' => WP_REST_Server::READABLE,
@@ -117,55 +127,67 @@ class TainacanApi extends WP_REST_Controller {
                 ),
             )
         ));
+
+        register_rest_route($namespace, $this->base['categories'], array(
+            array(
+                'methods' => WP_REST_Server::READABLE,
+                'callback' => array(RepositoryApi, 'get_repository_categories'),
+                'permission_callback' => array($this, 'get_items_permissions_check'),
+                'args' => array(
+                ),
+            )
+        ));
+
+
         //************* END REPOSITORY ENDPOINTS ****************//
         //************* START EXAMPLES ****************//
-//        register_rest_route($namespace, '/' . $base, array(
-//            array(
-//                'methods' => WP_REST_Server::READABLE,
-//                'callback' => array($this, 'get_items'),
-//                'permission_callback' => array($this, 'get_items_permissions_check'),
-//                'args' => array(
-//                ),
-//            ),
-//            array(
-//                'methods' => WP_REST_Server::CREATABLE,
-//                'callback' => array($this, 'create_item'),
-//                'permission_callback' => array($this, 'create_item_permissions_check'),
-//                'args' => $this->get_endpoint_args_for_item_schema(true),
-//            ),
-//        ));
-//        register_rest_route($namespace, '/' . $base . '/(?P<id>[\d]+)', array(
-//            array(
-//                'methods' => WP_REST_Server::READABLE,
-//                'callback' => array($this, 'get_item'),
-//                'permission_callback' => array($this, 'get_item_permissions_check'),
-//                'args' => array(
-//                    'context' => array(
-//                        'default' => 'view',
-//                    ),
-//                ),
-//            ),
-//            array(
-//                'methods' => WP_REST_Server::EDITABLE,
-//                'callback' => array($this, 'update_item'),
-//                'permission_callback' => array($this, 'update_item_permissions_check'),
-//                'args' => $this->get_endpoint_args_for_item_schema(false),
-//            ),
-//            array(
-//                'methods' => WP_REST_Server::DELETABLE,
-//                'callback' => array($this, 'delete_item'),
-//                'permission_callback' => array($this, 'delete_item_permissions_check'),
-//                'args' => array(
-//                    'force' => array(
-//                        'default' => false,
-//                    ),
-//                ),
-//            ),
-//        ));
-//        register_rest_route($namespace, '/' . $base . '/schema', array(
-//            'methods' => WP_REST_Server::READABLE,
-//            'callback' => array($this, 'get_public_item_schema'),
-//        ));
+        /*register_rest_route($namespace, '/' . $base, array(
+            array(
+                'methods' => WP_REST_Server::READABLE,
+                'callback' => array($this, 'get_items'),
+                'permission_callback' => array($this, 'get_items_permissions_check'),
+                'args' => array(
+                ),
+            ),
+            array(
+                'methods' => WP_REST_Server::CREATABLE,
+                'callback' => array($this, 'create_item'),
+                'permission_callback' => array($this, 'create_item_permissions_check'),
+                'args' => $this->get_endpoint_args_for_item_schema(true),
+            ),
+        ));
+        register_rest_route($namespace, '/' . $base . '/(?P<id>[\d]+)', array(
+            array(
+                'methods' => WP_REST_Server::READABLE,
+                'callback' => array($this, 'get_item'),
+                'permission_callback' => array($this, 'get_item_permissions_check'),
+                'args' => array(
+                    'context' => array(
+                        'default' => 'view',
+                    ),
+                ),
+            ),
+            array(
+                'methods' => WP_REST_Server::EDITABLE,
+                'callback' => array($this, 'update_item'),
+                'permission_callback' => array($this, 'update_item_permissions_check'),
+                'args' => $this->get_endpoint_args_for_item_schema(false),
+            ),
+            array(
+                'methods' => WP_REST_Server::DELETABLE,
+                'callback' => array($this, 'delete_item'),
+                'permission_callback' => array($this, 'delete_item_permissions_check'),
+                'args' => array(
+                    'force' => array(
+                        'default' => false,
+                    ),
+                ),
+            ),
+        ));
+        register_rest_route($namespace, '/' . $base . '/schema', array(
+            'methods' => WP_REST_Server::READABLE,
+            'callback' => array($this, 'get_public_item_schema'),
+        ));*/
         //************* END EXAMPLES ****************//
     }
 

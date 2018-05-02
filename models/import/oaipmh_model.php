@@ -140,25 +140,21 @@ class OAIPMHModel extends Model {
     public function generate_selects($data) {
         $html = '';
         $propertyModel = new PropertyModel;
-        //$facets_id = CollectionModel::get_facets($data['collection_id']);
+
         $html .= "<option value=''>" . __('Select...','tainacan') . "</option>";
         $html .= "<option value='post_title'>" . __('Item Title','tainacan') . "</option>";
         $html .= "<option value='post_content'>" . __('Item Description','tainacan') . "</option>";
         $html .= "<option value='socialdb_object_content'>" . __('Item Content','tainacan') . "</option>";
         $html .= "<option value='post_permalink'>" . __('Item URL','tainacan') . "</option>";
         $html .= "<option value='socialdb_object_dc_type'>" . __('Item Type','tainacan') . "</option>";
-        //$html .= "<option value='socialdb_object_from'>" . __('Item Format') . "</option>";
         $html .= "<option value='socialdb_object_dc_source'>" . __('Item Source','tainacan') . "</option>";
-       // $html .= "<option value='hierarchy'>" . __('Hierarchy') . "</option>";
-       // if ($facets_id) {
-          //  foreach ($facets_id as $facet_id) {
-           //     $term_facet = get_term_by("id", $facet_id, "socialdb_category_type");
-          //      $html .= "<option value='facet_" . $term_facet->term_id . "'>Faceta " . $term_facet->name . "</option>";
-           // }
-        //}
+        $html .= "<option value='tag'>" . __('Tag','tainacan') . "</option>";
+        $html .= "<option value='attach'>" . __('Attachments','tainacan') . "</option>";
+
         $root_category = $this->get_category_root_of($data['collection_id']);
-        //$all_properties_id = get_term_meta($root_category, 'socialdb_category_property_id');
-        $all_properties_id = $this->get_parent_properties($root_category, [],$root_category); 
+
+        $all_properties_id = $this->get_parent_properties($root_category, [],$root_category);
+
         //busco as propriedades sem domain
         $properties_with_no_domain = $this->list_properties_by_collection($data['collection_id']);
         if($properties_with_no_domain&&is_array($properties_with_no_domain)){
@@ -168,32 +164,45 @@ class OAIPMHModel extends Model {
                 }
             }
         }
+
         if ($all_properties_id) {
-            foreach ($all_properties_id as $property_id) {
-                $parent = '';
+            $properties = [];
+            $parent_list = [];
+            foreach ($all_properties_id as $property_id)
+            {
                 $property = get_term_by("id", $property_id, "socialdb_property_type");
                 $property_root = get_term_meta($property->term_id, 'socialdb_property_created_category', true);
                 $term = socialdb_term_exists($property_root);
+
                 if($term){
                     $parent = ' - '.$term['name'];
                 }else{
-                     $parent = ' - '.__('Removed category','tainacan');
+                    $parent = ' - '.__('Removed category','tainacan');
                 }
+
                 if(in_array($property->slug, $this->fixed_slugs) ):
                     continue;
                 endif;
+
+                $properties[$property_id] = $property->name;
+                $parent_list[$property_id] = $parent;
+            }
+
+            asort($properties, SORT_STRING);
+
+            foreach ($properties as $property_id => $property_name)
+            {
                 $type = $propertyModel->get_property_type($property_id); // pego o tipo da propriedade
                 if ($type == 'socialdb_property_object') {
-                    $html .= "<option value='objectproperty_" . $property_id . "'>" . $property->name . ' (' . __('Object Property','tainacan') . ')' .$parent. "</option>";
+                    $html .= "<option value='objectproperty_" . $property_id . "'>" . $property_name . ' (' . __('Object Property','tainacan') . ')' .$parent_list[$property_id]. "</option>";
                 } elseif ($type == 'socialdb_property_data') {
-                    $html .= "<option value='dataproperty_" . $property_id . "'>" . $property->name . ' (' . __('Data Property','tainacan') . ')' .$parent. "</option>";
+                    $html .= "<option value='dataproperty_" . $property_id . "'>" . $property_name . ' (' . __('Data Property','tainacan') . ')' .$parent_list[$property_id]. "</option>";
                 } elseif($type == 'socialdb_property_term'){
-                       $html .= "<option value='termproperty_" . $property_id . "'>" . $property->name . ' (' . __('Term Property','tainacan') . ')' .$parent. "</option>";
+                    $html .= "<option value='termproperty_" . $property_id . "'>" . $property_name . ' (' . __('Term Property','tainacan') . ')' .$parent_list[$property_id]. "</option>";
                 }
             }
         }
-        $html .= "<option value='tag'>" . __('Tag','tainacan') . "</option>";
-        $html .= "<option value='attach'>" . __('Attachments','tainacan') . "</option>";
+
         return $html;
     }
 

@@ -71,7 +71,6 @@ while (have_posts()) : the_post();
                     <!-- TAINACAN: esta div agrupa a submissao de novos itens e a ordenacao (estilo inline usado para afastar do painel da colecao) -->
                     <div id="menu_object" class="row col-md-12">
                         <div class="col-lg-12 no-padding">
-
                             <div class="col-md-12 no-padding">
                                 <div class="row search-top-container">
                                     <div class="col-md-12">
@@ -129,11 +128,11 @@ while (have_posts()) : the_post();
                                 <input type="hidden" id="advanced_search_collection" name="advanced_search_collection" value="<?php echo $_currentID_ ?>">
                                 <input type="hidden" id="advanced_search_collection_id" name="collection_id" value="<?php echo $_currentID_; ?>">
                                 <div style="margin-top: 10px;display:none;" class="" id="propertiesRootAdvancedSearch">
-                                    <center>
+                                    <div style="text-align: center;">
                                         <img src="<?php echo get_template_directory_uri() . '/libraries/images/catalogo_loader_725.gif' ?>"
                                              alt="<?php _t('Loading',1);?>" title="<?php _t('Loading',1);?>" />
                                         <h3><?php _e('Please wait...', 'tainacan') ?></h3>
-                                    </center>
+                                    </div>
                                 </div>
                             </form>
                         </div>
@@ -268,8 +267,10 @@ while (have_posts()) : the_post();
 
                                 <div class="col-md-2 selectable-items <?= $HideFromPlugin; ?>" id="normal-selectable">
                                     <?php
-                                    if (is_user_logged_in() && get_the_ID() != get_option('collection_root_id') &&
-                                        verify_collection_moderators(get_the_ID(), get_current_user_id())):
+                                    if (is_user_logged_in() &&
+                                        ((get_the_ID() != get_option('collection_root_id') &&
+                                        verify_collection_moderators(get_the_ID(), get_current_user_id())) ||
+                                        current_user_can('administrator'))):
                                         ?>
                                         <label><?php _t('Select: ', 1); ?></label>
                                         <div class="selectors">
@@ -331,6 +332,7 @@ while (have_posts()) : the_post();
                                         if (get_the_ID() != get_option('collection_root_id') && verify_collection_moderators(get_the_ID(), get_current_user_id())) {
                                             ?>
                                             <button onclick="show_trash_page();" class="btn btn-default pull-right button-trash collection-trash">
+                                                <span class="glyphicon glyphicon-trash"></span>
                                                 <?php echo $trash_name ?>
                                             </button>
                                             <?php
@@ -341,6 +343,7 @@ while (have_posts()) : the_post();
                                             //if ($admin_email == $user_data || $blog_email == $user_data) {
                                             ?>
                                             <button onclick="show_trash_page();" class="btn btn-default button-trash pull-right">
+                                                <span class="glyphicon glyphicon-trash"></span>
                                                 <?php echo $trash_name; ?>
                                             </button>
                                             <?php

@@ -167,6 +167,18 @@ if(is_object($cover) && $cover->post_type === "attachment") {
                 </div>
             </div>
 
+            <div class="form-group">
+                <?php
+                $hide_search = get_option('socialdb_collection_hide_search');
+                $hide_footer = get_option('socialdb_collection_hide_footer');
+                ?>
+                <h5 style="font-weight: bolder; margin-bottom: 2px;"> <?php _e('Appearance','tainacan'); ?> </h5>
+                <input type="checkbox" value="true" name="socialdb_collection_hide_search" <?php  if(isset($hide_search) && $hide_search == 'true') echo 'checked' ?>>
+                <?php _e("Hide home's search", "tainacan"); ?>
+                <br>
+                <input type="checkbox" value="true" name="socialdb_collection_hide_footer" <?php  if(isset($hide_footer) && $hide_footer == 'true') echo 'checked' ?>>
+                <?php _e("Hide footer", "tainacan"); ?>
+            </div>
             <!-- Mapeamento coleção -->
             <?php
             if(has_action("add_mapping_library_collections"))

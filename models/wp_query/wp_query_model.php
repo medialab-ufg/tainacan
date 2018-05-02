@@ -591,6 +591,7 @@ class WPQueryModel extends Model {
             );
 
             $meta_query = (!isset($recover_data['post_type']) || empty($recover_data['post_type']) || $recover_data['post_type'] =='socialdb_object') ? $this->get_meta_query($recover_data) : false;
+
             if ($meta_query) {
                 $args['meta_query'] = $meta_query;
 	            /*$args['meta_query'] = array(
@@ -609,19 +610,20 @@ class WPQueryModel extends Model {
             if (isset($meta_key)&&!in_array($meta_key, ['title','comment_count','date'])) {
                 $args['meta_key'] = $meta_key;
             }
-//            if (isset($recover_data['post_type']) && $recover_data['post_type']=='socialdb_collection') {
-//                $args['s'] = $recover_data['keyword'];
-//            }
-//            if(isset($recover_data['advanced_search']) && isset($recover_data['keyword'])){
-//                if(has_filter('alter_s_wpquery_search')){
-//                    $s = apply_filters('alter_s_wpquery_search',$recover_data['keyword']);
-//                    if($s){
-//                        $args['s'] = $s;
-//                    }
-//                }else{
-//                    $args['s'] = $recover_data['keyword'];
-//                }
-//            }
+
+            /*if (isset($recover_data['post_type']) && $recover_data['post_type']=='socialdb_collection') {
+                $args['s'] = $recover_data['keyword'];
+            }
+            if(isset($recover_data['advanced_search']) && isset($recover_data['keyword'])){
+                if(has_filter('alter_s_wpquery_search')){
+                    $s = apply_filters('alter_s_wpquery_search',$recover_data['keyword']);
+                    if($s){
+                        $args['s'] = $s;
+                    }
+                }else{
+                    $args['s'] = $recover_data['keyword'];
+                }
+            }*/
             $args['s'] = $recover_data['keyword'];
 
             if(isset($recover_data['author']) && $recover_data['author'] != ''){
@@ -826,6 +828,7 @@ class WPQueryModel extends Model {
                 'operator' => 'IN'
             );
         }else if(!isset($recover_data['author']) || $recover_data['author']===''){
+            /*print "No Author\n";
             $private_collections = get_option('socialdb_private_collections');
             $private_collections = ($private_collections) ?  unserialize($private_collections) : [];
             if(!empty($private_collections)){
@@ -835,7 +838,7 @@ class WPQueryModel extends Model {
                     'terms' => $private_collections,
                     'operator' => 'NOT IN'
                 );
-            }
+            }*/
         }
         $tax_query = $this->get_hash_synomys($recover_data,$tax_query);
         if(isset($recover_data['advanced_search']['tags'])){
@@ -896,54 +899,53 @@ class WPQueryModel extends Model {
      * @author Eduardo Humberto
      */
     public function get_meta_query($recover_data) {
-        $meta_query = array();
         $meta_query = array('relation' => 'AND');
         //se estiver buscando uma string em uma colecao de itens
-//        if (isset($recover_data['keyword'])&&!is_array($recover_data['keyword']) && $recover_data['keyword'] != '') {
-//            $length = strlen($recover_data['keyword']);
-//            $recover_data['keyword'] = stripslashes ($recover_data['keyword'] );
-//            if ((strpos($recover_data['keyword'], '"') === 0)) {
-//                $array = explode('"', $recover_data['keyword']);
-//                foreach ($array as $str) {
-//                    if (trim($str) !== '') {
-//                        $meta_query[] = array(
-//                            'key' => 'socialdb_object_commom_values',
-//                            'value' => trim($str),
-//                            'compare' => 'LIKE'
-//                        );
-//                    }
-//                }
-//            } elseif ((strpos($recover_data['keyword'], "'") === 0)) {
-//                $array = explode("'", $recover_data['keyword']);
-//                foreach ($array as $str) {
-//                    if (trim($str) !== '') {
-//                        $meta_query[] = array(
-//                            'key' => 'socialdb_object_commom_values',
-//                            'value' => trim($str),
-//                            'compare' => 'LIKE'
-//                        );
-//                    }
-//                }
-//            } else {
-//                $array = explode(' ', $recover_data['keyword']);
-//                foreach ($array as $str) {
-//                    if (trim($str) !== '') {
-//                        $meta_query[] = array(
-//                            'key' => 'socialdb_object_commom_values',
-//                            'value' => trim($str),
-//                            'compare' => 'LIKE'
-//                        );
-//                    }
-//                }
-//            }
-//        }else if(isset($recover_data['keyword'])&&is_array($recover_data['keyword'])){
-//            $meta_query[] = array(
-//                            'key' => 'socialdb_object_commom_values',
-//                            'value' => $recover_data['keyword'],
-//                            'compare' => 'IN'
-//                        );
-//        }
-
+        /*if (isset($recover_data['keyword'])&&!is_array($recover_data['keyword']) && $recover_data['keyword'] != '') {
+            $length = strlen($recover_data['keyword']);
+            $recover_data['keyword'] = stripslashes ($recover_data['keyword'] );
+            if ((strpos($recover_data['keyword'], '"') === 0)) {
+                $array = explode('"', $recover_data['keyword']);
+                foreach ($array as $str) {
+                    if (trim($str) !== '') {
+                        $meta_query[] = array(
+                            'key' => 'socialdb_object_commom_values',
+                            'value' => trim($str),
+                            'compare' => 'LIKE'
+                        );
+                    }
+                }
+            } elseif ((strpos($recover_data['keyword'], "'") === 0)) {
+                $array = explode("'", $recover_data['keyword']);
+                foreach ($array as $str) {
+                    if (trim($str) !== '') {
+                        $meta_query[] = array(
+                            'key' => 'socialdb_object_commom_values',
+                            'value' => trim($str),
+                            'compare' => 'LIKE'
+                        );
+                    }
+                }
+            } else {
+                $array = explode(' ', $recover_data['keyword']);
+                foreach ($array as $str) {
+                    if (trim($str) !== '') {
+                        $meta_query[] = array(
+                            'key' => 'socialdb_object_commom_values',
+                            'value' => trim($str),
+                            'compare' => 'LIKE'
+                        );
+                    }
+                }
+            }
+        }else if(isset($recover_data['keyword'])&&is_array($recover_data['keyword'])){
+            $meta_query[] = array(
+                            'key' => 'socialdb_object_commom_values',
+                            'value' => $recover_data['keyword'],
+                            'compare' => 'IN'
+                        );
+        }*/
+        /*End String search*/
         if (isset($recover_data['properties_tree'])) {
             foreach ($recover_data['properties_tree'] as $property_id => $value_id) {
                 $meta_query[] = array(
@@ -1115,21 +1117,20 @@ class WPQueryModel extends Model {
                     'type' => 'DECIMAL',
                     'compare' => 'BETWEEN'
                 );
-//                $array =  explode(',', $value);
-//                $meta_query[] = array(
-//                    'key' => 'socialdb_property_' . $property_id,
-//                     'value' =>  floatval (trim($array[0])),
-//                    'type' => 'NUMERIC',
-//                    'compare' => '>='
-//                );
-//                 $meta_query[] = array(
-//                    'key' => 'socialdb_property_' . $property_id,
-//                     'value' =>  floatval (trim($array[1])),
-//                    'type' => 'NUMERIC',
-//                    'compare' => '<='
-//                );
+                /*$array =  explode(',', $value);
+                $meta_query[] = array(
+                    'key' => 'socialdb_property_' . $property_id,
+                     'value' =>  floatval (trim($array[0])),
+                    'type' => 'NUMERIC',
+                    'compare' => '>='
+                );
+                 $meta_query[] = array(
+                    'key' => 'socialdb_property_' . $property_id,
+                     'value' =>  floatval (trim($array[1])),
+                    'type' => 'NUMERIC',
+                    'compare' => '<='
+                );*/
             }
-           // var_dump( $meta_query);exit();
         }
         if (isset($recover_data['properties_data_range_date'])) {
             //$meta_query = array('relation' => 'AND');

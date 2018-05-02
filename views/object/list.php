@@ -17,9 +17,23 @@ if ( $loop->have_posts()) { ?>
     <div id="collection-view-mode">
         <div id='<?php echo $collection_list_mode; ?>-viewMode' class='col-md-12 no-padding list-mode-set'>
             <?php
+            if(isset($items_id) && count($items_id) > 0)
+            {
+	            echo "<input type='hidden' id='items_id' value='";
+	            $items_id_length = count($items_id)- 1;
+	            foreach ($items_id as $index => $id)
+	            {
+		            echo $id;
+		            if($index != $items_id_length)
+			            echo ',';
+	            }
+	            echo "'>";
+            }
+
             while ( $loop->have_posts() ) : $loop->the_post(); $countLine++;
                 $curr_id = get_the_ID();
-                if(strcmp(get_the_title(), "Tainacan - Coleções") === 0) //Tainacan - Coleções
+
+                if($curr_id === 5) //Tainacan - Coleções
                 {
                     continue;
                 }
@@ -36,7 +50,17 @@ if ( $loop->have_posts()) { ?>
             ?>
         </div>
 
-    </div> <br />
+    </div>
+    <br>
+    <script>
+        if($(".select_some").hasClass("highlight"))
+        {
+            $('.object_id').each(function(idx, el) {
+                var item = $("#object_" + $(el).val() );
+                $(item).find('.toggleSelect').addClass('selecting-item');
+            });
+        }
+    </script>
 
 <?php } else {
     if(get_option('collection_root_id') != $collection_id): ?>

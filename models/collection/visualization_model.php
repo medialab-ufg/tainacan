@@ -262,11 +262,12 @@ class VisualizationModel extends CollectionModel {
         ksort($facets);
         foreach ($facets as &$facet_id) {
             $facet = get_term_by('id', $facet_id, 'socialdb_category_type');
+
             $ancestors = get_ancestors($facet->term_id,'socialdb_category_type');
             $skip = false;
             foreach ($ancestors as $value) {
                if(in_array($value, $facets)){
-                   $skip = true;
+               	    $skip = true;
                }
             }
 
@@ -306,12 +307,13 @@ class VisualizationModel extends CollectionModel {
                 $widget = get_post_meta($data['collection_id'], 'socialdb_collection_facet_'.$facet_id.'_widget', true);
 
                 $type = $propertyModel->get_property_type($facet_id); // pego o tipo da propriedade;
+
                 //METADADOS FIXOS
-                if ('socialdb_property_fixed_type'==$facet->slug) {
+                if ('socialdb_property_fixed_type' == $facet->slug) {
                     $classCss = get_post_meta($data['collection_id'], 'socialdb_collection_facet_' . $facet_id . '_color', true);
                     $dynatree[] = array('title' => $facet->name, 'key' => 'socialdb_object_dc_type_facet', 'isLazy' => true, 'data' => $url, 'expand' => true, 'hideCheckbox' => true, 'addClass' => $classCss);
                     $dynatree[end(array_keys($dynatree))] = $this->getTypeDynatree($data['collection_id'], $dynatree[end(array_keys($dynatree))], $classCss);
-                }elseif ('socialdb_property_fixed_title'==$facet->slug&&$widget=='tree') {
+                }elseif ('socialdb_property_fixed_title' == $facet->slug && $widget == 'tree') {
                    $classCss = get_post_meta($data['collection_id'], 'socialdb_collection_facet_' . $facet_id . '_color', true);
                     $dynatree[] = array('title' =>$facet->name, 'key' => 'socialdb_object_dc_type_facet', 'isLazy' => true, 'data' => $url, 'expand' => true, 'hideCheckbox' => true, 'addClass' => $classCss);
                     $property['metas']['socialdb_property_object_category_id'] = $this->get_category_root_of($data['collection_id']);
@@ -320,19 +322,19 @@ class VisualizationModel extends CollectionModel {
                     $dynatree[end(array_keys($dynatree))] = $this->getPropertyRelDynatree($property, $dynatree[end(array_keys($dynatree))], $classCss);
                 }
                 // para o formato
-                elseif ('socialdb_property_fixed_from'==$facet->slug) {
+                elseif ('socialdb_property_fixed_from' == $facet->slug) {
                     $classCss = get_post_meta($data['collection_id'], 'socialdb_collection_facet_' . $facet_id . '_color', true);
                     $dynatree[] = array('title' =>$facet->name, 'key' => 'socialdb_object_from_facet', 'isLazy' => true, 'data' => $url, 'expand' => true, 'hideCheckbox' => true, 'addClass' => $classCss);
                     $dynatree[end(array_keys($dynatree))] = $this->getFormatDynatree($data['collection_id'], $dynatree[end(array_keys($dynatree))], $classCss);
                 }
                 //fonte dos dados
-                elseif ('socialdb_property_fixed_source'==$facet->slug) {
+                elseif ('socialdb_property_fixed_source' == $facet->slug) {
                     $classCss = get_post_meta($data['collection_id'], 'socialdb_collection_facet_' . $facet_id . '_color', true);
                     $dynatree[] = array('title' => $facet->name, 'key' => 'socialdb_object_from_facet', 'isLazy' => true, 'data' => $url, 'expand' => true, 'hideCheckbox' => true, 'addClass' => $classCss);
                     $dynatree[end(array_keys($dynatree))] = $this->getSourceDynatree($data['collection_id'], $dynatree[end(array_keys($dynatree))], $classCss);
                 }
                 //tags
-                elseif ('socialdb_property_fixed_tags'==$facet->slug && ( $widget=='tree')) {
+                elseif ('socialdb_property_fixed_tags' == $facet->slug && ( $widget=='tree')) {
                     //tags
                     if($labels_collection){
                         $array = unserialize($labels_collection);
@@ -344,7 +346,7 @@ class VisualizationModel extends CollectionModel {
                     $dynatree[end(array_keys($dynatree))] = $this->getTagRelDynatree($data['collection_id'], $dynatree[end(array_keys($dynatree))], 'tag_img');
                 }
                 //licencas dos itens
-                elseif ('socialdb_property_fixed_license'==$facet->slug) {
+                elseif ('socialdb_property_fixed_license' == $facet->slug) {
                     $classCss = get_post_meta($data['collection_id'], 'socialdb_collection_facet_socialdb_license_id_color', true);
                     $dynatree[] = array('title' => $facet->name, 'key' => 'socialdb_license_id_facet_tag', 'isLazy' => true, 'data' => $url, 'expand' => true, 'hideCheckbox' => true, 'addClass' => $classCss);
                     $dynatree[end(array_keys($dynatree))] = $this->getLicensesDynatree($data['collection_id'], $dynatree[end(array_keys($dynatree))], $classCss);
@@ -385,6 +387,12 @@ class VisualizationModel extends CollectionModel {
             }
 
 
+        }
+        //
+        foreach ($dynatree as $index => $tree)
+        {
+            usort($tree['children'], 'order_dynatree');
+            $dynatree[$index]['children'] = $tree['children'];
         }
 
         return json_encode($dynatree,JSON_UNESCAPED_UNICODE);
@@ -684,6 +692,7 @@ class VisualizationModel extends CollectionModel {
     public function getChildrenDynatree($facet_id, $dynatree, $classCss = 'color4',$ordenation = 't.name ASC', $collection_id = null) {
         $counter = 0;
         $children = $this->getChildren($facet_id, $ordenation);
+	    usort($children, "order_dynatree");
         if (count($children) > 0) {
             foreach ($children as $child) {
                 $children_of_child = $this->getChildren($child->term_id,$ordenation);
@@ -790,8 +799,13 @@ class VisualizationModel extends CollectionModel {
      * Metodo reponsavel em gerar a listagem do dynatree
      * Autor: Eduardo Humberto
      */
+
     public function expandDynatree($data) {
-        if (strpos($data['key'], "_moreoptions") !== false && strpos($data['key'], "_moreoptionstag") === false && strpos($data['key'], "_moreoptionsproperty") === false && strpos($data['key'], "_moreoptionsdataproperty") === false) {
+        if (strpos($data['key'], "_moreoptions") !== false &&
+            strpos($data['key'], "_moreoptionstag") === false &&
+            strpos($data['key'], "_moreoptionsproperty") === false &&
+            strpos($data['key'], "_moreoptionsdataproperty") === false)
+        {
             return $this->expand_categories_moreoptions($data['collection'], $data['key'], $data);
         } elseif (strpos($data['key'], "?alphabet=") !== false) {
             return $this->expand_alphabet_dynatree_category($data['collection'], $data['key'], $data);
@@ -1023,6 +1037,7 @@ class VisualizationModel extends CollectionModel {
      * Metodo reponsavel gerar a lista apos expan
      * Autor: Eduardo Humberto
      */
+
     function expand_alphabet_dynatree_category($collection_id, $key, $data) {
         $category_model = new CategoryModel;
         if (isset($data['hide_checkbox'])) {
@@ -1030,33 +1045,50 @@ class VisualizationModel extends CollectionModel {
         } else {
             $hide_checkbox = false;
         }
+
         $string = str_replace('?alphabet=', ',', $key);
         $array = explode(',', $string);
         $children = $this->get_term_children_by_first_letter($array[0], $array[1]);
+
         $facet_id = $category_model->get_category_facet_parent($array[0], $collection_id);
+
         $classCss = $category_model->get_facet_class($facet_id, $collection_id);
+	    $classCss = ($classCss)?$classCss:'color4';
+
         $cont = 0;
+
         if (count($children) > 0) {
+	        usort($children, "order_dynatree");
             foreach ($children as $child) {
                 $cont++;
-                if( strtolower($array[1]) == 'a' ){
+                /*if( strtolower($array[1]) == 'a' ){
                     if($cont <= ($this->getDynatreeNumberItems($facet_id,$array[0]) + 1))
                         continue;
-                }
+                }*/
                 $children_of_child = $this->getChildren($child->term_id);
 
-                if (count($children_of_child) > 0 || (!empty($children_of_child) && $children_of_child)) {
-                    $dynatree[] = array('title' => $child->name, 'hideCheckbox' => $hide_checkbox, 'key' => $child->term_id, 'isLazy' => true, 'addClass' => $classCss);
-                    //$dynatree[] = array('title' => $child->name.' ('. $this->count_items_related($child->term_id).')','hideCheckbox' => $hide_checkbox, 'key' => $child->term_id, 'isLazy' => true, 'addClass' => $classCss);
-                } else {
-                    $dynatree[] = array('title' => $child->name, 'hideCheckbox' => $hide_checkbox, 'key' => $child->term_id, 'addClass' => $classCss);
-                    //$dynatree[] = array('title' => $child->name.' ('. $this->count_items_related($child->term_id).')','hideCheckbox' => $hide_checkbox, 'key' => $child->term_id, 'addClass' => $classCss);
-                }
+	            if (count($children_of_child) > 0 || (!empty($children_of_child) && $children_of_child)) {// se tiver descendentes
+		            $dynatree[] = array('title' => $child->name,
+		                                'select'=>$category_model->isSelected($child->term_id,$data,'categories'),
+		                                'hideCheckbox' => $hide_checkbox,
+		                                'key' => $child->term_id,
+		                                'isLazy' => true,
+		                                'addClass' => $classCss);
+
+	            } else {// se nao tiver filhos
+		            $dynatree[] = array('title' => $child->name,
+		                                'select'=>$category_model->isSelected($child->term_id,$data,'categories'),
+		                                'hideCheckbox' => $hide_checkbox,
+		                                'key' => $child->term_id,
+		                                'addClass' => $classCss);
+	            }
+
                 $cont++;
             }
         }
         return $dynatree;
     }
+
 
     /**
      * @signature expand_alphabet_dynatree($key, $classCss)
@@ -1190,7 +1222,14 @@ class VisualizationModel extends CollectionModel {
         $arrayalphabet = $this->return_alphabet_array();
         foreach ($arrayalphabet as $letter) {
             if (count($this->get_term_children_by_first_letter($term_id, $letter)) > 0) {
-                $data = array('title' => strtoupper($letter), 'key' => $term_id . '?alphabet=' . $letter, 'isFolder' => false, 'hideCheckbox' => true, 'expand' => false, 'isLazy' => true, 'data' => '', 'addClass' => 'more');
+                $data = array('title' => strtoupper($letter),
+                              'key' => $term_id . '?alphabet=' . $letter,
+                              'isFolder' => false,
+                              'hideCheckbox' => true,
+                              'expand' => false,
+                              'isLazy' => true,
+                              'data' => '',
+                              'addClass' => 'more');
                 $dynatree[] = $data;
             }
             //  var_dump($value,$valor,$value!==null||$value!=='NULL');
@@ -1199,7 +1238,7 @@ class VisualizationModel extends CollectionModel {
         return $dynatree;
     }
 
-    /**
+	/**
      * @signature expand_categories_moreoptions($key, $classCss)
      * @param int $key O id da categoria a ser expandida
      * @param string $classCss A classe css que sera usada para mostrar o icone adequado

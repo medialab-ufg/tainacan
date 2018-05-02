@@ -24,6 +24,8 @@ $view_helper = new ViewHelper();
         $habilitate_item_media = (isset($ordenation['collection_metas']['socialdb_collection_item_habilitate_media'])) ? $ordenation['collection_metas']['socialdb_collection_item_habilitate_media']:'';
         $visualization_page_category = $ordenation['collection_metas']['socialdb_collection_visualization_page_category'];
         $itens_per_page = $ordenation['collection_metas']['socialdb_collection_itens_per_page'];
+        $collumns_to_show = $ordenation['collection_metas']['socialdb_collection_item_collumns'];
+
         ?>
         <form method="POST" name="form_ordenation_search" style="padding-left: 15px;margin-top: 10px" id="form_ordenation_search">
         <div id="layout-accordion" class="menu_left" style="margin-top: 20px; padding-right: 0; font-size: 12px;border: none;">
@@ -209,15 +211,23 @@ $view_helper = new ViewHelper();
                     <label for="collection_ordenation_form"><?php _e('Select the layout for the item visualization','tainacan'); ?></label><br>
                     <input type="radio" 
                            <?php echo ( $item_visualization == 'two' || empty($item_visualization)) ? "checked = 'checked'" : ''; ?>
-                           name="socialdb_collection_item_visualization" 
-                            onchange="showHabilitateItemMedia(this,false)" 
+                           name="socialdb_collection_item_visualization"
                            value="two">&nbsp;<?php _e('Focus in media','tainacan'); ?><br>
-                    <input type="radio" 
-                           name="socialdb_collection_item_visualization" 
-                           onchange="showHabilitateItemMedia(this,true)" 
+                    <?php
+                        if(!isset($collumns_to_show) || empty($collumns_to_show)){
+	                        $collumns_to_show = 2;
+                        }
+                    ?>
+                    <div id="collumns_number" style="margin-left: 1.2rem;">
+                        <input type="radio" name="socialdb_collection_item_collumns" value="2" <?php if($collumns_to_show == 2) echo 'checked';?>> <?php _e("Two collumns", "tainacan"); ?><br>
+                        <input type="radio" name="socialdb_collection_item_collumns" value="1" <?php if($collumns_to_show == 1) echo 'checked';?>> <?php _e("One collumn", "tainacan"); ?><br>
+                    </div>
+
+                    <input type="radio"
+                           name="socialdb_collection_item_visualization"
                            <?php echo ( $item_visualization == 'one' ) ? "checked = 'checked'" : ''; ?>
                            value="one">&nbsp;<?php _e('Focus in metadata','tainacan'); ?><br>
-                    <div id="habilitateItemMedia" <?php echo ($item_visualization == 'two' || empty($item_visualization))?'style="display:none;"' : '' ?>>
+                    <div id="habilitateItemMedia" <?php echo ($item_visualization == 'two' || empty($item_visualization))?'"' : '' ?>>
                         &nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" name="habilitateItemMedia" value="true" <?php echo ( $habilitate_item_media == 'true' ) ? "checked = 'checked'" : ''; ?>>
                         <?php _e('Habilitate visualization of image and attachments','tainacan') ?>
                     </div>
@@ -238,17 +248,8 @@ $view_helper = new ViewHelper();
                            onchange="showHabilitateMedia(this,true)" 
                            <?php echo ( $submission_visualization == 'one' ) ? "checked = 'checked'" : ''; ?>
                            value="one">&nbsp;<?php _e('Focus in metadata','tainacan'); ?><br>
-                    
-                            <!--select name="socialdb_collection_submission_visualization" id="socialdb_collection_submission_visualization" onchange="showHabilitateMedia(this)" class="form-control">
-                                <option value="one" <?php ( $submission_visualization == 'one' ) ? "selected = 'selected'" : ''; ?> >
-                                    <?php _e('1 column','tainacan'); ?>
-                                </option>
-                                <option value="two" <?php if ($submission_visualization == 'two'|| empty($submission_visualization)) { echo 'selected = "selected"'; } ?> >
-                                    <?php _e('2 columns','tainacan'); ?>
-                                </option>
-                            </select-->
                     <div id="habilitateMedia" <?php echo ($submission_visualization == 'two' || empty($submission_visualization))?'style="display:none;"' : '' ?> >
-                        &nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" name="habilitateMedia" value="true"    <?php echo ( $habilitate_media == 'true' ) ? "checked = 'checked'" : ''; ?>>
+                        &nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" name="habilitateMedia" value="true"    <?php echo ($submission_visualization == 'one' && $habilitate_media == 'true' ) ? "checked = 'checked'" : ''; ?>>
                         <?php _e('Habilitate visualization of image and attachments','tainacan') ?>
                     </div>
                 </div>

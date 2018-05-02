@@ -42,6 +42,8 @@ class ObjectFileModel extends Model {
                             $obj['name'] = $attachment->post_title;
                             $obj['ID'] = $attachment->ID;
                             $obj['size'] = filesize(get_attached_file($attachment->ID));
+                            $obj['thumbnail'] = wp_get_attachment_thumb_url($attachment->ID);
+                            $obj['caption'] = get_post_meta($attachment->ID, "socialdb_thumbnail_caption", true);
                             $result[] = $obj;
                         }
                     }
@@ -98,11 +100,18 @@ class ObjectFileModel extends Model {
                 //  var_dump($args);
                 $attachments = get_posts($args);
                 $arquivos = get_post_meta($post->ID, '_file_id');
+
                 if ($attachments) {
                     foreach ($attachments as $attachment) {
-                        if(is_numeric($data['file_name'])){
+                    	if(is_numeric($data['file_name'])){
                             if (in_array($attachment->ID, $arquivos) && $data['file_name'] == $attachment->ID) {
                                 $result = wp_delete_attachment($attachment->ID);
+                            }else //Case file name is a number
+                            {
+	                            $filename = explode('.', $data['file_name'])[0];
+	                            if (in_array($attachment->ID, $arquivos) && str_replace(' ','-',urldecode($filename)) == urldecode($attachment->post_title)) {
+		                            $result = wp_delete_attachment($attachment->ID);
+	                            }
                             }
                         }else{
                             $filename = explode('.', $data['file_name'])[0];

@@ -93,7 +93,12 @@ class EventObjectDeleteModel extends EventModel {
             // Update the post into the database
             $value = wp_update_post($object);
 
-            if(has_filter('tainacan_delete_item_perm')) {
+            if ($value === 0) {
+                if(wp_delete_post($object_id))
+                {
+                    $value = 1;
+                }
+            }else if(has_filter('tainacan_delete_item_perm')) {
                 $this->update_event_state('confirmed', $data['event_id']); // seto a o evento como invalido
                 //return apply_filters('tainacan_delete_item_perm', $value, $collection_id);
                 apply_filters('tainacan_delete_item_perm', $value, $collection_id);

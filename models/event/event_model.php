@@ -372,8 +372,8 @@ abstract class EventModel extends Model {
      * Autor: Eduardo Humberto 
      */
     public function insert_event($name) {
-        $name = str_replace('?', '', $name);
-        $name = str_replace('.', '', $name);
+        /*$name = str_replace('?', '', $name);
+        $name = str_replace('.', '', $name);*/
 //$name = remove_accent($name);
 // $name = cut_string($name, 190);
         $post = array(

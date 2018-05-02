@@ -1,3 +1,4 @@
+<?php //echo "<pre>"; print_r($json_autocomplete); echo "</pre>";?>
 <script>!function (d, s, id) {
         var js, fjs = d.getElementsByTagName(s)[0], p = /^http:/.test(d.location) ? 'http' : 'https';
         if (!d.getElementById(id)) {
@@ -18,15 +19,19 @@
             var that = this,
                     currentCategory = "";
             $.each(items, function (index, item) {
-                var li;
+                if(item.category == 'Itens')
+                {
+                    var li;
 
-                if (item.category != currentCategory) {
-                    ul.append("<li class='ui-autocomplete-category'><b>" + item.category + "</b></li>");
-                    currentCategory = item.category;
-                }
-                li = that._renderItemData(ul, item);
-                if (item.category) {
-                    li.attr("aria-label", item.category + " : " + item.label);
+                    if (item.category != currentCategory) {
+                        ul.append("<li class='ui-autocomplete-category'><b>" + item.category + "</b></li>");
+                        currentCategory = item.category;
+                    }
+
+                    li = that._renderItemData(ul, item);
+                    if (item.category) {
+                        li.attr("aria-label", item.category + " : " + item.label);
+                    }
                 }
             });
         }
@@ -53,11 +58,13 @@
             select: function (event, ui) {
                 var str = '' + ui.item.id+'';
                 $("#search_objects").val('');
+
                 if (str.indexOf("_keyword") >= 0) {
                     wpquery_keyword("'" + str.replace('_keyword', '')+ "'");
                 }else{
                     wpquery_keyword("'" + ui.item.value+ "'");
                 }
+
                 setTimeout(function () {
                     $("#search_objects").val(ui.item.label);
                 }, 100);

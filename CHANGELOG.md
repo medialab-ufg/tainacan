@@ -6,6 +6,61 @@ e este projeto adere para [Semantic Versioning](http://semver.org/spec/v2.0.0.ht
 
 ## [Unreleased]
 
+## [0.8] - 2018-03-18
+### Adicionado
+- Opção para busca no cabeçalho
+- Link para visualizar o item do tipo imagem na resolução original
+- Opção para definir a imagem raiz apos transformar um item no tipo imagem
+- Legendas nos anexos
+- Opção para esconder rodapé do repositorio
+- Mostrar taxonomias na API rest
+- Barra de progresso para importação de CSV
+- Adicionado um icone de lixeira para a lixeira
+- Adicionada a opção para ocultar busca do repositorio
+- Exibição de itens em uma coluna foi adicionado como opção para o modo de visualização em mídia
+
+### Modificado
+- Interface de busca avançada
+- Seleção de itens em massa
+- Posição do botão 'Salvar' metadado na home do item
+- Margem da caixa de opções do item na home do item
+- Aceita tabela de usuarios com nome diferente do padrão
+- Autocompletar mostra somente itens e não mais tags, categorias e etc.
+- Ordenação em ordem alfabetica do metadados do CSV e da coleção durante o mapeamento CSV => Tainacan
+- Ordenação da Dynatree na busca lateral
+- Importação de CSV de forma serial e paginada (evitar timeout)
+- Imagens como anexo são exibidas em um modal com tamanho maximo igual ao tamanho da tela
+- Ordenação dos metadados da busca avaçanda de uma coleção para refletir a ordenação definida pelo usuario 
+
+### Corrigido
+- Não apresentação dos metadados na home do item
+- Duplicação de itens em outras coleções
+- Duplicação de valores na edição de itens na home do item
+- Inserção de anexos
+- Filtros de categorias na busca avançada
+- Aprensetação das opções da lixeira no item ao avançar a pagina
+- Remoção de links nos valores e inserção de datas nos metadados compostos
+- Remoção do manual tainacan e substituição por link para Wiki
+- Redirecionamento ao editar um item
+- Links de itens exibidos na home de eventos da coleção
+- Metadados de relacionamento em nivel de repositorio
+- Redicionamento dos slides referente aos anexos na home do item
+- Importador de CSV refeito
+- Ordenação da Dynatree corrigida
+- Deleção de itens "defeituosos" de forma definitiva
+- Correção do posicionamento da barra principal na exibição de páginas
+- Capa do ropositorio é exibido do mesmo tamanho em todas as páginas
+- Remoção do tostr após seleção em massa ser finalizada
+- Correção do posicionamento do logo do repositorio
+- Paginação na lixeira funcionando corretamente
+- Problemas de codificação de CSV
+
+### Removido
+- Remoção PDFSmallot 
+
+### Obsoleto
+- Ajuda
+
 ## [0.7] - 2018-02-01
 ### Adicionado
 - Permitir alterar o arquivo raiz ex. '.pdf e .jpg' na interface do tainacan. Para evitar que ter que subir de novo um item.
@@ -23,19 +78,19 @@ e este projeto adere para [Semantic Versioning](http://semver.org/spec/v2.0.0.ht
 - Alterar a codificação do arquivo no exportar csv
 
 ### Corrigido
-- Leitor de PDF na home do item indisponível 
+- Leitor de PDF na home do item indisponível
 - Quebra de linha em item do tipo 'texto' esta se transformando em divisão de colunas na visualização do item
 - Não permite ter mais de duas votações do tipo estrela
 - Corrigir duplicação de valores de metadados de dados
 - Corrigir a busca avançada do tainacan na home inicial e na home da coleção
 - Erro ao tentar exportar o CSV e pacote do tainacan de itens de uma coleção
 - Definir a imagem do cabeçalho e a marca do repo de acordo com o recorte definido na submissão dos mesmos
-- Centralização, corte e preenchimento das miniaturas dos itens 
+- Centralização, corte e preenchimento das miniaturas dos itens
 - Corrigir a busca geral do repositório permitindo filtrar pelos metadados 'titulo' e 'descrição' dos itens
 - Corrigir a ordenação dos itens na home da coleção
 - Metadados compostos com alterações na home do item inconsistente
 - Erro ao tentar definir somente uma unica submissão de itens
-- Corrigir a definição do filtro para o metadado 'Tags' 
+- Corrigir a definição do filtro para o metadado 'Tags'
 - Corrigir filtro do tipo data permitindo filtrar por valores de datas informadas
 - Corrigir submissão em massa de arquivos retirando o travamento de tela
 - Corrigir a ocultação de coleções
@@ -109,8 +164,9 @@ e este projeto adere para [Semantic Versioning](http://semver.org/spec/v2.0.0.ht
 
 ## [0.3] - 2017-04-12
 
-[Unreleased]: https://github.com/medialab-ufg/tainacan/compare/v0.7...HEAD
-[0.7]: https://github.com/medialab-ufg/tainacan/compare/v0.6.1...v0.7
+[Unreleased]: https://github.com/medialab-ufg/tainacan/compare/v0.8...HEAD
+[0.8]: https://github.com/medialab-ufg/tainacan/compare/vv0.7...v0.8
+[0.7]: https://github.com/medialab-ufg/tainacan/compare/v0.6.1...vv0.7
 [0.6.1]: https://github.com/medialab-ufg/tainacan/compare/v0.6...v0.6.1
 [0.6]: https://github.com/medialab-ufg/tainacan/compare/v0.5...v0.6
 [0.5]: https://github.com/medialab-ufg/tainacan/compare/v0.4...v0.5

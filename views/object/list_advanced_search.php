@@ -28,32 +28,32 @@ include_once ('js/list_advanced_search_js.php');
          <!-- Container geral do objeto-->
              <div id="object_<?php echo get_the_ID() ?>">
                 <div class="media">
-                <div class="media-left">
-                      <div>
-                                  <?php
-                                  //verifica se tem thumbnail
-                                  if (get_the_post_thumbnail(get_the_ID())) {
-                                      $url = get_post_meta(get_the_ID(), 'socialdb_thumbnail_url', true);
-                                      $url_image = wp_get_attachment_url(get_post_thumbnail_id(get_the_ID()));
-                                      if ($url) {
-                                          ?>
-                                          <!-- onclick="showSingleObject('< ?php echo get_the_ID() ?>', '< ?php echo get_template_directory_uri() ?>');" -->
-                                          <a href="#" onclick="$.prettyPhoto.open(['<?php echo $url_image; ?>'],[''],['']); return false"><?php echo get_the_post_thumbnail(get_the_ID(),'thumbnail'); ?></a>
-                                      <?php } else {
-                                          ?>
-                                          <a href="#" onclick="$.prettyPhoto.open(['<?php echo $url_image; ?>'],[''],['']); return false">
-                                              <?php
-                                              echo get_the_post_thumbnail(get_the_ID(),'thumbnail');
+                    <div class="media-left">
+                          <div>
+                                      <?php
+                                      //verifica se tem thumbnail
+                                      if (get_the_post_thumbnail(get_the_ID())) {
+                                          $url = get_post_meta(get_the_ID(), 'socialdb_thumbnail_url', true);
+                                          $url_image = wp_get_attachment_url(get_post_thumbnail_id(get_the_ID()));
+                                          if ($url) {
                                               ?>
-                                          </a>    
-                                          <?php
-                                      }
-                                  } else {// pega a foto padrao 
-                                      ?>
-                                          <img height="150" src="<?php echo get_template_directory_uri() ?>/libraries/images/default_thumbnail.png">
-                              <?php } ?>
+                                              <!-- onclick="showSingleObject('< ?php echo get_the_ID() ?>', '< ?php echo get_template_directory_uri() ?>');" -->
+                                              <a href="#" onclick="$.prettyPhoto.open(['<?php echo $url_image; ?>'],[''],['']); return false"><?php echo get_the_post_thumbnail(get_the_ID(),'thumbnail'); ?></a>
+                                          <?php } else {
+                                              ?>
+                                              <a href="#" onclick="$.prettyPhoto.open(['<?php echo $url_image; ?>'],[''],['']); return false">
+                                                  <?php
+                                                  echo get_the_post_thumbnail(get_the_ID(),'thumbnail');
+                                                  ?>
+                                              </a>
+                                              <?php
+                                          }
+                                      } else {// pega a foto padrao
+                                          ?>
+                                              <img height="150" src="<?php echo get_template_directory_uri() ?>/libraries/images/default_thumbnail.png">
+                                  <?php } ?>
+                        </div>
                     </div>
-                </div>
                 <div class="media-body">
                     <h4 class="media-heading"><a target="_blank" href="<?php echo $data[get_the_ID()]['link'] ?>"><?php the_title() ?></a></h4>
                     <?php echo substr(get_the_content(), 0, 450) ; ?>

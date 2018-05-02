@@ -11,7 +11,6 @@
         }).done(function (result) {
             $('.data').html(result);
             $('#tmp_div_all_metas').html(result);
-
         });
     });
     function cancel_import_csv() {
@@ -21,7 +20,6 @@
 
     //function save_csv_delimiter(){
     $('#form_import_csv_delimit').submit(function (e) {
-        //e.preventDefault();
         show_modal_main();
         $.ajax({
             url: $('#src').val() + "/controllers/mapping/mapping_controller.php",
@@ -29,10 +27,6 @@
             data: new FormData(this),
             processData: false,
             contentType: false
-                    /*data: {
-                     collection_id: $('#collection_id').val(), 
-                     form: $("#form_import_csv_delimit").serialize(),
-                     operation: 'saving_delimiter_header_csv'}*/
         }).done(function (result) {
             hide_modal_main();
             if(result.trim()==='false'){

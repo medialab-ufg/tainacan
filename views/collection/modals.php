@@ -357,7 +357,7 @@
                 <img src="<?php echo get_template_directory_uri() . '/libraries/images/catalogo_loader_725.gif' ?>">
                 <h3><?php _e('Please wait...', 'tainacan') ?></h3>
                 <div id="divprogress">
-                    <progress id='progressbarmapas' value='0' max='100' style='width: 100%;'></progress><br>
+                    <progress id='progressbargeneral' value='0' max='100' style='width: 90%;'></progress><br>
                 </div>
             </center>
         </div>

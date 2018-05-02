@@ -342,9 +342,9 @@
                     // Close menu on click
                     var promisse = get_url_category(node.data.key);
                     promisse.done(function (result) {
-                        elem = jQuery.parseJSON(result);
+                        var elem = jQuery.parseJSON(result);
                         var n = node.data.key.toString().indexOf("_");
-                        if(node.data.key.indexOf('_tag')>=0){
+                        if(node.data.key.indexOf('_tag') >= 0){
                             showPageTags(elem.slug, src);
                             node.deactivate();
                         }else if(n<0||node.data.key.indexOf('_facet_category')>=0){
@@ -362,10 +362,15 @@
                         } else {
                             $("#category_single_parent_name").val(node.data.title);
                             $("#category_single_parent_id").val(node.data.key);
-                            $('#modalAddCategoria').modal('show');
+                            if(menu === 'myMenuSingleTag')
+                            {
+                                $('#modalAdicionarTag').modal('show');
+                            }else
+                            {
+                                $('#modalAddCategoria').modal('show');
+                            }
+
                             $('.dropdown-toggle').dropdown();
-                            //ativando para um dynatree especifico
-                            //$("#category_single_add_dynatree_id").val(dynatree_id);
                         }
                     });
                     break;

@@ -142,7 +142,7 @@ function delete_object(title, text, object_id, time) {
                     socialdb_event_collection_id: $('#collection_id').val()}
             }).done(function (result) {
                 $('#modalImportMain').modal('hide');//esconde o modal de carregamento
-                elem_first = jQuery.parseJSON(result);
+                let elem_first = JSON.parse(result);
                 showAlertGeneral(elem_first.title, elem_first.msg, elem_first.type);
 
                 if(elem_first.type === "success")
@@ -278,11 +278,19 @@ function clean_collection(title, text, collection_id) {
                 url: $('#src').val() + "/controllers/object/object_controller.php",
                 data: {
                     operation: 'clean_collection_itens',
-                    collection_id: collection_id}
+                    collection_id: collection_id,
+                    selected_items: $("#items_id").val()
+                }
             }).done(function (result) {
                 $('#modalImportMain').modal('hide');//escondo o modal de carregamento
-                elem_first = jQuery.parseJSON(result);
-                showList($('#src').val());
+
+                let clear = $("#clear");
+                let elem_first = jQuery.parseJSON(result);
+
+                if($(clear).is(':visible'))
+                    $(clear).click();
+                else showList($('#src').val());
+
                 showAlertGeneral(elem_first.title, elem_first.msg, elem_first.type);
             });
         }
@@ -327,6 +335,7 @@ function move_items_to_trash(title, text, obj_ids, collection_id) {
        cancelButtonText: "Cancelar"
     }, function(isConfirm){
         if (isConfirm) {
+            toastr.clear();
             $("#modalImportMain").modal('show');
             $.ajax({
                 type: "POST",

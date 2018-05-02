@@ -6,7 +6,6 @@ add_action('init', 'register_post_types');
 add_action('init', 'register_taxonomies');
 include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 include_once( dirname(__FILE__) . "/config/config.php" );
-require_once (dirname(__FILE__) . '/libraries/php/PDFParser/vendor/autoload.php');
 require_once (dirname(__FILE__) . '/libraries/php/OfficeToPlainText/OfficeDocumentToPlainText.php');
 require_once('wp_bootstrap_navwalker.php');
 include_once("models/log/log_model.php");
@@ -1140,6 +1139,7 @@ function register_post_types() {
 function register_taxonomies() {
     $category_args = array(
         'hierarchical' => true,
+        'show_in_rest' => true,
         'query_var' => 'category',
         'rewrite' => array(
             'slug' => 'category',
@@ -1156,13 +1156,15 @@ function register_taxonomies() {
             'parent_item' => __('Parent Category', 'tainacan'),
             'parent_item_colon' => __('Parent Category:', 'tainacan')),
     );
+
+    $other_category_args = ['show_in_rest' => true];
     register_taxonomy('socialdb_category_type', array('socialdb_object'), $category_args);
-    register_taxonomy('socialdb_tag_type', array('socialdb_collection'));
-    register_taxonomy('socialdb_channel_type', array('socialdb_channel'));
-    register_taxonomy('socialdb_license_type', array('socialdb_license'));
-    register_taxonomy('socialdb_collection_type', array('socialdb_collection'));
-    register_taxonomy('socialdb_property_type', array('socialdb_vote'));
-    register_taxonomy('socialdb_event_type', array('socialdb_event'));
+    register_taxonomy('socialdb_tag_type', array('socialdb_collection'), $other_category_args);
+    register_taxonomy('socialdb_channel_type', array('socialdb_channel'), $other_category_args);
+    register_taxonomy('socialdb_license_type', array('socialdb_license'), $other_category_args);
+    register_taxonomy('socialdb_collection_type', array('socialdb_collection'), $other_category_args);
+    register_taxonomy('socialdb_property_type', array('socialdb_vote'), $other_category_args);
+    register_taxonomy('socialdb_event_type', array('socialdb_event'), $other_category_args);
 }
 
 function create_oai_post() {
@@ -3268,7 +3270,7 @@ function display_img_items_collection($collection_id, $max_itens, $is_popular = 
  * */
 
 function set_navbar_bg_color($color, $special_page) {
-    return ( is_front_page() || is_page($special_page) ) ? '' : "style='background-color: ${color}'";
+    return ( is_front_page() || is_page() ) ? '' : "style='background-color: ${color}'";
 }
 
 function get_home_collection_types() {
@@ -3373,9 +3375,12 @@ function get_item_thumb_image($item_id, $size = "thumbnail") {
             return '<img src="' . get_item_thumbnail_default($item_id) . '" class="img-responsive height100" style="max-width: 100%;">';
         }
     } else {
+        add_image_size( 'custom-size', 220, 180, true );
+
         $html_image = wp_get_attachment_image(get_post_thumbnail_id($item_id), $size, false, array('class' => 'img-responsive'));
 
         $image = wp_get_attachment_image_src(get_post_thumbnail_id($item_id), "thumbnail", false);
+        //print "<pre>".print_r($html_image); echo "</pre>";
 
         if (preg_match("/pdf_thumb_/", basename($image[0]))) {
             $DOM = simplexml_load_string($html_image);
@@ -3568,14 +3573,6 @@ function reindex($options) {
             }
         }
 
-        if ($pdf_text) {
-            foreach ($PDFidPostAttachmentURL as $post_id => $info) {
-                if (!array_key_exists('socialdb_pdf_text', $info['post_meta'])) {
-                    get_add_pdf_text($post_id, $info['attachment_id']);
-                }
-            }
-        }
-
         if ($office_text) {
             foreach ($OFFICEidPostAttachmentURL as $post_id => $info) {
                 if (!array_key_exists('socialdb_office_document_text', $info['post_meta'])) {
@@ -3599,7 +3596,8 @@ function get_pdf_no_thumb_ids($count) {
     $posts = get_posts($args);
 
     $PDFidAttachment = [];
-    foreach ($posts as $post) {
+    foreach ($posts as $post)
+    {
         if (!has_post_thumbnail($post->ID))
         {
             $post_meta = get_post_meta($post->ID);
@@ -3609,7 +3607,6 @@ function get_pdf_no_thumb_ids($count) {
             if ($url_file)
             {
                 $post_mime = get_post_mime_type($attachment_id);
-
                 if (strcmp($post_mime, 'application/pdf') == 0)
                 {
                     $PDFidAttachment[$post->ID] = $url_file;
@@ -3690,24 +3687,6 @@ function save_canvas_pdf_thumbnails($canvas_images, $reindex = false) {
     return $return;
 }
 
-function get_add_pdf_text($post_id, $item_id) {
-	$url_file = wp_get_attachment_url($item_id);
-	try {
-		$parser = new \Smalot\PdfParser\Parser();
-		$pdf = $parser->parseFile($url_file);
-		$pdf_text = $pdf->getText();
-	} catch (Exception $e) {
-		//Can't read PDF file, just move on.
-	}
-
-	if(isset($pdf_text) && !empty($pdf_text))
-    {
-	    $model = new Model();
-	    $model->set_common_field_values($post_id, "socialdb_property_$item_id", $pdf_text);
-	    update_post_meta($post_id, "socialdb_pdf_text", true);
-    }
-}
-
 function get_add_office_document_text($post_id, $item_id) {
     $file_path = get_attached_file($item_id);
 
@@ -3768,14 +3747,6 @@ function get_documents_text($ids)
             }
         }
     }
-
-    /*foreach($PDFidPostAttachmentURL as $post_id => $info)
-    {
-        if(!array_key_exists('socialdb_pdf_text', $info['post_meta']))
-        {
-            get_add_pdf_text($post_id, $info['attachment_id']);
-        }
-    }*/
 
     foreach($OFFICEidPostAttachmentURL as $post_id => $info)
     {
@@ -3857,7 +3828,7 @@ if (!defined("MANUAL_TAINACAN_URL")) {
     if (has_filter('alter_link_manual')) {
         define("MANUAL_TAINACAN_URL", apply_filters('alter_link_manual', ''));
     } else {
-        define("MANUAL_TAINACAN_URL", "https://github.com/l3pufg/tainacan/blob/dev/extras/manual/manual_usuario_tainacan_v1.pdf?raw=true");
+        define("MANUAL_TAINACAN_URL", "http://wiki.tainacan.medialab.ufg.br");
     }
 }
 
@@ -3991,4 +3962,183 @@ function add_helpText ($property, $this_ref)
 		$property['metas']['socialdb_property_help'] = $help_text;
 		$this_ref->hasTextHelper($property);
 	}
+}
+
+function sort_results($a, $b)
+{
+    $title_a = $a->meta_value;
+    $title_b = $b->meta_value;
+
+    return usort_sort($title_a, $title_b);
+}
+
+function order_dynatree($a, $b)
+{
+    if(isset($a->name))
+    {
+	    $title_a = $a->name;
+	    $title_b = $b->name;
+    }else{
+	    $title_a = $a['title'];
+	    $title_b = $b['title'];
+    }
+
+	return usort_sort($title_a, $title_b);
+}
+//Considera que já está em ordem alfabetica
+function usort_sort($title_a, $title_b)
+{
+    $pattern = "/(\d+)/";
+
+    $a_array = preg_split($pattern, $title_a, -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
+    $b_array = preg_split($pattern, $title_b, -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
+
+    for($i = 0, $j = 0; $i < count($a_array) && $j < count($b_array); $i++, $j++)
+    {
+        if(is_numeric($a_array[$i]) && is_numeric($b_array[$j]))//Both are numbers
+        {
+            $a_int = intval($a_array[$i]);
+            $b_int = intval($b_array[$j]);
+
+            if($a_int < $b_int)
+            {
+                return -1;
+            }else if($b_int < $a_int)
+            {
+                return 1;
+            }
+        }else if(is_numeric($a_array[$i]) && !is_numeric($b_array[$j]))//Just A is a number
+        {
+            return -1;
+        }else if(!is_numeric($a_array[$i]) && is_numeric($b_array[$j]))//Just B is a number
+        {
+            return 1;
+        }
+    }
+
+    $sort = [$title_a, $title_b];
+    sort($sort, SORT_STRING);
+    if($sort[0] === $title_a)
+        return -1;
+    else return 1;
+}
+
+//Gera ordenação sintetica caso não haja ordenação definida
+function gen_ordenation($collection_id, $property_object = null, $property_data = null, $property_term = null, $property_compounds = null)
+{
+    $ordenation = unserialize(get_post_meta($collection_id, 'socialdb_collection_properties_ordenation', true));
+    if(!$ordenation || (is_array($ordenation['default'])))
+    {
+        $ordenation = [];
+        if(isset($property_object))
+        {
+            foreach ($property_object as $item_in)
+            {
+                $ordenation[] = $item_in['id'];
+            }
+        }
+
+        if(isset($property_data))
+        {
+            foreach ($property_data as $item_in)
+            {
+                $ordenation[] = $item_in['id'];
+            }
+        }
+
+        if(isset($property_term))
+        {
+            foreach ($property_term as $item_in)
+            {
+                $ordenation[] = $item_in['id'];
+            }
+        }
+
+        if(isset($property_compounds))
+        {
+            foreach ($property_compounds as $item_in)
+            {
+                $ordenation[] = $item_in['id'];
+            }
+        }
+    }
+    else
+    {
+        $ordenation_alt = [];
+
+        foreach ($ordenation as $tab){
+            $ids = explode(",", $tab);
+            foreach ($ids as $id)
+            {
+                $ordenation_alt[] = $id;
+            }
+        }
+
+        foreach ($ordenation_alt as $id)
+        {
+            if(isset($property_object))
+            {
+                foreach ($property_object as $item_in)
+                {
+                    if(!in_array($item_in['id'], $ordenation_alt))
+                        $ordenation_alt[] = $item_in['id'];
+                }
+            }
+
+            if(isset($property_data))
+            {
+                foreach ($property_data as $item_in)
+                {
+                    if(!in_array($item_in['id'], $ordenation_alt))
+                        $ordenation_alt[] = $item_in['id'];
+                }
+            }
+
+            if(isset($property_term))
+            {
+                foreach ($property_term as $item_in)
+                {
+                    if(!in_array($item_in['id'], $ordenation_alt))
+                        $ordenation_alt[] = $item_in['id'];
+                }
+            }
+
+            if(isset($property_compounds))
+            {
+                foreach ($property_compounds as $item_in)
+                {
+                    if(!in_array($item_in['id'], $ordenation_alt))
+                        $ordenation_alt[] = $item_in['id'];
+                }
+            }
+        }
+
+        $ordenation = $ordenation_alt;
+    }
+
+    return $ordenation;
+}
+
+function get_all_children($wpdb, &$all_categories)
+{
+    $wp_term_taxonomy = $wpdb->prefix . "term_taxonomy";
+    $wp_terms = $wpdb->prefix . "terms";
+
+    foreach ($all_categories as $index => $category)
+    {
+        $parent = $category->term_id;
+        $query = "
+        SELECT * FROM $wp_terms t
+        INNER JOIN $wp_term_taxonomy tt ON t.term_id = tt.term_id
+        WHERE tt.parent = {$parent}
+                    ORDER BY t.name
+        ";
+
+        $children = $wpdb->get_results($query);
+        if(!empty($children))
+        {
+            $all_categories[$index]->children =  $children;
+            get_all_children($wpdb, $all_categories[$index]->children);
+        }
+    }
 }

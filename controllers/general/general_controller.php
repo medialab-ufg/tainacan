@@ -44,7 +44,7 @@ include_once (dirname(__FILE__) . '/../../../../../wp-includes/wp-db.php');
 
          if( false != file_get_contents( $menu_json ) ):
              $parsed_json = json_decode( utf8_encode( file_get_contents( $menu_json )) );
-             return $parsed_json->${property};
+             return $parsed_json->${$property};
          else:
              return false;
          endif;

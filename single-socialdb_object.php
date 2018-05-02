@@ -64,6 +64,11 @@ if (has_action('alter_page_item')) {
     ];
 
     $view_helper = new ObjectHelper($collection_id);
+	$collumns_to_show = get_post_meta($collection_id,"socialdb_collection_item_collumns", true);
+	if($collumns_to_show == 1){
+		$collumns_to_show = 12;
+	}else $collumns_to_show = 6;
+
     ?>
 
     <ol class="breadcrumb item-breadcrumbs">
@@ -138,18 +143,19 @@ if (has_action('alter_page_item')) {
                                     update_post_meta( $post->ID, 'socialdb_object_content', str_replace('</p>','',$string));
 
                                 }
-                                if ($item_opts['from'] == 'internal' && wp_get_attachment_url($metas['socialdb_object_content'][0])) {
-                                    $url = wp_get_attachment_url($metas['socialdb_object_content'][0]);
+                                $url = wp_get_attachment_url($metas['socialdb_object_content'][0]);
+                                if ($item_opts['from'] == 'internal' && $url) {
                                     switch ($metas['socialdb_object_dc_type'][0]) {
                                         case 'audio':
                                             $content = '<audio controls><source src="' . $url . '">' . __('Your browser does not support the audio element.', 'tainacan') . '</audio>';
                                             break;
                                         case 'image':
                                             if (get_the_post_thumbnail($post->ID, 'thumbnail')) {
-                                                $url_image = get_the_post_thumbnail($post->ID, 'large', ['class' => 'img-responsive img-thumbnail']);
+                                                $url_large = wp_get_attachment_image_src($metas['socialdb_object_content'][0], "large")[0];
                                                 $style_watermark = ($has_watermark ? 'style="background:url(' . $url_watermark . ') no-repeat center; background-size: contain;"' : '');
                                                 $opacity_watermark = ($has_watermark ? 'opacity: 0.80;' : '');
-                                                $content = '<center ' . $style_watermark . '>' . $url_image . '</center>';
+                                                $text = __("See original image", "tainacan");
+                                                $content = '<div style="text-align:center; display: block; max-height: 1000px"' . $style_watermark . '> <a href="'.$url.'" target="_blank"><img title="'.$text.'" style="max-height: 100%; width: auto; height: auto;"class="img-responsive img-thumbnail" src="' . $url_large . '"></a></div>';
                                             }
                                             break;
                                         case 'video':
@@ -178,62 +184,66 @@ if (has_action('alter_page_item')) {
                                                 $content = '<embed src="' . $url . '" width="600" height="500" alt="pdf" pluginspage="http://www.adobe.com/products/acrobat/readstep2.html">';
                                             }
 
-                                            //'<embed src="' . $url . '" width="600" height="500" alt="pdf" pluginspage="http://www.adobe.com/products/acrobat/readstep2.html">';
                                             break;
                                         default:
                                             $content = '<p style="text-align:center;">' . __('File link:') . ' <a target="_blank" href="' . $url . '">' . __('Click here!', 'tainacan') . '</a></p>';
                                             break;
                                     }
                                 } else {
-                                    switch ($metas['socialdb_object_dc_type'][0]) {
-                                        case 'audio':
-                                            $content = '<audio controls><source src="' . $metas['socialdb_object_content'][0] . '">' . __('Your browser does not support the audio element.', 'tainacan') . '</audio>';
-                                            break;
-                                        case 'image':
-                                            $style_watermark = ($has_watermark ? 'style="background:url(' . $url_watermark . ') no-repeat center; background-size: contain;"' : '');
-                                            $opacity_watermark = ($has_watermark ? 'opacity: 0.80;' : '');
-                                            if (get_the_post_thumbnail($post->ID, 'thumbnail')) {
-                                                $url_image = wp_get_attachment_url(get_post_thumbnail_id($post->ID, 'large'));
-                                                $content = '<center ' . $style_watermark . '><img style="max-width:480px; ' . $opacity_watermark . '"  src="' . $url_image . '" class="img-responsive" /></center>';
-//                                            $content = '<center><a href="#" onclick="$.prettyPhoto.open([\'' . $url_image . '\'], [\'\'], [\'\']);return false">
-//                                                        <img style="max-width:880px;"  src="' . $url_image . '" class="img-responsive" />
-//                                                    </a></center>';
-                                            } else {
-                                                $content = "<img src='" . $metas['socialdb_object_content'][0] . "' class='img-responsive' />";
-                                            }
-                                            break;
-                                        case 'video':
-	                                        $short_url = strpos($metas['socialdb_object_content'][0], 'youtu.be') !== false;
-                                            if (strpos($metas['socialdb_object_content'][0], 'youtube') !== false || $short_url) {
-                                                $step1 = explode('v=', $metas['socialdb_object_content'][0]);
-                                                $step2 = explode('&', $step1[1]);
+                                    if(!empty($metas['socialdb_object_content'][0]))
+                                    {
+	                                    switch ($metas['socialdb_object_dc_type'][0]) {
+		                                    case 'audio':
+			                                    $content = '<audio controls><source src="' . $metas['socialdb_object_content'][0] . '">' . __('Your browser does not support the audio element.', 'tainacan') . '</audio>';
+			                                    break;
+		                                    case 'image':
+			                                    $style_watermark = ($has_watermark ? 'style="background:url(' . $url_watermark . ') no-repeat center; background-size: contain;"' : '');
+			                                    $opacity_watermark = ($has_watermark ? 'opacity: 0.80;' : '');
+			                                    if (get_the_post_thumbnail($post->ID, 'thumbnail')) {
+				                                    $url_image = wp_get_attachment_url(get_post_thumbnail_id($post->ID, 'large'));
+				                                    $content = '<center ' . $style_watermark . '><img style="max-width:480px; ' . $opacity_watermark . '"  src="' . $url_image . '" class="img-responsive" /></center>';
+			                                    } else {
+			                                        $text = __("See original image", "tainacan");
+			                                        $content = '<div style="text-align:center; display: block; max-height: 1000px"> <a href="'.$metas['socialdb_object_content'][0].'" target="_blank"><img title="'.$text.'" style="max-height: 100%; width: auto; height: auto;" class="img-responsive img-thumbnail" src="' . $metas['socialdb_object_content'][0] . '"></a></div>';
+			                                    }
+			                                    break;
+		                                    case 'video':
+			                                    $short_url = strpos($metas['socialdb_object_content'][0], 'youtu.be') !== false;
+			                                    if (strpos($metas['socialdb_object_content'][0], 'youtube') !== false || $short_url) {
+				                                    $step1 = explode('v=', $metas['socialdb_object_content'][0]);
+				                                    $step2 = explode('&', $step1[1]);
 
-                                                if($short_url)
-                                                {
-                                                    $video_id = end(explode('/', $metas['socialdb_object_content'][0]));
-                                                }else $video_id = $step2[0];
+				                                    if($short_url)
+				                                    {
+					                                    $video_id = end(explode('/', $metas['socialdb_object_content'][0]));
+				                                    }else $video_id = $step2[0];
 
-                                                $content = "<div style='height:600px; display: flex !important;'  ><iframe  class='embed-responsive-item'  src='https://www.youtube.com/embed/" . $video_id . "?html5=1' allowfullscreen frameborder='0'></iframe></div>";
-                                            } elseif (strpos($metas['socialdb_object_content'][0], 'vimeo') !== false) {
-                                                $step1 = explode('/', rtrim($metas['socialdb_object_content'][0], '/'));
-                                                $video_id = end($step1);
-                                                $content = "<div class=\"embed-responsive embed-responsive-16by9\"><iframe class='embed-responsive-item' src='https://player.vimeo.com/video/" . $video_id . "' frameborder='0'></iframe></div>";
-                                            } else {
-                                                $content = "<div class=\"embed-responsive embed-responsive-16by9\"><iframe class='embed-responsive-item' src='" . $metas['socialdb_object_content'][0] . "' frameborder='0'></iframe></div>";
-                                            }
-                                            break;
-                                        case 'pdf':
-                                            $content = '<embed src="' . $metas['socialdb_object_content'][0] . '" width="600" height="500" alt="pdf" pluginspage="http://www.adobe.com/products/acrobat/readstep2.html">';
-                                            break;
-                                        default:
-                                            //colocando o http
-                                            if( strpos($metas['socialdb_object_content'][0],'http://') === false ||  strpos($metas['socialdb_object_content'][0],'https://') === false){
-                                                $metas['socialdb_object_content'][0] = 'http://'.$metas['socialdb_object_content'][0];
-                                            }
+				                                    $content = "<div style='height:600px; display: flex !important;'  ><iframe  class='embed-responsive-item'  src='https://www.youtube.com/embed/" . $video_id . "?html5=1' allowfullscreen frameborder='0'></iframe></div>";
+			                                    } elseif (strpos($metas['socialdb_object_content'][0], 'vimeo') !== false) {
+				                                    $step1 = explode('/', rtrim($metas['socialdb_object_content'][0], '/'));
+				                                    $video_id = end($step1);
+				                                    $content = "<div class=\"embed-responsive embed-responsive-16by9\"><iframe class='embed-responsive-item' src='https://player.vimeo.com/video/" . $video_id . "' frameborder='0'></iframe></div>";
+			                                    } else {
+				                                    $content = "<div class=\"embed-responsive embed-responsive-16by9\"><iframe class='embed-responsive-item' src='" . $metas['socialdb_object_content'][0] . "' frameborder='0'></iframe></div>";
+			                                    }
+			                                    break;
+		                                    case 'pdf':
+			                                    $content = '<embed src="' . $metas['socialdb_object_content'][0] . '" width="600" height="500" alt="pdf" pluginspage="http://www.adobe.com/products/acrobat/readstep2.html">';
+			                                    break;
+		                                    default:
+			                                    //colocando o http
+			                                    if( strpos($metas['socialdb_object_content'][0],'http://') === false &&  strpos($metas['socialdb_object_content'][0],'https://') === false){
+				                                    $metas['socialdb_object_content'][0] = 'http://'.$metas['socialdb_object_content'][0];
+			                                    }
 
-                                            $content = '<p style="text-align:center;">' . __('File link:', 'tainacan') . ' <a target="_blank" href="' . $metas['socialdb_object_content'][0] . '">' . __('Click here!', 'tainacan') . '</a></p>';
-                                            break;
+			                                    $content = '<p style="text-align:center;">' . __('File link:', 'tainacan') . ' <a target="_blank" href="' . $metas['socialdb_object_content'][0] . '">' . __('Click here!', 'tainacan') . '</a></p>';
+			                                    break;
+	                                    }
                                     }
+                                    else $content = '<div class="alert alert-info text-center">
+                                                              <strong>'.__('This item have no file', 'tainacan').'</strong>
+                                                     </div>';
+
                                 }
                                 echo $content;
                             }
@@ -446,9 +456,12 @@ if (has_action('alter_page_item')) {
                                 <button type="button" onclick="edit_description()" id="edit_description"
                                         class="btn btn-default btn-xs"><span class="glyphicon glyphicon-edit"></span>
                                 </button>
+
+                                <br>
                                 <button type="button" onclick="save_description('<?php echo $post->ID ?>')"
                                         id="save_description" class="btn btn-default btn-xs" style="display: none;">
-                                    <span class="glyphicon glyphicon-floppy-disk"></span></button>
+                                    <span class="glyphicon glyphicon-floppy-disk"></span>
+                                </button>
                             </small>
                         <?php endif; ?>
                     </div>
@@ -462,7 +475,7 @@ if (has_action('alter_page_item')) {
                     </div>
                 </div>
 
-                <div class="col-md-6 left-container" <?php echo $view_helper->get_visibility($view_helper->terms_fixed['license']) ?>
+                <div class="col-md-6 left-container no-padding" <?php echo $view_helper->get_visibility($view_helper->terms_fixed['license']) ?>
                      style="border-right: 3px solid #e8e8e8">
                     <!-- Licencas do item -->
                     <div class="box-item-paddings item-license" <?php if (has_action('home_item_license_div')) do_action('home_item_license_div') ?>
@@ -473,12 +486,15 @@ if (has_action('alter_page_item')) {
                             // verifico se o metadado pode ser alterado
                             if (verify_allowed_action($collection_id, 'socialdb_collection_permission_edit_property_data_value', $object_id)): ?>
                                 <small>
-                                    <button type="button" onclick="cancel_license()" id="cancel_license"
-                                            class="btn btn-default btn-xs" style="display: none;"><span
-                                                class="glyphicon glyphicon-arrow-left"></span></button>
                                     <button type="button" onclick="edit_license()" id="edit_license"
                                             class="btn btn-default btn-xs"><span
                                                 class="glyphicon glyphicon-edit"></span></button>
+                                    <button type="button" onclick="cancel_license()" id="cancel_license"
+                                            class="btn btn-default btn-xs" style="display: none;"><span
+                                                class="glyphicon glyphicon-arrow-left"></span>
+                                    </button>
+
+                                    <br>
                                     <button type="button" onclick="save_license('<?php echo $post->ID ?>')"
                                             id="save_license" class="btn btn-default btn-xs" style="display: none;">
                                         <span class="glyphicon glyphicon-floppy-disk"></span></button>
@@ -507,11 +523,11 @@ if (has_action('alter_page_item')) {
                             // verifico se o metadado pode ser alterado
                             if (verify_allowed_action($collection_id, 'socialdb_collection_permission_edit_tag', $post->ID)):
                                 ?>
-                                <button type="button" onclick="cancel_tag()" id="cancel_tag"
-                                        class="btn btn-default btn-xs" style="display: none;"><span
-                                            class="glyphicon glyphicon-arrow-left"></span></button>
                                 <button type="button" onclick="edit_tag()" id="edit_tag" class="btn btn-default btn-xs">
                                     <span class="glyphicon glyphicon-edit"></span></button>
+                                <button type="button" onclick="cancel_tag()" id="cancel_tag"
+                                        class="btn btn-default btn-xs" style="display: none;"><span
+                                            class="glyphicon glyphicon-arrow-left"></span></button><br>
                                 <button type="button" onclick="save_tag('<?php echo $post->ID ?>')" id="save_tag"
                                         class="btn btn-default btn-xs" style="display: none;"><span
                                             class="glyphicon glyphicon-floppy-disk"></span></button>

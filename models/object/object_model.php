@@ -1536,6 +1536,7 @@ class ObjectModel extends Model {
                 }
             }
         }
+
         $data['category_root_id'] = $this->get_category_root_of($data['collection_id']);
         return $data;
     }
@@ -1578,9 +1579,11 @@ class ObjectModel extends Model {
                 $all_data['metas']['value'] = $property_model->get_object_property_value($data['object_id'], $property_id);
                 $all_data['metas']['object_id'] = $data['object_id'];
             }
+
             $all_data['has_children'] = $this->getChildren($all_data['metas']['socialdb_property_term_root'],'t.name ASC');
             $data['property_term'][] = $all_data;
         }
+
         return $all_data;
     }
 
@@ -1888,8 +1891,12 @@ class ObjectModel extends Model {
      */
     public function clean_collection($data) {
         $items = $this->get_collection_posts_trash($data['collection_id']);
+        $selected_items = explode(",", $data['selected_items']);
+
         if ($items && is_array($items)) {
             foreach ($items as $item) {
+            	if(!in_array($item->ID, $selected_items))
+            		continue;
                 $object = array(
                     'ID' => $item->ID,
                     'post_status' => 'draft'
@@ -2187,7 +2194,6 @@ class ObjectModel extends Model {
             'post_excerpt' => $item->post_excerpt,
             'post_status' => $item->post_status,
             'comment_status' => $item->comment_status,
-            //'ping_status' =>  $item->ping_status,
             //'post_password' =>  $item->post_password,
             //'post_name' =>  $item->post_name,
             //'to_ping' =>  $item->to_ping,
@@ -2195,7 +2201,7 @@ class ObjectModel extends Model {
             //'post_modified' =>  $item->post_modified,
             //'post_modified_gmt' =>  $item->post_modified_gmt,
             'post_content_filtered' => $item->post_content_filtered,
-            'post_parent' => $item->post_parent,
+            'post_parent' => $collection_id,
             //'guid' =>  $item->guid,
             //'menu_order' =>  $item->menu_order,
             'post_type' => $item->post_type,
@@ -2212,18 +2218,47 @@ class ObjectModel extends Model {
         return $newItem;
     }
 
+    public function get_metas( $item_id ){
+    	global $wpdb;
+    	$wp_postmeta = $wpdb->postmeta;
+    	$query = "SELECT * FROM $wp_postmeta WHERE post_id = $item_id";
+    	$results =  $wpdb->get_results( $query );
+    	if( $results && is_array( $results )){
+    		return $results;
+	    } else {
+    		return [];
+	    }
+    }
+
     public function copyItemMetas($itemID, array $oldMetas, $same_collection = true) {
         if ($same_collection) {
-            foreach ($oldMetas as $key => $value) {
-                foreach ($value as $row) {
-                    add_post_meta($itemID, $key, $row);
+        	$new_ids = [];
+            foreach ($oldMetas as $key => $row) {
+                if (strpos($row->meta_key, 'socialdb_property_helper') === false){
+	                $new_ids[$row->meta_id] = $this->sdb_add_post_meta($itemID, $row->meta_key, $row->meta_value);
                 }
+            }
+	        foreach ( $oldMetas as $key => $row ) {
+		        if (strpos($row->meta_key, 'socialdb_property_helper') !== false){
+			        $helper = maybe_unserialize($row->meta_value);
+			        $helper = maybe_unserialize($helper);
+			        if(is_array($helper)){
+				        foreach ($helper  as $indexRoot => $position ) {
+					        foreach ( $position as $index => $property ) {
+						        foreach ( $property['values'] as $indexChildren => $value ){
+						        	$helper[$indexRoot][$index]['values'][$indexChildren] = $new_ids[$value];
+						        }
+					        }
+				        }
+			        }
+			        add_post_meta($itemID,  $row->meta_key ,serialize($helper));
+		        }
             }
         } else {
             foreach ($oldMetas as $key => $value) {
                 foreach ($value as $row) {
-                    if (strpos($key, 'social_property_') === false) {
-                        add_post_meta($itemID, $key, $row);
+                    if (strpos($key, 'socialdb_property_') === false) {
+                        add_post_meta($itemID, $key, maybe_unserialize($row));
                     }
                 }
             }

@@ -494,8 +494,8 @@ class ExportModel extends Model {
             /** Title * */
             if ($object->post_title != "") {
                 $value = $object->post_title;
-                if(mb_detect_encoding($value)==='UTF-8'){
-                    $value = utf8_decode($value);
+                if(mb_detect_encoding($value) !== 'UTF-8'){
+                	$value = utf8_encode($value);
                 }
                 $csv_data['title'] = $value;
             } else {
@@ -505,8 +505,8 @@ class ExportModel extends Model {
             /** Description * */
             if ($object->post_content != "") {
                 $value = $object->post_content;
-                if(mb_detect_encoding($value)==='UTF-8'){
-                    $value = utf8_decode($value);
+                if(mb_detect_encoding($value) !== 'UTF-8'){
+                    $value = utf8_encode($value);
                 }
 	            $csv_data['description'] = str_replace('"','',$value);
             } else {
@@ -515,7 +515,12 @@ class ExportModel extends Model {
 
             /** Content * */
             if (get_post_meta($object->ID, 'socialdb_object_content', true) != "") {
-                $csv_data['content'] = utf8_decode(get_post_meta($object->ID, 'socialdb_object_content', true));
+                $csv_data['content'] = get_post_meta($object->ID, 'socialdb_object_content', true);
+	            if(mb_detect_encoding($csv_data['content']) !== 'UTF-8')
+	            {
+		            $csv_data['content'] = utf8_encode($csv_data['content']);
+	            }
+
                 if ($csv_data['content'] != '' && is_numeric($csv_data['content'])) {
                     $csv_data['content'] = wp_get_attachment_url($csv_data['content']);
                 }
@@ -526,18 +531,26 @@ class ExportModel extends Model {
             /** Origin  * */
             if (get_post_meta($object->ID, 'socialdb_object_from')) {
                 $csv_data['item_from'] = get_post_meta($object->ID, 'socialdb_object_from', true);
+	            if(mb_detect_encoding($csv_data['item_from']) !== 'UTF-8')
+	            {
+		            $csv_data['item_from'] = utf8_encode($csv_data['item_from']);
+	            }
             }
 
             /** Type  * */
             if (get_post_meta($object->ID, 'socialdb_object_dc_type')) {
                 $csv_data['item_type'] = get_post_meta($object->ID, 'socialdb_object_dc_type', true);
+	            if(mb_detect_encoding($csv_data['item_type']) !== 'UTF-8')
+	            {
+		            $csv_data['item_type'] = utf8_encode($csv_data['item_type']);
+	            }
             }
 
             /** Source  * */
             if (get_post_meta($object->ID, 'socialdb_object_dc_source')) {
                 $value = get_post_meta($object->ID, 'socialdb_object_dc_source', true);
-                if(mb_detect_encoding($value)==='UTF-8'){
-                    $value = utf8_decode($value);
+                if(mb_detect_encoding($value) !== 'UTF-8'){
+                    $value = utf8_encode($value);
                 }
                 $csv_data['item_source'] = $value;
             }
@@ -545,19 +558,31 @@ class ExportModel extends Model {
             /** URL * */
             if (get_post_meta($object->ID, 'socialdb_uri_imported')) {
                 $csv_data['permalink'] = get_post_meta($object->ID, 'socialdb_uri_imported', true);
+                if(mb_detect_encoding($csv_data['permalink']) !== 'UTF-8')
+                {
+	                $csv_data['permalink'] = utf8_encode($csv_data['permalink']);
+                }
             } else {
                 $csv_data['permalink'] = get_the_permalink($data['collection_id']) . '?object_id=' . $object->ID;
+	            if(mb_detect_encoding($csv_data['permalink']) !== 'UTF-8')
+	            {
+		            $csv_data['permalink'] = utf8_encode($csv_data['permalink']);
+	            }
             }
 
             /** Tags * */
             $tags = wp_get_object_terms($object->ID, 'socialdb_tag_type', array('fields' => 'names'));
             if (!empty($tags)) {
-                $csv_data['tags'] = utf8_decode(implode('||', $tags));
+                $csv_data['tags'] = implode('||', $tags);
+                if(mb_detect_encoding($csv_data['tags']) !== 'UTF-8')
+                {
+	                $csv_data['tags'] = utf8_encode($csv_data['tags']);
+                }
             } else {
                 $csv_data['tags'] = '';
             }
 
-            /** Categories * */
+            /** Categories **/
             $categories_of_facet = array();
             $category_model = new CategoryModel;
             $categories = wp_get_object_terms($object->ID, 'socialdb_category_type');
@@ -574,11 +599,20 @@ class ExportModel extends Model {
             if ($facets) {
                 foreach ($facets as $facet) {
                     $term = get_term_by('id', $facet, 'socialdb_category_type');
-                    if (is_array($categories_of_facet[$facet])):
-                        $csv_data[utf8_decode($term->name)] = utf8_decode(implode(', ', $categories_of_facet[$facet]));
-                    else:
-                        $csv_data[utf8_decode($term->name)] = '';
-                    endif;
+                    if(!empty($term->name) && mb_detect_encoding($term->name) !== 'UTF-8')
+                    {
+	                    $term->name = utf8_encode($term->name);
+                    }
+                    if (is_array($categories_of_facet[$facet])) {
+	                    $csv_data[ $term->name ] = implode( ', ', $categories_of_facet[ $facet ] );
+	                    if ( mb_detect_encoding( $csv_data[ $term->name ] ) !== 'UTF-8' ) {
+		                    $csv_data[ $term->name ] = utf8_encode( $csv_data[ $term->name ] );
+	                    }
+                    }
+                    else
+                    {
+                    	$csv_data[$term->name] = '';
+                    }
                 }
             }
 
@@ -589,25 +623,41 @@ class ExportModel extends Model {
             if ($all_properties_id) {
                 foreach ($all_properties_id as $property_id) {
                     $property = get_term_by("id", $property_id, "socialdb_property_type");
+
                     if (in_array($property->slug, $this->fixed_slugs)):
                         continue;
                     endif;
+
+	                if(mb_detect_encoding($property->name) !== 'UTF-8')
+	                {
+		                $property->name = utf8_encode($property->name);
+	                }
+
                     $type = $propertyModel->get_property_type($property_id); // pego o tipo da propriedade
+
                     if ($type == 'socialdb_property_data') {
                         $value = get_post_meta($object->ID, 'socialdb_property_' . $property_id, true);
-                        if(mb_detect_encoding($value)==='UTF-8'){
-                            $value = utf8_decode($value);
+                        if(mb_detect_encoding($value) !== 'UTF-8'){
+                            $value = utf8_encode($value);
                         }
-                        $csv_data[utf8_decode($property->name)] = $value;
+
+                        $csv_data[$property->name] = $value;
                     } elseif ($type == 'socialdb_property_object') {
                         $property_result_meta_value = get_post_meta($object->ID, 'socialdb_property_' . $property_id);
                         if (is_array($property_result_meta_value) && $property_result_meta_value[0] != '') {
                             foreach ($property_result_meta_value as $property_meta_value) {
                                 $array_property_name[] = get_post($property_meta_value)->post_title;
                             }
-                            $csv_data[utf8_decode($property->name)] = utf8_decode(implode(', ', $array_property_name));
+
+                            $array_property_name = implode(', ', $array_property_name);
+                            if(mb_detect_encoding($array_property_name) !== 'UTF-8')
+                            {
+                            	$array_property_name = utf8_encode($array_property_name);
+                            }
+
+                            $csv_data[$property->name] = $array_property_name;
                         } else {
-                            $csv_data[utf8_decode($property->name)] = '';
+                            $csv_data[$property->name] = '';
                         }
                     }
                 }
@@ -618,7 +668,13 @@ class ExportModel extends Model {
             /** Arquivos * */
             $array_files = $this->list_files_to_export($object->ID);
             if ($array_files) {
-                $csv_data['Files'] = implode(', ', $array_files);
+            	$array_files = implode(', ', $array_files);
+	            if(mb_detect_encoding($array_files) !== 'UTF-8')
+	            {
+		            $array_files = utf8_encode($array_files);
+	            }
+
+                $csv_data['Files'] = $array_files;
             } else {
                 $csv_data['Files'] = '';
             }
@@ -974,6 +1030,7 @@ class ExportModel extends Model {
         if (count($array) == 0) {
             return null;
         }
+
         if (!is_dir(dirname(__FILE__) . '/collections/')) {
             mkdir(dirname(__FILE__) . '/collections');
         }
@@ -990,7 +1047,8 @@ class ExportModel extends Model {
     }
 
     public function force_zip_download() {
-        $file = dirname(__FILE__) . '/tainacan_full_csv.zip';
+        $file = './tainacan_full_csv.zip';
+
         if (headers_sent()) {
             echo 'HTTP header already sent';
         } else {

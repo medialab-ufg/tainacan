@@ -112,9 +112,6 @@ class MappingController extends Controller {
             case 'is_harvesting':
                 return $mapping_model->is_harvesting($data);
             case 'saving_delimiter_header_csv':
-                //parse_str($data['form'], $form);
-                //var_dump($data, $data['file'], $_FILES);
-                //exit();
                 $mapping_id = $data['socialdb_csv_mapping_id'];
                 $delimiter = ($data['socialdb_delimiter_csv'] == '' ? ';' : $data['socialdb_delimiter_csv']);
                 $multi_values = ($data['socialdb_delimiter_multi_values_csv'] == '' ? '||' : $data['socialdb_delimiter_multi_values_csv']);
@@ -133,22 +130,26 @@ class MappingController extends Controller {
                 }                
                 $mapping_model->save_delimiter_csv($mapping_id, $delimiter, $multi_values, $hierarchy, $import_url_external, $csv_has_header,$code);
                 $files = $mapping_model->show_files_csv($mapping_id);
-                foreach ($files as $file) {
-                    //$name_file =  wp_get_attachment_link($file->ID, 'thumbnail', false, true);
-                    $name_file = wp_get_attachment_url($file->ID);
-                    $type = pathinfo($name_file);
-                    if($type['extension']=='zip'){
-                       $data['csv_data'] = $mapping_model->get_csv_in_zip_file($name_file, $delimiter);
-                    }else{
-                        $objeto = fopen($name_file, 'r');
-                        if(strpos($name_file, 'socialdb_csv')!==false && strpos($name_file, 'tainacan_csv')!==false)
-                            $csv_data = fgetcsv($objeto, 0, $delimiter);
-                        while(($csv_data = fgetcsv($objeto, 0, $delimiter)) !== false){
-                             $data['csv_data'] = $csv_data;
-                             break;
-                        }
-                    }
-                    break;
+
+                if(isset($files) && !empty($files))
+                {
+                	foreach ($files as $file) {
+		                //$name_file =  wp_get_attachment_link($file->ID, 'thumbnail', false, true);
+		                $name_file = wp_get_attachment_url($file->ID);
+		                $type = pathinfo($name_file);
+		                if($type['extension']=='zip'){
+			                $data['csv_data'] = $mapping_model->get_csv_in_zip_file($name_file, $delimiter);
+		                }else{
+			                $objeto = fopen($name_file, 'r');
+			                if(strpos($name_file, 'socialdb_csv')!==false && strpos($name_file, 'tainacan_csv')!==false)
+				                $csv_data = fgetcsv($objeto, 0, $delimiter);
+			                while(($csv_data = fgetcsv($objeto, 0, $delimiter)) !== false){
+				                $data['csv_data'] = $csv_data;
+				                break;
+			                }
+		                }
+		                break;
+	                }
                 }
                 $data['mapping_id'] = $mapping_id;
                 unset($data['file']);
@@ -163,24 +164,6 @@ class MappingController extends Controller {
                 else
                     return $this->render(dirname(__FILE__) . '../../../views/import/csv/add_mapping.php', $data);
                 break;
-            /* case 'saving_delimiter_header_csv':
-              //parse_str($data['form'], $form);
-              var_dump($data,$data['file'], $_FILES);
-              exit();
-              $mapping_id = $form['socialdb_csv_mapping_id'];
-              $delimiter = ($form['socialdb_delimiter_csv'] == '' ? ';' : $form['socialdb_delimiter_csv']);
-              $csv_has_header = $form['socialdb_csv_has_header'];
-              $mapping_model->save_delimiter_csv($mapping_id, $delimiter, $csv_has_header);
-              $files = $mapping_model->show_files_csv($mapping_id);
-              foreach ($files as $file) {
-              //$name_file =  wp_get_attachment_link($file->ID, 'thumbnail', false, true);
-              $name_file = wp_get_attachment_url($file->ID);
-              $objeto = fopen($name_file, 'r');
-              $data['csv_data'] = fgetcsv($objeto, 0, $delimiter);
-              break;
-              }
-              $data['mapping_id'] = $mapping_id;
-              return $this->render(dirname(__FILE__) . '../../../views/import/csv/add_mapping.php', $data); */
             case 'saving_mapping_csv':
                 return $mapping_model->saving_mapping_csv($data);
             case 'list_mapping_csv':

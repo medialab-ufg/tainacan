@@ -72,7 +72,7 @@ if (isset($property_data)):
     }    
 endif;   
 
-if ((isset($property_term) && count($property_term) > 1) || (count($property_term) == 1 )):
+if (isset($property_term) && (count($property_term) > 1 || count($property_term) == 1 )):
     $ids = [];
     foreach ($property_term as $property) { 
         if(in_array($property['id'], $properties_to_avoid)){

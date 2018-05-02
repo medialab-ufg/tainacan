@@ -50,23 +50,40 @@ class ExportController extends Controller {
 
                 break;
             case "export_csv_file_full":
-                error_reporting(0);
+                //error_reporting(0);
                 $all_collections = $export_model->get_all_collections();
                 $data['socialdb_delimiter_csv'] = ';';
+
                 foreach ($all_collections as $collection) {
                     if (get_option('collection_root_id') != $collection->ID) {
                         $data['collection_id'] = $collection->ID;
                         $filename = htmlentities($collection->post_title);
-                        $csv_data = $export_model->generate_csv_data($data);
-                        if (is_array($csv_data)) {
+                        ob_start();
+                        $export_model->generate_csv_data($data);
+	                    $csv_data = ob_get_clean();
+	                    ob_end_clean();
+
+	                    if(!empty($csv_data))
+	                    {
+		                    if (!is_dir(dirname(__FILE__) . '/collections/')) {
+			                    mkdir(dirname(__FILE__) . '/collections');
+		                    }
+
+		                    $df = fopen(dirname(__FILE__) . '/collections/' . utf8_decode($filename) . '.csv', 'w');
+		                    fwrite($df, $csv_data, strlen($csv_data));
+		                    fclose($df);
+	                    }
+                        /*if (is_array($csv_data)) {
+
                             $export_model->array2csv_full($csv_data, $filename, $data['socialdb_delimiter_csv']);
-                        }
+                        }*/
                     }
                 }
-                $export_model->create_zip_by_folder(dirname(__FILE__) . '../../../models/export', '/collections/', 'tainacan_full_csv');
-                $export_model->force_zip_download();
+
+                $export_model->create_zip_by_folder(dirname(__FILE__), '/collections/', 'tainacan_full_csv');
+	            $export_model->force_zip_download();
                 //$csv_data = $export_model->generate_csv_data($data);
-                //$export_model->download_send_headers("tainacan_csv.csv');
+                //$export_model->download_send_headers("tainacan_csv.csv");
                 //echo $export_model->array2csv($csv_data, $data['socialdb_delimiter_csv']);
                 Log::addLog(['collection_id' => $data['collection_id'], 'event_type' => 'imports', 'event' => 'export_csv']);
                 break;
