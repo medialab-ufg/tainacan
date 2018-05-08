@@ -280,12 +280,10 @@ class CsvModel extends Model {
 
                                         $term_id = $wpdb->get_results($sql);
                                         $term_id = $term_id[0]->term_id;
-                                        if(strcmp($field_value, "Cerâmica") === 0)
-                                        {
-                                            print $sql."\n";
-                                            print $term_id."\n";
-                                            exit();
-                                        }
+
+                                        print $sql."\n";
+                                        print $term_id."\n";
+
                                         $class = new ObjectSaveValuesModel();
                                         if($term_id)
                                         {
