@@ -281,9 +281,6 @@ class CsvModel extends Model {
                                         $term_id = $wpdb->get_results($sql);
                                         $term_id = $term_id[0]->term_id;
 
-                                        print $sql."\n";
-                                        print $term_id." $object_id $property_id\n";
-
                                         $class = new ObjectSaveValuesModel();
                                         if($term_id)
                                         {
