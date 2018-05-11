@@ -53,6 +53,16 @@ $is_current_user_the_author = get_post($curr_id)->post_author == get_current_use
     </ul>
 <?php endif; ?>
 
+<?php
+  if(session_id() == '' || !isset($_SESSION)) {
+    // session isn't started
+    session_start();
+  }
+
+  if( $_SESSION['collection_id'] == get_option('collection_root_id'))
+    return;
+?>
+
 <ul class="nav navbar-bar navbar-right item-menu-container"  <?php if(has_action('hide_actions_item')) do_action('hide_actions_item') ?> >
     <li class="dropdown open_item_actions" id="action-<?php echo $curr_id; ?>">
         <a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">

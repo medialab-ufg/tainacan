@@ -27,6 +27,7 @@ get_template_part("partials/setup","header");
 global $config;
 // session_start();
 $_currentID_ = get_the_ID();
+$_SESSION['collection_id'] = $_currentID_;
 $visualization_page_category = get_post_meta($_currentID_, 'socialdb_collection_visualization_page_category', true);
 $_enable_header_ = get_post_meta($_currentID_, 'socialdb_collection_show_header', true);
 $_color_scheme = ViewHelper::getCollectionColors($_currentID_);
