@@ -276,7 +276,8 @@ class CsvModel extends Model {
 
                                     global $wpdb;
                                     foreach ($fields_value as $field_value) {
-                                        $sql = "SELECT t.term_id FROM $wpdb->terms t, $wpdb->termmeta tm WHERE t.name = '$field_value' AND tm.meta_key = 'socialdb_property_term_root' AND tm.meta_value=$parent;";
+                                        $sql = "SELECT t.term_id FROM $wpdb->terms t, $wpdb->termmeta tm WHERE t.name LIKE '$field_value' AND tm.meta_key LIKE 'socialdb_property_term_root' AND tm.meta_value = $parent;";
+
                                         $term_id = $wpdb->get_results($sql);
                                         $term_id = $term_id[0]->term_id;
 

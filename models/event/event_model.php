@@ -13,13 +13,13 @@ abstract class EventModel extends Model {
 
     var $parent;
     var $permission_name;
-    
+
     /**
      * function list_events($data)
      * @param array $data Os dados vindos do formulario
      * @return array com os dados a serem montados na view
-     * 
-     * @author: Eduardo Humberto 
+     *
+     * @author: Eduardo Humberto
      */
     public static function list_events_notification($data) {
         $collectionModel = new CollectionModel;
@@ -67,8 +67,8 @@ abstract class EventModel extends Model {
      * function list_events($data)
      * @param array $data Os dados vindos do formulario
      * @return array com os dados a serem montados na view
-     * 
-     * @author: Eduardo Humberto 
+     *
+     * @author: Eduardo Humberto
      */
     public static function list_events($data) {
         $collectionModel = new CollectionModel;
@@ -142,8 +142,8 @@ abstract class EventModel extends Model {
      * function list_events($data)
      * @param array $data Os dados vindos do formulario
      * @return array com os dados a serem montados na view
-     * 
-     * @author: Eduardo Humberto 
+     *
+     * @author: Eduardo Humberto
      */
     public static function get_event($data) {
         $userModel = new UserModel();
@@ -182,8 +182,8 @@ abstract class EventModel extends Model {
      * function list_all_events_terms($data)
      * @param array $data Os dados vindos do formulario
      * @return array com todas os eventos da colecao em questao
-     * 
-     * @author: Eduardo Humberto 
+     *
+     * @author: Eduardo Humberto
      */
     public static function list_all_events_terms($data) {
         global $wpdb;
@@ -209,8 +209,8 @@ abstract class EventModel extends Model {
      * function list_all_events_terms($data)
      * @param array $data Os dados vindos do formulario
      * @return array com todas os eventos da colecao em questao
-     * 
-     * @author: Eduardo Humberto 
+     *
+     * @author: Eduardo Humberto
      */
     public static function list_all_events_by_user($data) {
         $collection_events_mine = array();
@@ -267,8 +267,8 @@ abstract class EventModel extends Model {
      * function get_type($data)
      * @param wp_term $event O evento que queremos pegar o evento
      * @return string com todas os eventos da colecao em questao
-     * 
-     * @author: Eduardo Humberto 
+     *
+     * @author: Eduardo Humberto
      */
     public static function get_type($event) {
         $terms = socialdb_relations_item($event->ID, 'socialdb_event_type');
@@ -316,9 +316,9 @@ abstract class EventModel extends Model {
                  case 'socialdb_event_property_compounds_create':
                     return __('Create Compound Property', 'tainacan');
                 case 'socialdb_event_property_compounds_edit':
-                    return __('Edit Compound Property', 'tainacan'); 
-                    
-                    
+                    return __('Edit Compound Property', 'tainacan');
+
+
                 case 'socialdb_event_property_term_delete':
                     return __('Delete Property', 'tainacan');
                 case 'socialdb_event_property_term_create':
@@ -344,9 +344,9 @@ abstract class EventModel extends Model {
     /**
      * function generate_title($data)
      * @param array $data Os dados vindos do formulario
-     * @return string O titulo do evento em questao 
-     * 
-     * Autor: Eduardo Humberto 
+     * @return string O titulo do evento em questao
+     *
+     * Autor: Eduardo Humberto
      */
     abstract public function generate_title($data);
 
@@ -354,9 +354,9 @@ abstract class EventModel extends Model {
      * function  verify_event($data)
      * @param array $data Os dados vindos do formulario
      * @param array $automatically_verified Se foi automaticamente verificada
-     * @return json com os dados 
-     * 
-     * Autor: Eduardo Humberto 
+     * @return json com os dados
+     *
+     * Autor: Eduardo Humberto
      */
     abstract public function verify_event($data, $automatically_verified = false);
 
@@ -367,9 +367,9 @@ abstract class EventModel extends Model {
     /**
      * function insert_term($data)
      * @param string $name  O nome do evento
-     * @return ara  
-     * 
-     * Autor: Eduardo Humberto 
+     * @return ara
+     *
+     * Autor: Eduardo Humberto
      */
     public function insert_event($name) {
         /*$name = str_replace('?', '', $name);
@@ -393,8 +393,8 @@ abstract class EventModel extends Model {
      * @param string $name  O nome do pai do evento
      * @param array $data  Array com os dados vindos do formulario com os nomes iguais aos campos no banco de dados
      * @return void  funcao apenas para insercao dos meta dados dos eventos
-     * 
-     * Autor: Eduardo Humberto 
+     *
+     * Autor: Eduardo Humberto
      */
     public function instantiate_metas_event($id, $name, $data){
         global $wpdb;
@@ -418,9 +418,9 @@ abstract class EventModel extends Model {
     /**
      * function create_event($data)
      * @param array $data Os dados vindos do formulario com os nomes iguais aos campos do evento no banco de dados
-     * @return json para a view  
-     * 
-     * Autor: Eduardo Humberto 
+     * @return json para a view
+     *
+     * Autor: Eduardo Humberto
      */
     public function create_event($data) {
         $title = $this->generate_title($data); // gera o titulo para o evento
@@ -489,9 +489,9 @@ abstract class EventModel extends Model {
      * @param int $collection_id O id da colecao que sera feito o evento
      * @param string $action A acao que sera executada
      * @param int $user_id O id do usuario, caso seja anonimo, sera 0
-     * @return boolean true se deve confirmar o evento e false caso nao deva 
-     * 
-     * @author Eduardo Humberto 
+     * @return boolean true se deve confirmar o evento e false caso nao deva
+     *
+     * @author Eduardo Humberto
      */
     public function is_automatically_verify_event($collection_id, $action, $user_id, $event_id = 0){
         if (has_filter('tainacan_alter_permission_actions')) {
@@ -589,7 +589,10 @@ abstract class EventModel extends Model {
             } else {
                 return false;
             }
-        } else {
+        } elseif( $permission == '' ){
+            return false;
+        }
+        else {
             return true;
         }
     }
@@ -598,8 +601,8 @@ abstract class EventModel extends Model {
      * funcao que busca a categoria dos eventos de criacao de metadados
      * @param int O id do evento
      * @return void
-     * 
-     * @author Eduardo Humberto 
+     *
+     * @author Eduardo Humberto
      */
     public function get_category_of($event_id) {
         if (get_post_meta($event_id, 'socialdb_event_property_term_create_category_root_id', true)) {
@@ -636,8 +639,8 @@ abstract class EventModel extends Model {
      * @param string O estado que deseja colocar
      * @param int O id do evento
      * @return void
-     * 
-     * @author Eduardo Humberto 
+     *
+     * @author Eduardo Humberto
      */
     public function update_event_state($state, $event_id) {
         update_post_meta($event_id, 'socialdb_event_confirmed', $state);
@@ -649,8 +652,8 @@ abstract class EventModel extends Model {
      * @param string A observacao do evento
      * @param boolean Se e verificada automaticamente
      * @return void
-     * 
-     * @author Eduardo Humberto 
+     *
+     * @author Eduardo Humberto
      */
     public function set_approval_metas($event_id, $observation, $automatically_verified) {
         update_post_meta($event_id, 'socialdb_event_approval_date', mktime());
@@ -668,8 +671,8 @@ abstract class EventModel extends Model {
      * @param string A observacao do evento
      * @param boolean Se e verificada automaticamente
      * @return void
-     * 
-     * @author Eduardo Humberto 
+     *
+     * @author Eduardo Humberto
      */
     public function notificate_user_email($collection_id, $user_id, $event_id) {
         $user = get_user_by('id', 1);
@@ -714,7 +717,7 @@ abstract class EventModel extends Model {
             $headers .= "From: Admin <" . $user->data->user_email . ">\r\n";
 //endereço de resposta, se queremos que seja diferente a do remitente
 //$headers .= "Reply-To: mariano@desarrolloweb.com\r\n";
-//endereços que receberão uma copia $headers .= "Cc: manel@desarrolloweb.com\r\n"; 
+//endereços que receberão uma copia $headers .= "Cc: manel@desarrolloweb.com\r\n";
 //endereços que receberão uma copia oculta
 //$headers .= "Bcc: vinnie@criarweb.com,joao@criarweb.com\r\n";
 // wp_mail($emails, $matter, $body, $headers);
@@ -727,8 +730,8 @@ abstract class EventModel extends Model {
      * @param string O titulo do evento
      * @param boolean Se e verificada automaticamente
      * @return void
-     * 
-     * @author Eduardo Humberto 
+     *
+     * @author Eduardo Humberto
      */
     public function notificate_moderators_email($collection_id, $title) {
         $user = get_user_by('id', 1);
@@ -778,8 +781,8 @@ abstract class EventModel extends Model {
      * @param int O id da collecao
      * @param array Se e verificada automaticamente
      * @return void
-     * 
-     * @author Eduardo Humberto 
+     *
+     * @author Eduardo Humberto
      */
     public function owner_emails($collection_id) {
         $emails = [];
