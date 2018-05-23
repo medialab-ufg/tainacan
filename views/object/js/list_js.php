@@ -822,7 +822,7 @@
         var order_id = $('#collection_single_ordenation').val();
         var col_id = $('#collection_id').val();
 
-        /* $.ajax({
+         $.ajax({
             type: "POST", url: $('#src').val() + "/controllers/ranking/ranking_controller.php",
             data: { collection_id: col_id, ordenation_id: order_id, operation: 'list_value_ordenation', object_id: object_id}
         }).done(function (result) {
@@ -850,7 +850,7 @@
                     });
                 });
             }
-        }); */
+        });
     });
 
     function setRankingClass(js_elem, ob_class) {

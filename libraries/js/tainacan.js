@@ -3014,7 +3014,6 @@ function changeViewMode(viewMode) {
     } else {
         if (viewMode === "table") {
           //  $(".center_pagination").hide();
-          $("ul .pagination").hide();
         } else {
             $(".center_pagination").show();
         }
