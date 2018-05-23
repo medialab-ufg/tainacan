@@ -264,13 +264,13 @@ $(window).load(function () {
         redirectAdvancedSearch('#search_collections');
        // showAdvancedSearch($("#src").val(), search_for);
     });
-    
+
     $('#formSearchCollectionsIbram').submit(function (e) {
         e.preventDefault();
         //showIbramSearch( $('#search_collections').val());
         showAdvancedSearch($('#src').val(), $('#formSearchCollectionsIbram #search_collections').val());
     });
-    
+
     $('#formSearchCollectionsTopSearch').submit(function (e) {
         e.preventDefault();
         showIbramSearch( $('#search_collections').val());
@@ -637,7 +637,7 @@ $(window).load(function () {
 }); // On load Tainacan' main page
 
 $(document).ready(function () {
-    // Header btn-toggle                    
+    // Header btn-toggle
     $('#btn-toggle').on('click', function(e){
         if( $('#to-collapse').hasClass('in') ){
             $('#to-collapse').removeClass('in');
@@ -922,11 +922,11 @@ function toggle_disable_input(id)
         $(elem).prop('disabled', true);
     }
 }
-    
+
 /**
  * funcao que redireciona para a home da colecao para a busca avancada
-* @type o campo que sera buscado 
-*/    
+* @type o campo que sera buscado
+*/
 function redirectAdvancedSearch(field){
     if(field === false)
          window.location = $('#collection_root_url').val()+'?search-advanced-text=@';
@@ -1109,7 +1109,7 @@ function showTrash(src) {
             $('#collection_empty').show();
             $('#items_not_found').hide();
         }
-        return; 
+        return;
         /*
         if($('#table-view_wrapper').is(':visible')){
             wpquery_clean();
@@ -2626,7 +2626,7 @@ function showAPIConfiguration(src) {
 function repoConfig(src, op, ctrl, col_id) {
     var is_front = $("#repository_main_page").val();
     if ( ctrl == 'property' || ctrl == 'event' ) {
-        var send_ctrl = ctrl + '/' + ctrl + '_controller.php'; 
+        var send_ctrl = ctrl + '/' + ctrl + '_controller.php';
     } else {
         var send_ctrl = 'theme_options/theme_options_controller.php';
     }
@@ -2699,9 +2699,9 @@ function resetHomeStyleSettings() {
             $($_main).hide();
         }
     }
-    
+
     $("#users_div").hide();
-    
+
     var ibram_active = $('.ibram_menu_active').val();
     if( ibram_active && ibram_active == true.toString() ) {
         $('#collection_post').show();
@@ -3008,12 +3008,13 @@ function setMenuContainerHeight() {
     }
 }
 
-function changeViewMode(viewMode) {    
+function changeViewMode(viewMode) {
     if (viewMode === "slideshow") {
         getCollectionSlideshow();
     } else {
         if (viewMode === "table") {
-            $(".center_pagination").hide();
+          //  $(".center_pagination").hide();
+          $("ul .pagination").hide();
         } else {
             $(".center_pagination").show();
         }
