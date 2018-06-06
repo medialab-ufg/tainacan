@@ -926,10 +926,10 @@ class VisualizationModel extends CollectionModel {
         $id = str_replace('_moreoptions', '', $key);
         $classCss = get_post_meta($collection_id, 'socialdb_collection_facet_' . $id . '_color', true);
         $ordenation = get_post_meta($collection_id, 'socialdb_collection_facet_' . $id . '_ordenation', true);
-        if (isset($data['order']) || ($ordenation && $ordenation == 'alphabetic')) {
-            $children = $this->getChildren($id, 't.name ASC');
-        } else {
+        if (isset($data['order']) || ($ordenation && $ordenation !== 'alphabetic')) {
             $children = $this->getChildren($id);
+        } else {
+            $children = $this->getChildren($id, 't.name ASC');
         }
         if (count($children) > 0 && count($children) < 50) {
             foreach ($children as $child) {
