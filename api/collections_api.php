@@ -146,6 +146,16 @@ abstract class CollectionsApi {
             $objectFileClass = new ObjectFileModel();
             $item->attachments = $objectFileClass->get_files(['object_id'=>$item_id]);
         }
+
+	$item->type_tainacan = get_post_meta( $item_id, 'socialdb_object_dc_type', true );
+
+	$content = get_post_meta( $item_id, 'socialdb_object_content', true);
+	
+	if( $content && is_numeric( $content ) ){
+		$item->content_tainacan = get_post($content);
+	} else {
+		$item->content_tainacan = $content;
+	}
         
         return $item;
     }
