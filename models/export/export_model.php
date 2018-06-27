@@ -634,19 +634,50 @@ class ExportModel extends Model {
 	                }
 
                     $type = $propertyModel->get_property_type($property_id); // pego o tipo da propriedade
+                    $array_property_name = [];
 
                     if ($type == 'socialdb_property_data') {
-                        $value = get_post_meta($object->ID, 'socialdb_property_' . $property_id, true);
-                        if(mb_detect_encoding($value) !== 'UTF-8'){
-                            $value = utf8_encode($value);
-                        }
+                        $property_result_meta_value = get_post_meta($object->ID, 'socialdb_property_' . $property_id);
 
-                        $csv_data[$property->name] = $value;
+                        if (is_array($property_result_meta_value) && $property_result_meta_value[0] != '') {
+
+                            foreach ( $property_result_meta_value as $property_meta_value) {
+                                $array_property_name[] = $property_meta_value;
+                            }
+
+                            $array_property_name = implode(', ', $array_property_name);
+                            if(mb_detect_encoding($array_property_name) !== 'UTF-8')
+                            {
+                            	$array_property_name = utf8_encode($array_property_name);
+                            }
+
+                            $csv_data[$property->name] = $array_property_name;
+                        } else {
+                            $csv_data[$property->name] = '';
+                        }
                     } elseif ($type == 'socialdb_property_object') {
                         $property_result_meta_value = get_post_meta($object->ID, 'socialdb_property_' . $property_id);
                         if (is_array($property_result_meta_value) && $property_result_meta_value[0] != '') {
                             foreach ($property_result_meta_value as $property_meta_value) {
                                 $array_property_name[] = get_post($property_meta_value)->post_title;
+                            }
+
+                            $array_property_name = implode(', ', $array_property_name);
+                            if(mb_detect_encoding($array_property_name) !== 'UTF-8')
+                            {
+                            	$array_property_name = utf8_encode($array_property_name);
+                            }
+
+                            $csv_data[$property->name] = $array_property_name;
+                        } else {
+                            $csv_data[$property->name] = '';
+                        }
+                    } elseif ($type == 'socialdb_property_term') {
+                        $property_result_meta_value = get_post_meta($object->ID, 'socialdb_property_' . $property_id . '_cat');
+
+                        if (is_array($property_result_meta_value) && $property_result_meta_value[0] != '') {
+                            foreach ($property_result_meta_value as $property_meta_value) {
+                                $array_property_name[] = get_term_by('id', $property_meta_value, 'socialdb_category_type' )->name;
                             }
 
                             $array_property_name = implode(', ', $array_property_name);
