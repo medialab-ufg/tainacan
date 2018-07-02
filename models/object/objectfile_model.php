@@ -17,7 +17,7 @@ class ObjectFileModel extends Model {
      * @param array $data Os dados vindos do formulario
      * @return json com os dados do resultado do evento criado
      * @description - Insere um objeto apenas com o titulo
-     * @author: Eduardo 
+     * @author: Eduardo
      */
     public function list_files($data) {
         $post = get_post($data['object_id']);
@@ -63,7 +63,7 @@ class ObjectFileModel extends Model {
      * @param array $data Os dados vindos do formulario
      * @return json com os dados do resultado do evento criado
      * @description - Insere um objeto apenas com o titulo
-     * @author: Eduardo 
+     * @author: Eduardo
      */
     public function save_file($data) {
         if ($_FILES) {
@@ -77,13 +77,13 @@ class ObjectFileModel extends Model {
             }
         }
     }
-    
+
     /**
      * @signature - save_file($data)
      * @param array $data Os dados vindos do formulario
      * @return json com os dados do resultado do evento criado
      * @description - Insere um objeto apenas com o titulo
-     * @author: Eduardo 
+     * @author: Eduardo
      */
     public function delete_file($data) {
         if ($data['object_id'] && $data['file_name']) {
@@ -129,13 +129,13 @@ class ObjectFileModel extends Model {
             echo 'true';
         }
     }
-    
+
     /**
      * @signature - save_file($data)
      * @param array $data Os dados vindos do formulario
      * @return json com os dados do resultado do evento criado
      * @description - Insere um objeto apenas com o titulo
-     * @author: Eduardo 
+     * @author: Eduardo
      */
     public function show_files($data) {
         $real_attachments = [];
@@ -153,29 +153,30 @@ class ObjectFileModel extends Model {
                 //  var_dump($args);
                 $attachments = get_posts($args);
                 $arquivos = get_post_meta($post->ID, '_file_id');
+
                 $object_content = get_post_meta($data['object_id'],'socialdb_object_content',true);
                 if ($attachments) {
                     foreach ($attachments as $attachment) {
-                        if (in_array($attachment->ID, $arquivos)&&$object_content!=$attachment->ID) {
+                        if ( isset($attachment->post_parent) && $attachment->post_parent == $post->ID && $object_content!=$attachment->ID) {
                              $metas = wp_get_attachment_metadata($attachment->ID);
                             $real_attachments['posts'][] = $attachment;
                             $extension = $attachment->guid;
                             $ext = pathinfo($extension, PATHINFO_EXTENSION);
                             if(in_array($ext, ['mp4','m4v','wmv','avi','mpg','ogv','3gp','3g2'])){
-                                    $real_attachments['videos'][] = $attachment;     
+                                    $real_attachments['videos'][] = $attachment;
                              }elseif (in_array($ext, ['jpg','jpeg','png','gif'])) {
                                      $obj['metas'] = $metas;
-                                    $real_attachments['image'][] = $attachment;     
+                                    $real_attachments['image'][] = $attachment;
                              }elseif (in_array($ext, ['mp3','m4a','ogg','wav','wma'])) {
-                                    $real_attachments['audio'][] = $attachment;     
+                                    $real_attachments['audio'][] = $attachment;
                              }elseif(in_array($ext, ['pdf'])){
-                                    $real_attachments['pdf'][] = $attachment;   
+                                    $real_attachments['pdf'][] = $attachment;
                              }else{
                                     $real_attachments['others'][] = $attachment;
                              }
                         }
                     }
-                } 
+                }
             }
         }
         if(!empty($real_attachments)){
@@ -184,9 +185,9 @@ class ObjectFileModel extends Model {
             return false;
         }
     }
-    
+
     /**
-     * 
+     *
      * @param type $data
      * @return type
      */
@@ -223,10 +224,10 @@ class ObjectFileModel extends Model {
                         $ext = pathinfo($extension, PATHINFO_EXTENSION);
                         if(in_array($ext, ['mp4','m4v','wmv','avi','mpg','ogv','3gp','3g2'])){
                             update_post_meta($item_id, 'socialdb_object_dc_type', 'video');
-                            $result['videos'][] = $obj;     
+                            $result['videos'][] = $obj;
                         }elseif (in_array($ext, ['jpg','jpeg','png','gif', 'tiff'])) {
                            set_post_thumbnail($item_id, $attachment->ID);
-                           update_post_meta($item_id, 'socialdb_object_dc_type', 'image'); 
+                           update_post_meta($item_id, 'socialdb_object_dc_type', 'image');
                            $obj['metas'] = $metas;
                            $result['image'][] = $obj;
                            /*
@@ -244,29 +245,29 @@ class ObjectFileModel extends Model {
                         }
                         elseif (in_array($ext, ['mp3','m4a','ogg','wav','wma']))
                         {
-                           update_post_meta($item_id, 'socialdb_object_dc_type', 'audio');  
+                           update_post_meta($item_id, 'socialdb_object_dc_type', 'audio');
                            $result['audio'][] = $obj;
                         }
                         elseif(in_array($ext, ['pdf']))
                         {
-                           update_post_meta($item_id, 'socialdb_object_dc_type', 'pdf');   
+                           update_post_meta($item_id, 'socialdb_object_dc_type', 'pdf');
                            $result['pdf'][] = $obj;
                         }
                         elseif (in_array($ext, ['doc', 'docx', 'pptx', 'xlsx']))
                         {
-                             update_post_meta($item_id, 'socialdb_object_dc_type', 'other');  
+                             update_post_meta($item_id, 'socialdb_object_dc_type', 'other');
                             $result['office'][] = $obj;
 
                             $last_position = count($result['office']) - 1;
-                            
+
                             $result['office'][$last_position]['ext'] = $ext;
                             $result['others'][] = $obj;
                         }
                         else{
-                            update_post_meta($item_id, 'socialdb_object_dc_type', 'other');  
+                            update_post_meta($item_id, 'socialdb_object_dc_type', 'other');
                             $result['others'][] = $obj;
                         }
-                        
+
                     }
                 }
             }
@@ -278,7 +279,7 @@ class ObjectFileModel extends Model {
      * @param array $data Os dados vindos do formulario
      * @return json com os dados do resultado do evento criado
      * @description - Insere um objeto apenas com o titulo
-     * @author: Eduardo 
+     * @author: Eduardo
      */
     public function get_files($data) {
         $post = get_post($data['object_id']);
@@ -306,7 +307,7 @@ class ObjectFileModel extends Model {
                         $extension = $attachment->guid;
                         $ext = pathinfo($extension, PATHINFO_EXTENSION);
                         if(in_array($ext, ['mp4','m4v','wmv','avi','mpg','ogv','3gp','3g2'])){
-                            $result['videos'][] = $obj;     
+                            $result['videos'][] = $obj;
                         }elseif (in_array($ext, ['jpg','jpeg','png','gif', 'tiff'])) {
                            $obj['metas'] = $metas;
                            $result['image'][] = $obj;
@@ -336,13 +337,13 @@ class ObjectFileModel extends Model {
                             $result['office'][] = $obj;
 
                             $last_position = count($result['office']) - 1;
-                            
+
                             $result['office'][$last_position]['ext'] = $ext;
                         }
                         else{
                             $result['others'][] = $obj;
                         }
-                        
+
                     }
                 }
             }
@@ -354,7 +355,7 @@ class ObjectFileModel extends Model {
      * @param array $data Os dados vindos do formulario
      * @return json com os dados do resultado do evento criado
      * @description - Insere um objeto apenas com o titulo
-     * @author: Eduardo 
+     * @author: Eduardo
      */
     public function get_inserted_items_social_network($data) {
         $result = [];
@@ -369,39 +370,39 @@ class ObjectFileModel extends Model {
                 if(isset($tags_id)){
                     $tags_name = [];
                     foreach ($tags_id as $tag) {
-                        $tags_name[] = get_term_by('id',$tag,'socialdb_tag_type')->name; 
+                        $tags_name[] = get_term_by('id',$tag,'socialdb_tag_type')->name;
                     }
                     $obj['tags'] = implode(',', $tags_name);
                 }
-                $properties = $this->get_properties_object($item->ID); 
+                $properties = $this->get_properties_object($item->ID);
                 if($properties && is_array($properties)){
                     $obj['properties'] = $properties;
                 }
                 $type = get_post_meta($item_id,'socialdb_object_dc_type',true);
                 $obj['source'] = get_post_meta($item_id,'socialdb_object_dc_source',true);;
                 if($type=='video'){
-                    $result['videos'][] = $obj;   
+                    $result['videos'][] = $obj;
                 }elseif($type=='image'){
-                    $result['image'][] = $obj;     
+                    $result['image'][] = $obj;
                 }elseif($type=='text'){
-                     $result['text'][] = $obj;   
+                     $result['text'][] = $obj;
                 }elseif($type=='pdf'){
-                     $result['pdf'][] = $obj;   
+                     $result['pdf'][] = $obj;
                 }elseif($type=='other'||$type=='others'){
-                     $result['other'][] = $obj;   
+                     $result['other'][] = $obj;
                      $result['others'][] = $obj;
                 }elseif($type=='audio'){
-                     $result['audio'][] = $obj;   
+                     $result['audio'][] = $obj;
                 }else{
-                    $result['text'][] = $obj;  
+                    $result['text'][] = $obj;
                 }
                 $result['items'][] = $obj;
             }
         }
         return $result;
     }
-    
-    
+
+
     function remove_accent_file($str) {
         $a = array('�', '�', '�', '�', '�', '�', '�', '�', '�', '�', '�', '�', '�', '�', '�', '�', '�', '�', '�', '�', '�', '�', '�', '�', '�', '�', '�', '�', '�', '�', '�', '�', '�', '�', '�', '�', '�', '�', '�', '�', '�', '�', '�', '�', '�', '�', '�', '�', '�', '�', '�', '�', '�', '�', '�', '�', '�', '�', '�', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '�', '�', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '�', '�', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '�', '?', '?', '?', '?', '�', '�', '?', '�', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?');
         $b = array('A', 'A', 'A', 'A', 'A', 'A', 'AE', 'C', 'E', 'E', 'E', 'E', 'I', 'I', 'I', 'I', 'D', 'N', 'O', 'O', 'O', 'O', 'O', 'O', 'U', 'U', 'U', 'U', 'Y', 's', 'a', 'a', 'a', 'a', 'a', 'a', 'ae', 'c', 'e', 'e', 'e', 'e', 'i', 'i', 'i', 'i', 'n', 'o', 'o', 'o', 'o', 'o', 'o', 'u', 'u', 'u', 'u', 'y', 'y', 'A', 'a', 'A', 'a', 'A', 'a', 'C', 'c', 'C', 'c', 'C', 'c', 'C', 'c', 'D', 'd', 'D', 'd', 'E', 'e', 'E', 'e', 'E', 'e', 'E', 'e', 'E', 'e', 'G', 'g', 'G', 'g', 'G', 'g', 'G', 'g', 'H', 'h', 'H', 'h', 'I', 'i', 'I', 'i', 'I', 'i', 'I', 'i', 'I', 'i', 'IJ', 'ij', 'J', 'j', 'K', 'k', 'L', 'l', 'L', 'l', 'L', 'l', 'L', 'l', 'l', 'l', 'N', 'n', 'N', 'n', 'N', 'n', 'n', 'O', 'o', 'O', 'o', 'O', 'o', 'OE', 'oe', 'R', 'r', 'R', 'r', 'R', 'r', 'S', 's', 'S', 's', 'S', 's', 'S', 's', 'T', 't', 'T', 't', 'T', 't', 'U', 'u', 'U', 'u', 'U', 'u', 'U', 'u', 'U', 'u', 'U', 'u', 'W', 'w', 'Y', 'y', 'Y', 'Z', 'z', 'Z', 'z', 'Z', 'z', 's', 'f', 'O', 'o', 'U', 'u', 'A', 'a', 'I', 'i', 'O', 'o', 'U', 'u', 'U', 'u', 'U', 'u', 'U', 'u', 'U', 'u', 'A', 'a', 'AE', 'ae', 'O', 'o');

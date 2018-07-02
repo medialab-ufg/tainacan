@@ -42,7 +42,7 @@ abstract class CollectionsApi {
             return new WP_REST_Response( CollectionsFiltersApi::getCollectionFilters($data), 200 );
         else
             return new WP_Error('collection_not_found',  __( 'No collections found!', 'tainacan' ), array('status' => 404));
-        
+
     }
 
     public function get_collection_items($request) {
@@ -96,7 +96,7 @@ abstract class CollectionsApi {
     }
     /*******************************************************************************/
     // Metodos usados pela classe
-    
+
     public function get_item($item_id,$attachments = false) {
         $CollectionModel = new CollectionModel;
         $item = get_post($item_id);
@@ -105,19 +105,19 @@ abstract class CollectionsApi {
         unset($item->pinged);
         unset($item->post_password);
         unset($item->to_ping);
-        
+
         $collection_id = get_post_meta($item_id, 'socialdb_object_collection_init', true);
         if(empty($collection_id)){
           $collection_id = $CollectionModel->get_collection_by_object($item_id)[0]->ID;
         }
-        
+
         //busco a url certa caso for post type object
         if($item->post_type === 'socialdb_object'){
             $item->guid = get_the_permalink($collection_id).$item->post_name;
             //link do item
             $item->link = [ RepositoryApi::getLink('object',$item_id,'self',[ 'collection_id' => $collection_id ]) ];
         }
-        
+
        //caso o post type collection verifico se possui a capap
         if($item->post_type === 'socialdb_collection'){
             $cover_id = get_post_meta($item_id, 'socialdb_collection_cover_id', true);
@@ -126,7 +126,7 @@ abstract class CollectionsApi {
             //referncia ao link da colecao na api
             $item->link = [ RepositoryApi::getLink('collection',$item_id) ];
         }
-        
+
         unset($item->post_type);
         //thumbnail do item
         if(has_post_thumbnail($item_id)){
@@ -138,19 +138,30 @@ abstract class CollectionsApi {
                 }
             }
         }else{
-            $item->thumbnail = get_template_directory_uri() . "/libraries/images/colecao_thumb.svg";
+            //$item->thumbnail = get_template_directory_uri() . "/libraries/images/colecao_thumb.svg";
+            $item->thumbnail = "";
         }
-        
+
         //se for para mostrar anexos
-        if($attachments){
+        //if($attachments){
             $objectFileClass = new ObjectFileModel();
             $item->attachments = $objectFileClass->get_files(['object_id'=>$item_id]);
-        }
-        
+        //}
+
+	$item->type_tainacan = get_post_meta( $item_id, 'socialdb_object_dc_type', true );
+
+	$content = get_post_meta( $item_id, 'socialdb_object_content', true);
+
+	if( $content && is_numeric( $content ) ){
+		$item->content_tainacan = get_post($content);
+	} else {
+		$item->content_tainacan = $content;
+	}
+
         return $item;
     }
     /**
-     * 
+     *
      * @param type $params
      * @return \WP_Error|\WP_REST_Response
      */
@@ -162,7 +173,7 @@ abstract class CollectionsApi {
         $metadatas = CollectionsApi::structProperties($properties);
         $args = $wpQueryModel->queryAPI($filters,$params['id']);
         $loop = new WP_Query($args);
-        
+
         //itero sobre os itens
         if ($loop->have_posts()) {
             $data = [];
@@ -185,9 +196,9 @@ abstract class CollectionsApi {
             return new WP_Error('empty_search',  __( 'No items found with these arguments!', 'tainacan' ), array('status' => 404));
         }
     }
-    
+
     /**
-     * 
+     *
      * @param type $property
      */
     public function getTypeProperty($property) {
@@ -201,7 +212,7 @@ abstract class CollectionsApi {
             return 'compound';
         }else{
             return $property['type'];
-        }         
+        }
     }
 
     /**
@@ -274,19 +285,19 @@ abstract class CollectionsApi {
     public function prettifyPropertyCompound($property,$type = 'item',$values = false){
         $return = [];
         $wpQueryModel = new WPQueryModel();
-        
+
         //se estiver buscando os valores de um item especifico
         if($type === 'item'){
             $return = ['id' => $property['id'],'name'=>$property['name'],'type'=> CollectionsApi::getTypeProperty($property),'children'=>[]];
             $childrens =  $property['metas']['socialdb_property_compounds_properties_id'];
             $childrens = (is_array($childrens)) ? $childrens : explode(',', $childrens);
-            
+
             // itero sobre os filhos para buscar os seus dados
             foreach ($childrens as $children) {
                 $children = (is_array($children)) ?  $children : $wpQueryModel->get_all_property($children, true);
                 $children_array[$children['id']] = $children;
             }
-            
+
             //se existir o valor inserido
             if($values){
                 $line = [];
@@ -305,7 +316,7 @@ abstract class CollectionsApi {
                         $column[] = CollectionsApi::get_values_atom($children,[]);
                 }
                  $return['children'][] = $column;
-            }            
+            }
         }
         return $return;
     }
@@ -327,14 +338,14 @@ abstract class CollectionsApi {
         }
         if(!isset($array['values']))
             $array['empty'] = true;
-        
+
         return $array;
     }
-    
+
     /**
      * metodo que prerpara o array de metadado de propriedade de dados a ser mostrado
      * na resposta
-     * 
+     *
      * @param array $property
      * @param string $type
      * @param array $values
@@ -351,28 +362,28 @@ abstract class CollectionsApi {
                         foreach ($value[0]['values'] as $meta_id) {
                             $meta =  $wpQueryModel->sdb_get_post_meta($meta_id);
                             $item_id =  $meta->post_id;
-                            $return['values'][] = $meta->meta_value;        
+                            $return['values'][] = $meta->meta_value;
                         }
                         //se o plugin de data aproximada estiver ativado
                         if (isset($item_id) && is_plugin_active('data_aacr2/data_aacr2.php') && $property['type'] == 'date' && get_post_meta($item_id, "socialdb_property_{$property['id']}_0_date", true)):
                             unset($return['values']);
                             $return['values'][] =  get_post_meta($object_id, "socialdb_property_{$property['id']}_0_date", true);
-                        endif;    
+                        endif;
                     }
                 }
             }else{
                 $return['empty'] = true;
             }
         }else{
-            $return = ['id' => $property['id'],'name'=>$property['name']]; 
+            $return = ['id' => $property['id'],'name'=>$property['name']];
         }
         return $return;
     }
-    
+
     /**
      * metodo que prerpara o array de metadado de propriedade de relacionamento a ser mostrado
      * na resposta
-     * 
+     *
      * @param array $property
      * @param string $type
      * @param array $values
@@ -399,15 +410,15 @@ abstract class CollectionsApi {
                 $return['empty'] = true;
             }
         }else{
-            $return = ['id' => $property['id'],'name'=>$property['name']]; 
+            $return = ['id' => $property['id'],'name'=>$property['name']];
         }
         return $return;
     }
-    
+
     /**
      * metodo que prerpara o array de metadado de propriedade de relacionamento a ser mostrado
      * na resposta
-     * 
+     *
      * @param array $property
      * @param string $type
      * @param array $values
@@ -430,7 +441,7 @@ abstract class CollectionsApi {
                         if(isset($item_id)){
                             $properties_children = CollectionsApi::getCategoryProperties($return['values'],$item_id);
                             if($properties_children)
-                                 $return['term-properties'] = $properties_children; 
+                                 $return['term-properties'] = $properties_children;
                         }
                     }
                 }
@@ -438,7 +449,7 @@ abstract class CollectionsApi {
                 $return['empty'] = true;
             }
         }else{
-            $return = ['id' => $property['id'],'name'=>$property['name']]; 
+            $return = ['id' => $property['id'],'name'=>$property['name']];
         }
         return $return;
     }
@@ -460,7 +471,7 @@ abstract class CollectionsApi {
             if($terms)
                 $properties = array_merge ($properties, $terms);
         }
-        
+
         //retirando possiveis duplicacoes
         $properties = array_filter($properties);
         foreach ($properties as $metadata) {
@@ -484,6 +495,6 @@ abstract class CollectionsApi {
         }
         return $array;
     }
-    
-    
+
+
 }

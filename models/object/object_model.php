@@ -1063,7 +1063,7 @@ class ObjectModel extends Model {
         $order = $this->set_type_order($args);
 
         if(strcmp($mode_view, 'table') === 0)
-            $posts_per_page = -1;
+            $posts_per_page = 12;
         else if(!empty($qtd = get_post_meta($args['collection_id'], 'socialdb_collection_itens_per_page', true)))
         	$posts_per_page = $qtd;
         else $posts_per_page = 12;

@@ -17,9 +17,10 @@
                     last: "<?php _e('Last', 'tainacan'); ?>"
                 }
             },
-            lengthMenu: [10, 15, 25, 50],
-            searching: false
-            /* paging: false, info: false */
+            //lengthMenu: [10, 15, 25, 50],
+            searching: false,
+            paging: false,
+            info: false
         };
         $('.list-view-container').eq(0).css('border-top', 0);
 
@@ -129,7 +130,7 @@
             var i_id = $(this).attr("data-id");
             showSingleObject(i_id, src);
         }); */
-        
+
         $('.pagination_items').jqPagination({
             link_string: '/?page={page_number}',
             page_string: '<?php _t("Page ",1); ?>' + '{current_page}' + '<?php _t(" of ",1); ?>' + ' {max_page}',
@@ -209,7 +210,7 @@
 
         if( default_viewMode === "geolocation" ) {
             if( lat || long || approx || approx_loc ) {
-                $('.viewMode-control li.geolocation').removeClass('hide');                
+                $('.viewMode-control li.geolocation').removeClass('hide');
             }
         }
 
@@ -218,7 +219,8 @@
             // getSlideshowTime();
             getCollectionSlideshow();
         } else if(default_viewMode === "table") {
-            $(".center_pagination").hide();
+          //  $(".center_pagination").hide();
+          $("ul .pagination").hide();
         }
         $('.viewMode-control li').removeClass('selected-viewMode');
         $('.viewMode-control li.' + default_viewMode).addClass('selected-viewMode');
@@ -820,7 +822,7 @@
         var order_id = $('#collection_single_ordenation').val();
         var col_id = $('#collection_id').val();
 
-        $.ajax({
+         $.ajax({
             type: "POST", url: $('#src').val() + "/controllers/ranking/ranking_controller.php",
             data: { collection_id: col_id, ordenation_id: order_id, operation: 'list_value_ordenation', object_id: object_id}
         }).done(function (result) {
