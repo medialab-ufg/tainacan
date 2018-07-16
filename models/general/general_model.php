@@ -2105,6 +2105,7 @@ class Model {
      */
     public function sdb_update_post_meta($meta_id, $value) {
         global $wpdb;
+        $value = addslashes($value);
         $query = "UPDATE $wpdb->postmeta SET meta_value = '$value' WHERE meta_id = $meta_id";
         $result = $wpdb->get_results($query);
         return $result;
