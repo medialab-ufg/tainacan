@@ -109,7 +109,7 @@ class EventPropertyDataEditValue extends EventModel {
      * 
      * Autor: Eduardo Humberto 
      */
-    public function verify_event($data,$automatically_verified = false)
+    public function verify_event($data, $automatically_verified = false)
     {
        $actual_state = get_post_meta($data['event_id'], 'socialdb_event_confirmed',true);
        if($actual_state != 'confirmed' && $automatically_verified || (isset($data['socialdb_event_confirmed']) && $data['socialdb_event_confirmed'] == 'true'))// se o evento foi confirmado automaticamente ou pelos moderadores
