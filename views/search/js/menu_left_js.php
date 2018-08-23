@@ -191,7 +191,6 @@
                 }
             },
             onCreate: function (node, span) {
-               //console.log(decodeEntities(node.data.title));
                $(node.span).find('.dynatree-title').html(decodeEntities(node.data.title));
                 /*if(!$('body').hasClass('logged-in'))
                 {

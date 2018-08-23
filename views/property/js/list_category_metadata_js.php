@@ -450,7 +450,6 @@
                 data: current_data,
                 processData: false
             }).done(function(result) {
-                console.log("Olá");
                 $('#modalImportMain').modal('hide');
 
                 var current_modal = get_open_model_id();
@@ -1163,7 +1162,6 @@
                     $("#property_category_dynatree").dynatree("getRoot").visit(function (node) {
                         node.select(false);
                     });
-                    //console.log(contador);
 
                     $('#selected_categories_relationship').html('Verificando relacionamentos...');
                     setTimeout(function(){
@@ -1177,7 +1175,6 @@
                                 elem = jQuery.parseJSON(result);
                                 var contador = 0;
                                 $("#property_category_dynatree").dynatree("getRoot").visit(function (node) {
-                                    //console.log(value , node);
                                     if (value == node.data.key) {
                                         contador++;
                                         node.select(true);
@@ -1190,7 +1187,6 @@
                                         }
                                     }
                                 });
-                                //console.log(contador);
                                 if(contador === 0){
                                     add_label_box(elem.term.term_id, elem.term.name, '#selected_categories_relationship');
                                     ids = $('#property_object_category_id').val().split(',');
@@ -1206,7 +1202,6 @@
                         setTimeout(function(){
                             var reverse =  localStorage.getItem("reverse");
                             var is_reverse =  localStorage.getItem("is_reverse");
-                            console.log(reverse,'reverso');
                             if (is_reverse === 'false') {
                                 $("#property_object_is_reverse").val('false');
                                 $("#property_object_reverse option[value='false']").attr('selected', 'selected');
@@ -1239,7 +1234,6 @@
             setTimeout(function(){
                 var reverse =  localStorage.getItem("reverse");
                 var is_reverse =  localStorage.getItem("is_reverse");
-                console.log(reverse);
                 if (is_reverse === 'false') {
                     $("#property_object_is_reverse").val('false');
                     $("#property_object_reverse option[value='false']").attr('selected', 'selected');

@@ -1711,7 +1711,6 @@
                 $("#meta-category .property_data_use_filter").prop('checked', true);
                 $("#meta-category .term-widget").show();
             } else if (elem.search_widget && elem.search_widget != 'false') {
-                console.log($("#meta-category .property_data_use_filter"));
                 $("#property_term_filter_widget").val(elem.metas.property_term_filter_widget);
                 $("#meta-category .property_data_use_filter").prop('checked', true);
                 $("#meta-category .term-widget").show();
@@ -1733,7 +1732,6 @@
             }
             if(elem.more_options == '' || elem.more_options === 'true'){
                 $("#meta-category #habilitate_more_options").prop('checked', true);
-                console.log(elem.more_options);
             }else{
                 $("#meta-category #habilitate_more_options").prop('checked', false);
             }

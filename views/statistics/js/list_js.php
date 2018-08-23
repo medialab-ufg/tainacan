@@ -128,9 +128,7 @@
 
         if(report){
             var title = report;
-        }
-        else{
-            console.log('Erro desconhecido '+ report);
+        } else {
             return false;
         }
 

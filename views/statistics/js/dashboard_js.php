@@ -73,9 +73,7 @@ function fetchDashData(action, parent, filter) {
     url: $(".stat_path").val() + '/controllers/log/log_controller.php', type: 'POST',
     data: { operation: 'user_events', parent: parent, event: action, from: "", to: "", collec_id: null, filter: filter }
   }).done(function(resp) {
-    console.log(resp);
     var rJSON = JSON.parse(resp);
-    console.log(rJSON);
 
     if( (rJSON.stat_object == null) || rJSON.stat_object.length == 0) {
       switch (action) {

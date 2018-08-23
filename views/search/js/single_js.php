@@ -53,12 +53,10 @@
                 processData: false,
                 contentType: false
             }).done(function (result) {
-                let elem = jQuery.parseJSON(result);
+                var elem = jQuery.parseJSON(result);
                 hide_modal_main();
                 if (elem.args_collection) {
-                    let search_collections_query = elem.args_collection;
-                    console.log(elem);
-                    console.log(search_collections_query);
+                    var search_collections_query = elem.args_collection;
                     $('#wp_query_args').val(search_collections_query);
 
                     if(elem.has_collection && elem.has_item)
