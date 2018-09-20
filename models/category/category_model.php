@@ -20,7 +20,7 @@ class CategoryModel extends Model {
 
     var $usermodel;
 
-    public function CategoryModel() {
+    public function __construct() {
         $this->usermodel = new UserModel();
     }
 

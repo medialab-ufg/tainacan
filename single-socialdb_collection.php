@@ -1,4 +1,8 @@
 <?php
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+
 require_once(dirname(__FILE__) . '/models/social_network/Facebook/autoload.php');
 require_once(dirname(__FILE__) . '/controllers/helpers/helpers_controller.php');
 require_once(dirname(__FILE__) . '/helpers/view_helper.php');
@@ -20,12 +24,9 @@ if(!get_option('tainacan_update_items_helpers')){
     wp_redirect(get_the_permalink());
 endif;
 /****************************************************************************** */
-
-session_start();
 get_header();
 get_template_part("partials/setup","header");
 global $config;
-// session_start();
 $_currentID_ = get_the_ID();
 $_SESSION['collection_id'] = $_currentID_;
 $visualization_page_category = get_post_meta($_currentID_, 'socialdb_collection_visualization_page_category', true);

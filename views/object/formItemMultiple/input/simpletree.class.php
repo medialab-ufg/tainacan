@@ -115,7 +115,6 @@ class SimpleTreeMultipleClass extends FormItemMultiple {
                                 $("#category_single_parent_id").val(node.data.key);
                             }
                         }else if (node.bSelected) {
-                            console.log($('#item-multiple-selected').val().trim());
                             $.ajax({
                                 url: $('#src').val() + '/controllers/object/form_item_controller.php',
                                 type: 'POST',
@@ -137,7 +136,6 @@ class SimpleTreeMultipleClass extends FormItemMultiple {
                                 node.data.key, '<?php echo $compound_id ?>', '<?php echo $property_id ?>', '<?php echo $index_id ?>');
                             <?php endif; ?>
                         } else {
-                            console.log($('#item-multiple-selected').val().trim());
                             $('#appendCategoryMetadata_<?php echo $compound_id; ?>_0_0').html('');
                             $.ajax({
                                 url: $('#src').val() + '/controllers/object/form_item_controller.php',

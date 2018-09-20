@@ -647,7 +647,6 @@ class FormItemMultiple extends Model {
 
             function openAccordeon(id){
                 let op = $('.expand-all-item').attr('data-operation');
-                console.log(op);
                 if( op == 0)//Retrair
                 {
                     $('#form_properties_items').find("div.action-text").html('Expandir todos');

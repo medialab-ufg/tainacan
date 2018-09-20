@@ -35,7 +35,6 @@
 
         // SUBMISSAO DO FORMULARIO
         $('#submit_form_category').submit(function (e) {
-            console.log("Ola");
             e.preventDefault();
             var formData = new FormData(this);
             verify_category_privacity(formData);// esta funcao chama a que insere o formulario de fato

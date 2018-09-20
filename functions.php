@@ -3840,7 +3840,11 @@ if (!defined("MANUAL_TAINACAN_URL")) {
 function load_repository_configs() {
     $request = $_SERVER['REQUEST_URI'];
     $_site_url = parse_url(site_url());
-    $check = str_replace( $_site_url["path"], "", $request );
+
+    $check = $request;
+    if (array_key_exists("path", $_site_url)) {
+        $check = str_replace( $_site_url["path"], "", $request );    
+    }
 
     if (strpos($check, "/adm/") === 0 && preg_match('/\badm{1}\b/', $request) == 1) {
         locate_template( "configs.php" , true, false );

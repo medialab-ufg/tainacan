@@ -1110,9 +1110,7 @@ class FormItem extends Model {
                 var index_id = args[2];
                 var block = false;
                 var cont = 0;
-                console.log($('#container-field-'+compound_id+'-'+index_id+' .validate-compound-'+compound_id));
                 $.each($('#container-field-'+compound_id+'-'+index_id+' .validate-compound-'+compound_id),function(index,value){
-                    console.log($(value).val());
                     if($(value).val()==='false'){
                         block = true;
                     }
@@ -1131,7 +1129,6 @@ class FormItem extends Model {
 
             function demo(compound_id,index_id,property,key,i) {
                 setTimeout(function () {
-                    //console.log('Taking a break...');
                 $.ajax({
                     url: $('#src').val() + '/controllers/object/form_item_controller.php',
                     type: 'POST',
@@ -1145,7 +1142,6 @@ class FormItem extends Model {
                         }
                     }
                 });
-               // console.log('later');
                 }, 250 * i);
             }
 

@@ -458,7 +458,6 @@
          if(items_id.length > 0)
          {
              sessionStorage.setItem("selected_ids", items_id.join(','));
-             console.log(sessionStorage.getItem())
          }
     }
 

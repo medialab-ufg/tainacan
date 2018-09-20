@@ -158,10 +158,7 @@
         var final_value = false;
         var cont = parseInt(index);
         while(cont >= 0) {
-
             for (var i = 0; i < properties_id.length; i++) {
-
-                console.log($('[name="socialdb_property_' + compound_id + '_' + properties_id[i] + '_' + cont + '[]"]'));
                 if ($('[name="socialdb_property_' + compound_id + '_' + properties_id[i] + '_' + cont + '[]"]').length == 0) {
                     continue;
                 }

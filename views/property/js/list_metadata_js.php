@@ -1276,7 +1276,6 @@
                     $("#property_category_dynatree").dynatree("getRoot").visit(function (node) {
                         node.select(false);
                     });
-                    //console.log(contador);
 
                     $('#selected_categories_relationship').html('Verificando relacionamentos...');
                     setTimeout(function(){
@@ -1290,7 +1289,6 @@
                                 elem = jQuery.parseJSON(result);
                                 var contador = 0;
                                 $("#property_category_dynatree").dynatree("getRoot").visit(function (node) {
-                                    //console.log(value , node);
                                     if (value == node.data.key) {
                                         contador++;
                                         node.select(true);
@@ -1303,7 +1301,6 @@
                                         }
                                     }
                                 });
-                                //console.log(contador);
                                 if(contador === 0){
                                     add_label_box(elem.term.term_id, elem.term.name, '#selected_categories_relationship');
                                     ids = $('#property_object_category_id').val().split(',');
@@ -1319,7 +1316,6 @@
                         setTimeout(function(){
                             var reverse =  localStorage.getItem("reverse");
                             var is_reverse =  localStorage.getItem("is_reverse");
-                            console.log(reverse,'reverso');
                             if (is_reverse === 'false') {
                                 $("#property_object_is_reverse").val('false');
                                 $("#property_object_reverse option[value='false']").attr('selected', 'selected');
@@ -1353,7 +1349,6 @@
             setTimeout(function(){
                 var reverse =  localStorage.getItem("reverse");
                 var is_reverse =  localStorage.getItem("is_reverse");
-                console.log(reverse);
                 if (is_reverse === 'false') {
                     $("#property_object_is_reverse").val('false');
                     $("#property_object_reverse option[value='false']").attr('selected', 'selected');
@@ -1718,7 +1713,6 @@
             }
             if(elem.more_options == '' || elem.more_options === 'true'){
                 $("#meta-category #habilitate_more_options").prop('checked', true);
-                console.log(elem.more_options);
             }else{
                 $("#meta-category #habilitate_more_options").prop('checked', false);
             }
@@ -1958,7 +1952,6 @@
             data: {collection_id: $('#collection_list_ranking_id').val(), ranking_id: id, operation: "edit_ranking"}
         }).done(function (result) {
             elem = $.parseJSON(result);
-            console.log(elem);
             var item_type = elem.ranking.type;
             $("#submit_form_ranking .ranking-type").focus().val(item_type);
 
@@ -2449,7 +2442,6 @@
     }
 
     function toggle_range_submit(el) {
-        console.log("Olá");
         ($(el).val() == "range") ? $("#range_submit").fadeIn() : $("#range_submit").fadeOut();
     }
 
