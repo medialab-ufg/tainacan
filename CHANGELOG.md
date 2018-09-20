@@ -5,6 +5,10 @@ O formato é baseado em [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 e este projeto adere para [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+## [0.8.2] - 2018-07-02
+### Corrigido
+- Bugs na exportação de CSV
+- Bugs na API
 
 ## [0.8] - 2018-03-18
 ### Adicionado
