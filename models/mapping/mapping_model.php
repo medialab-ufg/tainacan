@@ -9,7 +9,7 @@ require_once(dirname(__FILE__) . '../../category/category_model.php');
 
 class MappingModel extends Model {
 
-    public function MappingModel($name) {
+    public function __construct($name) {
         $this->parent = get_term_by('name', $name, 'socialdb_channel_type');
     }
 
