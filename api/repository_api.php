@@ -126,6 +126,20 @@ abstract class RepositoryApi {
         }
         $response = array_merge($response, $result);
 
+        $terms = get_terms( array(
+            'taxonomy' => 'socialdb_tag_type'
+        ) );
+
+        if($terms){
+            $tag_root = get_term_by('slug','socialdb_tag','socialdb_tag_type');
+            
+            if( $tag_root ){
+                $tag_root->children = $terms;
+                $response[] = $tag_root;
+            }
+            
+        }
+
         get_all_children($wpdb, $response);
 
         return new WP_REST_Response($response, 200);
