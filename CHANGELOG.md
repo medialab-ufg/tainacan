@@ -5,6 +5,9 @@ O formato é baseado em [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 e este projeto adere para [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+## [0.8.5] - 2018-11-10
+- Exportação de tags na API
+
 ## [0.8.4] - 2018-19-09
 - Vários bugfixes gerais
 - Remoção de informações JS sendo exibidas no console
