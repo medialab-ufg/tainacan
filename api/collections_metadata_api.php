@@ -2,6 +2,7 @@
 
 abstract class CollectionsMetadataApi {
     
+    public static $collection_id;
     /**
      * 
      * @param type $param
@@ -12,6 +13,7 @@ abstract class CollectionsMetadataApi {
         $params = $request->get_params();
         $collection_id = $params['id'];
         $property_id = $params['meta'];
+        self::$collection_id = $collection_id;
         
         //labels fixos
         $params['labels_collection'] = unserialize(get_post_meta($collection_id, 'socialdb_collection_fixed_properties_labels', true));
@@ -55,6 +57,9 @@ abstract class CollectionsMetadataApi {
         $ObjectModel = new ObjectModel();
         $params = $request->get_params();
         $collection_id = $params['id'];
+
+        self::$collection_id = $collection_id;
+
         $response = [];
         
         //labels fixos
@@ -207,7 +212,10 @@ abstract class CollectionsMetadataApi {
                 if( $params['includeMetadata'] === '1' && $details['type'] != 'property-default'){
                     $details['metadata'] = CollectionsMetadataApi::includeMetadata($property);
                     $details['visibility'] = ( in_array($property['id'], $params['visibility'])) ? 'off' : 'on';
-                }elseif ($details['type'] === 'property-default' ) {
+                }else if( isset($property['slug']) && $property['slug'] === 'socialdb_property_fixed_tags'){
+                    $details['metadata'] = CollectionsMetadataApi::includeMetadata($property);
+                    $details['type'] = 'checkbox';
+                } elseif ($details['type'] === 'property-default' ) {
                     $visibility = (get_term_meta($property['id'],'socialdb_property_visibility',true));
                     $details['real-name'] = $details['name'];
                     $details['name'] = (isset($params['labels_collection'][$property['id']])) ? $params['labels_collection'][$property['id']] :  $details['name'];
@@ -234,7 +242,10 @@ abstract class CollectionsMetadataApi {
         $data = ['text', 'textarea', 'date', 'number', 'numeric', 'auto-increment', 'user'];
         $term = ['selectbox', 'radio', 'checkbox', 'tree', 'tree_checkbox', 'multipleselect'];
         $object = (isset($property['metas']['socialdb_property_object_category_id']) && !empty($property['metas']['socialdb_property_object_category_id'])) ? true : false;
-        if (in_array($property['type'], $data) && !$object) {
+       
+        if( isset($property['slug']) && $property['slug'] === 'socialdb_property_fixed_tags'){
+            return CollectionsMetadataApi::metadataTag($metadata);
+        } else if (in_array($property['type'], $data) && !$object) {
             return CollectionsMetadataApi::metadataText($property);
         } else if (in_array($property['type'], $term) && !$object) {
             return CollectionsMetadataApi::metadataTerm($property);
@@ -361,6 +372,22 @@ abstract class CollectionsMetadataApi {
             }
         }
         
+        return $return;
+    }
+
+    /**
+     * 
+     */
+    public function metadataTag($property){
+        $return = [];
+
+        $term_tag = get_term_by('name','socialdb_tag','socialdb_tag_type');
+        $return['taxonomy'] = $term_tag->term_id;
+        $return['cardinality'] = 'n';
+
+        $values = wp_get_object_terms( self::$collection_id, 'socialdb_tag_type' );
+        $return['categories'] = ($values) ? $values : [];
+
         return $return;
     }
 

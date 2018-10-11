@@ -231,6 +231,15 @@ abstract class CollectionsApi {
                 }
             }
         }
+
+        if( isset($properties['fixeds']) ){
+            foreach ($properties['fixeds'] as $data) {
+
+                if($data['slug'] === 'socialdb_property_fixed_tags')
+                    $structedProperties[] = $data;
+            }
+        }
+
         return $structedProperties;
     }
 
@@ -245,7 +254,10 @@ abstract class CollectionsApi {
             $data = ['text', 'textarea', 'date', 'number', 'numeric', 'auto-increment', 'user'];
             $term = ['selectbox', 'radio', 'checkbox', 'tree', 'tree_checkbox', 'multipleselect'];
             $object = (isset($metadata['metas']['socialdb_property_object_category_id']) && !empty($metadata['metas']['socialdb_property_object_category_id'])) ? true : false;
-            if (in_array($metadata['type'], $data) && !$object) {
+            
+            if( isset($metadata['slug']) && $metadata['slug'] === 'socialdb_property_fixed_tags'){
+                $array[] = CollectionsApi::prettifyTags($metadata, $item_id);
+            } else if (in_array($metadata['type'], $data) && !$object) {
                 $array[] = CollectionsApi::prettifyPropertyData($metadata,'item',$values);
             } else if (in_array($metadata['type'], $term) && !$object) {
                 $array[] = CollectionsApi::prettifyPropertyTerm($metadata,'item',$values);
@@ -451,6 +463,23 @@ abstract class CollectionsApi {
         }else{
             $return = ['id' => $property['id'],'name'=>$property['name']];
         }
+        return $return;
+    }
+
+    /**
+     * metodo que prerpara o array de tags
+     * na resposta
+     *
+     * @param array $property
+     * @param string $type
+     * @param array $values
+     * @return array
+     */
+    public function prettifyTags($property,$item_id){
+        $return = ['id' => $property['id'],'name'=>$property['name'],'type'=> 'checkbox'];
+        $values = wp_get_object_terms( $item_id, 'socialdb_tag_type', ['fields' => 'ids'] );
+
+        $return['values'] = ($values) ? $values : [];
         return $return;
     }
 
