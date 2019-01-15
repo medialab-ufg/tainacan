@@ -508,7 +508,7 @@ class ExportModel extends Model {
                 if(mb_detect_encoding($value) !== 'UTF-8'){
                     $value = utf8_encode($value);
                 }
-	            $csv_data['description'] = str_replace('"','',$value);
+	            $csv_data['description'] = $value;
             } else {
                 $csv_data['description'] = '';
             }
@@ -723,7 +723,6 @@ class ExportModel extends Model {
 
     public function generate_csv_data_selected($data) {
         $propertyModel = new PropertyModel;
-        $facets_id = CollectionModel::get_facets($data['collection_id']);
         $objects = $data['loop'];
         $csv = [];
         while ($objects->have_posts()) {
@@ -798,27 +797,6 @@ class ExportModel extends Model {
             $categories_of_facet = array();
             $category_model = new CategoryModel;
             $categories = wp_get_object_terms(get_the_ID(), 'socialdb_category_type');
-            $facets = CollectionModel::get_facets($data['collection_id']);
-            /*  if (is_array($categories)):
-              foreach ($categories as $category) {
-              $facet_id = $category_model->get_category_facet_parent($category->term_id, $data['collection_id']);
-              if (!isset($facet_id) || $facet_id == $category->term_id) {
-              continue;
-              }
-              $categories_of_facet[$facet_id][] = $this->get_hierarchy_names($category->term_id, $facet_id);
-              }
-              endif;
-
-              if ($facets) {
-              foreach ($facets as $facet) {
-              $term = get_term_by('id', $facet, 'socialdb_category_type');
-              if (is_array($categories_of_facet[$facet])):
-              $csv_data[$term->name] = implode(', ', $categories_of_facet[$facet]);
-              else:
-              $csv_data[$term->name] = '';
-              endif;
-              }
-              } */
 
             $categories_of_facet = [];
 
@@ -931,11 +909,18 @@ class ExportModel extends Model {
                     'post_parent' => $post->ID,
                     'exclude' => get_post_thumbnail_id()
                 );
-                //  var_dump($args);
+
                 $attachments = get_posts($args);
                 $arquivos = get_post_meta($post->ID, '_file_id');
+                $content = get_post_meta($object_id, 'socialdb_object_content', true);
+
                 if ($attachments) {
                     foreach ($attachments as $attachment) {
+
+                        if( $attachment->ID == $content ){
+                            continue;
+                        }
+
                         if (in_array($attachment->ID, $arquivos)) {
                             $url = wp_get_attachment_url($attachment->ID);
                             //$array_temp['size'] = filesize( get_attached_file( $attachment->ID ) );

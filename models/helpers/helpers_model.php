@@ -65,9 +65,13 @@ class HelpersModel extends Model {
         $model = new HelpersModel;
         update_option('tainacan_update_items_helpers', 'true');
         $items = $model->getAllItemsPublished();
-        foreach ($items as $item) {
-            $model->getAllPropertiesFromItem($item->ID) ;
+
+        if(is_array($items)){
+            foreach ($items as $item) {
+                $model->getAllPropertiesFromItem($item->ID) ;
+            }
         }
+
     }
     
     /**
