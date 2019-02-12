@@ -1096,11 +1096,10 @@ class ExportModel extends Model {
 
         ///remove any ESCAPED double quotes within string.
         $value = str_replace('\\"','"',$value);
-        return $value;
         //then force escape these same double quotes And Any UNESCAPED Ones.
-        //$value = str_replace('"','\"',$value);
+        $value = str_replace('"','\"',$value);
         //force wrap value in quotes and return
-        //return '"'.$value.'"';
+        return '"'.$value.'"';
     }
 
 
