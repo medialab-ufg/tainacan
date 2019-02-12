@@ -508,7 +508,7 @@ class ExportModel extends Model {
                 if(mb_detect_encoding($value) !== 'UTF-8'){
                     $value = utf8_encode($value);
                 }
-	            $csv_data['description'] = $value;
+	            $csv_data['description'] = str_replace('"',"'",$value);
             } else {
                 $csv_data['description'] = '';
             }
@@ -712,10 +712,12 @@ class ExportModel extends Model {
 
             if($first)
             {
-            	fputs($df, implode( $data['socialdb_delimiter_csv'], array_keys($csv_data))."\r\n");
+            	//fputs($df, implode( $data['socialdb_delimiter_csv'], array_keys($csv_data))."\r\n");
+                fputcsv($df, array_keys($csv_data), $data['socialdb_delimiter_csv']);
 	            $first = false;
             }
-            fputs($df, implode( $data['socialdb_delimiter_csv'], array_map(array($this, 'encodeFunc'), $csv_data))."\r\n");
+            //fputs($df, implode( $data['socialdb_delimiter_csv'], array_map(array($this, 'encodeFunc'), $csv_data))."\r\n");
+            fputcsv($df, $csv_data, $data['socialdb_delimiter_csv']);
 	        clean_post_cache($object->ID);
         }
 	    fclose($df);
