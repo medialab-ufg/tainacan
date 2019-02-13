@@ -508,7 +508,7 @@ class ExportModel extends Model {
                 if(mb_detect_encoding($value) !== 'UTF-8'){
                     $value = utf8_encode($value);
                 }
-	            $csv_data['description'] = str_replace('"',"'",$value);
+	            $csv_data['description'] = preg_replace( "/\r|\n/", "", $value );
             } else {
                 $csv_data['description'] = '';
             }
