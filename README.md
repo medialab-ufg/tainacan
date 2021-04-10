@@ -2,7 +2,9 @@
 
 ### ⚠️ Warning ⚠️ 
 
-This repository doesn't offer the most recent version of Tainacan, nor is the repository in which the active development of this tool takes place. **To access the source code of the most recent version of Tainacan, access [tainacan/tainacan](https://github.com/tainacan/tainacan)**.
+This repository doesn't offer the most recent version of Tainacan. 
+
+**To access the source code of the most recent version of Tainacan, access [tainacan/tainacan](https://github.com/tainacan/tainacan)**.
 
 ### What is Tainacan?
 
@@ -15,7 +17,9 @@ the Ministry of Culture and the Brazilian Institute of Museums.
 
 ### ⚠️ Atenção ⚠️ 
 
-Este repositório não oferece a versão mais recente do Tainacan, e não é o repositório em que o desenvolvimento ativo desta ferramenta ocorre. **Para acessar o código-fonte da versão mais recente do Tainacan, acesse [tainacan/tainacan](https://github.com/tainacan/tainacan)**.
+Este repositório não oferece a versão mais recente do Tainacan.
+
+**Para acessar o código-fonte da versão mais recente do Tainacan, acesse [tainacan/tainacan](https://github.com/tainacan/tainacan)**.
 
 ### O que é o Tainacan?
 
